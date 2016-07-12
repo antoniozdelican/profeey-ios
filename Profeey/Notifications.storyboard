@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="ngN-Xw-YX1">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+    </dependencies>
+    <scenes>
+        <!--Capture-->
+        <scene sceneID="acG-oc-q6J">
+            <objects>
+                <tableViewController id="gVo-EO-ei7" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="lo5-3I-gPX">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="NEn-xG-i2B">
+                                <rect key="frame" x="0.0" y="92" width="600" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="NEn-xG-i2B" id="vby-vy-8XN">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="gVo-EO-ei7" id="8Ia-zV-83B"/>
+                            <outlet property="delegate" destination="gVo-EO-ei7" id="tWu-jg-pRi"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Capture" id="E3Z-wE-uLm"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="QGN-mx-nWb" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="883" y="278"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="LVl-tf-v3F">
+            <objects>
+                <navigationController id="ngN-Xw-YX1" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" tag="3" title="" image="ic_notifications" id="fpA-8k-wvf"/>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Ofv-pv-ojx">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="gVo-EO-ei7" kind="relationship" relationship="rootViewController" id="bYT-lp-3O3"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="DVN-6o-yzz" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="63" y="278"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="ic_notifications" width="25" height="25"/>
+    </resources>
+</document>
