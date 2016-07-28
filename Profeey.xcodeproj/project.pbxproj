@@ -19,6 +19,7 @@
 		A90A09581D43E5A7006AC49D /* WelcomeNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A90A09571D43E5A7006AC49D /* WelcomeNavigationController.swift */; };
 		A919D0A21D3FC48800AF0726 /* NameSignUpTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A919D0A11D3FC48800AF0726 /* NameSignUpTableViewController.swift */; };
 		A91A35241D1C26E6006F22B2 /* FullScreenIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91A35231D1C26E6006F22B2 /* FullScreenIndicator.swift */; };
+		A92A8C141D4A37BB00A89FF5 /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A92A8C131D4A37BB00A89FF5 /* TestViewController.swift */; };
 		A930BC7C1D0DD43F004D49F7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A930BC7B1D0DD43F004D49F7 /* AppDelegate.swift */; };
 		A930BC811D0DD43F004D49F7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A930BC7F1D0DD43F004D49F7 /* Main.storyboard */; };
 		A930BC831D0DD43F004D49F7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A930BC821D0DD43F004D49F7 /* Assets.xcassets */; };
@@ -160,6 +161,7 @@
 		A90A09571D43E5A7006AC49D /* WelcomeNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeNavigationController.swift; sourceTree = "<group>"; };
 		A919D0A11D3FC48800AF0726 /* NameSignUpTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NameSignUpTableViewController.swift; sourceTree = "<group>"; };
 		A91A35231D1C26E6006F22B2 /* FullScreenIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FullScreenIndicator.swift; sourceTree = "<group>"; };
+		A92A8C131D4A37BB00A89FF5 /* TestViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
 		A930BC781D0DD43E004D49F7 /* Profeey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Profeey.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A930BC7B1D0DD43F004D49F7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A930BC801D0DD43F004D49F7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -584,6 +586,7 @@
 				A98BB1CF1D3A353100E6FB4D /* UserTableViewCell.swift */,
 				A903C3CB1D38E04200ED7E10 /* PostTableViewCell.swift */,
 				A9ACAE181D390E3B00D77682 /* PostCategoryCollectionViewCell.swift */,
+				A92A8C131D4A37BB00A89FF5 /* TestViewController.swift */,
 			);
 			name = Profile;
 			sourceTree = "<group>";
@@ -795,6 +798,7 @@
 				A9C482181D30ED0B007B5423 /* ItemCollectionViewCell.swift in Sources */,
 				A90228111D3279B500C2EFEB /* ItemTableViewCell.swift in Sources */,
 				A961875F1D3FA67B0028DEA7 /* ClientManager.swift in Sources */,
+				A92A8C141D4A37BB00A89FF5 /* TestViewController.swift in Sources */,
 				A9D960661D32FFE700273A78 /* AWSUserFirstLastName.swift in Sources */,
 				A98BB1CE1D3A32AD00E6FB4D /* ProfileTableViewController.swift in Sources */,
 				A96622051D0EC49700298CE7 /* Colors.swift in Sources */,

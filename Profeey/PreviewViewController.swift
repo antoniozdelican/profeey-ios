@@ -13,14 +13,17 @@ class PreviewViewController: UIViewController {
 
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var imageView: UIImageView!
-    
     @IBOutlet weak var cropImageView: UIImageView!
-    
     @IBOutlet weak var imageViewWidthConstraint: NSLayoutConstraint!
     @IBOutlet weak var imageViewHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var okButton: UIButton!
+    
     
     var photo: UIImage?
     var asset: PHAsset?
+    var imageOnScreen: UIImage?
+    var finalImage: UIImage?
+    var scale: CGFloat?
     // Determine if it's a photo or asset from gallery.
     var isPhoto: Bool = true
     var cropFrameLength: CGFloat!
@@ -49,7 +52,7 @@ class PreviewViewController: UIViewController {
         super.didReceiveMemoryWarning()
     }
     
-    // MARK: Configuration
+    // MARK: Pre-onfiguration
     
     private func configureCropImageView() {
         // Set up the cropImageView depending on the device.
@@ -70,18 +73,16 @@ class PreviewViewController: UIViewController {
         self.scrollView.delegate = self
         self.scrollView.decelerationRate = UIScrollViewDecelerationRateFast
         self.scrollView.minimumZoomScale = 1.0
-        self.scrollView.maximumZoomScale = 4.0
+        self.scrollView.maximumZoomScale = 2.0
         self.scrollView.zoomScale = 1.0
     }
     
     private func configurePhoto() {
-//        guard let newWidth = self.photo?.size.width,
-//            let newHeight = self.photo?.size.height else {
-//                return
-//        }
-//        self.imageViewWidthConstraint.constant = newWidth
-//        self.imageViewHeightConstraint.constant = newHeight
-//        self.imageView.image = photo
+        guard let image = self.photo else {
+            return
+        }
+        self.imageOnScreen = image
+        self.adjustImageOnScreen(image)
     }
     
     private func configureAsset() {
@@ -94,42 +95,76 @@ class PreviewViewController: UIViewController {
                 resultHandler: {
                     (result: UIImage?, info: [NSObject : AnyObject]?) in
                     if let image = result {
-                        
-                        let aspectRatio = image.size.width / image.size.height
-                        var newImageWidth: CGFloat
-                        var newImageHeight: CGFloat
-                        
-                        if image.size.width <= image.size.height {
-                            newImageWidth = self.view.bounds.width
-                            newImageHeight = ceil(newImageWidth / aspectRatio)
-                        } else {
-                            newImageHeight = self.view.bounds.width
-                            newImageWidth = ceil(newImageHeight * aspectRatio)
-                        }
-                        
-                        self.imageViewWidthConstraint.constant = newImageWidth
-                        self.imageViewHeightConstraint.constant = newImageHeight
-                        self.imageView.image = image
-                        
-                        self.updateScrollView(newImageWidth, newImageHeight: newImageHeight)
+                        self.imageOnScreen = image
+                        self.adjustImageOnScreen(image)
                     }
             })
         }
     }
     
-    private func updateScrollView(newImageWidth: CGFloat, newImageHeight: CGFloat) {
-        // Adjust insets.
+    private func adjustImageOnScreen(image: UIImage) {        
+        let aspectRatio = image.size.width / image.size.height
+        var newImageViewWidth: CGFloat
+        var newImageViewHeight: CGFloat
+        
+        if image.size.width <= image.size.height {
+            newImageViewWidth = self.view.bounds.width
+            newImageViewHeight = ceil(newImageViewWidth / aspectRatio)
+        } else {
+            newImageViewHeight = self.view.bounds.width
+            newImageViewWidth = ceil(newImageViewHeight * aspectRatio)
+        }
+        self.imageViewWidthConstraint.constant = newImageViewWidth
+        self.imageViewHeightConstraint.constant = newImageViewHeight
+        self.imageView.image = image
+        // Set up scale for later use.
+        self.scale = image.size.width / newImageViewWidth
+        
+        self.scrollView.layoutIfNeeded()
+        // Adjust scrollView inset.
         let topInset = ceil((self.scrollView.bounds.height - self.cropFrameLength) / 2)
         let bottomInset = topInset
         self.scrollView.contentInset = UIEdgeInsetsMake(topInset, self.CROP_FRAME_PADDING, bottomInset, self.CROP_FRAME_PADDING)
         
-        // Adjust offsets.
-        let offsetX = -ceil((self.scrollView.bounds.width - newImageWidth) / 2)
-        let difference = ceil((newImageHeight - self.cropFrameLength) / 2)
+        // Adjust scrollView offset.
+        let offsetX = -ceil((self.scrollView.bounds.width - newImageViewWidth) / 2)
+        let difference = ceil((newImageViewHeight - self.cropFrameLength) / 2)
         let offsetY = -(topInset - difference)
         self.scrollView.contentOffset = CGPointMake(offsetX, offsetY)
     }
-
+    
+    // MARK: Navigation
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if let destinationViewController = segue.destinationViewController as? TestViewController {
+            destinationViewController.image = self.finalImage
+        }
+    }
+    
+    // MARK: IBActions
+    
+    @IBAction func okButtonTapped(sender: AnyObject) {
+        self.test()
+    }
+    
+    private func test() {
+        guard let scale = self.scale, let imageOnScreen = self.imageOnScreen else {
+            return
+        }
+        
+        let topInset = ceil((self.scrollView.bounds.height - self.cropFrameLength) / 2)
+        let zoomScale = 1.0 / self.scrollView.zoomScale
+        
+        let cropX = (self.scrollView.contentOffset.x + self.CROP_FRAME_PADDING) * scale * zoomScale
+        let cropY = (self.scrollView.contentOffset.y + topInset) * scale * zoomScale
+        
+        let cropWidth = self.cropFrameLength * scale * zoomScale
+        let cropHeight = self.cropFrameLength * scale * zoomScale
+        
+        self.finalImage = imageOnScreen.crop(cropX, cropY: cropY, cropWidth: cropWidth, cropHeight: cropHeight)
+        self.performSegueWithIdentifier("segueToTestVc", sender: self)
+        
+    }
 }
 
 extension PreviewViewController: UIScrollViewDelegate {

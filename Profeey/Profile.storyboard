@@ -330,7 +330,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="v5q-Tx-68k" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3089" y="313"/>
+            <point key="canvasLocation" x="3553" y="-967"/>
         </scene>
         <!--Preview View Controller-->
         <scene sceneID="qcB-b5-SoY">
@@ -382,13 +382,38 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bg_crop_667h" translatesAutoresizingMaskIntoConstraints="NO" id="saR-n1-Jxk">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="900"/>
                             </imageView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="27f-h0-Yu3" userLabel="Custom Toolbar View">
+                                <rect key="frame" x="0.0" y="806" width="600" height="94"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EHi-iX-nwh">
+                                        <rect key="frame" x="263" y="10" width="74" height="74"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="74" id="jll-xd-L9r"/>
+                                            <constraint firstAttribute="width" constant="74" id="tW3-Cc-0u4"/>
+                                        </constraints>
+                                        <state key="normal" image="btn_capture_ok"/>
+                                        <connections>
+                                            <action selector="okButtonTapped:" destination="OkQ-Jd-zQ2" eventType="touchUpInside" id="jQ9-a7-cjJ"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="EHi-iX-nwh" firstAttribute="centerY" secondItem="27f-h0-Yu3" secondAttribute="centerY" id="ZYd-eJ-vPE"/>
+                                    <constraint firstItem="EHi-iX-nwh" firstAttribute="centerX" secondItem="27f-h0-Yu3" secondAttribute="centerX" id="seE-Bg-NV1"/>
+                                    <constraint firstAttribute="height" constant="94" id="yVN-i6-ibG"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="0.98039215690000003" green="0.98039215690000003" blue="0.98039215690000003" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="saR-n1-Jxk" secondAttribute="trailing" id="0QS-fV-FA1"/>
                             <constraint firstItem="z2d-wO-Vn7" firstAttribute="top" secondItem="saR-n1-Jxk" secondAttribute="bottom" id="4hq-ym-nou"/>
                             <constraint firstItem="pun-j0-kcE" firstAttribute="top" secondItem="qMh-Yf-fYI" secondAttribute="top" id="5fg-Vq-2eG"/>
+                            <constraint firstItem="27f-h0-Yu3" firstAttribute="leading" secondItem="qMh-Yf-fYI" secondAttribute="leading" id="Ekq-pg-56g"/>
                             <constraint firstItem="z2d-wO-Vn7" firstAttribute="top" secondItem="pun-j0-kcE" secondAttribute="bottom" id="M5o-B7-VyL"/>
+                            <constraint firstItem="z2d-wO-Vn7" firstAttribute="top" secondItem="27f-h0-Yu3" secondAttribute="bottom" id="SPr-e7-sKK"/>
+                            <constraint firstAttribute="trailing" secondItem="27f-h0-Yu3" secondAttribute="trailing" id="cyW-04-IoR"/>
                             <constraint firstItem="saR-n1-Jxk" firstAttribute="top" secondItem="qMh-Yf-fYI" secondAttribute="top" id="mJ4-xX-bqR"/>
                             <constraint firstItem="pun-j0-kcE" firstAttribute="leading" secondItem="qMh-Yf-fYI" secondAttribute="leading" id="r7T-hK-WSD"/>
                             <constraint firstItem="saR-n1-Jxk" firstAttribute="leading" secondItem="qMh-Yf-fYI" secondAttribute="leading" id="wLv-uJ-1As"/>
@@ -402,12 +427,52 @@
                         <outlet property="imageView" destination="bKr-ig-6l5" id="hTZ-0n-IDY"/>
                         <outlet property="imageViewHeightConstraint" destination="ST1-dQ-CMB" id="TUo-Ta-lte"/>
                         <outlet property="imageViewWidthConstraint" destination="4ag-lu-60u" id="tep-ti-zxO"/>
+                        <outlet property="okButton" destination="EHi-iX-nwh" id="2md-CL-4ma"/>
                         <outlet property="scrollView" destination="pun-j0-kcE" id="UhD-2a-obi"/>
+                        <segue destination="fTo-Xi-AK4" kind="show" identifier="segueToTestVc" id="yV8-x6-iJH"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KcT-B8-2Gc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4143" y="1335"/>
+            <point key="canvasLocation" x="4407" y="-433"/>
+        </scene>
+        <!--Test View Controller-->
+        <scene sceneID="svI-iO-zPx">
+            <objects>
+                <viewController id="fTo-Xi-AK4" customClass="TestViewController" customModule="Profeey" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="NsP-zm-qNi"/>
+                        <viewControllerLayoutGuide type="bottom" id="2p5-uL-Et8"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="kfU-gS-u2n">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="hbE-6H-7af">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="600" id="cLn-Qd-khw"/>
+                                    <constraint firstAttribute="height" constant="600" id="nNb-Mj-AGn"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="hbE-6H-7af" firstAttribute="centerY" secondItem="kfU-gS-u2n" secondAttribute="centerY" id="Eyu-aF-awz"/>
+                            <constraint firstItem="hbE-6H-7af" firstAttribute="centerX" secondItem="kfU-gS-u2n" secondAttribute="centerX" id="r5o-bm-2ta"/>
+                        </constraints>
+                    </view>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <size key="freeformSize" width="600" height="600"/>
+                    <connections>
+                        <outlet property="imageView" destination="hbE-6H-7af" id="uVn-UG-DuE"/>
+                        <outlet property="imageViewHeightConstraint" destination="nNb-Mj-AGn" id="IbY-pp-DSX"/>
+                        <outlet property="imageViewWidthConstraint" destination="cLn-Qd-khw" id="Sjx-fc-90F"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="B4z-J7-aOH" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="5131" y="-376"/>
         </scene>
         <!--Gallery Collection View Controller-->
         <scene sceneID="Zt7-XV-jjx">
@@ -480,7 +545,7 @@
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OHb-82-aKO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1995" y="313"/>
+            <point key="canvasLocation" x="3561" y="1"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="4d0-FG-qFF">
@@ -496,7 +561,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pqC-f7-X5B" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1995" y="1121"/>
+            <point key="canvasLocation" x="3133" y="865"/>
         </scene>
         <!--Capture Page View Controller-->
         <scene sceneID="h8j-Y1-wrP">
@@ -582,12 +647,13 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FuR-hu-cMA" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="bm3-ng-Y1I" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="2815" y="1121"/>
+            <point key="canvasLocation" x="3989" y="865"/>
         </scene>
     </scenes>
     <resources>
         <image name="bg_crop_667h" width="375" height="667"/>
         <image name="btn_camera_switch" width="22" height="22"/>
+        <image name="btn_capture_ok" width="74" height="74"/>
         <image name="btn_capture_photo" width="74" height="74"/>
         <image name="btn_close" width="22" height="22"/>
         <image name="btn_white_small" width="85" height="30"/>
