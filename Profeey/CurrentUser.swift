@@ -12,6 +12,7 @@ class CurrentUser: User {
     
     override init() {
         super.init()
+        // Current user should come from UserPool.currentUser!!
         self.configureFromLocal()
     }
     
@@ -29,7 +30,7 @@ class CurrentUser: User {
     // Update self and local cached data.
     func updateFromRemote(awsUser: AWSUser) {
         LocalService.setAboutLocal(awsUser._about)
-        LocalService.setFullNameLocal(awsUser._fullName)
+        //LocalService.setFullNameLocal(awsUser._fullName)
         LocalService.setPreferredUsernameLocal(awsUser._preferredUsername)
         LocalService.setProfessionsLocal(awsUser._professions)
         LocalService.setProfilePicUrlLocal(awsUser._profilePicUrl)

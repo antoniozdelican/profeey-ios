@@ -12,27 +12,18 @@ import AWSMobileHubHelper
 
 class LogInViewController: UIViewController {
 
-    @IBOutlet weak var emailTextField: UITextField!
-    @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var logInButton: UIButton!
     @IBOutlet weak var toolbarBottomConstraint: NSLayoutConstraint!
     
     var toolbarBottomConstraintConstant: CGFloat = 0.0
-    var isEmailEmpty: Bool = true
-    var isPasswordEmpty: Bool = true
+    var passwordAuthenticationCompletion: AWSCognitoIdentityPasswordAuthenticationDetails?
     
-    var passwordAuthenticationCompletion: AWSCognitoIdentityPasswordAuthenticationDetails!
+    var username: String?
+    var password: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.Plain, target:nil, action:nil)
-        
-        self.emailTextField.addTarget(self, action: #selector(LogInViewController.emailTextFieldDidChange(_:)), forControlEvents: UIControlEvents.EditingChanged)
-        self.emailTextField.delegate = self
-        self.passwordTextField.addTarget(self, action: #selector(LogInViewController.passwordTextFieldDidChange(_:)), forControlEvents: UIControlEvents.EditingChanged)
-        self.passwordTextField.delegate = self
-        self.logInButton.addTarget(self, action: #selector(LogInViewController.logInButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         self.logInButton.enabled = false
         self.toolbarBottomConstraintConstant = self.toolbarBottomConstraint.constant
         self.registerForKeyboardNotifications()
@@ -42,72 +33,67 @@ class LogInViewController: UIViewController {
         super.didReceiveMemoryWarning()
     }
     
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
-        self.emailTextField.becomeFirstResponder()
-    }
+    // MARK: Navigation
     
-    override func viewWillDisappear(animated: Bool) {
-        super.viewWillDisappear(animated)
-        self.emailTextField.resignFirstResponder()
-        self.passwordTextField.resignFirstResponder()
-    }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-    
-    // MARK: Tappers
-    
-    func emailTextFieldDidChange(sender: UITextField) {
-        guard let email = self.emailTextField.text else {
-            return
+        if let destinationViewController = segue.destinationViewController as? LogInTableViewController {
+            destinationViewController.logInDelegate = self
         }
-        self.isEmailEmpty = email.isEmpty
-        self.logInButton.enabled = (!self.isEmailEmpty && !self.isPasswordEmpty)
     }
     
-    func passwordTextFieldDidChange(sender: UITextField) {
-        guard let password = self.passwordTextField.text else {
-            return
-        }
-        self.isPasswordEmpty = password.isEmpty
-        self.logInButton.enabled = (!self.isEmailEmpty && !self.isPasswordEmpty)
-    }
+    // MARK: AWS
     
-    func logInButtonTapped(sender: UIButton) {
-        self.emailTextField.resignFirstResponder()
-        self.passwordTextField.resignFirstResponder()
+//    private func logIn() {
+//        guard let username = self.emailTextField.text, password = self.passwordTextField.text else {
+//            return
+//        }
+//        FullScreenIndicator.show()
+//        AWSClientManager.defaultClientManager().logIn(username, password: password, completionHandler: {
+//            (task: AWSTask) in
+//            dispatch_async(dispatch_get_main_queue(), {
+//                FullScreenIndicator.hide()
+//                if let error = task.error {
+//                    let alertController = UIAlertController(title: "Something went wrong", message: error.userInfo["message"] as? String, preferredStyle: .Alert)
+//                    let alertAction = UIAlertAction(title: "Ok", style: .Cancel, handler: nil)
+//                    alertController.addAction(alertAction)
+//                    if self.presentedViewController == nil {
+//                        self.presentViewController(alertController, animated: true, completion: nil)
+//                    }
+//                } else {
+//                    print("Signed in")
+//                    self.redirectToMain()
+//                }
+//            })
+//            return nil
+//        })
+//    }
+    
+    // MARK: IBActions
+    
+    @IBAction func logInButtonTapped(sender: AnyObject) {
         self.logIn()
+    }
+    
+    @IBAction func closeButtonTapped(sender: AnyObject) {
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
     
     // MARK: AWS
     
     private func logIn() {
-        guard let username = self.emailTextField.text, password = self.passwordTextField.text else {
+        guard let username = self.username, let password = self.password else {
             return
         }
         FullScreenIndicator.show()
-        AWSRemoteService.defaultRemoteService().logIn(username, password: password, completionHandler: {
+        AWSClientManager.defaultClientManager().logIn(username, password: password, completionHandler: {
             (task: AWSTask) in
             dispatch_async(dispatch_get_main_queue(), {
                 FullScreenIndicator.hide()
                 if let error = task.error {
-                    let alertController = UIAlertController(title: "Something went wrong", message: error.userInfo["message"] as? String, preferredStyle: .Alert)
-                    let alertAction = UIAlertAction(title: "Ok", style: .Cancel, handler: nil)
-                    alertController.addAction(alertAction)
-                    if self.presentedViewController == nil {
-                        self.presentViewController(alertController, animated: true, completion: nil)
-                    }
-                } else {
-                    print("Signed in")
+                    let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.userInfo["message"] as? String, cancelButtonTitle: "Ok")
+                    self.presentViewController(alertController, animated: true, completion: nil)
+                }
+                else {
                     self.redirectToMain()
                 }
             })
@@ -115,18 +101,14 @@ class LogInViewController: UIViewController {
         })
     }
     
+    // MARK: Helpers
+    
     private func redirectToMain() {
         guard let window = UIApplication.sharedApplication().keyWindow,
-        let initialViewController = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController() else {
-            return
+            let initialViewController = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController() else {
+                return
         }
         window.rootViewController = initialViewController
-    }
-    
-    // MARK: IBActions
-    
-    @IBAction func closeButtonTapped(sender: AnyObject) {
-        self.dismissViewControllerAnimated(true, completion: nil)
     }
 
     // MARK: Keyboard notifications
@@ -162,15 +144,17 @@ class LogInViewController: UIViewController {
             self.view.layoutIfNeeded()
         })
     }
-
 }
 
-extension LogInViewController: UITextFieldDelegate {
+extension LogInViewController: LogInDelegate {
     
-    func textFieldDidEndEditing(textField: UITextField) {
-        // For jumping bug
-        self.emailTextField.layoutIfNeeded()
-        self.passwordTextField.layoutIfNeeded()
+    func toggleLogInButton(enabled: Bool) {
+        self.logInButton.enabled = enabled
+    }
+    
+    func updateUsernamePassword(username: String?, password: String?) {
+        self.username = username
+        self.password = password
     }
 }
 

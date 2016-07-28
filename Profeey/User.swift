@@ -8,9 +8,14 @@
 
 class User: NSObject {
     
-    var about: String?
-    var fullName: String?
+    var firstName: String?
+    var lastName: String?
+    var email: String?
     var preferredUsername: String?
+    var fullName: String?
+    
+    var about: String?
+//    var preferredUsername: String?
     var profilePicUrl: String?
     var professions: [String]?
     

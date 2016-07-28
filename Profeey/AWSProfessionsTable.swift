@@ -37,9 +37,7 @@ class AWSProfessionsTable: NSObject, Table {
         partitionKeyType = "String"
         indexes = [
         ]
-        if (model.classForCoder.respondsToSelector("rangeKeyAttribute")) {
-            sortKeyName = model.classForCoder.rangeKeyAttribute!()
-        }
+        //sortKeyName = model.classForCoder.rangeKeyAttribute!()
         super.init()
     }
     
@@ -52,6 +50,58 @@ class AWSProfessionsTable: NSObject, Table {
     
     func tableAttributeName(dataObjectAttributeName: String) -> String {
         return AWSProfession.JSONKeyPathsByPropertyKey()[dataObjectAttributeName] as! String
+    }
+    
+    /**
+     * Update professions table upon user select.
+     *
+     */
+    
+    func saveProfessions(professions: [String], completionHandler: (errors: [NSError]?) -> Void) {
+        var errors: [NSError] = []
+        let group: dispatch_group_t = dispatch_group_create()
+        
+        let dynamoDB = AWSDynamoDB.defaultDynamoDB()
+        let updateItemInput = AWSDynamoDBUpdateItemInput()
+        updateItemInput.tableName = self.tableName
+        
+        for profession in professions {
+            let hashKeyValue = AWSDynamoDBAttributeValue()
+            hashKeyValue.S = profession
+            updateItemInput.key = ["professionName" : hashKeyValue]
+            
+            let increaseNumber = AWSDynamoDBAttributeValue()
+            increaseNumber.N = "1"
+            updateItemInput.expressionAttributeValues = [":val": increaseNumber]
+            
+            updateItemInput.updateExpression = "ADD numberOfUsers :val"
+            
+            dispatch_group_enter(group)
+            
+            dynamoDB.updateItem(updateItemInput, completionHandler: {
+                (result: AWSDynamoDBUpdateItemOutput?, error: NSError?) in
+                if let error = error {
+                    dispatch_async(dispatch_get_main_queue(), {
+                        errors.append(error)
+                    })
+                }
+                dispatch_group_leave(group)
+            })
+        }
+        
+        dispatch_group_notify(group, dispatch_get_main_queue(), {
+            if errors.count > 0 {
+                completionHandler(errors: errors)
+            }
+            else {
+                completionHandler(errors: nil)
+            }
+        })
+    }
+    
+    func saveProfession(profession: AWSProfession, completionHandler: AWSContinuationBlock) {
+        let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
+        objectMapper.save(profession).continueWithBlock(completionHandler)
     }
     
     /**

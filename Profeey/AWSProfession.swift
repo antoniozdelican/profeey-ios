@@ -13,7 +13,7 @@ import AWSDynamoDB
 class AWSProfession: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     
     var _professionName: String?
-    var _numberOfUsers: String?
+    var _numberOfUsers: Int?
     
     class func dynamoDBTableName() -> String {
         

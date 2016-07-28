@@ -10,65 +10,43 @@ import UIKit
 
 class NameSignUpViewController: UIViewController {
 
-    @IBOutlet weak var fullNameTextField: UITextField!
-    @IBOutlet weak var nextButton: UIButton!
+    @IBOutlet weak var continueButton: UIButton!
     @IBOutlet weak var toolbarBottomConstraint: NSLayoutConstraint!
     
     var toolbarBottomConstraintConstant: CGFloat = 0.0
+    var newUser: User?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.Plain, target:nil, action:nil)
-        
-        self.fullNameTextField.addTarget(self, action: #selector(NameSignUpViewController.fullNameTextFieldDidChange(_:)), forControlEvents: UIControlEvents.EditingChanged)
-        self.nextButton.addTarget(self, action: #selector(NameSignUpViewController.nextButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        self.nextButton.enabled = false
+        self.continueButton.enabled = false
         self.toolbarBottomConstraintConstant = self.toolbarBottomConstraint.constant
         self.registerForKeyboardNotifications()
+        
+        // Initialize empty user.
+        self.newUser = User()
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
     
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
-        self.fullNameTextField.becomeFirstResponder()
-    }
-    
-    override func viewWillDisappear(animated: Bool) {
-        super.viewWillDisappear(animated)
-        self.fullNameTextField.resignFirstResponder()
-    }
-    
-     // MARK: Navigation
+    // MARK: Navigation
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if let destinationViewController = segue.destinationViewController as? NameSignUpTableViewController {
+            destinationViewController.nameSignUpDelegate = self
+        }
         if let destinationViewController = segue.destinationViewController as? EmailSignUpViewController {
-           destinationViewController.fullName = self.fullNameTextField.text
+            destinationViewController.newUser = self.newUser
         }
-    }
-    
-    // MARK: Tappers
-    
-    func fullNameTextFieldDidChange(sender: UITextField) {
-        guard let text = sender.text else {
-            return
-        }
-        let trimmedText = text.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
-        if trimmedText.isEmpty {
-            self.nextButton.enabled = false
-        } else {
-            self.nextButton.enabled = true
-        }
-    }
-    
-    func nextButtonTapped(sender: UIButton) {
-        self.performSegueWithIdentifier("segueToEmailVc", sender: self)
     }
     
     // MARK: IBActions
+    
+    @IBAction func continueButtonTapped(sender: AnyObject) {
+        self.performSegueWithIdentifier("segueToEmailVc", sender: self)
+    }
     
     @IBAction func closeButtonTapped(sender: AnyObject) {
         self.dismissViewControllerAnimated(true, completion: nil)
@@ -106,5 +84,17 @@ class NameSignUpViewController: UIViewController {
         UIView.animateWithDuration(duration, animations: {
             self.view.layoutIfNeeded()
         })
+    }
+}
+
+extension NameSignUpViewController: NameSignUpDelegate {
+    
+    func toggleContinueButton(enabled: Bool) {
+        self.continueButton.enabled = enabled
+    }
+    
+    func updateFirstLastName(firstName: String?, lastName: String?) {
+        self.newUser?.firstName = firstName
+        self.newUser?.lastName = lastName
     }
 }

@@ -54,9 +54,10 @@ class EditProfileTableViewController: UITableViewController {
             case let destinationViewController as EditNameTableViewController:
                 destinationViewController.fullName = self.currentUser.fullName
                 destinationViewController.delegate = self
-            case let destinationViewController as EditProfessionsViewController:
-                destinationViewController.professions = self.currentUser.professions
+            case let destinationViewController as ItemsViewController:
+                destinationViewController.items = self.currentUser.professions
                 destinationViewController.delegate = self
+                destinationViewController.itemType = ItemType.Profession
             case let destinationViewController as EditAboutTableViewController:
                 destinationViewController.about = self.currentUser.about
                 destinationViewController.delegate = self
@@ -121,10 +122,11 @@ extension EditProfileTableViewController: EditAboutDelegate {
     }
 }
 
-extension EditProfileTableViewController: EditProfessionsDelegate {
+extension EditProfileTableViewController: EditItemsDelegate {
     
-    func professionsUpdated(professions: [String]?) {
-        self.currentUser.professions = professions
+    func itemsUpdated(items: [String]?, itemType: ItemType?) {
+        // We know here itemType is .Profession
+        self.currentUser.professions = items
         self.professionsPlaceholderLabel.text = self.currentUser.professions?.joinWithSeparator(" · ")
         self.tableView.reloadData()
         self.delegate?.currentUserUpdated(self.currentUser)

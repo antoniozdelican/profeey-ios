@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A902280F1D32778B00C2EFEB /* SearchProfessionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A902280E1D32778B00C2EFEB /* SearchProfessionsTableViewController.swift */; };
-		A90228111D3279B500C2EFEB /* ProfessionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A90228101D3279B500C2EFEB /* ProfessionTableViewCell.swift */; };
+		A90228111D3279B500C2EFEB /* ItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A90228101D3279B500C2EFEB /* ItemTableViewCell.swift */; };
+		A903C3CC1D38E04200ED7E10 /* PostTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A903C3CB1D38E04200ED7E10 /* PostTableViewCell.swift */; };
 		A903EB4C1D169DCC00B33025 /* FakeCaptureNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A903EB4B1D169DCC00B33025 /* FakeCaptureNavigationController.swift */; };
 		A903EB4E1D16A2FE00B33025 /* CaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A903EB4D1D16A2FE00B33025 /* CaptureViewController.swift */; };
 		A903EB571D16A39700B33025 /* LLSimpleCamera.m in Sources */ = {isa = PBXBuildFile; fileRef = A903EB521D16A39700B33025 /* LLSimpleCamera.m */; };
@@ -16,6 +16,8 @@
 		A903EB591D16A39700B33025 /* UIImage+FixOrientation.m in Sources */ = {isa = PBXBuildFile; fileRef = A903EB561D16A39700B33025 /* UIImage+FixOrientation.m */; };
 		A903EB5B1D16A3C800B33025 /* ProfeeySimpleCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = A903EB5A1D16A3C800B33025 /* ProfeeySimpleCamera.swift */; };
 		A903EB5D1D16D0E600B33025 /* PhotoPreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A903EB5C1D16D0E600B33025 /* PhotoPreviewViewController.swift */; };
+		A90A09581D43E5A7006AC49D /* WelcomeNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A90A09571D43E5A7006AC49D /* WelcomeNavigationController.swift */; };
+		A919D0A21D3FC48800AF0726 /* NameSignUpTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A919D0A11D3FC48800AF0726 /* NameSignUpTableViewController.swift */; };
 		A91A35241D1C26E6006F22B2 /* FullScreenIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91A35231D1C26E6006F22B2 /* FullScreenIndicator.swift */; };
 		A930BC7C1D0DD43F004D49F7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A930BC7B1D0DD43F004D49F7 /* AppDelegate.swift */; };
 		A930BC811D0DD43F004D49F7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A930BC7F1D0DD43F004D49F7 /* Main.storyboard */; };
@@ -40,6 +42,11 @@
 		A94797A71D2E3451007CBF08 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = A94797A61D2E3451007CBF08 /* User.swift */; };
 		A94797AC1D2E3A0C007CBF08 /* AWSRemoteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A94797AB1D2E3A0C007CBF08 /* AWSRemoteService.swift */; };
 		A94797AE1D2E3C6B007CBF08 /* AWSConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A94797AD1D2E3C6B007CBF08 /* AWSConstants.swift */; };
+		A95C31B11D3E14510003377F /* UICKeyChainStore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A95C31B01D3E14510003377F /* UICKeyChainStore.framework */; };
+		A95C31B41D3E16370003377F /* UICKeyChainStore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A95C31B31D3E16370003377F /* UICKeyChainStore.framework */; };
+		A95C31B51D3E164C0003377F /* UICKeyChainStore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A95C31B31D3E16370003377F /* UICKeyChainStore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A95C31B71D3E16930003377F /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95C31B61D3E16930003377F /* Constants.swift */; };
+		A95C31B91D3E35AA0003377F /* AWSClientManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95C31B81D3E35AA0003377F /* AWSClientManager.swift */; };
 		A95E40C81D350D3400FD61F9 /* EditUsernameTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95E40C71D350D3400FD61F9 /* EditUsernameTableViewController.swift */; };
 		A95E40CA1D35105A00FD61F9 /* EditNameTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95E40C91D35105A00FD61F9 /* EditNameTableViewController.swift */; };
 		A95E40CC1D35137700FD61F9 /* EditAboutTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95E40CB1D35137700FD61F9 /* EditAboutTableViewController.swift */; };
@@ -49,6 +56,7 @@
 		A9604F821D33722F00F23B33 /* AWSUserProfessions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9604F811D33722F00F23B33 /* AWSUserProfessions.swift */; };
 		A9604F851D337DEA00F23B33 /* CurrentUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9604F841D337DEA00F23B33 /* CurrentUser.swift */; };
 		A9604F891D33C99100F23B33 /* AWSUserProfilePic.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9604F881D33C99100F23B33 /* AWSUserProfilePic.swift */; };
+		A961875F1D3FA67B0028DEA7 /* ClientManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A961875E1D3FA67B0028DEA7 /* ClientManager.swift */; };
 		A96622001D0EBBC200298CE7 /* Onboarding.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A96621FF1D0EBBC200298CE7 /* Onboarding.storyboard */; };
 		A96622031D0EC0FE00298CE7 /* SignUp.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A96622021D0EC0FE00298CE7 /* SignUp.storyboard */; };
 		A96622051D0EC49700298CE7 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96622041D0EC49700298CE7 /* Colors.swift */; };
@@ -57,42 +65,61 @@
 		A966220B1D0EDE4E00298CE7 /* PasswordSignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A966220A1D0EDE4E00298CE7 /* PasswordSignUpViewController.swift */; };
 		A966220E1D0EF38C00298CE7 /* LogIn.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A966220D1D0EF38C00298CE7 /* LogIn.storyboard */; };
 		A96622101D0EF39800298CE7 /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A966220F1D0EF39800298CE7 /* LogInViewController.swift */; };
-		A98884771D35841B006DD976 /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98884761D35841B006DD976 /* PreviewViewController.swift */; };
+		A96B3B991D3659790071FE7A /* ItemsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96B3B981D3659790071FE7A /* ItemsTableViewController.swift */; };
+		A96B3B9C1D365DF70071FE7A /* Items.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A96B3B9B1D365DF70071FE7A /* Items.storyboard */; };
+		A97C02731D489C8D00775D82 /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A97C02721D489C8D00775D82 /* PreviewViewController.swift */; };
+		A98884771D35841B006DD976 /* PreviewViewController2.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98884761D35841B006DD976 /* PreviewViewController2.swift */; };
+		A98B42DB1D43C4E00089A769 /* ProfessionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98B42DA1D43C4E00089A769 /* ProfessionsViewController.swift */; };
+		A98B42DD1D43C5720089A769 /* ProfessionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98B42DC1D43C5720089A769 /* ProfessionsTableViewController.swift */; };
+		A98B42E11D43C95A0089A769 /* ProfessionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98B42E01D43C95A0089A769 /* ProfessionTableViewCell.swift */; };
+		A98B42E31D43DD040089A769 /* ProfessionsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98B42E21D43DD040089A769 /* ProfessionsCollectionViewController.swift */; };
+		A98B42E51D43DDBD0089A769 /* ProfessionCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98B42E41D43DDBD0089A769 /* ProfessionCollectionViewCell.swift */; };
+		A98BB1CE1D3A32AD00E6FB4D /* ProfileTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98BB1CD1D3A32AD00E6FB4D /* ProfileTableViewController.swift */; };
+		A98BB1D01D3A353100E6FB4D /* UserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98BB1CF1D3A353100E6FB4D /* UserTableViewCell.swift */; };
+		A99030F71D464F3000336D26 /* GalleryCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99030F61D464F3000336D26 /* GalleryCollectionViewController.swift */; };
+		A99030F91D464FEE00336D26 /* GalleryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99030F81D464FEE00336D26 /* GalleryCollectionViewCell.swift */; };
+		A99030FB1D46632500336D26 /* AlbumsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99030FA1D46632500336D26 /* AlbumsTableViewController.swift */; };
+		A99030FD1D46634600336D26 /* AlbumTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99030FC1D46634600336D26 /* AlbumTableViewCell.swift */; };
+		A996454A1D4783DC00D1E2C3 /* CapturePageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99645491D4783DC00D1E2C3 /* CapturePageViewController.swift */; };
 		A99ADA1F1D0F189E0050E329 /* Welcome.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A99ADA1E1D0F189E0050E329 /* Welcome.storyboard */; };
-		A99ADA211D0F1ACD0050E329 /* UsernameWelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99ADA201D0F1ACD0050E329 /* UsernameWelcomeViewController.swift */; };
-		A99ADA231D0F22AA0050E329 /* ProfessionsWelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99ADA221D0F22AA0050E329 /* ProfessionsWelcomeViewController.swift */; };
-		A99ADA251D0F234C0050E329 /* ProfessionsWelcomeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99ADA241D0F234C0050E329 /* ProfessionsWelcomeTableViewController.swift */; };
-		A99ADA271D0F2EED0050E329 /* ProfessionWelcomeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99ADA261D0F2EED0050E329 /* ProfessionWelcomeTableViewCell.swift */; };
 		A99BD3621D3037D10072CC27 /* AWSProfession.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99BD3611D3037D10072CC27 /* AWSProfession.swift */; };
 		A99BD3681D303FE20072CC27 /* AWSProfessionsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99BD3671D303FE20072CC27 /* AWSProfessionsTable.swift */; };
-		A99DD48E1D29C1F70090FFAB /* ProfilePicUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99DD48D1D29C1F70090FFAB /* ProfilePicUploader.swift */; };
 		A9A503941D2F925F0030A472 /* EditProfileTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9A503931D2F925F0030A472 /* EditProfileTableViewController.swift */; };
 		A9A503991D2FA9180030A472 /* LocalService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9A503981D2FA9180030A472 /* LocalService.swift */; };
 		A9A5039F1D2FE0810030A472 /* AWSUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9A5039E1D2FE0810030A472 /* AWSUser.swift */; };
 		A9A503A11D2FE0A90030A472 /* AWSUsersTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9A503A01D2FE0A90030A472 /* AWSUsersTable.swift */; };
 		A9A503A71D2FF8450030A472 /* EditProfile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9A503A61D2FF8450030A472 /* EditProfile.storyboard */; };
-		A9AA30731D267769009AFF63 /* CaptureProfilePhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AA30721D267769009AFF63 /* CaptureProfilePhotoViewController.swift */; };
-		A9AA30751D2678A6009AFF63 /* CaptureProfilePhotoNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AA30741D2678A6009AFF63 /* CaptureProfilePhotoNavigationController.swift */; };
-		A9AA30791D26A800009AFF63 /* PreviewProfilePhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AA30781D26A800009AFF63 /* PreviewProfilePhotoViewController.swift */; };
+		A9A8DD111D4529B2009B3C24 /* LogInNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9A8DD101D4529B2009B3C24 /* LogInNavigationController.swift */; };
+		A9A8DD131D452BAA009B3C24 /* LogInTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9A8DD121D452BAA009B3C24 /* LogInTableViewController.swift */; };
+		A9ACAE191D390E3B00D77682 /* PostCategoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9ACAE181D390E3B00D77682 /* PostCategoryCollectionViewCell.swift */; };
+		A9AD744B1D3627BD007ACBD4 /* FiltersCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD744A1D3627BD007ACBD4 /* FiltersCollectionViewController.swift */; };
+		A9AD744F1D364882007ACBD4 /* EditTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD744E1D364882007ACBD4 /* EditTableViewController.swift */; };
 		A9B934B01D1BD9BB00ACC2B8 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B934AF1D1BD9BB00ACC2B8 /* OnboardingViewController.swift */; };
-		A9C482141D30E983007B5423 /* EditProfessionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C482131D30E983007B5423 /* EditProfessionsViewController.swift */; };
-		A9C482161D30EC25007B5423 /* ProfessionsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C482151D30EC25007B5423 /* ProfessionsCollectionViewController.swift */; };
-		A9C482181D30ED0B007B5423 /* ProfessionCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C482171D30ED0B007B5423 /* ProfessionCollectionViewCell.swift */; };
+		A9BFD9121D45EB3100D9D962 /* ProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9BFD9111D45EB3100D9D962 /* ProfileTableViewCell.swift */; };
+		A9BFD9171D46125700D9D962 /* CaptureProfilePicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9BFD9161D46125700D9D962 /* CaptureProfilePicViewController.swift */; };
+		A9C0ED3A1D3C21C30036F791 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C0ED391D3C21C30036F791 /* Post.swift */; };
+		A9C482141D30E983007B5423 /* ItemsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C482131D30E983007B5423 /* ItemsViewController.swift */; };
+		A9C482161D30EC25007B5423 /* ItemsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C482151D30EC25007B5423 /* ItemsCollectionViewController.swift */; };
+		A9C482181D30ED0B007B5423 /* ItemCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C482171D30ED0B007B5423 /* ItemCollectionViewCell.swift */; };
+		A9C5D0C41D3A84BC00EBA87D /* HomeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C5D0C31D3A84BC00EBA87D /* HomeTableViewController.swift */; };
+		A9C5D0CC1D3AABB100EBA87D /* PostDetailsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C5D0CB1D3AABB100EBA87D /* PostDetailsTableViewController.swift */; };
 		A9C6CB7F1D2929AA00863816 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C6CB7E1D2929AA00863816 /* Extensions.swift */; };
-		A9D960661D32FFE700273A78 /* AWSUserFullName.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D960651D32FFE700273A78 /* AWSUserFullName.swift */; };
+		A9CF75381D40BA1F0047BB1A /* SignUpNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CF75371D40BA1F0047BB1A /* SignUpNavigationController.swift */; };
+		A9CF753A1D40C1C80047BB1A /* EmailSignUpTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CF75391D40C1C80047BB1A /* EmailSignUpTableViewController.swift */; };
+		A9CF753C1D40C54B0047BB1A /* PasswordSignUpTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CF753B1D40C54B0047BB1A /* PasswordSignUpTableViewController.swift */; };
+		A9CF75461D40CB740047BB1A /* UsernameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CF75451D40CB740047BB1A /* UsernameViewController.swift */; };
+		A9CF75481D40CE2A0047BB1A /* UsernameTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CF75471D40CE2A0047BB1A /* UsernameTableViewController.swift */; };
+		A9D960661D32FFE700273A78 /* AWSUserFirstLastName.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D960651D32FFE700273A78 /* AWSUserFirstLastName.swift */; };
 		A9E53B691D10665100CD1D6C /* Home.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9E53B681D10665100CD1D6C /* Home.storyboard */; };
 		A9E53B6B1D10666800CD1D6C /* Search.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9E53B6A1D10666800CD1D6C /* Search.storyboard */; };
 		A9E53B6D1D10667100CD1D6C /* Capture.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9E53B6C1D10667100CD1D6C /* Capture.storyboard */; };
 		A9E53B6F1D10667B00CD1D6C /* Notifications.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9E53B6E1D10667B00CD1D6C /* Notifications.storyboard */; };
 		A9E53B711D10668400CD1D6C /* Profile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9E53B701D10668400CD1D6C /* Profile.storyboard */; };
 		A9E53B731D1067E800CD1D6C /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E53B721D1067E800CD1D6C /* MainTabBarController.swift */; };
-		A9E53B751D10784A00CD1D6C /* ProfileTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E53B741D10784A00CD1D6C /* ProfileTableViewController.swift */; };
-		A9E53B771D10786900CD1D6C /* HeaderProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E53B761D10786900CD1D6C /* HeaderProfileTableViewCell.swift */; };
 		A9EAD3361D1E7A7100994292 /* AWSMobileHubHelper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9EAD3351D1E7A7100994292 /* AWSMobileHubHelper.framework */; };
-		A9EAD3381D1E7AA500994292 /* AWSMobileClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9EAD3371D1E7AA500994292 /* AWSMobileClient.swift */; };
 		A9EAD3401D1E8E0C00994292 /* NoSQLModelHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9EAD33F1D1E8E0C00994292 /* NoSQLModelHelpers.swift */; };
-		A9FC7DAA1D100BCA001C17CB /* DiscoverWelcomeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9FC7DA91D100BCA001C17CB /* DiscoverWelcomeTableViewController.swift */; };
-		A9FC7DAC1D100BF8001C17CB /* UserWelcomeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9FC7DAB1D100BF8001C17CB /* UserWelcomeTableViewCell.swift */; };
+		A9F49D571D379D01002EB68B /* AWSPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F49D561D379D01002EB68B /* AWSPost.swift */; };
+		A9F49D5A1D379D70002EB68B /* AWSPostsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F49D591D379D70002EB68B /* AWSPostsTable.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -102,6 +129,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				A95C31B51D3E164C0003377F /* UICKeyChainStore.framework in Embed Frameworks */,
 				A930BC9C1D0DD5BD004D49F7 /* AWSCognito.framework in Embed Frameworks */,
 				A930BC9D1D0DD5BD004D49F7 /* AWSCognitoIdentityProvider.framework in Embed Frameworks */,
 				A930BC9E1D0DD5BD004D49F7 /* AWSCore.framework in Embed Frameworks */,
@@ -116,8 +144,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		A902280E1D32778B00C2EFEB /* SearchProfessionsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchProfessionsTableViewController.swift; sourceTree = "<group>"; };
-		A90228101D3279B500C2EFEB /* ProfessionTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfessionTableViewCell.swift; sourceTree = "<group>"; };
+		A90228101D3279B500C2EFEB /* ItemTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemTableViewCell.swift; sourceTree = "<group>"; };
+		A903C3CB1D38E04200ED7E10 /* PostTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostTableViewCell.swift; sourceTree = "<group>"; };
 		A903EB4B1D169DCC00B33025 /* FakeCaptureNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FakeCaptureNavigationController.swift; sourceTree = "<group>"; };
 		A903EB4D1D16A2FE00B33025 /* CaptureViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CaptureViewController.swift; sourceTree = "<group>"; };
 		A903EB501D16A39600B33025 /* Profeey-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Profeey-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -129,6 +157,8 @@
 		A903EB561D16A39700B33025 /* UIImage+FixOrientation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+FixOrientation.m"; sourceTree = "<group>"; };
 		A903EB5A1D16A3C800B33025 /* ProfeeySimpleCamera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfeeySimpleCamera.swift; sourceTree = "<group>"; };
 		A903EB5C1D16D0E600B33025 /* PhotoPreviewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoPreviewViewController.swift; sourceTree = "<group>"; };
+		A90A09571D43E5A7006AC49D /* WelcomeNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeNavigationController.swift; sourceTree = "<group>"; };
+		A919D0A11D3FC48800AF0726 /* NameSignUpTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NameSignUpTableViewController.swift; sourceTree = "<group>"; };
 		A91A35231D1C26E6006F22B2 /* FullScreenIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FullScreenIndicator.swift; sourceTree = "<group>"; };
 		A930BC781D0DD43E004D49F7 /* Profeey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Profeey.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A930BC7B1D0DD43F004D49F7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -148,6 +178,10 @@
 		A94797A61D2E3451007CBF08 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		A94797AB1D2E3A0C007CBF08 /* AWSRemoteService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSRemoteService.swift; sourceTree = "<group>"; };
 		A94797AD1D2E3C6B007CBF08 /* AWSConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSConstants.swift; sourceTree = "<group>"; };
+		A95C31B01D3E14510003377F /* UICKeyChainStore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UICKeyChainStore.framework; path = /Users/antonio/Projects/iOS/Profeey/Profeey/UICKeyChainStore.framework; sourceTree = "<absolute>"; };
+		A95C31B31D3E16370003377F /* UICKeyChainStore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = UICKeyChainStore.framework; sourceTree = "<group>"; };
+		A95C31B61D3E16930003377F /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		A95C31B81D3E35AA0003377F /* AWSClientManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSClientManager.swift; sourceTree = "<group>"; };
 		A95E40C71D350D3400FD61F9 /* EditUsernameTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditUsernameTableViewController.swift; sourceTree = "<group>"; };
 		A95E40C91D35105A00FD61F9 /* EditNameTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditNameTableViewController.swift; sourceTree = "<group>"; };
 		A95E40CB1D35137700FD61F9 /* EditAboutTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditAboutTableViewController.swift; sourceTree = "<group>"; };
@@ -157,6 +191,7 @@
 		A9604F811D33722F00F23B33 /* AWSUserProfessions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSUserProfessions.swift; sourceTree = "<group>"; };
 		A9604F841D337DEA00F23B33 /* CurrentUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrentUser.swift; sourceTree = "<group>"; };
 		A9604F881D33C99100F23B33 /* AWSUserProfilePic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSUserProfilePic.swift; sourceTree = "<group>"; };
+		A961875E1D3FA67B0028DEA7 /* ClientManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClientManager.swift; sourceTree = "<group>"; };
 		A96621FF1D0EBBC200298CE7 /* Onboarding.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Onboarding.storyboard; sourceTree = "<group>"; };
 		A96622021D0EC0FE00298CE7 /* SignUp.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SignUp.storyboard; sourceTree = "<group>"; };
 		A96622041D0EC49700298CE7 /* Colors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
@@ -165,42 +200,61 @@
 		A966220A1D0EDE4E00298CE7 /* PasswordSignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordSignUpViewController.swift; sourceTree = "<group>"; };
 		A966220D1D0EF38C00298CE7 /* LogIn.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LogIn.storyboard; sourceTree = "<group>"; };
 		A966220F1D0EF39800298CE7 /* LogInViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
-		A98884761D35841B006DD976 /* PreviewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreviewViewController.swift; sourceTree = "<group>"; };
+		A96B3B981D3659790071FE7A /* ItemsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemsTableViewController.swift; sourceTree = "<group>"; };
+		A96B3B9B1D365DF70071FE7A /* Items.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Items.storyboard; sourceTree = "<group>"; };
+		A97C02721D489C8D00775D82 /* PreviewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreviewViewController.swift; sourceTree = "<group>"; };
+		A98884761D35841B006DD976 /* PreviewViewController2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreviewViewController2.swift; sourceTree = "<group>"; };
+		A98B42DA1D43C4E00089A769 /* ProfessionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfessionsViewController.swift; sourceTree = "<group>"; };
+		A98B42DC1D43C5720089A769 /* ProfessionsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfessionsTableViewController.swift; sourceTree = "<group>"; };
+		A98B42E01D43C95A0089A769 /* ProfessionTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfessionTableViewCell.swift; sourceTree = "<group>"; };
+		A98B42E21D43DD040089A769 /* ProfessionsCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfessionsCollectionViewController.swift; sourceTree = "<group>"; };
+		A98B42E41D43DDBD0089A769 /* ProfessionCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfessionCollectionViewCell.swift; sourceTree = "<group>"; };
+		A98BB1CD1D3A32AD00E6FB4D /* ProfileTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileTableViewController.swift; sourceTree = "<group>"; };
+		A98BB1CF1D3A353100E6FB4D /* UserTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserTableViewCell.swift; sourceTree = "<group>"; };
+		A99030F61D464F3000336D26 /* GalleryCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GalleryCollectionViewController.swift; sourceTree = "<group>"; };
+		A99030F81D464FEE00336D26 /* GalleryCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GalleryCollectionViewCell.swift; sourceTree = "<group>"; };
+		A99030FA1D46632500336D26 /* AlbumsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlbumsTableViewController.swift; sourceTree = "<group>"; };
+		A99030FC1D46634600336D26 /* AlbumTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlbumTableViewCell.swift; sourceTree = "<group>"; };
+		A99645491D4783DC00D1E2C3 /* CapturePageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CapturePageViewController.swift; sourceTree = "<group>"; };
 		A99ADA1E1D0F189E0050E329 /* Welcome.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Welcome.storyboard; sourceTree = "<group>"; };
-		A99ADA201D0F1ACD0050E329 /* UsernameWelcomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsernameWelcomeViewController.swift; sourceTree = "<group>"; };
-		A99ADA221D0F22AA0050E329 /* ProfessionsWelcomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfessionsWelcomeViewController.swift; sourceTree = "<group>"; };
-		A99ADA241D0F234C0050E329 /* ProfessionsWelcomeTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfessionsWelcomeTableViewController.swift; sourceTree = "<group>"; };
-		A99ADA261D0F2EED0050E329 /* ProfessionWelcomeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfessionWelcomeTableViewCell.swift; sourceTree = "<group>"; };
 		A99BD3611D3037D10072CC27 /* AWSProfession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSProfession.swift; sourceTree = "<group>"; };
 		A99BD3671D303FE20072CC27 /* AWSProfessionsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSProfessionsTable.swift; sourceTree = "<group>"; };
-		A99DD48D1D29C1F70090FFAB /* ProfilePicUploader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfilePicUploader.swift; sourceTree = "<group>"; };
 		A9A503931D2F925F0030A472 /* EditProfileTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditProfileTableViewController.swift; sourceTree = "<group>"; };
 		A9A503981D2FA9180030A472 /* LocalService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalService.swift; sourceTree = "<group>"; };
 		A9A5039E1D2FE0810030A472 /* AWSUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSUser.swift; sourceTree = "<group>"; };
 		A9A503A01D2FE0A90030A472 /* AWSUsersTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSUsersTable.swift; sourceTree = "<group>"; };
 		A9A503A61D2FF8450030A472 /* EditProfile.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = EditProfile.storyboard; sourceTree = "<group>"; };
-		A9AA30721D267769009AFF63 /* CaptureProfilePhotoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CaptureProfilePhotoViewController.swift; sourceTree = "<group>"; };
-		A9AA30741D2678A6009AFF63 /* CaptureProfilePhotoNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CaptureProfilePhotoNavigationController.swift; sourceTree = "<group>"; };
-		A9AA30781D26A800009AFF63 /* PreviewProfilePhotoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreviewProfilePhotoViewController.swift; sourceTree = "<group>"; };
+		A9A8DD101D4529B2009B3C24 /* LogInNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogInNavigationController.swift; sourceTree = "<group>"; };
+		A9A8DD121D452BAA009B3C24 /* LogInTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogInTableViewController.swift; sourceTree = "<group>"; };
+		A9ACAE181D390E3B00D77682 /* PostCategoryCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostCategoryCollectionViewCell.swift; sourceTree = "<group>"; };
+		A9AD744A1D3627BD007ACBD4 /* FiltersCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FiltersCollectionViewController.swift; sourceTree = "<group>"; };
+		A9AD744E1D364882007ACBD4 /* EditTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditTableViewController.swift; sourceTree = "<group>"; };
 		A9B934AF1D1BD9BB00ACC2B8 /* OnboardingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
-		A9C482131D30E983007B5423 /* EditProfessionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditProfessionsViewController.swift; sourceTree = "<group>"; };
-		A9C482151D30EC25007B5423 /* ProfessionsCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfessionsCollectionViewController.swift; sourceTree = "<group>"; };
-		A9C482171D30ED0B007B5423 /* ProfessionCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfessionCollectionViewCell.swift; sourceTree = "<group>"; };
+		A9BFD9111D45EB3100D9D962 /* ProfileTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileTableViewCell.swift; sourceTree = "<group>"; };
+		A9BFD9161D46125700D9D962 /* CaptureProfilePicViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CaptureProfilePicViewController.swift; sourceTree = "<group>"; };
+		A9C0ED391D3C21C30036F791 /* Post.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
+		A9C482131D30E983007B5423 /* ItemsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemsViewController.swift; sourceTree = "<group>"; };
+		A9C482151D30EC25007B5423 /* ItemsCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemsCollectionViewController.swift; sourceTree = "<group>"; };
+		A9C482171D30ED0B007B5423 /* ItemCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemCollectionViewCell.swift; sourceTree = "<group>"; };
+		A9C5D0C31D3A84BC00EBA87D /* HomeTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeTableViewController.swift; sourceTree = "<group>"; };
+		A9C5D0CB1D3AABB100EBA87D /* PostDetailsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostDetailsTableViewController.swift; sourceTree = "<group>"; };
 		A9C6CB7E1D2929AA00863816 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
-		A9D960651D32FFE700273A78 /* AWSUserFullName.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSUserFullName.swift; sourceTree = "<group>"; };
+		A9CF75371D40BA1F0047BB1A /* SignUpNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpNavigationController.swift; sourceTree = "<group>"; };
+		A9CF75391D40C1C80047BB1A /* EmailSignUpTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmailSignUpTableViewController.swift; sourceTree = "<group>"; };
+		A9CF753B1D40C54B0047BB1A /* PasswordSignUpTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordSignUpTableViewController.swift; sourceTree = "<group>"; };
+		A9CF75451D40CB740047BB1A /* UsernameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsernameViewController.swift; sourceTree = "<group>"; };
+		A9CF75471D40CE2A0047BB1A /* UsernameTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsernameTableViewController.swift; sourceTree = "<group>"; };
+		A9D960651D32FFE700273A78 /* AWSUserFirstLastName.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSUserFirstLastName.swift; sourceTree = "<group>"; };
 		A9E53B681D10665100CD1D6C /* Home.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Home.storyboard; sourceTree = "<group>"; };
 		A9E53B6A1D10666800CD1D6C /* Search.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Search.storyboard; sourceTree = "<group>"; };
 		A9E53B6C1D10667100CD1D6C /* Capture.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Capture.storyboard; sourceTree = "<group>"; };
 		A9E53B6E1D10667B00CD1D6C /* Notifications.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Notifications.storyboard; sourceTree = "<group>"; };
 		A9E53B701D10668400CD1D6C /* Profile.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Profile.storyboard; sourceTree = "<group>"; };
 		A9E53B721D1067E800CD1D6C /* MainTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
-		A9E53B741D10784A00CD1D6C /* ProfileTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileTableViewController.swift; sourceTree = "<group>"; };
-		A9E53B761D10786900CD1D6C /* HeaderProfileTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeaderProfileTableViewCell.swift; sourceTree = "<group>"; };
 		A9EAD3351D1E7A7100994292 /* AWSMobileHubHelper.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSMobileHubHelper.framework; path = Profeey/AWSMobileHubHelper.framework; sourceTree = "<group>"; };
-		A9EAD3371D1E7AA500994292 /* AWSMobileClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSMobileClient.swift; sourceTree = "<group>"; };
 		A9EAD33F1D1E8E0C00994292 /* NoSQLModelHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoSQLModelHelpers.swift; sourceTree = "<group>"; };
-		A9FC7DA91D100BCA001C17CB /* DiscoverWelcomeTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiscoverWelcomeTableViewController.swift; sourceTree = "<group>"; };
-		A9FC7DAB1D100BF8001C17CB /* UserWelcomeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserWelcomeTableViewCell.swift; sourceTree = "<group>"; };
+		A9F49D561D379D01002EB68B /* AWSPost.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSPost.swift; sourceTree = "<group>"; };
+		A9F49D591D379D70002EB68B /* AWSPostsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSPostsTable.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -208,11 +262,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A95C31B41D3E16370003377F /* UICKeyChainStore.framework in Frameworks */,
 				A9EAD3361D1E7A7100994292 /* AWSMobileHubHelper.framework in Frameworks */,
 				A930BCA81D0DD623004D49F7 /* libz.tbd in Frameworks */,
 				A930BCA61D0DD61A004D49F7 /* libsqlite3.tbd in Frameworks */,
 				A930BC981D0DD586004D49F7 /* AWSLambda.framework in Frameworks */,
 				A930BC991D0DD586004D49F7 /* AWSMobileAnalytics.framework in Frameworks */,
+				A95C31B11D3E14510003377F /* UICKeyChainStore.framework in Frameworks */,
 				A930BC941D0DD586004D49F7 /* AWSCognito.framework in Frameworks */,
 				A930BC9A1D0DD586004D49F7 /* AWSS3.framework in Frameworks */,
 				A930BC951D0DD586004D49F7 /* AWSCognitoIdentityProvider.framework in Frameworks */,
@@ -260,8 +316,8 @@
 			children = (
 				A9C6CB7D1D29296B00863816 /* Extensions */,
 				A9EAD3481D1E8F3500994292 /* AWS */,
-				A903EB4F1D16A35400B33025 /* Camera */,
 				A9A503971D2FA7DB0030A472 /* Local */,
+				A903EB4F1D16A35400B33025 /* Camera */,
 				A9E53B671D10661700CD1D6C /* Side */,
 				A9E53B611D10657400CD1D6C /* Main */,
 				A930BC7B1D0DD43F004D49F7 /* AppDelegate.swift */,
@@ -277,6 +333,7 @@
 		A930BCA31D0DD5CC004D49F7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A95C31B31D3E16370003377F /* UICKeyChainStore.framework */,
 				A9EAD3351D1E7A7100994292 /* AWSMobileHubHelper.framework */,
 				A930BCA71D0DD623004D49F7 /* libz.tbd */,
 				A930BCA51D0DD61A004D49F7 /* libsqlite3.tbd */,
@@ -296,10 +353,11 @@
 			children = (
 				A9A5039E1D2FE0810030A472 /* AWSUser.swift */,
 				A9604F7F1D33722100F23B33 /* AWSUserAbout.swift */,
-				A9D960651D32FFE700273A78 /* AWSUserFullName.swift */,
+				A9D960651D32FFE700273A78 /* AWSUserFirstLastName.swift */,
 				A9604F7D1D33721000F23B33 /* AWSUserPreferredUsername.swift */,
 				A9604F811D33722F00F23B33 /* AWSUserProfessions.swift */,
 				A9604F881D33C99100F23B33 /* AWSUserProfilePic.swift */,
+				A9A503A01D2FE0A90030A472 /* AWSUsersTable.swift */,
 			);
 			name = AWSUser;
 			sourceTree = "<group>";
@@ -317,9 +375,10 @@
 			isa = PBXGroup;
 			children = (
 				A96622021D0EC0FE00298CE7 /* SignUp.storyboard */,
-				A96622061D0EC60500298CE7 /* NameSignUpViewController.swift */,
-				A96622081D0ED8D700298CE7 /* EmailSignUpViewController.swift */,
-				A966220A1D0EDE4E00298CE7 /* PasswordSignUpViewController.swift */,
+				A9CF75371D40BA1F0047BB1A /* SignUpNavigationController.swift */,
+				A9CF753F1D40CB100047BB1A /* Name */,
+				A9CF75401D40CB1A0047BB1A /* Email */,
+				A9CF75421D40CB390047BB1A /* Password */,
 			);
 			name = SignUp;
 			sourceTree = "<group>";
@@ -328,12 +387,14 @@
 			isa = PBXGroup;
 			children = (
 				A966220D1D0EF38C00298CE7 /* LogIn.storyboard */,
+				A9A8DD101D4529B2009B3C24 /* LogInNavigationController.swift */,
 				A966220F1D0EF39800298CE7 /* LogInViewController.swift */,
+				A9A8DD121D452BAA009B3C24 /* LogInTableViewController.swift */,
 			);
 			name = LogIn;
 			sourceTree = "<group>";
 		};
-		A967FFCB1D25213F00AE4E24 /* Edit */ = {
+		A967FFCB1D25213F00AE4E24 /* Edit Profile */ = {
 			isa = PBXGroup;
 			children = (
 				A9A503A61D2FF8450030A472 /* EditProfile.storyboard */,
@@ -341,13 +402,8 @@
 				A95E40C71D350D3400FD61F9 /* EditUsernameTableViewController.swift */,
 				A95E40C91D35105A00FD61F9 /* EditNameTableViewController.swift */,
 				A95E40CB1D35137700FD61F9 /* EditAboutTableViewController.swift */,
-				A9C482131D30E983007B5423 /* EditProfessionsViewController.swift */,
-				A9C482151D30EC25007B5423 /* ProfessionsCollectionViewController.swift */,
-				A9C482171D30ED0B007B5423 /* ProfessionCollectionViewCell.swift */,
-				A902280E1D32778B00C2EFEB /* SearchProfessionsTableViewController.swift */,
-				A90228101D3279B500C2EFEB /* ProfessionTableViewCell.swift */,
 			);
-			name = Edit;
+			name = "Edit Profile";
 			sourceTree = "<group>";
 		};
 		A967FFCC1D25215100AE4E24 /* Root */ = {
@@ -359,16 +415,38 @@
 			name = Root;
 			sourceTree = "<group>";
 		};
+		A96B3B9A1D365DCE0071FE7A /* Items */ = {
+			isa = PBXGroup;
+			children = (
+				A96B3B9B1D365DF70071FE7A /* Items.storyboard */,
+				A9C482131D30E983007B5423 /* ItemsViewController.swift */,
+				A9C482151D30EC25007B5423 /* ItemsCollectionViewController.swift */,
+				A9C482171D30ED0B007B5423 /* ItemCollectionViewCell.swift */,
+				A96B3B981D3659790071FE7A /* ItemsTableViewController.swift */,
+				A90228101D3279B500C2EFEB /* ItemTableViewCell.swift */,
+			);
+			name = Items;
+			sourceTree = "<group>";
+		};
+		A98B42D91D43C4BC0089A769 /* Professions */ = {
+			isa = PBXGroup;
+			children = (
+				A98B42DA1D43C4E00089A769 /* ProfessionsViewController.swift */,
+				A98B42DC1D43C5720089A769 /* ProfessionsTableViewController.swift */,
+				A98B42E01D43C95A0089A769 /* ProfessionTableViewCell.swift */,
+				A98B42E21D43DD040089A769 /* ProfessionsCollectionViewController.swift */,
+				A98B42E41D43DDBD0089A769 /* ProfessionCollectionViewCell.swift */,
+			);
+			name = Professions;
+			sourceTree = "<group>";
+		};
 		A99ADA1D1D0F188A0050E329 /* Welcome */ = {
 			isa = PBXGroup;
 			children = (
 				A99ADA1E1D0F189E0050E329 /* Welcome.storyboard */,
-				A99ADA201D0F1ACD0050E329 /* UsernameWelcomeViewController.swift */,
-				A99ADA221D0F22AA0050E329 /* ProfessionsWelcomeViewController.swift */,
-				A99ADA241D0F234C0050E329 /* ProfessionsWelcomeTableViewController.swift */,
-				A99ADA261D0F2EED0050E329 /* ProfessionWelcomeTableViewCell.swift */,
-				A9FC7DA91D100BCA001C17CB /* DiscoverWelcomeTableViewController.swift */,
-				A9FC7DAB1D100BF8001C17CB /* UserWelcomeTableViewCell.swift */,
+				A90A09571D43E5A7006AC49D /* WelcomeNavigationController.swift */,
+				A9CF75411D40CB2B0047BB1A /* Username */,
+				A98B42D91D43C4BC0089A769 /* Professions */,
 			);
 			name = Welcome;
 			sourceTree = "<group>";
@@ -379,8 +457,17 @@
 				A9A503981D2FA9180030A472 /* LocalService.swift */,
 				A94797A61D2E3451007CBF08 /* User.swift */,
 				A9604F841D337DEA00F23B33 /* CurrentUser.swift */,
+				A9C0ED391D3C21C30036F791 /* Post.swift */,
 			);
 			name = Local;
+			sourceTree = "<group>";
+		};
+		A9BFD9131D4611FF00D9D962 /* Capture Profile Pic */ = {
+			isa = PBXGroup;
+			children = (
+				A9BFD9161D46125700D9D962 /* CaptureProfilePicViewController.swift */,
+			);
+			name = "Capture Profile Pic";
 			sourceTree = "<group>";
 		};
 		A9C6CB7D1D29296B00863816 /* Extensions */ = {
@@ -389,6 +476,42 @@
 				A9C6CB7E1D2929AA00863816 /* Extensions.swift */,
 			);
 			name = Extensions;
+			sourceTree = "<group>";
+		};
+		A9CF753F1D40CB100047BB1A /* Name */ = {
+			isa = PBXGroup;
+			children = (
+				A96622061D0EC60500298CE7 /* NameSignUpViewController.swift */,
+				A919D0A11D3FC48800AF0726 /* NameSignUpTableViewController.swift */,
+			);
+			name = Name;
+			sourceTree = "<group>";
+		};
+		A9CF75401D40CB1A0047BB1A /* Email */ = {
+			isa = PBXGroup;
+			children = (
+				A96622081D0ED8D700298CE7 /* EmailSignUpViewController.swift */,
+				A9CF75391D40C1C80047BB1A /* EmailSignUpTableViewController.swift */,
+			);
+			name = Email;
+			sourceTree = "<group>";
+		};
+		A9CF75411D40CB2B0047BB1A /* Username */ = {
+			isa = PBXGroup;
+			children = (
+				A9CF75451D40CB740047BB1A /* UsernameViewController.swift */,
+				A9CF75471D40CE2A0047BB1A /* UsernameTableViewController.swift */,
+			);
+			name = Username;
+			sourceTree = "<group>";
+		};
+		A9CF75421D40CB390047BB1A /* Password */ = {
+			isa = PBXGroup;
+			children = (
+				A966220A1D0EDE4E00298CE7 /* PasswordSignUpViewController.swift */,
+				A9CF753B1D40C54B0047BB1A /* PasswordSignUpTableViewController.swift */,
+			);
+			name = Password;
 			sourceTree = "<group>";
 		};
 		A9E53B611D10657400CD1D6C /* Main */ = {
@@ -400,6 +523,8 @@
 				A9E53B641D1065EF00CD1D6C /* Capture */,
 				A9E53B651D1065FB00CD1D6C /* Notifications */,
 				A9E53B661D10660200CD1D6C /* Profile */,
+				A967FFCB1D25213F00AE4E24 /* Edit Profile */,
+				A96B3B9A1D365DCE0071FE7A /* Items */,
 			);
 			name = Main;
 			sourceTree = "<group>";
@@ -408,6 +533,8 @@
 			isa = PBXGroup;
 			children = (
 				A9E53B681D10665100CD1D6C /* Home.storyboard */,
+				A9C5D0C31D3A84BC00EBA87D /* HomeTableViewController.swift */,
+				A9C5D0CB1D3AABB100EBA87D /* PostDetailsTableViewController.swift */,
 			);
 			name = Home;
 			sourceTree = "<group>";
@@ -427,9 +554,11 @@
 				A903EB4B1D169DCC00B33025 /* FakeCaptureNavigationController.swift */,
 				A95E40CF1D35410500FD61F9 /* CaptureNavigationController.swift */,
 				A903EB4D1D16A2FE00B33025 /* CaptureViewController.swift */,
-				A98884761D35841B006DD976 /* PreviewViewController.swift */,
-				A903EB5C1D16D0E600B33025 /* PhotoPreviewViewController.swift */,
+				A98884761D35841B006DD976 /* PreviewViewController2.swift */,
+				A9AD744E1D364882007ACBD4 /* EditTableViewController.swift */,
+				A9AD744A1D3627BD007ACBD4 /* FiltersCollectionViewController.swift */,
 				A903EB5A1D16A3C800B33025 /* ProfeeySimpleCamera.swift */,
+				A903EB5C1D16D0E600B33025 /* PhotoPreviewViewController.swift */,
 			);
 			name = Capture;
 			sourceTree = "<group>";
@@ -445,13 +574,16 @@
 		A9E53B661D10660200CD1D6C /* Profile */ = {
 			isa = PBXGroup;
 			children = (
-				A967FFCB1D25213F00AE4E24 /* Edit */,
 				A9E53B701D10668400CD1D6C /* Profile.storyboard */,
-				A9E53B741D10784A00CD1D6C /* ProfileTableViewController.swift */,
-				A9E53B761D10786900CD1D6C /* HeaderProfileTableViewCell.swift */,
-				A9AA30741D2678A6009AFF63 /* CaptureProfilePhotoNavigationController.swift */,
-				A9AA30721D267769009AFF63 /* CaptureProfilePhotoViewController.swift */,
-				A9AA30781D26A800009AFF63 /* PreviewProfilePhotoViewController.swift */,
+				A98BB1CD1D3A32AD00E6FB4D /* ProfileTableViewController.swift */,
+				A9BFD9111D45EB3100D9D962 /* ProfileTableViewCell.swift */,
+				A99645491D4783DC00D1E2C3 /* CapturePageViewController.swift */,
+				A97C02721D489C8D00775D82 /* PreviewViewController.swift */,
+				A9FF5A461D4667DE0089D009 /* Gallery */,
+				A9BFD9131D4611FF00D9D962 /* Capture Profile Pic */,
+				A98BB1CF1D3A353100E6FB4D /* UserTableViewCell.swift */,
+				A903C3CB1D38E04200ED7E10 /* PostTableViewCell.swift */,
+				A9ACAE181D390E3B00D77682 /* PostCategoryCollectionViewCell.swift */,
 			);
 			name = Profile;
 			sourceTree = "<group>";
@@ -471,16 +603,45 @@
 			isa = PBXGroup;
 			children = (
 				A9604F831D33726700F23B33 /* AWSUser */,
-				A9EAD3371D1E7AA500994292 /* AWSMobileClient.swift */,
-				A94797AB1D2E3A0C007CBF08 /* AWSRemoteService.swift */,
+				A9F49D5B1D37A095002EB68B /* AWSProfession */,
+				A9F49D581D379D58002EB68B /* AWSPost */,
+				A95C31B81D3E35AA0003377F /* AWSClientManager.swift */,
+				A961875E1D3FA67B0028DEA7 /* ClientManager.swift */,
 				A94797AD1D2E3C6B007CBF08 /* AWSConstants.swift */,
-				A9A503A01D2FE0A90030A472 /* AWSUsersTable.swift */,
-				A99BD3611D3037D10072CC27 /* AWSProfession.swift */,
-				A99BD3671D303FE20072CC27 /* AWSProfessionsTable.swift */,
+				A94797AB1D2E3A0C007CBF08 /* AWSRemoteService.swift */,
 				A9EAD33F1D1E8E0C00994292 /* NoSQLModelHelpers.swift */,
-				A99DD48D1D29C1F70090FFAB /* ProfilePicUploader.swift */,
+				A95C31B61D3E16930003377F /* Constants.swift */,
 			);
 			name = AWS;
+			sourceTree = "<group>";
+		};
+		A9F49D581D379D58002EB68B /* AWSPost */ = {
+			isa = PBXGroup;
+			children = (
+				A9F49D561D379D01002EB68B /* AWSPost.swift */,
+				A9F49D591D379D70002EB68B /* AWSPostsTable.swift */,
+			);
+			name = AWSPost;
+			sourceTree = "<group>";
+		};
+		A9F49D5B1D37A095002EB68B /* AWSProfession */ = {
+			isa = PBXGroup;
+			children = (
+				A99BD3611D3037D10072CC27 /* AWSProfession.swift */,
+				A99BD3671D303FE20072CC27 /* AWSProfessionsTable.swift */,
+			);
+			name = AWSProfession;
+			sourceTree = "<group>";
+		};
+		A9FF5A461D4667DE0089D009 /* Gallery */ = {
+			isa = PBXGroup;
+			children = (
+				A99030F61D464F3000336D26 /* GalleryCollectionViewController.swift */,
+				A99030F81D464FEE00336D26 /* GalleryCollectionViewCell.swift */,
+				A99030FA1D46632500336D26 /* AlbumsTableViewController.swift */,
+				A99030FC1D46634600336D26 /* AlbumTableViewCell.swift */,
+			);
+			name = Gallery;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -548,6 +709,7 @@
 				A930BC831D0DD43F004D49F7 /* Assets.xcassets in Resources */,
 				A930BC811D0DD43F004D49F7 /* Main.storyboard in Resources */,
 				A9A503A71D2FF8450030A472 /* EditProfile.storyboard in Resources */,
+				A96B3B9C1D365DF70071FE7A /* Items.storyboard in Resources */,
 				A96622001D0EBBC200298CE7 /* Onboarding.storyboard in Resources */,
 				A9E53B6B1D10666800CD1D6C /* Search.storyboard in Resources */,
 				A9E53B6D1D10667100CD1D6C /* Capture.storyboard in Resources */,
@@ -585,60 +747,83 @@
 			files = (
 				A903EB581D16A39700B33025 /* LLSimpleCamera+Helper.m in Sources */,
 				A903EB5B1D16A3C800B33025 /* ProfeeySimpleCamera.swift in Sources */,
+				A9CF753A1D40C1C80047BB1A /* EmailSignUpTableViewController.swift in Sources */,
+				A9C5D0CC1D3AABB100EBA87D /* PostDetailsTableViewController.swift in Sources */,
 				A903EB5D1D16D0E600B33025 /* PhotoPreviewViewController.swift in Sources */,
+				A99030FD1D46634600336D26 /* AlbumTableViewCell.swift in Sources */,
+				A98B42E11D43C95A0089A769 /* ProfessionTableViewCell.swift in Sources */,
+				A9C5D0C41D3A84BC00EBA87D /* HomeTableViewController.swift in Sources */,
 				A94797AE1D2E3C6B007CBF08 /* AWSConstants.swift in Sources */,
-				A9E53B771D10786900CD1D6C /* HeaderProfileTableViewCell.swift in Sources */,
 				A96622071D0EC60500298CE7 /* NameSignUpViewController.swift in Sources */,
 				A96622091D0ED8D700298CE7 /* EmailSignUpViewController.swift in Sources */,
+				A9CF753C1D40C54B0047BB1A /* PasswordSignUpTableViewController.swift in Sources */,
 				A95E40CA1D35105A00FD61F9 /* EditNameTableViewController.swift in Sources */,
 				A966220B1D0EDE4E00298CE7 /* PasswordSignUpViewController.swift in Sources */,
+				A98B42DD1D43C5720089A769 /* ProfessionsTableViewController.swift in Sources */,
 				A9604F891D33C99100F23B33 /* AWSUserProfilePic.swift in Sources */,
 				A903EB4C1D169DCC00B33025 /* FakeCaptureNavigationController.swift in Sources */,
 				A95E40CC1D35137700FD61F9 /* EditAboutTableViewController.swift in Sources */,
-				A9AA30751D2678A6009AFF63 /* CaptureProfilePhotoNavigationController.swift in Sources */,
-				A99DD48E1D29C1F70090FFAB /* ProfilePicUploader.swift in Sources */,
+				A96B3B991D3659790071FE7A /* ItemsTableViewController.swift in Sources */,
 				A9EAD3401D1E8E0C00994292 /* NoSQLModelHelpers.swift in Sources */,
 				A95E40C81D350D3400FD61F9 /* EditUsernameTableViewController.swift in Sources */,
 				A99BD3681D303FE20072CC27 /* AWSProfessionsTable.swift in Sources */,
 				A9A5039F1D2FE0810030A472 /* AWSUser.swift in Sources */,
-				A9FC7DAC1D100BF8001C17CB /* UserWelcomeTableViewCell.swift in Sources */,
+				A9CF75461D40CB740047BB1A /* UsernameViewController.swift in Sources */,
+				A9ACAE191D390E3B00D77682 /* PostCategoryCollectionViewCell.swift in Sources */,
 				A9A503941D2F925F0030A472 /* EditProfileTableViewController.swift in Sources */,
 				A9604F821D33722F00F23B33 /* AWSUserProfessions.swift in Sources */,
-				A99ADA231D0F22AA0050E329 /* ProfessionsWelcomeViewController.swift in Sources */,
+				A90A09581D43E5A7006AC49D /* WelcomeNavigationController.swift in Sources */,
+				A95C31B71D3E16930003377F /* Constants.swift in Sources */,
+				A9F49D5A1D379D70002EB68B /* AWSPostsTable.swift in Sources */,
 				A91A35241D1C26E6006F22B2 /* FullScreenIndicator.swift in Sources */,
-				A98884771D35841B006DD976 /* PreviewViewController.swift in Sources */,
+				A9CF75481D40CE2A0047BB1A /* UsernameTableViewController.swift in Sources */,
+				A98884771D35841B006DD976 /* PreviewViewController2.swift in Sources */,
+				A996454A1D4783DC00D1E2C3 /* CapturePageViewController.swift in Sources */,
 				A9A503A11D2FE0A90030A472 /* AWSUsersTable.swift in Sources */,
 				A96622101D0EF39800298CE7 /* LogInViewController.swift in Sources */,
-				A9AA30731D267769009AFF63 /* CaptureProfilePhotoViewController.swift in Sources */,
-				A9AA30791D26A800009AFF63 /* PreviewProfilePhotoViewController.swift in Sources */,
+				A9BFD9121D45EB3100D9D962 /* ProfileTableViewCell.swift in Sources */,
+				A903C3CC1D38E04200ED7E10 /* PostTableViewCell.swift in Sources */,
+				A98BB1D01D3A353100E6FB4D /* UserTableViewCell.swift in Sources */,
+				A95C31B91D3E35AA0003377F /* AWSClientManager.swift in Sources */,
 				A9B934B01D1BD9BB00ACC2B8 /* OnboardingViewController.swift in Sources */,
 				A99BD3621D3037D10072CC27 /* AWSProfession.swift in Sources */,
-				A9E53B751D10784A00CD1D6C /* ProfileTableViewController.swift in Sources */,
-				A902280F1D32778B00C2EFEB /* SearchProfessionsTableViewController.swift in Sources */,
+				A9A8DD131D452BAA009B3C24 /* LogInTableViewController.swift in Sources */,
+				A9AD744B1D3627BD007ACBD4 /* FiltersCollectionViewController.swift in Sources */,
 				A94797AC1D2E3A0C007CBF08 /* AWSRemoteService.swift in Sources */,
 				A903EB591D16A39700B33025 /* UIImage+FixOrientation.m in Sources */,
-				A9C482181D30ED0B007B5423 /* ProfessionCollectionViewCell.swift in Sources */,
-				A90228111D3279B500C2EFEB /* ProfessionTableViewCell.swift in Sources */,
-				A9D960661D32FFE700273A78 /* AWSUserFullName.swift in Sources */,
-				A99ADA271D0F2EED0050E329 /* ProfessionWelcomeTableViewCell.swift in Sources */,
-				A99ADA211D0F1ACD0050E329 /* UsernameWelcomeViewController.swift in Sources */,
-				A9EAD3381D1E7AA500994292 /* AWSMobileClient.swift in Sources */,
+				A97C02731D489C8D00775D82 /* PreviewViewController.swift in Sources */,
+				A9C482181D30ED0B007B5423 /* ItemCollectionViewCell.swift in Sources */,
+				A90228111D3279B500C2EFEB /* ItemTableViewCell.swift in Sources */,
+				A961875F1D3FA67B0028DEA7 /* ClientManager.swift in Sources */,
+				A9D960661D32FFE700273A78 /* AWSUserFirstLastName.swift in Sources */,
+				A98BB1CE1D3A32AD00E6FB4D /* ProfileTableViewController.swift in Sources */,
 				A96622051D0EC49700298CE7 /* Colors.swift in Sources */,
+				A9CF75381D40BA1F0047BB1A /* SignUpNavigationController.swift in Sources */,
 				A94797A71D2E3451007CBF08 /* User.swift in Sources */,
 				A903EB4E1D16A2FE00B33025 /* CaptureViewController.swift in Sources */,
 				A9E53B731D1067E800CD1D6C /* MainTabBarController.swift in Sources */,
 				A9A503991D2FA9180030A472 /* LocalService.swift in Sources */,
 				A9604F7E1D33721000F23B33 /* AWSUserPreferredUsername.swift in Sources */,
-				A9FC7DAA1D100BCA001C17CB /* DiscoverWelcomeTableViewController.swift in Sources */,
 				A9604F801D33722100F23B33 /* AWSUserAbout.swift in Sources */,
+				A9C0ED3A1D3C21C30036F791 /* Post.swift in Sources */,
 				A903EB571D16A39700B33025 /* LLSimpleCamera.m in Sources */,
-				A9C482161D30EC25007B5423 /* ProfessionsCollectionViewController.swift in Sources */,
+				A9A8DD111D4529B2009B3C24 /* LogInNavigationController.swift in Sources */,
+				A9C482161D30EC25007B5423 /* ItemsCollectionViewController.swift in Sources */,
+				A99030F91D464FEE00336D26 /* GalleryCollectionViewCell.swift in Sources */,
+				A9BFD9171D46125700D9D962 /* CaptureProfilePicViewController.swift in Sources */,
+				A98B42DB1D43C4E00089A769 /* ProfessionsViewController.swift in Sources */,
 				A95E40D01D35410500FD61F9 /* CaptureNavigationController.swift in Sources */,
+				A99030FB1D46632500336D26 /* AlbumsTableViewController.swift in Sources */,
+				A9AD744F1D364882007ACBD4 /* EditTableViewController.swift in Sources */,
+				A9F49D571D379D01002EB68B /* AWSPost.swift in Sources */,
 				A9C6CB7F1D2929AA00863816 /* Extensions.swift in Sources */,
-				A99ADA251D0F234C0050E329 /* ProfessionsWelcomeTableViewController.swift in Sources */,
-				A9C482141D30E983007B5423 /* EditProfessionsViewController.swift in Sources */,
+				A98B42E31D43DD040089A769 /* ProfessionsCollectionViewController.swift in Sources */,
+				A9C482141D30E983007B5423 /* ItemsViewController.swift in Sources */,
+				A99030F71D464F3000336D26 /* GalleryCollectionViewController.swift in Sources */,
 				A9604F851D337DEA00F23B33 /* CurrentUser.swift in Sources */,
 				A930BC7C1D0DD43F004D49F7 /* AppDelegate.swift in Sources */,
+				A919D0A21D3FC48800AF0726 /* NameSignUpTableViewController.swift in Sources */,
+				A98B42E51D43DDBD0089A769 /* ProfessionCollectionViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -759,6 +944,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Profeey",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = Profeey/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -780,6 +966,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Profeey",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = Profeey/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

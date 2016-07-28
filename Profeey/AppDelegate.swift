@@ -7,33 +7,51 @@
 //
 
 import UIKit
-import AWSCognitoIdentityProvider
+import AWSCognito
+import AWSCore
 
+import AWSCognitoIdentityProvider
 import AWSMobileHubHelper
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate, AWSCognitoIdentityInteractiveAuthenticationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
+        self.configureUI()
+        
+//        AWSClientManager.defaultClientManager().userPool?.delegate = self
+//        AWSClientManager.defaultClientManager().incompleteSignUpDelegate = self
+//        AWSClientManager.defaultClientManager().getCurrentUser({
+//            (task: AWSTask) in
+//            return nil
+//        })
+        return true
+    }
+    
+    private func configureUI() {
         // UINavigationBar
-        UINavigationBar.appearance().barStyle = .Default
-        UINavigationBar.appearance().tintColor = Colors.black
-        UINavigationBar.appearance().translucent = false
-        UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: Colors.blue]
         UINavigationBar.appearance().barTintColor = Colors.greyLight
-//        UINavigationBar.appearance().shadowImage = UIImage()
-        UINavigationBar.appearance().setBackgroundImage(UIImage(), forBarMetrics: .Default)
+        UINavigationBar.appearance().tintColor = Colors.black
+        UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: Colors.blue]
+        UINavigationBar.appearance().shadowImage = UIImage()
+        // UINavigationBar.appearance().setBackgroundImage(UIImage(), forBarMetrics: .Default)
         
         // UITabBar
-        UITabBar.appearance().translucent = true
-        UITabBar.appearance().barTintColor = Colors.blue.colorWithAlphaComponent(0.8)
+        // UITabBar.appearance().translucent = true
+        UITabBar.appearance().translucent = false
+        // UITabBar.appearance().barTintColor = Colors.blue.colorWithAlphaComponent(0.8)
+        UITabBar.appearance().barTintColor = Colors.greyLight
+        UITabBar.appearance().backgroundImage = UIImage()
+        UITabBar.appearance().shadowImage = UIImage()
         
         // UITableView
         UITableView.appearance().backgroundColor = Colors.greyLight
-        UITableView.appearance().tableFooterView = UIView() // for removing empty cells
+        UITableView.appearance().tableFooterView = UIView()
+        UITableView.appearance().separatorColor = Colors.grey
+        UITableView.appearance().separatorInset = UIEdgeInsetsZero
         
         // UITableViewCell
         let colorView = UIView()
@@ -45,30 +63,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, AWSCognitoIdentityInterac
         
         // UITextView
         UITextView.appearance().tintColor = Colors.black
-        
-        // AWS bootstrap
-        let remoteService = AWSRemoteService.defaultRemoteService()
-        // Set pool delegate
-        remoteService.userPool.delegate = self
-        // Update user details.
-        remoteService.setUserDetails()
-        
-        // Resume AWS session
-        remoteService.resumeSession({
-            (task: AWSTask) in
-            return nil
-        })
-        
-        return true
     }
+}
+
+extension AppDelegate: AWSCognitoIdentityInteractiveAuthenticationDelegate {
     
     // Set up password authentication ui to retrieve username and password from the user.
     func startPasswordAuthentication() -> AWSCognitoIdentityPasswordAuthentication {
         print("Started password authentication:")
         // If calling from LogInViewController stay there.
         if let rootViewController = self.window?.rootViewController,
-        let presentedViewController = rootViewController.presentedViewController as? UINavigationController,
-        let logInViewController = presentedViewController.topViewController as? LogInViewController {
+            let presentedViewController = rootViewController.presentedViewController as? UINavigationController,
+            let logInViewController = presentedViewController.topViewController as? LogInViewController {
             print("Called from logInViewController.")
             return logInViewController
         }
@@ -78,6 +84,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate, AWSCognitoIdentityInterac
             self.window?.rootViewController = rootViewController
         })
         return rootViewController
+    }
+    
+}
+
+extension AppDelegate: IncompleteSignUpDelegate {
+    
+    func preferredUsernameNotSet() {
+        print("PreferredUsername not set:")
+        let storyboard = UIStoryboard(name: "Welcome", bundle: nil)
+        if let navigationViewController = storyboard.instantiateInitialViewController() as? UINavigationController,
+        let _ = navigationViewController.childViewControllers[0] as? UsernameViewController {
+            dispatch_async(dispatch_get_main_queue(), {
+                self.window?.rootViewController = navigationViewController
+            })
+        }
     }
 }
 

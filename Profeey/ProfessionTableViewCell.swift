@@ -2,7 +2,7 @@
 //  ProfessionTableViewCell.swift
 //  Profeey
 //
-//  Created by Antonio Zdelican on 10/07/16.
+//  Created by Antonio Zdelican on 23/07/16.
 //  Copyright © 2016 Profeey. All rights reserved.
 //
 

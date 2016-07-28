@@ -12,11 +12,12 @@ import AWSDynamoDB
 class AWSUser: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     
     var _userId: String?
-    var _about: String?
-    var _fullName: String?
+    var _firstName: String?
+    var _lastName: String?
     var _preferredUsername: String?
     var _profilePicUrl: String?
     var _professions: [String]?
+    var _about: String?
     
     class func dynamoDBTableName() -> String {
         
@@ -31,11 +32,12 @@ class AWSUser: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     override class func JSONKeyPathsByPropertyKey() -> [NSObject : AnyObject] {
         return [
             "_userId" : "userId",
-            "_about" : "about",
-            "_fullName" : "fullName",
+            "_firstName" : "firstName",
+            "_lastName" : "lastName",
             "_preferredUsername" : "preferredUsername",
             "_profilePicUrl" : "profilePicUrl",
             "_professions" : "professions",
+            "_about" : "about",
         ]
     }
 }

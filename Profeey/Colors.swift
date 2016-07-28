@@ -13,8 +13,11 @@ struct Colors {
     // #3C986D
     static let green = UIColor(red: 60.0/255.0, green: 152.0/255.0, blue: 109.0/255.0, alpha: 1.0)
     
+    // #4A90E2
+    static let blue = UIColor(red: 74.0/255.0, green: 144.0/255.0, blue: 226.0/255.0, alpha: 1.0)
+    
     // #3C7C99
-    static let blue = UIColor(red: 60.0/255.0, green: 124.0/255.0, blue: 153.0/255.0, alpha: 1.0)
+    static let blueDark = UIColor(red: 60.0/255.0, green: 124.0/255.0, blue: 153.0/255.0, alpha: 1.0)
     
     // #DC4141
     static let red = UIColor(red: 220.0/255.0, green: 65.0/255.0, blue: 65.0/255.0, alpha: 1.0)

@@ -28,7 +28,8 @@ class CaptureViewController: UIViewController {
         self.closeButton.image = UIImage(named: "btn_close")?.imageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal)
 
         self.camera = ProfeeySimpleCamera(quality: AVCaptureSessionPresetHigh, position: LLCameraPositionRear, videoEnabled: true)
-        self.cameraFrame = CGRectMake(0.0, 0.0, self.view.bounds.width, self.view.bounds.height - self.customToolbarView.bounds.height)
+//        self.cameraFrame = CGRectMake(0.0, 0.0, self.view.bounds.width, self.view.bounds.height - self.customToolbarView.bounds.height)
+        self.cameraFrame = CGRectMake(0.0, 0.0, self.view.bounds.width, self.view.bounds.height)
         self.camera.attachToViewController(self, withFrame: cameraFrame)
         self.camera.fixOrientationAfterCapture = false
         
@@ -93,7 +94,7 @@ class CaptureViewController: UIViewController {
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-        self.camera.view.frame = self.cameraFrame
+        self.camera.view.frame = self.view.bounds
     }
     
     override func preferredInterfaceOrientationForPresentation() -> UIInterfaceOrientation {
@@ -111,7 +112,7 @@ class CaptureViewController: UIViewController {
     // MARK: Navigation
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if let destinationViewController = segue.destinationViewController as? PreviewViewController {
+        if let destinationViewController = segue.destinationViewController as? PreviewViewController2 {
             destinationViewController.photo = self.photo?.fixOrientation()
         }
     }

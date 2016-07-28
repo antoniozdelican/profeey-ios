@@ -2,7 +2,7 @@
 //  ProfessionsCollectionViewController.swift
 //  Profeey
 //
-//  Created by Antonio Zdelican on 09/07/16.
+//  Created by Antonio Zdelican on 23/07/16.
 //  Copyright © 2016 Profeey. All rights reserved.
 //
 
@@ -19,46 +19,41 @@ class ProfessionsCollectionViewController: UICollectionViewController {
     let PROFESSION_FONT: UIFont = UIFont.systemFontOfSize(16.0)
     let TOP_INSET: CGFloat = 4.0
     let LEFT_INSET: CGFloat = 8.0
-    let RIGHT_INSET: CGFloat = 30.0
+    let RIGHT_INSET: CGFloat = 8.0
     
-    var professions: [String]?
-    var professionsArray: [String] = []
+    var professions: [String] = []
     var professionsRemoveDelegate: ProfessionsRemoveDelegate?
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        if let professions = self.professions {
-            self.professionsArray = professions
-        }
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
-
+    
     // MARK: UICollectionViewDataSource
-
+    
     override func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
         return 1
     }
-
-
+    
     override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.professionsArray.count
+        return self.professions.count
     }
-
+    
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("cellProfession", forIndexPath: indexPath) as! ProfessionCollectionViewCell
-        cell.professionLabel.text = self.professionsArray[indexPath.row]
+        cell.professionLabel.text = self.professions[indexPath.row]
         return cell
     }
-
+    
     // MARK: UICollectionViewDelegate
     
     override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         // Inform delegate.
         self.professionsRemoveDelegate?.removeAtIndex(indexPath.row)
-        self.professionsArray.removeAtIndex(indexPath.row)
+        self.professions.removeAtIndex(indexPath.row)
         collectionView.performBatchUpdates({
             collectionView.deleteItemsAtIndexPaths([indexPath])
             }, completion: {completed in
@@ -71,9 +66,9 @@ class ProfessionsCollectionViewController: UICollectionViewController {
 extension ProfessionsCollectionViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-        let profession = self.professionsArray[indexPath.row]
+        let item = self.professions[indexPath.row]
         // Calculations.
-        let labelRect = NSString(string: profession).boundingRectWithSize(CGSize(width: CGFloat(MAXFLOAT), height: self.PROFESSION_LABEL_HEIGHT), options: .UsesLineFragmentOrigin, attributes: [NSFontAttributeName: self.PROFESSION_FONT], context: nil)
+        let labelRect = NSString(string: item).boundingRectWithSize(CGSize(width: CGFloat(MAXFLOAT), height: self.PROFESSION_LABEL_HEIGHT), options: .UsesLineFragmentOrigin, attributes: [NSFontAttributeName: self.PROFESSION_FONT], context: nil)
         let cellWidth = ceil(labelRect.size.width) + self.LEFT_INSET + self.RIGHT_INSET
         let cellHeight = ceil(labelRect.size.height) + 2 * self.TOP_INSET
         
@@ -83,12 +78,12 @@ extension ProfessionsCollectionViewController: UICollectionViewDelegateFlowLayou
 
 extension ProfessionsCollectionViewController: ProfessionsAddDelegate {
     
-    // Insert selected profession.
-    func add(profession: String) {
-        guard !self.professionsArray.contains(profession) else {
+    // Insert selected item.
+    func addProfession(profession: String) {
+        guard !self.professions.contains(profession) else {
             return
         }
-        self.professionsArray.insert(profession, atIndex: 0)
+        self.professions.insert(profession, atIndex: 0)
         let indexPath = NSIndexPath(forRow: 0, inSection: 0)
         self.collectionView?.performBatchUpdates({
             self.collectionView?.insertItemsAtIndexPaths([indexPath])

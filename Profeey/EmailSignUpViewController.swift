@@ -7,29 +7,20 @@
 //
 
 import UIKit
+import AWSLambda
 
 class EmailSignUpViewController: UIViewController {
 
-    @IBOutlet weak var emailTextField: UITextField!
-    @IBOutlet weak var invalidEmailView: UIView!
-    @IBOutlet weak var nextButton: UIButton!
+    @IBOutlet weak var continueButton: UIButton!
     @IBOutlet weak var toolbarBottomConstraint: NSLayoutConstraint!
     
     var toolbarBottomConstraintConstant: CGFloat = 0.0
-    
-    var fullName: String?
+    var newUser: User?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.Plain, target:nil, action:nil)
-        
-        self.emailTextField.addTarget(self, action: #selector(EmailSignUpViewController.emailTextFieldDidChange(_:)), forControlEvents: UIControlEvents.EditingChanged)
-        self.invalidEmailView.layer.borderColor = Colors.red.CGColor
-        self.invalidEmailView.layer.borderWidth = 1.0
-        self.invalidEmailView.hidden = true
-        self.nextButton.addTarget(self, action: #selector(EmailSignUpViewController.nextButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        self.nextButton.enabled = false
+        self.continueButton.enabled = false
         self.toolbarBottomConstraintConstant = self.toolbarBottomConstraint.constant
         self.registerForKeyboardNotifications()
     }
@@ -38,71 +29,21 @@ class EmailSignUpViewController: UIViewController {
         super.didReceiveMemoryWarning()
     }
     
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
-        self.emailTextField.becomeFirstResponder()
-    }
-    
-    override func viewWillDisappear(animated: Bool) {
-        super.viewWillDisappear(animated)
-        self.emailTextField.resignFirstResponder()
-    }
-    
-
     // MARK: Navigation
-
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if let destinationViewController = segue.destinationViewController as? EmailSignUpTableViewController {
+            destinationViewController.emailSignUpDelegate = self
+        }
         if let destinationViewController = segue.destinationViewController as? PasswordSignUpViewController {
-            destinationViewController.fullName = self.fullName
-            destinationViewController.email = self.emailTextField.text
+            destinationViewController.newUser = self.newUser
         }
     }
     
-    // MARK: Tappers
+    // MARK: IBActions
     
-    func emailTextFieldDidChange(sender: UITextField) {
-        guard let email = self.emailTextField.text else {
-            return
-        }
-        if email.isEmpty {
-            self.nextButton.enabled = false
-        } else {
-            self.nextButton.enabled = true
-        }
-    }
-    
-    func nextButtonTapped(sender: UIButton) {
-        guard let email = self.emailTextField.text else {
-            return
-        }
-        if self.isEmailValid(email) {
-            self.performSegueWithIdentifier("segueToPasswordVc", sender: self)
-        } else {
-            // Show error box if it isn't already shown.
-            if self.invalidEmailView.hidden {
-                self.invalidEmailView.hidden = false
-                self.invalidEmailView.alpha = 1.0
-                UIView.animateWithDuration(
-                    0.4,
-                    delay: 2.0,
-                    options: UIViewAnimationOptions.CurveEaseIn,
-                    animations: {
-                        self.invalidEmailView.alpha = 0.0
-                    },
-                    completion: {
-                        (finished) in
-                        self.invalidEmailView.hidden = true
-                })
-            }
-        }
-    }
-    
-    // MARK: Helpers
-    
-    func isEmailValid(email: String) -> Bool {
-        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
-        let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
-        return emailTest.evaluateWithObject(email)
+    @IBAction func continueButtonTapped(sender: AnyObject) {
+        self.performSegueWithIdentifier("segueToPasswordVc", sender: self)
     }
     
     // MARK: Keyboard notifications
@@ -138,5 +79,15 @@ class EmailSignUpViewController: UIViewController {
             self.view.layoutIfNeeded()
         })
     }
+}
 
+extension EmailSignUpViewController: EmailSignUpDelegate {
+    
+    func toggleContinueButton(enabled: Bool) {
+        self.continueButton.enabled = enabled
+    }
+    
+    func updateEmail(email: String?) {
+        self.newUser?.email = email
+    }
 }
