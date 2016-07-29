@@ -77,8 +77,9 @@
 		A9AD744B1D3627BD007ACBD4 /* FiltersCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD744A1D3627BD007ACBD4 /* FiltersCollectionViewController.swift */; };
 		A9AD744F1D364882007ACBD4 /* EditTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD744E1D364882007ACBD4 /* EditTableViewController.swift */; };
 		A9B934B01D1BD9BB00ACC2B8 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B934AF1D1BD9BB00ACC2B8 /* OnboardingViewController.swift */; };
+		A9BCF7401D4C0737001B2EEA /* PreviewProfilePicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9BCF73F1D4C0737001B2EEA /* PreviewProfilePicViewController.swift */; };
+		A9BCF7421D4C085B001B2EEA /* CaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9BCF7411D4C085B001B2EEA /* CaptureViewController.swift */; };
 		A9BFD9121D45EB3100D9D962 /* ProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9BFD9111D45EB3100D9D962 /* ProfileTableViewCell.swift */; };
-		A9BFD9171D46125700D9D962 /* CaptureProfilePicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9BFD9161D46125700D9D962 /* CaptureProfilePicViewController.swift */; };
 		A9C0ED3A1D3C21C30036F791 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C0ED391D3C21C30036F791 /* Post.swift */; };
 		A9C482141D30E983007B5423 /* ItemsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C482131D30E983007B5423 /* ItemsViewController.swift */; };
 		A9C482161D30EC25007B5423 /* ItemsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C482151D30EC25007B5423 /* ItemsCollectionViewController.swift */; };
@@ -218,8 +219,9 @@
 		A9AD744A1D3627BD007ACBD4 /* FiltersCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FiltersCollectionViewController.swift; sourceTree = "<group>"; };
 		A9AD744E1D364882007ACBD4 /* EditTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditTableViewController.swift; sourceTree = "<group>"; };
 		A9B934AF1D1BD9BB00ACC2B8 /* OnboardingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
+		A9BCF73F1D4C0737001B2EEA /* PreviewProfilePicViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreviewProfilePicViewController.swift; sourceTree = "<group>"; };
+		A9BCF7411D4C085B001B2EEA /* CaptureViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CaptureViewController.swift; sourceTree = "<group>"; };
 		A9BFD9111D45EB3100D9D962 /* ProfileTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileTableViewCell.swift; sourceTree = "<group>"; };
-		A9BFD9161D46125700D9D962 /* CaptureProfilePicViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CaptureProfilePicViewController.swift; sourceTree = "<group>"; };
 		A9C0ED391D3C21C30036F791 /* Post.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		A9C482131D30E983007B5423 /* ItemsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemsViewController.swift; sourceTree = "<group>"; };
 		A9C482151D30EC25007B5423 /* ItemsCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemsCollectionViewController.swift; sourceTree = "<group>"; };
@@ -465,7 +467,7 @@
 			isa = PBXGroup;
 			children = (
 				A95E40CF1D35410500FD61F9 /* CaptureNavigationController.swift */,
-				A9BFD9161D46125700D9D962 /* CaptureProfilePicViewController.swift */,
+				A9BCF7411D4C085B001B2EEA /* CaptureViewController.swift */,
 			);
 			name = Photo;
 			sourceTree = "<group>";
@@ -554,6 +556,7 @@
 				A903EB4B1D169DCC00B33025 /* FakeCaptureNavigationController.swift */,
 				A9EB35581D4B66CE00E9C77A /* ScrollViewController.swift */,
 				A97C02721D489C8D00775D82 /* PreviewViewController.swift */,
+				A9BCF73F1D4C0737001B2EEA /* PreviewProfilePicViewController.swift */,
 				A9BFD9131D4611FF00D9D962 /* Photo */,
 				A9FF5A461D4667DE0089D009 /* Gallery */,
 				A9AD744E1D364882007ACBD4 /* EditTableViewController.swift */,
@@ -751,6 +754,7 @@
 				A9C5D0C41D3A84BC00EBA87D /* HomeTableViewController.swift in Sources */,
 				A94797AE1D2E3C6B007CBF08 /* AWSConstants.swift in Sources */,
 				A96622071D0EC60500298CE7 /* NameSignUpViewController.swift in Sources */,
+				A9BCF7421D4C085B001B2EEA /* CaptureViewController.swift in Sources */,
 				A96622091D0ED8D700298CE7 /* EmailSignUpViewController.swift in Sources */,
 				A9CF753C1D40C54B0047BB1A /* PasswordSignUpTableViewController.swift in Sources */,
 				A95E40CA1D35105A00FD61F9 /* EditNameTableViewController.swift in Sources */,
@@ -792,6 +796,7 @@
 				A9C482181D30ED0B007B5423 /* ItemCollectionViewCell.swift in Sources */,
 				A90228111D3279B500C2EFEB /* ItemTableViewCell.swift in Sources */,
 				A961875F1D3FA67B0028DEA7 /* ClientManager.swift in Sources */,
+				A9BCF7401D4C0737001B2EEA /* PreviewProfilePicViewController.swift in Sources */,
 				A9D960661D32FFE700273A78 /* AWSUserFirstLastName.swift in Sources */,
 				A98BB1CE1D3A32AD00E6FB4D /* ProfileTableViewController.swift in Sources */,
 				A96622051D0EC49700298CE7 /* Colors.swift in Sources */,
@@ -806,7 +811,6 @@
 				A9A8DD111D4529B2009B3C24 /* LogInNavigationController.swift in Sources */,
 				A9C482161D30EC25007B5423 /* ItemsCollectionViewController.swift in Sources */,
 				A99030F91D464FEE00336D26 /* GalleryCollectionViewCell.swift in Sources */,
-				A9BFD9171D46125700D9D962 /* CaptureProfilePicViewController.swift in Sources */,
 				A98B42DB1D43C4E00089A769 /* ProfessionsViewController.swift in Sources */,
 				A95E40D01D35410500FD61F9 /* CaptureNavigationController.swift in Sources */,
 				A99030FB1D46632500336D26 /* AlbumsTableViewController.swift in Sources */,

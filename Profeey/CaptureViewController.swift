@@ -1,8 +1,8 @@
 //
-//  CaptureProfilePicViewController.swift
+//  CaptureViewController.swift
 //  Profeey
 //
-//  Created by Antonio Zdelican on 25/07/16.
+//  Created by Antonio Zdelican on 29/07/16.
 //  Copyright © 2016 Profeey. All rights reserved.
 //
 
@@ -12,8 +12,8 @@ protocol CaptureDelegate {
     func galleryButtonTapped()
 }
 
-class CaptureProfilePicViewController: UIViewController {
-
+class CaptureViewController: UIViewController {
+    
     @IBOutlet weak var switchCameraButton: UIBarButtonItem!
     @IBOutlet weak var captureButton: UIButton!
     @IBOutlet weak var closeButton: UIBarButtonItem!
@@ -21,7 +21,7 @@ class CaptureProfilePicViewController: UIViewController {
     var camera: ProfeeySimpleCamera!
     var profilePic: UIImage?
     var captureDelegate: CaptureDelegate?
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.configureButtons()
@@ -41,7 +41,7 @@ class CaptureProfilePicViewController: UIViewController {
     override func preferredInterfaceOrientationForPresentation() -> UIInterfaceOrientation {
         return .Portrait
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
@@ -90,7 +90,7 @@ class CaptureProfilePicViewController: UIViewController {
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if let navigationController = segue.destinationViewController as? UINavigationController,
-        let childViewController = navigationController.childViewControllers[0] as? PreviewViewController {
+            let childViewController = navigationController.childViewControllers[0] as? PreviewViewController {
             childViewController.photo = self.profilePic?.fixOrientation()
             childViewController.isPhoto = true
         }

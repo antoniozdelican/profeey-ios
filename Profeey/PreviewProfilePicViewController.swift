@@ -1,8 +1,8 @@
 //
-//  PreviewViewController.swift
+//  PreviewProfilePicViewController.swift
 //  Profeey
 //
-//  Created by Antonio Zdelican on 27/07/16.
+//  Created by Antonio Zdelican on 29/07/16.
 //  Copyright © 2016 Profeey. All rights reserved.
 //
 
@@ -10,12 +10,14 @@ import UIKit
 import PhotosUI
 import AWSMobileHubHelper
 
-class PreviewViewController: UIViewController {
-
+class PreviewProfilePicViewController: UIViewController {
+    
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var cropImageView: UIImageView!
     @IBOutlet weak var imageViewWidthConstraint: NSLayoutConstraint!
     @IBOutlet weak var imageViewHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var okButton: UIButton!
     
     var photo: UIImage?
     var asset: PHAsset?
@@ -26,12 +28,13 @@ class PreviewViewController: UIViewController {
     var isPhoto: Bool = true
     var cropFrameLength: CGFloat!
     var CROP_FRAME_PADDING: CGFloat = 10.0
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.automaticallyAdjustsScrollViewInsets = false
         self.cropFrameLength = self.view.bounds.width - 2 * CROP_FRAME_PADDING
         
+        self.configureCropImageView()
         self.configureScrollView()
         
         if self.isPhoto {
@@ -44,12 +47,27 @@ class PreviewViewController: UIViewController {
     override func prefersStatusBarHidden() -> Bool {
         return true
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
     
     // MARK: Pre-onfiguration
+    
+    private func configureCropImageView() {
+        // Set up the cropImageView depending on the device.
+        let screenHeight: NSNumber = UIScreen.mainScreen().bounds.height
+        switch screenHeight {
+        case 568: // iPhone 5, 5s, SE
+            self.cropImageView.image = UIImage(named: "bg_crop_568h")
+        case 667: // iPhone 6, 6s
+            self.cropImageView.image = UIImage(named: "bg_crop_667h")
+        case 736: // iPhone 6 Plus, 6s Plus
+            self.cropImageView.image = UIImage(named: "bg_crop_736h")
+        default: // unknown
+            self.cropImageView.image = UIImage(named: "bg_crop_736h")
+        }
+    }
     
     private func configureScrollView() {
         self.scrollView.delegate = self
@@ -84,7 +102,7 @@ class PreviewViewController: UIViewController {
         }
     }
     
-    private func adjustImageOnScreen(image: UIImage) {        
+    private func adjustImageOnScreen(image: UIImage) {
         let aspectRatio = image.size.width / image.size.height
         var newImageViewWidth: CGFloat
         var newImageViewHeight: CGFloat
@@ -118,7 +136,13 @@ class PreviewViewController: UIViewController {
     // MARK: Navigation
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-
+        
+    }
+    
+    // MARK: IBActions
+    
+    @IBAction func okButtonTapped(sender: AnyObject) {
+        self.prepareForUpload()
     }
     
     @IBAction func closeButtonTapped(sender: AnyObject) {
@@ -154,8 +178,8 @@ class PreviewViewController: UIViewController {
     
     private func uploadImageS3() {
         guard let finalImage = self.finalImage,
-        let imageData = UIImageJPEGRepresentation(finalImage, 0.6) else {
-            return
+            let imageData = UIImageJPEGRepresentation(finalImage, 0.6) else {
+                return
         }
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         AWSClientManager.defaultClientManager().uploadImageS3(
@@ -167,34 +191,34 @@ class PreviewViewController: UIViewController {
             },
             completionHandler: {
                 (task: AWSTask) in
-                    if let error = task.error {
-                        dispatch_async(dispatch_get_main_queue(), {
-                            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-                            print(error)
-                        })
-                    } else if let imageKey = task.result as? String {
-                        
-                        // 1. Async delete oldProfilePicUrl.
-//                        if let oldProfilePicUrl = AWSClientManager.defaultClientManager().currentUser?.profilePicUrl {
-//                            self.deleteProfilePic(oldProfilePicUrl)
-//                        }
-//                       
-//                        // 2. Async update UserPool and DynamoDB.
-//                        self.updateProfilePic(imageKey)
-//                        
-//                        // 3. Update local currentUser profilePicUrl.
-//                        AWSClientManager.defaultClientManager().currentUser?.profilePicUrl = imageKey
-                        
-                        dispatch_async(dispatch_get_main_queue(), {
-                            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-                            print("Success!")
-                        })
-                    } else {
-                        dispatch_async(dispatch_get_main_queue(), {
-                            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-                            print("This should not happen!")
-                        })
-                    }
+                if let error = task.error {
+                    dispatch_async(dispatch_get_main_queue(), {
+                        UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                        print(error)
+                    })
+                } else if let imageKey = task.result as? String {
+                    
+                    // 1. Async delete oldProfilePicUrl.
+                    //                        if let oldProfilePicUrl = AWSClientManager.defaultClientManager().currentUser?.profilePicUrl {
+                    //                            self.deleteProfilePic(oldProfilePicUrl)
+                    //                        }
+                    //
+                    //                        // 2. Async update UserPool and DynamoDB.
+                    //                        self.updateProfilePic(imageKey)
+                    //
+                    //                        // 3. Update local currentUser profilePicUrl.
+                    //                        AWSClientManager.defaultClientManager().currentUser?.profilePicUrl = imageKey
+                    
+                    dispatch_async(dispatch_get_main_queue(), {
+                        UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                        print("Success!")
+                    })
+                } else {
+                    dispatch_async(dispatch_get_main_queue(), {
+                        UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                        print("This should not happen!")
+                    })
+                }
                 return nil
         })
     }
@@ -218,7 +242,7 @@ class PreviewViewController: UIViewController {
     }
 }
 
-extension PreviewViewController: UIScrollViewDelegate {
+extension PreviewProfilePicViewController: UIScrollViewDelegate {
     
     func viewForZoomingInScrollView(scrollView: UIScrollView) -> UIView? {
         return self.imageView

@@ -34,7 +34,7 @@ class ScrollViewController: UIViewController {
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if let navigationController = segue.destinationViewController as? UINavigationController,
-            let childViewController = navigationController.childViewControllers[0] as? CaptureProfilePicViewController {
+            let childViewController = navigationController.childViewControllers[0] as? CaptureViewController {
             childViewController.captureDelegate = self
         }
         if let navigationController = segue.destinationViewController as? UINavigationController,
