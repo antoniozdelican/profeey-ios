@@ -22,8 +22,10 @@ class AWSClientManager: NSObject, ClientManager {
     // Properties.
     var credentialsProvider: AWSCognitoCredentialsProvider?
     var userPool: AWSCognitoIdentityUserPool?
-    var contentManager: AWSContentManager?
+    //var contentManager: AWSContentManager?
+    var userFileManager: AWSUserFileManager?
     var currentUser: User?
+    var s3ProfilePicsPrexif: String = "public/profile_pics/"
     
     var incompleteSignUpDelegate: IncompleteSignUpDelegate?
     
@@ -69,13 +71,15 @@ class AWSClientManager: NSObject, ClientManager {
             credentialsProvider: self.credentialsProvider)
         AWSServiceManager.defaultServiceManager().defaultServiceConfiguration = defaultServiceConfiguration
         
-        // Default contentManager.
-//        let contentManagerConfiguration = AWSContentManagerConfiguration(
-//            bucketName: AWSConstants.BUCKET_NAME)
-//        AWSContentManager.registerContentManagerWithConfiguration(
-//            contentManagerConfiguration,
-//            forKey: "USEast1BucketManager")
-//        self.contentManager = AWSContentManager(forKey: "USEast1BucketManager")
+        // Default userFileManager.
+        let userFileManagerConfiguration = AWSUserFileManagerConfiguration(
+            bucketName: AWSConstants.BUCKET_NAME,
+            serviceConfiguration: defaultServiceConfiguration)
+        AWSUserFileManager.registerUserFileManagerWithConfiguration(
+            userFileManagerConfiguration,
+            forKey: "USEast1BucketManager")
+        self.userFileManager = AWSUserFileManager.custom(key: "USEast1BucketManager")
+        
     }
     
     // MARK: UserPool
@@ -83,7 +87,7 @@ class AWSClientManager: NSObject, ClientManager {
     func logIn(username: String, password: String, completionHandler: AWSContinuationBlock) {
         let user = self.userPool?.getUser()
         print("GetSession:")
-        user?.getSession(username, password: password, validationData: nil, scopes: nil).continueWithBlock({
+        user?.getSession(username, password: password, validationData: nil).continueWithBlock({
             (task: AWSTask) in
             if let error = task.error {
                 print("GetSession error:")
@@ -139,13 +143,16 @@ class AWSClientManager: NSObject, ClientManager {
                     user.preferredUsername = userAttributes?[preferredUsernameIndex].value
                 } else {
                     print("PreferredUsername not set:")
-                    self.incompleteSignUpDelegate?.preferredUsernameNotSet()
+                    //self.incompleteSignUpDelegate?.preferredUsernameNotSet()
                 }
                 if let firstNameIndex = userAttributes?.indexOf({ $0.name == "given_name" }) {
                     user.firstName = userAttributes?[firstNameIndex].value
                 }
                 if let lastNameIndex = userAttributes?.indexOf({ $0.name == "family_name" }) {
                     user.lastName = userAttributes?[lastNameIndex].value
+                }
+                if let profilePicUrlIndex = userAttributes?.indexOf({ $0.name == "picture" }) {
+                    user.profilePicUrl = userAttributes?[profilePicUrlIndex].value
                 }
                 self.currentUser = user
                 print("Update currentUser success!")
@@ -176,6 +183,7 @@ class AWSClientManager: NSObject, ClientManager {
                 return AWSTask(error: error).continueWithBlock(completionHandler)
             } else {
                 print("updateFirstLastName success!")
+                // Update DynamoDB.
                 self.updateFirstLastNameDynamoDB(firstName, lastName: lastName, completionHandler: completionHandler)
                 return nil
             }
@@ -197,7 +205,30 @@ class AWSClientManager: NSObject, ClientManager {
                 return AWSTask(error: error).continueWithBlock(completionHandler)
             } else {
                 print("updatePreferredUsername success!")
+                // Update DynamoDB.
                 self.updatePreferredUsernameDynamoDB(preferredUsername, completionHandler: completionHandler)
+                return nil
+            }
+        })
+    }
+    
+    func updateProfilePic(profilePicUrl: String?, completionHandler: AWSContinuationBlock) {
+        var attributes: [AWSCognitoIdentityUserAttributeType] = []
+        let profilePicAttribute = AWSCognitoIdentityUserAttributeType()
+        profilePicAttribute.name = "picture"
+        profilePicAttribute.value = profilePicUrl != nil ? profilePicUrl : ""
+        attributes.append(profilePicAttribute)
+        
+        print("updateProfilePic:")
+        self.userPool?.currentUser()?.updateAttributes(attributes).continueWithBlock({
+            (task: AWSTask) in
+            if let error = task.error {
+                print("updateProfilePic error:")
+                return AWSTask(error: error).continueWithBlock(completionHandler)
+            } else {
+                print("updateProfilePic success!")
+                // Update DynamoDB.
+                self.updateProfilePicDynamoDB(profilePicUrl, completionHandler: completionHandler)
                 return nil
             }
         })
@@ -308,14 +339,14 @@ class AWSClientManager: NSObject, ClientManager {
                 let user = AWSUserProfessions()
                 user._userId = identityId
                 user._professions = professions
-                print("updateProfessionsDynamoDB:")
+                print("updateUserProfessionsDynamoDB:")
                 usersTable.saveUserProfessions(user, completionHandler: {
                     (task: AWSTask) in
                     if let error = task.error {
-                        print("updateProfessionsDynamoDB error:")
+                        print("updateUserProfessionsDynamoDB error:")
                         return AWSTask(error: error).continueWithBlock(completionHandler)
                     } else {
-                        print("updateProfessionsDynamoDB success!")
+                        print("updateUserProfessionsDynamoDB success!")
                         return task.continueWithBlock(completionHandler)
                     }
                 })
@@ -327,6 +358,7 @@ class AWSClientManager: NSObject, ClientManager {
         })
     }
     
+    // In background.
     func updateProfessionsDynamoDB(professions: [String]) {
         let professionsTable = AWSProfessionsTable()
         print("updateProfessionsDynamoDB:")
@@ -334,8 +366,90 @@ class AWSClientManager: NSObject, ClientManager {
             (errors: [NSError]?) in
             if let errors = errors {
                 print("updateProfessionsDynamoDB errors: \(errors)")
+            } else {
+                print("updateProfessionsDynamoDB success!")
             }
         }
-
     }
+    
+    func updateProfilePicDynamoDB(profilePicUrl: String?, completionHandler: AWSContinuationBlock) {
+        self.credentialsProvider?.getIdentityId().continueWithBlock({
+            (task: AWSTask) in
+            if let error = task.error {
+                print("GetIdentityId error: \(error.localizedDescription)")
+                return AWSTask(error: error).continueWithBlock(completionHandler)
+            } else if let identityId = task.result as? String {
+                let usersTable = AWSUsersTable()
+                let user = AWSUserProfilePic()
+                user._userId = identityId
+                user._profilePicUrl = profilePicUrl
+                print("updateProfilePicDynamoDB:")
+                usersTable.saveUserProfilePic(user, completionHandler: {
+                    (task: AWSTask) in
+                    if let error = task.error {
+                        print("updateProfilePicDynamoDB error:")
+                        return AWSTask(error: error).continueWithBlock(completionHandler)
+                    } else {
+                        print("updateProfilePicDynamoDB success!")
+                        return task.continueWithBlock(completionHandler)
+                    }
+                })
+                return nil
+            } else {
+                print("This should not happen with getIdentityId!")
+                return AWSTask().continueWithBlock(completionHandler)
+            }
+        })
+    }
+    
+    // MARK: S3
+    
+    func uploadImageS3(imageData: NSData, isProfilePic: Bool, progressBlock: ((AWSLocalContent, NSProgress) -> Void)?, completionHandler: AWSContinuationBlock) {
+        guard let userFileManager = self.userFileManager else {
+            AWSTask().continueWithBlock(completionHandler)
+            return
+        }
+        let uniqueImageName = NSUUID().UUIDString.lowercaseString.stringByReplacingOccurrencesOfString("-", withString: "")
+        var imageKey: String
+        if isProfilePic {
+            imageKey = "\(self.s3ProfilePicsPrexif)\(uniqueImageName).jpg"
+        } else {
+            imageKey = "\(self.s3ProfilePicsPrexif)\(uniqueImageName).jpg"
+        }
+        
+        let localContent: AWSLocalContent = userFileManager.localContentWithData(imageData, key: imageKey)
+        print("uploadImageS3:")
+        localContent.uploadWithPinOnCompletion(
+            false,
+            progressBlock: progressBlock,
+            completionHandler: {
+                (content: AWSLocalContent?, error: NSError?) -> Void in
+                if let error = error {
+                    print("uploadImageS3 error:")
+                    AWSTask(error: error).continueWithBlock(completionHandler)
+                } else {
+                    print("uploadImageS3 success!")
+                    AWSTask(result: imageKey).continueWithBlock(completionHandler)
+                }
+        })
+    }
+    
+    // In background.
+    func deleteImageS3(imageKey: String, completionHandler: AWSContinuationBlock) {
+        guard let userFileManager = self.userFileManager else {
+            return
+        }
+        let content: AWSContent = userFileManager.contentWithKey(imageKey)
+        content.removeRemoteContentWithCompletionHandler {
+            (content: AWSContent?, error: NSError?) in
+            if let error = error {
+                print("deleteImageS3 error: \(error)")
+                AWSTask(error: error).continueWithBlock(completionHandler)
+            } else {
+                print("deleteImageS3 success!")
+                AWSTask().continueWithBlock(completionHandler)
+            }
+        }
+    }
+    
 }

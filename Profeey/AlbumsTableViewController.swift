@@ -108,13 +108,6 @@ class AlbumsTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         cell.layoutMargins = UIEdgeInsetsZero
     }
-    
-    
-    // MARK: IBActions
-    
-    @IBAction func cancelButtonTapped(sender: AnyObject) {
-        self.dismissViewControllerAnimated(true, completion: nil)
-    }
 }
 
 extension AlbumsTableViewController: PHPhotoLibraryChangeObserver {

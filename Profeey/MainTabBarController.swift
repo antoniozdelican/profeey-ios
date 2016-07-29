@@ -70,9 +70,9 @@ class MainTabBarController: UITabBarController {
 extension MainTabBarController: UITabBarControllerDelegate {
     
     func tabBarController(tabBarController: UITabBarController, shouldSelectViewController viewController: UIViewController) -> Bool {
-        // If view controller is Dummy controller, don't show it and instead get CaptureViewController
+        // If view controller is Dummy controller, don't show it and instead get CaptureScrollViewController
         if viewController is FakeCaptureNavigationController {
-            let caputeViewController = UIStoryboard(name: "Capture", bundle: nil).instantiateViewControllerWithIdentifier("captureNavigationController")
+            let caputeViewController = UIStoryboard(name: "Capture", bundle: nil).instantiateViewControllerWithIdentifier("captureScrollViewController")
             self.presentViewController(caputeViewController, animated: true, completion: nil)
             return false
         } else {

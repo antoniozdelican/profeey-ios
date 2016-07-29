@@ -99,17 +99,15 @@ class AWSUsersTable: NSObject, Table {
         objectMapper.save(userProfessionsToUpdate).continueWithBlock(completionHandler)
     }
     
+    func saveUserProfilePic(user: AWSUserProfilePic, completionHandler: AWSContinuationBlock) {
+        let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
+        objectMapper.save(user).continueWithBlock(completionHandler)
+    }
+    
     // TEST
     func saveUserAbout(user: AWSDynamoDBObjectModel, completionHandler: AWSContinuationBlock) {
         let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
         let userAboutToUpdate: AWSUserAbout = user as! AWSUserAbout
         objectMapper.save(userAboutToUpdate).continueWithBlock(completionHandler)
-    }
-    
-    // TEST
-    func saveUserProfilePic(user: AWSDynamoDBObjectModel, completionHandler: AWSContinuationBlock) {
-        let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
-        let userProfilePicToUpdate: AWSUserProfilePic = user as! AWSUserProfilePic
-        objectMapper.save(userProfilePicToUpdate).continueWithBlock(completionHandler)
     }
 }

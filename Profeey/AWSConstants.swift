@@ -17,8 +17,8 @@ struct AWSConstants {
     
     // MARK: UserPool
     static let COGNITO_USER_POOL_ID = "us-east-1_Ocb5XvVya"
-    static let COGNITO_USER_POOL_CLIENT_ID = "15fpq2fedpvbd08r4mmemekbck"
-    static let COGNITO_USER_POOL_CLIENT_SECRET = "hhvhvi5mecfvpha8042rck1pebsqsqcabr42so6b60url6dl7lb"
+    static let COGNITO_USER_POOL_CLIENT_ID = "617m2j4ahgmccefsro426l8e75"
+    static let COGNITO_USER_POOL_CLIENT_SECRET = "1tn08en453in4en0vh6g1vik6ipnakm8fcg6ijhc90uou2ssd1no"
     
     // MARK: S3
     static let BUCKET_NAME = "profeey-userfiles-mobilehub-1226628658"

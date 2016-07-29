@@ -164,7 +164,7 @@ extension LogInViewController: AWSCognitoIdentityPasswordAuthentication {
         // Do nothing.
     }
     
-    func didCompletePasswordAuthenticationStepWithError(error: NSError) {
+    func didCompletePasswordAuthenticationStepWithError(error: NSError?) {
         // Do nothing.
     }
 }

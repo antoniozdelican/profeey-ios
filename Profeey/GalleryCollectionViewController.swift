@@ -9,10 +9,13 @@
 import UIKit
 import PhotosUI
 
+protocol GalleryCollectionViewDelegate {
+    func updateAlbumName(name: String?)
+}
+
 class GalleryCollectionViewController: UICollectionViewController {
     
-    @IBOutlet weak var albumNameButton: UIButton!
-    
+    var galleryCollectionViewDelegate: GalleryCollectionViewDelegate?
     var imageManager: PHCachingImageManager?
     var thumbnailSize: CGSize!
     var album :PHFetchResult?
@@ -21,12 +24,7 @@ class GalleryCollectionViewController: UICollectionViewController {
     private var ITEM_INSET: CGFloat = 1.0
 
     override func viewDidLoad() {
-        super.viewDidLoad()
-        // Adjust button image to the right.
-        self.albumNameButton.transform = CGAffineTransformMakeScale(-1.0, 1.0)
-        self.albumNameButton.titleLabel?.transform = CGAffineTransformMakeScale(-1.0, 1.0)
-        self.albumNameButton.imageView?.transform = CGAffineTransformMakeScale(-1.0, 1.0)
-        
+        super.viewDidLoad()        
         self.imageManager = PHCachingImageManager()
         self.resetCachedAssets()
         
@@ -34,7 +32,7 @@ class GalleryCollectionViewController: UICollectionViewController {
             let allPhotosOptions = PHFetchOptions()
             allPhotosOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
             self.album = PHAsset.fetchAssetsWithOptions(allPhotosOptions)
-            self.albumNameButton.setTitle("All Photos", forState: .Normal)
+            self.galleryCollectionViewDelegate?.updateAlbumName("All Photos")
         }
     }
     
@@ -55,11 +53,12 @@ class GalleryCollectionViewController: UICollectionViewController {
             let childViewController = navigationController.childViewControllers[0] as? AlbumsTableViewController {
             childViewController.albumsDelegate = self
         }
-        if let destinationViewController = segue.destinationViewController as? PreviewViewController,
-        let indexPath = sender as? NSIndexPath,
-        let asset = self.album?[indexPath.item] as? PHAsset {
-            destinationViewController.asset = asset
-            destinationViewController.isPhoto = false
+        if let navigationController = segue.destinationViewController as? UINavigationController,
+            let childViewController = navigationController.childViewControllers[0] as? PreviewViewController,
+            let indexPath = sender as? NSIndexPath,
+            let asset = self.album?[indexPath.item] as? PHAsset {
+            childViewController.asset = asset
+            childViewController.isPhoto = false
         }
     }
 
@@ -108,12 +107,6 @@ class GalleryCollectionViewController: UICollectionViewController {
     override func scrollViewDidScroll(scrollView: UIScrollView) {
         // Update cached assets for the new visible area
         self.updateCachedAssets()
-    }
-    
-    // MARK: IBActions
-    
-    @IBAction func closeButtonTapped(sender: AnyObject) {
-        self.dismissViewControllerAnimated(true, completion: nil)
     }
     
     @IBAction func unwindToGalleryCollectionViewController(segue: UIStoryboardSegue) {
@@ -302,7 +295,8 @@ extension GalleryCollectionViewController: AlbumsDelegate {
         self.resetCachedAssets()
         self.album = album
         self.updateCachedAssets()
+        self.collectionView?.setContentOffset(CGPointMake(0.0, -44.0), animated: false)
         self.collectionView?.reloadData()
-        self.albumNameButton.setTitle(title, forState: .Normal)
+        self.galleryCollectionViewDelegate?.updateAlbumName(title)
     }
 }

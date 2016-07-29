@@ -8,6 +8,7 @@
 
 import UIKit
 import PhotosUI
+import AWSMobileHubHelper
 
 class PreviewViewController: UIViewController {
 
@@ -136,18 +137,19 @@ class PreviewViewController: UIViewController {
     // MARK: Navigation
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if let destinationViewController = segue.destinationViewController as? TestViewController {
-            destinationViewController.image = self.finalImage
-        }
     }
     
     // MARK: IBActions
     
     @IBAction func okButtonTapped(sender: AnyObject) {
-        self.test()
+        self.prepareForUpload()
     }
     
-    private func test() {
+    @IBAction func closeButtonTapped(sender: AnyObject) {
+        self.dismissViewControllerAnimated(false, completion: nil)
+    }
+    
+    private func prepareForUpload() {
         guard let scale = self.scale, let imageOnScreen = self.imageOnScreen else {
             return
         }
@@ -161,9 +163,82 @@ class PreviewViewController: UIViewController {
         let cropWidth = self.cropFrameLength * scale * zoomScale
         let cropHeight = self.cropFrameLength * scale * zoomScale
         
-        self.finalImage = imageOnScreen.crop(cropX, cropY: cropY, cropWidth: cropWidth, cropHeight: cropHeight)
-        self.performSegueWithIdentifier("segueToTestVc", sender: self)
+        // Crop.
+        let croppedImage = imageOnScreen.crop(cropX, cropY: cropY, cropWidth: cropWidth, cropHeight: cropHeight)
+        // Scale
+        let scaledImage = croppedImage.scale(400.0, height: 400.0, scale: croppedImage.scale)
+        self.finalImage = scaledImage
         
+        self.uploadImageS3()
+        //self.performSegueWithIdentifier("segueToTestVc", sender: self)
+        
+    }
+    
+    // MARK: AWS
+    
+    private func uploadImageS3() {
+        guard let finalImage = self.finalImage,
+        let imageData = UIImageJPEGRepresentation(finalImage, 0.6) else {
+            return
+        }
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        AWSClientManager.defaultClientManager().uploadImageS3(
+            imageData,
+            isProfilePic: true,
+            progressBlock: {
+                (localContent: AWSLocalContent, progress: NSProgress) in
+                return
+            },
+            completionHandler: {
+                (task: AWSTask) in
+                    if let error = task.error {
+                        dispatch_async(dispatch_get_main_queue(), {
+                            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                            print(error)
+                        })
+                    } else if let imageKey = task.result as? String {
+                        
+                        // 1. Async delete oldProfilePicUrl.
+//                        if let oldProfilePicUrl = AWSClientManager.defaultClientManager().currentUser?.profilePicUrl {
+//                            self.deleteProfilePic(oldProfilePicUrl)
+//                        }
+//                       
+//                        // 2. Async update UserPool and DynamoDB.
+//                        self.updateProfilePic(imageKey)
+//                        
+//                        // 3. Update local currentUser profilePicUrl.
+//                        AWSClientManager.defaultClientManager().currentUser?.profilePicUrl = imageKey
+                        
+                        dispatch_async(dispatch_get_main_queue(), {
+                            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                            print("Success!")
+                        })
+                    } else {
+                        dispatch_async(dispatch_get_main_queue(), {
+                            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                            print("This should not happen!")
+                        })
+                    }
+                return nil
+        })
+    }
+    
+    // Background.
+    private func updateProfilePic(profilePicUrl: String?) {
+        AWSClientManager.defaultClientManager().updateProfilePic(
+            profilePicUrl,
+            completionHandler: {
+                (task: AWSTask) in
+                return nil
+        })
+    }
+    
+    // Background.
+    private func deleteProfilePic(oldProfilePicUrl: String) {
+        AWSClientManager.defaultClientManager().deleteImageS3(oldProfilePicUrl, completionHandler: {
+            (task: AWSTask) in
+            return nil
+        })
     }
 }
 

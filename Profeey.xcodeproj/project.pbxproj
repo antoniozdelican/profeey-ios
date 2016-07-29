@@ -10,34 +10,17 @@
 		A90228111D3279B500C2EFEB /* ItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A90228101D3279B500C2EFEB /* ItemTableViewCell.swift */; };
 		A903C3CC1D38E04200ED7E10 /* PostTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A903C3CB1D38E04200ED7E10 /* PostTableViewCell.swift */; };
 		A903EB4C1D169DCC00B33025 /* FakeCaptureNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A903EB4B1D169DCC00B33025 /* FakeCaptureNavigationController.swift */; };
-		A903EB4E1D16A2FE00B33025 /* CaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A903EB4D1D16A2FE00B33025 /* CaptureViewController.swift */; };
 		A903EB571D16A39700B33025 /* LLSimpleCamera.m in Sources */ = {isa = PBXBuildFile; fileRef = A903EB521D16A39700B33025 /* LLSimpleCamera.m */; };
 		A903EB581D16A39700B33025 /* LLSimpleCamera+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = A903EB541D16A39700B33025 /* LLSimpleCamera+Helper.m */; };
 		A903EB591D16A39700B33025 /* UIImage+FixOrientation.m in Sources */ = {isa = PBXBuildFile; fileRef = A903EB561D16A39700B33025 /* UIImage+FixOrientation.m */; };
 		A903EB5B1D16A3C800B33025 /* ProfeeySimpleCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = A903EB5A1D16A3C800B33025 /* ProfeeySimpleCamera.swift */; };
-		A903EB5D1D16D0E600B33025 /* PhotoPreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A903EB5C1D16D0E600B33025 /* PhotoPreviewViewController.swift */; };
 		A90A09581D43E5A7006AC49D /* WelcomeNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A90A09571D43E5A7006AC49D /* WelcomeNavigationController.swift */; };
 		A919D0A21D3FC48800AF0726 /* NameSignUpTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A919D0A11D3FC48800AF0726 /* NameSignUpTableViewController.swift */; };
 		A91A35241D1C26E6006F22B2 /* FullScreenIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91A35231D1C26E6006F22B2 /* FullScreenIndicator.swift */; };
-		A92A8C141D4A37BB00A89FF5 /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A92A8C131D4A37BB00A89FF5 /* TestViewController.swift */; };
 		A930BC7C1D0DD43F004D49F7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A930BC7B1D0DD43F004D49F7 /* AppDelegate.swift */; };
 		A930BC811D0DD43F004D49F7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A930BC7F1D0DD43F004D49F7 /* Main.storyboard */; };
 		A930BC831D0DD43F004D49F7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A930BC821D0DD43F004D49F7 /* Assets.xcassets */; };
 		A930BC861D0DD43F004D49F7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A930BC841D0DD43F004D49F7 /* LaunchScreen.storyboard */; };
-		A930BC941D0DD586004D49F7 /* AWSCognito.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A930BC8D1D0DD586004D49F7 /* AWSCognito.framework */; };
-		A930BC951D0DD586004D49F7 /* AWSCognitoIdentityProvider.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A930BC8E1D0DD586004D49F7 /* AWSCognitoIdentityProvider.framework */; };
-		A930BC961D0DD586004D49F7 /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A930BC8F1D0DD586004D49F7 /* AWSCore.framework */; };
-		A930BC971D0DD586004D49F7 /* AWSDynamoDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A930BC901D0DD586004D49F7 /* AWSDynamoDB.framework */; };
-		A930BC981D0DD586004D49F7 /* AWSLambda.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A930BC911D0DD586004D49F7 /* AWSLambda.framework */; };
-		A930BC991D0DD586004D49F7 /* AWSMobileAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A930BC921D0DD586004D49F7 /* AWSMobileAnalytics.framework */; };
-		A930BC9A1D0DD586004D49F7 /* AWSS3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A930BC931D0DD586004D49F7 /* AWSS3.framework */; };
-		A930BC9C1D0DD5BD004D49F7 /* AWSCognito.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A930BC8D1D0DD586004D49F7 /* AWSCognito.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		A930BC9D1D0DD5BD004D49F7 /* AWSCognitoIdentityProvider.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A930BC8E1D0DD586004D49F7 /* AWSCognitoIdentityProvider.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		A930BC9E1D0DD5BD004D49F7 /* AWSCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A930BC8F1D0DD586004D49F7 /* AWSCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		A930BC9F1D0DD5BD004D49F7 /* AWSDynamoDB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A930BC901D0DD586004D49F7 /* AWSDynamoDB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		A930BCA01D0DD5BD004D49F7 /* AWSLambda.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A930BC911D0DD586004D49F7 /* AWSLambda.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		A930BCA11D0DD5BD004D49F7 /* AWSMobileAnalytics.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A930BC921D0DD586004D49F7 /* AWSMobileAnalytics.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		A930BCA21D0DD5BD004D49F7 /* AWSS3.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A930BC931D0DD586004D49F7 /* AWSS3.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A930BCA61D0DD61A004D49F7 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = A930BCA51D0DD61A004D49F7 /* libsqlite3.tbd */; };
 		A930BCA81D0DD623004D49F7 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = A930BCA71D0DD623004D49F7 /* libz.tbd */; };
 		A94797A71D2E3451007CBF08 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = A94797A61D2E3451007CBF08 /* User.swift */; };
@@ -69,7 +52,6 @@
 		A96B3B991D3659790071FE7A /* ItemsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96B3B981D3659790071FE7A /* ItemsTableViewController.swift */; };
 		A96B3B9C1D365DF70071FE7A /* Items.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A96B3B9B1D365DF70071FE7A /* Items.storyboard */; };
 		A97C02731D489C8D00775D82 /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A97C02721D489C8D00775D82 /* PreviewViewController.swift */; };
-		A98884771D35841B006DD976 /* PreviewViewController2.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98884761D35841B006DD976 /* PreviewViewController2.swift */; };
 		A98B42DB1D43C4E00089A769 /* ProfessionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98B42DA1D43C4E00089A769 /* ProfessionsViewController.swift */; };
 		A98B42DD1D43C5720089A769 /* ProfessionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98B42DC1D43C5720089A769 /* ProfessionsTableViewController.swift */; };
 		A98B42E11D43C95A0089A769 /* ProfessionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98B42E01D43C95A0089A769 /* ProfessionTableViewCell.swift */; };
@@ -81,7 +63,6 @@
 		A99030F91D464FEE00336D26 /* GalleryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99030F81D464FEE00336D26 /* GalleryCollectionViewCell.swift */; };
 		A99030FB1D46632500336D26 /* AlbumsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99030FA1D46632500336D26 /* AlbumsTableViewController.swift */; };
 		A99030FD1D46634600336D26 /* AlbumTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99030FC1D46634600336D26 /* AlbumTableViewCell.swift */; };
-		A996454A1D4783DC00D1E2C3 /* CapturePageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99645491D4783DC00D1E2C3 /* CapturePageViewController.swift */; };
 		A99ADA1F1D0F189E0050E329 /* Welcome.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A99ADA1E1D0F189E0050E329 /* Welcome.storyboard */; };
 		A99BD3621D3037D10072CC27 /* AWSProfession.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99BD3611D3037D10072CC27 /* AWSProfession.swift */; };
 		A99BD3681D303FE20072CC27 /* AWSProfessionsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99BD3671D303FE20072CC27 /* AWSProfessionsTable.swift */; };
@@ -119,6 +100,23 @@
 		A9E53B731D1067E800CD1D6C /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E53B721D1067E800CD1D6C /* MainTabBarController.swift */; };
 		A9EAD3361D1E7A7100994292 /* AWSMobileHubHelper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9EAD3351D1E7A7100994292 /* AWSMobileHubHelper.framework */; };
 		A9EAD3401D1E8E0C00994292 /* NoSQLModelHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9EAD33F1D1E8E0C00994292 /* NoSQLModelHelpers.swift */; };
+		A9EB35431D4B415400E9C77A /* AWSCognito.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9EB35421D4B415400E9C77A /* AWSCognito.framework */; };
+		A9EB354A1D4B417400E9C77A /* AWSCognitoIdentityProvider.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9EB35441D4B417400E9C77A /* AWSCognitoIdentityProvider.framework */; };
+		A9EB354B1D4B417400E9C77A /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9EB35451D4B417400E9C77A /* AWSCore.framework */; };
+		A9EB354C1D4B417400E9C77A /* AWSDynamoDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9EB35461D4B417400E9C77A /* AWSDynamoDB.framework */; };
+		A9EB354D1D4B417500E9C77A /* AWSLambda.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9EB35471D4B417400E9C77A /* AWSLambda.framework */; };
+		A9EB354E1D4B417500E9C77A /* AWSMobileAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9EB35481D4B417400E9C77A /* AWSMobileAnalytics.framework */; };
+		A9EB354F1D4B417500E9C77A /* AWSS3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9EB35491D4B417400E9C77A /* AWSS3.framework */; };
+		A9EB35501D4B418100E9C77A /* AWSCognito.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A9EB35421D4B415400E9C77A /* AWSCognito.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A9EB35511D4B418100E9C77A /* AWSCognitoIdentityProvider.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A9EB35441D4B417400E9C77A /* AWSCognitoIdentityProvider.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A9EB35521D4B418100E9C77A /* AWSCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A9EB35451D4B417400E9C77A /* AWSCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A9EB35531D4B418100E9C77A /* AWSDynamoDB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A9EB35461D4B417400E9C77A /* AWSDynamoDB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A9EB35541D4B418100E9C77A /* AWSLambda.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A9EB35471D4B417400E9C77A /* AWSLambda.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A9EB35551D4B418100E9C77A /* AWSMobileAnalytics.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A9EB35481D4B417400E9C77A /* AWSMobileAnalytics.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A9EB35561D4B418100E9C77A /* AWSS3.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A9EB35491D4B417400E9C77A /* AWSS3.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A9EB35591D4B66CE00E9C77A /* ScrollViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9EB35581D4B66CE00E9C77A /* ScrollViewController.swift */; };
+		A9EB355F1D4B83B500E9C77A /* GalleryNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9EB355E1D4B83B500E9C77A /* GalleryNavigationController.swift */; };
+		A9EB35621D4B9A3600E9C77A /* GalleryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9EB35611D4B9A3600E9C77A /* GalleryViewController.swift */; };
 		A9F49D571D379D01002EB68B /* AWSPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F49D561D379D01002EB68B /* AWSPost.swift */; };
 		A9F49D5A1D379D70002EB68B /* AWSPostsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F49D591D379D70002EB68B /* AWSPostsTable.swift */; };
 /* End PBXBuildFile section */
@@ -130,14 +128,14 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				A9EB35501D4B418100E9C77A /* AWSCognito.framework in Embed Frameworks */,
+				A9EB35511D4B418100E9C77A /* AWSCognitoIdentityProvider.framework in Embed Frameworks */,
+				A9EB35521D4B418100E9C77A /* AWSCore.framework in Embed Frameworks */,
+				A9EB35531D4B418100E9C77A /* AWSDynamoDB.framework in Embed Frameworks */,
+				A9EB35541D4B418100E9C77A /* AWSLambda.framework in Embed Frameworks */,
+				A9EB35551D4B418100E9C77A /* AWSMobileAnalytics.framework in Embed Frameworks */,
+				A9EB35561D4B418100E9C77A /* AWSS3.framework in Embed Frameworks */,
 				A95C31B51D3E164C0003377F /* UICKeyChainStore.framework in Embed Frameworks */,
-				A930BC9C1D0DD5BD004D49F7 /* AWSCognito.framework in Embed Frameworks */,
-				A930BC9D1D0DD5BD004D49F7 /* AWSCognitoIdentityProvider.framework in Embed Frameworks */,
-				A930BC9E1D0DD5BD004D49F7 /* AWSCore.framework in Embed Frameworks */,
-				A930BC9F1D0DD5BD004D49F7 /* AWSDynamoDB.framework in Embed Frameworks */,
-				A930BCA01D0DD5BD004D49F7 /* AWSLambda.framework in Embed Frameworks */,
-				A930BCA11D0DD5BD004D49F7 /* AWSMobileAnalytics.framework in Embed Frameworks */,
-				A930BCA21D0DD5BD004D49F7 /* AWSS3.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -148,7 +146,6 @@
 		A90228101D3279B500C2EFEB /* ItemTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemTableViewCell.swift; sourceTree = "<group>"; };
 		A903C3CB1D38E04200ED7E10 /* PostTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostTableViewCell.swift; sourceTree = "<group>"; };
 		A903EB4B1D169DCC00B33025 /* FakeCaptureNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FakeCaptureNavigationController.swift; sourceTree = "<group>"; };
-		A903EB4D1D16A2FE00B33025 /* CaptureViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CaptureViewController.swift; sourceTree = "<group>"; };
 		A903EB501D16A39600B33025 /* Profeey-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Profeey-Bridging-Header.h"; sourceTree = "<group>"; };
 		A903EB511D16A39700B33025 /* LLSimpleCamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLSimpleCamera.h; sourceTree = "<group>"; };
 		A903EB521D16A39700B33025 /* LLSimpleCamera.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLSimpleCamera.m; sourceTree = "<group>"; };
@@ -157,24 +154,15 @@
 		A903EB551D16A39700B33025 /* UIImage+FixOrientation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+FixOrientation.h"; sourceTree = "<group>"; };
 		A903EB561D16A39700B33025 /* UIImage+FixOrientation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+FixOrientation.m"; sourceTree = "<group>"; };
 		A903EB5A1D16A3C800B33025 /* ProfeeySimpleCamera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfeeySimpleCamera.swift; sourceTree = "<group>"; };
-		A903EB5C1D16D0E600B33025 /* PhotoPreviewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoPreviewViewController.swift; sourceTree = "<group>"; };
 		A90A09571D43E5A7006AC49D /* WelcomeNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeNavigationController.swift; sourceTree = "<group>"; };
 		A919D0A11D3FC48800AF0726 /* NameSignUpTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NameSignUpTableViewController.swift; sourceTree = "<group>"; };
 		A91A35231D1C26E6006F22B2 /* FullScreenIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FullScreenIndicator.swift; sourceTree = "<group>"; };
-		A92A8C131D4A37BB00A89FF5 /* TestViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
 		A930BC781D0DD43E004D49F7 /* Profeey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Profeey.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A930BC7B1D0DD43F004D49F7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A930BC801D0DD43F004D49F7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A930BC821D0DD43F004D49F7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A930BC851D0DD43F004D49F7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A930BC871D0DD43F004D49F7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A930BC8D1D0DD586004D49F7 /* AWSCognito.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSCognito.framework; path = Profeey/AWSCognito.framework; sourceTree = "<group>"; };
-		A930BC8E1D0DD586004D49F7 /* AWSCognitoIdentityProvider.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSCognitoIdentityProvider.framework; path = Profeey/AWSCognitoIdentityProvider.framework; sourceTree = "<group>"; };
-		A930BC8F1D0DD586004D49F7 /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSCore.framework; path = Profeey/AWSCore.framework; sourceTree = "<group>"; };
-		A930BC901D0DD586004D49F7 /* AWSDynamoDB.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSDynamoDB.framework; path = Profeey/AWSDynamoDB.framework; sourceTree = "<group>"; };
-		A930BC911D0DD586004D49F7 /* AWSLambda.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSLambda.framework; path = Profeey/AWSLambda.framework; sourceTree = "<group>"; };
-		A930BC921D0DD586004D49F7 /* AWSMobileAnalytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSMobileAnalytics.framework; path = Profeey/AWSMobileAnalytics.framework; sourceTree = "<group>"; };
-		A930BC931D0DD586004D49F7 /* AWSS3.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSS3.framework; path = Profeey/AWSS3.framework; sourceTree = "<group>"; };
 		A930BCA51D0DD61A004D49F7 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		A930BCA71D0DD623004D49F7 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		A94797A61D2E3451007CBF08 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -205,7 +193,6 @@
 		A96B3B981D3659790071FE7A /* ItemsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemsTableViewController.swift; sourceTree = "<group>"; };
 		A96B3B9B1D365DF70071FE7A /* Items.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Items.storyboard; sourceTree = "<group>"; };
 		A97C02721D489C8D00775D82 /* PreviewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreviewViewController.swift; sourceTree = "<group>"; };
-		A98884761D35841B006DD976 /* PreviewViewController2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreviewViewController2.swift; sourceTree = "<group>"; };
 		A98B42DA1D43C4E00089A769 /* ProfessionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfessionsViewController.swift; sourceTree = "<group>"; };
 		A98B42DC1D43C5720089A769 /* ProfessionsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfessionsTableViewController.swift; sourceTree = "<group>"; };
 		A98B42E01D43C95A0089A769 /* ProfessionTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfessionTableViewCell.swift; sourceTree = "<group>"; };
@@ -217,7 +204,6 @@
 		A99030F81D464FEE00336D26 /* GalleryCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GalleryCollectionViewCell.swift; sourceTree = "<group>"; };
 		A99030FA1D46632500336D26 /* AlbumsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlbumsTableViewController.swift; sourceTree = "<group>"; };
 		A99030FC1D46634600336D26 /* AlbumTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlbumTableViewCell.swift; sourceTree = "<group>"; };
-		A99645491D4783DC00D1E2C3 /* CapturePageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CapturePageViewController.swift; sourceTree = "<group>"; };
 		A99ADA1E1D0F189E0050E329 /* Welcome.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Welcome.storyboard; sourceTree = "<group>"; };
 		A99BD3611D3037D10072CC27 /* AWSProfession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSProfession.swift; sourceTree = "<group>"; };
 		A99BD3671D303FE20072CC27 /* AWSProfessionsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSProfessionsTable.swift; sourceTree = "<group>"; };
@@ -255,6 +241,16 @@
 		A9E53B721D1067E800CD1D6C /* MainTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		A9EAD3351D1E7A7100994292 /* AWSMobileHubHelper.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSMobileHubHelper.framework; path = Profeey/AWSMobileHubHelper.framework; sourceTree = "<group>"; };
 		A9EAD33F1D1E8E0C00994292 /* NoSQLModelHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoSQLModelHelpers.swift; sourceTree = "<group>"; };
+		A9EB35421D4B415400E9C77A /* AWSCognito.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSCognito.framework; path = Profeey/AWSCognito.framework; sourceTree = "<group>"; };
+		A9EB35441D4B417400E9C77A /* AWSCognitoIdentityProvider.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSCognitoIdentityProvider.framework; path = Profeey/AWSCognitoIdentityProvider.framework; sourceTree = "<group>"; };
+		A9EB35451D4B417400E9C77A /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSCore.framework; path = Profeey/AWSCore.framework; sourceTree = "<group>"; };
+		A9EB35461D4B417400E9C77A /* AWSDynamoDB.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSDynamoDB.framework; path = Profeey/AWSDynamoDB.framework; sourceTree = "<group>"; };
+		A9EB35471D4B417400E9C77A /* AWSLambda.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSLambda.framework; path = Profeey/AWSLambda.framework; sourceTree = "<group>"; };
+		A9EB35481D4B417400E9C77A /* AWSMobileAnalytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSMobileAnalytics.framework; path = Profeey/AWSMobileAnalytics.framework; sourceTree = "<group>"; };
+		A9EB35491D4B417400E9C77A /* AWSS3.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSS3.framework; path = Profeey/AWSS3.framework; sourceTree = "<group>"; };
+		A9EB35581D4B66CE00E9C77A /* ScrollViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollViewController.swift; sourceTree = "<group>"; };
+		A9EB355E1D4B83B500E9C77A /* GalleryNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GalleryNavigationController.swift; sourceTree = "<group>"; };
+		A9EB35611D4B9A3600E9C77A /* GalleryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GalleryViewController.swift; sourceTree = "<group>"; };
 		A9F49D561D379D01002EB68B /* AWSPost.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSPost.swift; sourceTree = "<group>"; };
 		A9F49D591D379D70002EB68B /* AWSPostsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSPostsTable.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -264,18 +260,18 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A9EB35431D4B415400E9C77A /* AWSCognito.framework in Frameworks */,
+				A9EB354B1D4B417400E9C77A /* AWSCore.framework in Frameworks */,
 				A95C31B41D3E16370003377F /* UICKeyChainStore.framework in Frameworks */,
+				A9EB354E1D4B417500E9C77A /* AWSMobileAnalytics.framework in Frameworks */,
 				A9EAD3361D1E7A7100994292 /* AWSMobileHubHelper.framework in Frameworks */,
+				A9EB354C1D4B417400E9C77A /* AWSDynamoDB.framework in Frameworks */,
+				A9EB354D1D4B417500E9C77A /* AWSLambda.framework in Frameworks */,
+				A9EB354A1D4B417400E9C77A /* AWSCognitoIdentityProvider.framework in Frameworks */,
+				A9EB354F1D4B417500E9C77A /* AWSS3.framework in Frameworks */,
 				A930BCA81D0DD623004D49F7 /* libz.tbd in Frameworks */,
 				A930BCA61D0DD61A004D49F7 /* libsqlite3.tbd in Frameworks */,
-				A930BC981D0DD586004D49F7 /* AWSLambda.framework in Frameworks */,
-				A930BC991D0DD586004D49F7 /* AWSMobileAnalytics.framework in Frameworks */,
 				A95C31B11D3E14510003377F /* UICKeyChainStore.framework in Frameworks */,
-				A930BC941D0DD586004D49F7 /* AWSCognito.framework in Frameworks */,
-				A930BC9A1D0DD586004D49F7 /* AWSS3.framework in Frameworks */,
-				A930BC951D0DD586004D49F7 /* AWSCognitoIdentityProvider.framework in Frameworks */,
-				A930BC971D0DD586004D49F7 /* AWSDynamoDB.framework in Frameworks */,
-				A930BC961D0DD586004D49F7 /* AWSCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -292,6 +288,7 @@
 				A903EB551D16A39700B33025 /* UIImage+FixOrientation.h */,
 				A903EB561D16A39700B33025 /* UIImage+FixOrientation.m */,
 				A903EB501D16A39600B33025 /* Profeey-Bridging-Header.h */,
+				A903EB5A1D16A3C800B33025 /* ProfeeySimpleCamera.swift */,
 			);
 			name = Camera;
 			sourceTree = "<group>";
@@ -339,13 +336,13 @@
 				A9EAD3351D1E7A7100994292 /* AWSMobileHubHelper.framework */,
 				A930BCA71D0DD623004D49F7 /* libz.tbd */,
 				A930BCA51D0DD61A004D49F7 /* libsqlite3.tbd */,
-				A930BC8D1D0DD586004D49F7 /* AWSCognito.framework */,
-				A930BC8E1D0DD586004D49F7 /* AWSCognitoIdentityProvider.framework */,
-				A930BC8F1D0DD586004D49F7 /* AWSCore.framework */,
-				A930BC901D0DD586004D49F7 /* AWSDynamoDB.framework */,
-				A930BC911D0DD586004D49F7 /* AWSLambda.framework */,
-				A930BC921D0DD586004D49F7 /* AWSMobileAnalytics.framework */,
-				A930BC931D0DD586004D49F7 /* AWSS3.framework */,
+				A9EB35421D4B415400E9C77A /* AWSCognito.framework */,
+				A9EB35441D4B417400E9C77A /* AWSCognitoIdentityProvider.framework */,
+				A9EB35451D4B417400E9C77A /* AWSCore.framework */,
+				A9EB35461D4B417400E9C77A /* AWSDynamoDB.framework */,
+				A9EB35471D4B417400E9C77A /* AWSLambda.framework */,
+				A9EB35481D4B417400E9C77A /* AWSMobileAnalytics.framework */,
+				A9EB35491D4B417400E9C77A /* AWSS3.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -464,12 +461,13 @@
 			name = Local;
 			sourceTree = "<group>";
 		};
-		A9BFD9131D4611FF00D9D962 /* Capture Profile Pic */ = {
+		A9BFD9131D4611FF00D9D962 /* Photo */ = {
 			isa = PBXGroup;
 			children = (
+				A95E40CF1D35410500FD61F9 /* CaptureNavigationController.swift */,
 				A9BFD9161D46125700D9D962 /* CaptureProfilePicViewController.swift */,
 			);
-			name = "Capture Profile Pic";
+			name = Photo;
 			sourceTree = "<group>";
 		};
 		A9C6CB7D1D29296B00863816 /* Extensions */ = {
@@ -554,13 +552,12 @@
 			children = (
 				A9E53B6C1D10667100CD1D6C /* Capture.storyboard */,
 				A903EB4B1D169DCC00B33025 /* FakeCaptureNavigationController.swift */,
-				A95E40CF1D35410500FD61F9 /* CaptureNavigationController.swift */,
-				A903EB4D1D16A2FE00B33025 /* CaptureViewController.swift */,
-				A98884761D35841B006DD976 /* PreviewViewController2.swift */,
+				A9EB35581D4B66CE00E9C77A /* ScrollViewController.swift */,
+				A97C02721D489C8D00775D82 /* PreviewViewController.swift */,
+				A9BFD9131D4611FF00D9D962 /* Photo */,
+				A9FF5A461D4667DE0089D009 /* Gallery */,
 				A9AD744E1D364882007ACBD4 /* EditTableViewController.swift */,
 				A9AD744A1D3627BD007ACBD4 /* FiltersCollectionViewController.swift */,
-				A903EB5A1D16A3C800B33025 /* ProfeeySimpleCamera.swift */,
-				A903EB5C1D16D0E600B33025 /* PhotoPreviewViewController.swift */,
 			);
 			name = Capture;
 			sourceTree = "<group>";
@@ -579,14 +576,9 @@
 				A9E53B701D10668400CD1D6C /* Profile.storyboard */,
 				A98BB1CD1D3A32AD00E6FB4D /* ProfileTableViewController.swift */,
 				A9BFD9111D45EB3100D9D962 /* ProfileTableViewCell.swift */,
-				A99645491D4783DC00D1E2C3 /* CapturePageViewController.swift */,
-				A97C02721D489C8D00775D82 /* PreviewViewController.swift */,
-				A9FF5A461D4667DE0089D009 /* Gallery */,
-				A9BFD9131D4611FF00D9D962 /* Capture Profile Pic */,
 				A98BB1CF1D3A353100E6FB4D /* UserTableViewCell.swift */,
 				A903C3CB1D38E04200ED7E10 /* PostTableViewCell.swift */,
 				A9ACAE181D390E3B00D77682 /* PostCategoryCollectionViewCell.swift */,
-				A92A8C131D4A37BB00A89FF5 /* TestViewController.swift */,
 			);
 			name = Profile;
 			sourceTree = "<group>";
@@ -639,6 +631,8 @@
 		A9FF5A461D4667DE0089D009 /* Gallery */ = {
 			isa = PBXGroup;
 			children = (
+				A9EB355E1D4B83B500E9C77A /* GalleryNavigationController.swift */,
+				A9EB35611D4B9A3600E9C77A /* GalleryViewController.swift */,
 				A99030F61D464F3000336D26 /* GalleryCollectionViewController.swift */,
 				A99030F81D464FEE00336D26 /* GalleryCollectionViewCell.swift */,
 				A99030FA1D46632500336D26 /* AlbumsTableViewController.swift */,
@@ -752,7 +746,6 @@
 				A903EB5B1D16A3C800B33025 /* ProfeeySimpleCamera.swift in Sources */,
 				A9CF753A1D40C1C80047BB1A /* EmailSignUpTableViewController.swift in Sources */,
 				A9C5D0CC1D3AABB100EBA87D /* PostDetailsTableViewController.swift in Sources */,
-				A903EB5D1D16D0E600B33025 /* PhotoPreviewViewController.swift in Sources */,
 				A99030FD1D46634600336D26 /* AlbumTableViewCell.swift in Sources */,
 				A98B42E11D43C95A0089A769 /* ProfessionTableViewCell.swift in Sources */,
 				A9C5D0C41D3A84BC00EBA87D /* HomeTableViewController.swift in Sources */,
@@ -780,14 +773,15 @@
 				A9F49D5A1D379D70002EB68B /* AWSPostsTable.swift in Sources */,
 				A91A35241D1C26E6006F22B2 /* FullScreenIndicator.swift in Sources */,
 				A9CF75481D40CE2A0047BB1A /* UsernameTableViewController.swift in Sources */,
-				A98884771D35841B006DD976 /* PreviewViewController2.swift in Sources */,
-				A996454A1D4783DC00D1E2C3 /* CapturePageViewController.swift in Sources */,
 				A9A503A11D2FE0A90030A472 /* AWSUsersTable.swift in Sources */,
 				A96622101D0EF39800298CE7 /* LogInViewController.swift in Sources */,
 				A9BFD9121D45EB3100D9D962 /* ProfileTableViewCell.swift in Sources */,
 				A903C3CC1D38E04200ED7E10 /* PostTableViewCell.swift in Sources */,
 				A98BB1D01D3A353100E6FB4D /* UserTableViewCell.swift in Sources */,
+				A9EB355F1D4B83B500E9C77A /* GalleryNavigationController.swift in Sources */,
 				A95C31B91D3E35AA0003377F /* AWSClientManager.swift in Sources */,
+				A9EB35591D4B66CE00E9C77A /* ScrollViewController.swift in Sources */,
+				A9EB35621D4B9A3600E9C77A /* GalleryViewController.swift in Sources */,
 				A9B934B01D1BD9BB00ACC2B8 /* OnboardingViewController.swift in Sources */,
 				A99BD3621D3037D10072CC27 /* AWSProfession.swift in Sources */,
 				A9A8DD131D452BAA009B3C24 /* LogInTableViewController.swift in Sources */,
@@ -798,13 +792,11 @@
 				A9C482181D30ED0B007B5423 /* ItemCollectionViewCell.swift in Sources */,
 				A90228111D3279B500C2EFEB /* ItemTableViewCell.swift in Sources */,
 				A961875F1D3FA67B0028DEA7 /* ClientManager.swift in Sources */,
-				A92A8C141D4A37BB00A89FF5 /* TestViewController.swift in Sources */,
 				A9D960661D32FFE700273A78 /* AWSUserFirstLastName.swift in Sources */,
 				A98BB1CE1D3A32AD00E6FB4D /* ProfileTableViewController.swift in Sources */,
 				A96622051D0EC49700298CE7 /* Colors.swift in Sources */,
 				A9CF75381D40BA1F0047BB1A /* SignUpNavigationController.swift in Sources */,
 				A94797A71D2E3451007CBF08 /* User.swift in Sources */,
-				A903EB4E1D16A2FE00B33025 /* CaptureViewController.swift in Sources */,
 				A9E53B731D1067E800CD1D6C /* MainTabBarController.swift in Sources */,
 				A9A503991D2FA9180030A472 /* LocalService.swift in Sources */,
 				A9604F7E1D33721000F23B33 /* AWSUserPreferredUsername.swift in Sources */,

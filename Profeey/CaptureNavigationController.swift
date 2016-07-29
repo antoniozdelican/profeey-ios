@@ -16,8 +16,8 @@ class CaptureNavigationController: UINavigationController {
         self.navigationBar.shadowImage = UIImage()
         self.navigationBar.translucent = true
         self.navigationBar.tintColor = UIColor.whiteColor()
-        self.view.backgroundColor = UIColor.clearColor()
-        self.navigationBar.backgroundColor = UIColor.clearColor()
+//        self.view.backgroundColor = UIColor.clearColor()
+//        self.navigationBar.backgroundColor = UIColor.clearColor()
     }
 
     override func didReceiveMemoryWarning() {

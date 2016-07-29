@@ -26,10 +26,10 @@ class ProfeeySimpleCamera: LLSimpleCamera {
     
     func setCustomFocusBox() {
         let focusBox = CALayer()
-        focusBox.cornerRadius = 0
-        focusBox.bounds = CGRectMake(0.0, 0.0, 100.0, 100.0)
-        focusBox.borderWidth = 5.0
-        focusBox.borderColor = UIColor.blueColor().CGColor
+        focusBox.cornerRadius = 4.0
+        focusBox.bounds = CGRectMake(0.0, 0.0, 80.0, 80.0)
+        focusBox.borderWidth = 4.0
+        focusBox.borderColor = UIColor.whiteColor().CGColor
         focusBox.opacity = 0.0
         self.view.layer.addSublayer(focusBox)
         

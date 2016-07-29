@@ -8,31 +8,23 @@
 
 import UIKit
 
+protocol CaptureDelegate {
+    func galleryButtonTapped()
+}
+
 class CaptureProfilePicViewController: UIViewController {
 
     @IBOutlet weak var switchCameraButton: UIBarButtonItem!
     @IBOutlet weak var captureButton: UIButton!
+    @IBOutlet weak var closeButton: UIBarButtonItem!
     
     var camera: ProfeeySimpleCamera!
     var profilePic: UIImage?
+    var captureDelegate: CaptureDelegate?
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // Set up the cropImageView depending on the device.
-//        let screenHeight: NSNumber = UIScreen.mainScreen().bounds.height
-//        switch screenHeight {
-//        case 568: // iPhone 5, 5s, SE
-//            self.cropImageView.image = UIImage(named: "bg_crop_568h")
-//        case 667: // iPhone 6, 6s
-//            self.cropImageView.image = UIImage(named: "bg_crop_667h")
-//        case 736: // iPhone 6 Plus, 6s Plus
-//            self.cropImageView.image = UIImage(named: "bg_crop_736h")
-//        default: // unknown
-//            self.cropImageView.image = UIImage(named: "bg_crop_736h")
-//        }
-        
-        // Set up the camera.
+        self.configureButtons()
         self.configureCamera()
     }
     
@@ -52,6 +44,13 @@ class CaptureProfilePicViewController: UIViewController {
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+    }
+    
+    // MARK: Configure
+    
+    private func configureButtons() {
+        self.switchCameraButton.image = UIImage(named: "btn_camera_switch")?.imageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal)
+        self.closeButton.image = UIImage(named: "btn_close_white")?.imageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal)
     }
     
     private func configureCamera() {
@@ -90,9 +89,10 @@ class CaptureProfilePicViewController: UIViewController {
     // MARK: Navigation
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if let destinationViewController = segue.destinationViewController as? PreviewViewController {
-            destinationViewController.photo = self.profilePic?.fixOrientation()
-            destinationViewController.isPhoto = true
+        if let navigationController = segue.destinationViewController as? UINavigationController,
+        let childViewController = navigationController.childViewControllers[0] as? PreviewViewController {
+            childViewController.photo = self.profilePic?.fixOrientation()
+            childViewController.isPhoto = true
         }
     }
     
@@ -114,31 +114,12 @@ class CaptureProfilePicViewController: UIViewController {
         self.camera.togglePosition()
     }
     
+    @IBAction func galleryButtonTapped(sender: AnyObject) {
+        self.captureDelegate?.galleryButtonTapped()
+    }
+    
+    
     @IBAction func closeButtonTapped(sender: AnyObject) {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
-    
-    private func cropImage(image: UIImage) -> UIImage {
-        
-        let originalWidht = image.size.width
-        let originalHeight = image.size.height
-        
-        let cropWidth = originalWidht - 2 * 10.0 // edges from each side
-        let cropHeight = cropWidth
-        let cropX: CGFloat = 10.0
-        let cropY = (originalHeight - cropHeight) / 2
-        let cropRect = CGRectMake(cropX, cropY, cropWidth, cropHeight)
-        
-        //return image.crop(cropX, cropY: cropY, cropWidth: cropWidth, cropHeight: cropHeight)
-        
-        // Not sure about scale.
-        // UIScreen.mainScreen().scale
-        var newImage = image
-        let cgiImage = image.CGImage
-        if let imageRef = CGImageCreateWithImageInRect(cgiImage, cropRect) {
-            newImage = UIImage(CGImage: imageRef, scale: image.scale, orientation: image.imageOrientation)
-        }
-        return newImage
-    }
-    
 }
