@@ -80,3 +80,10 @@ extension PasswordSignUpTableViewController: InvalidPasswordSignUpDelegate {
         self.warningTableViewCell.hidden = hidden
     }
 }
+
+extension PasswordSignUpTableViewController: PasswordSignUpViewDelegate {
+    
+    func removeKeyboard() {
+        self.passwordTextField.resignFirstResponder()
+    }
+}

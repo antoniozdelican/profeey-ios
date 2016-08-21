@@ -22,14 +22,12 @@ class AWSClientManager: NSObject, ClientManager {
     // Properties.
     var credentialsProvider: AWSCognitoCredentialsProvider?
     var userPool: AWSCognitoIdentityUserPool?
-    //var contentManager: AWSContentManager?
     var userFileManager: AWSUserFileManager?
-    var currentUser: User?
+    
+    // TEST properties.
     var s3ProfilePicsPrexif: String = "public/profile_pics/"
-    
     var incompleteSignUpDelegate: IncompleteSignUpDelegate?
-    
-    // Singleton initialization.
+
     static func defaultClientManager() -> AWSClientManager {
         if sharedInstance == nil {
             sharedInstance = AWSClientManager()
@@ -39,7 +37,8 @@ class AWSClientManager: NSObject, ClientManager {
     }
     
     private func configure() {
-        print("Configure client...")
+        print("Configuring client...")
+        
         // Setup logging.
         AWSLogger.defaultLogger().logLevel = AWSLogLevel.Verbose
         
@@ -64,7 +63,7 @@ class AWSClientManager: NSObject, ClientManager {
             regionType: AWSConstants.COGNITO_REGIONTYPE,
             identityPoolId: AWSConstants.COGNITO_IDENTITY_POOL_ID,
             identityProviderManager: self.userPool)
-        
+
         // Default service.
         let defaultServiceConfiguration = AWSServiceConfiguration(
             region: AWSConstants.COGNITO_REGIONTYPE,
@@ -82,354 +81,190 @@ class AWSClientManager: NSObject, ClientManager {
         
     }
     
-    // MARK: UserPool
-    
     func logIn(username: String, password: String, completionHandler: AWSContinuationBlock) {
-        let user = self.userPool?.getUser()
-        print("GetSession:")
-        user?.getSession(username, password: password, validationData: nil).continueWithBlock({
-            (task: AWSTask) in
-            if let error = task.error {
-                print("GetSession error:")
-                return AWSTask(error: error).continueWithBlock(completionHandler)
-            } else {
-                print("GetSession success!")
-                return task.continueWithBlock(completionHandler)
-            }
-        })
+        // UserPool logIn.
+        PRFYUserPoolManager.defaultUserPoolManager().logInUserPool(username, password: password, completionHandler: completionHandler)
     }
     
-    func signUp(username: String, password: String, email: String, completionHandler: AWSContinuationBlock) {
-        var attributes: [AWSCognitoIdentityUserAttributeType] = []
-        let emailAttribute = AWSCognitoIdentityUserAttributeType()
-        emailAttribute.name = "email"
-        emailAttribute.value = email
-        attributes.append(emailAttribute)
-        
-        print("SignUp:")
-        self.userPool?.signUp(username, password: password, userAttributes: attributes, validationData: nil).continueWithBlock({
+    func signUp(username: String, password: String, email: String, firstName: String?, lastName: String?, completionHandler: AWSContinuationBlock) {
+        // UserPool signUp.
+        PRFYUserPoolManager.defaultUserPoolManager().signUpUserPool(username, password: password, email: email, firstName: firstName, lastName: lastName, completionHandler: {
             (task: AWSTask) in
             if let error = task.error {
-                print("SignUp error:")
                 return AWSTask(error: error).continueWithBlock(completionHandler)
             } else {
-                print("SignUp success!")
-                // Proceed to log in.
-                self.logIn(username, password: password, completionHandler: completionHandler)
-                return nil
+                // DynamoDB updateFirstLastName ASYNC.
+                PRFYDynamoDBManager.defaultDynamoDBManager().updateFirstLastNameDynamoDB(firstName, lastName: lastName, completionHandler: {
+                    (task: AWSTask) in
+                    return nil
+                })
+                return task.continueWithBlock(completionHandler)
             }
         })
     }
     
     func signOut(completionHandler: AWSContinuationBlock) {
-        print("SignOut:")
-        self.userPool?.currentUser()?.signOut()
+        // UserPool signOut.
+        PRFYUserPoolManager.defaultUserPoolManager().signOutUserPool(completionHandler)
+        // Credentials provider cleanUp.
         self.credentialsProvider?.clearKeychain()
-        AWSTask(result: nil).continueWithBlock(completionHandler)
+    }
+    
+    func getUserDetails(completionHandler: AWSContinuationBlock) {
+        // UserPool getUserDetails.
+        PRFYUserPoolManager.defaultUserPoolManager().getUserDetailsUserPool(completionHandler)
+    }
+    
+    func getUser(userId: String, completionHandler: AWSContinuationBlock) {
+        // DynamoDB getUser.
+        PRFYDynamoDBManager.defaultDynamoDBManager().getUserDynamoDB(userId, completionHandler: completionHandler)
     }
     
     func getCurrentUser(completionHandler: AWSContinuationBlock) {
-        print("Update currentUser:")
-        self.userPool?.currentUser()?.getDetails().continueWithBlock({
-            (task: AWSTask) in
-            if let error = task.error {
-                print("Update currentUser error: \(error)")
-                return AWSTask(error: error).continueWithBlock(completionHandler)
-            } else if let result = task.result as? AWSCognitoIdentityUserGetDetailsResponse {
-                let userAttributes = result.userAttributes
-                let user = User()
-                // If preferredUsername is not yet set, notifiy delegate (AppDelegate).
-                if let preferredUsernameIndex = userAttributes?.indexOf({ $0.name == "preferred_username" }) {
-                    user.preferredUsername = userAttributes?[preferredUsernameIndex].value
-                } else {
-                    print("PreferredUsername not set:")
-                    //self.incompleteSignUpDelegate?.preferredUsernameNotSet()
-                }
-                if let firstNameIndex = userAttributes?.indexOf({ $0.name == "given_name" }) {
-                    user.firstName = userAttributes?[firstNameIndex].value
-                }
-                if let lastNameIndex = userAttributes?.indexOf({ $0.name == "family_name" }) {
-                    user.lastName = userAttributes?[lastNameIndex].value
-                }
-                if let profilePicUrlIndex = userAttributes?.indexOf({ $0.name == "picture" }) {
-                    user.profilePicUrl = userAttributes?[profilePicUrlIndex].value
-                }
-                self.currentUser = user
-                print("Update currentUser success!")
-                return task.continueWithBlock(completionHandler)
-            } else {
-                print("This should not happen with GetDetails.")
-                return AWSTask().continueWithBlock(completionHandler)
-            }
-        })
+        // DynamoDB getCurrentUser.
+        PRFYDynamoDBManager.defaultDynamoDBManager().getCurrentUserDynamoDB(completionHandler)
     }
     
+//    func getCurrentUser(completionHandler: AWSContinuationBlock) {
+//        print("getCurrentUser:")
+//        self.userPool?.currentUser()?.getDetails().continueWithBlock({
+//            (task: AWSTask) in
+//            if let error = task.error {
+//                print("getCurrentUser error: \(error)")
+//                return AWSTask(error: error).continueWithBlock(completionHandler)
+//            } else if let result = task.result as? AWSCognitoIdentityUserGetDetailsResponse {
+//                let userAttributes = result.userAttributes
+//                let user = User()
+//                // If preferredUsername is not yet set, notifiy delegate (AppDelegate).
+//                if let preferredUsernameIndex = userAttributes?.indexOf({ $0.name == "preferred_username" }) {
+//                    user.preferredUsername = userAttributes?[preferredUsernameIndex].value
+//                } else {
+//                    print("PreferredUsername not set:")
+//                    //self.incompleteSignUpDelegate?.preferredUsernameNotSet()
+//                }
+//                if let firstNameIndex = userAttributes?.indexOf({ $0.name == "given_name" }) {
+//                    user.firstName = userAttributes?[firstNameIndex].value
+//                }
+//                if let lastNameIndex = userAttributes?.indexOf({ $0.name == "family_name" }) {
+//                    user.lastName = userAttributes?[lastNameIndex].value
+//                }
+//                if let profilePicUrlIndex = userAttributes?.indexOf({ $0.name == "picture" }) {
+//                    user.profilePicUrl = userAttributes?[profilePicUrlIndex].value
+//                }
+//                self.currentUser = user
+//                print("getCurrentUser success!")
+//                return task.continueWithBlock(completionHandler)
+//            } else {
+//                print("This should not happen with getCurrentUser.")
+//                return AWSTask().continueWithBlock(completionHandler)
+//            }
+//        })
+//    }
+    
     func updateFirstLastName(firstName: String?, lastName: String?, completionHandler: AWSContinuationBlock) {
-        var attributes: [AWSCognitoIdentityUserAttributeType] = []
-        let firstNameAttribute = AWSCognitoIdentityUserAttributeType()
-        firstNameAttribute.name = "given_name"
-        firstNameAttribute.value = firstName != nil ? firstName : ""
-        attributes.append(firstNameAttribute)
-        let lastNameAttribute = AWSCognitoIdentityUserAttributeType()
-        lastNameAttribute.name = "family_name"
-        lastNameAttribute.value = lastName != nil ? lastName : ""
-        attributes.append(lastNameAttribute)
-        
-        print("updateFirstLastName:")
-        self.userPool?.currentUser()?.updateAttributes(attributes).continueWithBlock({
+        // UserPool updateFirstLastName.
+        PRFYUserPoolManager.defaultUserPoolManager().updateFirstLastNameUserPool(firstName, lastName: lastName, completionHandler: {
             (task: AWSTask) in
             if let error = task.error {
-                print("updateFirstLastName error:")
                 return AWSTask(error: error).continueWithBlock(completionHandler)
             } else {
-                print("updateFirstLastName success!")
-                // Update DynamoDB.
-                self.updateFirstLastNameDynamoDB(firstName, lastName: lastName, completionHandler: completionHandler)
+                // DynamoDB updateFirstLastName SYNC.
+                PRFYDynamoDBManager.defaultDynamoDBManager().updateFirstLastNameDynamoDB(firstName, lastName: lastName, completionHandler: completionHandler)
                 return nil
             }
         })
     }
     
     func updatePreferredUsername(preferredUsername: String, completionHandler: AWSContinuationBlock) {
-        var attributes: [AWSCognitoIdentityUserAttributeType] = []
-        let preferredUsernameAttribute = AWSCognitoIdentityUserAttributeType()
-        preferredUsernameAttribute.name = "preferred_username"
-        preferredUsernameAttribute.value = preferredUsername
-        attributes.append(preferredUsernameAttribute)
-        
-        print("updatePreferredUsername:")
-        self.userPool?.currentUser()?.updateAttributes(attributes).continueWithBlock({
+        // UserPool updatePreferredUsername.
+        PRFYUserPoolManager.defaultUserPoolManager().updatePreferredUsernameUserPool(preferredUsername, completionHandler: {
             (task: AWSTask) in
             if let error = task.error {
-                print("updatePreferredUsername error:")
                 return AWSTask(error: error).continueWithBlock(completionHandler)
             } else {
-                print("updatePreferredUsername success!")
-                // Update DynamoDB.
-                self.updatePreferredUsernameDynamoDB(preferredUsername, completionHandler: completionHandler)
+                // DynamoDB updatePreferredUsername SYNC.
+                PRFYDynamoDBManager.defaultDynamoDBManager().updatePreferredUsernameDynamoDB(preferredUsername, completionHandler: completionHandler)
                 return nil
             }
         })
+    }
+    
+    func updateUserProfessions(professions: [String]?, completionHandler: AWSContinuationBlock) {
+        // DynamoDB updateUserProfessions.
+        PRFYDynamoDBManager.defaultDynamoDBManager().updateUserProfessionsDynamoDB(professions, completionHandler: completionHandler)
+        // TODO should update Professions table!
     }
     
     func updateProfilePic(profilePicUrl: String?, completionHandler: AWSContinuationBlock) {
-        var attributes: [AWSCognitoIdentityUserAttributeType] = []
-        let profilePicAttribute = AWSCognitoIdentityUserAttributeType()
-        profilePicAttribute.name = "picture"
-        profilePicAttribute.value = profilePicUrl != nil ? profilePicUrl : ""
-        attributes.append(profilePicAttribute)
-        
-        print("updateProfilePic:")
-        self.userPool?.currentUser()?.updateAttributes(attributes).continueWithBlock({
-            (task: AWSTask) in
-            if let error = task.error {
-                print("updateProfilePic error:")
-                return AWSTask(error: error).continueWithBlock(completionHandler)
-            } else {
-                print("updateProfilePic success!")
-                // Update DynamoDB.
-                self.updateProfilePicDynamoDB(profilePicUrl, completionHandler: completionHandler)
-                return nil
-            }
-        })
+//        var attributes: [AWSCognitoIdentityUserAttributeType] = []
+//        let profilePicAttribute = AWSCognitoIdentityUserAttributeType()
+//        profilePicAttribute.name = "picture"
+//        profilePicAttribute.value = profilePicUrl != nil ? profilePicUrl : ""
+//        attributes.append(profilePicAttribute)
+//        
+//        print("updateProfilePic:")
+//        self.userPool?.currentUser()?.updateAttributes(attributes).continueWithBlock({
+//            (task: AWSTask) in
+//            if let error = task.error {
+//                print("updateProfilePic error:")
+//                return AWSTask(error: error).continueWithBlock(completionHandler)
+//            } else {
+//                print("updateProfilePic success!")
+//                // Update DynamoDB.
+//                PRFYDynamoDBManager.defaultDynamoDBManager().updateProfilePicDynamoDB(profilePicUrl, completionHandler: completionHandler)
+//                return nil
+//            }
+//        })
     }
     
-    // MARK: DynamoDB
+    // MARK: Posts
     
-    func getCurrentUserDynamoDB(completionHandler: AWSContinuationBlock) {
-        print("getCurrentUserDynamoDB:")
-        self.credentialsProvider?.getIdentityId().continueWithBlock({
-            (task: AWSTask) in
-            if let error = task.error {
-                print("GetIdentityId error: \(error.localizedDescription)")
-                return AWSTask(error: error).continueWithBlock(completionHandler)
-            } else if let identityId = task.result as? String {
-                let usersTable = AWSUsersTable()
-                print("getCurrentUserDynamoDB:")
-                usersTable.getUser(identityId, completionHandler: {
-                    (task: AWSTask) in
-                    if let error = task.error {
-                        print("getCurrentUserDynamoDB error:")
-                        return AWSTask(error: error).continueWithBlock(completionHandler)
-                    } else if (task.result as? AWSUser) != nil {
-                        print("getCurrentUserDynamoDB success!")
-                        return task.continueWithBlock(completionHandler)
-                    } else {
-                        print("This should not happen with getCurrentUserDynamoDB!")
-                        return AWSTask().continueWithBlock(completionHandler)
-                    }
-                })
-                return nil
-            } else {
-                print("This should not happen with getIdentityId!")
-                return AWSTask().continueWithBlock(completionHandler)
-            }
-        })
+    func getCurrentUserPosts(completionHandler: AWSContinuationBlock) {
+        // DynamoDb getCurrentUserPosts.
+        PRFYDynamoDBManager.defaultDynamoDBManager().getCurrentUserPostsDynamoDB(completionHandler)
     }
     
-    func updateFirstLastNameDynamoDB(firstName: String?, lastName: String?, completionHandler: AWSContinuationBlock) {
-        self.credentialsProvider?.getIdentityId().continueWithBlock({
-            (task: AWSTask) in
-            if let error = task.error {
-                print("GetIdentityId error: \(error.localizedDescription)")
-                return AWSTask(error: error).continueWithBlock(completionHandler)
-            } else if let identityId = task.result as? String {
-                let usersTable = AWSUsersTable()
-                let user = AWSUserFirstLastName()
-                user._userId = identityId
-                user._firstName = firstName
-                user._lastName = lastName
-                print("updateFirstLastNameDynamoDB:")
-                usersTable.saveUserFirstLastName(user, completionHandler: {
-                    (task: AWSTask) in
-                    if let error = task.error {
-                        print("updateFirstLastNameDynamoDB error:")
-                        return AWSTask(error: error).continueWithBlock(completionHandler)
-                    } else {
-                        print("updateFirstLastNameDynamoDB success!")
-                        return task.continueWithBlock(completionHandler)
-                    }
-                })
-                return nil
-            } else {
-                print("This should not happen with getIdentityId!")
-                return AWSTask().continueWithBlock(completionHandler)
-            }
-        })
-    }
-    
-    func updatePreferredUsernameDynamoDB(preferredUsername: String?, completionHandler: AWSContinuationBlock) {
-        self.credentialsProvider?.getIdentityId().continueWithBlock({
-            (task: AWSTask) in
-            if let error = task.error {
-                print("GetIdentityId error: \(error.localizedDescription)")
-                return AWSTask(error: error).continueWithBlock(completionHandler)
-            } else if let identityId = task.result as? String {
-                let usersTable = AWSUsersTable()
-                let user = AWSUserPreferredUsername()
-                user._userId = identityId
-                user._preferredUsername = preferredUsername
-                print("updatePreferredUsernameDynamoDB:")
-                usersTable.saveUserPreferredUsername(user, completionHandler: {
-                    (task: AWSTask) in
-                    if let error = task.error {
-                        print("updatePreferredUsernameDynamoDB error:")
-                        return AWSTask(error: error).continueWithBlock(completionHandler)
-                    } else {
-                        print("updatePreferredUsernameDynamoDB success!")
-                        return task.continueWithBlock(completionHandler)
-                    }
-                })
-                return nil
-            } else {
-                print("This should not happen with getIdentityId!")
-                return AWSTask().continueWithBlock(completionHandler)
-            }
-        })
-    }
-    
-    func updateUserProfessionsDynamoDB(professions: [String]?, completionHandler: AWSContinuationBlock) {
-        self.credentialsProvider?.getIdentityId().continueWithBlock({
-            (task: AWSTask) in
-            if let error = task.error {
-                print("GetIdentityId error: \(error.localizedDescription)")
-                return AWSTask(error: error).continueWithBlock(completionHandler)
-            } else if let identityId = task.result as? String {
-                let usersTable = AWSUsersTable()
-                let user = AWSUserProfessions()
-                user._userId = identityId
-                user._professions = professions
-                print("updateUserProfessionsDynamoDB:")
-                usersTable.saveUserProfessions(user, completionHandler: {
-                    (task: AWSTask) in
-                    if let error = task.error {
-                        print("updateUserProfessionsDynamoDB error:")
-                        return AWSTask(error: error).continueWithBlock(completionHandler)
-                    } else {
-                        print("updateUserProfessionsDynamoDB success!")
-                        return task.continueWithBlock(completionHandler)
-                    }
-                })
-                return nil
-            } else {
-                print("This should not happen with getIdentityId!")
-                return AWSTask().continueWithBlock(completionHandler)
-            }
-        })
-    }
-    
-    // In background.
-    func updateProfessionsDynamoDB(professions: [String]) {
-        let professionsTable = AWSProfessionsTable()
-        print("updateProfessionsDynamoDB:")
-        professionsTable.saveProfessions(professions) {
-            (errors: [NSError]?) in
-            if let errors = errors {
-                print("updateProfessionsDynamoDB errors: \(errors)")
-            } else {
-                print("updateProfessionsDynamoDB success!")
-            }
-        }
-    }
-    
-    func updateProfilePicDynamoDB(profilePicUrl: String?, completionHandler: AWSContinuationBlock) {
-        self.credentialsProvider?.getIdentityId().continueWithBlock({
-            (task: AWSTask) in
-            if let error = task.error {
-                print("GetIdentityId error: \(error.localizedDescription)")
-                return AWSTask(error: error).continueWithBlock(completionHandler)
-            } else if let identityId = task.result as? String {
-                let usersTable = AWSUsersTable()
-                let user = AWSUserProfilePic()
-                user._userId = identityId
-                user._profilePicUrl = profilePicUrl
-                print("updateProfilePicDynamoDB:")
-                usersTable.saveUserProfilePic(user, completionHandler: {
-                    (task: AWSTask) in
-                    if let error = task.error {
-                        print("updateProfilePicDynamoDB error:")
-                        return AWSTask(error: error).continueWithBlock(completionHandler)
-                    } else {
-                        print("updateProfilePicDynamoDB success!")
-                        return task.continueWithBlock(completionHandler)
-                    }
-                })
-                return nil
-            } else {
-                print("This should not happen with getIdentityId!")
-                return AWSTask().continueWithBlock(completionHandler)
-            }
-        })
-    }
-    
-    // MARK: S3
-    
-    func uploadImageS3(imageData: NSData, isProfilePic: Bool, progressBlock: ((AWSLocalContent, NSProgress) -> Void)?, completionHandler: AWSContinuationBlock) {
-        guard let userFileManager = self.userFileManager else {
-            AWSTask().continueWithBlock(completionHandler)
-            return
-        }
-        let uniqueImageName = NSUUID().UUIDString.lowercaseString.stringByReplacingOccurrencesOfString("-", withString: "")
-        var imageKey: String
-        if isProfilePic {
-            imageKey = "\(self.s3ProfilePicsPrexif)\(uniqueImageName).jpg"
-        } else {
-            imageKey = "\(self.s3ProfilePicsPrexif)\(uniqueImageName).jpg"
-        }
-        
-        let localContent: AWSLocalContent = userFileManager.localContentWithData(imageData, key: imageKey)
-        print("uploadImageS3:")
-        localContent.uploadWithPinOnCompletion(
-            false,
-            progressBlock: progressBlock,
+    func getImage(imageUrl: String, completionHandler: AWSContinuationBlock) {
+        // S3 downloadImage.
+        PRFYS3Manager.defaultDynamoDBManager().downloadImageS3(
+            imageUrl,
+            progressBlock: {
+                (content: AWSContent, progress: NSProgress) in
+                // TODO
+            },
             completionHandler: {
-                (content: AWSLocalContent?, error: NSError?) -> Void in
-                if let error = error {
-                    print("uploadImageS3 error:")
-                    AWSTask(error: error).continueWithBlock(completionHandler)
+                (task: AWSTask) in
+                if let error = task.error {
+                    return AWSTask(error: error).continueWithBlock(completionHandler)
+                } else if let data = task.result as? NSData {
+                    return AWSTask(result: data).continueWithBlock(completionHandler)
                 } else {
-                    print("uploadImageS3 success!")
-                    AWSTask(result: imageKey).continueWithBlock(completionHandler)
+                    print("This should not happen with getImage.")
+                    return AWSTask().continueWithBlock(completionHandler)
+                }
+        })
+    }
+    
+    func createPost(imageData: NSData, title: String?, description: String?, isProfilePic: Bool, completionHandler: AWSContinuationBlock) {
+        // S3 uploadImage.
+        PRFYS3Manager.defaultDynamoDBManager().uploadImageS3(
+            imageData,
+            isProfilePic: isProfilePic,
+            progressBlock: {
+                (localContent: AWSLocalContent, progress: NSProgress) in
+                // TODO
+            },
+            completionHandler: {
+                (task: AWSTask) in
+                if let error = task.error {
+                    return AWSTask(error: error).continueWithBlock(completionHandler)
+                } else if let imageUrl = task.result as? String {
+                    // DynamoDB createPostDynamoDb SYNC.
+                    PRFYDynamoDBManager.defaultDynamoDBManager().createPostDynamoDB(imageUrl, title: title, description: description, completionHandler: completionHandler)
+                    return nil
+                } else {
+                    print("This should not happen with createPost.")
+                    return AWSTask().continueWithBlock(completionHandler)
                 }
         })
     }
@@ -451,5 +286,4 @@ class AWSClientManager: NSObject, ClientManager {
             }
         }
     }
-    
 }

@@ -2,54 +2,61 @@
 //  PreviewViewController.swift
 //  Profeey
 //
-//  Created by Antonio Zdelican on 27/07/16.
+//  Created by Antonio Zdelican on 01/08/16.
 //  Copyright © 2016 Profeey. All rights reserved.
 //
 
 import UIKit
 import PhotosUI
-import AWSMobileHubHelper
 
 class PreviewViewController: UIViewController {
-
+    
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var imageViewWidthConstraint: NSLayoutConstraint!
     @IBOutlet weak var imageViewHeightConstraint: NSLayoutConstraint!
     
-    var photo: UIImage?
+    var capturedPhoto: UIImage?
     var asset: PHAsset?
-    var imageOnScreen: UIImage?
-    var finalImage: UIImage?
-    var scale: CGFloat?
     // Determine if it's a photo or asset from gallery.
     var isPhoto: Bool = true
-    var cropFrameLength: CGFloat!
-    var CROP_FRAME_PADDING: CGFloat = 10.0
     
+    // Adjusting imageView in scrollView.
+    private var newImageViewWidth: CGFloat = 0.0
+    private var newImageViewHeight: CGFloat = 0.0
+    
+    private var scale: CGFloat?
+    private var finalImage: UIImage?
+    private var alreadyConfigured: Bool = false
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.automaticallyAdjustsScrollViewInsets = false
-        self.cropFrameLength = self.view.bounds.width - 2 * CROP_FRAME_PADDING
-        
         self.configureScrollView()
-        
-        if self.isPhoto {
-            self.configurePhoto()
-        } else {
-            self.configureAsset()
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        // Skip if we come back from EditVc.
+        if !self.alreadyConfigured {
+            if self.isPhoto {
+                self.configurePhoto()
+            } else {
+                self.configureAsset()
+            }
+            self.alreadyConfigured = true
         }
     }
     
     override func prefersStatusBarHidden() -> Bool {
         return true
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
     
-    // MARK: Pre-onfiguration
+    // MARK: Configuration
     
     private func configureScrollView() {
         self.scrollView.delegate = self
@@ -60,11 +67,11 @@ class PreviewViewController: UIViewController {
     }
     
     private func configurePhoto() {
-        guard let image = self.photo else {
+        // Fix orientation for the bug.
+        guard let image = self.capturedPhoto?.fixOrientation() else {
             return
         }
-        self.imageOnScreen = image
-        self.adjustImageOnScreen(image)
+        self.adjustImageSize(image)
     }
     
     private func configureAsset() {
@@ -77,144 +84,106 @@ class PreviewViewController: UIViewController {
                 resultHandler: {
                     (result: UIImage?, info: [NSObject : AnyObject]?) in
                     if let image = result {
-                        self.imageOnScreen = image
-                        self.adjustImageOnScreen(image)
+                        self.adjustImageSize(image)
                     }
             })
         }
     }
     
-    private func adjustImageOnScreen(image: UIImage) {        
-        let aspectRatio = image.size.width / image.size.height
-        var newImageViewWidth: CGFloat
-        var newImageViewHeight: CGFloat
-        
-        if image.size.width <= image.size.height {
-            newImageViewWidth = self.view.bounds.width
-            newImageViewHeight = ceil(newImageViewWidth / aspectRatio)
-        } else {
-            newImageViewHeight = self.view.bounds.width
-            newImageViewWidth = ceil(newImageViewHeight * aspectRatio)
-        }
-        self.imageViewWidthConstraint.constant = newImageViewWidth
-        self.imageViewHeightConstraint.constant = newImageViewHeight
-        self.imageView.image = image
-        // Set up scale for later use.
-        self.scale = image.size.width / newImageViewWidth
-        
-        self.scrollView.layoutIfNeeded()
-        // Adjust scrollView inset.
-        let topInset = ceil((self.scrollView.bounds.height - self.cropFrameLength) / 2)
-        let bottomInset = topInset
-        self.scrollView.contentInset = UIEdgeInsetsMake(topInset, self.CROP_FRAME_PADDING, bottomInset, self.CROP_FRAME_PADDING)
-        
-        // Adjust scrollView offset.
-        let offsetX = -ceil((self.scrollView.bounds.width - newImageViewWidth) / 2)
-        let difference = ceil((newImageViewHeight - self.cropFrameLength) / 2)
-        let offsetY = -(topInset - difference)
-        self.scrollView.contentOffset = CGPointMake(offsetX, offsetY)
-    }
-    
     // MARK: Navigation
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-
+        if let destinationViewController = segue.destinationViewController as? EditPostTableViewController {
+            destinationViewController.finalImage = self.finalImage
+        }
     }
     
-    @IBAction func closeButtonTapped(sender: AnyObject) {
+    // MARK: IBActions
+    
+    @IBAction func nextButtonTapped(sender: AnyObject) {
+        self.prepareFinalImage()
+    }
+    
+    @IBAction func backButtonTapped(sender: AnyObject) {
         self.dismissViewControllerAnimated(false, completion: nil)
     }
     
-    private func prepareForUpload() {
-        guard let scale = self.scale, let imageOnScreen = self.imageOnScreen else {
+    // MARK: Helpers
+    
+    private func adjustImageSize(image: UIImage) {
+        let aspectRatio = image.size.width / image.size.height
+        
+        // Scale to 1080.
+        let scaledWidth: CGFloat = 1080
+        let scaledHeight = scaledWidth / aspectRatio
+        let scaledImage = image.scale(scaledWidth, height: scaledHeight, scale: image.scale)
+        
+        // ImageView.
+        self.scrollView.layoutIfNeeded()
+        if scaledImage.size.width >= scaledImage.size.height {
+            self.newImageViewWidth = self.scrollView.bounds.width
+            self.newImageViewHeight = ceil(self.newImageViewWidth / aspectRatio)
+        } else {
+            self.newImageViewHeight = self.scrollView.bounds.height
+            self.newImageViewWidth = ceil(self.newImageViewHeight * aspectRatio)
+        }
+        self.imageViewWidthConstraint.constant = self.newImageViewWidth
+        self.imageViewHeightConstraint.constant = self.newImageViewHeight
+        
+        // Set up scale for later use.
+        self.scale = scaledImage.size.width / self.newImageViewWidth
+        
+        // ScrollView inset.
+        self.adjustScrollViewInset()
+        
+        // ScrollView offset.
+        self.adjustScrollViewOffset()
+        
+        self.imageView.image = scaledImage
+    }
+    
+    private func adjustScrollViewInset() {
+        let zoomScale = self.scrollView.zoomScale
+        var topInset: CGFloat
+        var bottomInset: CGFloat
+        var leftInset: CGFloat
+        var rightInset: CGFloat
+        if self.newImageViewHeight * zoomScale < self.scrollView.bounds.height {
+            topInset = ceil((self.scrollView.bounds.height - self.newImageViewHeight * zoomScale) / 2)
+        } else {
+            topInset = 0.0
+        }
+        bottomInset = topInset
+        if self.newImageViewWidth * zoomScale < self.scrollView.bounds.width {
+            leftInset = ceil((self.scrollView.bounds.width - self.newImageViewWidth * zoomScale) / 2)
+        } else {
+            leftInset = 0.0
+        }
+        rightInset = leftInset
+        self.scrollView.contentInset = UIEdgeInsetsMake(topInset, leftInset, bottomInset, rightInset)
+    }
+    
+    private func adjustScrollViewOffset() {
+        let offsetX = -ceil((self.scrollView.bounds.width - self.newImageViewWidth) / 2)
+        let offsetY = -ceil((self.scrollView.bounds.height - self.newImageViewHeight) / 2)
+        self.scrollView.contentOffset = CGPointMake(offsetX, offsetY)
+    }
+    
+    private func prepareFinalImage() {
+        guard let scale = self.scale, let image = self.imageView.image else {
             return
         }
-        
-        let topInset = ceil((self.scrollView.bounds.height - self.cropFrameLength) / 2)
         let zoomScale = 1.0 / self.scrollView.zoomScale
         
-        let cropX = (self.scrollView.contentOffset.x + self.CROP_FRAME_PADDING) * scale * zoomScale
-        let cropY = (self.scrollView.contentOffset.y + topInset) * scale * zoomScale
-        
-        let cropWidth = self.cropFrameLength * scale * zoomScale
-        let cropHeight = self.cropFrameLength * scale * zoomScale
-        
         // Crop.
-        let croppedImage = imageOnScreen.crop(cropX, cropY: cropY, cropWidth: cropWidth, cropHeight: cropHeight)
-        // Scale
-        let scaledImage = croppedImage.scale(400.0, height: 400.0, scale: croppedImage.scale)
-        self.finalImage = scaledImage
+        let cropX = ceil((self.scrollView.contentOffset.x + self.scrollView.contentInset.left) * zoomScale * scale)
+        let cropY = ceil((self.scrollView.contentOffset.y + self.scrollView.contentInset.top) * zoomScale * scale)
+        let cropWidth = ceil((self.scrollView.bounds.width - (self.scrollView.contentInset.left + self.scrollView.contentInset.right)) * zoomScale * scale)
+        let cropHeight = ceil((self.scrollView.bounds.height - (self.scrollView.contentInset.top + self.scrollView.contentInset.bottom)) * zoomScale * scale)
+        let croppedImage = image.crop(cropX, cropY: cropY, cropWidth: cropWidth, cropHeight: cropHeight)
         
-        self.uploadImageS3()
-        //self.performSegueWithIdentifier("segueToTestVc", sender: self)
-        
-    }
-    
-    // MARK: AWS
-    
-    private func uploadImageS3() {
-        guard let finalImage = self.finalImage,
-        let imageData = UIImageJPEGRepresentation(finalImage, 0.6) else {
-            return
-        }
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-        AWSClientManager.defaultClientManager().uploadImageS3(
-            imageData,
-            isProfilePic: true,
-            progressBlock: {
-                (localContent: AWSLocalContent, progress: NSProgress) in
-                return
-            },
-            completionHandler: {
-                (task: AWSTask) in
-                    if let error = task.error {
-                        dispatch_async(dispatch_get_main_queue(), {
-                            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-                            print(error)
-                        })
-                    } else if let imageKey = task.result as? String {
-                        
-                        // 1. Async delete oldProfilePicUrl.
-//                        if let oldProfilePicUrl = AWSClientManager.defaultClientManager().currentUser?.profilePicUrl {
-//                            self.deleteProfilePic(oldProfilePicUrl)
-//                        }
-//                       
-//                        // 2. Async update UserPool and DynamoDB.
-//                        self.updateProfilePic(imageKey)
-//                        
-//                        // 3. Update local currentUser profilePicUrl.
-//                        AWSClientManager.defaultClientManager().currentUser?.profilePicUrl = imageKey
-                        
-                        dispatch_async(dispatch_get_main_queue(), {
-                            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-                            print("Success!")
-                        })
-                    } else {
-                        dispatch_async(dispatch_get_main_queue(), {
-                            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-                            print("This should not happen!")
-                        })
-                    }
-                return nil
-        })
-    }
-    
-    // Background.
-    private func updateProfilePic(profilePicUrl: String?) {
-        AWSClientManager.defaultClientManager().updateProfilePic(
-            profilePicUrl,
-            completionHandler: {
-                (task: AWSTask) in
-                return nil
-        })
-    }
-    
-    // Background.
-    private func deleteProfilePic(oldProfilePicUrl: String) {
-        AWSClientManager.defaultClientManager().deleteImageS3(oldProfilePicUrl, completionHandler: {
-            (task: AWSTask) in
-            return nil
-        })
+        self.finalImage = croppedImage
+        self.performSegueWithIdentifier("segueToEditVc", sender: self)
     }
 }
 
@@ -222,5 +191,9 @@ extension PreviewViewController: UIScrollViewDelegate {
     
     func viewForZoomingInScrollView(scrollView: UIScrollView) -> UIView? {
         return self.imageView
+    }
+    
+    func scrollViewDidZoom(scrollView: UIScrollView) {
+        self.adjustScrollViewInset()
     }
 }

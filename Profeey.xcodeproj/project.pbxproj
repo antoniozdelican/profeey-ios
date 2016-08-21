@@ -8,15 +8,17 @@
 
 /* Begin PBXBuildFile section */
 		A90228111D3279B500C2EFEB /* ItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A90228101D3279B500C2EFEB /* ItemTableViewCell.swift */; };
-		A903C3CC1D38E04200ED7E10 /* PostTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A903C3CB1D38E04200ED7E10 /* PostTableViewCell.swift */; };
 		A903EB4C1D169DCC00B33025 /* FakeCaptureNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A903EB4B1D169DCC00B33025 /* FakeCaptureNavigationController.swift */; };
 		A903EB571D16A39700B33025 /* LLSimpleCamera.m in Sources */ = {isa = PBXBuildFile; fileRef = A903EB521D16A39700B33025 /* LLSimpleCamera.m */; };
 		A903EB581D16A39700B33025 /* LLSimpleCamera+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = A903EB541D16A39700B33025 /* LLSimpleCamera+Helper.m */; };
 		A903EB591D16A39700B33025 /* UIImage+FixOrientation.m in Sources */ = {isa = PBXBuildFile; fileRef = A903EB561D16A39700B33025 /* UIImage+FixOrientation.m */; };
 		A903EB5B1D16A3C800B33025 /* ProfeeySimpleCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = A903EB5A1D16A3C800B33025 /* ProfeeySimpleCamera.swift */; };
 		A90A09581D43E5A7006AC49D /* WelcomeNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A90A09571D43E5A7006AC49D /* WelcomeNavigationController.swift */; };
+		A913FC701D51F6AF000D10A6 /* DynamoDBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A913FC6F1D51F6AF000D10A6 /* DynamoDBManager.swift */; };
+		A913FC721D51FAD6000D10A6 /* PRFYDynamoDBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A913FC711D51FAD6000D10A6 /* PRFYDynamoDBManager.swift */; };
 		A919D0A21D3FC48800AF0726 /* NameSignUpTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A919D0A11D3FC48800AF0726 /* NameSignUpTableViewController.swift */; };
 		A91A35241D1C26E6006F22B2 /* FullScreenIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91A35231D1C26E6006F22B2 /* FullScreenIndicator.swift */; };
+		A92453A51D5CD1EC005FB08C /* CameraOverlayView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A92453A41D5CD1EC005FB08C /* CameraOverlayView.xib */; };
 		A930BC7C1D0DD43F004D49F7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A930BC7B1D0DD43F004D49F7 /* AppDelegate.swift */; };
 		A930BC811D0DD43F004D49F7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A930BC7F1D0DD43F004D49F7 /* Main.storyboard */; };
 		A930BC831D0DD43F004D49F7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A930BC821D0DD43F004D49F7 /* Assets.xcassets */; };
@@ -24,21 +26,16 @@
 		A930BCA61D0DD61A004D49F7 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = A930BCA51D0DD61A004D49F7 /* libsqlite3.tbd */; };
 		A930BCA81D0DD623004D49F7 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = A930BCA71D0DD623004D49F7 /* libz.tbd */; };
 		A94797A71D2E3451007CBF08 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = A94797A61D2E3451007CBF08 /* User.swift */; };
-		A94797AC1D2E3A0C007CBF08 /* AWSRemoteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A94797AB1D2E3A0C007CBF08 /* AWSRemoteService.swift */; };
 		A94797AE1D2E3C6B007CBF08 /* AWSConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A94797AD1D2E3C6B007CBF08 /* AWSConstants.swift */; };
-		A95C31B11D3E14510003377F /* UICKeyChainStore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A95C31B01D3E14510003377F /* UICKeyChainStore.framework */; };
-		A95C31B41D3E16370003377F /* UICKeyChainStore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A95C31B31D3E16370003377F /* UICKeyChainStore.framework */; };
+		A9528CAC1D53D1FB00B00C85 /* ProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9528CAB1D53D1FB00B00C85 /* ProfileTableViewCell.swift */; };
 		A95C31B51D3E164C0003377F /* UICKeyChainStore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A95C31B31D3E16370003377F /* UICKeyChainStore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		A95C31B71D3E16930003377F /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95C31B61D3E16930003377F /* Constants.swift */; };
 		A95C31B91D3E35AA0003377F /* AWSClientManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95C31B81D3E35AA0003377F /* AWSClientManager.swift */; };
 		A95E40C81D350D3400FD61F9 /* EditUsernameTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95E40C71D350D3400FD61F9 /* EditUsernameTableViewController.swift */; };
-		A95E40CA1D35105A00FD61F9 /* EditNameTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95E40C91D35105A00FD61F9 /* EditNameTableViewController.swift */; };
 		A95E40CC1D35137700FD61F9 /* EditAboutTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95E40CB1D35137700FD61F9 /* EditAboutTableViewController.swift */; };
 		A95E40D01D35410500FD61F9 /* CaptureNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95E40CF1D35410500FD61F9 /* CaptureNavigationController.swift */; };
 		A9604F7E1D33721000F23B33 /* AWSUserPreferredUsername.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9604F7D1D33721000F23B33 /* AWSUserPreferredUsername.swift */; };
 		A9604F801D33722100F23B33 /* AWSUserAbout.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9604F7F1D33722100F23B33 /* AWSUserAbout.swift */; };
 		A9604F821D33722F00F23B33 /* AWSUserProfessions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9604F811D33722F00F23B33 /* AWSUserProfessions.swift */; };
-		A9604F851D337DEA00F23B33 /* CurrentUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9604F841D337DEA00F23B33 /* CurrentUser.swift */; };
 		A9604F891D33C99100F23B33 /* AWSUserProfilePic.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9604F881D33C99100F23B33 /* AWSUserProfilePic.swift */; };
 		A961875F1D3FA67B0028DEA7 /* ClientManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A961875E1D3FA67B0028DEA7 /* ClientManager.swift */; };
 		A96622001D0EBBC200298CE7 /* Onboarding.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A96621FF1D0EBBC200298CE7 /* Onboarding.storyboard */; };
@@ -51,21 +48,31 @@
 		A96622101D0EF39800298CE7 /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A966220F1D0EF39800298CE7 /* LogInViewController.swift */; };
 		A96B3B991D3659790071FE7A /* ItemsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96B3B981D3659790071FE7A /* ItemsTableViewController.swift */; };
 		A96B3B9C1D365DF70071FE7A /* Items.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A96B3B9B1D365DF70071FE7A /* Items.storyboard */; };
-		A97C02731D489C8D00775D82 /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A97C02721D489C8D00775D82 /* PreviewViewController.swift */; };
+		A975529C1D4F4D0300F773FF /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A975529B1D4F4D0300F773FF /* PreviewViewController.swift */; };
+		A98787301D64986A009F54B8 /* SearchResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A987872F1D64986A009F54B8 /* SearchResultsViewController.swift */; };
 		A98B42DB1D43C4E00089A769 /* ProfessionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98B42DA1D43C4E00089A769 /* ProfessionsViewController.swift */; };
 		A98B42DD1D43C5720089A769 /* ProfessionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98B42DC1D43C5720089A769 /* ProfessionsTableViewController.swift */; };
 		A98B42E11D43C95A0089A769 /* ProfessionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98B42E01D43C95A0089A769 /* ProfessionTableViewCell.swift */; };
 		A98B42E31D43DD040089A769 /* ProfessionsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98B42E21D43DD040089A769 /* ProfessionsCollectionViewController.swift */; };
 		A98B42E51D43DDBD0089A769 /* ProfessionCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98B42E41D43DDBD0089A769 /* ProfessionCollectionViewCell.swift */; };
 		A98BB1CE1D3A32AD00E6FB4D /* ProfileTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98BB1CD1D3A32AD00E6FB4D /* ProfileTableViewController.swift */; };
-		A98BB1D01D3A353100E6FB4D /* UserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98BB1CF1D3A353100E6FB4D /* UserTableViewCell.swift */; };
+		A98E33331D51057800750D35 /* CategoriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98E33321D51057800750D35 /* CategoriesViewController.swift */; };
+		A98E33351D510AF600750D35 /* CategoriesCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98E33341D510AF600750D35 /* CategoriesCollectionViewController.swift */; };
+		A98E33371D510B1300750D35 /* CategoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98E33361D510B1300750D35 /* CategoryCollectionViewCell.swift */; };
+		A98E33391D51180A00750D35 /* Categories.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A98E33381D51180A00750D35 /* Categories.storyboard */; };
 		A99030F71D464F3000336D26 /* GalleryCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99030F61D464F3000336D26 /* GalleryCollectionViewController.swift */; };
 		A99030F91D464FEE00336D26 /* GalleryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99030F81D464FEE00336D26 /* GalleryCollectionViewCell.swift */; };
 		A99030FB1D46632500336D26 /* AlbumsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99030FA1D46632500336D26 /* AlbumsTableViewController.swift */; };
 		A99030FD1D46634600336D26 /* AlbumTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99030FC1D46634600336D26 /* AlbumTableViewCell.swift */; };
+		A990ECAC1D6A4B6500C3C9CE /* ExperienceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A990ECAB1D6A4B6500C3C9CE /* ExperienceTableViewCell.swift */; };
+		A990ECAE1D6A4B7C00C3C9CE /* ExperienceTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A990ECAD1D6A4B7C00C3C9CE /* ExperienceTableViewController.swift */; };
+		A990ECB01D6A572500C3C9CE /* UsersTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A990ECAF1D6A572500C3C9CE /* UsersTableViewController.swift */; };
+		A990ECB31D6A576E00C3C9CE /* Users.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A990ECB21D6A576E00C3C9CE /* Users.storyboard */; };
+		A990ECB51D6A582100C3C9CE /* UserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A990ECB41D6A582100C3C9CE /* UserTableViewCell.swift */; };
+		A990ECB81D6A5F6A00C3C9CE /* Comments.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A990ECB71D6A5F6A00C3C9CE /* Comments.storyboard */; };
+		A99956E21D5BAD2D00A9556A /* EditFirstLastNameTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99956E11D5BAD2D00A9556A /* EditFirstLastNameTableViewController.swift */; };
+		A99956E71D5BD21E00A9556A /* Professions.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A99956E61D5BD21E00A9556A /* Professions.storyboard */; };
 		A99ADA1F1D0F189E0050E329 /* Welcome.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A99ADA1E1D0F189E0050E329 /* Welcome.storyboard */; };
-		A99BD3621D3037D10072CC27 /* AWSProfession.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99BD3611D3037D10072CC27 /* AWSProfession.swift */; };
-		A99BD3681D303FE20072CC27 /* AWSProfessionsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99BD3671D303FE20072CC27 /* AWSProfessionsTable.swift */; };
 		A9A503941D2F925F0030A472 /* EditProfileTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9A503931D2F925F0030A472 /* EditProfileTableViewController.swift */; };
 		A9A503991D2FA9180030A472 /* LocalService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9A503981D2FA9180030A472 /* LocalService.swift */; };
 		A9A5039F1D2FE0810030A472 /* AWSUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9A5039E1D2FE0810030A472 /* AWSUser.swift */; };
@@ -73,18 +80,33 @@
 		A9A503A71D2FF8450030A472 /* EditProfile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9A503A61D2FF8450030A472 /* EditProfile.storyboard */; };
 		A9A8DD111D4529B2009B3C24 /* LogInNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9A8DD101D4529B2009B3C24 /* LogInNavigationController.swift */; };
 		A9A8DD131D452BAA009B3C24 /* LogInTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9A8DD121D452BAA009B3C24 /* LogInTableViewController.swift */; };
-		A9ACAE191D390E3B00D77682 /* PostCategoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9ACAE181D390E3B00D77682 /* PostCategoryCollectionViewCell.swift */; };
+		A9A95B2D1D58989B0009CEE7 /* Post.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9A95B2C1D58989B0009CEE7 /* Post.storyboard */; };
+		A9A99FA61D60C6D200B01006 /* EditPostTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9A99FA51D60C6D200B01006 /* EditPostTableViewController.swift */; };
+		A9AC2C741D6484A000D84D33 /* SearchTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AC2C731D6484A000D84D33 /* SearchTableViewController.swift */; };
 		A9AD744B1D3627BD007ACBD4 /* FiltersCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD744A1D3627BD007ACBD4 /* FiltersCollectionViewController.swift */; };
-		A9AD744F1D364882007ACBD4 /* EditTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD744E1D364882007ACBD4 /* EditTableViewController.swift */; };
+		A9B4AB9C1D61EC1F0001C682 /* PRFYS3Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B4AB9B1D61EC1F0001C682 /* PRFYS3Manager.swift */; };
+		A9B4AB9E1D61EC300001C682 /* S3Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B4AB9D1D61EC300001C682 /* S3Manager.swift */; };
+		A9B7A2441D65A562009DA340 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B7A2431D65A562009DA340 /* Category.swift */; };
+		A9B7A2461D65BF64009DA340 /* PopularCategoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B7A2451D65BF64009DA340 /* PopularCategoryTableViewCell.swift */; };
+		A9B7A2481D65D8B2009DA340 /* PostTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B7A2471D65D8B2009DA340 /* PostTableViewCell.swift */; };
+		A9B7A24A1D65D8C0009DA340 /* HomeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B7A2491D65D8C0009DA340 /* HomeTableViewController.swift */; };
 		A9B934B01D1BD9BB00ACC2B8 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B934AF1D1BD9BB00ACC2B8 /* OnboardingViewController.swift */; };
 		A9BCF7401D4C0737001B2EEA /* PreviewProfilePicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9BCF73F1D4C0737001B2EEA /* PreviewProfilePicViewController.swift */; };
 		A9BCF7421D4C085B001B2EEA /* CaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9BCF7411D4C085B001B2EEA /* CaptureViewController.swift */; };
-		A9BFD9121D45EB3100D9D962 /* ProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9BFD9111D45EB3100D9D962 /* ProfileTableViewCell.swift */; };
+		A9BD00BB1D50BE4100732060 /* CategoriesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9BD00BA1D50BE4100732060 /* CategoriesTableViewController.swift */; };
+		A9BD00BD1D50BE9900732060 /* CategoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9BD00BC1D50BE9900732060 /* CategoryTableViewCell.swift */; };
+		A9BE4BA51D69DE14005D1B07 /* ProfileHeaderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9BE4BA41D69DE14005D1B07 /* ProfileHeaderTableViewCell.swift */; };
+		A9BE4BA71D69E361005D1B07 /* ProfileAboutTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9BE4BA61D69E361005D1B07 /* ProfileAboutTableViewCell.swift */; };
+		A9BF16411D64DA4600060A9E /* SearchCategoriesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9BF16401D64DA4600060A9E /* SearchCategoriesTableViewController.swift */; };
+		A9BF16431D64DC2600060A9E /* SearchUsersTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9BF16421D64DC2600060A9E /* SearchUsersTableViewController.swift */; };
+		A9BF16451D64DC5F00060A9E /* SearchUserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9BF16441D64DC5F00060A9E /* SearchUserTableViewCell.swift */; };
+		A9BF16471D64DDAC00060A9E /* SearchCategoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9BF16461D64DDAC00060A9E /* SearchCategoryTableViewCell.swift */; };
+		A9BF16491D6514C900060A9E /* NoResultsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9BF16481D6514C900060A9E /* NoResultsTableViewCell.swift */; };
+		A9BF164B1D6519D100060A9E /* SearchingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9BF164A1D6519D100060A9E /* SearchingTableViewCell.swift */; };
 		A9C0ED3A1D3C21C30036F791 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C0ED391D3C21C30036F791 /* Post.swift */; };
 		A9C482141D30E983007B5423 /* ItemsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C482131D30E983007B5423 /* ItemsViewController.swift */; };
 		A9C482161D30EC25007B5423 /* ItemsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C482151D30EC25007B5423 /* ItemsCollectionViewController.swift */; };
 		A9C482181D30ED0B007B5423 /* ItemCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C482171D30ED0B007B5423 /* ItemCollectionViewCell.swift */; };
-		A9C5D0C41D3A84BC00EBA87D /* HomeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C5D0C31D3A84BC00EBA87D /* HomeTableViewController.swift */; };
 		A9C5D0CC1D3AABB100EBA87D /* PostDetailsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C5D0CB1D3AABB100EBA87D /* PostDetailsTableViewController.swift */; };
 		A9C6CB7F1D2929AA00863816 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C6CB7E1D2929AA00863816 /* Extensions.swift */; };
 		A9CF75381D40BA1F0047BB1A /* SignUpNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CF75371D40BA1F0047BB1A /* SignUpNavigationController.swift */; };
@@ -92,7 +114,38 @@
 		A9CF753C1D40C54B0047BB1A /* PasswordSignUpTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CF753B1D40C54B0047BB1A /* PasswordSignUpTableViewController.swift */; };
 		A9CF75461D40CB740047BB1A /* UsernameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CF75451D40CB740047BB1A /* UsernameViewController.swift */; };
 		A9CF75481D40CE2A0047BB1A /* UsernameTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CF75471D40CE2A0047BB1A /* UsernameTableViewController.swift */; };
+		A9D21B2F1D5B5F5A00B5847D /* AWSCognito.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9D21B281D5B5F5A00B5847D /* AWSCognito.framework */; };
+		A9D21B301D5B5F5A00B5847D /* AWSCognitoIdentityProvider.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9D21B291D5B5F5A00B5847D /* AWSCognitoIdentityProvider.framework */; };
+		A9D21B311D5B5F5A00B5847D /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9D21B2A1D5B5F5A00B5847D /* AWSCore.framework */; };
+		A9D21B321D5B5F5A00B5847D /* AWSDynamoDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9D21B2B1D5B5F5A00B5847D /* AWSDynamoDB.framework */; };
+		A9D21B331D5B5F5A00B5847D /* AWSLambda.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9D21B2C1D5B5F5A00B5847D /* AWSLambda.framework */; };
+		A9D21B341D5B5F5A00B5847D /* AWSMobileAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9D21B2D1D5B5F5A00B5847D /* AWSMobileAnalytics.framework */; };
+		A9D21B351D5B5F5A00B5847D /* AWSS3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9D21B2E1D5B5F5A00B5847D /* AWSS3.framework */; };
+		A9D21B361D5B5F6900B5847D /* AWSCognito.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9D21B281D5B5F5A00B5847D /* AWSCognito.framework */; };
+		A9D21B371D5B5F6900B5847D /* AWSCognito.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A9D21B281D5B5F5A00B5847D /* AWSCognito.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A9D21B381D5B5F6900B5847D /* AWSCognitoIdentityProvider.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9D21B291D5B5F5A00B5847D /* AWSCognitoIdentityProvider.framework */; };
+		A9D21B391D5B5F6900B5847D /* AWSCognitoIdentityProvider.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A9D21B291D5B5F5A00B5847D /* AWSCognitoIdentityProvider.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A9D21B3A1D5B5F6900B5847D /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9D21B2A1D5B5F5A00B5847D /* AWSCore.framework */; };
+		A9D21B3B1D5B5F6900B5847D /* AWSCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A9D21B2A1D5B5F5A00B5847D /* AWSCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A9D21B3C1D5B5F6900B5847D /* AWSDynamoDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9D21B2B1D5B5F5A00B5847D /* AWSDynamoDB.framework */; };
+		A9D21B3D1D5B5F6900B5847D /* AWSDynamoDB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A9D21B2B1D5B5F5A00B5847D /* AWSDynamoDB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A9D21B3E1D5B5F6900B5847D /* AWSLambda.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9D21B2C1D5B5F5A00B5847D /* AWSLambda.framework */; };
+		A9D21B3F1D5B5F6900B5847D /* AWSLambda.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A9D21B2C1D5B5F5A00B5847D /* AWSLambda.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A9D21B401D5B5F6900B5847D /* AWSMobileAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9D21B2D1D5B5F5A00B5847D /* AWSMobileAnalytics.framework */; };
+		A9D21B411D5B5F6900B5847D /* AWSMobileAnalytics.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A9D21B2D1D5B5F5A00B5847D /* AWSMobileAnalytics.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A9D21B421D5B5F6900B5847D /* AWSS3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9D21B2E1D5B5F5A00B5847D /* AWSS3.framework */; };
+		A9D21B431D5B5F6900B5847D /* AWSS3.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A9D21B2E1D5B5F5A00B5847D /* AWSS3.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A9D21B451D5B662100B5847D /* PRFYUserPoolManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D21B441D5B662100B5847D /* PRFYUserPoolManager.swift */; };
+		A9D21B471D5B664F00B5847D /* UserPoolManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D21B461D5B664F00B5847D /* UserPoolManager.swift */; };
+		A9D716A91D57486100300135 /* PostSmallTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D716A81D57486100300135 /* PostSmallTableViewCell.swift */; };
+		A9D8C93D1D66669000C23540 /* MyCategoriesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D8C93C1D66669000C23540 /* MyCategoriesTableViewCell.swift */; };
+		A9D8C93F1D66670000C23540 /* MyCategoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D8C93E1D66670000C23540 /* MyCategoryCollectionViewCell.swift */; };
+		A9D8C9411D6675C100C23540 /* HomeHeaderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D8C9401D6675C100C23540 /* HomeHeaderTableViewCell.swift */; };
 		A9D960661D32FFE700273A78 /* AWSUserFirstLastName.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D960651D32FFE700273A78 /* AWSUserFirstLastName.swift */; };
+		A9E4507A1D59E6C500D14553 /* CommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E450791D59E6C500D14553 /* CommentTableViewCell.swift */; };
+		A9E4507C1D59E6D300D14553 /* CommentsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E4507B1D59E6D300D14553 /* CommentsTableViewController.swift */; };
+		A9E4507E1D59E6E400D14553 /* CommentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E4507D1D59E6E400D14553 /* CommentsViewController.swift */; };
+		A9E450801D5A09F100D14553 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E4507F1D5A09F100D14553 /* Comment.swift */; };
 		A9E53B691D10665100CD1D6C /* Home.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9E53B681D10665100CD1D6C /* Home.storyboard */; };
 		A9E53B6B1D10666800CD1D6C /* Search.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9E53B6A1D10666800CD1D6C /* Search.storyboard */; };
 		A9E53B6D1D10667100CD1D6C /* Capture.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9E53B6C1D10667100CD1D6C /* Capture.storyboard */; };
@@ -101,22 +154,7 @@
 		A9E53B731D1067E800CD1D6C /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E53B721D1067E800CD1D6C /* MainTabBarController.swift */; };
 		A9EAD3361D1E7A7100994292 /* AWSMobileHubHelper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9EAD3351D1E7A7100994292 /* AWSMobileHubHelper.framework */; };
 		A9EAD3401D1E8E0C00994292 /* NoSQLModelHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9EAD33F1D1E8E0C00994292 /* NoSQLModelHelpers.swift */; };
-		A9EB35431D4B415400E9C77A /* AWSCognito.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9EB35421D4B415400E9C77A /* AWSCognito.framework */; };
-		A9EB354A1D4B417400E9C77A /* AWSCognitoIdentityProvider.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9EB35441D4B417400E9C77A /* AWSCognitoIdentityProvider.framework */; };
-		A9EB354B1D4B417400E9C77A /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9EB35451D4B417400E9C77A /* AWSCore.framework */; };
-		A9EB354C1D4B417400E9C77A /* AWSDynamoDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9EB35461D4B417400E9C77A /* AWSDynamoDB.framework */; };
-		A9EB354D1D4B417500E9C77A /* AWSLambda.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9EB35471D4B417400E9C77A /* AWSLambda.framework */; };
-		A9EB354E1D4B417500E9C77A /* AWSMobileAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9EB35481D4B417400E9C77A /* AWSMobileAnalytics.framework */; };
-		A9EB354F1D4B417500E9C77A /* AWSS3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9EB35491D4B417400E9C77A /* AWSS3.framework */; };
-		A9EB35501D4B418100E9C77A /* AWSCognito.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A9EB35421D4B415400E9C77A /* AWSCognito.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		A9EB35511D4B418100E9C77A /* AWSCognitoIdentityProvider.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A9EB35441D4B417400E9C77A /* AWSCognitoIdentityProvider.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		A9EB35521D4B418100E9C77A /* AWSCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A9EB35451D4B417400E9C77A /* AWSCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		A9EB35531D4B418100E9C77A /* AWSDynamoDB.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A9EB35461D4B417400E9C77A /* AWSDynamoDB.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		A9EB35541D4B418100E9C77A /* AWSLambda.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A9EB35471D4B417400E9C77A /* AWSLambda.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		A9EB35551D4B418100E9C77A /* AWSMobileAnalytics.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A9EB35481D4B417400E9C77A /* AWSMobileAnalytics.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		A9EB35561D4B418100E9C77A /* AWSS3.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A9EB35491D4B417400E9C77A /* AWSS3.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A9EB35591D4B66CE00E9C77A /* ScrollViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9EB35581D4B66CE00E9C77A /* ScrollViewController.swift */; };
-		A9EB355F1D4B83B500E9C77A /* GalleryNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9EB355E1D4B83B500E9C77A /* GalleryNavigationController.swift */; };
 		A9EB35621D4B9A3600E9C77A /* GalleryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9EB35611D4B9A3600E9C77A /* GalleryViewController.swift */; };
 		A9F49D571D379D01002EB68B /* AWSPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F49D561D379D01002EB68B /* AWSPost.swift */; };
 		A9F49D5A1D379D70002EB68B /* AWSPostsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F49D591D379D70002EB68B /* AWSPostsTable.swift */; };
@@ -129,14 +167,14 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				A9EB35501D4B418100E9C77A /* AWSCognito.framework in Embed Frameworks */,
-				A9EB35511D4B418100E9C77A /* AWSCognitoIdentityProvider.framework in Embed Frameworks */,
-				A9EB35521D4B418100E9C77A /* AWSCore.framework in Embed Frameworks */,
-				A9EB35531D4B418100E9C77A /* AWSDynamoDB.framework in Embed Frameworks */,
-				A9EB35541D4B418100E9C77A /* AWSLambda.framework in Embed Frameworks */,
-				A9EB35551D4B418100E9C77A /* AWSMobileAnalytics.framework in Embed Frameworks */,
-				A9EB35561D4B418100E9C77A /* AWSS3.framework in Embed Frameworks */,
+				A9D21B411D5B5F6900B5847D /* AWSMobileAnalytics.framework in Embed Frameworks */,
+				A9D21B371D5B5F6900B5847D /* AWSCognito.framework in Embed Frameworks */,
+				A9D21B3B1D5B5F6900B5847D /* AWSCore.framework in Embed Frameworks */,
+				A9D21B391D5B5F6900B5847D /* AWSCognitoIdentityProvider.framework in Embed Frameworks */,
+				A9D21B431D5B5F6900B5847D /* AWSS3.framework in Embed Frameworks */,
+				A9D21B3F1D5B5F6900B5847D /* AWSLambda.framework in Embed Frameworks */,
 				A95C31B51D3E164C0003377F /* UICKeyChainStore.framework in Embed Frameworks */,
+				A9D21B3D1D5B5F6900B5847D /* AWSDynamoDB.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -145,7 +183,6 @@
 
 /* Begin PBXFileReference section */
 		A90228101D3279B500C2EFEB /* ItemTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemTableViewCell.swift; sourceTree = "<group>"; };
-		A903C3CB1D38E04200ED7E10 /* PostTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostTableViewCell.swift; sourceTree = "<group>"; };
 		A903EB4B1D169DCC00B33025 /* FakeCaptureNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FakeCaptureNavigationController.swift; sourceTree = "<group>"; };
 		A903EB501D16A39600B33025 /* Profeey-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Profeey-Bridging-Header.h"; sourceTree = "<group>"; };
 		A903EB511D16A39700B33025 /* LLSimpleCamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLSimpleCamera.h; sourceTree = "<group>"; };
@@ -156,8 +193,11 @@
 		A903EB561D16A39700B33025 /* UIImage+FixOrientation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+FixOrientation.m"; sourceTree = "<group>"; };
 		A903EB5A1D16A3C800B33025 /* ProfeeySimpleCamera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfeeySimpleCamera.swift; sourceTree = "<group>"; };
 		A90A09571D43E5A7006AC49D /* WelcomeNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeNavigationController.swift; sourceTree = "<group>"; };
+		A913FC6F1D51F6AF000D10A6 /* DynamoDBManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DynamoDBManager.swift; sourceTree = "<group>"; };
+		A913FC711D51FAD6000D10A6 /* PRFYDynamoDBManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PRFYDynamoDBManager.swift; sourceTree = "<group>"; };
 		A919D0A11D3FC48800AF0726 /* NameSignUpTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NameSignUpTableViewController.swift; sourceTree = "<group>"; };
 		A91A35231D1C26E6006F22B2 /* FullScreenIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FullScreenIndicator.swift; sourceTree = "<group>"; };
+		A92453A41D5CD1EC005FB08C /* CameraOverlayView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CameraOverlayView.xib; sourceTree = "<group>"; };
 		A930BC781D0DD43E004D49F7 /* Profeey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Profeey.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A930BC7B1D0DD43F004D49F7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A930BC801D0DD43F004D49F7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -167,20 +207,16 @@
 		A930BCA51D0DD61A004D49F7 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		A930BCA71D0DD623004D49F7 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		A94797A61D2E3451007CBF08 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
-		A94797AB1D2E3A0C007CBF08 /* AWSRemoteService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSRemoteService.swift; sourceTree = "<group>"; };
 		A94797AD1D2E3C6B007CBF08 /* AWSConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSConstants.swift; sourceTree = "<group>"; };
-		A95C31B01D3E14510003377F /* UICKeyChainStore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UICKeyChainStore.framework; path = /Users/antonio/Projects/iOS/Profeey/Profeey/UICKeyChainStore.framework; sourceTree = "<absolute>"; };
+		A9528CAB1D53D1FB00B00C85 /* ProfileTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileTableViewCell.swift; sourceTree = "<group>"; };
 		A95C31B31D3E16370003377F /* UICKeyChainStore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = UICKeyChainStore.framework; sourceTree = "<group>"; };
-		A95C31B61D3E16930003377F /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		A95C31B81D3E35AA0003377F /* AWSClientManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSClientManager.swift; sourceTree = "<group>"; };
 		A95E40C71D350D3400FD61F9 /* EditUsernameTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditUsernameTableViewController.swift; sourceTree = "<group>"; };
-		A95E40C91D35105A00FD61F9 /* EditNameTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditNameTableViewController.swift; sourceTree = "<group>"; };
 		A95E40CB1D35137700FD61F9 /* EditAboutTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditAboutTableViewController.swift; sourceTree = "<group>"; };
 		A95E40CF1D35410500FD61F9 /* CaptureNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CaptureNavigationController.swift; sourceTree = "<group>"; };
 		A9604F7D1D33721000F23B33 /* AWSUserPreferredUsername.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSUserPreferredUsername.swift; sourceTree = "<group>"; };
 		A9604F7F1D33722100F23B33 /* AWSUserAbout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSUserAbout.swift; sourceTree = "<group>"; };
 		A9604F811D33722F00F23B33 /* AWSUserProfessions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSUserProfessions.swift; sourceTree = "<group>"; };
-		A9604F841D337DEA00F23B33 /* CurrentUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrentUser.swift; sourceTree = "<group>"; };
 		A9604F881D33C99100F23B33 /* AWSUserProfilePic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSUserProfilePic.swift; sourceTree = "<group>"; };
 		A961875E1D3FA67B0028DEA7 /* ClientManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClientManager.swift; sourceTree = "<group>"; };
 		A96621FF1D0EBBC200298CE7 /* Onboarding.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Onboarding.storyboard; sourceTree = "<group>"; };
@@ -193,21 +229,31 @@
 		A966220F1D0EF39800298CE7 /* LogInViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
 		A96B3B981D3659790071FE7A /* ItemsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemsTableViewController.swift; sourceTree = "<group>"; };
 		A96B3B9B1D365DF70071FE7A /* Items.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Items.storyboard; sourceTree = "<group>"; };
-		A97C02721D489C8D00775D82 /* PreviewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreviewViewController.swift; sourceTree = "<group>"; };
+		A975529B1D4F4D0300F773FF /* PreviewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreviewViewController.swift; sourceTree = "<group>"; };
+		A987872F1D64986A009F54B8 /* SearchResultsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResultsViewController.swift; sourceTree = "<group>"; };
 		A98B42DA1D43C4E00089A769 /* ProfessionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfessionsViewController.swift; sourceTree = "<group>"; };
 		A98B42DC1D43C5720089A769 /* ProfessionsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfessionsTableViewController.swift; sourceTree = "<group>"; };
 		A98B42E01D43C95A0089A769 /* ProfessionTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfessionTableViewCell.swift; sourceTree = "<group>"; };
 		A98B42E21D43DD040089A769 /* ProfessionsCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfessionsCollectionViewController.swift; sourceTree = "<group>"; };
 		A98B42E41D43DDBD0089A769 /* ProfessionCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfessionCollectionViewCell.swift; sourceTree = "<group>"; };
 		A98BB1CD1D3A32AD00E6FB4D /* ProfileTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileTableViewController.swift; sourceTree = "<group>"; };
-		A98BB1CF1D3A353100E6FB4D /* UserTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserTableViewCell.swift; sourceTree = "<group>"; };
+		A98E33321D51057800750D35 /* CategoriesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoriesViewController.swift; sourceTree = "<group>"; };
+		A98E33341D510AF600750D35 /* CategoriesCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoriesCollectionViewController.swift; sourceTree = "<group>"; };
+		A98E33361D510B1300750D35 /* CategoryCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryCollectionViewCell.swift; sourceTree = "<group>"; };
+		A98E33381D51180A00750D35 /* Categories.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Categories.storyboard; sourceTree = "<group>"; };
 		A99030F61D464F3000336D26 /* GalleryCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GalleryCollectionViewController.swift; sourceTree = "<group>"; };
 		A99030F81D464FEE00336D26 /* GalleryCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GalleryCollectionViewCell.swift; sourceTree = "<group>"; };
 		A99030FA1D46632500336D26 /* AlbumsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlbumsTableViewController.swift; sourceTree = "<group>"; };
 		A99030FC1D46634600336D26 /* AlbumTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlbumTableViewCell.swift; sourceTree = "<group>"; };
+		A990ECAB1D6A4B6500C3C9CE /* ExperienceTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExperienceTableViewCell.swift; sourceTree = "<group>"; };
+		A990ECAD1D6A4B7C00C3C9CE /* ExperienceTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExperienceTableViewController.swift; sourceTree = "<group>"; };
+		A990ECAF1D6A572500C3C9CE /* UsersTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsersTableViewController.swift; sourceTree = "<group>"; };
+		A990ECB21D6A576E00C3C9CE /* Users.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Users.storyboard; sourceTree = "<group>"; };
+		A990ECB41D6A582100C3C9CE /* UserTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserTableViewCell.swift; sourceTree = "<group>"; };
+		A990ECB71D6A5F6A00C3C9CE /* Comments.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Comments.storyboard; sourceTree = "<group>"; };
+		A99956E11D5BAD2D00A9556A /* EditFirstLastNameTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditFirstLastNameTableViewController.swift; sourceTree = "<group>"; };
+		A99956E61D5BD21E00A9556A /* Professions.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Professions.storyboard; sourceTree = "<group>"; };
 		A99ADA1E1D0F189E0050E329 /* Welcome.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Welcome.storyboard; sourceTree = "<group>"; };
-		A99BD3611D3037D10072CC27 /* AWSProfession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSProfession.swift; sourceTree = "<group>"; };
-		A99BD3671D303FE20072CC27 /* AWSProfessionsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSProfessionsTable.swift; sourceTree = "<group>"; };
 		A9A503931D2F925F0030A472 /* EditProfileTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditProfileTableViewController.swift; sourceTree = "<group>"; };
 		A9A503981D2FA9180030A472 /* LocalService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalService.swift; sourceTree = "<group>"; };
 		A9A5039E1D2FE0810030A472 /* AWSUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSUser.swift; sourceTree = "<group>"; };
@@ -215,18 +261,33 @@
 		A9A503A61D2FF8450030A472 /* EditProfile.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = EditProfile.storyboard; sourceTree = "<group>"; };
 		A9A8DD101D4529B2009B3C24 /* LogInNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogInNavigationController.swift; sourceTree = "<group>"; };
 		A9A8DD121D452BAA009B3C24 /* LogInTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogInTableViewController.swift; sourceTree = "<group>"; };
-		A9ACAE181D390E3B00D77682 /* PostCategoryCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostCategoryCollectionViewCell.swift; sourceTree = "<group>"; };
+		A9A95B2C1D58989B0009CEE7 /* Post.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Post.storyboard; sourceTree = "<group>"; };
+		A9A99FA51D60C6D200B01006 /* EditPostTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditPostTableViewController.swift; sourceTree = "<group>"; };
+		A9AC2C731D6484A000D84D33 /* SearchTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchTableViewController.swift; sourceTree = "<group>"; };
 		A9AD744A1D3627BD007ACBD4 /* FiltersCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FiltersCollectionViewController.swift; sourceTree = "<group>"; };
-		A9AD744E1D364882007ACBD4 /* EditTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditTableViewController.swift; sourceTree = "<group>"; };
+		A9B4AB9B1D61EC1F0001C682 /* PRFYS3Manager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PRFYS3Manager.swift; sourceTree = "<group>"; };
+		A9B4AB9D1D61EC300001C682 /* S3Manager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = S3Manager.swift; sourceTree = "<group>"; };
+		A9B7A2431D65A562009DA340 /* Category.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
+		A9B7A2451D65BF64009DA340 /* PopularCategoryTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopularCategoryTableViewCell.swift; sourceTree = "<group>"; };
+		A9B7A2471D65D8B2009DA340 /* PostTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostTableViewCell.swift; sourceTree = "<group>"; };
+		A9B7A2491D65D8C0009DA340 /* HomeTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeTableViewController.swift; sourceTree = "<group>"; };
 		A9B934AF1D1BD9BB00ACC2B8 /* OnboardingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		A9BCF73F1D4C0737001B2EEA /* PreviewProfilePicViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreviewProfilePicViewController.swift; sourceTree = "<group>"; };
 		A9BCF7411D4C085B001B2EEA /* CaptureViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CaptureViewController.swift; sourceTree = "<group>"; };
-		A9BFD9111D45EB3100D9D962 /* ProfileTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileTableViewCell.swift; sourceTree = "<group>"; };
+		A9BD00BA1D50BE4100732060 /* CategoriesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoriesTableViewController.swift; sourceTree = "<group>"; };
+		A9BD00BC1D50BE9900732060 /* CategoryTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryTableViewCell.swift; sourceTree = "<group>"; };
+		A9BE4BA41D69DE14005D1B07 /* ProfileHeaderTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileHeaderTableViewCell.swift; sourceTree = "<group>"; };
+		A9BE4BA61D69E361005D1B07 /* ProfileAboutTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileAboutTableViewCell.swift; sourceTree = "<group>"; };
+		A9BF16401D64DA4600060A9E /* SearchCategoriesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchCategoriesTableViewController.swift; sourceTree = "<group>"; };
+		A9BF16421D64DC2600060A9E /* SearchUsersTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchUsersTableViewController.swift; sourceTree = "<group>"; };
+		A9BF16441D64DC5F00060A9E /* SearchUserTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchUserTableViewCell.swift; sourceTree = "<group>"; };
+		A9BF16461D64DDAC00060A9E /* SearchCategoryTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchCategoryTableViewCell.swift; sourceTree = "<group>"; };
+		A9BF16481D6514C900060A9E /* NoResultsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoResultsTableViewCell.swift; sourceTree = "<group>"; };
+		A9BF164A1D6519D100060A9E /* SearchingTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchingTableViewCell.swift; sourceTree = "<group>"; };
 		A9C0ED391D3C21C30036F791 /* Post.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		A9C482131D30E983007B5423 /* ItemsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemsViewController.swift; sourceTree = "<group>"; };
 		A9C482151D30EC25007B5423 /* ItemsCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemsCollectionViewController.swift; sourceTree = "<group>"; };
 		A9C482171D30ED0B007B5423 /* ItemCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemCollectionViewCell.swift; sourceTree = "<group>"; };
-		A9C5D0C31D3A84BC00EBA87D /* HomeTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeTableViewController.swift; sourceTree = "<group>"; };
 		A9C5D0CB1D3AABB100EBA87D /* PostDetailsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostDetailsTableViewController.swift; sourceTree = "<group>"; };
 		A9C6CB7E1D2929AA00863816 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		A9CF75371D40BA1F0047BB1A /* SignUpNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpNavigationController.swift; sourceTree = "<group>"; };
@@ -234,7 +295,24 @@
 		A9CF753B1D40C54B0047BB1A /* PasswordSignUpTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordSignUpTableViewController.swift; sourceTree = "<group>"; };
 		A9CF75451D40CB740047BB1A /* UsernameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsernameViewController.swift; sourceTree = "<group>"; };
 		A9CF75471D40CE2A0047BB1A /* UsernameTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsernameTableViewController.swift; sourceTree = "<group>"; };
+		A9D21B281D5B5F5A00B5847D /* AWSCognito.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSCognito.framework; path = Profeey/AWSCognito.framework; sourceTree = "<group>"; };
+		A9D21B291D5B5F5A00B5847D /* AWSCognitoIdentityProvider.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSCognitoIdentityProvider.framework; path = Profeey/AWSCognitoIdentityProvider.framework; sourceTree = "<group>"; };
+		A9D21B2A1D5B5F5A00B5847D /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSCore.framework; path = Profeey/AWSCore.framework; sourceTree = "<group>"; };
+		A9D21B2B1D5B5F5A00B5847D /* AWSDynamoDB.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSDynamoDB.framework; path = Profeey/AWSDynamoDB.framework; sourceTree = "<group>"; };
+		A9D21B2C1D5B5F5A00B5847D /* AWSLambda.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSLambda.framework; path = Profeey/AWSLambda.framework; sourceTree = "<group>"; };
+		A9D21B2D1D5B5F5A00B5847D /* AWSMobileAnalytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSMobileAnalytics.framework; path = Profeey/AWSMobileAnalytics.framework; sourceTree = "<group>"; };
+		A9D21B2E1D5B5F5A00B5847D /* AWSS3.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSS3.framework; path = Profeey/AWSS3.framework; sourceTree = "<group>"; };
+		A9D21B441D5B662100B5847D /* PRFYUserPoolManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PRFYUserPoolManager.swift; sourceTree = "<group>"; };
+		A9D21B461D5B664F00B5847D /* UserPoolManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserPoolManager.swift; sourceTree = "<group>"; };
+		A9D716A81D57486100300135 /* PostSmallTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostSmallTableViewCell.swift; sourceTree = "<group>"; };
+		A9D8C93C1D66669000C23540 /* MyCategoriesTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyCategoriesTableViewCell.swift; sourceTree = "<group>"; };
+		A9D8C93E1D66670000C23540 /* MyCategoryCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyCategoryCollectionViewCell.swift; sourceTree = "<group>"; };
+		A9D8C9401D6675C100C23540 /* HomeHeaderTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeHeaderTableViewCell.swift; sourceTree = "<group>"; };
 		A9D960651D32FFE700273A78 /* AWSUserFirstLastName.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSUserFirstLastName.swift; sourceTree = "<group>"; };
+		A9E450791D59E6C500D14553 /* CommentTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentTableViewCell.swift; sourceTree = "<group>"; };
+		A9E4507B1D59E6D300D14553 /* CommentsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentsTableViewController.swift; sourceTree = "<group>"; };
+		A9E4507D1D59E6E400D14553 /* CommentsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentsViewController.swift; sourceTree = "<group>"; };
+		A9E4507F1D5A09F100D14553 /* Comment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
 		A9E53B681D10665100CD1D6C /* Home.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Home.storyboard; sourceTree = "<group>"; };
 		A9E53B6A1D10666800CD1D6C /* Search.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Search.storyboard; sourceTree = "<group>"; };
 		A9E53B6C1D10667100CD1D6C /* Capture.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Capture.storyboard; sourceTree = "<group>"; };
@@ -243,15 +321,7 @@
 		A9E53B721D1067E800CD1D6C /* MainTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		A9EAD3351D1E7A7100994292 /* AWSMobileHubHelper.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSMobileHubHelper.framework; path = Profeey/AWSMobileHubHelper.framework; sourceTree = "<group>"; };
 		A9EAD33F1D1E8E0C00994292 /* NoSQLModelHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoSQLModelHelpers.swift; sourceTree = "<group>"; };
-		A9EB35421D4B415400E9C77A /* AWSCognito.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSCognito.framework; path = Profeey/AWSCognito.framework; sourceTree = "<group>"; };
-		A9EB35441D4B417400E9C77A /* AWSCognitoIdentityProvider.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSCognitoIdentityProvider.framework; path = Profeey/AWSCognitoIdentityProvider.framework; sourceTree = "<group>"; };
-		A9EB35451D4B417400E9C77A /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSCore.framework; path = Profeey/AWSCore.framework; sourceTree = "<group>"; };
-		A9EB35461D4B417400E9C77A /* AWSDynamoDB.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSDynamoDB.framework; path = Profeey/AWSDynamoDB.framework; sourceTree = "<group>"; };
-		A9EB35471D4B417400E9C77A /* AWSLambda.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSLambda.framework; path = Profeey/AWSLambda.framework; sourceTree = "<group>"; };
-		A9EB35481D4B417400E9C77A /* AWSMobileAnalytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSMobileAnalytics.framework; path = Profeey/AWSMobileAnalytics.framework; sourceTree = "<group>"; };
-		A9EB35491D4B417400E9C77A /* AWSS3.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSS3.framework; path = Profeey/AWSS3.framework; sourceTree = "<group>"; };
 		A9EB35581D4B66CE00E9C77A /* ScrollViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollViewController.swift; sourceTree = "<group>"; };
-		A9EB355E1D4B83B500E9C77A /* GalleryNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GalleryNavigationController.swift; sourceTree = "<group>"; };
 		A9EB35611D4B9A3600E9C77A /* GalleryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GalleryViewController.swift; sourceTree = "<group>"; };
 		A9F49D561D379D01002EB68B /* AWSPost.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSPost.swift; sourceTree = "<group>"; };
 		A9F49D591D379D70002EB68B /* AWSPostsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSPostsTable.swift; sourceTree = "<group>"; };
@@ -262,18 +332,23 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A9EB35431D4B415400E9C77A /* AWSCognito.framework in Frameworks */,
-				A9EB354B1D4B417400E9C77A /* AWSCore.framework in Frameworks */,
-				A95C31B41D3E16370003377F /* UICKeyChainStore.framework in Frameworks */,
-				A9EB354E1D4B417500E9C77A /* AWSMobileAnalytics.framework in Frameworks */,
+				A9D21B3E1D5B5F6900B5847D /* AWSLambda.framework in Frameworks */,
+				A9D21B421D5B5F6900B5847D /* AWSS3.framework in Frameworks */,
 				A9EAD3361D1E7A7100994292 /* AWSMobileHubHelper.framework in Frameworks */,
-				A9EB354C1D4B417400E9C77A /* AWSDynamoDB.framework in Frameworks */,
-				A9EB354D1D4B417500E9C77A /* AWSLambda.framework in Frameworks */,
-				A9EB354A1D4B417400E9C77A /* AWSCognitoIdentityProvider.framework in Frameworks */,
-				A9EB354F1D4B417500E9C77A /* AWSS3.framework in Frameworks */,
+				A9D21B341D5B5F5A00B5847D /* AWSMobileAnalytics.framework in Frameworks */,
+				A9D21B401D5B5F6900B5847D /* AWSMobileAnalytics.framework in Frameworks */,
 				A930BCA81D0DD623004D49F7 /* libz.tbd in Frameworks */,
+				A9D21B2F1D5B5F5A00B5847D /* AWSCognito.framework in Frameworks */,
+				A9D21B351D5B5F5A00B5847D /* AWSS3.framework in Frameworks */,
+				A9D21B331D5B5F5A00B5847D /* AWSLambda.framework in Frameworks */,
+				A9D21B361D5B5F6900B5847D /* AWSCognito.framework in Frameworks */,
+				A9D21B3A1D5B5F6900B5847D /* AWSCore.framework in Frameworks */,
+				A9D21B381D5B5F6900B5847D /* AWSCognitoIdentityProvider.framework in Frameworks */,
+				A9D21B301D5B5F5A00B5847D /* AWSCognitoIdentityProvider.framework in Frameworks */,
 				A930BCA61D0DD61A004D49F7 /* libsqlite3.tbd in Frameworks */,
-				A95C31B11D3E14510003377F /* UICKeyChainStore.framework in Frameworks */,
+				A9D21B321D5B5F5A00B5847D /* AWSDynamoDB.framework in Frameworks */,
+				A9D21B3C1D5B5F6900B5847D /* AWSDynamoDB.framework in Frameworks */,
+				A9D21B311D5B5F5A00B5847D /* AWSCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -338,13 +413,13 @@
 				A9EAD3351D1E7A7100994292 /* AWSMobileHubHelper.framework */,
 				A930BCA71D0DD623004D49F7 /* libz.tbd */,
 				A930BCA51D0DD61A004D49F7 /* libsqlite3.tbd */,
-				A9EB35421D4B415400E9C77A /* AWSCognito.framework */,
-				A9EB35441D4B417400E9C77A /* AWSCognitoIdentityProvider.framework */,
-				A9EB35451D4B417400E9C77A /* AWSCore.framework */,
-				A9EB35461D4B417400E9C77A /* AWSDynamoDB.framework */,
-				A9EB35471D4B417400E9C77A /* AWSLambda.framework */,
-				A9EB35481D4B417400E9C77A /* AWSMobileAnalytics.framework */,
-				A9EB35491D4B417400E9C77A /* AWSS3.framework */,
+				A9D21B281D5B5F5A00B5847D /* AWSCognito.framework */,
+				A9D21B291D5B5F5A00B5847D /* AWSCognitoIdentityProvider.framework */,
+				A9D21B2A1D5B5F5A00B5847D /* AWSCore.framework */,
+				A9D21B2B1D5B5F5A00B5847D /* AWSDynamoDB.framework */,
+				A9D21B2C1D5B5F5A00B5847D /* AWSLambda.framework */,
+				A9D21B2D1D5B5F5A00B5847D /* AWSMobileAnalytics.framework */,
+				A9D21B2E1D5B5F5A00B5847D /* AWSS3.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -353,10 +428,10 @@
 			isa = PBXGroup;
 			children = (
 				A9A5039E1D2FE0810030A472 /* AWSUser.swift */,
-				A9604F7F1D33722100F23B33 /* AWSUserAbout.swift */,
 				A9D960651D32FFE700273A78 /* AWSUserFirstLastName.swift */,
 				A9604F7D1D33721000F23B33 /* AWSUserPreferredUsername.swift */,
 				A9604F811D33722F00F23B33 /* AWSUserProfessions.swift */,
+				A9604F7F1D33722100F23B33 /* AWSUserAbout.swift */,
 				A9604F881D33C99100F23B33 /* AWSUserProfilePic.swift */,
 				A9A503A01D2FE0A90030A472 /* AWSUsersTable.swift */,
 			);
@@ -401,7 +476,7 @@
 				A9A503A61D2FF8450030A472 /* EditProfile.storyboard */,
 				A9A503931D2F925F0030A472 /* EditProfileTableViewController.swift */,
 				A95E40C71D350D3400FD61F9 /* EditUsernameTableViewController.swift */,
-				A95E40C91D35105A00FD61F9 /* EditNameTableViewController.swift */,
+				A99956E11D5BAD2D00A9556A /* EditFirstLastNameTableViewController.swift */,
 				A95E40CB1D35137700FD61F9 /* EditAboutTableViewController.swift */,
 			);
 			name = "Edit Profile";
@@ -429,9 +504,19 @@
 			name = Items;
 			sourceTree = "<group>";
 		};
+		A97552961D4F3B5800F773FF /* Edit */ = {
+			isa = PBXGroup;
+			children = (
+				A9A99FA51D60C6D200B01006 /* EditPostTableViewController.swift */,
+				A9AD744A1D3627BD007ACBD4 /* FiltersCollectionViewController.swift */,
+			);
+			name = Edit;
+			sourceTree = "<group>";
+		};
 		A98B42D91D43C4BC0089A769 /* Professions */ = {
 			isa = PBXGroup;
 			children = (
+				A99956E61D5BD21E00A9556A /* Professions.storyboard */,
 				A98B42DA1D43C4E00089A769 /* ProfessionsViewController.swift */,
 				A98B42DC1D43C5720089A769 /* ProfessionsTableViewController.swift */,
 				A98B42E01D43C95A0089A769 /* ProfessionTableViewCell.swift */,
@@ -441,13 +526,33 @@
 			name = Professions;
 			sourceTree = "<group>";
 		};
+		A990ECB11D6A575400C3C9CE /* Users */ = {
+			isa = PBXGroup;
+			children = (
+				A990ECB21D6A576E00C3C9CE /* Users.storyboard */,
+				A990ECAF1D6A572500C3C9CE /* UsersTableViewController.swift */,
+				A990ECB41D6A582100C3C9CE /* UserTableViewCell.swift */,
+			);
+			name = Users;
+			sourceTree = "<group>";
+		};
+		A990ECB61D6A5F4F00C3C9CE /* Comments */ = {
+			isa = PBXGroup;
+			children = (
+				A990ECB71D6A5F6A00C3C9CE /* Comments.storyboard */,
+				A9E4507D1D59E6E400D14553 /* CommentsViewController.swift */,
+				A9E4507B1D59E6D300D14553 /* CommentsTableViewController.swift */,
+				A9E450791D59E6C500D14553 /* CommentTableViewCell.swift */,
+			);
+			name = Comments;
+			sourceTree = "<group>";
+		};
 		A99ADA1D1D0F188A0050E329 /* Welcome */ = {
 			isa = PBXGroup;
 			children = (
 				A99ADA1E1D0F189E0050E329 /* Welcome.storyboard */,
 				A90A09571D43E5A7006AC49D /* WelcomeNavigationController.swift */,
 				A9CF75411D40CB2B0047BB1A /* Username */,
-				A98B42D91D43C4BC0089A769 /* Professions */,
 			);
 			name = Welcome;
 			sourceTree = "<group>";
@@ -457,10 +562,42 @@
 			children = (
 				A9A503981D2FA9180030A472 /* LocalService.swift */,
 				A94797A61D2E3451007CBF08 /* User.swift */,
-				A9604F841D337DEA00F23B33 /* CurrentUser.swift */,
+				A9B7A2431D65A562009DA340 /* Category.swift */,
 				A9C0ED391D3C21C30036F791 /* Post.swift */,
+				A9E4507F1D5A09F100D14553 /* Comment.swift */,
 			);
 			name = Local;
+			sourceTree = "<group>";
+		};
+		A9A95B271D58752E0009CEE7 /* Post */ = {
+			isa = PBXGroup;
+			children = (
+				A9A95B2C1D58989B0009CEE7 /* Post.storyboard */,
+				A9C5D0CB1D3AABB100EBA87D /* PostDetailsTableViewController.swift */,
+			);
+			name = Post;
+			sourceTree = "<group>";
+		};
+		A9A99FA21D60C2AC00B01006 /* Preview */ = {
+			isa = PBXGroup;
+			children = (
+				A975529B1D4F4D0300F773FF /* PreviewViewController.swift */,
+				A9BCF73F1D4C0737001B2EEA /* PreviewProfilePicViewController.swift */,
+			);
+			name = Preview;
+			sourceTree = "<group>";
+		};
+		A9BD00B91D50BE1400732060 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				A98E33381D51180A00750D35 /* Categories.storyboard */,
+				A98E33321D51057800750D35 /* CategoriesViewController.swift */,
+				A9BD00BA1D50BE4100732060 /* CategoriesTableViewController.swift */,
+				A9BD00BC1D50BE9900732060 /* CategoryTableViewCell.swift */,
+				A98E33341D510AF600750D35 /* CategoriesCollectionViewController.swift */,
+				A98E33361D510B1300750D35 /* CategoryCollectionViewCell.swift */,
+			);
+			name = Categories;
 			sourceTree = "<group>";
 		};
 		A9BFD9131D4611FF00D9D962 /* Photo */ = {
@@ -468,6 +605,7 @@
 			children = (
 				A95E40CF1D35410500FD61F9 /* CaptureNavigationController.swift */,
 				A9BCF7411D4C085B001B2EEA /* CaptureViewController.swift */,
+				A92453A41D5CD1EC005FB08C /* CameraOverlayView.xib */,
 			);
 			name = Photo;
 			sourceTree = "<group>";
@@ -526,7 +664,12 @@
 				A9E53B651D1065FB00CD1D6C /* Notifications */,
 				A9E53B661D10660200CD1D6C /* Profile */,
 				A967FFCB1D25213F00AE4E24 /* Edit Profile */,
+				A9A95B271D58752E0009CEE7 /* Post */,
+				A990ECB61D6A5F4F00C3C9CE /* Comments */,
+				A990ECB11D6A575400C3C9CE /* Users */,
 				A96B3B9A1D365DCE0071FE7A /* Items */,
+				A9BD00B91D50BE1400732060 /* Categories */,
+				A98B42D91D43C4BC0089A769 /* Professions */,
 			);
 			name = Main;
 			sourceTree = "<group>";
@@ -535,8 +678,11 @@
 			isa = PBXGroup;
 			children = (
 				A9E53B681D10665100CD1D6C /* Home.storyboard */,
-				A9C5D0C31D3A84BC00EBA87D /* HomeTableViewController.swift */,
-				A9C5D0CB1D3AABB100EBA87D /* PostDetailsTableViewController.swift */,
+				A9B7A2491D65D8C0009DA340 /* HomeTableViewController.swift */,
+				A9D8C9401D6675C100C23540 /* HomeHeaderTableViewCell.swift */,
+				A9D8C93C1D66669000C23540 /* MyCategoriesTableViewCell.swift */,
+				A9D8C93E1D66670000C23540 /* MyCategoryCollectionViewCell.swift */,
+				A9B7A2471D65D8B2009DA340 /* PostTableViewCell.swift */,
 			);
 			name = Home;
 			sourceTree = "<group>";
@@ -545,6 +691,15 @@
 			isa = PBXGroup;
 			children = (
 				A9E53B6A1D10666800CD1D6C /* Search.storyboard */,
+				A9AC2C731D6484A000D84D33 /* SearchTableViewController.swift */,
+				A9B7A2451D65BF64009DA340 /* PopularCategoryTableViewCell.swift */,
+				A987872F1D64986A009F54B8 /* SearchResultsViewController.swift */,
+				A9BF16421D64DC2600060A9E /* SearchUsersTableViewController.swift */,
+				A9BF16441D64DC5F00060A9E /* SearchUserTableViewCell.swift */,
+				A9BF16401D64DA4600060A9E /* SearchCategoriesTableViewController.swift */,
+				A9BF16461D64DDAC00060A9E /* SearchCategoryTableViewCell.swift */,
+				A9BF16481D6514C900060A9E /* NoResultsTableViewCell.swift */,
+				A9BF164A1D6519D100060A9E /* SearchingTableViewCell.swift */,
 			);
 			name = Search;
 			sourceTree = "<group>";
@@ -555,12 +710,10 @@
 				A9E53B6C1D10667100CD1D6C /* Capture.storyboard */,
 				A903EB4B1D169DCC00B33025 /* FakeCaptureNavigationController.swift */,
 				A9EB35581D4B66CE00E9C77A /* ScrollViewController.swift */,
-				A97C02721D489C8D00775D82 /* PreviewViewController.swift */,
-				A9BCF73F1D4C0737001B2EEA /* PreviewProfilePicViewController.swift */,
 				A9BFD9131D4611FF00D9D962 /* Photo */,
 				A9FF5A461D4667DE0089D009 /* Gallery */,
-				A9AD744E1D364882007ACBD4 /* EditTableViewController.swift */,
-				A9AD744A1D3627BD007ACBD4 /* FiltersCollectionViewController.swift */,
+				A9A99FA21D60C2AC00B01006 /* Preview */,
+				A97552961D4F3B5800F773FF /* Edit */,
 			);
 			name = Capture;
 			sourceTree = "<group>";
@@ -578,10 +731,12 @@
 			children = (
 				A9E53B701D10668400CD1D6C /* Profile.storyboard */,
 				A98BB1CD1D3A32AD00E6FB4D /* ProfileTableViewController.swift */,
-				A9BFD9111D45EB3100D9D962 /* ProfileTableViewCell.swift */,
-				A98BB1CF1D3A353100E6FB4D /* UserTableViewCell.swift */,
-				A903C3CB1D38E04200ED7E10 /* PostTableViewCell.swift */,
-				A9ACAE181D390E3B00D77682 /* PostCategoryCollectionViewCell.swift */,
+				A9528CAB1D53D1FB00B00C85 /* ProfileTableViewCell.swift */,
+				A9BE4BA41D69DE14005D1B07 /* ProfileHeaderTableViewCell.swift */,
+				A9BE4BA61D69E361005D1B07 /* ProfileAboutTableViewCell.swift */,
+				A9D716A81D57486100300135 /* PostSmallTableViewCell.swift */,
+				A990ECAD1D6A4B7C00C3C9CE /* ExperienceTableViewController.swift */,
+				A990ECAB1D6A4B6500C3C9CE /* ExperienceTableViewCell.swift */,
 			);
 			name = Profile;
 			sourceTree = "<group>";
@@ -601,14 +756,17 @@
 			isa = PBXGroup;
 			children = (
 				A9604F831D33726700F23B33 /* AWSUser */,
-				A9F49D5B1D37A095002EB68B /* AWSProfession */,
 				A9F49D581D379D58002EB68B /* AWSPost */,
+				A94797AD1D2E3C6B007CBF08 /* AWSConstants.swift */,
 				A95C31B81D3E35AA0003377F /* AWSClientManager.swift */,
 				A961875E1D3FA67B0028DEA7 /* ClientManager.swift */,
-				A94797AD1D2E3C6B007CBF08 /* AWSConstants.swift */,
-				A94797AB1D2E3A0C007CBF08 /* AWSRemoteService.swift */,
+				A9D21B441D5B662100B5847D /* PRFYUserPoolManager.swift */,
+				A9D21B461D5B664F00B5847D /* UserPoolManager.swift */,
+				A913FC711D51FAD6000D10A6 /* PRFYDynamoDBManager.swift */,
+				A913FC6F1D51F6AF000D10A6 /* DynamoDBManager.swift */,
 				A9EAD33F1D1E8E0C00994292 /* NoSQLModelHelpers.swift */,
-				A95C31B61D3E16930003377F /* Constants.swift */,
+				A9B4AB9B1D61EC1F0001C682 /* PRFYS3Manager.swift */,
+				A9B4AB9D1D61EC300001C682 /* S3Manager.swift */,
 			);
 			name = AWS;
 			sourceTree = "<group>";
@@ -622,19 +780,9 @@
 			name = AWSPost;
 			sourceTree = "<group>";
 		};
-		A9F49D5B1D37A095002EB68B /* AWSProfession */ = {
-			isa = PBXGroup;
-			children = (
-				A99BD3611D3037D10072CC27 /* AWSProfession.swift */,
-				A99BD3671D303FE20072CC27 /* AWSProfessionsTable.swift */,
-			);
-			name = AWSProfession;
-			sourceTree = "<group>";
-		};
 		A9FF5A461D4667DE0089D009 /* Gallery */ = {
 			isa = PBXGroup;
 			children = (
-				A9EB355E1D4B83B500E9C77A /* GalleryNavigationController.swift */,
 				A9EB35611D4B9A3600E9C77A /* GalleryViewController.swift */,
 				A99030F61D464F3000336D26 /* GalleryCollectionViewController.swift */,
 				A99030F81D464FEE00336D26 /* GalleryCollectionViewCell.swift */,
@@ -655,7 +803,6 @@
 				A930BC751D0DD43E004D49F7 /* Frameworks */,
 				A930BC761D0DD43E004D49F7 /* Resources */,
 				A930BC9B1D0DD5B1004D49F7 /* Embed Frameworks */,
-				A930BCA41D0DD5EC004D49F7 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -713,32 +860,22 @@
 				A96622001D0EBBC200298CE7 /* Onboarding.storyboard in Resources */,
 				A9E53B6B1D10666800CD1D6C /* Search.storyboard in Resources */,
 				A9E53B6D1D10667100CD1D6C /* Capture.storyboard in Resources */,
+				A99956E71D5BD21E00A9556A /* Professions.storyboard in Resources */,
 				A9E53B711D10668400CD1D6C /* Profile.storyboard in Resources */,
 				A9E53B6F1D10667B00CD1D6C /* Notifications.storyboard in Resources */,
+				A98E33391D51180A00750D35 /* Categories.storyboard in Resources */,
+				A990ECB31D6A576E00C3C9CE /* Users.storyboard in Resources */,
 				A966220E1D0EF38C00298CE7 /* LogIn.storyboard in Resources */,
+				A9A95B2D1D58989B0009CEE7 /* Post.storyboard in Resources */,
 				A96622031D0EC0FE00298CE7 /* SignUp.storyboard in Resources */,
+				A990ECB81D6A5F6A00C3C9CE /* Comments.storyboard in Resources */,
 				A99ADA1F1D0F189E0050E329 /* Welcome.storyboard in Resources */,
+				A92453A51D5CD1EC005FB08C /* CameraOverlayView.xib in Resources */,
 				A9E53B691D10665100CD1D6C /* Home.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		A930BCA41D0DD5EC004D49F7 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "bash \"${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/AWSCore.framework/strip-frameworks.sh\"";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		A930BC741D0DD43E004D49F7 /* Sources */ = {
@@ -748,79 +885,106 @@
 				A903EB581D16A39700B33025 /* LLSimpleCamera+Helper.m in Sources */,
 				A903EB5B1D16A3C800B33025 /* ProfeeySimpleCamera.swift in Sources */,
 				A9CF753A1D40C1C80047BB1A /* EmailSignUpTableViewController.swift in Sources */,
+				A9AC2C741D6484A000D84D33 /* SearchTableViewController.swift in Sources */,
 				A9C5D0CC1D3AABB100EBA87D /* PostDetailsTableViewController.swift in Sources */,
 				A99030FD1D46634600336D26 /* AlbumTableViewCell.swift in Sources */,
 				A98B42E11D43C95A0089A769 /* ProfessionTableViewCell.swift in Sources */,
-				A9C5D0C41D3A84BC00EBA87D /* HomeTableViewController.swift in Sources */,
 				A94797AE1D2E3C6B007CBF08 /* AWSConstants.swift in Sources */,
+				A9D8C93D1D66669000C23540 /* MyCategoriesTableViewCell.swift in Sources */,
 				A96622071D0EC60500298CE7 /* NameSignUpViewController.swift in Sources */,
+				A9B7A2441D65A562009DA340 /* Category.swift in Sources */,
+				A9D716A91D57486100300135 /* PostSmallTableViewCell.swift in Sources */,
 				A9BCF7421D4C085B001B2EEA /* CaptureViewController.swift in Sources */,
+				A990ECB01D6A572500C3C9CE /* UsersTableViewController.swift in Sources */,
 				A96622091D0ED8D700298CE7 /* EmailSignUpViewController.swift in Sources */,
 				A9CF753C1D40C54B0047BB1A /* PasswordSignUpTableViewController.swift in Sources */,
-				A95E40CA1D35105A00FD61F9 /* EditNameTableViewController.swift in Sources */,
 				A966220B1D0EDE4E00298CE7 /* PasswordSignUpViewController.swift in Sources */,
+				A9B4AB9C1D61EC1F0001C682 /* PRFYS3Manager.swift in Sources */,
 				A98B42DD1D43C5720089A769 /* ProfessionsTableViewController.swift in Sources */,
 				A9604F891D33C99100F23B33 /* AWSUserProfilePic.swift in Sources */,
 				A903EB4C1D169DCC00B33025 /* FakeCaptureNavigationController.swift in Sources */,
 				A95E40CC1D35137700FD61F9 /* EditAboutTableViewController.swift in Sources */,
+				A9BD00BB1D50BE4100732060 /* CategoriesTableViewController.swift in Sources */,
 				A96B3B991D3659790071FE7A /* ItemsTableViewController.swift in Sources */,
 				A9EAD3401D1E8E0C00994292 /* NoSQLModelHelpers.swift in Sources */,
 				A95E40C81D350D3400FD61F9 /* EditUsernameTableViewController.swift in Sources */,
-				A99BD3681D303FE20072CC27 /* AWSProfessionsTable.swift in Sources */,
+				A98E33351D510AF600750D35 /* CategoriesCollectionViewController.swift in Sources */,
 				A9A5039F1D2FE0810030A472 /* AWSUser.swift in Sources */,
+				A990ECB51D6A582100C3C9CE /* UserTableViewCell.swift in Sources */,
 				A9CF75461D40CB740047BB1A /* UsernameViewController.swift in Sources */,
-				A9ACAE191D390E3B00D77682 /* PostCategoryCollectionViewCell.swift in Sources */,
+				A9528CAC1D53D1FB00B00C85 /* ProfileTableViewCell.swift in Sources */,
+				A98E33331D51057800750D35 /* CategoriesViewController.swift in Sources */,
 				A9A503941D2F925F0030A472 /* EditProfileTableViewController.swift in Sources */,
+				A99956E21D5BAD2D00A9556A /* EditFirstLastNameTableViewController.swift in Sources */,
+				A990ECAC1D6A4B6500C3C9CE /* ExperienceTableViewCell.swift in Sources */,
 				A9604F821D33722F00F23B33 /* AWSUserProfessions.swift in Sources */,
+				A9BF164B1D6519D100060A9E /* SearchingTableViewCell.swift in Sources */,
+				A9B7A2461D65BF64009DA340 /* PopularCategoryTableViewCell.swift in Sources */,
 				A90A09581D43E5A7006AC49D /* WelcomeNavigationController.swift in Sources */,
-				A95C31B71D3E16930003377F /* Constants.swift in Sources */,
+				A9D21B451D5B662100B5847D /* PRFYUserPoolManager.swift in Sources */,
+				A9B7A24A1D65D8C0009DA340 /* HomeTableViewController.swift in Sources */,
 				A9F49D5A1D379D70002EB68B /* AWSPostsTable.swift in Sources */,
+				A9E4507C1D59E6D300D14553 /* CommentsTableViewController.swift in Sources */,
 				A91A35241D1C26E6006F22B2 /* FullScreenIndicator.swift in Sources */,
+				A9D8C9411D6675C100C23540 /* HomeHeaderTableViewCell.swift in Sources */,
 				A9CF75481D40CE2A0047BB1A /* UsernameTableViewController.swift in Sources */,
 				A9A503A11D2FE0A90030A472 /* AWSUsersTable.swift in Sources */,
+				A990ECAE1D6A4B7C00C3C9CE /* ExperienceTableViewController.swift in Sources */,
 				A96622101D0EF39800298CE7 /* LogInViewController.swift in Sources */,
-				A9BFD9121D45EB3100D9D962 /* ProfileTableViewCell.swift in Sources */,
-				A903C3CC1D38E04200ED7E10 /* PostTableViewCell.swift in Sources */,
-				A98BB1D01D3A353100E6FB4D /* UserTableViewCell.swift in Sources */,
-				A9EB355F1D4B83B500E9C77A /* GalleryNavigationController.swift in Sources */,
+				A9B4AB9E1D61EC300001C682 /* S3Manager.swift in Sources */,
+				A913FC701D51F6AF000D10A6 /* DynamoDBManager.swift in Sources */,
 				A95C31B91D3E35AA0003377F /* AWSClientManager.swift in Sources */,
+				A9A99FA61D60C6D200B01006 /* EditPostTableViewController.swift in Sources */,
+				A9D21B471D5B664F00B5847D /* UserPoolManager.swift in Sources */,
 				A9EB35591D4B66CE00E9C77A /* ScrollViewController.swift in Sources */,
 				A9EB35621D4B9A3600E9C77A /* GalleryViewController.swift in Sources */,
 				A9B934B01D1BD9BB00ACC2B8 /* OnboardingViewController.swift in Sources */,
-				A99BD3621D3037D10072CC27 /* AWSProfession.swift in Sources */,
+				A9E450801D5A09F100D14553 /* Comment.swift in Sources */,
 				A9A8DD131D452BAA009B3C24 /* LogInTableViewController.swift in Sources */,
 				A9AD744B1D3627BD007ACBD4 /* FiltersCollectionViewController.swift in Sources */,
-				A94797AC1D2E3A0C007CBF08 /* AWSRemoteService.swift in Sources */,
+				A9BF16411D64DA4600060A9E /* SearchCategoriesTableViewController.swift in Sources */,
 				A903EB591D16A39700B33025 /* UIImage+FixOrientation.m in Sources */,
-				A97C02731D489C8D00775D82 /* PreviewViewController.swift in Sources */,
+				A975529C1D4F4D0300F773FF /* PreviewViewController.swift in Sources */,
 				A9C482181D30ED0B007B5423 /* ItemCollectionViewCell.swift in Sources */,
+				A9BE4BA51D69DE14005D1B07 /* ProfileHeaderTableViewCell.swift in Sources */,
 				A90228111D3279B500C2EFEB /* ItemTableViewCell.swift in Sources */,
+				A9BF16471D64DDAC00060A9E /* SearchCategoryTableViewCell.swift in Sources */,
+				A9B7A2481D65D8B2009DA340 /* PostTableViewCell.swift in Sources */,
 				A961875F1D3FA67B0028DEA7 /* ClientManager.swift in Sources */,
 				A9BCF7401D4C0737001B2EEA /* PreviewProfilePicViewController.swift in Sources */,
+				A9E4507A1D59E6C500D14553 /* CommentTableViewCell.swift in Sources */,
+				A9BD00BD1D50BE9900732060 /* CategoryTableViewCell.swift in Sources */,
 				A9D960661D32FFE700273A78 /* AWSUserFirstLastName.swift in Sources */,
+				A9BF16491D6514C900060A9E /* NoResultsTableViewCell.swift in Sources */,
 				A98BB1CE1D3A32AD00E6FB4D /* ProfileTableViewController.swift in Sources */,
 				A96622051D0EC49700298CE7 /* Colors.swift in Sources */,
+				A98787301D64986A009F54B8 /* SearchResultsViewController.swift in Sources */,
 				A9CF75381D40BA1F0047BB1A /* SignUpNavigationController.swift in Sources */,
 				A94797A71D2E3451007CBF08 /* User.swift in Sources */,
 				A9E53B731D1067E800CD1D6C /* MainTabBarController.swift in Sources */,
+				A9D8C93F1D66670000C23540 /* MyCategoryCollectionViewCell.swift in Sources */,
+				A913FC721D51FAD6000D10A6 /* PRFYDynamoDBManager.swift in Sources */,
 				A9A503991D2FA9180030A472 /* LocalService.swift in Sources */,
+				A9BE4BA71D69E361005D1B07 /* ProfileAboutTableViewCell.swift in Sources */,
 				A9604F7E1D33721000F23B33 /* AWSUserPreferredUsername.swift in Sources */,
 				A9604F801D33722100F23B33 /* AWSUserAbout.swift in Sources */,
 				A9C0ED3A1D3C21C30036F791 /* Post.swift in Sources */,
 				A903EB571D16A39700B33025 /* LLSimpleCamera.m in Sources */,
+				A9BF16451D64DC5F00060A9E /* SearchUserTableViewCell.swift in Sources */,
 				A9A8DD111D4529B2009B3C24 /* LogInNavigationController.swift in Sources */,
 				A9C482161D30EC25007B5423 /* ItemsCollectionViewController.swift in Sources */,
 				A99030F91D464FEE00336D26 /* GalleryCollectionViewCell.swift in Sources */,
+				A98E33371D510B1300750D35 /* CategoryCollectionViewCell.swift in Sources */,
 				A98B42DB1D43C4E00089A769 /* ProfessionsViewController.swift in Sources */,
+				A9E4507E1D59E6E400D14553 /* CommentsViewController.swift in Sources */,
 				A95E40D01D35410500FD61F9 /* CaptureNavigationController.swift in Sources */,
 				A99030FB1D46632500336D26 /* AlbumsTableViewController.swift in Sources */,
-				A9AD744F1D364882007ACBD4 /* EditTableViewController.swift in Sources */,
 				A9F49D571D379D01002EB68B /* AWSPost.swift in Sources */,
 				A9C6CB7F1D2929AA00863816 /* Extensions.swift in Sources */,
 				A98B42E31D43DD040089A769 /* ProfessionsCollectionViewController.swift in Sources */,
+				A9BF16431D64DC2600060A9E /* SearchUsersTableViewController.swift in Sources */,
 				A9C482141D30E983007B5423 /* ItemsViewController.swift in Sources */,
 				A99030F71D464F3000336D26 /* GalleryCollectionViewController.swift in Sources */,
-				A9604F851D337DEA00F23B33 /* CurrentUser.swift in Sources */,
 				A930BC7C1D0DD43F004D49F7 /* AppDelegate.swift in Sources */,
 				A919D0A21D3FC48800AF0726 /* NameSignUpTableViewController.swift in Sources */,
 				A98B42E51D43DDBD0089A769 /* ProfessionCollectionViewCell.swift in Sources */,

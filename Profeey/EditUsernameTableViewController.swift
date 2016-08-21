@@ -18,12 +18,11 @@ class EditUsernameTableViewController: UITableViewController {
     @IBOutlet weak var preferredUsernameTextField: UITextField!
     
     var preferredUsername: String?
-    var delegate: EditUsernameDelegate?
+    var editUsernameDelegate: EditUsernameDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.tableView.separatorColor = Colors.grey
-        self.tableView.separatorInset = UIEdgeInsetsZero
+        
         self.preferredUsernameTextField.text = self.preferredUsername
     }
     
@@ -48,7 +47,7 @@ class EditUsernameTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 84.0
+        return 74.0
     }
     
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
@@ -58,7 +57,8 @@ class EditUsernameTableViewController: UITableViewController {
     // MARK: IBActions
     
     @IBAction func saveButtonTapped(sender: AnyObject) {
-        self.setPreferredUsername()
+        self.preferredUsernameTextField.resignFirstResponder()
+        self.updatePreferredUsername()
     }
     
     @IBAction func cancelButtonTapped(sender: AnyObject) {
@@ -67,27 +67,22 @@ class EditUsernameTableViewController: UITableViewController {
     
     // MARK: AWS
     
-    private func setPreferredUsername() {
-        guard let preferredUsernameText = self.preferredUsernameTextField.text?.trimm() else {
+    private func updatePreferredUsername() {
+        guard let preferredUsernameText = self.preferredUsernameTextField.text else {
             return
         }
-        // Set nil if empty to comply with DynamoDB!
-        let preferredUsername: String? = (preferredUsernameText.isEmpty ? nil : preferredUsernameText)
+        
+        let preferredUsername = preferredUsernameText.trimm()
         FullScreenIndicator.show()
-        AWSRemoteService.defaultRemoteService().setPreferredUsername(preferredUsername, completionHandler: {
+        AWSClientManager.defaultClientManager().updatePreferredUsername(preferredUsername, completionHandler: {
             (task: AWSTask) in
             dispatch_async(dispatch_get_main_queue(), {
                 FullScreenIndicator.hide()
                 if let error = task.error {
                     let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.userInfo["message"] as? String, cancelButtonTitle: "Ok")
-                    if self.presentedViewController == nil {
-                        self.presentViewController(alertController, animated: true, completion: nil)
-                    }
+                    self.presentViewController(alertController, animated: true, completion: nil)
                 } else {
-                    // Cache locally.
-                    LocalService.setPreferredUsernameLocal(preferredUsername)
-                    // Inform delegate.
-                    self.delegate?.usernameUpdated(preferredUsername)
+                    self.editUsernameDelegate?.usernameUpdated(preferredUsername)
                     self.performSegueWithIdentifier("segueUnwindToEditProfileTableVc", sender: self)
                 }
             })

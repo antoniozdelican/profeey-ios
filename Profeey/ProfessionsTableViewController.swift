@@ -14,7 +14,7 @@ protocol ProfessionsDidSelectRowDelegate {
 
 class ProfessionsTableViewController: UITableViewController {
     
-    private var professions: [String] = []
+    var professions: [String] = []
     var professionsDidSelectRowDelegate: ProfessionsDidSelectRowDelegate?
 
     override func viewDidLoad() {

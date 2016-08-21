@@ -71,3 +71,10 @@ class UsernameTableViewController: UITableViewController {
         self.usernameDelegate?.updateUsername(self.username)
     }
 }
+
+extension UsernameTableViewController: UsernameViewDelegate {
+    
+    func removeKeyboard() {
+        self.usernameTextField.resignFirstResponder()
+    }
+}

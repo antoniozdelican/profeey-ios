@@ -113,6 +113,22 @@ extension UInt {
     }
 }
 
+extension Int {
+    func numberToString() -> String {
+        if self > 999 && self <= 999999 {
+            let thousands = self / 1000
+            let hundreds = self % 1000 / 100
+            return hundreds > 0 ? "\(thousands).\(hundreds)k" : "\(thousands)k"
+        }
+        if self > 999999 {
+            let millions = self / 100000
+            let hundredThousands = self % 100000 / 10000
+            return hundredThousands > 0 ? "\(millions).\(hundredThousands)m" : "\(millions)m"
+        }
+        return "\(self)"
+    }
+}
+
 extension String {
     func getLastPathComponent() -> String {
         let nsstringValue: NSString = self

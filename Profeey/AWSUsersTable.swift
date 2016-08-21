@@ -40,21 +40,8 @@ class AWSUsersTable: NSObject, Table {
         super.init()
     }
     
-    /**
-     * Converts the attribute name from data object format to table format.
-     *
-     * - parameter dataObjectAttributeName: data object attribute name
-     * - returns: table attribute name
-     */
-    
     func tableAttributeName(dataObjectAttributeName: String) -> String {
         return AWSUser.JSONKeyPathsByPropertyKey()[dataObjectAttributeName] as! String
-    }
-    
-    func getUser(userId: String, completionHandler: AWSContinuationBlock) {
-        let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
-        //objectMapper.load(AWSUser.self, hashKey: userId, rangeKey: nil, completionHandler: completionHandler)
-        objectMapper.load(AWSUser.self, hashKey: userId, rangeKey: nil).continueWithBlock(completionHandler)
     }
     
     // TEST 
@@ -81,33 +68,28 @@ class AWSUsersTable: NSObject, Table {
         objectMapper.save(userToUpdate, configuration: updateMapperConfig).continueWithBlock(completionHandler)
     }
     
+    func getUser(userId: String, completionHandler: AWSContinuationBlock) {
+        let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
+        objectMapper.load(AWSUser.self, hashKey: userId, rangeKey: nil).continueWithBlock(completionHandler)
+    }
+    
     func saveUserFirstLastName(user: AWSUserFirstLastName, completionHandler: AWSContinuationBlock) {
         let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
-        let userFirstLastNameToUpdate: AWSUserFirstLastName = user
-        objectMapper.save(userFirstLastNameToUpdate).continueWithBlock(completionHandler)
+        objectMapper.save(user).continueWithBlock(completionHandler)
     }
     
     func saveUserPreferredUsername(user: AWSUserPreferredUsername, completionHandler: AWSContinuationBlock) {
         let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
-        let userPreferredUsernameToUpdate: AWSUserPreferredUsername = user
-        objectMapper.save(userPreferredUsernameToUpdate).continueWithBlock(completionHandler)
+        objectMapper.save(user).continueWithBlock(completionHandler)
     }
     
     func saveUserProfessions(user: AWSUserProfessions, completionHandler: AWSContinuationBlock) {
         let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
-        let userProfessionsToUpdate: AWSUserProfessions = user
-        objectMapper.save(userProfessionsToUpdate).continueWithBlock(completionHandler)
+        objectMapper.save(user).continueWithBlock(completionHandler)
     }
     
     func saveUserProfilePic(user: AWSUserProfilePic, completionHandler: AWSContinuationBlock) {
         let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
         objectMapper.save(user).continueWithBlock(completionHandler)
-    }
-    
-    // TEST
-    func saveUserAbout(user: AWSDynamoDBObjectModel, completionHandler: AWSContinuationBlock) {
-        let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
-        let userAboutToUpdate: AWSUserAbout = user as! AWSUserAbout
-        objectMapper.save(userAboutToUpdate).continueWithBlock(completionHandler)
     }
 }

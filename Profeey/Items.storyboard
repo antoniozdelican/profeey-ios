@@ -191,7 +191,6 @@
                         <outlet property="itemsLabel" destination="IYa-iW-Acx" id="tSE-Hw-Nzc"/>
                         <outlet property="saveButton" destination="DdA-iA-7WY" id="bvN-lN-Opc"/>
                         <segue destination="Iya-PE-NIo" kind="unwind" identifier="segueUnwindToEditProfileTableVc" unwindAction="unwindToEditProfileTableViewController:" id="2xb-Qi-Nzq"/>
-                        <segue destination="Iya-PE-NIo" kind="unwind" identifier="segueUnwindToEditTableVc" unwindAction="unwindToEditTableViewController:" id="1h4-eF-4Xd"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WGm-Gz-tSv" userLabel="First Responder" sceneMemberID="firstResponder"/>

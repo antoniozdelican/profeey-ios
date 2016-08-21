@@ -10,6 +10,10 @@ import UIKit
 import AWSCognitoIdentityProvider
 import AWSMobileHubHelper
 
+protocol LogInViewDelegate {
+    func removeKeyboard()
+}
+
 class LogInViewController: UIViewController {
 
     @IBOutlet weak var logInButton: UIButton!
@@ -20,6 +24,7 @@ class LogInViewController: UIViewController {
     
     var username: String?
     var password: String?
+    var logInViewDelegate: LogInViewDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,40 +42,15 @@ class LogInViewController: UIViewController {
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if let destinationViewController = segue.destinationViewController as? LogInTableViewController {
-            destinationViewController.logInDelegate = self
+            destinationViewController.logInTableViewDelegate = self
+            self.logInViewDelegate = destinationViewController
         }
     }
-    
-    // MARK: AWS
-    
-//    private func logIn() {
-//        guard let username = self.emailTextField.text, password = self.passwordTextField.text else {
-//            return
-//        }
-//        FullScreenIndicator.show()
-//        AWSClientManager.defaultClientManager().logIn(username, password: password, completionHandler: {
-//            (task: AWSTask) in
-//            dispatch_async(dispatch_get_main_queue(), {
-//                FullScreenIndicator.hide()
-//                if let error = task.error {
-//                    let alertController = UIAlertController(title: "Something went wrong", message: error.userInfo["message"] as? String, preferredStyle: .Alert)
-//                    let alertAction = UIAlertAction(title: "Ok", style: .Cancel, handler: nil)
-//                    alertController.addAction(alertAction)
-//                    if self.presentedViewController == nil {
-//                        self.presentViewController(alertController, animated: true, completion: nil)
-//                    }
-//                } else {
-//                    print("Signed in")
-//                    self.redirectToMain()
-//                }
-//            })
-//            return nil
-//        })
-//    }
     
     // MARK: IBActions
     
     @IBAction func logInButtonTapped(sender: AnyObject) {
+        self.logInViewDelegate?.removeKeyboard()
         self.logIn()
     }
     
@@ -146,7 +126,7 @@ class LogInViewController: UIViewController {
     }
 }
 
-extension LogInViewController: LogInDelegate {
+extension LogInViewController: LogInTableViewDelegate {
     
     func toggleLogInButton(enabled: Bool) {
         self.logInButton.enabled = enabled

@@ -140,28 +140,7 @@ class ItemsViewController: UIViewController {
     // MARK: AWS
     
     private func setProfessions() {
-        // Set nil if empty to comply with DynamoDB!
-        self.items = (self.itemsArray.isEmpty ? nil : self.itemsArray)
-        FullScreenIndicator.show()
-        AWSRemoteService.defaultRemoteService().saveUserProfessions(self.items, completionHandler: {
-            (task: AWSTask) in
-            dispatch_async(dispatch_get_main_queue(), {
-                FullScreenIndicator.hide()
-                if let error = task.error {
-                    let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.userInfo["message"] as? String, cancelButtonTitle: "Ok")
-                    if self.presentedViewController == nil {
-                        self.presentViewController(alertController, animated: true, completion: nil)
-                    }
-                } else {
-                    // Cache locally.
-                    LocalService.setProfessionsLocal(self.items)
-                    // Inform delegate.
-                    self.delegate?.itemsUpdated(self.items, itemType: self.itemType)
-                    self.performSegueWithIdentifier("segueUnwindToEditProfileTableVc", sender: self)
-                }
-            })
-            return nil
-        })
+        // Set nil if empty to comply with DynamoDB!    
     }
     
     private func setOthers() {

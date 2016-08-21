@@ -45,3 +45,11 @@ class FiltersCollectionViewController: UICollectionViewController {
         return cell
     }
 }
+
+extension FiltersCollectionViewController: UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+        
+        return CGSizeMake(100.0, 100.0)
+    }
+}

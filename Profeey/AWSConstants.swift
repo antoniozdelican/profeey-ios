@@ -13,13 +13,13 @@ struct AWSConstants {
     
     // MARK: Cognito
     static let COGNITO_REGIONTYPE = AWSRegionType.USEast1
-    static let COGNITO_IDENTITY_POOL_ID = "us-east-1:cf413650-369e-477d-bde4-cbc3758e77d9"
+    static let COGNITO_IDENTITY_POOL_ID = "us-east-1:a29f1a34-0cdb-4ad4-b084-2a1a3c165375"
     
     // MARK: UserPool
-    static let COGNITO_USER_POOL_ID = "us-east-1_Ocb5XvVya"
-    static let COGNITO_USER_POOL_CLIENT_ID = "617m2j4ahgmccefsro426l8e75"
-    static let COGNITO_USER_POOL_CLIENT_SECRET = "1tn08en453in4en0vh6g1vik6ipnakm8fcg6ijhc90uou2ssd1no"
+    static let COGNITO_USER_POOL_ID = "us-east-1_1k48Mmnb3"
+    static let COGNITO_USER_POOL_CLIENT_ID = "1d0hdnfmh14d3vsci890rf8sgu"
+    static let COGNITO_USER_POOL_CLIENT_SECRET = "1hj5nbbejhd5te6u6r60qm5mi1dlbtsrkv1bo9sq422mfh6jns13"
     
     // MARK: S3
-    static let BUCKET_NAME = "profeey-userfiles-mobilehub-1226628658"
+    static let BUCKET_NAME = "profeey-userfiles-mobilehub-294297648"
 }

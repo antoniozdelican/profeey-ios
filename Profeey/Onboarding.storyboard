@@ -24,8 +24,8 @@
                                     <constraint firstAttribute="height" constant="45" id="uiw-Ap-Lak"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                <state key="normal" title="Sign up" backgroundImage="btn_white">
-                                    <color key="titleColor" red="0.2901960784" green="0.83137254900000002" blue="0.8862745098" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" title="Sign up" backgroundImage="btn_blue">
+                                    <color key="titleColor" red="0.2901960784" green="0.56470588239999997" blue="0.8862745098" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
                                 <connections>
                                     <segue destination="kpF-e3-6VE" kind="presentation" id="rKF-CW-MT4"/>
@@ -35,7 +35,7 @@
                                 <rect key="frame" x="173" y="535" width="255" height="45"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <state key="normal" title="Log in">
-                                    <color key="titleColor" red="0.2901960784" green="0.83137254900000002" blue="0.8862745098" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleColor" red="0.2901960784" green="0.56470588239999997" blue="0.8862745098" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
                                 <connections>
                                     <segue destination="Qmx-zC-zjk" kind="presentation" id="Uxp-mM-jqh"/>
@@ -44,19 +44,27 @@
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Profeey" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fmZ-ng-JhW">
                                 <rect key="frame" x="237.5" y="120" width="125" height="43"/>
                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="36"/>
-                                <color key="textColor" red="0.29019607843137252" green="0.83137254901960778" blue="0.88627450980392153" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="textColor" red="0.2901960784" green="0.56470588239999997" blue="0.8862745098" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Show your work" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wna-9o-A4L">
+                                <rect key="frame" x="236" y="183" width="129" height="22"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <color key="textColor" red="0.2901960784" green="0.2901960784" blue="0.2901960784" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
-                        <color key="backgroundColor" red="0.98039215690000003" green="0.98039215690000003" blue="0.98039215690000003" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="aQV-Vl-wN7" firstAttribute="height" secondItem="HaG-cs-ple" secondAttribute="height" id="1qZ-kN-UdN"/>
                             <constraint firstItem="aQV-Vl-wN7" firstAttribute="centerX" secondItem="gi2-jJ-kxm" secondAttribute="centerX" id="5BL-A3-Zai"/>
                             <constraint firstItem="HaG-cs-ple" firstAttribute="centerX" secondItem="gi2-jJ-kxm" secondAttribute="centerX" id="9ss-AL-dGA"/>
                             <constraint firstItem="aQV-Vl-wN7" firstAttribute="top" secondItem="HaG-cs-ple" secondAttribute="bottom" constant="20" id="G2r-Dq-VRL"/>
                             <constraint firstItem="gFr-ws-Ipi" firstAttribute="top" secondItem="aQV-Vl-wN7" secondAttribute="bottom" constant="20" id="RJ0-tG-oTD"/>
+                            <constraint firstItem="wna-9o-A4L" firstAttribute="centerX" secondItem="gi2-jJ-kxm" secondAttribute="centerX" id="ZwS-Fq-1k6"/>
                             <constraint firstItem="fmZ-ng-JhW" firstAttribute="top" secondItem="aDN-Lg-Cd1" secondAttribute="bottom" constant="100" id="dLH-ld-ni8"/>
                             <constraint firstItem="fmZ-ng-JhW" firstAttribute="centerX" secondItem="gi2-jJ-kxm" secondAttribute="centerX" id="oq5-7t-vwf"/>
+                            <constraint firstItem="wna-9o-A4L" firstAttribute="top" secondItem="fmZ-ng-JhW" secondAttribute="bottom" constant="20" id="rRE-LX-eBW"/>
                             <constraint firstItem="aQV-Vl-wN7" firstAttribute="width" secondItem="HaG-cs-ple" secondAttribute="width" id="skS-Tj-F4d"/>
                         </constraints>
                     </view>
@@ -83,6 +91,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="btn_white" width="255" height="45"/>
+        <image name="btn_blue" width="255" height="45"/>
     </resources>
 </document>

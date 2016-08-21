@@ -14,14 +14,13 @@ class AWSPost: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     
     var _userId: String?
     var _postId: String?
-    var _caption: String?
-    var _categories: [String]?
-    var _creationDate: NSNumber?
-    var _mediaUrl: String?
+    var _description: String?
+    var _imageUrl: String?
+    var _title: String?
     
     class func dynamoDBTableName() -> String {
         
-        return "profeey-mobilehub-1226628658-Posts"
+        return "profeey-mobilehub-294297648-Posts"
     }
     
     class func hashKeyAttribute() -> String {
@@ -38,10 +37,9 @@ class AWSPost: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
         return [
             "_userId" : "userId",
             "_postId" : "postId",
-            "_caption" : "caption",
-            "_categories" : "categories",
-            "_creationDate" : "creationDate",
-            "_mediaUrl" : "mediaUrl",
+            "_description" : "description",
+            "_imageUrl" : "imageUrl",
+            "_title" : "title",
         ]
     }
 }

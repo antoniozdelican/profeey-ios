@@ -38,7 +38,6 @@ class GalleryViewController: UIViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if let destinationViewController = segue.destinationViewController as? GalleryCollectionViewController {
             destinationViewController.galleryCollectionViewDelegate = self
-            // Transfer delegation to GalleryCollectionVc.
             self.albumsDelegate = destinationViewController
         }
         if let navigationController = segue.destinationViewController as? UINavigationController,

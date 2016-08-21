@@ -19,12 +19,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        
         self.configureUI()
         
 //        AWSClientManager.defaultClientManager().userPool?.delegate = self
-//        AWSClientManager.defaultClientManager().incompleteSignUpDelegate = self
-//        AWSClientManager.defaultClientManager().getCurrentUser({
+//        AWSClientManager.defaultClientManager().getUserDetails({
 //            (task: AWSTask) in
 //            return nil
 //        })
@@ -33,19 +31,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     private func configureUI() {
         // UINavigationBar
+//        UINavigationBar.appearance().setBackgroundImage(UIImage(), forBarMetrics: .Default)
+//        UINavigationBar.appearance().shadowImage = UIImage()
+        UINavigationBar.appearance().backgroundColor = Colors.greyLight
         UINavigationBar.appearance().barTintColor = Colors.greyLight
-        UINavigationBar.appearance().tintColor = Colors.black
+        UINavigationBar.appearance().translucent = false
+        UINavigationBar.appearance().tintColor = Colors.blue
         UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: Colors.blue]
-        UINavigationBar.appearance().shadowImage = UIImage()
-        // UINavigationBar.appearance().setBackgroundImage(UIImage(), forBarMetrics: .Default)
         
         // UITabBar
-        // UITabBar.appearance().translucent = true
-        UITabBar.appearance().translucent = false
-        // UITabBar.appearance().barTintColor = Colors.blue.colorWithAlphaComponent(0.8)
         UITabBar.appearance().barTintColor = Colors.greyLight
-        UITabBar.appearance().backgroundImage = UIImage()
-        UITabBar.appearance().shadowImage = UIImage()
+        UITabBar.appearance().translucent = false
+//        UITabBar.appearance().backgroundImage = UIImage()
+//        UITabBar.appearance().shadowImage = UIImage()
         
         // UITableView
         UITableView.appearance().backgroundColor = Colors.greyLight
@@ -55,11 +53,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // UITableViewCell
         let colorView = UIView()
-        colorView.backgroundColor = Colors.greyLight
+        colorView.backgroundColor = UIColor.whiteColor()
         UITableViewCell.appearance().selectedBackgroundView = colorView
+        UITableViewCell.appearance().backgroundColor = UIColor.clearColor()
         
         // UITextField
         UITextField.appearance().tintColor = Colors.black
+        UITextField.appearanceWhenContainedInInstancesOfClasses([UISearchBar.self]).backgroundColor = UIColor.blackColor()
         
         // UITextView
         UITextView.appearance().tintColor = Colors.black

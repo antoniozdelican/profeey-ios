@@ -71,31 +71,6 @@ class EditAboutTableViewController: UITableViewController {
     // MARK: AWS
     
     private func setAbout() {
-        guard let aboutText = self.aboutTextView.text?.trimm() else {
-            return
-        }
-        // Set nil if empty to comply with DynamoDB!
-        let about: String? = (aboutText.isEmpty ? nil : aboutText)
-        FullScreenIndicator.show()
-        AWSRemoteService.defaultRemoteService().saveUserAbout(about, completionHandler: {
-            (task: AWSTask) in
-            dispatch_async(dispatch_get_main_queue(), {
-                FullScreenIndicator.hide()
-                if let error = task.error {
-                    let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.userInfo["message"] as? String, cancelButtonTitle: "Ok")
-                    if self.presentedViewController == nil {
-                        self.presentViewController(alertController, animated: true, completion: nil)
-                    }
-                } else {
-                    // Cache locally.
-                    LocalService.setAboutLocal(about)
-                    // Inform delegate.
-                    self.delegate?.aboutUpdated(about)
-                    self.performSegueWithIdentifier("segueUnwindToEditProfileTableVc", sender: self)
-                }
-            })
-            return nil
-        })
     }
 }
 

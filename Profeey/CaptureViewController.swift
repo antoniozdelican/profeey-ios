@@ -14,28 +14,40 @@ protocol CaptureDelegate {
 
 class CaptureViewController: UIViewController {
     
-    @IBOutlet weak var switchCameraButton: UIBarButtonItem!
-    @IBOutlet weak var captureButton: UIButton!
-    @IBOutlet weak var closeButton: UIBarButtonItem!
     
-    var camera: ProfeeySimpleCamera!
-    var profilePic: UIImage?
+    @IBOutlet weak var flashButton: UIButton!
+    @IBOutlet weak var cameraSwitchButton: UIBarButtonItem!
+    @IBOutlet weak var captureButton: UIButton!
+    @IBOutlet var cameraOverlayView: UIView!
+    @IBOutlet weak var cameraWindowSubView: UIView!
+    
+    private var capturedPhoto: UIImage?
     var captureDelegate: CaptureDelegate?
+    
+    private var imagePickerController: UIImagePickerController!
+    private var isCameraAvailable: Bool = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.configureButtons()
+        
+        NSBundle.mainBundle().loadNibNamed("CameraOverlayView", owner: self, options: nil)
         self.configureCamera()
     }
     
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        self.camera.start()
-    }
-    
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-        self.camera.view.frame = self.view.bounds
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        if !self.isCameraAvailable {
+            // Disable buttons.
+            self.flashButton.enabled = false
+            self.cameraSwitchButton.enabled = false
+            self.captureButton.enabled = false
+            // Present empty camera overlay view.
+            self.cameraOverlayView.frame = CGRectMake(0.0, 0.0, self.view.bounds.width, self.view.bounds.height)
+            self.view.insertSubview(self.cameraOverlayView, atIndex: 0)
+            // Present alert.
+            let alertController = self.getSimpleAlertWithTitle("No camera", message: "Your device doesn't have a camera.", cancelButtonTitle: "Ok")
+            self.presentViewController(alertController, animated: true, completion: nil)
+        }
     }
     
     override func preferredInterfaceOrientationForPresentation() -> UIInterfaceOrientation {
@@ -46,43 +58,29 @@ class CaptureViewController: UIViewController {
         super.didReceiveMemoryWarning()
     }
     
-    // MARK: Configure
-    
-    private func configureButtons() {
-        self.switchCameraButton.image = UIImage(named: "btn_camera_switch")?.imageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal)
-        self.closeButton.image = UIImage(named: "btn_close_white")?.imageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal)
-    }
+    // MARK: Configuration
     
     private func configureCamera() {
-        self.camera = ProfeeySimpleCamera(quality: AVCaptureSessionPresetHigh, position: LLCameraPositionRear, videoEnabled: true)
-        let rect = CGRectMake(0.0, 0.0, self.view.bounds.width, self.view.bounds.height)
-        self.camera.attachToViewController(self, withFrame: rect)
-        self.camera.fixOrientationAfterCapture = true
-        
-        // Disable buttons if camera not available.
-        guard ProfeeySimpleCamera.isFrontCameraAvailable() && ProfeeySimpleCamera.isRearCameraAvailable() else {
-            self.captureButton.enabled = false
-            self.switchCameraButton.enabled = false
-            let alertController = UIAlertController(title: "Camera error", message: "You must have a camera to take video.", preferredStyle: UIAlertControllerStyle.Alert)
-            let alertAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil)
-            alertController.addAction(alertAction)
-            self.presentViewController(alertController, animated: true, completion: nil)
-            return
-        }
-        // Check for errors.
-        self.camera.onError = {
-            (camera, error) -> Void in
-            print("Camera error: \(error)")
-            if (error.domain == LLSimpleCameraErrorDomain) {
-                if UInt(error.code) == LLSimpleCameraErrorCodeCameraPermission.rawValue || UInt(error.code) == LLSimpleCameraErrorCodeMicrophonePermission.rawValue {
-                    let alertController = UIAlertController(title: "Check permissions", message: "We need permission for the camera and microphone.", preferredStyle: UIAlertControllerStyle.Alert)
-                    let alertAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Default, handler: nil)
-                    alertController.addAction(alertAction)
-                    self.presentViewController(alertController, animated: true, completion: nil)
-                    self.switchCameraButton.enabled = false
-                    self.captureButton.enabled = false
-                }
-            }
+        // Check if camera exists.
+        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera) {
+            self.imagePickerController = UIImagePickerController()
+            self.imagePickerController.modalPresentationStyle = UIModalPresentationStyle.CurrentContext
+            self.imagePickerController.sourceType = UIImagePickerControllerSourceType.Camera
+            self.imagePickerController.delegate = self
+            self.imagePickerController.allowsEditing = false
+            self.imagePickerController.showsCameraControls = false
+            self.imagePickerController.cameraFlashMode = UIImagePickerControllerCameraFlashMode.Off
+            
+            self.cameraOverlayView.frame = self.imagePickerController.cameraOverlayView!.frame
+            self.imagePickerController.cameraOverlayView = self.cameraOverlayView
+            self.cameraOverlayView = nil
+            
+            self.addChildViewController(self.imagePickerController)
+            self.imagePickerController.view.frame = CGRectMake(0.0, 0.0, self.view.bounds.width, self.view.bounds.height)
+            self.view.insertSubview(self.imagePickerController.view, atIndex: 0)
+            self.imagePickerController.didMoveToParentViewController(self)
+        } else {
+            self.isCameraAvailable = false
         }
     }
     
@@ -91,7 +89,8 @@ class CaptureViewController: UIViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if let navigationController = segue.destinationViewController as? UINavigationController,
             let childViewController = navigationController.childViewControllers[0] as? PreviewViewController {
-            childViewController.photo = self.profilePic?.fixOrientation()
+            childViewController.capturedPhoto = self.capturedPhoto
+            self.capturedPhoto = nil
             childViewController.isPhoto = true
         }
     }
@@ -99,19 +98,44 @@ class CaptureViewController: UIViewController {
     // MARK: IBActions
     
     @IBAction func captureButtonTapped(sender: AnyObject) {
-        self.camera.capture({
-            (camera, image, metadata, error) -> Void in
-            if error == nil {
-                self.profilePic = image
-                self.performSegueWithIdentifier("segueToPreviewVc", sender: self)
-            } else {
-                print("An error has occured: \(error)")
-            }
-            }, exactSeenImage: true)
+        self.imagePickerController.takePicture()
     }
     
+    @IBAction func flashButtonTapped(sender: AnyObject) {
+        guard self.imagePickerController.cameraDevice == UIImagePickerControllerCameraDevice.Rear else {
+            return
+        }
+        if self.imagePickerController.cameraFlashMode == UIImagePickerControllerCameraFlashMode.On {
+            self.imagePickerController.cameraFlashMode = UIImagePickerControllerCameraFlashMode.Off
+            self.flashButton.setImage(UIImage(named: "ic_flash_black"), forState: UIControlState.Normal)
+            
+        } else if self.imagePickerController.cameraFlashMode == UIImagePickerControllerCameraFlashMode.Off {
+            self.imagePickerController.cameraFlashMode = UIImagePickerControllerCameraFlashMode.On
+            self.flashButton.setImage(UIImage(named: "ic_flash_orange"), forState: UIControlState.Normal)
+        }
+    }
+    
+    
     @IBAction func switchCameraButtonTapped(sender: AnyObject) {
-        self.camera.togglePosition()
+        if self.imagePickerController.cameraDevice == UIImagePickerControllerCameraDevice.Rear {
+            self.imagePickerController.cameraDevice = UIImagePickerControllerCameraDevice.Front
+            UIView.animateWithDuration(
+                0.0,
+                delay: 0.5,
+                options: [],
+                animations: {
+                    self.flashButton.alpha = 0.0
+                }, completion: nil)
+        } else {
+            self.imagePickerController.cameraDevice = UIImagePickerControllerCameraDevice.Rear
+            UIView.animateWithDuration(
+                0.0,
+                delay: 0.5,
+                options: [],
+                animations: {
+                    self.flashButton.alpha = 1.0
+                }, completion: nil)
+        }
     }
     
     @IBAction func galleryButtonTapped(sender: AnyObject) {
@@ -122,4 +146,26 @@ class CaptureViewController: UIViewController {
     @IBAction func closeButtonTapped(sender: AnyObject) {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
+}
+
+extension CaptureViewController: UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+    
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+        var capturedPhoto = UIImage()
+        if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
+            // Flip image if front camera.
+            if (self.imagePickerController.cameraDevice == UIImagePickerControllerCameraDevice.Front) && (image.CGImage != nil) {
+                capturedPhoto = UIImage(CGImage: image.CGImage!, scale: image.scale, orientation: .LeftMirrored)
+            } else {
+                capturedPhoto = image
+            }
+        }
+        self.capturedPhoto = capturedPhoto
+        self.performSegueWithIdentifier("segueToPreviewVc", sender: self)
+    }
+    
+    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
 }

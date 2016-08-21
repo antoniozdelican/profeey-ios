@@ -12,84 +12,178 @@ import AWSMobileHubHelper
 
 class ProfileTableViewController: UITableViewController {
     
-    var currentUser: User?
+    // For now it's currentUser from DynamoDB.
+    var user: User?
+    var posts: [Post] = []
+    var isCurrentUser: Bool = true
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.Plain, target:nil, action:nil)
         self.tableView.delaysContentTouches = false
-        self.currentUser = AWSClientManager.defaultClientManager().currentUser
-        self.navigationItem.title = self.currentUser?.preferredUsername
-//        if self.currentUser == nil {
-//            self.getCurrentUser()
-//        }
-//        self.getCurrentUserDynamoDB()
+        self.tableView.estimatedRowHeight = 120.0
+        self.tableView.rowHeight = UITableViewAutomaticDimension
+        
+        if self.isCurrentUser {
+            self.getCurrentUser()
+            self.getCurrentUserPosts()
+        } else {
+            // TEST
+            self.navigationItem.title = self.user?.preferredUsername
+            // MOCK
+            let category1 = Category(categoryName: "Melon Production", numberOfUsers: 2, numberOfPosts: 12)
+            let category2 = Category(categoryName: "Fruit Growing", numberOfUsers: 2, numberOfPosts: 12)
+            let category3 = Category(categoryName: "Agriculture", numberOfUsers: 3, numberOfPosts: 28)
+            let category4 = Category(categoryName: "Apple Production", numberOfUsers: 2, numberOfPosts: 12)
+            let category5 = Category(categoryName: "Fruit agriculture", numberOfUsers: 1, numberOfPosts: 5)
+            
+            let post1 = Post(user: self.user, postDescription: nil, imageUrl: nil, title: "Melon harvest - peak of the season", image: UIImage(named: "post_pic_ivan"), categories: [category1, category2, category3])
+            let post2 = Post(user: self.user, postDescription: nil, imageUrl: nil, title: "Garden view on our products", image: UIImage(named: "post_pic_ivan_2"), categories: [category2, category3])
+            let post3 = Post(user: self.user, postDescription: nil, imageUrl: nil, title: "Granny Smith apple", image: UIImage(named: "post_pic_ivan_3"), categories: [category4])
+            let post4 = Post(user: self.user, postDescription: nil, imageUrl: nil, title: "Our hothouses in the afternoon", image: UIImage(named: "post_pic_ivan_4"), categories: [category5])
+            self.posts = [post1, post2, post3, post4]
+        }
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
+    
+    // MARK: Configuration
+    
+    private func configureUser(user: User?) {
+        self.user = user
+        self.tableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.None)
+        self.navigationItem.title = self.user?.preferredUsername
+    }
+    
+    // MARK: Navigation
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if let destinationViewController = segue.destinationViewController as? EditProfileTableViewController {
+            destinationViewController.user = self.user
+            destinationViewController.editProfileDelegate = self
+        }
+        if let destinationViewController = segue.destinationViewController as? UsersTableViewController {
+            // Followers.
+            destinationViewController.isLikers = false
+        }
+        
+        if let navigationController = segue.destinationViewController as? UINavigationController,
+            let childViewController = navigationController.childViewControllers[0] as? PostDetailsTableViewController,
+            let indexPath = sender as? NSIndexPath {
+            childViewController.post = self.posts[indexPath.row]
+        }
+        if let destinationViewController = segue.destinationViewController as? PostDetailsTableViewController,
+            let indexPath = sender as? NSIndexPath {
+            destinationViewController.post = self.posts[indexPath.row]
+        }
+        if let destinationViewController = segue.destinationViewController as? ExperienceTableViewController,
+            let indexPath = sender as? NSIndexPath {
+            if indexPath.section == 2 {
+                destinationViewController.isEducation = false
+            } else {
+                destinationViewController.isEducation = true
+            }
+        }
+    }
 
     // MARK: UITableViewDataSource
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 2
+        return 6
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 {
+        switch section {
+        case 0:
             return 1
-        } else {
-            return 0
+        case 1:
+            return 1
+        case 2:
+            return 1
+        case 3:
+            return 1
+        case 4:
+            return 1
+        default:
+            return self.posts.count
         }
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if indexPath.section == 0 {
+        switch indexPath.section {
+        case 0:
             let cell = tableView.dequeueReusableCellWithIdentifier("cellProfile", forIndexPath: indexPath) as! ProfileTableViewCell
-            let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ProfileTableViewController.profilePicImageViewTapped(_:)))
-            cell.profilePicImageView.addGestureRecognizer(tapGestureRecognizer)
-            cell.fullNameLabel.text = [self.currentUser?.firstName, self.currentUser?.lastName].flatMap({ $0 }).joinWithSeparator(" ")
-            cell.professionsLabel.text = self.currentUser?.professions?.joinWithSeparator(" · ")
+            cell.profilePicImageView.image = self.user?.profilePic
+            cell.fullNameLabel.text = self.user?.fullName
+            cell.professionsLabel.text = self.user?.professions?.joinWithSeparator(" · ")
+            cell.locationLabel.text = "Zagreb, Croatia"
+            cell.postsButton.setTitle(self.posts.count.numberToString(), forState: UIControlState.Normal)
+            if self.isCurrentUser {
+                cell.setEditButton()
+                cell.followButton.addTarget(self, action: #selector(ProfileTableViewController.editButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+            } else {
+                cell.setFollowButton()
+            }
+            cell.selectionStyle = UITableViewCellSelectionStyle.None
             return cell
-        } else {
-            return UITableViewCell()
+        case 1:
+            let cell = tableView.dequeueReusableCellWithIdentifier("cellAbout", forIndexPath: indexPath) as! ProfileAboutTableViewCell
+            cell.aboutLabel.text = "I’ve been working in the fruit industry for more than a decade.  Used many technologies in apple and melon production as well as in seed growing. I’m looking for new opportunities and connections."
+            cell.selectionStyle = UITableViewCellSelectionStyle.None
+            return cell
+        case 2:
+            let cell = tableView.dequeueReusableCellWithIdentifier("cellHeader", forIndexPath: indexPath) as! ProfileHeaderTableViewCell
+            cell.headerLabel.text = "Work Experience"
+            return cell
+        case 3:
+            let cell = tableView.dequeueReusableCellWithIdentifier("cellHeader", forIndexPath: indexPath) as! ProfileHeaderTableViewCell
+            cell.headerLabel.text = "Education"
+            return cell
+        case 4:
+            let cell = tableView.dequeueReusableCellWithIdentifier("cellHeaderPosts", forIndexPath: indexPath)
+            cell.selectionStyle = UITableViewCellSelectionStyle.None
+            return cell
+        default:
+            let cell = tableView.dequeueReusableCellWithIdentifier("cellPost", forIndexPath: indexPath) as! PostSmallTableViewCell
+            let post = posts[indexPath.row]
+            cell.postImageView.image = post.image
+            cell.titleLabel.text = post.title
+            cell.categoriesLabel.text = post.categories?.flatMap({ $0.categoryName }).joinWithSeparator(" · ")
+            cell.timeLabel.text = "2 minutes ago"
+            return cell
         }
     }
     
     // MARK: UITableViewDelegate
     
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        if indexPath.section == 5 {
+            self.performSegueWithIdentifier("segueToPostVc", sender: indexPath)
+        }
+        if indexPath.section == 2 || indexPath.section == 3 {
+            self.performSegueWithIdentifier("segueToExperienceVc", sender: indexPath)
+        }
+    }
+    
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-//        guard let cell = cell as? PostTableViewCell else {
-//            return
-//        }
-//        cell.setCollectionViewDataSourceDelegate(self, forRow: indexPath.row)
-//        cell.collectionViewOffset = self.storedOffsets[indexPath.row] ?? 0
+        cell.layoutMargins = UIEdgeInsetsZero
     }
     
-    override func tableView(tableView: UITableView, didEndDisplayingCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-//        guard let cell = cell as? PostTableViewCell else {
-//            return
-//        }
-//        self.storedOffsets[indexPath.row] = cell.collectionViewOffset
+    // MARK: IBActions
+    
+    @IBAction func followersButtonTapped(sender: AnyObject) {
+        self.performSegueWithIdentifier("segueToUsersVc", sender: self)
     }
     
-    override func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if indexPath.section == 0 {
-            return self.view.bounds.height - (self.tabBarController?.tabBar.bounds.height)!
-        } else {
-            return 120.0
-        }
-    }
-    
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if indexPath.section == 0 {
-            return self.view.bounds.height - (self.tabBarController?.tabBar.bounds.height)!
-        } else {
-            return UITableViewAutomaticDimension
-        }
-    }
     
     // MARK: Tappers
+    
+    func editButtonTapped(sender: UIButton) {
+        self.performSegueWithIdentifier("segueToEditProfileVc", sender: self)
+    }
     
     func profilePicImageViewTapped(sender: UITapGestureRecognizer) {
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
@@ -107,101 +201,84 @@ class ProfileTableViewController: UITableViewController {
         self.presentViewController(alertController, animated: true, completion: nil)
     }
     
-    
     // MARK: AWS
     
     private func getCurrentUser() {
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         AWSClientManager.defaultClientManager().getCurrentUser({
             (task: AWSTask) in
             dispatch_async(dispatch_get_main_queue(), {
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                 if let error = task.error {
-                    print("Error: \(error.localizedDescription)")
-                } else {
-                    print("Update currentUser success!")
-                    self.currentUser = AWSClientManager.defaultClientManager().currentUser
-                    self.navigationItem.title = self.currentUser?.preferredUsername
-                    self.tableView.reloadData()
-                }
-            })
-            return nil
-        })
-    }
-    
-    private func getCurrentUserDynamoDB() {
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-        AWSClientManager.defaultClientManager().getCurrentUserDynamoDB({
-            (task: AWSTask) in
-            dispatch_async(dispatch_get_main_queue(), {
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-                if let error = task.error {
-                    print("Error: \(error.localizedDescription)")
+                    let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.userInfo["message"] as? String, cancelButtonTitle: "Ok")
+                    self.presentViewController(alertController, animated: true, completion: nil)
                 } else if let user = task.result as? AWSUser {
-                    // Update professions.
-                    self.currentUser?.professions = user._professions
-                    self.tableView.reloadData()
+                    let user = User(firstName: user._firstName, lastName: user._lastName, preferredUsername: user._preferredUsername, professions: user._professions, profilePicUrl: user._profilePicUrl)
+                    self.configureUser(user)
                 } else {
-                    print("This should not happen with getCurrentUserDynamoDB!")
+                    print("This should not happen getCurrentUser!")
                 }
             })
             return nil
         })
     }
     
+    private func getCurrentUserPosts() {
+        AWSClientManager.defaultClientManager().getCurrentUserPosts({
+            (task: AWSTask) in
+            if let error = task.error {
+                dispatch_async(dispatch_get_main_queue(), {
+                    let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.userInfo["message"] as? String, cancelButtonTitle: "Ok")
+                    self.presentViewController(alertController, animated: true, completion: nil)
+                })
+            } else {
+                let output = task.result as? AWSDynamoDBPaginatedOutput
+                if let awsPosts = output?.items as? [AWSPost] {
+                    for (index, awsPost) in awsPosts.enumerate() {
+                        let post = Post(postDescription: awsPost._description, imageUrl: awsPost._imageUrl, title: awsPost._title)
+                        self.posts.insert(post, atIndex: index)
+                        self.getPostImage(index, imageUrl: awsPost._imageUrl)
+                    }
+                    dispatch_async(dispatch_get_main_queue(), {
+                        self.tableView.beginUpdates()
+                        self.tableView.reloadSections(NSIndexSet(index: 1), withRowAnimation: UITableViewRowAnimation.None)
+                        self.tableView.endUpdates()
+                    })
+                }
+            }
+            return nil
+        })
+    }
     
-//    private func downloadProfilePic(profilePicUrl: String) {
-//        AWSRemoteService.defaultRemoteService().downloadProfilePic(
-//            profilePicUrl,
-//            progressBlock: {
-//                (content: AWSContent?, progress: NSProgress?) -> Void in
-//                return
-//            },
-//            completionHandler: {
-//                (task: AWSTask) in
-//                dispatch_async(dispatch_get_main_queue(), {
-//                    if let error = task.error {
-//                        print("Error: \(error)")
-//                    } else if let result = task.result as? NSData {
-//                        // Cache locally.
-//                        LocalService.setProfilePicLocal(result)
-//                        self.currentUser?.profilePicData = result
-//                        self.tableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: .None)
-//                    } else {
-//                        print("This should not happen!")
-//                    }
-//                })
-//                return nil
-//        })
-//    }
+    // In background
+    private func getPostImage(index: Int, imageUrl: String?) {
+        guard let imageUrl = imageUrl else {
+            return
+        }
+        AWSClientManager.defaultClientManager().getImage(
+            imageUrl,
+            completionHandler: {
+                (task: AWSTask) in
+                if let error = task.error {
+                    print("Error: \(error)")
+                } else {
+                    if let imageData = task.result as? NSData {
+                        let image = UIImage(data: imageData)
+                        let indexPath = NSIndexPath(forRow: index, inSection: 1)
+                        self.posts[index].image = image
+                        dispatch_async(dispatch_get_main_queue(), {
+                            self.tableView.beginUpdates()
+                            self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
+                            self.tableView.endUpdates()
+                        })
+                    }
+                }
+                return nil
+        })
+    }
 }
 
-//extension ProfileTableViewController: UICollectionViewDataSource, UICollectionViewDelegate {
-//    
-////    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-////        return self.categoriesArray.count
-////    }
-////    
-////    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-////        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("cellPostCategory", forIndexPath: indexPath) as! PostCategoryCollectionViewCell
-////        cell.categoryLabel.text = self.categoriesArray[indexPath.row]
-////        return cell
-////    }
-//}
-
-extension ProfileTableViewController: UICollectionViewDelegateFlowLayout {
-//    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-//        // Constants for post category cell size.
-//        let itemLabelHeight: CGFloat = 17.0
-//        let itemFont: UIFont = UIFont.systemFontOfSize(14.0)
-//        let topInset: CGFloat = 4.0
-//        let leftInset: CGFloat = 8.0
-//        let rightInset: CGFloat = 8.0
-//        let item = self.categoriesArray[indexPath.row]
-//        // Calculations.
-//        let labelRect = NSString(string: item).boundingRectWithSize(CGSize(width: CGFloat(MAXFLOAT), height: itemLabelHeight), options: .UsesLineFragmentOrigin, attributes: [NSFontAttributeName: itemFont], context: nil)
-//        let cellWidth = ceil(labelRect.size.width) + leftInset + rightInset
-//        let cellHeight = ceil(labelRect.size.height) + 2 * topInset
-//        return CGSizeMake(cellWidth, cellHeight)
-//    }
+extension ProfileTableViewController: EditProfileDelegate {
+    
+    func userUpdated(user: User?) {
+        self.configureUser(user)
+    }
 }

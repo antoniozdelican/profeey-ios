@@ -17,14 +17,20 @@ protocol ProfessionsAddDelegate {
     func addProfession(profession: String)
 }
 
+// Used in edit profile.
+protocol EditProfessionsDelegate {
+    func professionsUpdated(professions:[String]?)
+}
+
 class ProfessionsViewController: UIViewController {
     
     @IBOutlet weak var professionTextField: UITextField!
     
-    var toolbarBottomConstraintConstant: CGFloat = 0.0
     var professions: [String] = []
     var professionsTextFieldDelegate: ProfessionsTextFieldDelegate?
     var professionsAddDelegate: ProfessionsAddDelegate?
+    var editProfessionsDelegate: EditProfessionsDelegate?
+    var isEditProfessions: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,7 +58,7 @@ class ProfessionsViewController: UIViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if let destinationViewController = segue.destinationViewController as? ProfessionsCollectionViewController {
             destinationViewController.professions = self.professions
-            // Add item to collection view delegate.
+            // Add profession to collection view delegate.
             self.professionsAddDelegate = destinationViewController
             // Set remove delegate.
             destinationViewController.professionsRemoveDelegate = self
@@ -60,7 +66,7 @@ class ProfessionsViewController: UIViewController {
         if let destinationViewController = segue.destinationViewController as? ProfessionsTableViewController {
             // Set textField delegate.
             self.professionsTextFieldDelegate = destinationViewController
-//            // Set didSelectRow delegate.
+            // Set didSelectRow delegate.
             destinationViewController.professionsDidSelectRowDelegate = self
         }
     }
@@ -68,6 +74,7 @@ class ProfessionsViewController: UIViewController {
     // MARK: IBActions
     
     @IBAction func doneButtonTapped(sender: AnyObject) {
+        self.professionTextField.resignFirstResponder()
         self.updateUserProfessions()
     }
     
@@ -82,25 +89,27 @@ class ProfessionsViewController: UIViewController {
     // MARK: AWS
     
     private func updateUserProfessions() {
+        
+        // DynamoDB deletes attribute with nil.
         let professions: [String]? = self.professions.isEmpty ? nil : self.professions
         FullScreenIndicator.show()
-        AWSClientManager.defaultClientManager().updateUserProfessionsDynamoDB(professions, completionHandler: {
+        AWSClientManager.defaultClientManager().updateUserProfessions(professions, completionHandler: {
             (task: AWSTask) in
+            dispatch_async(dispatch_get_main_queue(), {
+                FullScreenIndicator.hide()
                 if let error = task.error {
-                    dispatch_async(dispatch_get_main_queue(), {
-                        FullScreenIndicator.hide()
-                        let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.userInfo["message"] as? String, cancelButtonTitle: "Ok")
-                        self.presentViewController(alertController, animated: true, completion: nil)
-                    })
+                    let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.userInfo["message"] as? String, cancelButtonTitle: "Ok")
+                    self.presentViewController(alertController, animated: true, completion: nil)
                 } else {
-                    // Update general professions in background.
-                    AWSClientManager.defaultClientManager().updateProfessionsDynamoDB(self.professions)
-                    
-                    dispatch_async(dispatch_get_main_queue(), {
-                        FullScreenIndicator.hide()
+                    // Can be edit or signUp flow.
+                    if self.isEditProfessions {
+                        self.editProfessionsDelegate?.professionsUpdated(professions)
+                        self.performSegueWithIdentifier("segueUnwindToEditProfileTableVc", sender: self)
+                    } else {
                         self.redirectToMain()
-                    })
+                    }
                 }
+            })
             return nil
         })
     }

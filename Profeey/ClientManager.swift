@@ -14,31 +14,27 @@ protocol ClientManager {
     
     var credentialsProvider: AWSCognitoCredentialsProvider? { get }
     var userPool: AWSCognitoIdentityUserPool? { get }
-//    var contentManager: AWSContentManager? { get }
     var userFileManager: AWSUserFileManager? { get }
-    var currentUser: User? { get }
     
-    // MARK: UserPool
+    // MARK: User
     
     func logIn(username: String, password: String, completionHandler: AWSContinuationBlock)
-    func signUp(username: String, password: String, email: String, completionHandler: AWSContinuationBlock)
+    func signUp(username: String, password: String, email: String, firstName: String?, lastName: String?, completionHandler: AWSContinuationBlock)
     func signOut(completionHandler: AWSContinuationBlock)
+    
+    func getUserDetails(completionHandler: AWSContinuationBlock)
+    func getUser(userId: String, completionHandler: AWSContinuationBlock)
     func getCurrentUser(completionHandler: AWSContinuationBlock)
+    
     func updateFirstLastName(firstName: String?, lastName: String?, completionHandler: AWSContinuationBlock)
     func updatePreferredUsername(preferredUsername: String, completionHandler: AWSContinuationBlock)
+    func updateUserProfessions(professions: [String]?, completionHandler: AWSContinuationBlock)
     func updateProfilePic(profilePicUrl: String?, completionHandler: AWSContinuationBlock)
     
-    // MARK: DynamoDB
-    func getCurrentUserDynamoDB(completionHandler: AWSContinuationBlock)
-    func updateFirstLastNameDynamoDB(firstName: String?, lastName: String?, completionHandler: AWSContinuationBlock)
-    func updatePreferredUsernameDynamoDB(preferredUsername: String?, completionHandler: AWSContinuationBlock)
-    func updateUserProfessionsDynamoDB(professions: [String]?, completionHandler: AWSContinuationBlock)
+    // MARK: Post
     
-    func updateProfessionsDynamoDB(professions: [String])
-    
-    func updateProfilePicDynamoDB(profilePicUrl: String?, completionHandler: AWSContinuationBlock)
-    
+    func getCurrentUserPosts(completionHandler: AWSContinuationBlock)
+    func createPost(imageData: NSData, title: String?, description: String?, isProfilePic: Bool, completionHandler: AWSContinuationBlock)
     // MARK: S3
-    func uploadImageS3(imageData: NSData, isProfilePic: Bool, progressBlock: ((AWSLocalContent, NSProgress) -> Void)?, completionHandler: AWSContinuationBlock)
     func deleteImageS3(imageKey: String, completionHandler: AWSContinuationBlock)
 }

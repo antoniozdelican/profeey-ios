@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol LogInDelegate {
+protocol LogInTableViewDelegate {
     func toggleLogInButton(enabled: Bool)
     func updateUsernamePassword(username: String?, password: String?)
 }
@@ -19,7 +19,7 @@ class LogInTableViewController: UITableViewController {
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var titleTableViewCell: UITableViewCell!
     
-    var logInDelegate: LogInDelegate?
+    var logInTableViewDelegate: LogInTableViewDelegate?
     var username: String?
     var password: String?
     
@@ -68,11 +68,11 @@ class LogInTableViewController: UITableViewController {
         self.username = usernameText
         self.password = passwordText
         if !self.username!.isEmpty && !self.password!.isEmpty {
-            self.logInDelegate?.toggleLogInButton(true)
+            self.logInTableViewDelegate?.toggleLogInButton(true)
         } else {
-            self.logInDelegate?.toggleLogInButton(false)
+            self.logInTableViewDelegate?.toggleLogInButton(false)
         }
-        self.logInDelegate?.updateUsernamePassword(self.username, password: self.password)
+        self.logInTableViewDelegate?.updateUsernamePassword(self.username, password: self.password)
     }
 }
 
@@ -88,5 +88,13 @@ extension LogInTableViewController: UITextFieldDelegate {
             self.passwordTextField.becomeFirstResponder()
         }
         return true
+    }
+}
+
+extension LogInTableViewController: LogInViewDelegate {
+    
+    func removeKeyboard() {
+        self.usernameTextField.resignFirstResponder()
+        self.passwordTextField.resignFirstResponder()
     }
 }

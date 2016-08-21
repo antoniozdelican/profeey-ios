@@ -9,6 +9,10 @@
 import UIKit
 import AWSMobileHubHelper
 
+protocol UsernameViewDelegate {
+    func removeKeyboard()
+}
+
 class UsernameViewController: UIViewController {
     
     @IBOutlet weak var continueButton: UIButton!
@@ -16,6 +20,7 @@ class UsernameViewController: UIViewController {
     
     var toolbarBottomConstraintConstant: CGFloat = 0.0
     var username: String?
+    var usernameViewDelegate: UsernameViewDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,18 +39,20 @@ class UsernameViewController: UIViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if let destinationViewController = segue.destinationViewController as? UsernameTableViewController {
             destinationViewController.usernameDelegate = self
+            self.usernameViewDelegate = destinationViewController
         }
     }
     
     // MARK: IBActions
     
     @IBAction func continueButtonTapped(sender: AnyObject) {
-        self.updateUsername()
+        self.usernameViewDelegate?.removeKeyboard()
+        self.updatePreferredUsername()
     }
     
     // MARK: AWS
     
-    private func updateUsername() {
+    private func updatePreferredUsername() {
         guard let preferredUsername = self.username else {
             return
         }

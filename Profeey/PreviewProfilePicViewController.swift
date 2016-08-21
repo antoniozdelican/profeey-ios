@@ -177,50 +177,50 @@ class PreviewProfilePicViewController: UIViewController {
     // MARK: AWS
     
     private func uploadImageS3() {
-        guard let finalImage = self.finalImage,
-            let imageData = UIImageJPEGRepresentation(finalImage, 0.6) else {
-                return
-        }
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-        AWSClientManager.defaultClientManager().uploadImageS3(
-            imageData,
-            isProfilePic: true,
-            progressBlock: {
-                (localContent: AWSLocalContent, progress: NSProgress) in
-                return
-            },
-            completionHandler: {
-                (task: AWSTask) in
-                if let error = task.error {
-                    dispatch_async(dispatch_get_main_queue(), {
-                        UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-                        print(error)
-                    })
-                } else if let imageKey = task.result as? String {
-                    
-                    // 1. Async delete oldProfilePicUrl.
-                    //                        if let oldProfilePicUrl = AWSClientManager.defaultClientManager().currentUser?.profilePicUrl {
-                    //                            self.deleteProfilePic(oldProfilePicUrl)
-                    //                        }
-                    //
-                    //                        // 2. Async update UserPool and DynamoDB.
-                    //                        self.updateProfilePic(imageKey)
-                    //
-                    //                        // 3. Update local currentUser profilePicUrl.
-                    //                        AWSClientManager.defaultClientManager().currentUser?.profilePicUrl = imageKey
-                    
-                    dispatch_async(dispatch_get_main_queue(), {
-                        UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-                        print("Success!")
-                    })
-                } else {
-                    dispatch_async(dispatch_get_main_queue(), {
-                        UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-                        print("This should not happen!")
-                    })
-                }
-                return nil
-        })
+//        guard let finalImage = self.finalImage,
+//            let imageData = UIImageJPEGRepresentation(finalImage, 0.6) else {
+//                return
+//        }
+//        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+//        AWSClientManager.defaultClientManager().uploadImageS3(
+//            imageData,
+//            isProfilePic: true,
+//            progressBlock: {
+//                (localContent: AWSLocalContent, progress: NSProgress) in
+//                return
+//            },
+//            completionHandler: {
+//                (task: AWSTask) in
+//                if let error = task.error {
+//                    dispatch_async(dispatch_get_main_queue(), {
+//                        UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+//                        print(error)
+//                    })
+//                } else if let imageKey = task.result as? String {
+//                    
+//                    // 1. Async delete oldProfilePicUrl.
+//                    //                        if let oldProfilePicUrl = AWSClientManager.defaultClientManager().currentUser?.profilePicUrl {
+//                    //                            self.deleteProfilePic(oldProfilePicUrl)
+//                    //                        }
+//                    //
+//                    //                        // 2. Async update UserPool and DynamoDB.
+//                    //                        self.updateProfilePic(imageKey)
+//                    //
+//                    //                        // 3. Update local currentUser profilePicUrl.
+//                    //                        AWSClientManager.defaultClientManager().currentUser?.profilePicUrl = imageKey
+//                    
+//                    dispatch_async(dispatch_get_main_queue(), {
+//                        UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+//                        print("Success!")
+//                    })
+//                } else {
+//                    dispatch_async(dispatch_get_main_queue(), {
+//                        UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+//                        print("This should not happen!")
+//                    })
+//                }
+//                return nil
+//        })
     }
     
     // Background.

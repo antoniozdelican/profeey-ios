@@ -30,6 +30,7 @@ class GalleryCollectionViewController: UICollectionViewController {
         
         if self.album == nil {
             let allPhotosOptions = PHFetchOptions()
+            allPhotosOptions.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.Image.rawValue)
             allPhotosOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
             self.album = PHAsset.fetchAssetsWithOptions(allPhotosOptions)
             self.galleryCollectionViewDelegate?.updateAlbumName("All Photos")

@@ -30,7 +30,6 @@ class AlbumsTableViewController: UITableViewController {
         
         // Fetch allPhotos.
         let allPhotosFetchResult = PHAsset.fetchAssetsWithOptions(fetchOptions)
-        //self.albums.append(["All Photos": allPhotosFetchResult])
         self.fetchResults.append(allPhotosFetchResult)
         self.titles.append("All Photos")
 
@@ -39,7 +38,6 @@ class AlbumsTableViewController: UITableViewController {
         if let assetCollection = selfiesAssetCollections[0] as? PHAssetCollection {
             let fetchResult = PHAsset.fetchAssetsInAssetCollection(assetCollection, options: fetchOptions)
             let title = (assetCollection.localizedTitle != nil) ? assetCollection.localizedTitle! : ""
-            //self.albums.append([title: fetchResult])
             self.fetchResults.append(fetchResult)
             self.titles.append(title)
         }

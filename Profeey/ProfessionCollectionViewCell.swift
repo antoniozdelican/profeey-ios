@@ -16,10 +16,6 @@ class ProfessionCollectionViewCell: UICollectionViewCell {
         super.awakeFromNib()
         self.layer.borderWidth = 1.0
         self.layer.cornerRadius = 4.0
-        self.configureBlue()
-    }
-    
-    func configureBlue() {
         self.layer.borderColor = Colors.blue.CGColor
         self.professionLabel.textColor = Colors.blue
         // Selected.

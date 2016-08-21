@@ -14,6 +14,10 @@ protocol InvalidPasswordSignUpDelegate {
     func toggleWarningTableViewCell(hidden: Bool)
 }
 
+protocol PasswordSignUpViewDelegate {
+    func removeKeyboard()
+}
+
 class PasswordSignUpViewController: UIViewController {
 
     @IBOutlet weak var continueButton: UIButton!
@@ -23,6 +27,7 @@ class PasswordSignUpViewController: UIViewController {
     var newUser: User?
     var password: String?
     var invalidPasswordSignUpDelegate: InvalidPasswordSignUpDelegate?
+    var passwordSignUpViewDelegate: PasswordSignUpViewDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,12 +48,15 @@ class PasswordSignUpViewController: UIViewController {
             destinationViewController.passwordSignUpDelegate = self
             // Trigger warning table view cell.
             self.invalidPasswordSignUpDelegate = destinationViewController
+            
+            self.passwordSignUpViewDelegate = destinationViewController
         }
     }
     
     // MARK: IBActions
     
     @IBAction func continueButtonTapped(sender: AnyObject) {
+        self.passwordSignUpViewDelegate?.removeKeyboard()
         guard let password = self.password else {
             return
         }
@@ -65,7 +73,7 @@ class PasswordSignUpViewController: UIViewController {
     // MARK: AWS
     
     private func signUp() {
-        guard let newUser = newUser else {
+        guard let newUser = self.newUser else {
             return
         }
         FullScreenIndicator.show()
@@ -73,27 +81,20 @@ class PasswordSignUpViewController: UIViewController {
         let generatedUsername = NSUUID().UUIDString.lowercaseString
         let password: String = self.password!
         let email: String =  newUser.email!
+        let firstName: String? = newUser.firstName
+        let lastName: String? = newUser.lastName
         
-        AWSClientManager.defaultClientManager().signUp(generatedUsername, password: password, email: email, completionHandler: {
+        AWSClientManager.defaultClientManager().signUp(generatedUsername, password: password, email: email, firstName: firstName, lastName: lastName, completionHandler: {
             (task: AWSTask) in
+            dispatch_async(dispatch_get_main_queue(), {
+                FullScreenIndicator.hide()
                 if let error = task.error {
-                    dispatch_async(dispatch_get_main_queue(), {
-                        FullScreenIndicator.hide()
-                        let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.userInfo["message"] as? String, cancelButtonTitle: "Ok")
-                        self.presentViewController(alertController, animated: true, completion: nil)
-                    })
+                    let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.userInfo["message"] as? String, cancelButtonTitle: "Ok")
+                    self.presentViewController(alertController, animated: true, completion: nil)
                 } else {
-                    // Set firstName and lastName in background.
-                    AWSClientManager.defaultClientManager().updateFirstLastName(newUser.firstName, lastName: newUser.lastName, completionHandler: {
-                        (task: AWSTask) in
-                        return nil
-                    })
-                    
-                    dispatch_async(dispatch_get_main_queue(), {
-                        FullScreenIndicator.hide()
-                        self.redirectToWelcome()
-                    })
+                    self.redirectToWelcome()
                 }
+            })
             return nil
         })
     }

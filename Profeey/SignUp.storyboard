@@ -252,7 +252,7 @@
                         </variation>
                     </view>
                     <navigationItem key="navigationItem" id="Fxe-QU-lwN">
-                        <barButtonItem key="leftBarButtonItem" image="btn_close" id="LwO-Ec-EuA">
+                        <barButtonItem key="leftBarButtonItem" image="ic_close_blue" id="LwO-Ec-EuA">
                             <connections>
                                 <action selector="closeButtonTapped:" destination="6mb-hF-01r" id="GsN-XM-8iX"/>
                             </connections>
@@ -662,8 +662,8 @@
         </scene>
     </scenes>
     <resources>
-        <image name="btn_close" width="22" height="22"/>
         <image name="btn_disabled" width="255" height="45"/>
         <image name="btn_green" width="255" height="45"/>
+        <image name="ic_close_blue" width="22" height="22"/>
     </resources>
 </document>

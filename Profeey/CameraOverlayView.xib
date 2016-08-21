@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CaptureViewController" customModule="Profeey" customModuleProvider="target">
+            <connections>
+                <outlet property="cameraOverlayView" destination="iN0-l3-epB" id="9Is-pd-goF"/>
+                <outlet property="cameraWindowSubView" destination="XPM-WI-s1z" id="RMf-gh-ncg"/>
+                <outlet property="captureButton" destination="Dpz-Ca-7rF" id="XXt-IK-6fp"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="600" height="1043"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XPM-WI-s1z" userLabel="Camera Window Sub View">
+                    <rect key="frame" x="0.0" y="0.0" width="600" height="800"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="XPM-WI-s1z" secondAttribute="height" multiplier="3:4" id="4Vw-kA-zWe"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FS6-Xb-moA">
+                    <rect key="frame" x="0.0" y="800" width="600" height="243"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Dpz-Ca-7rF">
+                            <rect key="frame" x="263" y="159" width="74" height="74"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="74" id="EG2-yA-3ha"/>
+                                <constraint firstAttribute="height" constant="74" id="wxm-nA-KKd"/>
+                            </constraints>
+                            <state key="normal" image="btn_capture_photo"/>
+                            <connections>
+                                <action selector="captureButtonTapped:" destination="-1" eventType="touchUpInside" id="TyX-LZ-ANi"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dte-TV-TwF">
+                            <rect key="frame" x="0.0" y="178" width="65" height="65"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="65" id="4ww-ot-cbo"/>
+                                <constraint firstAttribute="height" constant="65" id="djb-3G-0cA"/>
+                            </constraints>
+                            <state key="normal" image="ic_gallery_black"/>
+                            <connections>
+                                <action selector="galleryButtonTapped:" destination="-1" eventType="touchUpInside" id="Js0-9I-nfn"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" red="0.98039215686274506" green="0.98039215686274506" blue="0.98039215686274506" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstItem="dte-TV-TwF" firstAttribute="leading" secondItem="FS6-Xb-moA" secondAttribute="leading" id="IHO-be-yTb"/>
+                        <constraint firstAttribute="bottom" secondItem="dte-TV-TwF" secondAttribute="bottom" id="UCe-IX-0C4"/>
+                        <constraint firstAttribute="bottom" secondItem="Dpz-Ca-7rF" secondAttribute="bottom" constant="10" id="cpZ-oR-l0W"/>
+                        <constraint firstItem="Dpz-Ca-7rF" firstAttribute="centerX" secondItem="FS6-Xb-moA" secondAttribute="centerX" id="vSs-aF-FFs"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="FS6-Xb-moA" secondAttribute="bottom" id="8uk-Pa-SXv"/>
+                <constraint firstAttribute="trailing" secondItem="XPM-WI-s1z" secondAttribute="trailing" id="DdX-UQ-xKc"/>
+                <constraint firstAttribute="trailing" secondItem="FS6-Xb-moA" secondAttribute="trailing" id="Gg0-Tn-Aao"/>
+                <constraint firstItem="XPM-WI-s1z" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="HLi-o1-XRR"/>
+                <constraint firstItem="FS6-Xb-moA" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="OlQ-uw-Iiq"/>
+                <constraint firstItem="XPM-WI-s1z" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="cos-W1-57t"/>
+                <constraint firstItem="FS6-Xb-moA" firstAttribute="top" secondItem="XPM-WI-s1z" secondAttribute="bottom" id="elH-ph-Bgv"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="230" y="471.5"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="btn_capture_photo" width="74" height="74"/>
+        <image name="ic_gallery_black" width="35" height="35"/>
+    </resources>
+</document>

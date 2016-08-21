@@ -215,7 +215,7 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="VId-P7-C9q">
-                        <barButtonItem key="leftBarButtonItem" image="btn_close" id="kRb-yb-pSz">
+                        <barButtonItem key="leftBarButtonItem" image="ic_close_blue" id="kRb-yb-pSz">
                             <connections>
                                 <action selector="closeButtonTapped:" destination="r6d-C3-Q0K" id="erO-Sm-sqQ"/>
                             </connections>
@@ -232,8 +232,8 @@
         </scene>
     </scenes>
     <resources>
-        <image name="btn_close" width="22" height="22"/>
         <image name="btn_disabled" width="255" height="45"/>
         <image name="btn_green" width="255" height="45"/>
+        <image name="ic_close_blue" width="22" height="22"/>
     </resources>
 </document>
