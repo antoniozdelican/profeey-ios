@@ -81,11 +81,17 @@ class EditFirstLastNameTableViewController: UITableViewController {
         // DynamoDB deletes attribute with nil.
         let firstName: String? = firstNameText.trimm().isEmpty ? nil : firstNameText.trimm()
         let lastName: String? = lastNameText.trimm().isEmpty ? nil : lastNameText.trimm()
+        
         FullScreenIndicator.show()
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        
         AWSClientManager.defaultClientManager().updateFirstLastName(firstName, lastName: lastName, completionHandler: {
             (task: AWSTask) in
             dispatch_async(dispatch_get_main_queue(), {
+                
                 FullScreenIndicator.hide()
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                
                 if let error = task.error {
                     let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.userInfo["message"] as? String, cancelButtonTitle: "Ok")
                     self.presentViewController(alertController, animated: true, completion: nil)

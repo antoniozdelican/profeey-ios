@@ -72,12 +72,19 @@ class EditUsernameTableViewController: UITableViewController {
             return
         }
         
+        // This should not be emtpy!
         let preferredUsername = preferredUsernameText.trimm()
+        
         FullScreenIndicator.show()
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        
         AWSClientManager.defaultClientManager().updatePreferredUsername(preferredUsername, completionHandler: {
             (task: AWSTask) in
             dispatch_async(dispatch_get_main_queue(), {
+                
                 FullScreenIndicator.hide()
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                
                 if let error = task.error {
                     let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.userInfo["message"] as? String, cancelButtonTitle: "Ok")
                     self.presentViewController(alertController, animated: true, completion: nil)
