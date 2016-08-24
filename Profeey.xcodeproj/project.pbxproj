@@ -89,6 +89,7 @@
 		A9B7A2461D65BF64009DA340 /* PopularCategoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B7A2451D65BF64009DA340 /* PopularCategoryTableViewCell.swift */; };
 		A9B7A2481D65D8B2009DA340 /* PostTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B7A2471D65D8B2009DA340 /* PostTableViewCell.swift */; };
 		A9B7A24A1D65D8C0009DA340 /* HomeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B7A2491D65D8C0009DA340 /* HomeTableViewController.swift */; };
+		A9B8D2DB1D6DE810004AF185 /* UploadProgressTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B8D2DA1D6DE810004AF185 /* UploadProgressTableViewCell.swift */; };
 		A9B934B01D1BD9BB00ACC2B8 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B934AF1D1BD9BB00ACC2B8 /* OnboardingViewController.swift */; };
 		A9BCF7401D4C0737001B2EEA /* PreviewProfilePicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9BCF73F1D4C0737001B2EEA /* PreviewProfilePicViewController.swift */; };
 		A9BCF7421D4C085B001B2EEA /* CaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9BCF7411D4C085B001B2EEA /* CaptureViewController.swift */; };
@@ -276,6 +277,7 @@
 		A9B7A2451D65BF64009DA340 /* PopularCategoryTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopularCategoryTableViewCell.swift; sourceTree = "<group>"; };
 		A9B7A2471D65D8B2009DA340 /* PostTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostTableViewCell.swift; sourceTree = "<group>"; };
 		A9B7A2491D65D8C0009DA340 /* HomeTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeTableViewController.swift; sourceTree = "<group>"; };
+		A9B8D2DA1D6DE810004AF185 /* UploadProgressTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UploadProgressTableViewCell.swift; sourceTree = "<group>"; };
 		A9B934AF1D1BD9BB00ACC2B8 /* OnboardingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		A9BCF73F1D4C0737001B2EEA /* PreviewProfilePicViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreviewProfilePicViewController.swift; sourceTree = "<group>"; };
 		A9BCF7411D4C085B001B2EEA /* CaptureViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CaptureViewController.swift; sourceTree = "<group>"; };
@@ -700,6 +702,7 @@
 				A9D8C93C1D66669000C23540 /* MyCategoriesTableViewCell.swift */,
 				A9D8C93E1D66670000C23540 /* MyCategoryCollectionViewCell.swift */,
 				A9B7A2471D65D8B2009DA340 /* PostTableViewCell.swift */,
+				A9B8D2DA1D6DE810004AF185 /* UploadProgressTableViewCell.swift */,
 			);
 			name = Home;
 			sourceTree = "<group>";
@@ -968,6 +971,7 @@
 				A9E450801D5A09F100D14553 /* Comment.swift in Sources */,
 				A9A8DD131D452BAA009B3C24 /* LogInTableViewController.swift in Sources */,
 				A9AD744B1D3627BD007ACBD4 /* FiltersCollectionViewController.swift in Sources */,
+				A9B8D2DB1D6DE810004AF185 /* UploadProgressTableViewCell.swift in Sources */,
 				A9BF16411D64DA4600060A9E /* SearchCategoriesTableViewController.swift in Sources */,
 				A903EB591D16A39700B33025 /* UIImage+FixOrientation.m in Sources */,
 				A975529C1D4F4D0300F773FF /* PreviewViewController.swift in Sources */,

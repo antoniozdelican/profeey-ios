@@ -7,12 +7,14 @@
 //
 
 import UIKit
+import AWSMobileHubHelper
 
 class HomeTableViewController: UITableViewController {
     
     //TEST
     private var popularCategories: [Category] = []
     
+    private var user: User?
     private var posts: [Post] = []
 
     override func viewDidLoad() {
@@ -20,6 +22,9 @@ class HomeTableViewController: UITableViewController {
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.Plain, target:nil, action:nil)
         self.tableView.estimatedRowHeight = 155.0
         self.tableView.rowHeight = UITableViewAutomaticDimension
+        
+        // Get currentUser in background immediately for later use.
+        self.getCurrentUser()
         
         //TEST
 //        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), forBarMetrics: .Default)
@@ -132,6 +137,112 @@ class HomeTableViewController: UITableViewController {
         if indexPath.section == 0 || indexPath.section == 2 {
             cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
         }
+    }
+    
+    // MARK: IBActions
+    
+    @IBAction func unwindToHomeTableViewController(segue: UIStoryboardSegue) {
+        if segue.identifier == "segueUnwindToHomeVc",
+            let sourceViewController = segue.sourceViewController as? EditPostTableViewController {
+            guard let imageData = sourceViewController.imageData,
+                let titleText = sourceViewController.titleTextField.text,
+                let descriptionText = sourceViewController.descriptionTextView.text else {
+                    return
+            }
+            self.createPost(imageData, titleText: titleText, descriptionText: descriptionText)
+            
+        }
+    }
+    
+    // MARK: AWS
+    
+    private func createPost(imageData: NSData, titleText: String, descriptionText: String) {
+        let title: String? = titleText.trimm().isEmpty ? nil: titleText.trimm()
+        let description: String? = descriptionText.trimm().isEmpty ? nil : descriptionText.trimm()
+        
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        
+        AWSClientManager.defaultClientManager().createPost(imageData, title: title, description: description, isProfilePic: false, completionHandler: {
+            (task: AWSTask) in
+            dispatch_async(dispatch_get_main_queue(), {
+                
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                
+                if let error = task.error {
+                    let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.userInfo["message"] as? String, cancelButtonTitle: "Ok")
+                    self.presentViewController(alertController, animated: true, completion: nil)
+                } else if let awsPost = task.result as? AWSPost {
+                    let post = Post(title: awsPost._title, postDescription: awsPost._description, imageUrl: awsPost._imageUrl, testCategories: awsPost._categories, creationDate: awsPost._creationDate, user: self.user)
+                    
+                    // Inert at the beginning.
+                    self.posts.insert(post, atIndex: 0)
+                    
+                    // Get postPic.
+                    let image = UIImage(data: imageData)
+                    post.image = image
+                    
+                    self.tableView.reloadData()
+                } else {
+                    print("This should not happen createPost!")
+                }
+                
+            })
+            return nil
+        })
+    }
+    
+    private func getCurrentUser() {
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        AWSClientManager.defaultClientManager().getCurrentUser({
+            (task: AWSTask) in
+            dispatch_async(dispatch_get_main_queue(), {
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                if let error = task.error {
+                    print("Error: \(error.userInfo["message"])")
+                } else if let awsUser = task.result as? AWSUser {
+                    let user = User(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, profession: awsUser._profession, profilePicUrl: awsUser._profilePicUrl, location: awsUser._location, about: awsUser._about)
+                    
+                    // Set current user.
+                    self.user = user
+                    
+                    // Get profilePic.
+                    if let profilePicUrl = awsUser._profilePicUrl {
+                        self.downloadImage(profilePicUrl, postIndex: nil)
+                    }
+                } else {
+                    print("This should not happen getCurrentUser!")
+                }
+            })
+            return nil
+        })
+    }
+    
+    private func downloadImage(imageKey: String, postIndex: Int?) {
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        AWSClientManager.defaultClientManager().downloadImage(
+            imageKey,
+            completionHandler: {
+                (task: AWSTask) in
+                dispatch_async(dispatch_get_main_queue(), {
+                    UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                    if let error = task.error {
+                        print("Error: \(error.userInfo["message"])")
+                    } else {
+                        if let imageData = task.result as? NSData {
+                            let image = UIImage(data: imageData)
+                            if let index = postIndex {
+                                // It's postPic.
+                                self.posts[index].image = image
+                                self.tableView.reloadData()
+                            } else {
+                                // It's profilePic.
+                                self.user?.profilePic = image
+                            }
+                        }
+                    }
+                })
+                return nil
+        })
     }
 }
 

@@ -18,7 +18,7 @@ class EditPostTableViewController: UITableViewController {
     @IBOutlet weak var categoriesLabel: UILabel!
     
     var finalImage: UIImage?
-    private var imageData: NSData?
+    var imageData: NSData?
     private var categories: [String] = []
     
     override func viewDidLoad() {
@@ -26,7 +26,6 @@ class EditPostTableViewController: UITableViewController {
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.Plain, target:nil, action:nil)
         self.thumbnailImageView.image = self.finalImage
         self.descriptionTextView.delegate = self
-        print(finalImage?.size)
         if let finalImage = self.finalImage {
             self.imageData = UIImageJPEGRepresentation(finalImage, 0.6)
         }
@@ -78,7 +77,8 @@ class EditPostTableViewController: UITableViewController {
     @IBAction func postButtonTapped(sender: AnyObject) {
         self.titleTextField.resignFirstResponder()
         self.descriptionTextView.resignFirstResponder()
-        self.createPost()
+        // Upload is on homeVc.
+        self.performSegueWithIdentifier("segueUnwindToHomeVc", sender: self)
     }
     
     @IBAction func backButtonTapped(sender: AnyObject) {
@@ -100,30 +100,37 @@ class EditPostTableViewController: UITableViewController {
         }
     }
     
-    // MARK: AWS
+    private func prepareForUpload() {
+        guard let imageData = self.imageData,
+            let titleText = self.titleTextField.text,
+            let descriptionText = self.descriptionTextView.text else {
+                return
+        }
+    }
     
     private func createPost() {
-        guard let imageData = self.imageData,
-            let titleText = self.titleTextField.text else {
-            return
-        }
-        FullScreenIndicator.show()
-        let title: String? = titleText.trimm().isEmpty ? nil : titleText.trimm()
-        let description: String? = self.descriptionTextView.text.trimm().isEmpty ? nil : self.descriptionTextView.text.trimm()
-        
-        AWSClientManager.defaultClientManager().createPost(imageData, title: title, description: description, isProfilePic: false, completionHandler: {
-            (task: AWSTask) in
-            dispatch_async(dispatch_get_main_queue(), {
-                FullScreenIndicator.hide()
-                if let error = task.error {
-                    let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.userInfo["message"] as? String, cancelButtonTitle: "Ok")
-                    self.presentViewController(alertController, animated: true, completion: nil)
-                } else {
-                    //self.redirectToWelcome()
-                }
-            })
-            return nil
-        })
+        self.performSegueWithIdentifier("segueUnwindToHomeVc", sender: self)
+//        guard let imageData = self.imageData,
+//            let titleText = self.titleTextField.text else {
+//            return
+//        }
+//        FullScreenIndicator.show()
+//        let title: String? = titleText.trimm().isEmpty ? nil : titleText.trimm()
+//        let description: String? = self.descriptionTextView.text.trimm().isEmpty ? nil : self.descriptionTextView.text.trimm()
+//        
+//        AWSClientManager.defaultClientManager().createPost(imageData, title: title, description: description, isProfilePic: false, completionHandler: {
+//            (task: AWSTask) in
+//            dispatch_async(dispatch_get_main_queue(), {
+//                FullScreenIndicator.hide()
+//                if let error = task.error {
+//                    let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.userInfo["message"] as? String, cancelButtonTitle: "Ok")
+//                    self.presentViewController(alertController, animated: true, completion: nil)
+//                } else {
+//                    //self.redirectToWelcome()
+//                }
+//            })
+//            return nil
+//        })
     }
 }
 

@@ -21,11 +21,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         self.configureUI()
         
-//        AWSClientManager.defaultClientManager().userPool?.delegate = self
-//        AWSClientManager.defaultClientManager().getUserDetails({
-//            (task: AWSTask) in
-//            return nil
-//        })
+        AWSClientManager.defaultClientManager().userPool?.delegate = self
+        AWSClientManager.defaultClientManager().getUserDetails({
+            (task: AWSTask) in
+            return nil
+        })
         return true
     }
     

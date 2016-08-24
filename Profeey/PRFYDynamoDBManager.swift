@@ -31,9 +31,12 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
             if let error = task.error {
                 print("getUserDynamoDB error:")
                 return AWSTask(error: error).continueWithBlock(completionHandler)
-            } else {
+            } else if (task.result as? AWSUser) != nil {
                 print("getUserDynamoDB success!")
                 return task.continueWithBlock(completionHandler)
+            } else {
+                print("This should not happen with getUserDynamoDB!")
+                return AWSTask().continueWithBlock(completionHandler)
             }
         })
     }
@@ -45,8 +48,9 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
                 print("getIdentityId error: \(error.localizedDescription)")
                 return AWSTask(error: error).continueWithBlock(completionHandler)
             } else if let identityId = task.result as? String {
-                let usersTable = AWSUsersTable()
+                
                 print("getCurrentUserDynamoDB:")
+                let usersTable = AWSUsersTable()
                 usersTable.getUser(identityId, completionHandler: {
                     (task: AWSTask) in
                     if let error = task.error {
@@ -266,7 +270,6 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
                 AWSTask(error: error).continueWithBlock(completionHandler)
             } else {
                 print("getUserPostsDynamoDb success!")
-                print(response?.items)
                 AWSTask(result: response).continueWithBlock(completionHandler)
             }
         })
@@ -316,6 +319,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
                 post._imageUrl = imageUrl
                 post._title = title
                 post._description = description
+                post._creationDate = NSNumber(double: NSDate().timeIntervalSince1970)
                 postsTable.savePost(post, completionHandler: {
                     (task: AWSTask) in
                     if let error = task.error {
@@ -323,7 +327,9 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
                         return AWSTask(error: error).continueWithBlock(completionHandler)
                     } else {
                         print("createPostDynamoDb success!")
-                        return task.continueWithBlock(completionHandler)
+                        // Return AWSPost to the caller vc.
+                        return AWSTask(result: post).continueWithBlock(completionHandler)
+                        //return task.continueWithBlock(completionHandler)
                     }
                 })
                 return nil

@@ -25,7 +25,6 @@ class AWSClientManager: NSObject, ClientManager {
     var userFileManager: AWSUserFileManager?
     
     // TEST properties.
-    var s3ProfilePicsPrexif: String = "public/profile_pics/"
     var incompleteSignUpDelegate: IncompleteSignUpDelegate?
 
     static func defaultClientManager() -> AWSClientManager {
@@ -228,6 +227,11 @@ class AWSClientManager: NSObject, ClientManager {
     }
     
     // MARK: Posts
+    
+    func getUserPosts(userId: String, completionHandler: AWSContinuationBlock) {
+        // DynamoDB getUserPosts.
+        PRFYDynamoDBManager.defaultDynamoDBManager().getUserPostsDynamoDB(userId, completionHandler: completionHandler)
+    }
     
     func getCurrentUserPosts(completionHandler: AWSContinuationBlock) {
         // DynamoDb getCurrentUserPosts.

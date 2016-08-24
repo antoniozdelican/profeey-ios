@@ -77,6 +77,7 @@
                                                 <constraint firstItem="hgp-B8-VD3" firstAttribute="leading" secondItem="38Q-ug-Wdn" secondAttribute="leadingMargin" constant="8" id="BBF-64-Cl2"/>
                                                 <constraint firstItem="WQP-Pu-sWm" firstAttribute="leading" secondItem="38Q-ug-Wdn" secondAttribute="leading" id="Eon-GW-mmh"/>
                                                 <constraint firstItem="058-mp-QOd" firstAttribute="top" secondItem="hgp-B8-VD3" secondAttribute="bottom" constant="8" id="Jd1-AP-khf"/>
+                                                <constraint firstItem="058-mp-QOd" firstAttribute="top" relation="greaterThanOrEqual" secondItem="hgp-B8-VD3" secondAttribute="bottom" constant="8" id="blY-Sa-Tr6"/>
                                                 <constraint firstAttribute="trailing" secondItem="Khq-Lt-kGw" secondAttribute="trailing" constant="16" id="eCn-X8-15n"/>
                                                 <constraint firstAttribute="trailing" secondItem="WQP-Pu-sWm" secondAttribute="trailing" id="eka-qZ-4Qi"/>
                                                 <constraint firstItem="hgp-B8-VD3" firstAttribute="top" secondItem="Khq-Lt-kGw" secondAttribute="bottom" constant="12" id="htY-Qp-Gwt"/>
@@ -170,77 +171,6 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="48" id="Wa3-hC-e5o">
-                                        <rect key="frame" x="0.0" y="617" width="600" height="48"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Wa3-hC-e5o" id="KrS-Oo-XlG">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="47.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IZQ-gn-itI">
-                                                    <rect key="frame" x="5" y="0.0" width="47" height="47"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="47" id="5bD-gg-eF7"/>
-                                                        <constraint firstAttribute="width" constant="47" id="6v2-4t-swb"/>
-                                                    </constraints>
-                                                    <state key="normal" image="ic_like_grey_big"/>
-                                                </button>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vQj-rH-SD3">
-                                                    <rect key="frame" x="503" y="0.0" width="81" height="47"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="81" id="4CJ-BN-5ro"/>
-                                                        <constraint firstAttribute="height" constant="47" id="hZu-47-6B9"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <state key="normal" title="0 comments">
-                                                        <color key="titleColor" red="0.63921568630000003" green="0.63921568630000003" blue="0.63921568630000003" alpha="1" colorSpace="calibratedRGB"/>
-                                                    </state>
-                                                    <connections>
-                                                        <action selector="numberOfCommentsButton:" destination="IjR-Zz-amQ" eventType="touchUpInside" id="6sK-kl-In2"/>
-                                                    </connections>
-                                                </button>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mxe-OY-KzQ">
-                                                    <rect key="frame" x="414" y="0.0" width="81" height="47"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="81" id="Oqa-oh-5wO"/>
-                                                        <constraint firstAttribute="height" constant="47" id="Ott-i2-4xp"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <state key="normal" title="0 likes">
-                                                        <color key="titleColor" red="0.63921568630000003" green="0.63921568630000003" blue="0.63921568630000003" alpha="1" colorSpace="calibratedRGB"/>
-                                                    </state>
-                                                    <connections>
-                                                        <action selector="numberOfLikesButtonTapped:" destination="IjR-Zz-amQ" eventType="touchUpInside" id="hXD-ey-28Q"/>
-                                                    </connections>
-                                                </button>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ERe-j3-b3u">
-                                                    <rect key="frame" x="72" y="0.0" width="47" height="47"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="47" id="lzk-HN-bJz"/>
-                                                        <constraint firstAttribute="width" constant="47" id="re1-iM-oY4"/>
-                                                    </constraints>
-                                                    <state key="normal" image="ic_comment_grey_big"/>
-                                                    <connections>
-                                                        <action selector="commentButtonTapped:" destination="IjR-Zz-amQ" eventType="touchUpInside" id="o69-aZ-Bhh"/>
-                                                    </connections>
-                                                </button>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="IZQ-gn-itI" firstAttribute="top" secondItem="KrS-Oo-XlG" secondAttribute="top" id="3Kf-bf-zeF"/>
-                                                <constraint firstItem="vQj-rH-SD3" firstAttribute="leading" secondItem="Mxe-OY-KzQ" secondAttribute="trailing" constant="8" id="7lF-S6-3A9"/>
-                                                <constraint firstItem="IZQ-gn-itI" firstAttribute="leading" secondItem="KrS-Oo-XlG" secondAttribute="leading" constant="5" id="BOk-Kg-wqm"/>
-                                                <constraint firstAttribute="bottom" secondItem="vQj-rH-SD3" secondAttribute="bottom" constant="0.5" id="Fjp-Gu-AuM"/>
-                                                <constraint firstItem="Mxe-OY-KzQ" firstAttribute="top" secondItem="KrS-Oo-XlG" secondAttribute="top" id="P7z-vm-jvV"/>
-                                                <constraint firstAttribute="bottom" secondItem="IZQ-gn-itI" secondAttribute="bottom" constant="0.5" id="VmB-ln-uRx"/>
-                                                <constraint firstAttribute="bottom" secondItem="ERe-j3-b3u" secondAttribute="bottom" constant="0.5" id="XvW-mN-4D7"/>
-                                                <constraint firstItem="ERe-j3-b3u" firstAttribute="top" secondItem="KrS-Oo-XlG" secondAttribute="top" id="env-f2-XvJ"/>
-                                                <constraint firstAttribute="trailing" secondItem="vQj-rH-SD3" secondAttribute="trailing" constant="16" id="lZ2-K1-6SA"/>
-                                                <constraint firstItem="ERe-j3-b3u" firstAttribute="leading" secondItem="IZQ-gn-itI" secondAttribute="trailing" constant="20" id="pOc-c4-MRR"/>
-                                                <constraint firstAttribute="bottom" secondItem="Mxe-OY-KzQ" secondAttribute="bottom" constant="0.5" id="v1C-rc-6A0"/>
-                                                <constraint firstItem="vQj-rH-SD3" firstAttribute="top" secondItem="KrS-Oo-XlG" secondAttribute="top" id="zml-67-tSi"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                         </sections>
@@ -255,13 +185,10 @@
                     <size key="freeformSize" width="600" height="900"/>
                     <connections>
                         <outlet property="categoriesLabel" destination="Mhd-ps-fme" id="VVo-38-yKp"/>
-                        <outlet property="commentButton" destination="ERe-j3-b3u" id="W5s-Ni-bdW"/>
                         <outlet property="descriptionLabel" destination="275-A3-ntw" id="eXN-Da-n2f"/>
                         <outlet property="fullNameLabel" destination="fsC-Hk-ni4" id="qas-SI-NRh"/>
-                        <outlet property="likeButton" destination="fOP-1y-4DQ" id="UHE-wY-bMo"/>
+                        <outlet property="likeButton" destination="fOP-1y-4DQ" id="WJj-aq-MrM"/>
                         <outlet property="mainTableViewCell" destination="JAJ-0l-Onq" id="z9G-3N-Fut"/>
-                        <outlet property="numberOfCommentsButton" destination="vQj-rH-SD3" id="MUy-zw-l0G"/>
-                        <outlet property="numberOfLikesButton" destination="Mxe-OY-KzQ" id="Mob-Ur-wKu"/>
                         <outlet property="postPicImageView" destination="WQP-Pu-sWm" id="7Bi-VC-Zhl"/>
                         <outlet property="postPicImageViewHeightConstraint" destination="V8c-cs-5al" id="WQl-uh-FsH"/>
                         <outlet property="professionLabel" destination="Wjs-Ta-Tlq" id="mX2-Xz-SSl"/>
@@ -307,9 +234,7 @@
     <resources>
         <image name="btn_circle_white" width="45" height="45"/>
         <image name="ic_categories_grey" width="20" height="20"/>
-        <image name="ic_comment_grey_big" width="25" height="25"/>
         <image name="ic_like_black_big" width="25" height="25"/>
-        <image name="ic_like_grey_big" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="t89-Hu-0iI"/>

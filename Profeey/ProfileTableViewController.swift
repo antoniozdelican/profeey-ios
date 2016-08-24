@@ -30,22 +30,26 @@ class ProfileTableViewController: UITableViewController {
         
         if self.isCurrentUser {
             self.getCurrentUser()
-            //self.getCurrentUserPosts()
         } else {
-            // TEST
+            // User should already be set by other vc.
             self.navigationItem.title = self.user?.preferredUsername
-            // MOCK
-            let category1 = Category(categoryName: "Melon Production", numberOfUsers: 2, numberOfPosts: 12)
-            let category2 = Category(categoryName: "Fruit Growing", numberOfUsers: 2, numberOfPosts: 12)
-            let category3 = Category(categoryName: "Agriculture", numberOfUsers: 3, numberOfPosts: 28)
-            let category4 = Category(categoryName: "Apple Production", numberOfUsers: 2, numberOfPosts: 12)
-            let category5 = Category(categoryName: "Fruit agriculture", numberOfUsers: 1, numberOfPosts: 5)
             
-            let post1 = Post(user: self.user, postDescription: nil, imageUrl: nil, title: "Melon harvest - peak of the season", image: UIImage(named: "post_pic_ivan"), categories: [category1, category2, category3])
-            let post2 = Post(user: self.user, postDescription: nil, imageUrl: nil, title: "Garden view on our products", image: UIImage(named: "post_pic_ivan_2"), categories: [category2, category3])
-            let post3 = Post(user: self.user, postDescription: nil, imageUrl: nil, title: "Granny Smith apple", image: UIImage(named: "post_pic_ivan_3"), categories: [category4])
-            let post4 = Post(user: self.user, postDescription: nil, imageUrl: nil, title: "Our hothouses in the afternoon", image: UIImage(named: "post_pic_ivan_4"), categories: [category5])
-            self.posts = [post1, post2, post3, post4]
+            // Get posts.
+            self.getUserPosts()
+            
+            //
+            // MOCK
+//            let category1 = Category(categoryName: "Melon Production", numberOfUsers: 2, numberOfPosts: 12)
+//            let category2 = Category(categoryName: "Fruit Growing", numberOfUsers: 2, numberOfPosts: 12)
+//            let category3 = Category(categoryName: "Agriculture", numberOfUsers: 3, numberOfPosts: 28)
+//            let category4 = Category(categoryName: "Apple Production", numberOfUsers: 2, numberOfPosts: 12)
+//            let category5 = Category(categoryName: "Fruit agriculture", numberOfUsers: 1, numberOfPosts: 5)
+//            
+//            let post1 = Post(user: self.user, postDescription: nil, imageUrl: nil, title: "Melon harvest - peak of the season", image: UIImage(named: "post_pic_ivan"), categories: [category1, category2, category3])
+//            let post2 = Post(user: self.user, postDescription: nil, imageUrl: nil, title: "Garden view on our products", image: UIImage(named: "post_pic_ivan_2"), categories: [category2, category3])
+//            let post3 = Post(user: self.user, postDescription: nil, imageUrl: nil, title: "Granny Smith apple", image: UIImage(named: "post_pic_ivan_3"), categories: [category4])
+//            let post4 = Post(user: self.user, postDescription: nil, imageUrl: nil, title: "Our hothouses in the afternoon", image: UIImage(named: "post_pic_ivan_4"), categories: [category5])
+//            self.posts = [post1, post2, post3, post4]
         }
     }
 
@@ -57,7 +61,8 @@ class ProfileTableViewController: UITableViewController {
     
     private func configureUser(user: User?) {
         self.user = user
-        self.tableView.reloadData()
+        // Always reload section 0 for a user!
+        self.tableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.None)
         self.navigationItem.title = self.user?.preferredUsername
     }
     
@@ -137,7 +142,6 @@ class ProfileTableViewController: UITableViewController {
         case 1:
             let cell = tableView.dequeueReusableCellWithIdentifier("cellAbout", forIndexPath: indexPath) as! ProfileAboutTableViewCell
             cell.aboutLabel.text = self.user?.about
-//            cell.aboutLabel.text = "I’ve been working in the fruit industry for more than a decade.  Used many technologies in apple and melon production as well as in seed growing. I’m looking for new opportunities and connections."
             cell.selectionStyle = UITableViewCellSelectionStyle.None
             return cell
         case 2:
@@ -163,8 +167,11 @@ class ProfileTableViewController: UITableViewController {
             let post = posts[indexPath.row]
             cell.postImageView.image = post.image
             cell.titleLabel.text = post.title
-            cell.categoriesLabel.text = post.categories?.flatMap({ $0.categoryName }).joinWithSeparator(" · ")
-            cell.timeLabel.text = "2 minutes ago"
+            cell.categoriesLabel.text = post.testCategories?.joinWithSeparator(" · ")
+            //cell.categoriesLabel.text = post.categories?.flatMap({ $0.categoryName }).joinWithSeparator(" · ")
+
+            cell.timeLabel.text = post.creationDateString
+            
             return cell
         }
     }
@@ -187,7 +194,6 @@ class ProfileTableViewController: UITableViewController {
     }
     
     // MARK: IBActions
-    
     
     @IBAction func settingsButtonTapped(sender: AnyObject) {
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
@@ -240,11 +246,18 @@ class ProfileTableViewController: UITableViewController {
                     let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.userInfo["message"] as? String, cancelButtonTitle: "Ok")
                     self.presentViewController(alertController, animated: true, completion: nil)
                 } else if let awsUser = task.result as? AWSUser {
-                    let user = User(firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, profession: awsUser._profession, profilePicUrl: awsUser._profilePicUrl, location: awsUser._location, about: awsUser._about)
-                    if let profilePicUrl = awsUser._profilePicUrl {
-                        self.getProfilePic(profilePicUrl)
-                    }
+                    let user = User(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, profession: awsUser._profession, profilePicUrl: awsUser._profilePicUrl, location: awsUser._location, about: awsUser._about)
+                    
+                    // Update UI.
                     self.configureUser(user)
+                    
+                    // Get profilePic.
+                    if let profilePicUrl = awsUser._profilePicUrl {
+                        self.downloadImage(profilePicUrl, postIndex: nil)
+                    }
+                    
+                    // Get posts.
+                    self.getUserPosts()
                 } else {
                     print("This should not happen getCurrentUser!")
                 }
@@ -253,7 +266,40 @@ class ProfileTableViewController: UITableViewController {
         })
     }
     
-    private func getProfilePic(imageKey: String) {
+    private func getUserPosts() {
+        guard let userId = self.user?.userId else {
+            return
+        }
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        AWSClientManager.defaultClientManager().getUserPosts(userId, completionHandler: {
+            (task: AWSTask) in
+            dispatch_async(dispatch_get_main_queue(), {
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                if let error = task.error {
+                    print("Error: \(error.userInfo["message"])")
+                } else {
+                    if let output = task.result as? AWSDynamoDBPaginatedOutput,
+                        let awsPosts = output.items as? [AWSPost] {
+                        // Iterate through all posts. This should change and fetch only certain or?
+                        for (index, awsPost) in awsPosts.enumerate() {
+                            let post = Post(title: awsPost._title, postDescription: awsPost._description, imageUrl: awsPost._imageUrl, testCategories: awsPost._categories, creationDate: awsPost._creationDate, user: self.user)
+                            self.posts.append(post)
+                            
+                            // Get postPic.
+                            if let imageUrl = awsPost._imageUrl {
+                                self.downloadImage(imageUrl, postIndex: index)
+                            }
+                        }
+                        // Always reload section 6 for posts!
+                        self.tableView.reloadSections(NSIndexSet(index: 6), withRowAnimation: UITableViewRowAnimation.None)
+                    }
+                }
+            })
+            return nil
+        })
+    }
+    
+    private func downloadImage(imageKey: String, postIndex: Int?) {
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         AWSClientManager.defaultClientManager().downloadImage(
             imageKey,
@@ -266,65 +312,20 @@ class ProfileTableViewController: UITableViewController {
                     } else {
                         if let imageData = task.result as? NSData {
                             let image = UIImage(data: imageData)
-                            self.user?.profilePic = image
-                            self.tableView.reloadData()
+                            if let index = postIndex {
+                                // It's postPic.
+                                self.posts[index].image = image
+                                // Always reload section 6 for posts!
+                                self.tableView.reloadSections(NSIndexSet(index: 6), withRowAnimation: UITableViewRowAnimation.None)
+                            } else {
+                                // It's profilePic.
+                                self.user?.profilePic = image
+                                // Always reload section 0 for a user!
+                                self.tableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.None)
+                            }
                         }
                     }
                 })
-                return nil
-        })
-    }
-    
-    private func getCurrentUserPosts() {
-        AWSClientManager.defaultClientManager().getCurrentUserPosts({
-            (task: AWSTask) in
-            if let error = task.error {
-                dispatch_async(dispatch_get_main_queue(), {
-                    let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.userInfo["message"] as? String, cancelButtonTitle: "Ok")
-                    self.presentViewController(alertController, animated: true, completion: nil)
-                })
-            } else {
-                let output = task.result as? AWSDynamoDBPaginatedOutput
-                if let awsPosts = output?.items as? [AWSPost] {
-                    for (index, awsPost) in awsPosts.enumerate() {
-                        let post = Post(postDescription: awsPost._description, imageUrl: awsPost._imageUrl, title: awsPost._title)
-                        self.posts.insert(post, atIndex: index)
-                        self.getPostImage(index, imageUrl: awsPost._imageUrl)
-                    }
-                    dispatch_async(dispatch_get_main_queue(), {
-                        self.tableView.beginUpdates()
-                        self.tableView.reloadSections(NSIndexSet(index: 1), withRowAnimation: UITableViewRowAnimation.None)
-                        self.tableView.endUpdates()
-                    })
-                }
-            }
-            return nil
-        })
-    }
-    
-    // In background
-    private func getPostImage(index: Int, imageUrl: String?) {
-        guard let imageUrl = imageUrl else {
-            return
-        }
-        AWSClientManager.defaultClientManager().downloadImage(
-            imageUrl,
-            completionHandler: {
-                (task: AWSTask) in
-                if let error = task.error {
-                    print("Error: \(error)")
-                } else {
-                    if let imageData = task.result as? NSData {
-                        let image = UIImage(data: imageData)
-                        let indexPath = NSIndexPath(forRow: index, inSection: 1)
-                        self.posts[index].image = image
-                        dispatch_async(dispatch_get_main_queue(), {
-                            self.tableView.beginUpdates()
-                            self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
-                            self.tableView.endUpdates()
-                        })
-                    }
-                }
                 return nil
         })
     }

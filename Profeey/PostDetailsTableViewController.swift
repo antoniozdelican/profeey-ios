@@ -12,6 +12,7 @@ class PostDetailsTableViewController: UITableViewController {
 
     @IBOutlet weak var postPicImageView: UIImageView!
     @IBOutlet weak var postPicImageViewHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var likeButton: UIButton!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var categoriesLabel: UILabel!
     @IBOutlet weak var mainTableViewCell: UITableViewCell!
@@ -20,12 +21,6 @@ class PostDetailsTableViewController: UITableViewController {
     @IBOutlet weak var fullNameLabel: UILabel!
     @IBOutlet weak var professionLabel: UILabel!
     @IBOutlet weak var userTableViewCell: UITableViewCell!
-    
-    
-    @IBOutlet weak var likeButton: UIButton!
-    @IBOutlet weak var commentButton: UIButton!
-    @IBOutlet weak var numberOfLikesButton: UIButton!
-    @IBOutlet weak var numberOfCommentsButton: UIButton!
     
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel!
@@ -63,7 +58,8 @@ class PostDetailsTableViewController: UITableViewController {
         }
         // Title and categories.
         self.titleLabel.text = self.post?.title
-        self.categoriesLabel.text = self.post?.categories?.flatMap({ $0.categoryName }).joinWithSeparator(" · ")
+        self.categoriesLabel.text = self.post?.testCategories?.joinWithSeparator(" · ")
+//        self.categoriesLabel.text = self.post?.categories?.flatMap({ $0.categoryName }).joinWithSeparator(" · ")
         // User.
         self.profilePicImageView.layer.cornerRadius = 4.0
         self.profilePicImageView.clipsToBounds = true
@@ -71,15 +67,15 @@ class PostDetailsTableViewController: UITableViewController {
         self.fullNameLabel.text = self.post?.user?.fullName
         self.professionLabel.text = self.post?.user?.profession
         // Likes and comments.
-        if let numberOfLikes = self.post?.numberOfLikes.numberToString() {
-            self.numberOfLikesButton.setTitle("\(numberOfLikes) likes", forState: UIControlState.Normal)
-        }
-        if let numberOfComments = self.post?.numberOfComments.numberToString() {
-            self.numberOfCommentsButton.setTitle("\(numberOfComments) comments", forState: UIControlState.Normal)
-        }
+//        if let numberOfLikes = self.post?.numberOfLikes.numberToString() {
+//            self.numberOfLikesButton.setTitle("\(numberOfLikes) likes", forState: UIControlState.Normal)
+//        }
+//        if let numberOfComments = self.post?.numberOfComments.numberToString() {
+//            self.numberOfCommentsButton.setTitle("\(numberOfComments) comments", forState: UIControlState.Normal)
+//        }
         // Other.
+        self.descriptionLabel.text = self.post?.postDescription
         self.timeLabel.text = "Posted 2 minutes ago"
-        self.descriptionLabel.text = "Lorem ipsum dolor sit amet, eu mea legendos scribentur, an est paulo soluta aliquid, enim duis ut cum. Nostro meliore phaedrum et has. In mea essent dicunt, solum tation regione id eum, at assum legendos his. Minim nobis vitae nec in, volutpat adipiscing pri in. Nam cu audiam volutpat expetenda, docendi copiosae oportere et quo. Eu impedit periculis qui. Eu cum vitae lobortis necessitatibus, eum dictas docendi epicuri ut. Sale voluptua at eos. Homero audiam legendos sea ei, et usu odio putent tincidunt. \n Adipisci intellegat nec ea, sed animal euismod pericula no. Pro summo postea ad, probo mediocritatem sit no. An est putant iisque, ea usu etiam perfecto conceptam. Aliquip referrentur eum et. \n Id iisque latine usu, sea ei solum facer scriptorem, illud vivendum no duo. Nec melius integre mnesarchum ut, quo at mutat accusamus similique, cum et tale putant quodsi. Pro probo definitiones ex, at cum modus novum diceret. Dicunt sententiae cotidieque nam in, graeco molestie mei ea. Eam omnes deserunt quaestio an, ipsum adipisci erroribus mel et, pri ex dicant facilisi euripidis. At lucilius oportere deseruisse nec, sed magna explicari id, nonumes maiestatis repudiandae pri at. \n Id iisque latine usu, sea ei solum facer scriptorem, illud vivendum no duo. Nec melius integre mnesarchum ut, quo at mutat accusamus similique, cum et tale putant quodsi. Pro probo definitiones ex, at cum modus novum diceret. Dicunt sententiae cotidieque nam in, graeco molestie mei ea. Eam omnes deserunt quaestio an, ipsum adipisci erroribus mel et, pri ex dicant facilisi euripidis. At lucilius oportere deseruisse nec, sed magna explicari id, nonumes maiestatis repudiandae pri at."
     }
     
     override func viewDidAppear(animated: Bool) {

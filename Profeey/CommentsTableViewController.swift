@@ -19,7 +19,7 @@ class CommentsTableViewController: UITableViewController {
         self.tableView.rowHeight = UITableViewAutomaticDimension
         self.tableView.contentOffset = CGPointMake(0.0, CGFloat.max)
         
-        let user1 = User(firstName: "Antonio", lastName: "Zdelican", preferredUsername: "antonio", profession: "Engineer", profilePicUrl: nil, location: nil, about: nil)
+        let user1 = User(userId: nil, firstName: "Antonio", lastName: "Zdelican", preferredUsername: "antonio", profession: "Engineer", profilePicUrl: nil, location: nil, about: nil)
         let comment1 = Comment(user: user1, commentText: "Currently discovering iOS and energy management.")
         let comment2 = Comment(user: user1, commentText: "Awesome")
         let comment3 = Comment(user: user1, commentText: "Bla")

@@ -35,6 +35,7 @@ protocol ClientManager {
     
     // MARK: Post
     
+    func getUserPosts(userId: String, completionHandler: AWSContinuationBlock)
     func getCurrentUserPosts(completionHandler: AWSContinuationBlock)
     func createPost(imageData: NSData, title: String?, description: String?, isProfilePic: Bool, completionHandler: AWSContinuationBlock)
     // MARK: S3

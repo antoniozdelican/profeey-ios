@@ -151,3 +151,60 @@ extension String {
         return passwordTest.evaluateWithObject(self)
     }
 }
+
+extension NSDate {
+    func yearsFrom(date: NSDate) -> Int {
+        return NSCalendar.currentCalendar().components(.Year, fromDate: date, toDate: self, options: []).year
+    }
+    
+    func monthsFrom(date: NSDate) -> Int {
+        return NSCalendar.currentCalendar().components(.Month, fromDate: date, toDate: self, options: []).month
+    }
+    
+    func weeksFrom(date: NSDate) -> Int {
+        return NSCalendar.currentCalendar().components(.WeekOfYear, fromDate: date, toDate: self, options: []).weekOfYear
+    }
+    
+    func daysFrom(date: NSDate) -> Int {
+        return NSCalendar.currentCalendar().components(.Day, fromDate: date, toDate: self, options: []).day
+    }
+    
+    func hoursFrom(date: NSDate) -> Int {
+        return NSCalendar.currentCalendar().components(.Hour, fromDate: date, toDate: self, options: []).hour
+    }
+    
+    func minutesFrom(date: NSDate) -> Int{
+        return NSCalendar.currentCalendar().components(.Minute, fromDate: date, toDate: self, options: []).minute
+    }
+    
+    func secondsFrom(date: NSDate) -> Int{
+        return NSCalendar.currentCalendar().components(.Second, fromDate: date, toDate: self, options: []).second
+    }
+    
+    // Calculate currentDate distance from creationDate for example.
+    // currentDate.offsetFrom(creationDate)
+    func offsetFrom(date: NSDate) -> String {
+        if yearsFrom(date)   > 0 {
+            return yearsFrom(date) > 1 ? "\(yearsFrom(date)) years ago" : "\(yearsFrom(date)) year ago"
+        }
+        if monthsFrom(date)  > 0 {
+            return monthsFrom(date) > 1 ? "\(monthsFrom(date)) months ago" : "\(monthsFrom(date)) month ago"
+        }
+        if weeksFrom(date)   > 0 {
+            return weeksFrom(date) > 1 ? "\(weeksFrom(date)) weeks ago" : "\(weeksFrom(date)) week ago"
+        }
+        if daysFrom(date)    > 0 {
+            return "\(daysFrom(date))d"
+        }
+        if hoursFrom(date)   > 0 {
+            return hoursFrom(date) > 1 ? "\(hoursFrom(date)) hours ago" : "\(hoursFrom(date)) hour ago"
+        }
+        if minutesFrom(date) > 0 {
+            return minutesFrom(date) > 1 ? "\(minutesFrom(date)) minutes ago" : "\(minutesFrom(date)) minute ago"
+        }
+        if secondsFrom(date) > 0 {
+            return secondsFrom(date) > 1 ? "\(secondsFrom(date)) second ago" : "\(secondsFrom(date)) seconds ago"
+        }
+        return "Now"
+    }
+}

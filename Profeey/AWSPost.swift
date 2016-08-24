@@ -14,6 +14,8 @@ class AWSPost: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     
     var _userId: String?
     var _postId: String?
+    var _categories: [String]?
+    var _creationDate: NSNumber?
     var _description: String?
     var _imageUrl: String?
     var _title: String?
@@ -37,6 +39,8 @@ class AWSPost: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
         return [
             "_userId" : "userId",
             "_postId" : "postId",
+            "_categories" : "categories",
+            "_creationDate" : "creationDate",
             "_description" : "description",
             "_imageUrl" : "imageUrl",
             "_title" : "title",

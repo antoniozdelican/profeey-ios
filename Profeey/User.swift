@@ -33,8 +33,9 @@ class User: NSObject {
         super.init()
     }
     
-    convenience init(firstName: String?, lastName: String?, preferredUsername: String?, profession: String?, profilePicUrl: String?, location: String?, about: String?) {
+    convenience init(userId: String?, firstName: String?, lastName: String?, preferredUsername: String?, profession: String?, profilePicUrl: String?, location: String?, about: String?) {
         self.init()
+        self.userId = userId
         self.firstName = firstName
         self.lastName = lastName
         self.preferredUsername = preferredUsername

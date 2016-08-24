@@ -11,21 +11,26 @@ import Foundation
 class Post: NSObject {
     
     // Properties.
+    var testCategories: [String]?
+    var creationDate: NSNumber?
     var postDescription: String?
     var imageUrl: String?
     var title: String?
     
-    var image: UIImage?
+    //Old
     var categories: [Category]?
     
-    //var userId: String?
-    var postId: String?
-    var caption: String?
-    var creationDate: NSNumber?
-    var mediaUrl: String?
-    
+    // Generated.
     var user: User?
-    var mediaData: NSData?
+    var image: UIImage?
+    var creationDateString: String? {
+        if let creationDate = self.creationDate {
+            let currentDate = NSDate()
+            return currentDate.offsetFrom(NSDate(timeIntervalSince1970: NSTimeInterval(creationDate)))
+        } else {
+            return nil
+        }
+    }
     
     var numberOfLikes: Int = 0
     var numberOfComments: Int = 0
@@ -34,33 +39,14 @@ class Post: NSObject {
         super.init()
     }
     
-    // TEST
-    convenience init(user: User?, postId: String?, caption: String?, creationDate: NSNumber?, mediaUrl: String?, mediaData: NSData?) {
+    convenience init(title: String?, postDescription: String?, imageUrl: String?, testCategories: [String]?, creationDate: NSNumber?, user: User?) {
         self.init()
-        self.user = user
-        self.postId = postId
-        self.caption = caption
-        self.creationDate = creationDate
-        self.mediaUrl = mediaUrl
-        
-        self.mediaData = mediaData
-    }
-    
-    // TEST
-    convenience init(user: User?, caption: String?, mediaData: NSData?, numberOfLikes: Int, numberOfComments: Int) {
-        self.init()
-        self.user = user
-        self.caption = caption
-        self.mediaData = mediaData
-        self.numberOfLikes = numberOfLikes
-        self.numberOfComments = numberOfComments
-    }
-    
-    convenience init(postDescription: String?, imageUrl: String?, title: String?) {
-        self.init()
+        self.title = title
         self.postDescription = postDescription
         self.imageUrl = imageUrl
-        self.title = title
+        self.testCategories = testCategories
+        self.creationDate = creationDate
+        self.user = user
     }
     
     convenience init(user: User?, postDescription: String?, imageUrl: String?, title: String?, image: UIImage?, categories: [Category]?) {

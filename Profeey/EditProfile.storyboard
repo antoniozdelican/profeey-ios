@@ -640,9 +640,9 @@
                                             </constraints>
                                             <variation key="default">
                                                 <mask key="constraints">
-                                                    <exclude reference="df8-JZ-1lA"/>
-                                                    <exclude reference="XUM-hr-WHi"/>
                                                     <exclude reference="9Lm-dZ-aXr"/>
+                                                    <exclude reference="XUM-hr-WHi"/>
+                                                    <exclude reference="df8-JZ-1lA"/>
                                                     <exclude reference="unm-bq-9cZ"/>
                                                 </mask>
                                             </variation>
@@ -691,10 +691,10 @@
                                             </constraints>
                                             <variation key="default">
                                                 <mask key="constraints">
-                                                    <exclude reference="GX8-Tm-gHC"/>
                                                     <exclude reference="3zG-jU-MiK"/>
-                                                    <exclude reference="kv0-3i-5Zz"/>
+                                                    <exclude reference="GX8-Tm-gHC"/>
                                                     <exclude reference="Oo0-LZ-xvx"/>
+                                                    <exclude reference="kv0-3i-5Zz"/>
                                                 </mask>
                                             </variation>
                                         </tableViewCellContentView>
