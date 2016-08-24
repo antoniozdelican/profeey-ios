@@ -102,6 +102,9 @@
 		A9BF16491D6514C900060A9E /* NoResultsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9BF16481D6514C900060A9E /* NoResultsTableViewCell.swift */; };
 		A9BF164B1D6519D100060A9E /* SearchingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9BF164A1D6519D100060A9E /* SearchingTableViewCell.swift */; };
 		A9C0ED3A1D3C21C30036F791 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C0ED391D3C21C30036F791 /* Post.swift */; };
+		A9C1EBDA1D6DAAFB00D574F1 /* EditProfessionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C1EBD91D6DAAFB00D574F1 /* EditProfessionTableViewController.swift */; };
+		A9C1EBDC1D6DAF6300D574F1 /* EditLocationTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C1EBDB1D6DAF6300D574F1 /* EditLocationTableViewController.swift */; };
+		A9C1EBDE1D6DB02500D574F1 /* AWSUserLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C1EBDD1D6DB02500D574F1 /* AWSUserLocation.swift */; };
 		A9C482141D30E983007B5423 /* ItemsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C482131D30E983007B5423 /* ItemsViewController.swift */; };
 		A9C482161D30EC25007B5423 /* ItemsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C482151D30EC25007B5423 /* ItemsCollectionViewController.swift */; };
 		A9C482181D30ED0B007B5423 /* ItemCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C482171D30ED0B007B5423 /* ItemCollectionViewCell.swift */; };
@@ -286,6 +289,9 @@
 		A9BF16481D6514C900060A9E /* NoResultsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoResultsTableViewCell.swift; sourceTree = "<group>"; };
 		A9BF164A1D6519D100060A9E /* SearchingTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchingTableViewCell.swift; sourceTree = "<group>"; };
 		A9C0ED391D3C21C30036F791 /* Post.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
+		A9C1EBD91D6DAAFB00D574F1 /* EditProfessionTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditProfessionTableViewController.swift; sourceTree = "<group>"; };
+		A9C1EBDB1D6DAF6300D574F1 /* EditLocationTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditLocationTableViewController.swift; sourceTree = "<group>"; };
+		A9C1EBDD1D6DB02500D574F1 /* AWSUserLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSUserLocation.swift; sourceTree = "<group>"; };
 		A9C482131D30E983007B5423 /* ItemsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemsViewController.swift; sourceTree = "<group>"; };
 		A9C482151D30EC25007B5423 /* ItemsCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemsCollectionViewController.swift; sourceTree = "<group>"; };
 		A9C482171D30ED0B007B5423 /* ItemCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -437,6 +443,7 @@
 				A9D960651D32FFE700273A78 /* AWSUserFirstLastName.swift */,
 				A9604F7D1D33721000F23B33 /* AWSUserPreferredUsername.swift */,
 				A985F1121D6C5D1300560013 /* AWSUserProfession.swift */,
+				A9C1EBDD1D6DB02500D574F1 /* AWSUserLocation.swift */,
 				A9604F7F1D33722100F23B33 /* AWSUserAbout.swift */,
 				A9604F881D33C99100F23B33 /* AWSUserProfilePic.swift */,
 				A9A503A01D2FE0A90030A472 /* AWSUsersTable.swift */,
@@ -483,6 +490,8 @@
 				A9A503931D2F925F0030A472 /* EditProfileTableViewController.swift */,
 				A95E40C71D350D3400FD61F9 /* EditUsernameTableViewController.swift */,
 				A99956E11D5BAD2D00A9556A /* EditFirstLastNameTableViewController.swift */,
+				A9C1EBD91D6DAAFB00D574F1 /* EditProfessionTableViewController.swift */,
+				A9C1EBDB1D6DAF6300D574F1 /* EditLocationTableViewController.swift */,
 				A95E40CB1D35137700FD61F9 /* EditAboutTableViewController.swift */,
 			);
 			name = "Edit Profile";
@@ -922,6 +931,7 @@
 				A98B42DD1D43C5720089A769 /* ProfessionsTableViewController.swift in Sources */,
 				A9FF2EEA1D6AEC1C0022AB0C /* EditCategoriesTableViewController.swift in Sources */,
 				A9604F891D33C99100F23B33 /* AWSUserProfilePic.swift in Sources */,
+				A9C1EBDE1D6DB02500D574F1 /* AWSUserLocation.swift in Sources */,
 				A903EB4C1D169DCC00B33025 /* FakeCaptureNavigationController.swift in Sources */,
 				A95E40CC1D35137700FD61F9 /* EditAboutTableViewController.swift in Sources */,
 				A96B3B991D3659790071FE7A /* ItemsTableViewController.swift in Sources */,
@@ -965,6 +975,7 @@
 				A9BE4BA51D69DE14005D1B07 /* ProfileHeaderTableViewCell.swift in Sources */,
 				A90228111D3279B500C2EFEB /* ItemTableViewCell.swift in Sources */,
 				A9BF16471D64DDAC00060A9E /* SearchCategoryTableViewCell.swift in Sources */,
+				A9C1EBDA1D6DAAFB00D574F1 /* EditProfessionTableViewController.swift in Sources */,
 				A9B7A2481D65D8B2009DA340 /* PostTableViewCell.swift in Sources */,
 				A961875F1D3FA67B0028DEA7 /* ClientManager.swift in Sources */,
 				A9BCF7401D4C0737001B2EEA /* PreviewProfilePicViewController.swift in Sources */,
@@ -989,6 +1000,7 @@
 				A903EB571D16A39700B33025 /* LLSimpleCamera.m in Sources */,
 				A9BF16451D64DC5F00060A9E /* SearchUserTableViewCell.swift in Sources */,
 				A9A8DD111D4529B2009B3C24 /* LogInNavigationController.swift in Sources */,
+				A9C1EBDC1D6DAF6300D574F1 /* EditLocationTableViewController.swift in Sources */,
 				A9C482161D30EC25007B5423 /* ItemsCollectionViewController.swift in Sources */,
 				A99030F91D464FEE00336D26 /* GalleryCollectionViewCell.swift in Sources */,
 				A98E33371D510B1300750D35 /* CategoryCollectionViewCell.swift in Sources */,

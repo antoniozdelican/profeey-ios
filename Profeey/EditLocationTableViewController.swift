@@ -1,43 +1,41 @@
 //
-//  EditAboutTableViewController.swift
+//  EditLocationTableViewController.swift
 //  Profeey
 //
-//  Created by Antonio Zdelican on 12/07/16.
+//  Created by Antonio Zdelican on 24/08/16.
 //  Copyright © 2016 Profeey. All rights reserved.
 //
 
 import UIKit
 import AWSMobileHubHelper
 
-protocol EditAboutDelegate {
-    func aboutUpdated(about: String?)
+protocol EditLocationDelegate {
+    func locationUpdated(location: String?)
 }
 
-class EditAboutTableViewController: UITableViewController {
-    
-    @IBOutlet weak var aboutTextView: UITextView!
-    @IBOutlet weak var aboutFakePlaceholderLabel: UILabel!
-    
-    var about: String?
-    var editAboutDelegate: EditAboutDelegate?
+class EditLocationTableViewController: UITableViewController {
 
+    @IBOutlet weak var locationTextField: UITextField!
+    
+    var location: String?
+    var editLocationDelegate: EditLocationDelegate?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.aboutTextView.text = self.about
-        self.aboutTextView.delegate = self
-        self.aboutFakePlaceholderLabel.hidden = !self.aboutTextView.text.isEmpty
+        
+        self.locationTextField.text = self.location
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        self.aboutTextView.becomeFirstResponder()
+        self.locationTextField.becomeFirstResponder()
     }
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
-        self.aboutTextView.resignFirstResponder()
+        self.locationTextField.resignFirstResponder()
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
@@ -49,7 +47,7 @@ class EditAboutTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 84.0
+        return 76.0
     }
     
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
@@ -59,8 +57,8 @@ class EditAboutTableViewController: UITableViewController {
     // MARK: IBActions
     
     @IBAction func saveButtonTapped(sender: AnyObject) {
-        self.aboutTextView.resignFirstResponder()
-        self.updateAbout()
+        self.locationTextField.resignFirstResponder()
+        self.updateLocation()
     }
     
     @IBAction func cancelButtonTapped(sender: AnyObject) {
@@ -69,17 +67,17 @@ class EditAboutTableViewController: UITableViewController {
     
     // MARK: AWS
     
-    private func updateAbout() {
-        guard let aboutText = self.aboutTextView.text else {
+    private func updateLocation() {
+        guard let locationText = self.locationTextField.text else {
             return
         }
         
-        let about: String? = aboutText.trimm().isEmpty ? nil : aboutText.trimm()
+        let location: String? = locationText.trimm().isEmpty ? nil : locationText.trimm()
         
         FullScreenIndicator.show()
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         
-        AWSClientManager.defaultClientManager().updateUserAbout(about, completionHandler: {
+        AWSClientManager.defaultClientManager().updateUserLocation(location, completionHandler: {
             (task: AWSTask) in
             dispatch_async(dispatch_get_main_queue(), {
                 
@@ -90,26 +88,12 @@ class EditAboutTableViewController: UITableViewController {
                     let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.userInfo["message"] as? String, cancelButtonTitle: "Ok")
                     self.presentViewController(alertController, animated: true, completion: nil)
                 } else {
-                    self.editAboutDelegate?.aboutUpdated(about)
+                    self.editLocationDelegate?.locationUpdated(location)
                     self.performSegueWithIdentifier("segueUnwindToEditProfileTableVc", sender: self)
                 }
             })
             return nil
         })
     }
-}
 
-extension EditAboutTableViewController: UITextViewDelegate {
-    
-    func textViewDidChange(textView: UITextView) {
-        self.aboutFakePlaceholderLabel.hidden = !textView.text.isEmpty
-        
-        // Changing height of the cell
-        let currentOffset = self.tableView.contentOffset
-        UIView.setAnimationsEnabled(false)
-        self.tableView.beginUpdates()
-        self.tableView.endUpdates()
-        UIView.setAnimationsEnabled(true)
-        self.tableView.setContentOffset(currentOffset, animated: false)
-    }
 }

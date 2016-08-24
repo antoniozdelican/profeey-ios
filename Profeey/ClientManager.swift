@@ -29,6 +29,8 @@ protocol ClientManager {
     func updateFirstLastName(firstName: String?, lastName: String?, completionHandler: AWSContinuationBlock)
     func updatePreferredUsername(preferredUsername: String, completionHandler: AWSContinuationBlock)
     func updateUserProfession(profession: String?, completionHandler: AWSContinuationBlock)
+    func updateUserLocation(location: String?, completionHandler: AWSContinuationBlock)
+    func updateUserAbout(about: String?, completionHandler: AWSContinuationBlock)
     func updateProfilePic(profilePicUrl: String?, completionHandler: AWSContinuationBlock)
     
     // MARK: Post

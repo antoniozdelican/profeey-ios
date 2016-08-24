@@ -195,6 +195,16 @@ class AWSClientManager: NSObject, ClientManager {
         // TODO should update Profession table!
     }
     
+    func updateUserLocation(location: String?, completionHandler: AWSContinuationBlock) {
+        // DynamoDB updateUserLocation.
+        PRFYDynamoDBManager.defaultDynamoDBManager().updateUserLocationDynamoDB(location, completionHandler: completionHandler)
+    }
+    
+    func updateUserAbout(about: String?, completionHandler: AWSContinuationBlock) {
+        // DynamoDB updateUserAbout.
+        PRFYDynamoDBManager.defaultDynamoDBManager().updateUserAboutDynamoDB(about, completionHandler: completionHandler)
+    }
+    
     func updateProfilePic(profilePicUrl: String?, completionHandler: AWSContinuationBlock) {
 //        var attributes: [AWSCognitoIdentityUserAttributeType] = []
 //        let profilePicAttribute = AWSCognitoIdentityUserAttributeType()

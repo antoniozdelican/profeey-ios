@@ -88,6 +88,16 @@ class AWSUsersTable: NSObject, Table {
         objectMapper.save(user).continueWithBlock(completionHandler)
     }
     
+    func saveUserLocation(user: AWSUserLocation, completionHandler: AWSContinuationBlock) {
+        let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
+        objectMapper.save(user).continueWithBlock(completionHandler)
+    }
+    
+    func saveUserAbout(user: AWSUserAbout, completionHandler: AWSContinuationBlock) {
+        let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
+        objectMapper.save(user).continueWithBlock(completionHandler)
+    }
+    
     func saveUserProfilePic(user: AWSUserProfilePic, completionHandler: AWSContinuationBlock) {
         let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
         objectMapper.save(user).continueWithBlock(completionHandler)
