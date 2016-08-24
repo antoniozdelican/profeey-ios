@@ -39,7 +39,7 @@ class CommentsViewController: UIViewController {
         self.sendButton.enabled = false
         
         // TEST
-        self.currentUser = User(firstName: "Antonio", lastName: "Zdelican", preferredUsername: "toni", profilePicData: UIImageJPEGRepresentation(UIImage(named: "pic_antonio")!, 0.6), professions: ["Computer Engineer"], about: "Pursuing my Master's Degree in CS. Love to code and design. Currently discovering iOS and energy management.", location: "Lisbon, Portugal", website: "antoniozdelican.com", posts: nil)
+//        self.currentUser = User(firstName: "Antonio", lastName: "Zdelican", preferredUsername: "toni", profilePicData: UIImageJPEGRepresentation(UIImage(named: "pic_antonio")!, 0.6), profession: "Computer Engineer", about: "Pursuing my Master's Degree in CS. Love to code and design. Currently discovering iOS and energy management.", location: "Lisbon, Portugal", website: "antoniozdelican.com", posts: nil)
     }
     
     override func viewDidAppear(animated: Bool) {

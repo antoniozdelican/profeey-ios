@@ -11,6 +11,9 @@ import UIKit
 class MyCategoryCollectionViewCell: UICollectionViewCell {
     
     @IBOutlet weak var categoryImageView: UIImageView!
+    @IBOutlet weak var categoryNameLabel: UILabel!
+    @IBOutlet weak var numberOfPostsLabel: UILabel!
+    
     
     override func awakeFromNib() {
         super.awakeFromNib()

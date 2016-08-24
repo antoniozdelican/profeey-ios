@@ -91,27 +91,27 @@ class ProfessionsViewController: UIViewController {
     private func updateUserProfessions() {
         
         // DynamoDB deletes attribute with nil.
-        let professions: [String]? = self.professions.isEmpty ? nil : self.professions
-        FullScreenIndicator.show()
-        AWSClientManager.defaultClientManager().updateUserProfessions(professions, completionHandler: {
-            (task: AWSTask) in
-            dispatch_async(dispatch_get_main_queue(), {
-                FullScreenIndicator.hide()
-                if let error = task.error {
-                    let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.userInfo["message"] as? String, cancelButtonTitle: "Ok")
-                    self.presentViewController(alertController, animated: true, completion: nil)
-                } else {
-                    // Can be edit or signUp flow.
-                    if self.isEditProfessions {
-                        self.editProfessionsDelegate?.professionsUpdated(professions)
-                        self.performSegueWithIdentifier("segueUnwindToEditProfileTableVc", sender: self)
-                    } else {
-                        self.redirectToMain()
-                    }
-                }
-            })
-            return nil
-        })
+//        let professions: [String]? = self.professions.isEmpty ? nil : self.professions
+//        FullScreenIndicator.show()
+//        AWSClientManager.defaultClientManager().updateUserProfessions(professions, completionHandler: {
+//            (task: AWSTask) in
+//            dispatch_async(dispatch_get_main_queue(), {
+//                FullScreenIndicator.hide()
+//                if let error = task.error {
+//                    let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.userInfo["message"] as? String, cancelButtonTitle: "Ok")
+//                    self.presentViewController(alertController, animated: true, completion: nil)
+//                } else {
+//                    // Can be edit or signUp flow.
+//                    if self.isEditProfessions {
+//                        self.editProfessionsDelegate?.professionsUpdated(professions)
+//                        self.performSegueWithIdentifier("segueUnwindToEditProfileTableVc", sender: self)
+//                    } else {
+//                        self.redirectToMain()
+//                    }
+//                }
+//            })
+//            return nil
+//        })
     }
     
     // MARK: Helpers

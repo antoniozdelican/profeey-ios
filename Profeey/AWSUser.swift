@@ -15,8 +15,9 @@ class AWSUser: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     var _about: String?
     var _firstName: String?
     var _lastName: String?
+    var _location: String?
     var _preferredUsername: String?
-    var _professions: [String]?
+    var _profession: String?
     var _profilePicUrl: String?
     
     class func dynamoDBTableName() -> String {
@@ -35,8 +36,9 @@ class AWSUser: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
             "_about" : "about",
             "_firstName" : "firstName",
             "_lastName" : "lastName",
+            "_location" : "location",
             "_preferredUsername" : "preferredUsername",
-            "_professions" : "professions",
+            "_profession" : "profession",
             "_profilePicUrl" : "profilePicUrl",
         ]
     }

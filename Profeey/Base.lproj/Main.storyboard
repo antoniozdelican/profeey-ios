@@ -12,7 +12,6 @@
                     <tabBar key="tabBar" contentMode="scaleToFill" id="BJa-hR-JRb">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" red="0.23529411759999999" green="0.48627450979999998" blue="0.59999999999999998" alpha="1" colorSpace="calibratedRGB"/>
                     </tabBar>
                     <connections>
                         <segue destination="97w-Xf-MCQ" kind="relationship" relationship="viewControllers" id="gqd-rf-IV7"/>
@@ -30,7 +29,9 @@
         <scene sceneID="zG5-Oa-eQY">
             <objects>
                 <viewControllerPlaceholder storyboardName="Home" id="97w-Xf-MCQ" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="" image="ic_home" id="8A6-A6-BbD"/>
+                    <tabBarItem key="tabBarItem" title="" image="ic_home" id="8A6-A6-BbD">
+                        <inset key="imageInsets" minX="0.0" minY="6" maxX="0.0" maxY="-6"/>
+                    </tabBarItem>
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VDG-6c-cWh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -40,7 +41,9 @@
         <scene sceneID="ZWc-gX-qBX">
             <objects>
                 <viewControllerPlaceholder storyboardName="Search" id="i34-VO-fQf" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" tag="1" title="" image="ic_search" id="ZhS-Ob-VtN"/>
+                    <tabBarItem key="tabBarItem" tag="1" title="" image="ic_search" id="ZhS-Ob-VtN">
+                        <inset key="imageInsets" minX="0.0" minY="6" maxX="0.0" maxY="-6"/>
+                    </tabBarItem>
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="M6i-p5-pVC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -50,7 +53,9 @@
         <scene sceneID="BCr-3p-irM">
             <objects>
                 <viewControllerPlaceholder storyboardName="Capture" id="Zz7-Ss-9H9" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" tag="2" title="" image="ic_capture" id="Yio-St-MM7"/>
+                    <tabBarItem key="tabBarItem" tag="2" title="" image="ic_capture" id="Yio-St-MM7">
+                        <inset key="imageInsets" minX="0.0" minY="6" maxX="0.0" maxY="-6"/>
+                    </tabBarItem>
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aZV-5T-Kll" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -60,7 +65,9 @@
         <scene sceneID="nTt-kK-HNC">
             <objects>
                 <viewControllerPlaceholder storyboardName="Notifications" id="0VB-vA-lol" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" tag="3" title="" image="ic_notifications" id="xbh-mp-FOv"/>
+                    <tabBarItem key="tabBarItem" tag="3" title="" image="ic_notifications" id="xbh-mp-FOv">
+                        <inset key="imageInsets" minX="0.0" minY="6" maxX="0.0" maxY="-6"/>
+                    </tabBarItem>
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Sh3-eB-dGd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -70,7 +77,9 @@
         <scene sceneID="cb4-oG-6WN">
             <objects>
                 <navigationController id="PkX-gg-apD" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" tag="4" title="" image="ic_profile" id="OwU-Yo-zab"/>
+                    <tabBarItem key="tabBarItem" tag="4" title="" image="ic_profile" id="OwU-Yo-zab">
+                        <inset key="imageInsets" minX="0.0" minY="6" maxX="0.0" maxY="-6"/>
+                    </tabBarItem>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="PFl-wv-I3F">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>

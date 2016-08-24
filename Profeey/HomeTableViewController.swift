@@ -10,10 +10,14 @@ import UIKit
 
 class HomeTableViewController: UITableViewController {
     
+    //TEST
+    private var popularCategories: [Category] = []
+    
     private var posts: [Post] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.Plain, target:nil, action:nil)
         self.tableView.estimatedRowHeight = 155.0
         self.tableView.rowHeight = UITableViewAutomaticDimension
         
@@ -24,18 +28,18 @@ class HomeTableViewController: UITableViewController {
 //        self.navigationController?.navigationBar.barTintColor = UIColor.clearColor()
 //        self.navigationController?.navigationBar.backgroundColor = UIColor.clearColor()
 //        self.navigationController?.navigationBar.tintColor = UIColor.whiteColor()
-        self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.Plain, target:nil, action:nil)
         
         // MOCK
-        let user1 = User(firstName: "Ivan", lastName: "Zdelican", preferredUsername: "ivan", professions: ["Fruit Grower"], profilePicData: UIImageJPEGRepresentation(UIImage(named: "pic_ivan")!, 0.6))
-        let user2 = User(firstName: "Filip", lastName: "Vargovic", preferredUsername: "filja", professions: ["Yacht Skipper", "Fitness Trainer"], profilePicData: UIImageJPEGRepresentation(UIImage(named: "pic_filip")!, 0.6))
-        let user3 = User(firstName: "Josip", lastName: "Zdelican", preferredUsername: "jole", professions: ["Agricultural Engineer"], profilePicData: UIImageJPEGRepresentation(UIImage(named: "pic_josip")!, 0.6))
+        let user1 = User(firstName: "Ivan", lastName: "Zdelican", preferredUsername: "ivan", profession: "Fruit Grower", profilePic: UIImage(named: "pic_ivan"))
+        let user2 = User(firstName: "Filip", lastName: "Vargovic", preferredUsername: "filja", profession: "Yacht Skipper", profilePic: UIImage(named: "pic_filip"))
+        let user3 = User(firstName: "Josip", lastName: "Zdelican", preferredUsername: "jole", profession: "Agricultural Engineer", profilePic: UIImage(named: "pic_josip"))
         
         // MOCK
-        let category1 = Category(categoryName: "Melon Production", numberOfUsers: 2, numberOfPosts: 12)
-        let category2 = Category(categoryName: "Yachting", numberOfUsers: 1, numberOfPosts: 5)
-        let category3 = Category(categoryName: "Agriculture", numberOfUsers: 3, numberOfPosts: 28)
-        let category4 = Category(categoryName: "Tobacco industry", numberOfUsers: 1, numberOfPosts: 1)
+        let category1 = Category(categoryName: "Melon Production", numberOfUsers: 2, numberOfPosts: 12, featuredImage: UIImage(named: "post_pic_ivan_4"))
+        let category2 = Category(categoryName: "Yachting", numberOfUsers: 1, numberOfPosts: 5, featuredImage: UIImage(named: "post_pic_filip"))
+        let category3 = Category(categoryName: "Agriculture", numberOfUsers: 3, numberOfPosts: 28, featuredImage: UIImage(named: "post_pic_ivan_2"))
+        let category4 = Category(categoryName: "Tobacco industry", numberOfUsers: 1, numberOfPosts: 1, featuredImage: UIImage(named: "post_pic_josip"))
+        self.popularCategories = [category1, category2, category3, category4]
         
         let post1 = Post(user: user1, postDescription: nil, imageUrl: nil, title: "Melon harvest - peak of the season", image: UIImage(named: "post_pic_ivan"), categories: [category1, category3])
         let post2 = Post(user: user2, postDescription: nil, imageUrl: nil, title: "New boat for this summer's tour", image: UIImage(named: "post_pic_filip"), categories: [category2])
@@ -53,6 +57,10 @@ class HomeTableViewController: UITableViewController {
         if let destinationViewController = segue.destinationViewController as? PostDetailsTableViewController,
             let indexPath = sender as? NSIndexPath {
             destinationViewController.post = self.posts[indexPath.row]
+        }
+        if let destinationViewController = segue.destinationViewController as? CategoryTableViewController,
+            let indexPath = sender as? NSIndexPath {
+            destinationViewController.category = self.popularCategories[indexPath.row]
         }
     }
 
@@ -78,25 +86,29 @@ class HomeTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         switch indexPath.section {
         case 0:
-            let cell = tableView.dequeueReusableCellWithIdentifier("cellHomeHeader", forIndexPath: indexPath) as! HomeHeaderTableViewCell
-            cell.headerTitleLabel.text = "Popular Skills"
+            let cell = tableView.dequeueReusableCellWithIdentifier("cellHeader", forIndexPath: indexPath) as! HomeHeaderTableViewCell
+            cell.headerTitleLabel.text = "Subscribed Skills"
+            cell.selectionStyle = UITableViewCellSelectionStyle.None
             return cell
         case 1:
             let cell = tableView.dequeueReusableCellWithIdentifier("cellCategory", forIndexPath: indexPath) as! MyCategoriesTableViewCell
+            // Set dataSource and delegate.
             cell.categoriesCollectionView.dataSource = self
             cell.categoriesCollectionView.delegate = self
+            cell.selectionStyle = UITableViewCellSelectionStyle.None
             return cell
         case 2:
-            let cell = tableView.dequeueReusableCellWithIdentifier("cellHomeHeader", forIndexPath: indexPath) as! HomeHeaderTableViewCell
+            let cell = tableView.dequeueReusableCellWithIdentifier("cellHeader", forIndexPath: indexPath) as! HomeHeaderTableViewCell
             cell.headerTitleLabel.text = "Following"
+            cell.selectionStyle = UITableViewCellSelectionStyle.None
             return cell
         default:
-            let cell = tableView.dequeueReusableCellWithIdentifier("cellPost2", forIndexPath: indexPath) as! PostTableViewCell
+            let cell = tableView.dequeueReusableCellWithIdentifier("cellPost", forIndexPath: indexPath) as! PostTableViewCell
             let post = self.posts[indexPath.row]
             let user = post.user
             cell.profilePicImageView.image = user?.profilePic
             cell.fullNameLabel.text = user?.fullName
-            cell.professionsLabel.text = user?.professions?.joinWithSeparator(" · ")
+            cell.professionLabel.text = user?.profession
             cell.postPicImageView.image = post.image
             cell.titleLabel.text = post.title
             cell.categoriesLabel.text = post.categories?.flatMap({ $0.categoryName }).joinWithSeparator(" · ")
@@ -109,38 +121,46 @@ class HomeTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        self.performSegueWithIdentifier("segueToPostDetailsVc", sender: indexPath)
+        let cell = tableView.cellForRowAtIndexPath(indexPath)
+        if cell is PostTableViewCell {
+           self.performSegueWithIdentifier("segueToPostDetailsVc", sender: indexPath)
+        }
     }
     
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        switch indexPath.section {
-        case 0:
+        cell.layoutMargins = UIEdgeInsetsZero
+        if indexPath.section == 0 || indexPath.section == 2 {
             cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
-        case 1:
-            cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
-        case 2:
-            cell.layoutMargins = UIEdgeInsetsZero
-        default:
-            cell.layoutMargins = UIEdgeInsetsZero
         }
     }
 }
 
-//TEST
-
 extension HomeTableViewController: UICollectionViewDataSource, UICollectionViewDelegate {
+    
+    // MARK: UICollectionViewDataSource
     
     func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
         return 1
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.posts.count
+        return self.popularCategories.count
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("cellCategory", forIndexPath: indexPath) as! MyCategoryCollectionViewCell
-        cell.categoryImageView.image = posts[indexPath.row].image
+        let category = self.popularCategories[indexPath.row]
+        cell.categoryImageView.image = category.featuredImage
+        cell.categoryNameLabel.text = category.categoryName
+        if let numberOfPosts = category.numberOfPosts {
+            cell.numberOfPostsLabel.text = "\(numberOfPosts.numberToString()) posts"
+        }
         return cell
+    }
+    
+    // MARK: UICollectionViewDelegate
+    
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        self.performSegueWithIdentifier("segueToCategoryVc", sender: indexPath)
     }
 }

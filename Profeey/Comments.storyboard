@@ -142,7 +142,7 @@
                                             <color key="textColor" red="0.2901960784" green="0.2901960784" blue="0.2901960784" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Professions" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B5L-QK-GNA">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Profession" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B5L-QK-GNA">
                                             <rect key="frame" x="119" y="10" width="471" height="17"/>
                                             <fontDescription key="fontDescription" type="system" weight="light" pointSize="14"/>
                                             <color key="textColor" red="0.63921568630000003" green="0.63921568630000003" blue="0.63921568630000003" alpha="1" colorSpace="calibratedRGB"/>
@@ -181,7 +181,7 @@
                                 <connections>
                                     <outlet property="commentLabel" destination="56k-a3-Wmc" id="vV9-wJ-hMb"/>
                                     <outlet property="fullNameLabel" destination="iKe-6y-A2V" id="LTq-ta-xCT"/>
-                                    <outlet property="professionsLabel" destination="B5L-QK-GNA" id="Jwb-09-jbd"/>
+                                    <outlet property="professionLabel" destination="B5L-QK-GNA" id="KPo-0d-xMC"/>
                                     <outlet property="profilePicImageView" destination="S85-g7-adF" id="TQW-ZL-hdw"/>
                                     <outlet property="timeLabel" destination="hhb-W9-3Af" id="2Mj-cb-cRm"/>
                                 </connections>

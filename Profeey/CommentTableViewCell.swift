@@ -12,7 +12,7 @@ class CommentTableViewCell: UITableViewCell {
 
     @IBOutlet weak var profilePicImageView: UIImageView!
     @IBOutlet weak var fullNameLabel: UILabel!
-    @IBOutlet weak var professionsLabel: UILabel!
+    @IBOutlet weak var professionLabel: UILabel!
     @IBOutlet weak var commentLabel: UILabel!
     @IBOutlet weak var timeLabel: UILabel!
     

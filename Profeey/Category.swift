@@ -15,6 +15,9 @@ class Category: NSObject {
     var numberOfUsers: Int?
     var numberOfPosts: Int?
     
+    //TEST
+    var featuredImage: UIImage?
+    
     override init() {
         super.init()
     }
@@ -24,5 +27,13 @@ class Category: NSObject {
         self.categoryName = categoryName
         self.numberOfUsers = numberOfUsers
         self.numberOfPosts = numberOfPosts
+    }
+    
+    convenience init(categoryName: String?, numberOfUsers: Int?, numberOfPosts: Int?, featuredImage: UIImage?) {
+        self.init()
+        self.categoryName = categoryName
+        self.numberOfUsers = numberOfUsers
+        self.numberOfPosts = numberOfPosts
+        self.featuredImage = featuredImage
     }
 }

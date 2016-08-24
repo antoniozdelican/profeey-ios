@@ -1,8 +1,8 @@
 //
-//  CategoriesCollectionViewController.swift
+//  EditCategoriesCollectionViewController.swift
 //  Profeey
 //
-//  Created by Antonio Zdelican on 02/08/16.
+//  Created by Antonio Zdelican on 22/08/16.
 //  Copyright © 2016 Profeey. All rights reserved.
 //
 
@@ -12,8 +12,8 @@ protocol CategoriesCollectionViewControllerDelegate {
     func didSelectItemAtIndexPath(index: Int)
 }
 
-class CategoriesCollectionViewController: UICollectionViewController {
-    
+class EditCategoriesCollectionViewController: UICollectionViewController {
+
     // Constants for cell size.
     private let CATEGORY_LABEL_HEIGHT: CGFloat = 20.0
     private let CATEGORY_FONT: UIFont = UIFont.systemFontOfSize(16.0)
@@ -24,29 +24,29 @@ class CategoriesCollectionViewController: UICollectionViewController {
     var oldCategories: [String]?
     private var categories: [String] = []
     var categoriesCollectionViewControllerDelegate: CategoriesCollectionViewControllerDelegate?
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         if let oldCategories = self.oldCategories {
             self.categories = oldCategories
         }
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
-
+    
     // MARK: UICollectionViewDataSource
-
+    
     override func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
         return 1
     }
-
-
+    
+    
     override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.categories.count
     }
-
+    
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("cellCategory", forIndexPath: indexPath) as! CategoryCollectionViewCell
         cell.categoryNameLabel.text = self.categories[indexPath.row]
@@ -67,7 +67,7 @@ class CategoriesCollectionViewController: UICollectionViewController {
     }
 }
 
-extension CategoriesCollectionViewController: UICollectionViewDelegateFlowLayout {
+extension EditCategoriesCollectionViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
         let category = self.categories[indexPath.row]
@@ -79,7 +79,7 @@ extension CategoriesCollectionViewController: UICollectionViewDelegateFlowLayout
     }
 }
 
-extension CategoriesCollectionViewController: CategoriesAddDelegate {
+extension EditCategoriesCollectionViewController: CategoriesAddDelegate {
     
     func addCategory(category: String) {
         guard !self.categories.contains(category) else {

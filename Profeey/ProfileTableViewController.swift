@@ -12,21 +12,25 @@ import AWSMobileHubHelper
 
 class ProfileTableViewController: UITableViewController {
     
+    @IBOutlet weak var settingsButton: UIBarButtonItem!
+    
     // For now it's currentUser from DynamoDB.
     var user: User?
     var posts: [Post] = []
-    var isCurrentUser: Bool = true
+    var isCurrentUser: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.Plain, target:nil, action:nil)
+        self.navigationItem.title = nil
         self.tableView.delaysContentTouches = false
         self.tableView.estimatedRowHeight = 120.0
         self.tableView.rowHeight = UITableViewAutomaticDimension
+        self.settingsButton.image = UIImage(named: "ic_settings")
         
         if self.isCurrentUser {
             self.getCurrentUser()
-            self.getCurrentUserPosts()
+            //self.getCurrentUserPosts()
         } else {
             // TEST
             self.navigationItem.title = self.user?.preferredUsername
@@ -53,7 +57,7 @@ class ProfileTableViewController: UITableViewController {
     
     private func configureUser(user: User?) {
         self.user = user
-        self.tableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.None)
+        self.tableView.reloadData()
         self.navigationItem.title = self.user?.preferredUsername
     }
     
@@ -91,7 +95,7 @@ class ProfileTableViewController: UITableViewController {
     // MARK: UITableViewDataSource
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 6
+        return 7
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -106,6 +110,8 @@ class ProfileTableViewController: UITableViewController {
             return 1
         case 4:
             return 1
+        case 5:
+            return 1
         default:
             return self.posts.count
         }
@@ -117,8 +123,8 @@ class ProfileTableViewController: UITableViewController {
             let cell = tableView.dequeueReusableCellWithIdentifier("cellProfile", forIndexPath: indexPath) as! ProfileTableViewCell
             cell.profilePicImageView.image = self.user?.profilePic
             cell.fullNameLabel.text = self.user?.fullName
-            cell.professionsLabel.text = self.user?.professions?.joinWithSeparator(" · ")
-            cell.locationLabel.text = "Zagreb, Croatia"
+            cell.professionLabel.text = self.user?.profession
+            cell.locationLabel.text = self.user?.location
             cell.postsButton.setTitle(self.posts.count.numberToString(), forState: UIControlState.Normal)
             if self.isCurrentUser {
                 cell.setEditButton()
@@ -130,18 +136,25 @@ class ProfileTableViewController: UITableViewController {
             return cell
         case 1:
             let cell = tableView.dequeueReusableCellWithIdentifier("cellAbout", forIndexPath: indexPath) as! ProfileAboutTableViewCell
-            cell.aboutLabel.text = "I’ve been working in the fruit industry for more than a decade.  Used many technologies in apple and melon production as well as in seed growing. I’m looking for new opportunities and connections."
+            cell.aboutLabel.text = self.user?.about
+//            cell.aboutLabel.text = "I’ve been working in the fruit industry for more than a decade.  Used many technologies in apple and melon production as well as in seed growing. I’m looking for new opportunities and connections."
             cell.selectionStyle = UITableViewCellSelectionStyle.None
             return cell
         case 2:
             let cell = tableView.dequeueReusableCellWithIdentifier("cellHeader", forIndexPath: indexPath) as! ProfileHeaderTableViewCell
             cell.headerLabel.text = "Work Experience"
+            cell.experienceImageView.image = UIImage(named: "ic_work_blue")
             return cell
         case 3:
             let cell = tableView.dequeueReusableCellWithIdentifier("cellHeader", forIndexPath: indexPath) as! ProfileHeaderTableViewCell
             cell.headerLabel.text = "Education"
+            cell.experienceImageView.image = UIImage(named: "ic_education_blue")
             return cell
         case 4:
+            let cell = tableView.dequeueReusableCellWithIdentifier("cellTest", forIndexPath: indexPath)
+            cell.selectionStyle = UITableViewCellSelectionStyle.None
+            return cell
+        case 5:
             let cell = tableView.dequeueReusableCellWithIdentifier("cellHeaderPosts", forIndexPath: indexPath)
             cell.selectionStyle = UITableViewCellSelectionStyle.None
             return cell
@@ -160,7 +173,8 @@ class ProfileTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        if indexPath.section == 5 {
+        let cell = tableView.cellForRowAtIndexPath(indexPath)
+        if cell is PostSmallTableViewCell {
             self.performSegueWithIdentifier("segueToPostVc", sender: indexPath)
         }
         if indexPath.section == 2 || indexPath.section == 3 {
@@ -174,6 +188,19 @@ class ProfileTableViewController: UITableViewController {
     
     // MARK: IBActions
     
+    
+    @IBAction func settingsButtonTapped(sender: AnyObject) {
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
+        let signOutAction = UIAlertAction(title: "Sign out", style: UIAlertActionStyle.Default, handler: {
+            (alert: UIAlertAction) in
+            self.signOut()
+        })
+        alertController.addAction(signOutAction)
+        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: nil)
+        alertController.addAction(cancelAction)
+        self.presentViewController(alertController, animated: true, completion: nil)
+    }
+    
     @IBAction func followersButtonTapped(sender: AnyObject) {
         self.performSegueWithIdentifier("segueToUsersVc", sender: self)
     }
@@ -185,39 +212,66 @@ class ProfileTableViewController: UITableViewController {
         self.performSegueWithIdentifier("segueToEditProfileVc", sender: self)
     }
     
-    func profilePicImageViewTapped(sender: UITapGestureRecognizer) {
-        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
-        let removePhotoAction = UIAlertAction(title: "Remove current photo", style: UIAlertActionStyle.Destructive, handler: {
-            (alert: UIAlertAction) in
-        })
-        alertController.addAction(removePhotoAction)
-        let takePhotoAction = UIAlertAction(title: "Update photo", style: UIAlertActionStyle.Default, handler: {
-            (alert: UIAlertAction) in
-            self.performSegueWithIdentifier("segueToCaptureProfilePicVc", sender: self)
-        })
-        alertController.addAction(takePhotoAction)
-        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: nil)
-        alertController.addAction(cancelAction)
-        self.presentViewController(alertController, animated: true, completion: nil)
-    }
+//    func profilePicImageViewTapped(sender: UITapGestureRecognizer) {
+//        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
+//        let removePhotoAction = UIAlertAction(title: "Remove current photo", style: UIAlertActionStyle.Destructive, handler: {
+//            (alert: UIAlertAction) in
+//        })
+//        alertController.addAction(removePhotoAction)
+//        let takePhotoAction = UIAlertAction(title: "Update photo", style: UIAlertActionStyle.Default, handler: {
+//            (alert: UIAlertAction) in
+//            self.performSegueWithIdentifier("segueToCaptureProfilePicVc", sender: self)
+//        })
+//        alertController.addAction(takePhotoAction)
+//        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: nil)
+//        alertController.addAction(cancelAction)
+//        self.presentViewController(alertController, animated: true, completion: nil)
+//    }
     
     // MARK: AWS
     
     private func getCurrentUser() {
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         AWSClientManager.defaultClientManager().getCurrentUser({
             (task: AWSTask) in
             dispatch_async(dispatch_get_main_queue(), {
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                 if let error = task.error {
                     let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.userInfo["message"] as? String, cancelButtonTitle: "Ok")
                     self.presentViewController(alertController, animated: true, completion: nil)
-                } else if let user = task.result as? AWSUser {
-                    let user = User(firstName: user._firstName, lastName: user._lastName, preferredUsername: user._preferredUsername, professions: user._professions, profilePicUrl: user._profilePicUrl)
+                } else if let awsUser = task.result as? AWSUser {
+                    let user = User(firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, profession: awsUser._profession, profilePicUrl: awsUser._profilePicUrl, location: awsUser._location, about: awsUser._about)
+                    if let profilePicUrl = awsUser._profilePicUrl {
+                        self.getProfilePic(profilePicUrl)
+                    }
                     self.configureUser(user)
                 } else {
                     print("This should not happen getCurrentUser!")
                 }
             })
             return nil
+        })
+    }
+    
+    private func getProfilePic(imageKey: String) {
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        AWSClientManager.defaultClientManager().downloadImage(
+            imageKey,
+            completionHandler: {
+                (task: AWSTask) in
+                dispatch_async(dispatch_get_main_queue(), {
+                    UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                    if let error = task.error {
+                        print("Error: \(error.userInfo["message"])")
+                    } else {
+                        if let imageData = task.result as? NSData {
+                            let image = UIImage(data: imageData)
+                            self.user?.profilePic = image
+                            self.tableView.reloadData()
+                        }
+                    }
+                })
+                return nil
         })
     }
     
@@ -253,7 +307,7 @@ class ProfileTableViewController: UITableViewController {
         guard let imageUrl = imageUrl else {
             return
         }
-        AWSClientManager.defaultClientManager().getImage(
+        AWSClientManager.defaultClientManager().downloadImage(
             imageUrl,
             completionHandler: {
                 (task: AWSTask) in
@@ -272,6 +326,18 @@ class ProfileTableViewController: UITableViewController {
                     }
                 }
                 return nil
+        })
+    }
+    
+    // MARK: AWS
+    
+    private func signOut() {
+        AWSClientManager.defaultClientManager().signOut({
+            (task: AWSTask) in
+            if let error = task.error {
+                print(error)
+            }
+            return nil
         })
     }
 }

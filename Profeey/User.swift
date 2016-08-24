@@ -9,31 +9,23 @@
 class User: NSObject {
     
     // Properties.
+    var userId: String?
+    var about: String?
     var firstName: String?
     var lastName: String?
-    var email: String?
+    var location: String?
     var preferredUsername: String?
-    var professions: [String]?
+    var profession: String?
     var profilePicUrl: String?
     
+    // For SignUp flow.
+    var email: String?
     
-    // TEST
-    var about: String?
-    var location: String?
-    var website: String?
-    
+    // Generated.
     var fullName: String? {
         return [self.firstName, self.lastName].flatMap{$0}.joinWithSeparator(" ")
     }
-    
-    var profilePicData: NSData?
-    var profilePic: UIImage? {
-        if let profilePicData = self.profilePicData {
-            return UIImage(data: profilePicData)
-        } else {
-            return nil
-        }
-    }
+    var profilePic: UIImage?
     
     var posts: [Post]?
     
@@ -41,46 +33,23 @@ class User: NSObject {
         super.init()
     }
     
-    convenience init(firstName: String?, lastName: String?, preferredUsername: String?, professions: [String]?, profilePicUrl: String?) {
+    convenience init(firstName: String?, lastName: String?, preferredUsername: String?, profession: String?, profilePicUrl: String?, location: String?, about: String?) {
         self.init()
         self.firstName = firstName
         self.lastName = lastName
         self.preferredUsername = preferredUsername
-        self.professions = professions
+        self.profession = profession
         self.profilePicUrl = profilePicUrl
-    }
-    
-    // TEST
-    convenience init(firstName: String?, lastName: String?, preferredUsername: String?, professions: [String]?, profilePicData: NSData?) {
-        self.init()
-        self.firstName = firstName
-        self.lastName = lastName
-        self.preferredUsername = preferredUsername
-        self.professions = professions
-        self.profilePicData = profilePicData
-    }
-    
-    // TEST
-    convenience init(firstName: String?, lastName: String?, preferredUsername: String?, profilePicData: NSData?, professions: [String]?) {
-        self.init()
-        self.firstName = firstName
-        self.lastName = lastName
-        self.preferredUsername = preferredUsername
-        self.profilePicData = profilePicData
-        self.professions = professions
-    }
-    
-    // TEST
-    convenience init(firstName: String?, lastName: String?, preferredUsername: String?, profilePicData: NSData?, professions: [String]?, about: String?, location: String?, website: String?, posts: [Post]?) {
-        self.init()
-        self.firstName = firstName
-        self.lastName = lastName
-        self.preferredUsername = preferredUsername
-        self.profilePicData = profilePicData
-        self.professions = professions
-        self.about = about
         self.location = location
-        self.website = website
-        self.posts = posts
+        self.about = about
+    }
+    
+    convenience init(firstName: String?, lastName: String?, preferredUsername: String?, profession: String?, profilePic: UIImage?) {
+        self.init()
+        self.firstName = firstName
+        self.lastName = lastName
+        self.preferredUsername = preferredUsername
+        self.profession = profession
+        self.profilePic = profilePic
     }
 }

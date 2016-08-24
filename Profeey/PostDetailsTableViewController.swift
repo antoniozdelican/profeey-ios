@@ -18,7 +18,7 @@ class PostDetailsTableViewController: UITableViewController {
     
     @IBOutlet weak var profilePicImageView: UIImageView!
     @IBOutlet weak var fullNameLabel: UILabel!
-    @IBOutlet weak var professionsLabel: UILabel!
+    @IBOutlet weak var professionLabel: UILabel!
     @IBOutlet weak var userTableViewCell: UITableViewCell!
     
     
@@ -42,6 +42,7 @@ class PostDetailsTableViewController: UITableViewController {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.Plain, target:nil, action:nil)
         self.automaticallyAdjustsScrollViewInsets = false
+        self.mainTableViewCell.selectionStyle = UITableViewCellSelectionStyle.None
         self.configurePost()
     }
 
@@ -68,7 +69,7 @@ class PostDetailsTableViewController: UITableViewController {
         self.profilePicImageView.clipsToBounds = true
         self.profilePicImageView.image = self.post?.user?.profilePic
         self.fullNameLabel.text = self.post?.user?.fullName
-        self.professionsLabel.text = self.post?.user?.professions?.joinWithSeparator(" · ")
+        self.professionLabel.text = self.post?.user?.profession
         // Likes and comments.
         if let numberOfLikes = self.post?.numberOfLikes.numberToString() {
             self.numberOfLikesButton.setTitle("\(numberOfLikes) likes", forState: UIControlState.Normal)
@@ -79,6 +80,28 @@ class PostDetailsTableViewController: UITableViewController {
         // Other.
         self.timeLabel.text = "Posted 2 minutes ago"
         self.descriptionLabel.text = "Lorem ipsum dolor sit amet, eu mea legendos scribentur, an est paulo soluta aliquid, enim duis ut cum. Nostro meliore phaedrum et has. In mea essent dicunt, solum tation regione id eum, at assum legendos his. Minim nobis vitae nec in, volutpat adipiscing pri in. Nam cu audiam volutpat expetenda, docendi copiosae oportere et quo. Eu impedit periculis qui. Eu cum vitae lobortis necessitatibus, eum dictas docendi epicuri ut. Sale voluptua at eos. Homero audiam legendos sea ei, et usu odio putent tincidunt. \n Adipisci intellegat nec ea, sed animal euismod pericula no. Pro summo postea ad, probo mediocritatem sit no. An est putant iisque, ea usu etiam perfecto conceptam. Aliquip referrentur eum et. \n Id iisque latine usu, sea ei solum facer scriptorem, illud vivendum no duo. Nec melius integre mnesarchum ut, quo at mutat accusamus similique, cum et tale putant quodsi. Pro probo definitiones ex, at cum modus novum diceret. Dicunt sententiae cotidieque nam in, graeco molestie mei ea. Eam omnes deserunt quaestio an, ipsum adipisci erroribus mel et, pri ex dicant facilisi euripidis. At lucilius oportere deseruisse nec, sed magna explicari id, nonumes maiestatis repudiandae pri at. \n Id iisque latine usu, sea ei solum facer scriptorem, illud vivendum no duo. Nec melius integre mnesarchum ut, quo at mutat accusamus similique, cum et tale putant quodsi. Pro probo definitiones ex, at cum modus novum diceret. Dicunt sententiae cotidieque nam in, graeco molestie mei ea. Eam omnes deserunt quaestio an, ipsum adipisci erroribus mel et, pri ex dicant facilisi euripidis. At lucilius oportere deseruisse nec, sed magna explicari id, nonumes maiestatis repudiandae pri at."
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        //TEST
+        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), forBarMetrics: .Default)
+        self.navigationController?.navigationBar.shadowImage = UIImage()
+        self.navigationController?.navigationBar.backgroundColor = UIColor.clearColor()
+        self.navigationController?.navigationBar.barTintColor = UIColor.clearColor()
+        self.navigationController?.navigationBar.translucent = true
+        self.navigationController?.navigationBar.tintColor = UIColor.whiteColor()
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        //TEST
+        self.navigationController?.navigationBar.setBackgroundImage(nil, forBarMetrics: .Default)
+        self.navigationController?.navigationBar.shadowImage = nil
+        self.navigationController?.navigationBar.backgroundColor = Colors.greyLight
+        self.navigationController?.navigationBar.barTintColor = Colors.greyLight
+        self.navigationController?.navigationBar.translucent = false
+        self.navigationController?.navigationBar.tintColor = Colors.blue
     }
     
     // MARK: Navigation
@@ -122,17 +145,17 @@ class PostDetailsTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        if cell == self.mainTableViewCell {
+        cell.layoutMargins = UIEdgeInsetsZero
+        if cell == self.userTableViewCell {
             cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
         }
-        cell.layoutMargins = UIEdgeInsetsZero
     }
     
     // MARK: IBActions
     
     @IBAction func likeButtonTapped(sender: AnyObject) {
         if self.isLiked {
-            self.likeButton.setImage(UIImage(named: "ic_like_grey_big"), forState: UIControlState.Normal)
+            self.likeButton.setImage(UIImage(named: "ic_like_black_big"), forState: UIControlState.Normal)
             self.isLiked = false
         } else {
             self.likeButton.setImage(UIImage(named: "ic_like_blue_big"), forState: UIControlState.Normal)

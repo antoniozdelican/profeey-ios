@@ -1,8 +1,8 @@
 //
-//  CategoriesViewController.swift
+//  EditCategoriesViewController.swift
 //  Profeey
 //
-//  Created by Antonio Zdelican on 02/08/16.
+//  Created by Antonio Zdelican on 22/08/16.
 //  Copyright © 2016 Profeey. All rights reserved.
 //
 
@@ -16,15 +16,15 @@ protocol CategoriesAddDelegate {
     func addCategory(category: String)
 }
 
-class CategoriesViewController: UIViewController {
-    
+class EditCategoriesViewController: UIViewController {
+
     @IBOutlet weak var addCategoryTextField: UITextField!
     
     var oldCategories: [String]?
     var categories: [String] = []
     var categoriesTextFieldDelegate: CategoriesTextFieldDelegate?
     var categoriesAddDelegate: CategoriesAddDelegate?
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         if let oldCategories = self.oldCategories {
@@ -45,7 +45,7 @@ class CategoriesViewController: UIViewController {
     override func prefersStatusBarHidden() -> Bool {
         return true
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
@@ -53,11 +53,11 @@ class CategoriesViewController: UIViewController {
     // MARK: Navigation
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if let destinationViewController = segue.destinationViewController as? CategoriesTableViewController {
+        if let destinationViewController = segue.destinationViewController as? EditCategoriesTableViewController {
             self.categoriesTextFieldDelegate = destinationViewController
             destinationViewController.categoriesTableViewControllerDelegate = self
         }
-        if let destinationViewController = segue.destinationViewController as? CategoriesCollectionViewController {
+        if let destinationViewController = segue.destinationViewController as? EditCategoriesCollectionViewController {
             self.categoriesAddDelegate = destinationViewController
             destinationViewController.categoriesCollectionViewControllerDelegate = self
             destinationViewController.oldCategories = self.oldCategories
@@ -86,7 +86,7 @@ class CategoriesViewController: UIViewController {
     
 }
 
-extension CategoriesViewController: CategoriesTableViewControllerDelegate {
+extension EditCategoriesViewController: CategoriesTableViewControllerDelegate {
     
     func scrollViewWillBeginDragging() {
         self.addCategoryTextField.resignFirstResponder()
@@ -99,7 +99,7 @@ extension CategoriesViewController: CategoriesTableViewControllerDelegate {
     }
 }
 
-extension CategoriesViewController: CategoriesCollectionViewControllerDelegate {
+extension EditCategoriesViewController: CategoriesCollectionViewControllerDelegate {
     
     func didSelectItemAtIndexPath(index: Int) {
         self.categories.removeAtIndex(index)

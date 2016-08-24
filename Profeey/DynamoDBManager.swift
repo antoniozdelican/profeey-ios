@@ -18,7 +18,7 @@ protocol DynamoDBManager {
     
     func updateFirstLastNameDynamoDB(firstName: String?, lastName: String?, completionHandler: AWSContinuationBlock)
     func updatePreferredUsernameDynamoDB(preferredUsername: String?, completionHandler: AWSContinuationBlock)
-    func updateUserProfessionsDynamoDB(professions: [String]?, completionHandler: AWSContinuationBlock)
+    func updateUserProfessionDynamoDB(profession: String?, completionHandler: AWSContinuationBlock)
     func updateProfilePicDynamoDB(profilePicUrl: String?, completionHandler: AWSContinuationBlock)
     
     // MARK: Posts

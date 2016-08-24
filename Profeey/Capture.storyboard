@@ -10,7 +10,9 @@
         <scene sceneID="vLm-xJ-5gS">
             <objects>
                 <navigationController id="8RV-Uw-cfX" customClass="FakeCaptureNavigationController" customModule="Profeey" customModuleProvider="target" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" tag="2" title="" image="ic_capture" id="XTe-CH-TgN"/>
+                    <tabBarItem key="tabBarItem" tag="2" title="" image="ic_capture" id="XTe-CH-TgN">
+                        <inset key="imageInsets" minX="0.0" minY="6" maxX="0.0" maxY="-6"/>
+                    </tabBarItem>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="4te-jG-bVx">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -534,7 +536,7 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="cFB-K6-oRC" kind="presentation" identifier="segueToCategoriesVc" id="u6Y-zd-rnf"/>
+                                            <segue destination="cFB-K6-oRC" kind="presentation" identifier="segueToEditCategoriesVc" id="u6Y-zd-rnf"/>
                                         </connections>
                                     </tableViewCell>
                                 </cells>
@@ -566,10 +568,10 @@
             </objects>
             <point key="canvasLocation" x="5511" y="1000"/>
         </scene>
-        <!--Categories-->
+        <!--EditCategories-->
         <scene sceneID="iYx-ED-XZV">
             <objects>
-                <viewControllerPlaceholder storyboardName="Categories" id="cFB-K6-oRC" sceneMemberID="viewController"/>
+                <viewControllerPlaceholder storyboardName="EditCategories" id="cFB-K6-oRC" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xgg-df-qNp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="6104" y="1000"/>

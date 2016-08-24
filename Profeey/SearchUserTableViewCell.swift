@@ -12,7 +12,7 @@ class SearchUserTableViewCell: UITableViewCell {
     
     @IBOutlet weak var profilePicImageView: UIImageView!
     @IBOutlet weak var fullNameLabel: UILabel!
-    @IBOutlet weak var professionsLabel: UILabel!
+    @IBOutlet weak var professionLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()

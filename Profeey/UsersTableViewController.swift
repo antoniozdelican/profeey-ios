@@ -44,7 +44,7 @@ class UsersTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCellWithIdentifier("cellUser", forIndexPath: indexPath) as! UserTableViewCell
         cell.profilePicImageView.image = UIImage(named: "pic_antonio")
         cell.fullNameLabel.text = "Antonio Zdelican"
-        cell.professionsLabel.text = "Computer Engineer"
+        cell.professionLabel.text = "Computer Engineer"
         if indexPath.row % 2 == 0 {
             cell.setFollowButton()
         } else {

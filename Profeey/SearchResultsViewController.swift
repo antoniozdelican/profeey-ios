@@ -32,6 +32,7 @@ class SearchResultsViewController: UIViewController {
     
     var scrollViewDelegate: ScrollViewDelegate?
     var selectUserDelegate: SelectUserDelegate?
+    var selectCategoryDelegate: SelectCategoryDelegate?
     private var searchUsersDelegate: SearchUsersDelegate?
     private var searchCategoriesDelegate: SearchCategoriesDelegate?
     
@@ -62,6 +63,7 @@ class SearchResultsViewController: UIViewController {
         if let destinationViewController = segue.destinationViewController as? SearchCategoriesTableViewController {
             destinationViewController.scrollViewDelegate = self.scrollViewDelegate
             self.searchCategoriesDelegate = destinationViewController
+            destinationViewController.selectCategoryDelegate = self.selectCategoryDelegate
         }
     }
     

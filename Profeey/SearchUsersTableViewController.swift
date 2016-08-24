@@ -78,7 +78,7 @@ class SearchUsersTableViewController: UITableViewController {
             let user = self.users[indexPath.row]
             cell.profilePicImageView.image = user.profilePic
             cell.fullNameLabel.text = user.fullName
-            cell.professionsLabel.text = user.professions?.joinWithSeparator(" · ")
+            cell.professionLabel.text = user.profession
             return cell
         }
     }
@@ -87,7 +87,6 @@ class SearchUsersTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        
         let cell = tableView.cellForRowAtIndexPath(indexPath)
         if cell is SearchUserTableViewCell {
             self.selectUserDelegate?.userSelected(indexPath.row)

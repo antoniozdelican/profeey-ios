@@ -131,7 +131,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         })
     }
     
-    func updateUserProfessionsDynamoDB(professions: [String]?, completionHandler: AWSContinuationBlock) {
+    func updateUserProfessionDynamoDB(profession: String?, completionHandler: AWSContinuationBlock) {
         AWSClientManager.defaultClientManager().credentialsProvider?.getIdentityId().continueWithBlock({
             (task: AWSTask) in
             if let error = task.error {
@@ -139,18 +139,18 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
                 return AWSTask(error: error).continueWithBlock(completionHandler)
             } else if let identityId = task.result as? String {
                 
-                print("updateUserProfessionsDynamoDB:")
+                print("updateUserProfessionDynamoDB:")
                 let usersTable = AWSUsersTable()
-                let user = AWSUserProfessions()
+                let user = AWSUserProfession()
                 user._userId = identityId
-                user._professions = professions
-                usersTable.saveUserProfessions(user, completionHandler: {
+                user._profession = profession
+                usersTable.saveUserProfession(user, completionHandler: {
                     (task: AWSTask) in
                     if let error = task.error {
-                        print("updateUserProfessionsDynamoDB error:")
+                        print("updateUserProfessionDynamoDB error:")
                         return AWSTask(error: error).continueWithBlock(completionHandler)
                     } else {
-                        print("updateUserProfessionsDynamoDB success!")
+                        print("updateUserProfessionDynamoDB success!")
                         return task.continueWithBlock(completionHandler)
                     }
                 })

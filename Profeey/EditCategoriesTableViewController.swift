@@ -1,8 +1,8 @@
 //
-//  CategoriesTableViewController.swift
+//  EditCategoriesTableViewController.swift
 //  Profeey
 //
-//  Created by Antonio Zdelican on 02/08/16.
+//  Created by Antonio Zdelican on 22/08/16.
 //  Copyright © 2016 Profeey. All rights reserved.
 //
 
@@ -13,8 +13,8 @@ protocol CategoriesTableViewControllerDelegate {
     func didSelectRowAtIndexPath(category: String)
 }
 
-class CategoriesTableViewController: UITableViewController {
-    
+class EditCategoriesTableViewController: UITableViewController {
+
     private var categories: [String] = []
     var categoriesTableViewControllerDelegate: CategoriesTableViewControllerDelegate?
     
@@ -23,17 +23,17 @@ class CategoriesTableViewController: UITableViewController {
         self.tableView.estimatedRowHeight = 50.0
         self.tableView.rowHeight = UITableViewAutomaticDimension
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
-
+    
     // MARK: UITableViewDataSource
-
+    
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
-
+    
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return categories.count
     }
@@ -75,14 +75,14 @@ class CategoriesTableViewController: UITableViewController {
             if self.categories.isEmpty {
                 self.categories.insert(trimmedText, atIndex: 0)
             } else {
-               self.categories[0] = trimmedText
+                self.categories[0] = trimmedText
             }
         }
         self.tableView.reloadData()
     }
 }
 
-extension CategoriesTableViewController: CategoriesTextFieldDelegate {
+extension EditCategoriesTableViewController: CategoriesTextFieldDelegate {
     
     func textFieldChanged(text: String) {
         self.filterCategoriesForSearchText(text)

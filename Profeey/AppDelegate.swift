@@ -42,8 +42,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // UITabBar
         UITabBar.appearance().barTintColor = Colors.greyLight
         UITabBar.appearance().translucent = false
-//        UITabBar.appearance().backgroundImage = UIImage()
-//        UITabBar.appearance().shadowImage = UIImage()
+        UITabBar.appearance().tintColor = Colors.blue
         
         // UITableView
         UITableView.appearance().backgroundColor = Colors.greyLight

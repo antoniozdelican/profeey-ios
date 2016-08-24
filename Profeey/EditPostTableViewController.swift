@@ -23,6 +23,7 @@ class EditPostTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.Plain, target:nil, action:nil)
         self.thumbnailImageView.image = self.finalImage
         self.descriptionTextView.delegate = self
         print(finalImage?.size)
@@ -43,7 +44,7 @@ class EditPostTableViewController: UITableViewController {
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if let navigationController = segue.destinationViewController as? UINavigationController,
-            let childViewController = navigationController.childViewControllers[0] as? CategoriesViewController {
+            let childViewController = navigationController.childViewControllers[0] as? EditCategoriesViewController {
             childViewController.oldCategories = self.categories
         }
     }
@@ -87,7 +88,7 @@ class EditPostTableViewController: UITableViewController {
     
     @IBAction func unwindToEditPostTableViewController(segue: UIStoryboardSegue) {
         if segue.identifier == "segueUnwindToEditPostVc",
-            let sourceViewController = segue.sourceViewController as? CategoriesViewController {
+            let sourceViewController = segue.sourceViewController as? EditCategoriesViewController {
             self.categories = sourceViewController.categories
             if self.categories.count > 0 {
               self.categoriesLabel.textColor = Colors.blue

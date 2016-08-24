@@ -129,8 +129,8 @@
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="73.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PROFESSIONS" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MKt-jZ-aIg">
-                                                    <rect key="frame" x="10" y="15" width="84" height="15"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PROFESSION" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MKt-jZ-aIg">
+                                                    <rect key="frame" x="10" y="15" width="76" height="15"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <color key="textColor" red="0.63921568630000003" green="0.63921568630000003" blue="0.63921568630000003" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -142,7 +142,7 @@
                                                         <constraint firstAttribute="height" constant="14" id="nxZ-94-q2y"/>
                                                     </constraints>
                                                 </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Professions" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qb0-k4-qbl">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Profession" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qb0-k4-qbl">
                                                     <rect key="frame" x="10" y="38" width="556" height="20"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                     <color key="textColor" red="0.2901960784" green="0.56470588239999997" blue="0.8862745098" alpha="1" colorSpace="calibratedRGB"/>
@@ -160,9 +160,6 @@
                                                 <constraint firstItem="MKt-jZ-aIg" firstAttribute="leading" secondItem="eIy-Jo-X4g" secondAttribute="leading" constant="10" id="nJn-Em-rKv"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <connections>
-                                            <segue destination="Pf2-x4-ZFN" kind="presentation" id="dJn-fH-j4J"/>
-                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="74" id="Q29-Ge-sK4">
                                         <rect key="frame" x="0.0" y="396" width="600" height="74"/>
@@ -219,7 +216,7 @@
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="fullNameLabel" destination="sNE-pn-GGa" id="Tij-Fi-CVs"/>
-                        <outlet property="professionsLabel" destination="qb0-k4-qbl" id="TZ1-l8-qHf"/>
+                        <outlet property="professionLabel" destination="qb0-k4-qbl" id="5pZ-9X-SMW"/>
                         <outlet property="profilePicImageView" destination="mQf-v3-AmF" id="4Nf-9W-Twx"/>
                         <outlet property="usernameLabel" destination="Zvw-dB-nX3" id="GV7-mf-pRF"/>
                     </connections>
@@ -387,16 +384,6 @@
                 <exit id="hq0-C8-pcU" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="3373" y="-464"/>
-        </scene>
-        <!--Professions-->
-        <scene sceneID="vur-ze-LPc">
-            <objects>
-                <viewControllerPlaceholder storyboardName="Professions" id="NPn-tj-dHp" sceneMemberID="viewController">
-                    <navigationItem key="navigationItem" id="lwx-OQ-wim"/>
-                </viewControllerPlaceholder>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="gss-YM-9dp" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="3284" y="278"/>
         </scene>
         <!--About-->
         <scene sceneID="7vP-S9-h93">
@@ -596,22 +583,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MAL-1M-cOV" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2555" y="-1201"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="cX0-sI-A2k">
-            <objects>
-                <navigationController id="Pf2-x4-ZFN" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="mX5-Oe-nsO">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <connections>
-                        <segue destination="NPn-tj-dHp" kind="relationship" relationship="rootViewController" id="R3H-Gl-IAg"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="H5d-sx-0ZD" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2555" y="278"/>
         </scene>
     </scenes>
     <resources>

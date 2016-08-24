@@ -47,7 +47,7 @@
                                                 <color key="titleColor" red="0.2901960784" green="0.56470588239999997" blue="0.8862745098" alpha="1" colorSpace="calibratedRGB"/>
                                             </state>
                                         </button>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Professions" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jfA-dm-4Fz">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Profession" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jfA-dm-4Fz">
                                             <rect key="frame" x="53" y="28" width="429" height="17"/>
                                             <fontDescription key="fontDescription" type="system" weight="light" pointSize="14"/>
                                             <color key="textColor" red="0.63921568630000003" green="0.63921568630000003" blue="0.63921568630000003" alpha="1" colorSpace="calibratedRGB"/>
@@ -71,7 +71,7 @@
                                 <connections>
                                     <outlet property="followButton" destination="UXI-2a-rAd" id="9WJ-WM-wmq"/>
                                     <outlet property="fullNameLabel" destination="jBc-MJ-rJt" id="hHg-u3-G4r"/>
-                                    <outlet property="professionsLabel" destination="jfA-dm-4Fz" id="ZMk-Gm-5OK"/>
+                                    <outlet property="professionLabel" destination="jfA-dm-4Fz" id="vcy-gV-Ufh"/>
                                     <outlet property="profilePicImageView" destination="0ja-as-E0f" id="G0d-zr-sym"/>
                                 </connections>
                             </tableViewCell>

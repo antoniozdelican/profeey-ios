@@ -19,7 +19,7 @@ class CommentsTableViewController: UITableViewController {
         self.tableView.rowHeight = UITableViewAutomaticDimension
         self.tableView.contentOffset = CGPointMake(0.0, CGFloat.max)
         
-        let user1 = User(firstName: "Antonio", lastName: "Zdelican", preferredUsername: "toni", profilePicData: UIImageJPEGRepresentation(UIImage(named: "pic_antonio")!, 0.6), professions: ["Computer Engineer"], about: "Pursuing my Master's Degree in CS. Love to code and design. Currently discovering iOS and energy management.", location: "Lisbon, Portugal", website: "antoniozdelican.com", posts: nil)
+        let user1 = User(firstName: "Antonio", lastName: "Zdelican", preferredUsername: "antonio", profession: "Engineer", profilePicUrl: nil, location: nil, about: nil)
         let comment1 = Comment(user: user1, commentText: "Currently discovering iOS and energy management.")
         let comment2 = Comment(user: user1, commentText: "Awesome")
         let comment3 = Comment(user: user1, commentText: "Bla")
@@ -54,7 +54,7 @@ class CommentsTableViewController: UITableViewController {
         let user = comment.user
         cell.profilePicImageView.image = user?.profilePic
         cell.fullNameLabel.text = user?.fullName
-        cell.professionsLabel.text = user?.professions?.joinWithSeparator(" · ")
+        cell.professionLabel.text = user?.profession
         cell.commentLabel.text = comment.commentText
         cell.timeLabel.text = "2 minutes ago"
         return cell

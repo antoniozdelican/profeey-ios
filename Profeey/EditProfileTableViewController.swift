@@ -17,7 +17,7 @@ class EditProfileTableViewController: UITableViewController {
     @IBOutlet weak var profilePicImageView: UIImageView!
     @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var fullNameLabel: UILabel!
-    @IBOutlet weak var professionsLabel: UILabel!
+    @IBOutlet weak var professionLabel: UILabel!
     
     var user: User?
     var editProfileDelegate: EditProfileDelegate?
@@ -36,7 +36,7 @@ class EditProfileTableViewController: UITableViewController {
     private func configureUser() {
         self.usernameLabel.text = self.user?.preferredUsername
         self.fullNameLabel.text = self.user?.fullName
-        self.professionsLabel.text = self.user?.professions?.joinWithSeparator(" · ")
+        self.professionLabel.text = self.user?.profession
         self.tableView.reloadData()
     }
     
@@ -52,20 +52,6 @@ class EditProfileTableViewController: UITableViewController {
                 destinationViewController.firstName = self.user?.firstName
                 destinationViewController.lastName = self.user?.lastName
                 destinationViewController.editFirstLastNameDelegate = self
-            case let destinationViewController as ProfessionsViewController:
-                if let professions = self.user?.professions {
-                    destinationViewController.professions = professions
-                }
-                destinationViewController.editProfessionsDelegate = self
-                destinationViewController.isEditProfessions = true
-                
-//            case let destinationViewController as ItemsViewController:
-//                destinationViewController.items = self.user?.professions
-//                destinationViewController.delegate = self
-//                destinationViewController.itemType = ItemType.Profession
-//            case let destinationViewController as EditAboutTableViewController:
-//                destinationViewController.about = self.user?.about
-//                destinationViewController.delegate = self
             default:
                 return
             }
@@ -114,33 +100,3 @@ extension EditProfileTableViewController: EditFirstLastNameDelegate {
         self.editProfileDelegate?.userUpdated(self.user)
     }
 }
-
-extension EditProfileTableViewController: EditProfessionsDelegate {
-    
-    func professionsUpdated(professions: [String]?) {
-        self.user?.professions = professions
-        self.configureUser()
-        self.editProfileDelegate?.userUpdated(self.user)
-    }
-}
-
-//extension EditProfileTableViewController: EditAboutDelegate {
-//    
-//    func aboutUpdated(about: String?) {
-//        self.currentUser?.about = about
-//        self.aboutPlaceholderLabel.text = self.currentUser?.about
-//        self.tableView.reloadData()
-//        //self.delegate?.currentUserUpdated(self.currentUser)
-//    }
-//}
-
-//extension EditProfileTableViewController: EditItemsDelegate {
-//    
-//    func itemsUpdated(items: [String]?, itemType: ItemType?) {
-//        // We know here itemType is .Profession
-//        self.currentUser?.professions = items
-//        self.professionsPlaceholderLabel.text = self.currentUser?.professions?.joinWithSeparator(" · ")
-//        self.tableView.reloadData()
-//        //self.delegate?.currentUserUpdated(self.currentUser)
-//    }
-//}

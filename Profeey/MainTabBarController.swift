@@ -25,44 +25,60 @@ class MainTabBarController: UITabBarController {
     
     func configureView() {
         // Set images for tabBar items
-        // Fetch child navbarControllers to set tabItems since they are in different storyboards
-        for navController in self.childViewControllers {
-            let tbItem = navController.tabBarItem
-            if tbItem.tag == 0 {
+        for navigationController in self.childViewControllers {
+            let tabBarItem = navigationController.tabBarItem
+            if tabBarItem.tag == 0 {
                 guard let image = UIImage(named: "ic_home"), let selectedImage = UIImage(named: "ic_home_selected") else {
                     return
                 }
-                tbItem.image = image.imageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal)
-                tbItem.selectedImage = selectedImage.imageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal)
+                tabBarItem.image = image.imageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal)
+                tabBarItem.selectedImage = selectedImage
             }
-            if tbItem.tag == 1 {
+            if tabBarItem.tag == 1 {
                 guard let image = UIImage(named: "ic_search"), let selectedImage = UIImage(named: "ic_search_selected") else {
                     return
                 }
-                tbItem.image = image.imageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal)
-                tbItem.selectedImage = selectedImage.imageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal)
+                tabBarItem.image = image.imageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal)
+                tabBarItem.selectedImage = selectedImage
             }
-            if tbItem.tag == 2 {
+            if tabBarItem.tag == 2 {
                 guard let image = UIImage(named: "ic_capture"), let selectedImage = UIImage(named: "ic_capture_selected") else {
                     return
                 }
-                tbItem.image = image.imageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal)
-                tbItem.selectedImage = selectedImage.imageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal)
+                tabBarItem.image = image.imageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal)
+                tabBarItem.selectedImage = selectedImage
             }
-            if tbItem.tag == 3 {
+            if tabBarItem.tag == 3 {
                 guard let image = UIImage(named: "ic_notifications"), let selectedImage = UIImage(named: "ic_notifications_selected") else {
                     return
                 }
-                tbItem.image = image.imageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal)
-                tbItem.selectedImage = selectedImage.imageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal)
+                tabBarItem.image = image.imageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal)
+                tabBarItem.selectedImage = selectedImage
             }
-            if tbItem.tag == 4 {
+            if tabBarItem.tag == 4 {
                 guard let image = UIImage(named: "ic_profile"), let selectedImage = UIImage(named: "ic_profile_selected") else {
                     return
                 }
-                tbItem.image = image.imageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal)
-                tbItem.selectedImage = selectedImage.imageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal)
+                tabBarItem.image = image.imageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal)
+                tabBarItem.selectedImage = selectedImage
+                
+                // Set currentUser flag.
+                if let childViewController = navigationController.childViewControllers[0] as? ProfileTableViewController {
+                    childViewController.isCurrentUser = true
+                }
             }
+        }
+    }
+    
+    // MARK: Navigation
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        print("here")
+        print(segue.destinationViewController)
+        if let navigationController = segue.destinationViewController as? UINavigationController,
+            let childViewController = navigationController.childViewControllers[0] as? ProfileTableViewController {
+            print("YEEES")
+            childViewController.isCurrentUser = true
         }
     }
 }
@@ -78,6 +94,5 @@ extension MainTabBarController: UITabBarControllerDelegate {
         } else {
             return true
         }
-//        return true
     }
 }

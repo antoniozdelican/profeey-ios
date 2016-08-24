@@ -15,75 +15,75 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellHomeHeader" rowHeight="55" id="vRl-9u-SjQ" customClass="HomeHeaderTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="92" width="600" height="55"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellHeader" rowHeight="62" id="vRl-9u-SjQ" customClass="HomeHeaderTableViewCell" customModule="Profeey" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="92" width="600" height="62"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="vRl-9u-SjQ" id="Umz-v3-xed">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="54.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="61.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Header Title" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zb8-QL-2mP">
-                                            <rect key="frame" x="15" y="15" width="570" height="24"/>
-                                            <fontDescription key="fontDescription" type="system" weight="light" pointSize="20"/>
-                                            <color key="textColor" red="0.63921568630000003" green="0.63921568630000003" blue="0.63921568630000003" alpha="1" colorSpace="calibratedRGB"/>
+                                            <rect key="frame" x="16" y="24" width="568" height="29"/>
+                                            <fontDescription key="fontDescription" type="system" weight="light" pointSize="24"/>
+                                            <color key="textColor" red="0.2901960784" green="0.2901960784" blue="0.2901960784" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstAttribute="bottom" secondItem="zb8-QL-2mP" secondAttribute="bottom" constant="15.5" id="JAH-hZ-kwX"/>
-                                        <constraint firstItem="zb8-QL-2mP" firstAttribute="top" secondItem="Umz-v3-xed" secondAttribute="top" constant="15" id="NeW-lg-XuU"/>
-                                        <constraint firstItem="zb8-QL-2mP" firstAttribute="leading" secondItem="Umz-v3-xed" secondAttribute="leading" constant="15" id="slq-XP-jlh"/>
-                                        <constraint firstAttribute="trailing" secondItem="zb8-QL-2mP" secondAttribute="trailing" constant="15" id="w6H-tB-Xd5"/>
+                                        <constraint firstItem="zb8-QL-2mP" firstAttribute="top" secondItem="Umz-v3-xed" secondAttribute="top" constant="24" id="Wco-lm-Ozd"/>
+                                        <constraint firstAttribute="bottom" secondItem="zb8-QL-2mP" secondAttribute="bottom" constant="8.5" id="lrC-Dq-WfP"/>
+                                        <constraint firstItem="zb8-QL-2mP" firstAttribute="leading" secondItem="Umz-v3-xed" secondAttribute="leading" constant="16" id="slq-XP-jlh"/>
+                                        <constraint firstAttribute="trailing" secondItem="zb8-QL-2mP" secondAttribute="trailing" constant="16" id="w6H-tB-Xd5"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="headerTitleLabel" destination="zb8-QL-2mP" id="a91-PM-F4S"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellCategory" rowHeight="275" id="4IK-Yy-tTt" customClass="MyCategoriesTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="147" width="600" height="275"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellCategory" rowHeight="249" id="4IK-Yy-tTt" customClass="MyCategoriesTableViewCell" customModule="Profeey" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="154" width="600" height="249"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="4IK-Yy-tTt" id="AJd-94-9Ic">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="274.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="248.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="3Uj-Iv-MsN">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="224"/>
+                                        <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="3Uj-Iv-MsN">
+                                            <rect key="frame" x="0.0" y="16" width="600" height="200"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             <constraints>
-                                                <constraint firstAttribute="height" constant="224" id="yPm-5X-u1c"/>
+                                                <constraint firstAttribute="height" constant="200" id="yPm-5X-u1c"/>
                                             </constraints>
-                                            <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="7.5" minimumInteritemSpacing="0.0" id="5Uf-bG-alF">
-                                                <size key="itemSize" width="335" height="224"/>
+                                            <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="8" minimumInteritemSpacing="0.0" id="aKF-gJ-xN9">
+                                                <size key="itemSize" width="300" height="200"/>
                                                 <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                                 <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                                <inset key="sectionInset" minX="15" minY="0.0" maxX="15" maxY="0.0"/>
+                                                <inset key="sectionInset" minX="16" minY="0.0" maxX="16" maxY="0.0"/>
                                             </collectionViewFlowLayout>
                                             <cells>
                                                 <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="cellCategory" id="fjG-80-012" customClass="MyCategoryCollectionViewCell" customModule="Profeey" customModuleProvider="target">
-                                                    <rect key="frame" x="15" y="0.0" width="335" height="224"/>
+                                                    <rect key="frame" x="16" y="0.0" width="300" height="200"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                                        <rect key="frame" x="0.0" y="0.0" width="335" height="224"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="300" height="200"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <subviews>
                                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="TsH-p8-bax">
-                                                                <rect key="frame" x="0.0" y="0.0" width="335" height="224"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="300" height="200"/>
                                                             </imageView>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Fruit Production" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="F9I-y3-gj5">
-                                                                <rect key="frame" x="78" y="84" width="179" height="30"/>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Category Name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="F9I-y3-gj5">
+                                                                <rect key="frame" x="62.5" y="72.5" width="175" height="30"/>
                                                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="24"/>
                                                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                 <nil key="highlightedColor"/>
-                                                                <color key="shadowColor" red="0.0" green="0.0" blue="0.0" alpha="0.20000000000000001" colorSpace="calibratedRGB"/>
+                                                                <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                                                 <size key="shadowOffset" width="0.0" height="1"/>
                                                             </label>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="35 posts" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FBA-ee-7Ws">
-                                                                <rect key="frame" x="134" y="118.5" width="67" height="21"/>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1234 posts" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FBA-ee-7Ws">
+                                                                <rect key="frame" x="107.5" y="106.5" width="85" height="21"/>
                                                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="16"/>
                                                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                 <nil key="highlightedColor"/>
-                                                                <color key="shadowColor" white="0.0" alpha="0.20000000000000001" colorSpace="calibratedWhite"/>
+                                                                <color key="shadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                                                 <size key="shadowOffset" width="0.0" height="1"/>
                                                             </label>
                                                         </subviews>
@@ -99,16 +99,19 @@
                                                         <constraint firstItem="F9I-y3-gj5" firstAttribute="centerY" secondItem="fjG-80-012" secondAttribute="centerY" constant="-12.5" id="xbK-dq-b5w"/>
                                                         <constraint firstItem="F9I-y3-gj5" firstAttribute="centerX" secondItem="fjG-80-012" secondAttribute="centerX" id="yKI-uW-vqm"/>
                                                     </constraints>
+                                                    <size key="customSize" width="300" height="200"/>
                                                     <connections>
                                                         <outlet property="categoryImageView" destination="TsH-p8-bax" id="1XJ-5G-Uaz"/>
+                                                        <outlet property="categoryNameLabel" destination="F9I-y3-gj5" id="Rru-um-KLP"/>
+                                                        <outlet property="numberOfPostsLabel" destination="FBA-ee-7Ws" id="mes-ZI-iFR"/>
                                                     </connections>
                                                 </collectionViewCell>
                                             </cells>
                                         </collectionView>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstAttribute="bottom" secondItem="3Uj-Iv-MsN" secondAttribute="bottom" constant="50.5" id="2B8-2e-k4J"/>
-                                        <constraint firstItem="3Uj-Iv-MsN" firstAttribute="top" secondItem="AJd-94-9Ic" secondAttribute="top" id="E8E-J8-WyL"/>
+                                        <constraint firstAttribute="bottom" secondItem="3Uj-Iv-MsN" secondAttribute="bottom" constant="32.5" id="1SL-hZ-6D4"/>
+                                        <constraint firstItem="3Uj-Iv-MsN" firstAttribute="top" secondItem="AJd-94-9Ic" secondAttribute="top" constant="16" id="E8E-J8-WyL"/>
                                         <constraint firstItem="3Uj-Iv-MsN" firstAttribute="leading" secondItem="AJd-94-9Ic" secondAttribute="leading" id="Mt0-iz-C46"/>
                                         <constraint firstAttribute="trailing" secondItem="3Uj-Iv-MsN" secondAttribute="trailing" id="ur1-M6-EjX"/>
                                     </constraints>
@@ -117,8 +120,8 @@
                                     <outlet property="categoriesCollectionView" destination="3Uj-Iv-MsN" id="Qb6-JJ-bBj"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellPost2" rowHeight="522" id="N0I-uP-p5q" customClass="PostTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="422" width="600" height="522"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellPost" rowHeight="522" id="N0I-uP-p5q" customClass="PostTableViewCell" customModule="Profeey" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="403" width="600" height="522"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="N0I-uP-p5q" id="VYj-jx-0Ft">
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="521.5"/>
@@ -137,7 +140,7 @@
                                             <color key="textColor" red="0.2901960784" green="0.2901960784" blue="0.2901960784" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Professions" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rkV-Ro-GYn">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Profession" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rkV-Ro-GYn">
                                             <rect key="frame" x="59" y="35" width="525" height="17"/>
                                             <fontDescription key="fontDescription" type="system" weight="light" pointSize="14"/>
                                             <color key="textColor" red="0.63921568630000003" green="0.63921568630000003" blue="0.63921568630000003" alpha="1" colorSpace="calibratedRGB"/>
@@ -225,7 +228,7 @@
                                     <outlet property="categoriesLabel" destination="GFy-ex-UMM" id="tld-8X-FKf"/>
                                     <outlet property="fullNameLabel" destination="zRO-qm-d2M" id="1KS-n9-ybR"/>
                                     <outlet property="postPicImageView" destination="lNb-19-T9C" id="HSZ-nE-D41"/>
-                                    <outlet property="professionsLabel" destination="rkV-Ro-GYn" id="N89-el-ezn"/>
+                                    <outlet property="professionLabel" destination="rkV-Ro-GYn" id="vKE-tp-45o"/>
                                     <outlet property="profilePicImageView" destination="xwo-5m-ceb" id="PBb-oe-8Jc"/>
                                     <outlet property="timeLabel" destination="bbI-Pj-0hT" id="K7q-Ok-8gc"/>
                                     <outlet property="titleLabel" destination="zsw-tz-mqL" id="cFN-C5-e0j"/>
@@ -242,11 +245,20 @@
                     <size key="freeformSize" width="600" height="1200"/>
                     <connections>
                         <segue destination="Q9y-Mr-q3K" kind="show" identifier="segueToPostDetailsVc" id="Mjz-qY-wFz"/>
+                        <segue destination="Ird-hl-vGH" kind="show" identifier="segueToCategoryVc" id="Y4z-ng-pYm"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GdN-Gk-DAZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="869" y="278"/>
+            <point key="canvasLocation" x="903" y="278"/>
+        </scene>
+        <!--Category-->
+        <scene sceneID="Bgs-sC-LtX">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Category" id="Ird-hl-vGH" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="hWd-vT-Pf1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1575" y="-50"/>
         </scene>
         <!--Post-->
         <scene sceneID="PcR-nM-DdX">
@@ -254,20 +266,22 @@
                 <viewControllerPlaceholder storyboardName="Post" id="Q9y-Mr-q3K" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="naK-si-Wo6" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1500" y="278"/>
+            <point key="canvasLocation" x="1561" y="510"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="etr-Xp-MB4">
             <objects>
                 <navigationController id="Hxy-e0-2AR" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="" image="ic_home" id="i1V-pt-sRq"/>
+                    <tabBarItem key="tabBarItem" title="" image="ic_home" id="i1V-pt-sRq">
+                        <inset key="imageInsets" minX="0.0" minY="6" maxX="0.0" maxY="-6"/>
+                    </tabBarItem>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="pY4-ct-SdI">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="IYk-WP-ADi" kind="relationship" relationship="rootViewController" id="PdM-2B-3i4"/>
+                        <segue destination="IYk-WP-ADi" kind="relationship" relationship="rootViewController" id="AdE-vW-krR"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9V4-dh-Eyy" userLabel="First Responder" sceneMemberID="firstResponder"/>

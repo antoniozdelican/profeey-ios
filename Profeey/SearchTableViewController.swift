@@ -32,15 +32,16 @@ class SearchTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.Plain, target:nil, action:nil)
         self.tableView.estimatedRowHeight = 85.0
         self.tableView.rowHeight = UITableViewAutomaticDimension
         self.automaticallyAdjustsScrollViewInsets = false
         self.configureSearchController()
         
         // MOCK
-        let user1 = User(firstName: "Ivan", lastName: "Zdelican", preferredUsername: "ivan", professions: ["Fruit Grower"], profilePicData: UIImageJPEGRepresentation(UIImage(named: "pic_ivan")!, 0.6))
-        let user2 = User(firstName: "Filip", lastName: "Vargovic", preferredUsername: "filja", professions: ["Yacht Skipper", "Fitness Trainer"], profilePicData: UIImageJPEGRepresentation(UIImage(named: "pic_filip")!, 0.6))
-        let user3 = User(firstName: "Josip", lastName: "Zdelican", preferredUsername: "jole", professions: ["Agricultural Engineer"], profilePicData: UIImageJPEGRepresentation(UIImage(named: "pic_josip")!, 0.6))
+        let user1 = User(firstName: "Ivan", lastName: "Zdelican", preferredUsername: "ivan", profession: "Fruit Grower", profilePic: UIImage(named: "pic_ivan"))
+        let user2 = User(firstName: "Filip", lastName: "Vargovic", preferredUsername: "filja", profession: "Yacht Skipper", profilePic: UIImage(named: "pic_filip"))
+        let user3 = User(firstName: "Josip", lastName: "Zdelican", preferredUsername: "jole", profession: "Agricultural Engineer", profilePic: UIImage(named: "pic_josip"))
         self.allUsers = [user1, user2, user3]
         
         // MOCK
@@ -68,6 +69,8 @@ class SearchTableViewController: UITableViewController {
         self.searchDelegate = self.searchResultsController
         // Set select user delegate.
         self.searchResultsController?.selectUserDelegate = self
+        // Set select category delegate.
+        self.searchResultsController?.selectCategoryDelegate = self
         
         self.searchController = UISearchController(searchResultsController: self.searchResultsController)
         self.searchController?.searchResultsUpdater = self
@@ -86,15 +89,21 @@ class SearchTableViewController: UITableViewController {
         if let destinationViewController = segue.destinationViewController as? ProfileTableViewController,
             let indexPath = sender as? NSIndexPath,
             let text = self.searchController?.searchBar.text {
-            if text.trimm().isEmpty {
-                // All users.
-                destinationViewController.user = self.allUsers[indexPath.row]
-                
-            } else {
-                // Searched users.
-                destinationViewController.user = self.searchedUsers[indexPath.row]
-            }
+            // Searched or all users.
+            destinationViewController.user = text.trimm().isEmpty ? self.allUsers[indexPath.row] : self.searchedUsers[indexPath.row]
             destinationViewController.isCurrentUser = false
+        }
+        if let destinationViewController = segue.destinationViewController as? CategoryTableViewController,
+            let indexPath = sender as? NSIndexPath,
+            let searchController = self.searchController,
+            let text = searchController.searchBar.text {
+            if searchController.active {
+                // Searched or all categories.
+                destinationViewController.category = text.trimm().isEmpty ? self.allCategories[indexPath.row] : self.searchedCategories[indexPath.row]
+            } else {
+                // Popular categories.
+                destinationViewController.category = self.popularCategories[indexPath.row]
+            }
         }
     }
 
@@ -116,7 +125,9 @@ class SearchTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         switch indexPath.section {
         case 0:
-            let cell = tableView.dequeueReusableCellWithIdentifier("cellPopularHeader", forIndexPath: indexPath)
+            let cell = tableView.dequeueReusableCellWithIdentifier("cellHeader", forIndexPath: indexPath) as! HomeHeaderTableViewCell
+            cell.headerTitleLabel.text = "Popular Skills"
+            cell.selectionStyle = UITableViewCellSelectionStyle.None
             return cell
         default:
             let cell = tableView.dequeueReusableCellWithIdentifier("cellPopularCategory", forIndexPath: indexPath) as! PopularCategoryTableViewCell
@@ -130,9 +141,8 @@ class SearchTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        
-        // TEST
-        self.performSegueWithIdentifier("segueToProfileVc", sender: indexPath)
+        // Popular category selected.
+        self.performSegueWithIdentifier("segueToCategoryVc", sender: indexPath)
     }
     
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
@@ -220,5 +230,13 @@ extension SearchTableViewController: SelectUserDelegate {
     func userSelected(index: Int) {
         let indexPath = NSIndexPath(forRow: index, inSection: 1)
         self.performSegueWithIdentifier("segueToProfileVc", sender: indexPath)
+    }
+}
+
+extension SearchTableViewController: SelectCategoryDelegate {
+    
+    func categorySelected(index: Int) {
+        let indexPath = NSIndexPath(forRow: index, inSection: 1)
+        self.performSegueWithIdentifier("segueToCategoryVc", sender: indexPath)
     }
 }

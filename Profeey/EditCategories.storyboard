@@ -24,7 +24,7 @@
         <!--Add categories-->
         <scene sceneID="cM0-0Y-2qH">
             <objects>
-                <viewController id="0aA-GK-eLY" customClass="CategoriesViewController" customModule="Profeey" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="0aA-GK-eLY" customClass="EditCategoriesViewController" customModule="Profeey" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="mPa-ky-Okx"/>
                         <viewControllerLayoutGuide type="bottom" id="hzx-r8-8ny"/>
@@ -42,7 +42,7 @@
                                             <constraint firstAttribute="height" constant="45" id="777-Od-uo6"/>
                                         </constraints>
                                         <connections>
-                                            <segue destination="Scg-N7-3J4" kind="embed" identifier="segueToCategoriesCollectionVc" id="gd9-xJ-dgB"/>
+                                            <segue destination="Scg-N7-3J4" kind="embed" identifier="segueToEditCategoriesCollectionVc" id="gd9-xJ-dgB"/>
                                         </connections>
                                     </containerView>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Add category..." textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="RXh-mo-kkd">
@@ -102,7 +102,7 @@
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="D7Q-C2-IDc">
                                 <rect key="frame" x="0.0" y="164" width="600" height="436"/>
                                 <connections>
-                                    <segue destination="wOL-C7-f0c" kind="embed" identifier="segueToCategoriesTableVc" id="sKa-C6-gdk"/>
+                                    <segue destination="wOL-C7-f0c" kind="embed" identifier="segueToEditCategoriesTableVc" id="sKa-C6-gdk"/>
                                 </connections>
                             </containerView>
                         </subviews>
@@ -140,10 +140,10 @@
             </objects>
             <point key="canvasLocation" x="1195" y="-562"/>
         </scene>
-        <!--Categories Collection View Controller-->
+        <!--Edit Categories Collection View Controller-->
         <scene sceneID="jO0-fh-kqc">
             <objects>
-                <collectionViewController id="Scg-N7-3J4" customClass="CategoriesCollectionViewController" customModule="Profeey" customModuleProvider="target" sceneMemberID="viewController">
+                <collectionViewController id="Scg-N7-3J4" customClass="EditCategoriesCollectionViewController" customModule="Profeey" customModuleProvider="target" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" id="T8Z-eh-OIh">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="45"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -214,10 +214,10 @@
             </objects>
             <point key="canvasLocation" x="1966" y="-839.5"/>
         </scene>
-        <!--Categories Table View Controller-->
+        <!--Edit Categories Table View Controller-->
         <scene sceneID="hs4-QC-C5B">
             <objects>
-                <tableViewController id="wOL-C7-f0c" customClass="CategoriesTableViewController" customModule="Profeey" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="wOL-C7-f0c" customClass="EditCategoriesTableViewController" customModule="Profeey" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="JfF-Lg-k51">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="436"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

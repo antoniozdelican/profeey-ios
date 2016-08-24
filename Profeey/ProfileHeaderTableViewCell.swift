@@ -11,7 +11,7 @@ import UIKit
 class ProfileHeaderTableViewCell: UITableViewCell {
 
     @IBOutlet weak var headerLabel: UILabel!
-    @IBOutlet weak var arrowImageView: UIImageView!
+    @IBOutlet weak var experienceImageView: UIImageView!
     
     override func awakeFromNib() {
         super.awakeFromNib()

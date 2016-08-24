@@ -65,7 +65,7 @@ class UsernameViewController: UIViewController {
                     let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.userInfo["message"] as? String, cancelButtonTitle: "Ok")
                     self.presentViewController(alertController, animated: true, completion: nil)
                 } else {
-                    self.performSegueWithIdentifier("segueToProfessionsVc", sender: self)
+                    self.performSegueWithIdentifier("segueToProfessionVc", sender: self)
                 }
             })
             return nil

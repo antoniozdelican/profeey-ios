@@ -189,10 +189,10 @@ class AWSClientManager: NSObject, ClientManager {
         })
     }
     
-    func updateUserProfessions(professions: [String]?, completionHandler: AWSContinuationBlock) {
-        // DynamoDB updateUserProfessions.
-        PRFYDynamoDBManager.defaultDynamoDBManager().updateUserProfessionsDynamoDB(professions, completionHandler: completionHandler)
-        // TODO should update Professions table!
+    func updateUserProfession(profession: String?, completionHandler: AWSContinuationBlock) {
+        // DynamoDB updateUserProfession.
+        PRFYDynamoDBManager.defaultDynamoDBManager().updateUserProfessionDynamoDB(profession, completionHandler: completionHandler)
+        // TODO should update Profession table!
     }
     
     func updateProfilePic(profilePicUrl: String?, completionHandler: AWSContinuationBlock) {
@@ -224,27 +224,6 @@ class AWSClientManager: NSObject, ClientManager {
         PRFYDynamoDBManager.defaultDynamoDBManager().getCurrentUserPostsDynamoDB(completionHandler)
     }
     
-    func getImage(imageUrl: String, completionHandler: AWSContinuationBlock) {
-        // S3 downloadImage.
-        PRFYS3Manager.defaultDynamoDBManager().downloadImageS3(
-            imageUrl,
-            progressBlock: {
-                (content: AWSContent, progress: NSProgress) in
-                // TODO
-            },
-            completionHandler: {
-                (task: AWSTask) in
-                if let error = task.error {
-                    return AWSTask(error: error).continueWithBlock(completionHandler)
-                } else if let data = task.result as? NSData {
-                    return AWSTask(result: data).continueWithBlock(completionHandler)
-                } else {
-                    print("This should not happen with getImage.")
-                    return AWSTask().continueWithBlock(completionHandler)
-                }
-        })
-    }
-    
     func createPost(imageData: NSData, title: String?, description: String?, isProfilePic: Bool, completionHandler: AWSContinuationBlock) {
         // S3 uploadImage.
         PRFYS3Manager.defaultDynamoDBManager().uploadImageS3(
@@ -264,6 +243,27 @@ class AWSClientManager: NSObject, ClientManager {
                     return nil
                 } else {
                     print("This should not happen with createPost.")
+                    return AWSTask().continueWithBlock(completionHandler)
+                }
+        })
+    }
+    
+    func downloadImage(imageKey: String, completionHandler: AWSContinuationBlock) {
+        // S3 downloadImage.
+        PRFYS3Manager.defaultDynamoDBManager().downloadImageS3(
+            imageKey,
+            progressBlock: {
+                (content: AWSContent, progress: NSProgress) in
+                // TODO
+            },
+            completionHandler: {
+                (task: AWSTask) in
+                if let error = task.error {
+                    return AWSTask(error: error).continueWithBlock(completionHandler)
+                } else if let data = task.result as? NSData {
+                    return AWSTask(result: data).continueWithBlock(completionHandler)
+                } else {
+                    print("This should not happen with downloadImage.")
                     return AWSTask().continueWithBlock(completionHandler)
                 }
         })

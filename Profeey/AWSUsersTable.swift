@@ -83,7 +83,7 @@ class AWSUsersTable: NSObject, Table {
         objectMapper.save(user).continueWithBlock(completionHandler)
     }
     
-    func saveUserProfessions(user: AWSUserProfessions, completionHandler: AWSContinuationBlock) {
+    func saveUserProfession(user: AWSUserProfession, completionHandler: AWSContinuationBlock) {
         let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
         objectMapper.save(user).continueWithBlock(completionHandler)
     }

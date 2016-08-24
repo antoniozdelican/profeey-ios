@@ -28,7 +28,7 @@ protocol ClientManager {
     
     func updateFirstLastName(firstName: String?, lastName: String?, completionHandler: AWSContinuationBlock)
     func updatePreferredUsername(preferredUsername: String, completionHandler: AWSContinuationBlock)
-    func updateUserProfessions(professions: [String]?, completionHandler: AWSContinuationBlock)
+    func updateUserProfession(profession: String?, completionHandler: AWSContinuationBlock)
     func updateProfilePic(profilePicUrl: String?, completionHandler: AWSContinuationBlock)
     
     // MARK: Post
@@ -36,5 +36,7 @@ protocol ClientManager {
     func getCurrentUserPosts(completionHandler: AWSContinuationBlock)
     func createPost(imageData: NSData, title: String?, description: String?, isProfilePic: Bool, completionHandler: AWSContinuationBlock)
     // MARK: S3
+    func downloadImage(imageKey: String, completionHandler: AWSContinuationBlock)
+    
     func deleteImageS3(imageKey: String, completionHandler: AWSContinuationBlock)
 }
