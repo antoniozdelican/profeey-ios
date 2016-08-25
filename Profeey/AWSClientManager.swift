@@ -226,6 +226,26 @@ class AWSClientManager: NSObject, ClientManager {
 //        })
     }
     
+    func scanUsers(completionHandler: AWSContinuationBlock) {
+        // DynamoDB scanUsers.
+        PRFYDynamoDBManager.defaultDynamoDBManager().scanUsersDynamoDB(completionHandler)
+    }
+    
+    func getUserRelationship(followedId: String, completionHandler: AWSContinuationBlock) {
+        // DynamoDB getUserRelationship.
+        PRFYDynamoDBManager.defaultDynamoDBManager().getUserRelationshipDynamoDB(followedId, completionHandler: completionHandler)
+    }
+    
+    func saveUserRelationship(followedId: String, completionHandler: AWSContinuationBlock) {
+        // DynamoDB saveUserRelationship.
+        PRFYDynamoDBManager.defaultDynamoDBManager().saveUserRelationshipDynamoDB(followedId, completionHandler: completionHandler)
+    }
+    
+    func removeUserRelationship(followedId: String, completionHandler: AWSContinuationBlock) {
+        // DynamoDB removeUserRelationship.
+        PRFYDynamoDBManager.defaultDynamoDBManager().removeUserRelationshipDynamoDB(followedId, completionHandler: completionHandler)
+    }
+    
     // MARK: Posts
     
     func getUserPosts(userId: String, completionHandler: AWSContinuationBlock) {
@@ -238,7 +258,7 @@ class AWSClientManager: NSObject, ClientManager {
         PRFYDynamoDBManager.defaultDynamoDBManager().getCurrentUserPostsDynamoDB(completionHandler)
     }
     
-    func createPost(imageData: NSData, title: String?, description: String?, isProfilePic: Bool, completionHandler: AWSContinuationBlock) {
+    func createPost(imageData: NSData, title: String?, description: String?, category: String?, isProfilePic: Bool, completionHandler: AWSContinuationBlock) {
         // S3 uploadImage.
         PRFYS3Manager.defaultDynamoDBManager().uploadImageS3(
             imageData,
@@ -253,7 +273,7 @@ class AWSClientManager: NSObject, ClientManager {
                     return AWSTask(error: error).continueWithBlock(completionHandler)
                 } else if let imageUrl = task.result as? String {
                     // DynamoDB createPostDynamoDb SYNC.
-                    PRFYDynamoDBManager.defaultDynamoDBManager().createPostDynamoDB(imageUrl, title: title, description: description, completionHandler: completionHandler)
+                    PRFYDynamoDBManager.defaultDynamoDBManager().createPostDynamoDB(imageUrl, title: title, description: description, category: category, completionHandler: completionHandler)
                     return nil
                 } else {
                     print("This should not happen with createPost.")

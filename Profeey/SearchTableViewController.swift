@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import AWSMobileHubHelper
+import AWSDynamoDB
 
 protocol ScrollViewDelegate {
     func scrollViewWillBeginDragging()
@@ -38,11 +40,14 @@ class SearchTableViewController: UITableViewController {
         self.automaticallyAdjustsScrollViewInsets = false
         self.configureSearchController()
         
+        // Start loading all users.
+        self.scanUsers()
+        
         // MOCK
-        let user1 = User(firstName: "Ivan", lastName: "Zdelican", preferredUsername: "ivan", profession: "Fruit Grower", profilePic: UIImage(named: "pic_ivan"))
-        let user2 = User(firstName: "Filip", lastName: "Vargovic", preferredUsername: "filja", profession: "Yacht Skipper", profilePic: UIImage(named: "pic_filip"))
-        let user3 = User(firstName: "Josip", lastName: "Zdelican", preferredUsername: "jole", profession: "Agricultural Engineer", profilePic: UIImage(named: "pic_josip"))
-        self.allUsers = [user1, user2, user3]
+//        let user1 = User(firstName: "Ivan", lastName: "Zdelican", preferredUsername: "ivan", profession: "Fruit Grower", profilePic: UIImage(named: "pic_ivan"))
+//        let user2 = User(firstName: "Filip", lastName: "Vargovic", preferredUsername: "filja", profession: "Yacht Skipper", profilePic: UIImage(named: "pic_filip"))
+//        let user3 = User(firstName: "Josip", lastName: "Zdelican", preferredUsername: "jole", profession: "Agricultural Engineer", profilePic: UIImage(named: "pic_josip"))
+//        self.allUsers = [user1, user2, user3]
         
         // MOCK
         let category1 = Category(categoryName: "Engineering", numberOfUsers: 2, numberOfPosts: 12)
@@ -183,6 +188,62 @@ class SearchTableViewController: UITableViewController {
             })
             self.searchDelegate?.showCategories(self.searchedCategories)
             
+        })
+    }
+    
+    // MARK: AWS
+    
+    private func scanUsers() {
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        AWSClientManager.defaultClientManager().scanUsers({
+            (task: AWSTask) in
+            dispatch_async(dispatch_get_main_queue(), {
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                if let error = task.error {
+                    print("Error: \(error.userInfo["message"])")
+                } else {
+                    if let output = task.result as? AWSDynamoDBPaginatedOutput,
+                        let awsUsers = output.items as? [AWSUser] {
+                        // Iterate through all users. This should change and fetch only certain or?
+                        for (index, awsUser) in awsUsers.enumerate() {
+                            let user = User(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, profession: awsUser._profession, profilePicUrl: awsUser._profilePicUrl, location: awsUser._location, about: awsUser._about)
+                            self.allUsers.append(user)
+                            
+                            // Get profilePic.
+                            if let imageUrl = awsUser._profilePicUrl {
+                                self.downloadImage(imageUrl, userIndex: index)
+                            }
+                        }
+                        // Reload tableView.
+                        self.searchDelegate?.showUsers(self.allUsers)
+                    }
+                }
+            })
+            return nil
+        })
+    }
+    
+    private func downloadImage(imageKey: String, userIndex: Int) {
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        AWSClientManager.defaultClientManager().downloadImage(
+            imageKey,
+            completionHandler: {
+                (task: AWSTask) in
+                dispatch_async(dispatch_get_main_queue(), {
+                    UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                    if let error = task.error {
+                        print("Error: \(error.userInfo["message"])")
+                    } else {
+                        if let imageData = task.result as? NSData {
+                            let image = UIImage(data: imageData)
+                            // Set user profilePic.
+                            self.allUsers[userIndex].profilePic = image
+                            // Reload tableView.
+                            self.searchDelegate?.showUsers(self.allUsers)
+                        }
+                    }
+                })
+                return nil
         })
     }
 }

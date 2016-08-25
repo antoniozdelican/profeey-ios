@@ -104,7 +104,7 @@
                                             <color key="textColor" red="0.2901960784" green="0.2901960784" blue="0.2901960784" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Categories" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="I3V-B9-0cA">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Category" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="I3V-B9-0cA">
                                             <rect key="frame" x="16" y="469" width="568" height="17"/>
                                             <fontDescription key="fontDescription" type="system" weight="light" pointSize="14"/>
                                             <color key="textColor" red="0.2901960784" green="0.2901960784" blue="0.2901960784" alpha="1" colorSpace="calibratedRGB"/>
@@ -177,7 +177,7 @@
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="categoriesLabel" destination="I3V-B9-0cA" id="14u-Gk-3sE"/>
+                                    <outlet property="categoryLabel" destination="I3V-B9-0cA" id="arC-Cw-3oE"/>
                                     <outlet property="fullNameLabel" destination="gCJ-s6-ll2" id="LdA-Lv-mmj"/>
                                     <outlet property="postPicImageView" destination="b9y-MC-fFA" id="5sq-Lc-T1B"/>
                                     <outlet property="professionLabel" destination="Mis-Ty-35d" id="C2Z-xN-cBv"/>
@@ -204,10 +204,10 @@
             </objects>
             <point key="canvasLocation" x="942" y="-137"/>
         </scene>
-        <!--Post-->
+        <!--PostDetails-->
         <scene sceneID="nfn-3b-CMu">
             <objects>
-                <viewControllerPlaceholder storyboardName="Post" id="Rtm-Qg-7d0" sceneMemberID="viewController"/>
+                <viewControllerPlaceholder storyboardName="PostDetails" id="Rtm-Qg-7d0" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iUl-he-zNd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1483" y="-219"/>

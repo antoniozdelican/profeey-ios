@@ -23,16 +23,11 @@ class HomeTableViewController: UITableViewController {
         self.tableView.estimatedRowHeight = 155.0
         self.tableView.rowHeight = UITableViewAutomaticDimension
         
+        // TEST
+        // Just in case get identityId for later use.
+        AWSClientManager.defaultClientManager().credentialsProvider?.getIdentityId()
         // Get currentUser in background immediately for later use.
         self.getCurrentUser()
-        
-        //TEST
-//        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), forBarMetrics: .Default)
-//        self.navigationController?.navigationBar.shadowImage = UIImage()
-//        self.navigationController?.navigationBar.translucent = true
-//        self.navigationController?.navigationBar.barTintColor = UIColor.clearColor()
-//        self.navigationController?.navigationBar.backgroundColor = UIColor.clearColor()
-//        self.navigationController?.navigationBar.tintColor = UIColor.whiteColor()
         
         // MOCK
         let user1 = User(firstName: "Ivan", lastName: "Zdelican", preferredUsername: "ivan", profession: "Fruit Grower", profilePic: UIImage(named: "pic_ivan"))
@@ -46,9 +41,13 @@ class HomeTableViewController: UITableViewController {
         let category4 = Category(categoryName: "Tobacco industry", numberOfUsers: 1, numberOfPosts: 1, featuredImage: UIImage(named: "post_pic_josip"))
         self.popularCategories = [category1, category2, category3, category4]
         
-        let post1 = Post(user: user1, postDescription: nil, imageUrl: nil, title: "Melon harvest - peak of the season", image: UIImage(named: "post_pic_ivan"), categories: [category1, category3])
-        let post2 = Post(user: user2, postDescription: nil, imageUrl: nil, title: "New boat for this summer's tour", image: UIImage(named: "post_pic_filip"), categories: [category2])
-        let post3 = Post(user: user3, postDescription: nil, imageUrl: nil, title: "Desired tobacco color of type Berlej before the final stage of drying", image: UIImage(named: "post_pic_josip"), categories: [category3, category4])
+        let creationDate = NSNumber(double: NSDate().timeIntervalSince1970)
+        let post1 = Post(title: "Melon harvest - peak of the season", postDescription: nil, imageUrl: nil, category: "Agriculture", creationDate: creationDate, user: user1)
+        post1.image = UIImage(named: "post_pic_ivan")
+        let post2 = Post(title: "New boat for this summer's tour", postDescription: nil, imageUrl: nil, category: "Yachting", creationDate: creationDate, user: user2)
+        post2.image = UIImage(named: "post_pic_filip")
+        let post3 = Post(title: "Desired tobacco color of type Berlej before the final stage of drying", postDescription: nil, imageUrl: nil, category: "Agriculture", creationDate: creationDate, user: user3)
+        post3.image = UIImage(named: "post_pic_josip")
         self.posts = [post1, post2, post3]
     }
 
@@ -116,8 +115,8 @@ class HomeTableViewController: UITableViewController {
             cell.professionLabel.text = user?.profession
             cell.postPicImageView.image = post.image
             cell.titleLabel.text = post.title
-            cell.categoriesLabel.text = post.categories?.flatMap({ $0.categoryName }).joinWithSeparator(" · ")
-            cell.timeLabel.text = "2 minutes ago"
+            cell.categoryLabel.text = post.category
+            cell.timeLabel.text = post.creationDateString
             return cell
         }
     }
@@ -144,25 +143,21 @@ class HomeTableViewController: UITableViewController {
     @IBAction func unwindToHomeTableViewController(segue: UIStoryboardSegue) {
         if segue.identifier == "segueUnwindToHomeVc",
             let sourceViewController = segue.sourceViewController as? EditPostTableViewController {
-            guard let imageData = sourceViewController.imageData,
-                let titleText = sourceViewController.titleTextField.text,
-                let descriptionText = sourceViewController.descriptionTextView.text else {
+            guard let imageData = sourceViewController.imageData else {
                     return
             }
-            self.createPost(imageData, titleText: titleText, descriptionText: descriptionText)
+            self.createPost(imageData, title: sourceViewController.postTitle, description: sourceViewController.postDescription, category: sourceViewController.category)
             
         }
     }
     
     // MARK: AWS
     
-    private func createPost(imageData: NSData, titleText: String, descriptionText: String) {
-        let title: String? = titleText.trimm().isEmpty ? nil: titleText.trimm()
-        let description: String? = descriptionText.trimm().isEmpty ? nil : descriptionText.trimm()
+    private func createPost(imageData: NSData, title: String?, description: String?, category: String?) {
         
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         
-        AWSClientManager.defaultClientManager().createPost(imageData, title: title, description: description, isProfilePic: false, completionHandler: {
+        AWSClientManager.defaultClientManager().createPost(imageData, title: title, description: description, category: category, isProfilePic: false, completionHandler: {
             (task: AWSTask) in
             dispatch_async(dispatch_get_main_queue(), {
                 
@@ -172,7 +167,7 @@ class HomeTableViewController: UITableViewController {
                     let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.userInfo["message"] as? String, cancelButtonTitle: "Ok")
                     self.presentViewController(alertController, animated: true, completion: nil)
                 } else if let awsPost = task.result as? AWSPost {
-                    let post = Post(title: awsPost._title, postDescription: awsPost._description, imageUrl: awsPost._imageUrl, testCategories: awsPost._categories, creationDate: awsPost._creationDate, user: self.user)
+                    let post = Post(title: awsPost._title, postDescription: awsPost._description, imageUrl: awsPost._imageUrl, category: awsPost._category, creationDate: awsPost._creationDate, user: self.user)
                     
                     // Inert at the beginning.
                     self.posts.insert(post, atIndex: 0)

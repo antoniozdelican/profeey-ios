@@ -152,7 +152,7 @@
                                             <color key="textColor" red="0.2901960784" green="0.2901960784" blue="0.2901960784" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Categories" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GFy-ex-UMM">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Category" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GFy-ex-UMM">
                                             <rect key="frame" x="16" y="469" width="568" height="17"/>
                                             <fontDescription key="fontDescription" type="system" weight="light" pointSize="14"/>
                                             <color key="textColor" red="0.2901960784" green="0.2901960784" blue="0.2901960784" alpha="1" colorSpace="calibratedRGB"/>
@@ -225,7 +225,7 @@
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="categoriesLabel" destination="GFy-ex-UMM" id="tld-8X-FKf"/>
+                                    <outlet property="categoryLabel" destination="GFy-ex-UMM" id="P1F-2B-cXP"/>
                                     <outlet property="fullNameLabel" destination="zRO-qm-d2M" id="1KS-n9-ybR"/>
                                     <outlet property="postPicImageView" destination="lNb-19-T9C" id="HSZ-nE-D41"/>
                                     <outlet property="professionLabel" destination="rkV-Ro-GYn" id="vKE-tp-45o"/>
@@ -284,10 +284,10 @@
             </objects>
             <point key="canvasLocation" x="1575" y="-50"/>
         </scene>
-        <!--Post-->
+        <!--PostDetails-->
         <scene sceneID="PcR-nM-DdX">
             <objects>
-                <viewControllerPlaceholder storyboardName="Post" id="Q9y-Mr-q3K" sceneMemberID="viewController"/>
+                <viewControllerPlaceholder storyboardName="PostDetails" id="Q9y-Mr-q3K" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="naK-si-Wo6" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1561" y="510"/>

@@ -15,20 +15,29 @@ class EditPostTableViewController: UITableViewController {
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var descriptionTextView: UITextView!
     @IBOutlet weak var descriptionFakePlaceholderLabel: UILabel!
-    @IBOutlet weak var categoriesLabel: UILabel!
+    @IBOutlet weak var categoryLabel: UILabel!
+    @IBOutlet weak var removeCategoryButton: UIButton!
+    @IBOutlet weak var addCategoryTableViewCell: UITableViewCell!
     
     var finalImage: UIImage?
+    // Properties that will be passed to HomeVc through delegation.
     var imageData: NSData?
-    private var categories: [String] = []
+    var postTitle: String?
+    var postDescription: String?
+    var category: String?
+    
+    private var categoryAdded: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.Plain, target:nil, action:nil)
         self.thumbnailImageView.image = self.finalImage
-        self.descriptionTextView.delegate = self
         if let finalImage = self.finalImage {
             self.imageData = UIImageJPEGRepresentation(finalImage, 0.6)
         }
+        self.descriptionTextView.delegate = self
+        self.removeCategoryButton.hidden = true
+        
     }
     
     override func prefersStatusBarHidden() -> Bool {
@@ -43,8 +52,8 @@ class EditPostTableViewController: UITableViewController {
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if let navigationController = segue.destinationViewController as? UINavigationController,
-            let childViewController = navigationController.childViewControllers[0] as? EditCategoriesViewController {
-            childViewController.oldCategories = self.categories
+            let childViewController = navigationController.childViewControllers[0] as? AddCategoryViewController {
+            childViewController.addCategoryDelegate = self
         }
     }
     
@@ -60,6 +69,10 @@ class EditPostTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        let cell = tableView.cellForRowAtIndexPath(indexPath)
+        if cell == self.addCategoryTableViewCell && !self.categoryAdded {
+            self.performSegueWithIdentifier("segueToAddCategoryVc", sender: self)
+        }
     }
     
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
@@ -77,60 +90,42 @@ class EditPostTableViewController: UITableViewController {
     @IBAction func postButtonTapped(sender: AnyObject) {
         self.titleTextField.resignFirstResponder()
         self.descriptionTextView.resignFirstResponder()
+        guard let titleText = self.titleTextField.text,
+            let descriptionText = self.descriptionTextView.text else {
+                return
+        }
+        
+        self.postTitle = titleText.trimm().isEmpty ? nil: titleText.trimm()
+        self.postDescription = descriptionText.trimm().isEmpty ? nil : descriptionText.trimm()
+        
         // Upload is on homeVc.
         self.performSegueWithIdentifier("segueUnwindToHomeVc", sender: self)
     }
     
-    @IBAction func backButtonTapped(sender: AnyObject) {
-        self.navigationController?.popViewControllerAnimated(true)
+    @IBAction func removeCategoryButtonTapped(sender: AnyObject) {
+        self.category = nil
+        self.removeCategoryButton.hidden = true
+        self.categoryLabel.text = "Add Skill"
+        self.categoryLabel.textColor = Colors.black
+        // Allow segueToAddCategoryVc.
+        self.categoryAdded = false
+        self.addCategoryTableViewCell.selectionStyle = UITableViewCellSelectionStyle.Default
     }
+    
     
     
     @IBAction func unwindToEditPostTableViewController(segue: UIStoryboardSegue) {
-        if segue.identifier == "segueUnwindToEditPostVc",
-            let sourceViewController = segue.sourceViewController as? EditCategoriesViewController {
-            self.categories = sourceViewController.categories
-            if self.categories.count > 0 {
-              self.categoriesLabel.textColor = Colors.blue
-                self.categoriesLabel.text = self.categories.joinWithSeparator(" · ")
-            } else {
-                self.categoriesLabel.textColor = Colors.disabled
-                self.categoriesLabel.text = "Add categories"
-            }
-        }
-    }
-    
-    private func prepareForUpload() {
-        guard let imageData = self.imageData,
-            let titleText = self.titleTextField.text,
-            let descriptionText = self.descriptionTextView.text else {
-                return
-        }
-    }
-    
-    private func createPost() {
-        self.performSegueWithIdentifier("segueUnwindToHomeVc", sender: self)
-//        guard let imageData = self.imageData,
-//            let titleText = self.titleTextField.text else {
-//            return
+//        if segue.identifier == "segueUnwindToEditPostVc",
+//            let sourceViewController = segue.sourceViewController as? EditCategoriesViewController {
+//            self.categories = sourceViewController.categories
+//            if self.categories.count > 0 {
+//              self.categoriesLabel.textColor = Colors.blue
+//                self.categoriesLabel.text = self.categories.joinWithSeparator(" · ")
+//            } else {
+//                self.categoriesLabel.textColor = Colors.disabled
+//                self.categoriesLabel.text = "Add categories"
+//            }
 //        }
-//        FullScreenIndicator.show()
-//        let title: String? = titleText.trimm().isEmpty ? nil : titleText.trimm()
-//        let description: String? = self.descriptionTextView.text.trimm().isEmpty ? nil : self.descriptionTextView.text.trimm()
-//        
-//        AWSClientManager.defaultClientManager().createPost(imageData, title: title, description: description, isProfilePic: false, completionHandler: {
-//            (task: AWSTask) in
-//            dispatch_async(dispatch_get_main_queue(), {
-//                FullScreenIndicator.hide()
-//                if let error = task.error {
-//                    let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.userInfo["message"] as? String, cancelButtonTitle: "Ok")
-//                    self.presentViewController(alertController, animated: true, completion: nil)
-//                } else {
-//                    //self.redirectToWelcome()
-//                }
-//            })
-//            return nil
-//        })
     }
 }
 
@@ -146,5 +141,18 @@ extension EditPostTableViewController: UITextViewDelegate {
         self.tableView.endUpdates()
         UIView.setAnimationsEnabled(true)
         self.tableView.setContentOffset(currentOffset, animated: false)
+    }
+}
+
+extension EditPostTableViewController: AddCategoryDelegate {
+    
+    func addCategory(category: String) {
+        self.category = category
+        self.removeCategoryButton.hidden = false
+        self.categoryLabel.text = category
+        self.categoryLabel.textColor = Colors.blue
+        // Prevent segueToAddCategoryVc.
+        self.categoryAdded = true
+        self.addCategoryTableViewCell.selectionStyle = UITableViewCellSelectionStyle.None
     }
 }

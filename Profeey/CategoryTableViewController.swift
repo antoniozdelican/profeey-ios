@@ -102,8 +102,9 @@ class CategoryTableViewController: UITableViewController {
             cell.professionLabel.text = user?.profession
             cell.postPicImageView.image = post.image
             cell.titleLabel.text = post.title
-            cell.categoriesLabel.text = post.categories?.flatMap({ $0.categoryName }).joinWithSeparator(" · ")
-            cell.timeLabel.text = "2 minutes ago"
+//            cell.categoryLabel.text = post.categories?.flatMap({ $0.categoryName }).joinWithSeparator(" · ")
+            cell.categoryLabel.text = post.category
+            cell.timeLabel.text = post.creationDateString
             return cell
         }
     }

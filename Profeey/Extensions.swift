@@ -203,7 +203,7 @@ extension NSDate {
             return minutesFrom(date) > 1 ? "\(minutesFrom(date)) minutes ago" : "\(minutesFrom(date)) minute ago"
         }
         if secondsFrom(date) > 0 {
-            return secondsFrom(date) > 1 ? "\(secondsFrom(date)) second ago" : "\(secondsFrom(date)) seconds ago"
+            return secondsFrom(date) > 1 ? "\(secondsFrom(date)) seconds ago" : "\(secondsFrom(date)) second ago"
         }
         return "Now"
     }

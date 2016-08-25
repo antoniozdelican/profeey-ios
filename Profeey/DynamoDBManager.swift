@@ -23,9 +23,14 @@ protocol DynamoDBManager {
     func updateUserAboutDynamoDB(about: String?, completionHandler: AWSContinuationBlock)
     func updateProfilePicDynamoDB(profilePicUrl: String?, completionHandler: AWSContinuationBlock)
     
+    func scanUsersDynamoDB(completionHandler: AWSContinuationBlock)
+    func getUserRelationshipDynamoDB(followedId: String, completionHandler: AWSContinuationBlock)
+    func saveUserRelationshipDynamoDB(followedId: String, completionHandler: AWSContinuationBlock)
+    func removeUserRelationshipDynamoDB(followedId: String, completionHandler: AWSContinuationBlock)
+    
     // MARK: Posts
     
     func getUserPostsDynamoDB(userId: String, completionHandler: AWSContinuationBlock)
     func getCurrentUserPostsDynamoDB(completionHandler: AWSContinuationBlock)
-    func createPostDynamoDB(imageUrl: String?, title: String?, description: String?, completionHandler: AWSContinuationBlock)
+    func createPostDynamoDB(imageUrl: String?, title: String?, description: String?, category: String?, completionHandler: AWSContinuationBlock)
 }

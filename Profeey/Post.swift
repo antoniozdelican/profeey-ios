@@ -11,7 +11,7 @@ import Foundation
 class Post: NSObject {
     
     // Properties.
-    var testCategories: [String]?
+    var category: String?
     var creationDate: NSNumber?
     var postDescription: String?
     var imageUrl: String?
@@ -39,12 +39,12 @@ class Post: NSObject {
         super.init()
     }
     
-    convenience init(title: String?, postDescription: String?, imageUrl: String?, testCategories: [String]?, creationDate: NSNumber?, user: User?) {
+    convenience init(title: String?, postDescription: String?, imageUrl: String?, category: String?, creationDate: NSNumber?, user: User?) {
         self.init()
         self.title = title
         self.postDescription = postDescription
         self.imageUrl = imageUrl
-        self.testCategories = testCategories
+        self.category = category
         self.creationDate = creationDate
         self.user = user
     }

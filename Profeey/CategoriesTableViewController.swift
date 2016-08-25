@@ -1,29 +1,25 @@
 //
-//  EditCategoriesTableViewController.swift
+//  CategoriesTableViewController.swift
 //  Profeey
 //
-//  Created by Antonio Zdelican on 22/08/16.
+//  Created by Antonio Zdelican on 25/08/16.
 //  Copyright © 2016 Profeey. All rights reserved.
 //
 
 import UIKit
 
-protocol CategoriesTableViewControllerDelegate {
-    func scrollViewWillBeginDragging()
-    func didSelectRowAtIndexPath(category: String)
-}
-
-class EditCategoriesTableViewController: UITableViewController {
-
-    private var categories: [String] = []
-    var categoriesTableViewControllerDelegate: CategoriesTableViewControllerDelegate?
+class CategoriesTableViewController: UITableViewController {
     
+    private var categories: [String] = []
+    var scrollViewDelegate: ScrollViewDelegate?
+    var addCategoryDelegate: AddCategoryDelegate?
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.estimatedRowHeight = 50.0
         self.tableView.rowHeight = UITableViewAutomaticDimension
     }
-    
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
@@ -49,10 +45,9 @@ class EditCategoriesTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        // Trigger delegate.
-        self.categoriesTableViewControllerDelegate?.didSelectRowAtIndexPath(self.categories[indexPath.row])
-        // Clear tableView.
-        self.filterCategoriesForSearchText("")
+        self.addCategoryDelegate?.addCategory(self.categories[indexPath.row])
+        // Go back to EditPostVc.
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
     
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
@@ -62,7 +57,7 @@ class EditCategoriesTableViewController: UITableViewController {
     // MARK: UIScrollViewDelegate
     
     override func scrollViewWillBeginDragging(scrollView: UIScrollView) {
-        self.categoriesTableViewControllerDelegate?.scrollViewWillBeginDragging()
+        self.scrollViewDelegate?.scrollViewWillBeginDragging()
     }
     
     // MARK: Helpers
@@ -82,7 +77,7 @@ class EditCategoriesTableViewController: UITableViewController {
     }
 }
 
-extension EditCategoriesTableViewController: CategoriesTextFieldDelegate {
+extension CategoriesTableViewController: AddCategoryTextFieldDelegate {
     
     func textFieldChanged(text: String) {
         self.filterCategoriesForSearchText(text)

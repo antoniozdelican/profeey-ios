@@ -68,6 +68,21 @@ class AWSUsersTable: NSObject, Table {
         objectMapper.save(userToUpdate, configuration: updateMapperConfig).continueWithBlock(completionHandler)
     }
     
+    func scanUsersDescription() -> String {
+        return "Get all users (5) in the table."
+    }
+    
+    func scanUsers(completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
+        let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
+        let scanExpression = AWSDynamoDBScanExpression()
+        scanExpression.limit = 5
+        objectMapper.scan(AWSUser.self, expression: scanExpression, completionHandler: completionHandler)
+    }
+    
+    func getUserDescription() -> String {
+        return "Find User with userId"
+    }
+    
     func getUser(userId: String, completionHandler: AWSContinuationBlock) {
         let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
         objectMapper.load(AWSUser.self, hashKey: userId, rangeKey: nil).continueWithBlock(completionHandler)

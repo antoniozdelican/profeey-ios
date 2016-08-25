@@ -14,10 +14,10 @@ class ProfileTableViewController: UITableViewController {
     
     @IBOutlet weak var settingsButton: UIBarButtonItem!
     
-    // For now it's currentUser from DynamoDB.
     var user: User?
     var posts: [Post] = []
     var isCurrentUser: Bool = false
+    var isFollowing: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,23 +33,10 @@ class ProfileTableViewController: UITableViewController {
         } else {
             // User should already be set by other vc.
             self.navigationItem.title = self.user?.preferredUsername
-            
+            // Check if this user is followed by currentUser.
+            self.getUserRelationship()
             // Get posts.
             self.getUserPosts()
-            
-            //
-            // MOCK
-//            let category1 = Category(categoryName: "Melon Production", numberOfUsers: 2, numberOfPosts: 12)
-//            let category2 = Category(categoryName: "Fruit Growing", numberOfUsers: 2, numberOfPosts: 12)
-//            let category3 = Category(categoryName: "Agriculture", numberOfUsers: 3, numberOfPosts: 28)
-//            let category4 = Category(categoryName: "Apple Production", numberOfUsers: 2, numberOfPosts: 12)
-//            let category5 = Category(categoryName: "Fruit agriculture", numberOfUsers: 1, numberOfPosts: 5)
-//            
-//            let post1 = Post(user: self.user, postDescription: nil, imageUrl: nil, title: "Melon harvest - peak of the season", image: UIImage(named: "post_pic_ivan"), categories: [category1, category2, category3])
-//            let post2 = Post(user: self.user, postDescription: nil, imageUrl: nil, title: "Garden view on our products", image: UIImage(named: "post_pic_ivan_2"), categories: [category2, category3])
-//            let post3 = Post(user: self.user, postDescription: nil, imageUrl: nil, title: "Granny Smith apple", image: UIImage(named: "post_pic_ivan_3"), categories: [category4])
-//            let post4 = Post(user: self.user, postDescription: nil, imageUrl: nil, title: "Our hothouses in the afternoon", image: UIImage(named: "post_pic_ivan_4"), categories: [category5])
-//            self.posts = [post1, post2, post3, post4]
         }
     }
 
@@ -135,7 +122,12 @@ class ProfileTableViewController: UITableViewController {
                 cell.setEditButton()
                 cell.followButton.addTarget(self, action: #selector(ProfileTableViewController.editButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
             } else {
-                cell.setFollowButton()
+                if self.isFollowing {
+                    cell.setFollowingButton()
+                } else {
+                    cell.setFollowButton()
+                }
+                cell.followButton.addTarget(self, action: #selector(ProfileTableViewController.followButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
             }
             cell.selectionStyle = UITableViewCellSelectionStyle.None
             return cell
@@ -167,9 +159,7 @@ class ProfileTableViewController: UITableViewController {
             let post = posts[indexPath.row]
             cell.postImageView.image = post.image
             cell.titleLabel.text = post.title
-            cell.categoriesLabel.text = post.testCategories?.joinWithSeparator(" · ")
-            //cell.categoriesLabel.text = post.categories?.flatMap({ $0.categoryName }).joinWithSeparator(" · ")
-
+            cell.categoryLabel.text = post.category
             cell.timeLabel.text = post.creationDateString
             
             return cell
@@ -218,21 +208,9 @@ class ProfileTableViewController: UITableViewController {
         self.performSegueWithIdentifier("segueToEditProfileVc", sender: self)
     }
     
-//    func profilePicImageViewTapped(sender: UITapGestureRecognizer) {
-//        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
-//        let removePhotoAction = UIAlertAction(title: "Remove current photo", style: UIAlertActionStyle.Destructive, handler: {
-//            (alert: UIAlertAction) in
-//        })
-//        alertController.addAction(removePhotoAction)
-//        let takePhotoAction = UIAlertAction(title: "Update photo", style: UIAlertActionStyle.Default, handler: {
-//            (alert: UIAlertAction) in
-//            self.performSegueWithIdentifier("segueToCaptureProfilePicVc", sender: self)
-//        })
-//        alertController.addAction(takePhotoAction)
-//        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: nil)
-//        alertController.addAction(cancelAction)
-//        self.presentViewController(alertController, animated: true, completion: nil)
-//    }
+    func followButtonTapped(sender: UIButton) {
+        self.isFollowing ? self.unfollowUser() : self.followUser()
+    }
     
     // MARK: AWS
     
@@ -282,7 +260,7 @@ class ProfileTableViewController: UITableViewController {
                         let awsPosts = output.items as? [AWSPost] {
                         // Iterate through all posts. This should change and fetch only certain or?
                         for (index, awsPost) in awsPosts.enumerate() {
-                            let post = Post(title: awsPost._title, postDescription: awsPost._description, imageUrl: awsPost._imageUrl, testCategories: awsPost._categories, creationDate: awsPost._creationDate, user: self.user)
+                            let post = Post(title: awsPost._title, postDescription: awsPost._description, imageUrl: awsPost._imageUrl, category: awsPost._category, creationDate: awsPost._creationDate, user: self.user)
                             self.posts.append(post)
                             
                             // Get postPic.
@@ -327,6 +305,69 @@ class ProfileTableViewController: UITableViewController {
                     }
                 })
                 return nil
+        })
+    }
+    
+    // Check if currentUser is following this user.
+    private func getUserRelationship() {
+        guard let followedId = self.user?.userId else {
+            return
+        }
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        AWSClientManager.defaultClientManager().getUserRelationship(followedId, completionHandler: {
+            (task: AWSTask) in
+            dispatch_async(dispatch_get_main_queue(), {
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                if let error = task.error {
+                    print("Error: \(error.userInfo["message"])")
+                } else {
+                    if task.result != nil {
+                        self.isFollowing = true
+                        self.tableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.None)
+                    }
+                }
+            })
+            return nil
+        })
+    }
+    
+    private func followUser() {
+        guard let followedId = self.user?.userId else {
+            return
+        }
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        AWSClientManager.defaultClientManager().saveUserRelationship(followedId, completionHandler: {
+            (task: AWSTask) in
+            dispatch_async(dispatch_get_main_queue(), {
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                if let error = task.error {
+                    print("Error: \(error.userInfo["message"])")
+                } else {
+                    self.isFollowing = true
+                    self.tableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.None)
+                }
+            })
+            return nil
+        })
+    }
+    
+    private func unfollowUser() {
+        guard let followedId = self.user?.userId else {
+            return
+        }
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        AWSClientManager.defaultClientManager().removeUserRelationship(followedId, completionHandler: {
+            (task: AWSTask) in
+            dispatch_async(dispatch_get_main_queue(), {
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                if let error = task.error {
+                    print("Error: \(error.userInfo["message"])")
+                } else {
+                    self.isFollowing = false
+                    self.tableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.None)
+                }
+            })
+            return nil
         })
     }
     

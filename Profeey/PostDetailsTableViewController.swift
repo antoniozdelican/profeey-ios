@@ -14,7 +14,7 @@ class PostDetailsTableViewController: UITableViewController {
     @IBOutlet weak var postPicImageViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var likeButton: UIButton!
     @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var categoriesLabel: UILabel!
+    @IBOutlet weak var categoryLabel: UILabel!
     @IBOutlet weak var mainTableViewCell: UITableViewCell!
     
     @IBOutlet weak var profilePicImageView: UIImageView!
@@ -58,8 +58,7 @@ class PostDetailsTableViewController: UITableViewController {
         }
         // Title and categories.
         self.titleLabel.text = self.post?.title
-        self.categoriesLabel.text = self.post?.testCategories?.joinWithSeparator(" · ")
-//        self.categoriesLabel.text = self.post?.categories?.flatMap({ $0.categoryName }).joinWithSeparator(" · ")
+        self.categoryLabel.text = self.post?.category
         // User.
         self.profilePicImageView.layer.cornerRadius = 4.0
         self.profilePicImageView.clipsToBounds = true
@@ -75,7 +74,7 @@ class PostDetailsTableViewController: UITableViewController {
 //        }
         // Other.
         self.descriptionLabel.text = self.post?.postDescription
-        self.timeLabel.text = "Posted 2 minutes ago"
+        self.timeLabel.text = self.post?.creationDateString
     }
     
     override func viewDidAppear(animated: Bool) {

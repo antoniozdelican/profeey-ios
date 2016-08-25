@@ -43,8 +43,8 @@ class ProfileTableViewCell: UITableViewCell {
     
     func setFollowingButton() {
         self.followButton.setTitle("FOLLOWING", forState: UIControlState.Normal)
-        self.followButton.setTitleColor(Colors.blue, forState: UIControlState.Normal)
-        self.followButton.setBackgroundImage(UIImage(named: "btn_blue_small"), forState: UIControlState.Normal)
+        self.followButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
+        self.followButton.setBackgroundImage(UIImage(named: "btn_blue_small_selected"), forState: UIControlState.Normal)
     }
 
 }
