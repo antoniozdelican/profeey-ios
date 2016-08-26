@@ -72,10 +72,7 @@ class AWSPostsPrimaryIndex: NSObject, Index {
     
     // Mark: QueryWithPartitionKey
     
-    func queryPostsWithPartitionKeyDescription() -> String {
-        return "Find all items with userId = \(AWSIdentityManager.defaultIdentityManager().identityId!)."
-    }
-    
+    // Find all items with userId.
     func queryUserPosts(userId: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
         let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
         let queryExpression = AWSDynamoDBQueryExpression()

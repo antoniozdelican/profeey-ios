@@ -86,15 +86,15 @@ class AWSUserRelationshipsPrimaryIndex: NSObject, Index {
     // Mark: QueryWithPartitionKey
     
     // Find all items with userId.
-//    func queryUserFollowed(userId: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
-//        let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
-//        let queryExpression = AWSDynamoDBQueryExpression()
-//        queryExpression.keyConditionExpression = "#userId = :userId"
-//        queryExpression.expressionAttributeNames = ["#userId": "userId",]
-//        queryExpression.expressionAttributeValues = [":userId": userId,]
-//        
-//        objectMapper.query(AWSUserRelationship.self, expression: queryExpression, completionHandler: completionHandler)
-//    }
+    func queryUserFollowed(userId: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
+        let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
+        let queryExpression = AWSDynamoDBQueryExpression()
+        queryExpression.keyConditionExpression = "#userId = :userId"
+        queryExpression.expressionAttributeNames = ["#userId": "userId",]
+        queryExpression.expressionAttributeValues = [":userId": userId,]
+        
+        objectMapper.query(AWSUserRelationship.self, expression: queryExpression, completionHandler: completionHandler)
+    }
     
     // Mark: QueryWithPartitionKeyAndSortKey
     
@@ -132,10 +132,7 @@ class AWSUserRelationshipsFollowersIndex: NSObject, Index {
         ]
     }
     
-    func queryWithPartitionKeyDescription() -> String {
-        return "Find all items with followedId."
-    }
-    
+    // Find all items with followedId.
     func queryUserFollowers(followedId: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
         let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
         let queryExpression = AWSDynamoDBQueryExpression()

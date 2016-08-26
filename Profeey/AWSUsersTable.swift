@@ -44,19 +44,6 @@ class AWSUsersTable: NSObject, Table {
         return AWSUser.JSONKeyPathsByPropertyKey()[dataObjectAttributeName] as! String
     }
     
-    // TEST 
-    func scanWithCompletionHandler(completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
-        let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
-        let scanExpression = AWSDynamoDBScanExpression()
-        scanExpression.limit = 5
-        
-        objectMapper.scan(AWSUser.self, expression: scanExpression, completionHandler: {(response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void in
-            dispatch_async(dispatch_get_main_queue(), {
-                completionHandler(response: response, error: error)
-            })
-        })
-    }
-    
     // TEST
     func saveUser(user: AWSDynamoDBObjectModel, completionHandler: AWSContinuationBlock) {
         let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
@@ -68,10 +55,7 @@ class AWSUsersTable: NSObject, Table {
         objectMapper.save(userToUpdate, configuration: updateMapperConfig).continueWithBlock(completionHandler)
     }
     
-    func scanUsersDescription() -> String {
-        return "Get all users (5) in the table."
-    }
-    
+    // Scan all users in the Users table.
     func scanUsers(completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
         let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
         let scanExpression = AWSDynamoDBScanExpression()
@@ -79,10 +63,7 @@ class AWSUsersTable: NSObject, Table {
         objectMapper.scan(AWSUser.self, expression: scanExpression, completionHandler: completionHandler)
     }
     
-    func getUserDescription() -> String {
-        return "Find User with userId"
-    }
-    
+    // Find a user with userId.
     func getUser(userId: String, completionHandler: AWSContinuationBlock) {
         let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
         objectMapper.load(AWSUser.self, hashKey: userId, rangeKey: nil).continueWithBlock(completionHandler)

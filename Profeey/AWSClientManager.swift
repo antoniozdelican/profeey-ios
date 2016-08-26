@@ -124,42 +124,6 @@ class AWSClientManager: NSObject, ClientManager {
         PRFYDynamoDBManager.defaultDynamoDBManager().getCurrentUserDynamoDB(completionHandler)
     }
     
-//    func getCurrentUser(completionHandler: AWSContinuationBlock) {
-//        print("getCurrentUser:")
-//        self.userPool?.currentUser()?.getDetails().continueWithBlock({
-//            (task: AWSTask) in
-//            if let error = task.error {
-//                print("getCurrentUser error: \(error)")
-//                return AWSTask(error: error).continueWithBlock(completionHandler)
-//            } else if let result = task.result as? AWSCognitoIdentityUserGetDetailsResponse {
-//                let userAttributes = result.userAttributes
-//                let user = User()
-//                // If preferredUsername is not yet set, notifiy delegate (AppDelegate).
-//                if let preferredUsernameIndex = userAttributes?.indexOf({ $0.name == "preferred_username" }) {
-//                    user.preferredUsername = userAttributes?[preferredUsernameIndex].value
-//                } else {
-//                    print("PreferredUsername not set:")
-//                    //self.incompleteSignUpDelegate?.preferredUsernameNotSet()
-//                }
-//                if let firstNameIndex = userAttributes?.indexOf({ $0.name == "given_name" }) {
-//                    user.firstName = userAttributes?[firstNameIndex].value
-//                }
-//                if let lastNameIndex = userAttributes?.indexOf({ $0.name == "family_name" }) {
-//                    user.lastName = userAttributes?[lastNameIndex].value
-//                }
-//                if let profilePicUrlIndex = userAttributes?.indexOf({ $0.name == "picture" }) {
-//                    user.profilePicUrl = userAttributes?[profilePicUrlIndex].value
-//                }
-//                self.currentUser = user
-//                print("getCurrentUser success!")
-//                return task.continueWithBlock(completionHandler)
-//            } else {
-//                print("This should not happen with getCurrentUser.")
-//                return AWSTask().continueWithBlock(completionHandler)
-//            }
-//        })
-//    }
-    
     func updateFirstLastName(firstName: String?, lastName: String?, completionHandler: AWSContinuationBlock) {
         // UserPool updateFirstLastName.
         PRFYUserPoolManager.defaultUserPoolManager().updateFirstLastNameUserPool(firstName, lastName: lastName, completionHandler: {
@@ -248,17 +212,12 @@ class AWSClientManager: NSObject, ClientManager {
     
     // MARK: Posts
     
-    func getUserPosts(userId: String, completionHandler: AWSContinuationBlock) {
-        // DynamoDB getUserPosts.
-        PRFYDynamoDBManager.defaultDynamoDBManager().getUserPostsDynamoDB(userId, completionHandler: completionHandler)
+    func queryUserPosts(userId: String, completionHandler: AWSContinuationBlock) {
+        // DynamoDB queryUserPosts.
+        PRFYDynamoDBManager.defaultDynamoDBManager().queryUserPostsDynamoDB(userId, completionHandler: completionHandler)
     }
     
-    func getCurrentUserPosts(completionHandler: AWSContinuationBlock) {
-        // DynamoDb getCurrentUserPosts.
-        PRFYDynamoDBManager.defaultDynamoDBManager().getCurrentUserPostsDynamoDB(completionHandler)
-    }
-    
-    func createPost(imageData: NSData, title: String?, description: String?, category: String?, isProfilePic: Bool, completionHandler: AWSContinuationBlock) {
+    func savePost(imageData: NSData, title: String?, description: String?, category: String?, isProfilePic: Bool, completionHandler: AWSContinuationBlock) {
         // S3 uploadImage.
         PRFYS3Manager.defaultDynamoDBManager().uploadImageS3(
             imageData,
@@ -272,11 +231,11 @@ class AWSClientManager: NSObject, ClientManager {
                 if let error = task.error {
                     return AWSTask(error: error).continueWithBlock(completionHandler)
                 } else if let imageUrl = task.result as? String {
-                    // DynamoDB createPostDynamoDb SYNC.
-                    PRFYDynamoDBManager.defaultDynamoDBManager().createPostDynamoDB(imageUrl, title: title, description: description, category: category, completionHandler: completionHandler)
+                    // DynamoDB savePostDynamoDb SYNC.
+                    PRFYDynamoDBManager.defaultDynamoDBManager().savePostDynamoDB(imageUrl, title: title, description: description, category: category, completionHandler: completionHandler)
                     return nil
                 } else {
-                    print("This should not happen with createPost.")
+                    print("This should not happen with savePost.")
                     return AWSTask().continueWithBlock(completionHandler)
                 }
         })

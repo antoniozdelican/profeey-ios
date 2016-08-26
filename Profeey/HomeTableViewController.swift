@@ -23,9 +23,6 @@ class HomeTableViewController: UITableViewController {
         self.tableView.estimatedRowHeight = 155.0
         self.tableView.rowHeight = UITableViewAutomaticDimension
         
-        // TEST
-        // Just in case get identityId for later use.
-        AWSClientManager.defaultClientManager().credentialsProvider?.getIdentityId()
         // Get currentUser in background immediately for later use.
         self.getCurrentUser()
         
@@ -146,46 +143,14 @@ class HomeTableViewController: UITableViewController {
             guard let imageData = sourceViewController.imageData else {
                     return
             }
-            self.createPost(imageData, title: sourceViewController.postTitle, description: sourceViewController.postDescription, category: sourceViewController.category)
+            self.savePost(imageData, title: sourceViewController.postTitle, description: sourceViewController.postDescription, category: sourceViewController.category)
             
         }
     }
     
     // MARK: AWS
     
-    private func createPost(imageData: NSData, title: String?, description: String?, category: String?) {
-        
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-        
-        AWSClientManager.defaultClientManager().createPost(imageData, title: title, description: description, category: category, isProfilePic: false, completionHandler: {
-            (task: AWSTask) in
-            dispatch_async(dispatch_get_main_queue(), {
-                
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-                
-                if let error = task.error {
-                    let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.userInfo["message"] as? String, cancelButtonTitle: "Ok")
-                    self.presentViewController(alertController, animated: true, completion: nil)
-                } else if let awsPost = task.result as? AWSPost {
-                    let post = Post(title: awsPost._title, postDescription: awsPost._description, imageUrl: awsPost._imageUrl, category: awsPost._category, creationDate: awsPost._creationDate, user: self.user)
-                    
-                    // Inert at the beginning.
-                    self.posts.insert(post, atIndex: 0)
-                    
-                    // Get postPic.
-                    let image = UIImage(data: imageData)
-                    post.image = image
-                    
-                    self.tableView.reloadData()
-                } else {
-                    print("This should not happen createPost!")
-                }
-                
-            })
-            return nil
-        })
-    }
-    
+    // Gets currentUser and credentialsProvider.idenityId! (important for later use!)
     private func getCurrentUser() {
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         AWSClientManager.defaultClientManager().getCurrentUser({
@@ -207,6 +172,39 @@ class HomeTableViewController: UITableViewController {
                 } else {
                     print("This should not happen getCurrentUser!")
                 }
+            })
+            return nil
+        })
+    }
+    
+    private func getUserFollowed() {
+        
+    }
+    
+    private func savePost(imageData: NSData, title: String?, description: String?, category: String?) {
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        AWSClientManager.defaultClientManager().savePost(imageData, title: title, description: description, category: category, isProfilePic: false, completionHandler: {
+            (task: AWSTask) in
+            dispatch_async(dispatch_get_main_queue(), {
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                if let error = task.error {
+                    let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.userInfo["message"] as? String, cancelButtonTitle: "Ok")
+                    self.presentViewController(alertController, animated: true, completion: nil)
+                } else if let awsPost = task.result as? AWSPost {
+                    let post = Post(title: awsPost._title, postDescription: awsPost._description, imageUrl: awsPost._imageUrl, category: awsPost._category, creationDate: awsPost._creationDate, user: self.user)
+                    
+                    // Inert at the beginning.
+                    self.posts.insert(post, atIndex: 0)
+                    
+                    // Get postPic.
+                    let image = UIImage(data: imageData)
+                    post.image = image
+                    
+                    self.tableView.reloadData()
+                } else {
+                    print("This should not happen createPost!")
+                }
+                
             })
             return nil
         })

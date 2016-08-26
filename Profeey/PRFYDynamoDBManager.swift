@@ -365,22 +365,22 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
     
     // MARK: Posts
     
-    func getUserPostsDynamoDB(userId: String, completionHandler: AWSContinuationBlock) {
-        print("getUserPostsDynamoDb:")
+    func queryUserPostsDynamoDB(userId: String, completionHandler: AWSContinuationBlock) {
+        print("queryUserPostsDynamoDB:")
         let postsPrimaryIndex = AWSPostsPrimaryIndex()
         postsPrimaryIndex.queryUserPosts(userId, completionHandler: {
             (response: AWSDynamoDBPaginatedOutput?, error: NSError?) in
             if let error = error {
-                print("getUserPostsDynamoDb error:")
+                print("queryUserPostsDynamoDB error:")
                 AWSTask(error: error).continueWithBlock(completionHandler)
             } else {
-                print("getUserPostsDynamoDb success!")
+                print("queryUserPostsDynamoDB success!")
                 AWSTask(result: response).continueWithBlock(completionHandler)
             }
         })
     }
     
-    func getCurrentUserPostsDynamoDB(completionHandler: AWSContinuationBlock) {
+    func savePostDynamoDB(imageUrl: String?, title: String?, description: String?, category: String?, completionHandler: AWSContinuationBlock) {
         AWSClientManager.defaultClientManager().credentialsProvider?.getIdentityId().continueWithBlock({
             (task: AWSTask) in
             if let error = task.error {
@@ -388,35 +388,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
                 return AWSTask(error: error).continueWithBlock(completionHandler)
             } else if let identityId = task.result as? String {
                 
-                print("getCurrentUserPostsDynamoDB:")
-                let postsPrimaryIndex = AWSPostsPrimaryIndex()
-                postsPrimaryIndex.queryUserPosts(identityId, completionHandler: {
-                    (response: AWSDynamoDBPaginatedOutput?, error: NSError?) in
-                    if let error = error {
-                        print("getCurrentUserPostsDynamoDB error:")
-                        AWSTask(error: error).continueWithBlock(completionHandler)
-                    } else {
-                        print("getCurrentUserPostsDynamoDB success!")
-                        AWSTask(result: response).continueWithBlock(completionHandler)
-                    }
-                })
-                return nil
-            } else {
-                print("This should not happen with getIdentityId!")
-                return AWSTask().continueWithBlock(completionHandler)
-            }
-        })
-    }
-    
-    func createPostDynamoDB(imageUrl: String?, title: String?, description: String?, category: String?, completionHandler: AWSContinuationBlock) {
-        AWSClientManager.defaultClientManager().credentialsProvider?.getIdentityId().continueWithBlock({
-            (task: AWSTask) in
-            if let error = task.error {
-                print("getIdentityId error: \(error.localizedDescription)")
-                return AWSTask(error: error).continueWithBlock(completionHandler)
-            } else if let identityId = task.result as? String {
-                
-                print("createPostDynamoDb:")
+                print("savePostDynamoDB:")
                 let postsTable = AWSPostsTable()
                 let post = AWSPost()
                 post._userId = identityId
@@ -429,10 +401,10 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
                 postsTable.savePost(post, completionHandler: {
                     (task: AWSTask) in
                     if let error = task.error {
-                        print("createPostDynamoDb error:")
+                        print("savePostDynamoDB error:")
                         return AWSTask(error: error).continueWithBlock(completionHandler)
                     } else {
-                        print("createPostDynamoDb success!")
+                        print("savePostDynamoDB success!")
                         // Return AWSPost to the caller vc.
                         return AWSTask(result: post).continueWithBlock(completionHandler)
                         //return task.continueWithBlock(completionHandler)

@@ -30,7 +30,6 @@ protocol DynamoDBManager {
     
     // MARK: Posts
     
-    func getUserPostsDynamoDB(userId: String, completionHandler: AWSContinuationBlock)
-    func getCurrentUserPostsDynamoDB(completionHandler: AWSContinuationBlock)
-    func createPostDynamoDB(imageUrl: String?, title: String?, description: String?, category: String?, completionHandler: AWSContinuationBlock)
+    func queryUserPostsDynamoDB(userId: String, completionHandler: AWSContinuationBlock)
+    func savePostDynamoDB(imageUrl: String?, title: String?, description: String?, category: String?, completionHandler: AWSContinuationBlock)
 }

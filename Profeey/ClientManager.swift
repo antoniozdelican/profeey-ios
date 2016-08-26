@@ -40,9 +40,9 @@ protocol ClientManager {
     
     // MARK: Post
     
-    func getUserPosts(userId: String, completionHandler: AWSContinuationBlock)
-    func getCurrentUserPosts(completionHandler: AWSContinuationBlock)
-    func createPost(imageData: NSData, title: String?, description: String?, category: String?, isProfilePic: Bool, completionHandler: AWSContinuationBlock)
+    func queryUserPosts(userId: String, completionHandler: AWSContinuationBlock)
+    func savePost(imageData: NSData, title: String?, description: String?, category: String?, isProfilePic: Bool, completionHandler: AWSContinuationBlock)
+    
     // MARK: S3
     func downloadImage(imageKey: String, completionHandler: AWSContinuationBlock)
     
