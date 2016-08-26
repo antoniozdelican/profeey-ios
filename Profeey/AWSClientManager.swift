@@ -195,6 +195,8 @@ class AWSClientManager: NSObject, ClientManager {
         PRFYDynamoDBManager.defaultDynamoDBManager().scanUsersDynamoDB(completionHandler)
     }
     
+    // MARK: UserRelationsips
+    
     func getUserRelationship(followedId: String, completionHandler: AWSContinuationBlock) {
         // DynamoDB getUserRelationship.
         PRFYDynamoDBManager.defaultDynamoDBManager().getUserRelationshipDynamoDB(followedId, completionHandler: completionHandler)
@@ -210,6 +212,11 @@ class AWSClientManager: NSObject, ClientManager {
         PRFYDynamoDBManager.defaultDynamoDBManager().removeUserRelationshipDynamoDB(followedId, completionHandler: completionHandler)
     }
     
+    func queryUserFollowed(userId: String, completionHandler: AWSContinuationBlock) {
+        // DynamoDB queryUserFollowed.
+        PRFYDynamoDBManager.defaultDynamoDBManager().queryUserFollowedDynamoDB(userId, completionHandler: completionHandler)
+    }
+    
     // MARK: Posts
     
     func queryUserPosts(userId: String, completionHandler: AWSContinuationBlock) {
@@ -217,7 +224,7 @@ class AWSClientManager: NSObject, ClientManager {
         PRFYDynamoDBManager.defaultDynamoDBManager().queryUserPostsDynamoDB(userId, completionHandler: completionHandler)
     }
     
-    func savePost(imageData: NSData, title: String?, description: String?, category: String?, isProfilePic: Bool, completionHandler: AWSContinuationBlock) {
+    func savePost(imageData: NSData, title: String?, description: String?, category: String?, user: User?, isProfilePic: Bool, completionHandler: AWSContinuationBlock) {
         // S3 uploadImage.
         PRFYS3Manager.defaultDynamoDBManager().uploadImageS3(
             imageData,
@@ -232,7 +239,7 @@ class AWSClientManager: NSObject, ClientManager {
                     return AWSTask(error: error).continueWithBlock(completionHandler)
                 } else if let imageUrl = task.result as? String {
                     // DynamoDB savePostDynamoDb SYNC.
-                    PRFYDynamoDBManager.defaultDynamoDBManager().savePostDynamoDB(imageUrl, title: title, description: description, category: category, completionHandler: completionHandler)
+                    PRFYDynamoDBManager.defaultDynamoDBManager().savePostDynamoDB(imageUrl, title: title, description: description, category: category, user: user, completionHandler: completionHandler)
                     return nil
                 } else {
                     print("This should not happen with savePost.")

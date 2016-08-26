@@ -36,7 +36,7 @@ class ProfileTableViewController: UITableViewController {
             // Check if this user is followed by currentUser.
             self.getUserRelationship()
             // Get posts.
-            self.queryUserPosts()
+            self.queryUserPosts(self.user?.userId)
         }
     }
 
@@ -235,7 +235,7 @@ class ProfileTableViewController: UITableViewController {
                     }
                     
                     // Get posts.
-                    self.queryUserPosts()
+                    self.queryUserPosts(awsUser._userId)
                 } else {
                     print("This should not happen getCurrentUser!")
                 }
@@ -244,8 +244,9 @@ class ProfileTableViewController: UITableViewController {
         })
     }
     
-    private func queryUserPosts() {
-        guard let userId = self.user?.userId else {
+    private func queryUserPosts(userId: String?) {
+        guard let userId = userId else {
+            print("No userId.")
             return
         }
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true

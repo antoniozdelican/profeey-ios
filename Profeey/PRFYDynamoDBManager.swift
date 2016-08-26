@@ -273,6 +273,8 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         })
     }
     
+    // MARK: UserRelationships
+    
     func getUserRelationshipDynamoDB(followedId: String, completionHandler: AWSContinuationBlock) {
         AWSClientManager.defaultClientManager().credentialsProvider?.getIdentityId().continueWithBlock({
             (task: AWSTask) in
@@ -363,6 +365,21 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         })
     }
     
+    func queryUserFollowedDynamoDB(userId: String, completionHandler: AWSContinuationBlock) {
+        print("queryUserFollowedDynamoDB:")
+        let userRelationshipsPrimaryIndex = AWSUserRelationshipsPrimaryIndex()
+        userRelationshipsPrimaryIndex.queryUserFollowed(userId, completionHandler: {
+            (response: AWSDynamoDBPaginatedOutput?, error: NSError?) in
+            if let error = error {
+                print("queryUserFollowedDynamoDB error:")
+                AWSTask(error: error).continueWithBlock(completionHandler)
+            } else {
+                print("queryUserFollowedDynamoDB success!")
+                AWSTask(result: response).continueWithBlock(completionHandler)
+            }
+        })
+    }
+    
     // MARK: Posts
     
     func queryUserPostsDynamoDB(userId: String, completionHandler: AWSContinuationBlock) {
@@ -380,7 +397,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         })
     }
     
-    func savePostDynamoDB(imageUrl: String?, title: String?, description: String?, category: String?, completionHandler: AWSContinuationBlock) {
+    func savePostDynamoDB(imageUrl: String?, title: String?, description: String?, category: String?, user: User?, completionHandler: AWSContinuationBlock) {
         AWSClientManager.defaultClientManager().credentialsProvider?.getIdentityId().continueWithBlock({
             (task: AWSTask) in
             if let error = task.error {
@@ -398,6 +415,12 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
                 post._description = description
                 post._category = category
                 post._creationDate = NSNumber(double: NSDate().timeIntervalSince1970)
+                
+                post._userFirstName = user?.firstName
+                post._userLastName = user?.lastName
+                post._userProfession = user?.profession
+                post._userProfilePicUrl = user?.profilePicUrl
+                
                 postsTable.savePost(post, completionHandler: {
                     (task: AWSTask) in
                     if let error = task.error {

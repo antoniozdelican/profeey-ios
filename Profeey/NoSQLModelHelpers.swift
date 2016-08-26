@@ -90,14 +90,14 @@ extension Table {
         var keys = keysArray as! [String]
         keys = keys.sort()
         
-        if (model.classForCoder.respondsToSelector("rangeKeyAttribute")) {
-            let rangeKeyAttribute = model.classForCoder.rangeKeyAttribute!()
-            let index = keys.indexOf(rangeKeyAttribute)
-            if let index = index {
-                keys.removeAtIndex(index)
-                keys.insert(rangeKeyAttribute, atIndex: 0)
-            }
-        }
+//        if (model.classForCoder.respondsToSelector("rangeKeyAttribute")) {
+//            let rangeKeyAttribute = model.classForCoder.rangeKeyAttribute!()
+//            let index = keys.indexOf(rangeKeyAttribute)
+//            if let index = index {
+//                keys.removeAtIndex(index)
+//                keys.insert(rangeKeyAttribute, atIndex: 0)
+//            }
+//        }
         model.classForCoder.hashKeyAttribute()
         let hashKeyAttribute = model.classForCoder.hashKeyAttribute()
         let index = keys.indexOf(hashKeyAttribute)

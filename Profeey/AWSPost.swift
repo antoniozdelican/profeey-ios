@@ -20,6 +20,11 @@ class AWSPost: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     var _imageUrl: String?
     var _title: String?
     
+    var _userFirstName: String?
+    var _userLastName: String?
+    var _userProfession: String?
+    var _userProfilePicUrl: String?
+    
     class func dynamoDBTableName() -> String {
         
         return "profeey-mobilehub-294297648-Posts"
@@ -44,6 +49,10 @@ class AWSPost: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
             "_description" : "description",
             "_imageUrl" : "imageUrl",
             "_title" : "title",
+            "_userFirstName" : "userFirstName",
+            "_userLastName" : "userLastName",
+            "_userProfession" : "userProfession",
+            "_userProfilePicUrl" : "userProfilePicUrl",
         ]
     }
 }

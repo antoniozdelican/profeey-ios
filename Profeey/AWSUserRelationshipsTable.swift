@@ -69,7 +69,7 @@ class AWSUserRelationshipsTable: NSObject, Table {
     }
 }
 
-// Used to get followed.
+// Query followed users by the user.
 class AWSUserRelationshipsPrimaryIndex: NSObject, Index {
     
     var indexName: String? {
@@ -117,7 +117,7 @@ class AWSUserRelationshipsPrimaryIndex: NSObject, Index {
 //    }
 }
 
-// Used to get followers.
+// Query followers of the user.
 class AWSUserRelationshipsFollowersIndex: NSObject, Index {
     
     var indexName: String? {

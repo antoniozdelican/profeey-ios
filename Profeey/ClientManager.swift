@@ -34,14 +34,18 @@ protocol ClientManager {
     func updateProfilePic(profilePicUrl: String?, completionHandler: AWSContinuationBlock)
     
     func scanUsers(completionHandler: AWSContinuationBlock)
+    
+    // MARK: UserRelationships
+    
     func getUserRelationship(followedId: String, completionHandler: AWSContinuationBlock)
     func saveUserRelationship(followedId: String, completionHandler: AWSContinuationBlock)
     func removeUserRelationship(followedId: String, completionHandler: AWSContinuationBlock)
+    func queryUserFollowed(userId: String, completionHandler: AWSContinuationBlock)
     
-    // MARK: Post
+    // MARK: Posts
     
     func queryUserPosts(userId: String, completionHandler: AWSContinuationBlock)
-    func savePost(imageData: NSData, title: String?, description: String?, category: String?, isProfilePic: Bool, completionHandler: AWSContinuationBlock)
+    func savePost(imageData: NSData, title: String?, description: String?, category: String?, user: User?, isProfilePic: Bool, completionHandler: AWSContinuationBlock)
     
     // MARK: S3
     func downloadImage(imageKey: String, completionHandler: AWSContinuationBlock)
