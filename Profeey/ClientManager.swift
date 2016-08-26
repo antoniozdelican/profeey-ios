@@ -45,6 +45,7 @@ protocol ClientManager {
     // MARK: Posts
     
     func queryUserPosts(userId: String, completionHandler: AWSContinuationBlock)
+    func queryUserPostsDateSorted(userId: String, completionHandler: AWSContinuationBlock)
     func savePost(imageData: NSData, title: String?, description: String?, category: String?, user: User?, isProfilePic: Bool, completionHandler: AWSContinuationBlock)
     
     // MARK: S3

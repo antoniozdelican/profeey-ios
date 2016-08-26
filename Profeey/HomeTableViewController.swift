@@ -197,7 +197,7 @@ class HomeTableViewController: UITableViewController {
                     var followedIds = awsUserRelationships.flatMap({$0._followedId})
                     followedIds.append(userId)
                     for userId in followedIds {
-                        self.queryUserPosts(userId)
+                        self.queryUserPostsDateSorted(userId)
                     }
                 }
             }
@@ -206,13 +206,13 @@ class HomeTableViewController: UITableViewController {
     }
     
     //3.
-    private func queryUserPosts(userId: String?) {
+    private func queryUserPostsDateSorted(userId: String?) {
         guard let userId = userId else {
             print("No userId.")
             return
         }
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-        AWSClientManager.defaultClientManager().queryUserPosts(userId, completionHandler: {
+        AWSClientManager.defaultClientManager().queryUserPostsDateSorted(userId, completionHandler: {
             (task: AWSTask) in
             UIApplication.sharedApplication().networkActivityIndicatorVisible = false
             if let error = task.error {

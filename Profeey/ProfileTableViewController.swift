@@ -36,7 +36,7 @@ class ProfileTableViewController: UITableViewController {
             // Check if this user is followed by currentUser.
             self.getUserRelationship()
             // Get posts.
-            self.queryUserPosts(self.user?.userId)
+            self.queryUserPostsDateSorted(self.user?.userId)
         }
     }
 
@@ -235,7 +235,7 @@ class ProfileTableViewController: UITableViewController {
                     }
                     
                     // Get posts.
-                    self.queryUserPosts(awsUser._userId)
+                    self.queryUserPostsDateSorted(awsUser._userId)
                 } else {
                     print("This should not happen getCurrentUser!")
                 }
@@ -244,13 +244,13 @@ class ProfileTableViewController: UITableViewController {
         })
     }
     
-    private func queryUserPosts(userId: String?) {
+    private func queryUserPostsDateSorted(userId: String?) {
         guard let userId = userId else {
             print("No userId.")
             return
         }
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-        AWSClientManager.defaultClientManager().queryUserPosts(userId, completionHandler: {
+        AWSClientManager.defaultClientManager().queryUserPostsDateSorted(userId, completionHandler: {
             (task: AWSTask) in
             dispatch_async(dispatch_get_main_queue(), {
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false

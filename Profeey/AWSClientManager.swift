@@ -224,6 +224,11 @@ class AWSClientManager: NSObject, ClientManager {
         PRFYDynamoDBManager.defaultDynamoDBManager().queryUserPostsDynamoDB(userId, completionHandler: completionHandler)
     }
     
+    func queryUserPostsDateSorted(userId: String, completionHandler: AWSContinuationBlock) {
+        // DynamoDB queryUserPostsDateSorted.
+        PRFYDynamoDBManager.defaultDynamoDBManager().queryUserPostsDateSortedDynamoDB(userId, completionHandler: completionHandler)
+    }
+    
     func savePost(imageData: NSData, title: String?, description: String?, category: String?, user: User?, isProfilePic: Bool, completionHandler: AWSContinuationBlock) {
         // S3 uploadImage.
         PRFYS3Manager.defaultDynamoDBManager().uploadImageS3(

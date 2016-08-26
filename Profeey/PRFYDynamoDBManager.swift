@@ -397,6 +397,21 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         })
     }
     
+    func queryUserPostsDateSortedDynamoDB(userId: String, completionHandler: AWSContinuationBlock) {
+        print("queryUserPostsDateSortedDynamoDB:")
+        let postsDateSortedIndex = AWsPostsDateSortedIndex()
+        postsDateSortedIndex.queryUserPostsDateSorted(userId, completionHandler: {
+            (response: AWSDynamoDBPaginatedOutput?, error: NSError?) in
+            if let error = error {
+                print("queryUserPostsDateSortedDynamoDB error:")
+                AWSTask(error: error).continueWithBlock(completionHandler)
+            } else {
+                print("queryUserPostsDateSortedDynamoDB success!")
+                AWSTask(result: response).continueWithBlock(completionHandler)
+            }
+        })
+    }
+    
     func savePostDynamoDB(imageUrl: String?, title: String?, description: String?, category: String?, user: User?, completionHandler: AWSContinuationBlock) {
         AWSClientManager.defaultClientManager().credentialsProvider?.getIdentityId().continueWithBlock({
             (task: AWSTask) in

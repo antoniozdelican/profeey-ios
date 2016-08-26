@@ -128,9 +128,10 @@ class AWSUserRelationshipsFollowersIndex: NSObject, Index {
     func supportedOperations() -> [String] {
         return [
             QueryWithPartitionKey,
-            QueryWithPartitionKeyAndSortKey,
         ]
     }
+    
+    // MARK: QueryWithPartitionKey
     
     // Find all items with followedId.
     func queryUserFollowers(followedId: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {

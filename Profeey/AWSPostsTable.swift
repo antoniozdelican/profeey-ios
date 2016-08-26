@@ -25,7 +25,7 @@ class AWSPostsTable: NSObject, Table {
     }
     var tableDisplayName: String {
         
-        return "Posts"
+        return "AwsPosts"
     }
     
     override init() {
@@ -64,21 +64,58 @@ class AWSPostsPrimaryIndex: NSObject, Index {
     func supportedOperations() -> [String] {
         return [
             QueryWithPartitionKey,
-            QueryWithPartitionKeyAndFilter,
-            QueryWithPartitionKeyAndSortKey,
-            QueryWithPartitionKeyAndSortKeyAndFilter,
         ]
     }
     
     // Mark: QueryWithPartitionKey
     
-    // Find all items with userId.
+    // Find all posts with userId.
     func queryUserPosts(userId: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
         let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
         let queryExpression = AWSDynamoDBQueryExpression()
         queryExpression.keyConditionExpression = "#userId = :userId"
         queryExpression.expressionAttributeNames = ["#userId": "userId",]
         queryExpression.expressionAttributeValues = [":userId": userId,]
+        
+        objectMapper.query(AWSPost.self, expression: queryExpression, completionHandler: completionHandler)
+    }
+}
+
+class AWsPostsDateSortedIndex: NSObject, Index {
+    
+    var indexName: String? {
+        
+        return "AwsDateSortedIndex"
+    }
+    
+    func supportedOperations() -> [String] {
+        return [
+            QueryWithPartitionKeyAndSortKey,
+        ]
+    }
+    
+    // MARK: QueryWithPartitionKeyAndSortKey
+    
+    // Find all posts with userId and creationDate <= currentDate.
+    func queryUserPostsDateSorted(userId: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
+        let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
+        let queryExpression = AWSDynamoDBQueryExpression()
+        queryExpression.indexName = "DateSortedIndex"
+        queryExpression.keyConditionExpression = "#userId = :userId AND #creationDate <= :creationDate"
+        queryExpression.expressionAttributeNames = [
+            "#userId": "userId",
+            "#creationDate": "creationDate",
+        ]
+        
+        let currentDateNumber = NSNumber(double: NSDate().timeIntervalSince1970)
+        
+        queryExpression.expressionAttributeValues = [
+            ":userId": userId,
+            ":creationDate": currentDateNumber,
+        ]
+        
+        // Set desc ordering.
+        queryExpression.scanIndexForward = false
         
         objectMapper.query(AWSPost.self, expression: queryExpression, completionHandler: completionHandler)
     }
