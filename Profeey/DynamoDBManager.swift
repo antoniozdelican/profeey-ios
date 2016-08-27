@@ -32,6 +32,12 @@ protocol DynamoDBManager {
     func removeUserRelationshipDynamoDB(followedId: String, completionHandler: AWSContinuationBlock)
     func queryUserFollowedDynamoDB(userId: String, completionHandler: AWSContinuationBlock)
     
+    // MARK: Likes
+    func getLikeDynamoDB(postId: String, completionHandler: AWSContinuationBlock)
+    func saveLikeDynamoDB(postId: String, completionHandler: AWSContinuationBlock)
+    func removeLikeDynamoDB(postId: String, completionHandler: AWSContinuationBlock)
+    func queryPostLikersDynamoDB(postId: String, completionHandler: AWSContinuationBlock)
+    
     // MARK: Posts
     
     func queryUserPostsDynamoDB(userId: String, completionHandler: AWSContinuationBlock)

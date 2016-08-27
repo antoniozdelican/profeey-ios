@@ -42,6 +42,13 @@ protocol ClientManager {
     func removeUserRelationship(followedId: String, completionHandler: AWSContinuationBlock)
     func queryUserFollowed(userId: String, completionHandler: AWSContinuationBlock)
     
+    // MARK: Likes
+    
+    func getLike(postId: String, completionHandler: AWSContinuationBlock)
+    func saveLike(postId: String, completionHandler: AWSContinuationBlock)
+    func removeLike(postId: String, completionHandler: AWSContinuationBlock)
+    func queryPostLikers(postId: String, completionHandler: AWSContinuationBlock)
+    
     // MARK: Posts
     
     func queryUserPosts(userId: String, completionHandler: AWSContinuationBlock)

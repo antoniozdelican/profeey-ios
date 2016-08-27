@@ -290,14 +290,6 @@
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="132.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="4y8-2M-xfl">
-                                            <rect key="frame" x="16" y="16" width="150" height="100"/>
-                                            <color key="backgroundColor" red="0.90980392156862744" green="0.90980392156862744" blue="0.90980392156862744" alpha="1" colorSpace="calibratedRGB"/>
-                                            <constraints>
-                                                <constraint firstAttribute="height" constant="100" id="1E9-Er-zT3"/>
-                                                <constraint firstAttribute="width" constant="150" id="emg-8f-aSe"/>
-                                            </constraints>
-                                        </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="S1N-nK-Pta">
                                             <rect key="frame" x="174" y="16" width="410" height="20"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
@@ -316,6 +308,14 @@
                                             <color key="textColor" red="0.2901960784" green="0.2901960784" blue="0.2901960784" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="4y8-2M-xfl">
+                                            <rect key="frame" x="16" y="16" width="150" height="100"/>
+                                            <color key="backgroundColor" red="0.90980392156862744" green="0.90980392156862744" blue="0.90980392156862744" alpha="1" colorSpace="calibratedRGB"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="100" id="1E9-Er-zT3"/>
+                                                <constraint firstAttribute="width" constant="150" id="emg-8f-aSe"/>
+                                            </constraints>
+                                        </imageView>
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="vrd-IQ-L2M" firstAttribute="top" secondItem="S1N-nK-Pta" secondAttribute="bottom" constant="2" id="17t-fB-P3r"/>

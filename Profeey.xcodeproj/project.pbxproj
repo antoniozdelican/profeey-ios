@@ -112,6 +112,8 @@
 		A9CF753C1D40C54B0047BB1A /* PasswordSignUpTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CF753B1D40C54B0047BB1A /* PasswordSignUpTableViewController.swift */; };
 		A9CF75461D40CB740047BB1A /* UsernameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CF75451D40CB740047BB1A /* UsernameViewController.swift */; };
 		A9CF75481D40CE2A0047BB1A /* UsernameTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CF75471D40CE2A0047BB1A /* UsernameTableViewController.swift */; };
+		A9D185D71D7192350073E65F /* AWSLikesTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D185D61D7192350073E65F /* AWSLikesTable.swift */; };
+		A9D185D91D71927E0073E65F /* AWSLike.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D185D81D71927E0073E65F /* AWSLike.swift */; };
 		A9D21B2F1D5B5F5A00B5847D /* AWSCognito.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9D21B281D5B5F5A00B5847D /* AWSCognito.framework */; };
 		A9D21B301D5B5F5A00B5847D /* AWSCognitoIdentityProvider.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9D21B291D5B5F5A00B5847D /* AWSCognitoIdentityProvider.framework */; };
 		A9D21B311D5B5F5A00B5847D /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9D21B2A1D5B5F5A00B5847D /* AWSCore.framework */; };
@@ -293,6 +295,8 @@
 		A9CF753B1D40C54B0047BB1A /* PasswordSignUpTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordSignUpTableViewController.swift; sourceTree = "<group>"; };
 		A9CF75451D40CB740047BB1A /* UsernameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsernameViewController.swift; sourceTree = "<group>"; };
 		A9CF75471D40CE2A0047BB1A /* UsernameTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsernameTableViewController.swift; sourceTree = "<group>"; };
+		A9D185D61D7192350073E65F /* AWSLikesTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSLikesTable.swift; sourceTree = "<group>"; };
+		A9D185D81D71927E0073E65F /* AWSLike.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSLike.swift; sourceTree = "<group>"; };
 		A9D21B281D5B5F5A00B5847D /* AWSCognito.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSCognito.framework; path = Profeey/AWSCognito.framework; sourceTree = "<group>"; };
 		A9D21B291D5B5F5A00B5847D /* AWSCognitoIdentityProvider.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSCognitoIdentityProvider.framework; path = Profeey/AWSCognitoIdentityProvider.framework; sourceTree = "<group>"; };
 		A9D21B2A1D5B5F5A00B5847D /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSCore.framework; path = Profeey/AWSCore.framework; sourceTree = "<group>"; };
@@ -644,6 +648,15 @@
 			name = Password;
 			sourceTree = "<group>";
 		};
+		A9D185D51D7192230073E65F /* AWSLikes */ = {
+			isa = PBXGroup;
+			children = (
+				A9D185D81D71927E0073E65F /* AWSLike.swift */,
+				A9D185D61D7192350073E65F /* AWSLikesTable.swift */,
+			);
+			name = AWSLikes;
+			sourceTree = "<group>";
+		};
 		A9E53B611D10657400CD1D6C /* Main */ = {
 			isa = PBXGroup;
 			children = (
@@ -745,6 +758,7 @@
 		A9EAD3481D1E8F3500994292 /* AWS */ = {
 			isa = PBXGroup;
 			children = (
+				A9D185D51D7192230073E65F /* AWSLikes */,
 				A9604F831D33726700F23B33 /* AWSUser */,
 				A9F49D581D379D58002EB68B /* AWSPost */,
 				A9193A2F1D6F130700E38F56 /* AWSUserRelationship */,
@@ -882,6 +896,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A903EB581D16A39700B33025 /* LLSimpleCamera+Helper.m in Sources */,
+				A9D185D71D7192350073E65F /* AWSLikesTable.swift in Sources */,
 				A903EB5B1D16A3C800B33025 /* ProfeeySimpleCamera.swift in Sources */,
 				A9CF753A1D40C1C80047BB1A /* EmailSignUpTableViewController.swift in Sources */,
 				A9AC2C741D6484A000D84D33 /* SearchTableViewController.swift in Sources */,
@@ -935,6 +950,7 @@
 				A9A99FA61D60C6D200B01006 /* EditPostTableViewController.swift in Sources */,
 				A9D21B471D5B664F00B5847D /* UserPoolManager.swift in Sources */,
 				A9EB35591D4B66CE00E9C77A /* ScrollViewController.swift in Sources */,
+				A9D185D91D71927E0073E65F /* AWSLike.swift in Sources */,
 				A9EB35621D4B9A3600E9C77A /* GalleryViewController.swift in Sources */,
 				A9B934B01D1BD9BB00ACC2B8 /* OnboardingViewController.swift in Sources */,
 				A9E450801D5A09F100D14553 /* Comment.swift in Sources */,

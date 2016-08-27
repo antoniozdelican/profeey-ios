@@ -95,26 +95,6 @@ class AWSUserRelationshipsPrimaryIndex: NSObject, Index {
         
         objectMapper.query(AWSUserRelationship.self, expression: queryExpression, completionHandler: completionHandler)
     }
-    
-    // Mark: QueryWithPartitionKeyAndSortKey
-    
-//    func queryUserFollowed(userId: String, followedId: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
-//        let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
-//        let queryExpression = AWSDynamoDBQueryExpression()
-//        
-//        queryExpression.keyConditionExpression = "#userId = :userId AND #followedId = :followedId"
-//        queryExpression.expressionAttributeNames = [
-//            "#userId": "userId",
-//            "#followedId": "followedId",
-//        ]
-//        queryExpression.expressionAttributeValues = [":userId": userId,]
-//        queryExpression.expressionAttributeValues = [
-//            ":userId": userId,
-//            ":followedId": followedId,
-//        ]
-//        
-//        objectMapper.query(AWSUserRelationship.self, expression: queryExpression, completionHandler: completionHandler)
-//    }
 }
 
 // Query followers of the user.

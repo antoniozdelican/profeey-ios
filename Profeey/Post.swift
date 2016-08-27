@@ -11,6 +11,8 @@ import Foundation
 class Post: NSObject {
     
     // Properties.
+    //var userId: String?
+    var postId: String?
     var category: String?
     var creationDate: NSNumber?
     var postDescription: String?
@@ -39,8 +41,9 @@ class Post: NSObject {
         super.init()
     }
     
-    convenience init(title: String?, postDescription: String?, imageUrl: String?, category: String?, creationDate: NSNumber?, user: User?) {
+    convenience init(postId: String?, title: String?, postDescription: String?, imageUrl: String?, category: String?, creationDate: NSNumber?, user: User?) {
         self.init()
+        self.postId = postId
         self.title = title
         self.postDescription = postDescription
         self.imageUrl = imageUrl
@@ -49,6 +52,7 @@ class Post: NSObject {
         self.user = user
     }
     
+    // TEST
     convenience init(user: User?, postDescription: String?, imageUrl: String?, title: String?, image: UIImage?, categories: [Category]?) {
         self.init()
         self.user = user

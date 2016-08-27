@@ -380,6 +380,115 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         })
     }
     
+    // MARK: Likes
+    
+    func getLikeDynamoDB(postId: String, completionHandler: AWSContinuationBlock) {
+        AWSClientManager.defaultClientManager().credentialsProvider?.getIdentityId().continueWithBlock({
+            (task: AWSTask) in
+            if let error = task.error {
+                print("getIdentityId error: \(error.localizedDescription)")
+                return AWSTask(error: error).continueWithBlock(completionHandler)
+            } else if let identityId = task.result as? String {
+                
+                print("getLikeDynamoDB:")
+                let likesTable = AWSLikesTable()
+                likesTable.getLike(identityId, postId: postId, completionHandler: {
+                    (task: AWSTask) in
+                    if let error = task.error {
+                        print("getLikeDynamoDB error:")
+                        return AWSTask(error: error).continueWithBlock(completionHandler)
+                    } else {
+                        print("getLikeDynamoDB success!")
+                        return task.continueWithBlock(completionHandler)
+                    }
+                })
+                return nil
+            } else {
+                print("This should not happen with getIdentityId!")
+                return AWSTask().continueWithBlock(completionHandler)
+            }
+        })
+    }
+    
+    func saveLikeDynamoDB(postId: String, completionHandler: AWSContinuationBlock) {
+        AWSClientManager.defaultClientManager().credentialsProvider?.getIdentityId().continueWithBlock({
+            (task: AWSTask) in
+            if let error = task.error {
+                print("getIdentityId error: \(error.localizedDescription)")
+                return AWSTask(error: error).continueWithBlock(completionHandler)
+            } else if let identityId = task.result as? String {
+                
+                print("saveLikeDynamoDB:")
+                let likesTable = AWSLikesTable()
+                let like = AWSLike()
+                like._userId = identityId
+                like._postId = postId
+                like._creationDate = NSNumber(double: NSDate().timeIntervalSince1970)
+                likesTable.saveLike(like, completionHandler: {
+                    (task: AWSTask) in
+                    if let error = task.error {
+                        print("saveLikeDynamoDB error:")
+                        return AWSTask(error: error).continueWithBlock(completionHandler)
+                    } else {
+                        print("saveLikeDynamoDB success!")
+                        return task.continueWithBlock(completionHandler)
+                    }
+                })
+                return nil
+            } else {
+                print("This should not happen with getIdentityId!")
+                return AWSTask().continueWithBlock(completionHandler)
+            }
+        })
+    }
+    
+    func removeLikeDynamoDB(postId: String, completionHandler: AWSContinuationBlock) {
+        AWSClientManager.defaultClientManager().credentialsProvider?.getIdentityId().continueWithBlock({
+            (task: AWSTask) in
+            if let error = task.error {
+                print("getIdentityId error: \(error.localizedDescription)")
+                return AWSTask(error: error).continueWithBlock(completionHandler)
+            } else if let identityId = task.result as? String {
+                
+                print("removeLikeDynamoDB:")
+                let likesTable = AWSLikesTable()
+                let like = AWSLike()
+                like._userId = identityId
+                like._postId = postId
+                likesTable.removeLike(like, completionHandler: {
+                    (task: AWSTask) in
+                    if let error = task.error {
+                        print("removeLikeDynamoDB error:")
+                        return AWSTask(error: error).continueWithBlock(completionHandler)
+                    } else {
+                        print("removeLikeDynamoDB success!")
+                        return task.continueWithBlock(completionHandler)
+                    }
+                })
+                return nil
+            } else {
+                print("This should not happen with getIdentityId!")
+                return AWSTask().continueWithBlock(completionHandler)
+            }
+        })
+    }
+    
+    func queryPostLikersDynamoDB(postId: String, completionHandler: AWSContinuationBlock) {
+        print("queryPostLikersDynamoDB:")
+        let likesPostIndex = AWSLikesPostIndex()
+        likesPostIndex.queryPostLikers(postId, completionHandler: {
+            (response: AWSDynamoDBPaginatedOutput?, error: NSError?) in
+            if let error = error {
+                print("queryPostLikersDynamoDB error:")
+                AWSTask(error: error).continueWithBlock(completionHandler)
+            } else {
+                print("queryPostLikersDynamoDB success!")
+                AWSTask(result: response).continueWithBlock(completionHandler)
+            }
+        })
+    }
+    
+    
     // MARK: Posts
     
     func queryUserPostsDynamoDB(userId: String, completionHandler: AWSContinuationBlock) {

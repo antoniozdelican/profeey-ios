@@ -17,8 +17,6 @@ class HomeTableViewController: UITableViewController {
     
     private var user: User?
     private var posts: [Post] = []
-    // Used to track which users have been loaded.
-    private var followedUsers: [User] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -151,7 +149,6 @@ class HomeTableViewController: UITableViewController {
     // MARK: AWS
     
     // Gets currentUser and credentialsProvider.idenityId
-    // 1.
     private func getCurrentUser() {
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         AWSClientManager.defaultClientManager().getCurrentUser({
@@ -169,7 +166,9 @@ class HomeTableViewController: UITableViewController {
                 }
                 
                 // Query followed.
-                self.queryUserFollowed(awsUser._userId)
+                if let userId = awsUser._userId {
+                    self.queryUserFollowed(userId)
+                }
                 
             } else {
                 print("This should not happen with getCurrentUser!")
@@ -178,12 +177,7 @@ class HomeTableViewController: UITableViewController {
         })
     }
     
-    //2.
-    private func queryUserFollowed(userId: String?) {
-        guard let userId = userId else {
-            print("No userId.")
-            return
-        }
+    private func queryUserFollowed(userId: String) {
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         AWSClientManager.defaultClientManager().queryUserFollowed(userId, completionHandler: {
             (task: AWSTask) in
@@ -205,12 +199,7 @@ class HomeTableViewController: UITableViewController {
         })
     }
     
-    //3.
-    private func queryUserPostsDateSorted(userId: String?) {
-        guard let userId = userId else {
-            print("No userId.")
-            return
-        }
+    private func queryUserPostsDateSorted(userId: String) {
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         AWSClientManager.defaultClientManager().queryUserPostsDateSorted(userId, completionHandler: {
             (task: AWSTask) in
@@ -223,33 +212,20 @@ class HomeTableViewController: UITableViewController {
                     
                     // Iterate through all posts. This should change and fetch only certain or?
                     for (index, awsPost) in awsPosts.enumerate() {
-                        
                         let indexPath = NSIndexPath(forRow: index, inSection: 3)
-                        let followedUserIndex = self.followedUsers.indexOf({$0.userId == userId})
 
                         dispatch_async(dispatch_get_main_queue(), {
-                            var user: User
-                            if followedUserIndex != nil {
-                                // If followed user already exists, don't create a new user object!
-                                user = self.followedUsers[followedUserIndex!]
-                            } else {
-                                // Else create a new object.
-                                user = User(userId: awsPost._userId, firstName: awsPost._userFirstName, lastName: awsPost._userLastName, preferredUsername: nil, profession: awsPost._userProfession, profilePicUrl: awsPost._userProfilePicUrl, location: nil, about: nil)
-                                self.followedUsers.append(user)
-                            }
                             
                             // Data is denormalized so we store user data in posts table!
-                            let post = Post(title: awsPost._title, postDescription: awsPost._description, imageUrl: awsPost._imageUrl, category: awsPost._category, creationDate: awsPost._creationDate, user: user)
+                            let user = User(userId: awsPost._userId, firstName: awsPost._userFirstName, lastName: awsPost._userLastName, preferredUsername: nil, profession: awsPost._userProfession, profilePicUrl: awsPost._userProfilePicUrl, location: nil, about: nil)
+                            let post = Post(postId: awsPost._postId, title: awsPost._title, postDescription: awsPost._description, imageUrl: awsPost._imageUrl, category: awsPost._category, creationDate: awsPost._creationDate, user: user)
                             self.posts.append(post)
                             self.tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
                         })
-
-                        // Get post userProfilePic.
-                        // But only if followed user doesn't yet exist!
-                        if followedUserIndex == nil {
-                            if let profilePicUrl = awsPost._userProfilePicUrl {
-                                self.downloadImage(profilePicUrl, indexPath: indexPath, isProfilePic: true)
-                            }
+                        
+                        // Get profilePic.
+                        if let profilePicUrl = awsPost._userProfilePicUrl {
+                            self.downloadImage(profilePicUrl, indexPath: indexPath, isProfilePic: true)
                         }
 
                         // Get postPic.
@@ -263,43 +239,39 @@ class HomeTableViewController: UITableViewController {
         })
     }
     
-    //4.a
     private func downloadImage(imageKey: String, indexPath: NSIndexPath?, isProfilePic: Bool) {
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-        AWSClientManager.defaultClientManager().downloadImage(imageKey, completionHandler: {
-            (task: AWSTask) in
+        
+        let content = AWSUserFileManager.custom(key: "USEast1BucketManager").contentWithKey(imageKey)
+        // TODO check if content.isImage()
+        var image: UIImage?
+        if content.cached {
+            print("Content cached:")
             UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-            if let error = task.error {
-                print("Error: \(error.userInfo["message"])")
-            } else {
-                if let imageData = task.result as? NSData {
-                    
-                    if let indexPath = indexPath {
-                        if isProfilePic {
-                            dispatch_async(dispatch_get_main_queue(), {
-                                let image = UIImage(data: imageData)
-                                // Update followedUsers profilePic.
-                                self.followedUsers[indexPath.row].profilePic = image
-                                self.posts[indexPath.row].user?.profilePic = image
-                                self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
-                            })
-                        } else {
-                            dispatch_async(dispatch_get_main_queue(), {
-                                let image = UIImage(data: imageData)
-                                self.posts[indexPath.row].image = image
-                                self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
-                            })
-                        }
-                        
+            image = UIImage(data: content.cachedData)
+            self.updateUIWithImage(image, indexPath: indexPath, isProfilePic: isProfilePic)
+        } else {
+            print("Download content:")
+            content.downloadWithDownloadType(
+                AWSContentDownloadType.IfNewerExists,
+                pinOnCompletion: false,
+                progressBlock: {
+                    (content: AWSContent?, progress: NSProgress?) -> Void in
+                    // TODO
+                },
+                completionHandler: {
+                    (content: AWSContent?, data: NSData?, error: NSError?) in
+                    UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                    if let error = error {
+                        print("Download content error: \(error.localizedDescription)")
+                    } else if let imageData = data {
+                        image = UIImage(data: imageData)
+                        self.updateUIWithImage(image, indexPath: indexPath, isProfilePic: isProfilePic)
                     } else {
-                        // Update only currentUser profilePic.
-                        let image = UIImage(data: imageData)
-                        self.user?.profilePic = image
+                        print("This should not happen with download content!")
                     }
-                }
-            }
-            return nil
-        })
+            })
+        }
     }
     
     private func savePost(imageData: NSData, title: String?, description: String?, category: String?) {
@@ -318,21 +290,40 @@ class HomeTableViewController: UITableViewController {
                 
                 dispatch_async(dispatch_get_main_queue(), {
                     
-                    let post = Post(title: awsPost._title, postDescription: awsPost._description, imageUrl: awsPost._imageUrl, category: awsPost._category, creationDate: awsPost._creationDate, user: self.user)
+                    let post = Post(postId: awsPost._postId, title: awsPost._title, postDescription: awsPost._description, imageUrl: awsPost._imageUrl, category: awsPost._category, creationDate: awsPost._creationDate, user: self.user)
                     let image = UIImage(data: imageData)
                     post.image = image
                     // Inert at the beginning.
                     self.posts.insert(post, atIndex: 0)
                     let indexPath = NSIndexPath(forRow: 0, inSection: 3)
-                    self.tableView.beginUpdates()
                     self.tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
-                    self.tableView.endUpdates()
                 })
             } else {
                 print("This should not happen with savePost!")
             }
             return nil
         })
+    }
+    
+    // MARK: Helpers
+    
+    private func updateUIWithImage(image: UIImage?, indexPath: NSIndexPath?, isProfilePic: Bool) {
+        if let indexPath = indexPath {
+            if isProfilePic {
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.posts[indexPath.row].user?.profilePic = image
+                    self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
+                })
+            } else {
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.posts[indexPath.row].image = image
+                    self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
+                })
+            }
+        } else {
+            // Update only currentUser profilePic.
+            self.user?.profilePic = image
+        }
     }
 }
 

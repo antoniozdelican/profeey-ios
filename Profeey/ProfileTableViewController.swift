@@ -24,8 +24,6 @@ class ProfileTableViewController: UITableViewController {
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.Plain, target:nil, action:nil)
         self.navigationItem.title = nil
         self.tableView.delaysContentTouches = false
-        self.tableView.estimatedRowHeight = 120.0
-        self.tableView.rowHeight = UITableViewAutomaticDimension
         self.settingsButton.image = UIImage(named: "ic_settings")
         
         if self.isCurrentUser {
@@ -36,7 +34,9 @@ class ProfileTableViewController: UITableViewController {
             // Check if this user is followed by currentUser.
             self.getUserRelationship()
             // Get posts.
-            self.queryUserPostsDateSorted(self.user?.userId)
+            if let userId = self.user?.userId {
+                self.queryUserPostsDateSorted(userId)
+            }
         }
     }
 
@@ -183,6 +183,22 @@ class ProfileTableViewController: UITableViewController {
         cell.layoutMargins = UIEdgeInsetsZero
     }
     
+    override func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        if indexPath.section == 7 {
+            return 133.0
+        } else {
+            return 120.0
+        }
+    }
+    
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        if indexPath.section == 7 {
+            return 133.0
+        } else {
+            return UITableViewAutomaticDimension
+        }
+    }
+    
     // MARK: IBActions
     
     @IBAction func settingsButtonTapped(sender: AnyObject) {
@@ -218,95 +234,102 @@ class ProfileTableViewController: UITableViewController {
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         AWSClientManager.defaultClientManager().getCurrentUser({
             (task: AWSTask) in
-            dispatch_async(dispatch_get_main_queue(), {
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-                if let error = task.error {
-                    let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.userInfo["message"] as? String, cancelButtonTitle: "Ok")
-                    self.presentViewController(alertController, animated: true, completion: nil)
-                } else if let awsUser = task.result as? AWSUser {
-                    let user = User(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, profession: awsUser._profession, profilePicUrl: awsUser._profilePicUrl, location: awsUser._location, about: awsUser._about)
-                    
-                    // Update UI.
-                    self.configureUser(user)
-                    
-                    // Get profilePic.
-                    if let profilePicUrl = awsUser._profilePicUrl {
-                        self.downloadImage(profilePicUrl, postIndex: nil)
-                    }
-                    
-                    // Get posts.
-                    self.queryUserPostsDateSorted(awsUser._userId)
-                } else {
-                    print("This should not happen getCurrentUser!")
+            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+            if let error = task.error {
+                print("getCurrentUser error: \(error.localizedDescription)")
+            } else if let awsUser = task.result as? AWSUser {
+                let user = User(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, profession: awsUser._profession, profilePicUrl: awsUser._profilePicUrl, location: awsUser._location, about: awsUser._about)
+                
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.user = user
+                    self.tableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.None)
+                    self.navigationItem.title = self.user?.preferredUsername
+                })
+                
+                // Get profilePic.
+                if let profilePicUrl = awsUser._profilePicUrl {
+                    self.downloadImage(profilePicUrl, indexPath: nil, isProfilePic: true)
                 }
-            })
+                
+                // Query user posts.
+                if let userId = awsUser._userId {
+                    self.queryUserPostsDateSorted(userId)
+                }
+            } else {
+                print("This should not happen with getCurrentUser!")
+            }
             return nil
         })
     }
     
-    private func queryUserPostsDateSorted(userId: String?) {
-        guard let userId = userId else {
-            print("No userId.")
-            return
-        }
+    private func queryUserPostsDateSorted(userId: String) {
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         AWSClientManager.defaultClientManager().queryUserPostsDateSorted(userId, completionHandler: {
             (task: AWSTask) in
-            dispatch_async(dispatch_get_main_queue(), {
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-                if let error = task.error {
-                    print("Error: \(error.userInfo["message"])")
-                } else {
-                    if let output = task.result as? AWSDynamoDBPaginatedOutput,
-                        let awsPosts = output.items as? [AWSPost] {
-                        // Iterate through all posts. This should change and fetch only certain or?
-                        for (index, awsPost) in awsPosts.enumerate() {
-                            let post = Post(title: awsPost._title, postDescription: awsPost._description, imageUrl: awsPost._imageUrl, category: awsPost._category, creationDate: awsPost._creationDate, user: self.user)
-                            self.posts.append(post)
+            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+            if let error = task.error {
+                print("queryUserPostsDateSorted error: \(error.localizedDescription)")
+            } else {
+                if let output = task.result as? AWSDynamoDBPaginatedOutput,
+                    let awsPosts = output.items as? [AWSPost] {
+                    
+                    // Iterate through all posts. This should change and fetch only certain or?
+                    for (index, awsPost) in awsPosts.enumerate() {
+                        let indexPath = NSIndexPath(forRow: index, inSection: 6)
+                        
+                        dispatch_async(dispatch_get_main_queue(), {
                             
-                            // Get postPic.
-                            if let imageUrl = awsPost._imageUrl {
-                                self.downloadImage(imageUrl, postIndex: index)
-                            }
+                            // Data is denormalized so we store user data in posts table!
+                            let user = self.user
+                            let post = Post(postId: awsPost._postId, title: awsPost._title, postDescription: awsPost._description, imageUrl: awsPost._imageUrl, category: awsPost._category, creationDate: awsPost._creationDate, user: user)
+                            self.posts.append(post)
+                            self.tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
+                        })
+                        
+                        // Get postPic.
+                        if let imageUrl = awsPost._imageUrl {
+                            self.downloadImage(imageUrl, indexPath: indexPath, isProfilePic: false)
                         }
-                        // Always reload section 6 for posts!
-                        self.tableView.reloadSections(NSIndexSet(index: 6), withRowAnimation: UITableViewRowAnimation.None)
                     }
                 }
-            })
+            }
             return nil
         })
     }
     
-    private func downloadImage(imageKey: String, postIndex: Int?) {
+    private func downloadImage(imageKey: String, indexPath: NSIndexPath?, isProfilePic: Bool) {
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-        AWSClientManager.defaultClientManager().downloadImage(
-            imageKey,
-            completionHandler: {
-                (task: AWSTask) in
-                dispatch_async(dispatch_get_main_queue(), {
+        
+        let content = AWSUserFileManager.custom(key: "USEast1BucketManager").contentWithKey(imageKey)
+        // TODO check if content.isImage()
+        var image: UIImage?
+        if content.cached {
+            print("Content cached:")
+            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+            image = UIImage(data: content.cachedData)
+            self.updateUIWithImage(image, indexPath: indexPath, isProfilePic: isProfilePic)
+        } else {
+            print("Download content:")
+            content.downloadWithDownloadType(
+                AWSContentDownloadType.IfNewerExists,
+                pinOnCompletion: false,
+                progressBlock: {
+                    (content: AWSContent?, progress: NSProgress?) -> Void in
+                    // TODO
+                },
+                completionHandler: {
+                    (content: AWSContent?, data: NSData?, error: NSError?) in
                     UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-                    if let error = task.error {
-                        print("Error: \(error.userInfo["message"])")
+                    if let error = error {
+                        print("Download content error: \(error.localizedDescription)")
+                    } else if let imageData = data {
+                        image = UIImage(data: imageData)
+                        self.updateUIWithImage(image, indexPath: indexPath, isProfilePic: isProfilePic)
                     } else {
-                        if let imageData = task.result as? NSData {
-                            let image = UIImage(data: imageData)
-                            if let index = postIndex {
-                                // It's postPic.
-                                self.posts[index].image = image
-                                // Always reload section 6 for posts!
-                                self.tableView.reloadSections(NSIndexSet(index: 6), withRowAnimation: UITableViewRowAnimation.None)
-                            } else {
-                                // It's profilePic.
-                                self.user?.profilePic = image
-                                // Always reload section 0 for a user!
-                                self.tableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.None)
-                            }
-                        }
+                        print("This should not happen with download content!")
                     }
-                })
-                return nil
-        })
+            })
+        }
     }
     
     // Check if currentUser is following this user.
@@ -372,8 +395,6 @@ class ProfileTableViewController: UITableViewController {
         })
     }
     
-    // MARK: AWS
-    
     private func signOut() {
         AWSClientManager.defaultClientManager().signOut({
             (task: AWSTask) in
@@ -382,6 +403,29 @@ class ProfileTableViewController: UITableViewController {
             }
             return nil
         })
+    }
+    
+    // MARK: Helpers
+    
+    private func updateUIWithImage(image: UIImage?, indexPath: NSIndexPath?, isProfilePic: Bool) {
+        if let indexPath = indexPath {
+            if isProfilePic {
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.posts[indexPath.row].user?.profilePic = image
+                    self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
+                })
+            } else {
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.posts[indexPath.row].image = image
+                    self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
+                })
+            }
+        } else {
+            dispatch_async(dispatch_get_main_queue(), {
+                self.user?.profilePic = image
+                self.tableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.None)
+            })
+        }
     }
 }
 

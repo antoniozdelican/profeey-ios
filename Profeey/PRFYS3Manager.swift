@@ -56,7 +56,7 @@ class PRFYS3Manager: NSObject, S3Manager {
             completionHandler: {
                 (content: AWSContent?, data: NSData?, error: NSError?) in
                 if let error = error {
-                    print("downloadImageS3 error:")
+                    print("downloadImageS3 error: \(error.localizedDescription)")
                     AWSTask(error: error).continueWithBlock(completionHandler)
                 } else {
                     print("downloadImageS3 success!")

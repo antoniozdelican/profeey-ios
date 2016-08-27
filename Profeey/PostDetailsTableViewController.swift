@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AWSMobileHubHelper
 
 class PostDetailsTableViewController: UITableViewController {
 
@@ -29,9 +30,8 @@ class PostDetailsTableViewController: UITableViewController {
     private var newImageViewHeight: CGFloat?
     
     private var comments: [Comment]?
-    
-    // TEST
-    var isLiked: Bool = false
+
+    private var isLiked: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,6 +39,8 @@ class PostDetailsTableViewController: UITableViewController {
         self.automaticallyAdjustsScrollViewInsets = false
         self.mainTableViewCell.selectionStyle = UITableViewCellSelectionStyle.None
         self.configurePost()
+        
+        self.getLike()
     }
 
     override func didReceiveMemoryWarning() {
@@ -152,9 +154,11 @@ class PostDetailsTableViewController: UITableViewController {
         if self.isLiked {
             self.likeButton.setImage(UIImage(named: "ic_like_black_big"), forState: UIControlState.Normal)
             self.isLiked = false
+            self.removeLike()
         } else {
             self.likeButton.setImage(UIImage(named: "ic_like_blue_big"), forState: UIControlState.Normal)
             self.isLiked = true
+            self.saveLike()
         }
     }
     
@@ -171,5 +175,71 @@ class PostDetailsTableViewController: UITableViewController {
         self.performSegueWithIdentifier("segueToCommentsVc", sender: self)
     }
     
+    // MARK: AWS
     
+    // Check if currentUser already liked this post.
+    private func getLike() {
+        guard let postId = self.post?.postId else {
+            return
+        }
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        AWSClientManager.defaultClientManager().getLike(postId, completionHandler: {
+            (task: AWSTask) in
+            dispatch_async(dispatch_get_main_queue(), {
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                if let error = task.error {
+                    print("getLike error: \(error.localizedDescription)")
+                } else {
+                    if task.result != nil {
+                        self.isLiked = true
+                        self.likeButton.setImage(UIImage(named: "ic_like_blue_big"), forState: UIControlState.Normal)
+                    } else {
+                        self.isLiked = false
+                        self.likeButton.setImage(UIImage(named: "ic_like_black_big"), forState: UIControlState.Normal)
+                    }
+                }
+            })
+            return nil
+        })
+    }
+    
+    // In background
+    private func saveLike() {
+        guard let postId = self.post?.postId else {
+            return
+        }
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        AWSClientManager.defaultClientManager().saveLike(postId, completionHandler: {
+            (task: AWSTask) in
+            dispatch_async(dispatch_get_main_queue(), {
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                if let error = task.error {
+                    print("saveLike error: \(error.localizedDescription)")
+                } else {
+                    print("saveLike success!")
+                }
+            })
+            return nil
+        })
+    }
+    
+    // In background
+    private func removeLike() {
+        guard let postId = self.post?.postId else {
+            return
+        }
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        AWSClientManager.defaultClientManager().removeLike(postId, completionHandler: {
+            (task: AWSTask) in
+            dispatch_async(dispatch_get_main_queue(), {
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                if let error = task.error {
+                    print("removeLike error: \(error.localizedDescription)")
+                } else {
+                    print("removeLike success!")
+                }
+            })
+            return nil
+        })
+    }
 }

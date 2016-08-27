@@ -195,6 +195,29 @@ class AWSClientManager: NSObject, ClientManager {
         PRFYDynamoDBManager.defaultDynamoDBManager().scanUsersDynamoDB(completionHandler)
     }
     
+    // MARK: Likes
+    
+    func getLike(postId: String, completionHandler: AWSContinuationBlock) {
+        // DynamoDB getLike.
+        PRFYDynamoDBManager.defaultDynamoDBManager().getLikeDynamoDB(postId, completionHandler: completionHandler)
+    }
+    
+    func saveLike(postId: String, completionHandler: AWSContinuationBlock) {
+        // DynamoDB saveLike.
+        PRFYDynamoDBManager.defaultDynamoDBManager().saveLikeDynamoDB(postId, completionHandler: completionHandler)
+    }
+    
+    func removeLike(postId: String, completionHandler: AWSContinuationBlock) {
+        // DynamoDB removeLike.
+        PRFYDynamoDBManager.defaultDynamoDBManager().removeLikeDynamoDB(postId, completionHandler: completionHandler)
+    }
+    
+    func queryPostLikers(postId: String, completionHandler: AWSContinuationBlock) {
+        // DynamoDB queryPostLikers.
+        PRFYDynamoDBManager.defaultDynamoDBManager().queryPostLikersDynamoDB(postId, completionHandler: completionHandler)
+    }
+    
+    
     // MARK: UserRelationsips
     
     func getUserRelationship(followedId: String, completionHandler: AWSContinuationBlock) {
@@ -237,6 +260,7 @@ class AWSClientManager: NSObject, ClientManager {
             progressBlock: {
                 (localContent: AWSLocalContent, progress: NSProgress) in
                 // TODO
+                return
             },
             completionHandler: {
                 (task: AWSTask) in
@@ -260,6 +284,7 @@ class AWSClientManager: NSObject, ClientManager {
             progressBlock: {
                 (content: AWSContent, progress: NSProgress) in
                 // TODO
+                return
             },
             completionHandler: {
                 (task: AWSTask) in
