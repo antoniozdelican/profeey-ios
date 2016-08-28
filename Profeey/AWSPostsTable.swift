@@ -25,7 +25,7 @@ class AWSPostsTable: NSObject, Table {
     }
     var tableDisplayName: String {
         
-        return "AwsPosts"
+        return "Posts"
     }
     
     override init() {
@@ -85,7 +85,7 @@ class AWsPostsDateSortedIndex: NSObject, Index {
     
     var indexName: String? {
         
-        return "AwsDateSortedIndex"
+        return "DateSortedIndex"
     }
     
     func supportedOperations() -> [String] {

@@ -96,6 +96,7 @@ class HomeTableViewController: UITableViewController {
             cell.fullNameLabel.text = user?.fullName
             cell.professionLabel.text = user?.profession
             cell.postPicImageView.image = post.image
+            cell.numberOfLikesLabel.text = "\(post.numberOfLikes)"
             cell.titleLabel.text = post.title
             cell.categoryLabel.text = post.category
             cell.timeLabel.text = post.creationDateString
@@ -223,6 +224,11 @@ class HomeTableViewController: UITableViewController {
                             self.tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
                         })
                         
+                        // Query likers.
+                        if let postId = awsPost._postId {
+                            self.queryPostLikers(postId, indexPath: indexPath)
+                        }
+                        
                         // Get profilePic.
                         if let profilePicUrl = awsPost._userProfilePicUrl {
                             self.downloadImage(profilePicUrl, indexPath: indexPath, isProfilePic: true)
@@ -235,6 +241,25 @@ class HomeTableViewController: UITableViewController {
                     }
                 }
             }
+            return nil
+        })
+    }
+    private func queryPostLikers(postId: String, indexPath: NSIndexPath) {
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        AWSClientManager.defaultClientManager().queryPostLikers(postId, completionHandler: {
+            (task: AWSTask) in
+            dispatch_async(dispatch_get_main_queue(), {
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                if let error = task.error {
+                    print("queryPostLikers error: \(error.localizedDescription)")
+                } else {
+                    if let output = task.result as? AWSDynamoDBPaginatedOutput,
+                        let awsLikes = output.items as? [AWSLike] {
+                        self.posts[indexPath.row].numberOfLikes = awsLikes.count
+                        self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
+                    }
+                }
+            })
             return nil
         })
     }

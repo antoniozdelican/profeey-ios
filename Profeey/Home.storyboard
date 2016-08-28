@@ -227,6 +227,7 @@
                                 <connections>
                                     <outlet property="categoryLabel" destination="GFy-ex-UMM" id="P1F-2B-cXP"/>
                                     <outlet property="fullNameLabel" destination="zRO-qm-d2M" id="1KS-n9-ybR"/>
+                                    <outlet property="numberOfLikesLabel" destination="Vsf-Dx-y9w" id="Rrm-eZ-ssX"/>
                                     <outlet property="postPicImageView" destination="lNb-19-T9C" id="HSZ-nE-D41"/>
                                     <outlet property="professionLabel" destination="rkV-Ro-GYn" id="vKE-tp-45o"/>
                                     <outlet property="profilePicImageView" destination="xwo-5m-ceb" id="PBb-oe-8Jc"/>

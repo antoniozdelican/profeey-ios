@@ -189,6 +189,7 @@
                         <outlet property="fullNameLabel" destination="fsC-Hk-ni4" id="qas-SI-NRh"/>
                         <outlet property="likeButton" destination="fOP-1y-4DQ" id="WJj-aq-MrM"/>
                         <outlet property="mainTableViewCell" destination="JAJ-0l-Onq" id="z9G-3N-Fut"/>
+                        <outlet property="numberOfLikesButton" destination="058-mp-QOd" id="UBQ-A8-4JJ"/>
                         <outlet property="postPicImageView" destination="WQP-Pu-sWm" id="7Bi-VC-Zhl"/>
                         <outlet property="postPicImageViewHeightConstraint" destination="V8c-cs-5al" id="WQl-uh-FsH"/>
                         <outlet property="professionLabel" destination="Wjs-Ta-Tlq" id="mX2-Xz-SSl"/>

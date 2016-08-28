@@ -156,6 +156,7 @@
 		A9EAD3401D1E8E0C00994292 /* NoSQLModelHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9EAD33F1D1E8E0C00994292 /* NoSQLModelHelpers.swift */; };
 		A9EB35591D4B66CE00E9C77A /* ScrollViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9EB35581D4B66CE00E9C77A /* ScrollViewController.swift */; };
 		A9EB35621D4B9A3600E9C77A /* GalleryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9EB35611D4B9A3600E9C77A /* GalleryViewController.swift */; };
+		A9EDB79D1D7307B400499FBB /* TopCategoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9EDB79C1D7307B400499FBB /* TopCategoryTableViewCell.swift */; };
 		A9F49D571D379D01002EB68B /* AWSPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F49D561D379D01002EB68B /* AWSPost.swift */; };
 		A9F49D5A1D379D70002EB68B /* AWSPostsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F49D591D379D70002EB68B /* AWSPostsTable.swift */; };
 		A9FF2EF11D6AEE9E0022AB0C /* Category.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9FF2EF01D6AEE9E0022AB0C /* Category.storyboard */; };
@@ -325,6 +326,7 @@
 		A9EAD33F1D1E8E0C00994292 /* NoSQLModelHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoSQLModelHelpers.swift; sourceTree = "<group>"; };
 		A9EB35581D4B66CE00E9C77A /* ScrollViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollViewController.swift; sourceTree = "<group>"; };
 		A9EB35611D4B9A3600E9C77A /* GalleryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GalleryViewController.swift; sourceTree = "<group>"; };
+		A9EDB79C1D7307B400499FBB /* TopCategoryTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopCategoryTableViewCell.swift; sourceTree = "<group>"; };
 		A9F49D561D379D01002EB68B /* AWSPost.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSPost.swift; sourceTree = "<group>"; };
 		A9F49D591D379D70002EB68B /* AWSPostsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSPostsTable.swift; sourceTree = "<group>"; };
 		A9FF2EF01D6AEE9E0022AB0C /* Category.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Category.storyboard; sourceTree = "<group>"; };
@@ -740,6 +742,7 @@
 				A9D716A81D57486100300135 /* PostSmallTableViewCell.swift */,
 				A990ECAD1D6A4B7C00C3C9CE /* ExperienceTableViewController.swift */,
 				A990ECAB1D6A4B6500C3C9CE /* ExperienceTableViewCell.swift */,
+				A9EDB79C1D7307B400499FBB /* TopCategoryTableViewCell.swift */,
 			);
 			name = Profile;
 			sourceTree = "<group>";
@@ -758,6 +761,7 @@
 		A9EAD3481D1E8F3500994292 /* AWS */ = {
 			isa = PBXGroup;
 			children = (
+				A9EDB7971D72CFF900499FBB /* AWSCategories */,
 				A9D185D51D7192230073E65F /* AWSLikes */,
 				A9604F831D33726700F23B33 /* AWSUser */,
 				A9F49D581D379D58002EB68B /* AWSPost */,
@@ -774,6 +778,13 @@
 				A9B4AB9D1D61EC300001C682 /* S3Manager.swift */,
 			);
 			name = AWS;
+			sourceTree = "<group>";
+		};
+		A9EDB7971D72CFF900499FBB /* AWSCategories */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = AWSCategories;
 			sourceTree = "<group>";
 		};
 		A9F49D581D379D58002EB68B /* AWSPost */ = {
@@ -982,6 +993,7 @@
 				A985F1131D6C5D1300560013 /* AWSUserProfession.swift in Sources */,
 				A9A503991D2FA9180030A472 /* LocalService.swift in Sources */,
 				A9BE4BA71D69E361005D1B07 /* ProfileAboutTableViewCell.swift in Sources */,
+				A9EDB79D1D7307B400499FBB /* TopCategoryTableViewCell.swift in Sources */,
 				A9604F7E1D33721000F23B33 /* AWSUserPreferredUsername.swift in Sources */,
 				A9604F801D33722100F23B33 /* AWSUserAbout.swift in Sources */,
 				A9C0ED3A1D3C21C30036F791 /* Post.swift in Sources */,

@@ -33,7 +33,6 @@ class Post: NSObject {
             return nil
         }
     }
-    
     var numberOfLikes: Int = 0
     var numberOfComments: Int = 0
 

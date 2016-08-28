@@ -8,6 +8,7 @@
 
 import UIKit
 import AWSMobileHubHelper
+import AWSDynamoDB
 
 class PostDetailsTableViewController: UITableViewController {
 
@@ -16,6 +17,7 @@ class PostDetailsTableViewController: UITableViewController {
     @IBOutlet weak var likeButton: UIButton!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var categoryLabel: UILabel!
+    @IBOutlet weak var numberOfLikesButton: UIButton!
     @IBOutlet weak var mainTableViewCell: UITableViewCell!
     
     @IBOutlet weak var profilePicImageView: UIImageView!
@@ -32,6 +34,7 @@ class PostDetailsTableViewController: UITableViewController {
     private var comments: [Comment]?
 
     private var isLiked: Bool = false
+    private var numberOfLikes = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,6 +44,7 @@ class PostDetailsTableViewController: UITableViewController {
         self.configurePost()
         
         self.getLike()
+        self.queryPostLikers()
     }
 
     override func didReceiveMemoryWarning() {
@@ -67,13 +71,6 @@ class PostDetailsTableViewController: UITableViewController {
         self.profilePicImageView.image = self.post?.user?.profilePic
         self.fullNameLabel.text = self.post?.user?.fullName
         self.professionLabel.text = self.post?.user?.profession
-        // Likes and comments.
-//        if let numberOfLikes = self.post?.numberOfLikes.numberToString() {
-//            self.numberOfLikesButton.setTitle("\(numberOfLikes) likes", forState: UIControlState.Normal)
-//        }
-//        if let numberOfComments = self.post?.numberOfComments.numberToString() {
-//            self.numberOfCommentsButton.setTitle("\(numberOfComments) comments", forState: UIControlState.Normal)
-//        }
         // Other.
         self.descriptionLabel.text = self.post?.postDescription
         self.timeLabel.text = self.post?.creationDateString
@@ -82,23 +79,23 @@ class PostDetailsTableViewController: UITableViewController {
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         //TEST
-        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), forBarMetrics: .Default)
-        self.navigationController?.navigationBar.shadowImage = UIImage()
-        self.navigationController?.navigationBar.backgroundColor = UIColor.clearColor()
-        self.navigationController?.navigationBar.barTintColor = UIColor.clearColor()
-        self.navigationController?.navigationBar.translucent = true
-        self.navigationController?.navigationBar.tintColor = UIColor.whiteColor()
+//        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), forBarMetrics: .Default)
+//        self.navigationController?.navigationBar.shadowImage = UIImage()
+//        self.navigationController?.navigationBar.backgroundColor = UIColor.clearColor()
+//        self.navigationController?.navigationBar.barTintColor = UIColor.clearColor()
+//        self.navigationController?.navigationBar.translucent = true
+//        self.navigationController?.navigationBar.tintColor = UIColor.whiteColor()
     }
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         //TEST
-        self.navigationController?.navigationBar.setBackgroundImage(nil, forBarMetrics: .Default)
-        self.navigationController?.navigationBar.shadowImage = nil
-        self.navigationController?.navigationBar.backgroundColor = Colors.greyLight
-        self.navigationController?.navigationBar.barTintColor = Colors.greyLight
-        self.navigationController?.navigationBar.translucent = false
-        self.navigationController?.navigationBar.tintColor = Colors.blue
+//        self.navigationController?.navigationBar.setBackgroundImage(nil, forBarMetrics: .Default)
+//        self.navigationController?.navigationBar.shadowImage = nil
+//        self.navigationController?.navigationBar.backgroundColor = Colors.greyLight
+//        self.navigationController?.navigationBar.barTintColor = Colors.greyLight
+//        self.navigationController?.navigationBar.translucent = false
+//        self.navigationController?.navigationBar.tintColor = Colors.blue
     }
     
     // MARK: Navigation
@@ -154,10 +151,16 @@ class PostDetailsTableViewController: UITableViewController {
         if self.isLiked {
             self.likeButton.setImage(UIImage(named: "ic_like_black_big"), forState: UIControlState.Normal)
             self.isLiked = false
+            self.numberOfLikes -= 1
+            let likesTitle = self.numberOfLikes > 1 ? "\(self.numberOfLikes) likes" : "\(self.numberOfLikes) like"
+            self.numberOfLikesButton.setTitle(likesTitle, forState: UIControlState.Normal)
             self.removeLike()
         } else {
             self.likeButton.setImage(UIImage(named: "ic_like_blue_big"), forState: UIControlState.Normal)
             self.isLiked = true
+            self.numberOfLikes += 1
+            let likesTitle = self.numberOfLikes > 1 ? "\(self.numberOfLikes) likes" : "\(self.numberOfLikes) like"
+            self.numberOfLikesButton.setTitle(likesTitle, forState: UIControlState.Normal)
             self.saveLike()
         }
     }
@@ -203,7 +206,7 @@ class PostDetailsTableViewController: UITableViewController {
         })
     }
     
-    // In background
+    // In background.
     private func saveLike() {
         guard let postId = self.post?.postId else {
             return
@@ -223,7 +226,7 @@ class PostDetailsTableViewController: UITableViewController {
         })
     }
     
-    // In background
+    // In background.
     private func removeLike() {
         guard let postId = self.post?.postId else {
             return
@@ -237,6 +240,30 @@ class PostDetailsTableViewController: UITableViewController {
                     print("removeLike error: \(error.localizedDescription)")
                 } else {
                     print("removeLike success!")
+                }
+            })
+            return nil
+        })
+    }
+    
+    private func queryPostLikers() {
+        guard let postId = self.post?.postId else {
+            return
+        }
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        AWSClientManager.defaultClientManager().queryPostLikers(postId, completionHandler: {
+            (task: AWSTask) in
+            dispatch_async(dispatch_get_main_queue(), {
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                if let error = task.error {
+                    print("queryPostLikers error: \(error.localizedDescription)")
+                } else {
+                    if let output = task.result as? AWSDynamoDBPaginatedOutput,
+                        let awsLikes = output.items as? [AWSLike] {
+                        self.numberOfLikes = awsLikes.count
+                        let likesTitle = self.numberOfLikes > 1 ? "\(self.numberOfLikes) likes" : "\(self.numberOfLikes) like"
+                        self.numberOfLikesButton.setTitle(likesTitle, forState: UIControlState.Normal)
+                    }
                 }
             })
             return nil

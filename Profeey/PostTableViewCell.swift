@@ -14,6 +14,7 @@ class PostTableViewCell: UITableViewCell {
     @IBOutlet weak var fullNameLabel: UILabel!
     @IBOutlet weak var professionLabel: UILabel!
     @IBOutlet weak var postPicImageView: UIImageView!
+    @IBOutlet weak var numberOfLikesLabel: UILabel!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var categoryLabel: UILabel!
     @IBOutlet weak var timeLabel: UILabel!

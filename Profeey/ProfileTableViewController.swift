@@ -15,9 +15,13 @@ class ProfileTableViewController: UITableViewController {
     @IBOutlet weak var settingsButton: UIBarButtonItem!
     
     var user: User?
-    var posts: [Post] = []
+    private var posts: [Post] = []
+    private var postsCount = 0
     var isCurrentUser: Bool = false
     var isFollowing: Bool = false
+    
+    private var topCategories: [String] = []
+    private var topCategoriesNumberOfPosts: [Int] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -93,18 +97,22 @@ class ProfileTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
+            // Profile cell.
             return 1
         case 1:
+            // About cell.
             return 1
         case 2:
-            return 1
+            return 0
         case 3:
-            return 1
+            return 0
         case 4:
-            return 1
+            // Top categories cells.
+            return self.topCategories.count
         case 5:
             return 1
         default:
+            // Posts cells.
             return self.posts.count
         }
     }
@@ -117,7 +125,7 @@ class ProfileTableViewController: UITableViewController {
             cell.fullNameLabel.text = self.user?.fullName
             cell.professionLabel.text = self.user?.profession
             cell.locationLabel.text = self.user?.location
-            cell.postsButton.setTitle(self.posts.count.numberToString(), forState: UIControlState.Normal)
+            cell.postsButton.setTitle(self.postsCount.numberToString(), forState: UIControlState.Normal)
             if self.isCurrentUser {
                 cell.setEditButton()
                 cell.followButton.addTarget(self, action: #selector(ProfileTableViewController.editButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
@@ -147,7 +155,11 @@ class ProfileTableViewController: UITableViewController {
             cell.experienceImageView.image = UIImage(named: "ic_education_blue")
             return cell
         case 4:
-            let cell = tableView.dequeueReusableCellWithIdentifier("cellTest", forIndexPath: indexPath)
+            let cell = tableView.dequeueReusableCellWithIdentifier("cellTopCategory", forIndexPath: indexPath) as! TopCategoryTableViewCell
+            cell.categoryNameLabel.text = self.topCategories[indexPath.row]
+            let numberOfPosts = self.topCategoriesNumberOfPosts[indexPath.row]
+            let numberOfPostsText = numberOfPosts > 1 ? "\(numberOfPosts.numberToString()) posts" : "\(numberOfPosts.numberToString()) post"
+            cell.numberOfPostsLabel.text = numberOfPostsText
             cell.selectionStyle = UITableViewCellSelectionStyle.None
             return cell
         case 5:
@@ -181,6 +193,9 @@ class ProfileTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         cell.layoutMargins = UIEdgeInsetsZero
+        if indexPath.section == 4 {
+            cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
+        }
     }
     
     override func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -243,6 +258,7 @@ class ProfileTableViewController: UITableViewController {
                 dispatch_async(dispatch_get_main_queue(), {
                     self.user = user
                     self.tableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.None)
+                    self.tableView.reloadSections(NSIndexSet(index: 1), withRowAnimation: UITableViewRowAnimation.None)
                     self.navigationItem.title = self.user?.preferredUsername
                 })
                 
@@ -272,6 +288,15 @@ class ProfileTableViewController: UITableViewController {
             } else {
                 if let output = task.result as? AWSDynamoDBPaginatedOutput,
                     let awsPosts = output.items as? [AWSPost] {
+                    
+                    // Update posts count.
+                    dispatch_async(dispatch_get_main_queue(), {
+                        self.postsCount = awsPosts.count
+                        self.tableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.None)
+                    })
+                    
+                    // Update top categories.
+                    self.updateTopCategories(awsPosts.flatMap({$0._category}))
                     
                     // Iterate through all posts. This should change and fetch only certain or?
                     for (index, awsPost) in awsPosts.enumerate() {
@@ -426,6 +451,32 @@ class ProfileTableViewController: UITableViewController {
                 self.tableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.None)
             })
         }
+    }
+    
+    private func updateTopCategories(categories: [String]) {
+        // Get frequency of each category (aka number of posts).
+        var categoryFrequencies = [String: Int]()
+        for category in categories {
+            if categoryFrequencies[category] == nil {
+                categoryFrequencies[category] = 1
+            } else {
+                categoryFrequencies[category] = categoryFrequencies[category]! + 1
+            }
+        }
+        
+        // Sorted categories by number of frequency (aka number posts).
+        let sortedCategories = Array(categoryFrequencies.keys).sort({ categoryFrequencies[$0] > categoryFrequencies[$1] })
+        var sortedCategoriesNumbers = [Int]()
+        for category in sortedCategories {
+            sortedCategoriesNumbers.append(categoryFrequencies[category]!)
+        }
+        
+        dispatch_async(dispatch_get_main_queue(), {
+            // Set only top 5 categories.
+            self.topCategories = Array(sortedCategories.prefix(5))
+            self.topCategoriesNumberOfPosts = Array(sortedCategoriesNumbers.prefix(5))
+            self.tableView.reloadSections(NSIndexSet(index: 4), withRowAnimation: UITableViewRowAnimation.None)
+        })
     }
 }
 

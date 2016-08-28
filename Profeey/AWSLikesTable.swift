@@ -101,7 +101,7 @@ class AWSLikesPostIndex: NSObject, Index {
     func queryPostLikers(postId: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
         let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
         let queryExpression = AWSDynamoDBQueryExpression()
-        queryExpression.indexName = "LikesIndex"
+        queryExpression.indexName = "PostIndex"
         queryExpression.keyConditionExpression = "#postId = :postId"
         queryExpression.expressionAttributeNames = ["#postId": "postId",]
         queryExpression.expressionAttributeValues = [":postId": postId,]
