@@ -28,7 +28,7 @@
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" scrollEnabled="NO" dataMode="static" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="Rtw-nX-0wd">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="471"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="0.98039215690000003" green="0.98039215690000003" blue="0.98039215690000003" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <sections>
                             <tableViewSection id="sIv-mD-nhc">
                                 <cells>
@@ -53,7 +53,6 @@
                                                 <constraint firstItem="FmR-NJ-DLQ" firstAttribute="top" secondItem="HoS-k0-Dy2" secondAttribute="top" constant="15" id="eBM-3Q-17r"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="60" id="9P4-ym-KYf">
                                         <rect key="frame" x="0.0" y="50" width="600" height="60"/>
@@ -94,7 +93,6 @@
                                                 </mask>
                                             </variation>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="60" id="sXZ-eW-qNA">
                                         <rect key="frame" x="0.0" y="110" width="600" height="60"/>
@@ -135,7 +133,6 @@
                                                 </mask>
                                             </variation>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
@@ -189,7 +186,6 @@
                                         </connections>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="65" id="Con-ED-oa4"/>
                                     <constraint firstItem="OpZ-md-sr2" firstAttribute="centerX" secondItem="9YR-Pm-e3A" secondAttribute="centerX" id="HOd-SA-mf4"/>
@@ -203,7 +199,7 @@
                                 </connections>
                             </containerView>
                         </subviews>
-                        <color key="backgroundColor" red="0.98039215690000003" green="0.98039215690000003" blue="0.98039215690000003" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="RZD-4O-at6" firstAttribute="leading" secondItem="lwU-fG-ZUu" secondAttribute="leading" id="3QD-s3-NoI"/>
                             <constraint firstItem="9YR-Pm-e3A" firstAttribute="top" secondItem="RZD-4O-at6" secondAttribute="bottom" id="FD1-Kx-V3j"/>

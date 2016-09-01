@@ -15,18 +15,19 @@ class PostDetailsTableViewController: UITableViewController {
     @IBOutlet weak var postPicImageView: UIImageView!
     @IBOutlet weak var postPicImageViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var likeButton: UIButton!
+    @IBOutlet weak var mainTableViewCell: UITableViewCell!
+    
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var categoryLabel: UILabel!
     @IBOutlet weak var numberOfLikesButton: UIButton!
-    @IBOutlet weak var mainTableViewCell: UITableViewCell!
     
     @IBOutlet weak var profilePicImageView: UIImageView!
     @IBOutlet weak var fullNameLabel: UILabel!
     @IBOutlet weak var professionLabel: UILabel!
     @IBOutlet weak var userTableViewCell: UITableViewCell!
     
-    @IBOutlet weak var timeLabel: UILabel!
-    @IBOutlet weak var descriptionLabel: UILabel!
+    //@IBOutlet weak var timeLabel: UILabel!
+    //@IBOutlet weak var descriptionLabel: UILabel!
     
     var post: Post?
     private var newImageViewHeight: CGFloat?
@@ -39,8 +40,6 @@ class PostDetailsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.Plain, target:nil, action:nil)
-        self.automaticallyAdjustsScrollViewInsets = false
-        self.mainTableViewCell.selectionStyle = UITableViewCellSelectionStyle.None
         self.configurePost()
         
         self.getLike()
@@ -72,30 +71,8 @@ class PostDetailsTableViewController: UITableViewController {
         self.fullNameLabel.text = self.post?.user?.fullName
         self.professionLabel.text = self.post?.user?.profession
         // Other.
-        self.descriptionLabel.text = self.post?.postDescription
-        self.timeLabel.text = self.post?.creationDateString
-    }
-    
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
-        //TEST
-//        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), forBarMetrics: .Default)
-//        self.navigationController?.navigationBar.shadowImage = UIImage()
-//        self.navigationController?.navigationBar.backgroundColor = UIColor.clearColor()
-//        self.navigationController?.navigationBar.barTintColor = UIColor.clearColor()
-//        self.navigationController?.navigationBar.translucent = true
-//        self.navigationController?.navigationBar.tintColor = UIColor.whiteColor()
-    }
-    
-    override func viewWillDisappear(animated: Bool) {
-        super.viewWillDisappear(animated)
-        //TEST
-//        self.navigationController?.navigationBar.setBackgroundImage(nil, forBarMetrics: .Default)
-//        self.navigationController?.navigationBar.shadowImage = nil
-//        self.navigationController?.navigationBar.backgroundColor = Colors.greyLight
-//        self.navigationController?.navigationBar.barTintColor = Colors.greyLight
-//        self.navigationController?.navigationBar.translucent = false
-//        self.navigationController?.navigationBar.tintColor = Colors.blue
+        //self.descriptionLabel.text = self.post?.postDescription
+        //self.timeLabel.text = self.post?.creationDateString
     }
     
     // MARK: Navigation
@@ -121,27 +98,54 @@ class PostDetailsTableViewController: UITableViewController {
     
     // MARK: UITableViewDelegate
     
+    override func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        switch indexPath.row {
+        case 0:
+            return 300.0
+        case 1:
+            return 30.0
+        case 2:
+            return 30.0
+        case 3:
+            return 40.0
+        case 4:
+            return 73.0
+        default:
+            return 0.0
+        }
+    }
+    
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         return UITableViewAutomaticDimension
     }
     
-    override func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 200.0
-    }
-    
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        
-        let cell = tableView.cellForRowAtIndexPath(indexPath)
-        if cell == self.userTableViewCell {
+        switch indexPath.row {
+        case 4:
             self.performSegueWithIdentifier("segueToProfileVc", sender: self)
+        default:
+            return
         }
     }
     
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         cell.layoutMargins = UIEdgeInsetsZero
-        if cell == self.userTableViewCell {
+        cell.selectionStyle = UITableViewCellSelectionStyle.None
+        switch indexPath.row {
+        case 0:
             cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
+        case 1:
+            cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
+        case 2:
+            cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
+        case 3:
+            cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 16.0)
+        case 4:
+            cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
+            cell.selectionStyle = UITableViewCellSelectionStyle.Default
+        default:
+            return
         }
     }
     
@@ -149,18 +153,18 @@ class PostDetailsTableViewController: UITableViewController {
     
     @IBAction func likeButtonTapped(sender: AnyObject) {
         if self.isLiked {
-            self.likeButton.setImage(UIImage(named: "ic_like_black_big"), forState: UIControlState.Normal)
+            self.likeButton.setImage(UIImage(named: "ic_like_blue_big"), forState: UIControlState.Normal)
             self.isLiked = false
             self.numberOfLikes -= 1
             let likesTitle = self.numberOfLikes > 1 ? "\(self.numberOfLikes) likes" : "\(self.numberOfLikes) like"
-            self.numberOfLikesButton.setTitle(likesTitle, forState: UIControlState.Normal)
+            //self.numberOfLikesButton.setTitle(likesTitle, forState: UIControlState.Normal)
             self.removeLike()
         } else {
-            self.likeButton.setImage(UIImage(named: "ic_like_blue_big"), forState: UIControlState.Normal)
+            self.likeButton.setImage(UIImage(named: "ic_like_blue_big_selected"), forState: UIControlState.Normal)
             self.isLiked = true
             self.numberOfLikes += 1
             let likesTitle = self.numberOfLikes > 1 ? "\(self.numberOfLikes) likes" : "\(self.numberOfLikes) like"
-            self.numberOfLikesButton.setTitle(likesTitle, forState: UIControlState.Normal)
+            //self.numberOfLikesButton.setTitle(likesTitle, forState: UIControlState.Normal)
             self.saveLike()
         }
     }
@@ -195,10 +199,10 @@ class PostDetailsTableViewController: UITableViewController {
                 } else {
                     if task.result != nil {
                         self.isLiked = true
-                        self.likeButton.setImage(UIImage(named: "ic_like_blue_big"), forState: UIControlState.Normal)
+                        self.likeButton.setImage(UIImage(named: "ic_like_blue_big_selected"), forState: UIControlState.Normal)
                     } else {
                         self.isLiked = false
-                        self.likeButton.setImage(UIImage(named: "ic_like_black_big"), forState: UIControlState.Normal)
+                        self.likeButton.setImage(UIImage(named: "ic_like_blue_big"), forState: UIControlState.Normal)
                     }
                 }
             })
@@ -262,7 +266,7 @@ class PostDetailsTableViewController: UITableViewController {
                         let awsLikes = output.items as? [AWSLike] {
                         self.numberOfLikes = awsLikes.count
                         let likesTitle = self.numberOfLikes > 1 ? "\(self.numberOfLikes) likes" : "\(self.numberOfLikes) like"
-                        self.numberOfLikesButton.setTitle(likesTitle, forState: UIControlState.Normal)
+                        //self.numberOfLikesButton.setTitle(likesTitle, forState: UIControlState.Normal)
                     }
                 }
             })

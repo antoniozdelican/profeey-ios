@@ -1,18 +1,18 @@
 //
-//  ExperienceTableViewCell.swift
+//  ProfileExperienceTableViewCell.swift
 //  Profeey
 //
-//  Created by Antonio Zdelican on 21/08/16.
+//  Created by Antonio Zdelican on 29/08/16.
 //  Copyright © 2016 Profeey. All rights reserved.
 //
 
 import UIKit
 
-class ExperienceTableViewCell: UITableViewCell {
+class ProfileExperienceTableViewCell: UITableViewCell {
 
     @IBOutlet weak var positionLabel: UILabel!
     @IBOutlet weak var organizationLabel: UILabel!
-    @IBOutlet weak var periodLabel: UILabel!
+    @IBOutlet weak var timePeriodLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()

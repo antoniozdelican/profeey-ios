@@ -1,5 +1,5 @@
 //
-//  TopCategoryTableViewCell.swift
+//  ProfileLocationTableViewCell.swift
 //  Profeey
 //
 //  Created by Antonio Zdelican on 28/08/16.
@@ -8,10 +8,9 @@
 
 import UIKit
 
-class TopCategoryTableViewCell: UITableViewCell {
+class ProfileLocationTableViewCell: UITableViewCell {
 
-    @IBOutlet weak var categoryNameLabel: UILabel!
-    @IBOutlet weak var numberOfPostsLabel: UILabel!
+    @IBOutlet weak var locationLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()

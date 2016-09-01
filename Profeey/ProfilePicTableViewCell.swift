@@ -1,5 +1,5 @@
 //
-//  ProfileHeaderTableViewCell.swift
+//  ProfilePicTableViewCell.swift
 //  Profeey
 //
 //  Created by Antonio Zdelican on 28/08/16.
@@ -8,12 +8,14 @@
 
 import UIKit
 
-class ProfileHeaderTableViewCell: UITableViewCell {
-    
-    @IBOutlet weak var headerLabel: UILabel!
+class ProfilePicTableViewCell: UITableViewCell {
 
+    @IBOutlet weak var profilePicImageView: UIImageView!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
+        self.profilePicImageView.layer.cornerRadius = 4.0
+        self.profilePicImageView.clipsToBounds = true
     }
 
     override func setSelected(selected: Bool, animated: Bool) {

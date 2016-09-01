@@ -1,17 +1,18 @@
 //
-//  ProfileHeaderTableViewCell.swift
+//  ProfileTopCategoryTableViewCell.swift
 //  Profeey
 //
-//  Created by Antonio Zdelican on 28/08/16.
+//  Created by Antonio Zdelican on 29/08/16.
 //  Copyright © 2016 Profeey. All rights reserved.
 //
 
 import UIKit
 
-class ProfileHeaderTableViewCell: UITableViewCell {
-    
-    @IBOutlet weak var headerLabel: UILabel!
+class ProfileTopCategoryTableViewCell: UITableViewCell {
 
+    @IBOutlet weak var topCategoryNameLabel: UILabel!
+    @IBOutlet weak var numberOfPostsLabel: UILabel!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
     }

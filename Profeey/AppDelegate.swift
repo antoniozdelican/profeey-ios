@@ -33,26 +33,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // UINavigationBar
 //        UINavigationBar.appearance().setBackgroundImage(UIImage(), forBarMetrics: .Default)
 //        UINavigationBar.appearance().shadowImage = UIImage()
-        UINavigationBar.appearance().backgroundColor = Colors.greyLight
-        UINavigationBar.appearance().barTintColor = Colors.greyLight
+//        UINavigationBar.appearance().backgroundColor = Colors.greyLight
+//        UINavigationBar.appearance().barTintColor = Colors.greyLight
+        UINavigationBar.appearance().backgroundColor = UIColor.whiteColor()
+        UINavigationBar.appearance().barTintColor = UIColor.whiteColor()
         UINavigationBar.appearance().translucent = false
         UINavigationBar.appearance().tintColor = Colors.blue
         UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: Colors.blue]
         
         // UITabBar
-        UITabBar.appearance().barTintColor = Colors.greyLight
+        //UITabBar.appearance().barTintColor = Colors.greyLight
+        UITabBar.appearance().barTintColor = UIColor.whiteColor()
         UITabBar.appearance().translucent = false
         UITabBar.appearance().tintColor = Colors.blue
         
         // UITableView
-        UITableView.appearance().backgroundColor = Colors.greyLight
+        //UITableView.appearance().backgroundColor = Colors.greyLight
         UITableView.appearance().tableFooterView = UIView()
         UITableView.appearance().separatorColor = Colors.grey
         UITableView.appearance().separatorInset = UIEdgeInsetsZero
         
         // UITableViewCell
         let colorView = UIView()
-        colorView.backgroundColor = UIColor.whiteColor()
+        colorView.backgroundColor = Colors.greyLight
         UITableViewCell.appearance().selectedBackgroundView = colorView
         UITableViewCell.appearance().backgroundColor = UIColor.clearColor()
         

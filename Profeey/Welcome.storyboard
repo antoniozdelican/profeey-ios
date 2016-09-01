@@ -14,7 +14,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="Utf-eW-u7f" kind="relationship" relationship="rootViewController" id="3Pu-jX-G8a"/>
+                        <segue destination="Fcf-B3-ntK" kind="relationship" relationship="rootViewController" id="WW9-2d-qN7"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="POV-gg-Ryw" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -62,7 +62,6 @@
                                                 <constraint firstItem="4b7-4E-0yf" firstAttribute="top" secondItem="4wX-TH-zAA" secondAttribute="bottom" constant="8" id="pQE-p8-Qg1"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="60" id="5Ex-2s-89L">
                                         <rect key="frame" x="0.0" y="78" width="600" height="60"/>
@@ -103,7 +102,6 @@
                                                 </mask>
                                             </variation>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="48" id="qa6-Sk-Rim">
                                         <rect key="frame" x="0.0" y="138" width="600" height="48"/>
@@ -132,7 +130,6 @@
                                                 </mask>
                                             </variation>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
@@ -185,7 +182,6 @@
                                         </connections>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstItem="BWN-Hh-9Rx" firstAttribute="centerY" secondItem="dok-Zk-14Y" secondAttribute="centerY" id="Edp-9X-xiL"/>
                                     <constraint firstItem="BWN-Hh-9Rx" firstAttribute="centerX" secondItem="dok-Zk-14Y" secondAttribute="centerX" id="TPG-YD-blm"/>
@@ -199,11 +195,12 @@
                                 </connections>
                             </containerView>
                         </subviews>
-                        <color key="backgroundColor" red="0.98039215690000003" green="0.98039215690000003" blue="0.98039215690000003" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="1OS-hT-05N" firstAttribute="top" secondItem="dok-Zk-14Y" secondAttribute="bottom" id="38x-Wh-izc"/>
                             <constraint firstAttribute="trailing" secondItem="c8i-IS-usa" secondAttribute="trailing" id="aMh-MP-tgB"/>
                             <constraint firstItem="dok-Zk-14Y" firstAttribute="leading" secondItem="Vrv-6J-0ne" secondAttribute="leading" id="geG-Hn-veb"/>
+                            <constraint firstItem="c8i-IS-usa" firstAttribute="top" secondItem="m5O-jm-rjW" secondAttribute="bottom" id="hJz-Yp-rMf"/>
                             <constraint firstItem="c8i-IS-usa" firstAttribute="top" secondItem="m5O-jm-rjW" secondAttribute="bottom" id="j1G-LE-AbD"/>
                             <constraint firstItem="c8i-IS-usa" firstAttribute="leading" secondItem="Vrv-6J-0ne" secondAttribute="leading" id="l0Q-L1-VOe"/>
                             <constraint firstItem="c8i-IS-usa" firstAttribute="top" secondItem="m5O-jm-rjW" secondAttribute="bottom" id="qWV-WL-piL"/>
@@ -213,6 +210,7 @@
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
+                                <exclude reference="j1G-LE-AbD"/>
                                 <exclude reference="qWV-WL-piL"/>
                                 <exclude reference="rkM-vo-CNN"/>
                             </mask>
@@ -222,16 +220,17 @@
                     <connections>
                         <outlet property="continueButton" destination="BWN-Hh-9Rx" id="ns4-WI-qCX"/>
                         <outlet property="toolbarBottomConstraint" destination="38x-Wh-izc" id="GA8-s1-yqY"/>
+                        <segue destination="Utf-eW-u7f" kind="show" identifier="segueToProfessionVc" id="9vN-nZ-Pvt"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="TrO-Dl-xGm" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="250" y="172"/>
         </scene>
-        <!--View Controller-->
+        <!--Profession View Controller-->
         <scene sceneID="U8o-f7-1Ht">
             <objects>
-                <viewController id="Utf-eW-u7f" sceneMemberID="viewController">
+                <viewController id="Utf-eW-u7f" customClass="ProfessionViewController" customModule="Profeey" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="NA4-y9-OKz"/>
                         <viewControllerLayoutGuide type="bottom" id="Ue1-Kt-a66"/>
@@ -256,9 +255,11 @@
                                         <state key="disabled" backgroundImage="btn_disabled">
                                             <color key="titleColor" red="0.78039215689999997" green="0.78039215689999997" blue="0.80392156859999997" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
+                                        <connections>
+                                            <action selector="continueButtonTapped:" destination="Utf-eW-u7f" eventType="touchUpInside" id="cw6-Dr-anq"/>
+                                        </connections>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="65" id="3TL-pw-hd1"/>
                                     <constraint firstItem="cXJ-5C-rml" firstAttribute="centerY" secondItem="Rw7-lP-dO8" secondAttribute="centerY" id="XIX-rZ-0Vh"/>
@@ -272,7 +273,7 @@
                                 </connections>
                             </containerView>
                         </subviews>
-                        <color key="backgroundColor" red="0.98039215686274506" green="0.98039215686274506" blue="0.98039215686274506" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="Rw7-lP-dO8" secondAttribute="trailing" id="39P-Mc-bKJ"/>
                             <constraint firstItem="Y0M-3x-25P" firstAttribute="top" secondItem="NA4-y9-OKz" secondAttribute="bottom" id="6m6-lX-PUW"/>
@@ -284,17 +285,25 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="SpI-n6-dwY">
-                        <barButtonItem key="rightBarButtonItem" title="Skip" id="bNz-X3-OKe"/>
+                        <barButtonItem key="rightBarButtonItem" title="Skip" id="bNz-X3-OKe">
+                            <connections>
+                                <action selector="skipButtonTapped:" destination="Utf-eW-u7f" id="VND-28-4j4"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="continueButton" destination="cXJ-5C-rml" id="19v-Tr-F8C"/>
+                        <outlet property="toolbarBottomConstraint" destination="8nT-e8-165" id="sw9-ez-JJU"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Aev-g4-MdJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="995" y="172"/>
         </scene>
-        <!--Test Table View Controller-->
+        <!--Profession Table View Controller-->
         <scene sceneID="eA6-mM-QTl">
             <objects>
-                <tableViewController id="Kxy-Hz-277" customClass="TestTableViewController" customModule="Profeey" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="Kxy-Hz-277" customClass="ProfessionTableViewController" customModule="Profeey" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" scrollEnabled="NO" dataMode="static" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="laf-n2-BXb">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="471"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -332,7 +341,6 @@
                                                 <constraint firstAttribute="bottom" secondItem="VKw-nA-5uK" secondAttribute="bottom" constant="16.5" id="wQC-kg-ZfY"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="60" id="dY7-0P-nFZ">
                                         <rect key="frame" x="0.0" y="78" width="600" height="60"/>
@@ -355,6 +363,9 @@
                                                             <exclude reference="bgg-rq-DoN"/>
                                                         </mask>
                                                     </variation>
+                                                    <connections>
+                                                        <action selector="textFieldChanged:" destination="Kxy-Hz-277" eventType="editingChanged" id="r9x-qe-jsL"/>
+                                                    </connections>
                                                 </textField>
                                             </subviews>
                                             <constraints>
@@ -370,7 +381,6 @@
                                                 </mask>
                                             </variation>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
@@ -380,6 +390,10 @@
                             <outlet property="delegate" destination="Kxy-Hz-277" id="ziZ-Fd-nwy"/>
                         </connections>
                     </tableView>
+                    <connections>
+                        <outlet property="professionTextField" destination="3oT-Zd-3d8" id="QNh-Xl-lIy"/>
+                        <outlet property="titleTableViewCell" destination="g1g-k4-VDG" id="dQB-iT-ZXz"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="l4L-ox-vuh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

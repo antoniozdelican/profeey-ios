@@ -194,7 +194,7 @@ extension NSDate {
             return weeksFrom(date) > 1 ? "\(weeksFrom(date)) weeks ago" : "\(weeksFrom(date)) week ago"
         }
         if daysFrom(date)    > 0 {
-            return "\(daysFrom(date))d"
+            return daysFrom(date) > 1 ? "\(daysFrom(date)) days ago" : "\(daysFrom(date)) day ago"
         }
         if hoursFrom(date)   > 0 {
             return hoursFrom(date) > 1 ? "\(hoursFrom(date)) hours ago" : "\(hoursFrom(date)) hour ago"

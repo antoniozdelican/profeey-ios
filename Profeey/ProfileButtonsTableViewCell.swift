@@ -1,28 +1,23 @@
 //
-//  ProfileTableViewCell.swift
+//  ProfileButtonsTableViewCell.swift
 //  Profeey
 //
-//  Created by Antonio Zdelican on 04/08/16.
+//  Created by Antonio Zdelican on 28/08/16.
 //  Copyright © 2016 Profeey. All rights reserved.
 //
 
 import UIKit
 
-class ProfileTableViewCell: UITableViewCell {
+class ProfileButtonsTableViewCell: UITableViewCell {
 
-    @IBOutlet weak var profilePicImageView: UIImageView!
-    @IBOutlet weak var fullNameLabel: UILabel!
-    @IBOutlet weak var professionLabel: UILabel!
-    @IBOutlet weak var locationLabel: UILabel!
+    
     @IBOutlet weak var followButton: UIButton!
-    @IBOutlet weak var postsButton: UIButton!
-    @IBOutlet weak var followersButton: UIButton!
-    @IBOutlet weak var recommendationsButton: UIButton!
+    @IBOutlet weak var numberOfPostsButton: UIButton!
+    @IBOutlet weak var numberOfFollowersButton: UIButton!
+    @IBOutlet weak var numberOfRecommendationsButton: UIButton!
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        self.profilePicImageView.layer.cornerRadius = 4.0
-        self.profilePicImageView.clipsToBounds = true
     }
 
     override func setSelected(selected: Bool, animated: Bool) {

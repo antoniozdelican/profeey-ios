@@ -28,7 +28,7 @@
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" scrollEnabled="NO" dataMode="static" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="Rtj-c5-OUc">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="471"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="0.98039215690000003" green="0.98039215690000003" blue="0.98039215690000003" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <sections>
                             <tableViewSection id="FhJ-7i-zLB">
                                 <cells>
@@ -53,7 +53,6 @@
                                                 <constraint firstItem="24s-kv-QY6" firstAttribute="top" secondItem="afh-vV-iB5" secondAttribute="top" constant="15" id="lCw-AW-ov8"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="60" id="ejK-So-b79">
                                         <rect key="frame" x="0.0" y="50" width="600" height="60"/>
@@ -94,7 +93,6 @@
                                                 </mask>
                                             </variation>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="60" id="Q0v-2K-4G9">
                                         <rect key="frame" x="0.0" y="110" width="600" height="60"/>
@@ -135,7 +133,6 @@
                                                 </mask>
                                             </variation>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="46" id="fzj-54-soh">
                                         <rect key="frame" x="0.0" y="170" width="600" height="46"/>
@@ -164,7 +161,6 @@
                                                 </mask>
                                             </variation>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
@@ -220,7 +216,6 @@
                                         </connections>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstItem="IFi-bz-G2f" firstAttribute="centerX" secondItem="Jcb-R1-S1k" secondAttribute="centerX" id="9vU-A5-u1b"/>
                                     <constraint firstAttribute="height" constant="65" id="aPb-Ee-0oG"/>
@@ -234,7 +229,7 @@
                                 </connections>
                             </containerView>
                         </subviews>
-                        <color key="backgroundColor" red="0.98039215686274506" green="0.98039215686274506" blue="0.98039215686274506" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="PKn-AK-gR6" firstAttribute="top" secondItem="Jcb-R1-S1k" secondAttribute="bottom" id="0ZG-Hw-yKc"/>
                             <constraint firstItem="0a9-ht-r8t" firstAttribute="top" secondItem="EDp-FS-e5F" secondAttribute="bottom" id="0hu-bZ-UhQ"/>
@@ -301,7 +296,6 @@
                                         </connections>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstItem="Pdb-UV-cOV" firstAttribute="centerX" secondItem="f7S-zW-QuY" secondAttribute="centerX" id="4ic-Ap-IJ1"/>
                                     <constraint firstAttribute="height" constant="65" id="HrP-mJ-Tj3"/>
@@ -315,7 +309,7 @@
                                 </connections>
                             </containerView>
                         </subviews>
-                        <color key="backgroundColor" red="0.98039215690000003" green="0.98039215690000003" blue="0.98039215690000003" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="DNx-6s-jE6" secondAttribute="trailing" id="5Tc-iG-4as"/>
                             <constraint firstItem="f7S-zW-QuY" firstAttribute="top" secondItem="DNx-6s-jE6" secondAttribute="bottom" id="GV8-0B-Kqw"/>
@@ -375,7 +369,6 @@
                                                 <constraint firstItem="jwV-HO-kYS" firstAttribute="leading" secondItem="zSB-11-RC8" secondAttribute="leading" constant="20" id="xFm-LP-fmC"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="60" id="VP2-p4-gDx">
                                         <rect key="frame" x="0.0" y="50" width="600" height="60"/>
@@ -410,7 +403,6 @@
                                                 <constraint firstItem="UTF-mt-k76" firstAttribute="leading" secondItem="VP2-jz-fHE" secondAttribute="leading" constant="20" id="pxU-7n-zzS"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="46" id="E1O-CU-9NY">
                                         <rect key="frame" x="0.0" y="110" width="600" height="46"/>
@@ -439,7 +431,6 @@
                                                 </mask>
                                             </variation>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
@@ -500,7 +491,6 @@
                                                 <constraint firstItem="W9g-dp-alK" firstAttribute="leading" secondItem="eQf-T2-wZc" secondAttribute="leading" constant="20" id="xoX-KE-U6A"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="60" id="Mz0-x1-FCd">
                                         <rect key="frame" x="0.0" y="78" width="600" height="60"/>
@@ -541,7 +531,6 @@
                                                 </mask>
                                             </variation>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="60" id="FFp-Ty-fwR">
                                         <rect key="frame" x="0.0" y="138" width="600" height="60"/>
@@ -572,7 +561,6 @@
                                                 </mask>
                                             </variation>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
@@ -625,7 +613,6 @@
                                         </connections>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="65" id="jxd-Ii-pOV"/>
                                     <constraint firstItem="Htm-Wo-bc5" firstAttribute="centerX" secondItem="4Uk-v0-38h" secondAttribute="centerX" id="nRw-5C-ETf"/>
@@ -639,7 +626,7 @@
                                 </connections>
                             </containerView>
                         </subviews>
-                        <color key="backgroundColor" red="0.98039215690000003" green="0.98039215690000003" blue="0.98039215690000003" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="pZk-TO-btp" secondAttribute="trailing" id="3tn-ZC-1R6"/>
                             <constraint firstItem="pZk-TO-btp" firstAttribute="top" secondItem="8Dj-Rj-N4G" secondAttribute="bottom" id="5FJ-7k-F9I"/>

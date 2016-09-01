@@ -112,7 +112,6 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                         </subviews>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <gestureRecognizers/>
                                         <constraints>
                                             <constraint firstItem="OUN-D6-t7d" firstAttribute="top" secondItem="Abg-0u-ctQ" secondAttribute="bottom" constant="5" id="9Ad-3B-jAo"/>
@@ -186,7 +185,6 @@
                                         </constraints>
                                     </scrollView>
                                 </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="35I-9x-mv6" secondAttribute="trailing" id="2Cr-J6-lrH"/>
                                     <constraint firstItem="N8t-0S-1Xt" firstAttribute="leading" secondItem="hJX-KT-36s" secondAttribute="leading" id="8JS-7i-oar"/>
@@ -233,7 +231,6 @@
                                 </constraints>
                             </scrollView>
                         </subviews>
-                        <color key="backgroundColor" red="0.98039215690000003" green="0.98039215690000003" blue="0.98039215690000003" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="22f-QB-ZuN" firstAttribute="top" secondItem="hJX-KT-36s" secondAttribute="bottom" id="16s-5P-fbm"/>
                             <constraint firstItem="22f-QB-ZuN" firstAttribute="height" secondItem="lqP-ie-CIJ" secondAttribute="height" id="BCc-MX-TvO"/>

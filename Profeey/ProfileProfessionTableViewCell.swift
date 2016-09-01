@@ -1,5 +1,5 @@
 //
-//  ProfileHeaderTableViewCell.swift
+//  ProfileProfessionTableViewCell.swift
 //  Profeey
 //
 //  Created by Antonio Zdelican on 28/08/16.
@@ -8,10 +8,10 @@
 
 import UIKit
 
-class ProfileHeaderTableViewCell: UITableViewCell {
-    
-    @IBOutlet weak var headerLabel: UILabel!
+class ProfileProfessionTableViewCell: UITableViewCell {
 
+    @IBOutlet weak var professionLabel: UILabel!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
     }

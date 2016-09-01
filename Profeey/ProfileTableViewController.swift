@@ -16,9 +16,11 @@ class ProfileTableViewController: UITableViewController {
     
     var user: User?
     private var posts: [Post] = []
-    private var postsCount = 0
+    private var numberOfPosts: Int?
     var isCurrentUser: Bool = false
     var isFollowing: Bool = false
+    
+    private var selectedSegment: Int = 0
     
     private var topCategories: [String] = []
     private var topCategoriesNumberOfPosts: [Int] = []
@@ -28,33 +30,25 @@ class ProfileTableViewController: UITableViewController {
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.Plain, target:nil, action:nil)
         self.navigationItem.title = nil
         self.tableView.delaysContentTouches = false
-        self.settingsButton.image = UIImage(named: "ic_settings")
+        
+        
         
         if self.isCurrentUser {
             self.getCurrentUser()
         } else {
             // User should already be set by other vc.
-            self.navigationItem.title = self.user?.preferredUsername
+            //self.navigationItem.title = self.user?.preferredUsername
             // Check if this user is followed by currentUser.
-            self.getUserRelationship()
-            // Get posts.
-            if let userId = self.user?.userId {
-                self.queryUserPostsDateSorted(userId)
-            }
+//            self.getUserRelationship()
+//            // Get posts.
+//            if let userId = self.user?.userId {
+//                self.queryUserPostsDateSorted(userId)
+//            }
         }
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-    }
-    
-    // MARK: Configuration
-    
-    private func configureUser(user: User?) {
-        self.user = user
-        // Always reload section 0 for a user!
-        self.tableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.None)
-        self.navigationItem.title = self.user?.preferredUsername
     }
     
     // MARK: Navigation
@@ -68,113 +62,151 @@ class ProfileTableViewController: UITableViewController {
             // Followers.
             destinationViewController.isLikers = false
         }
-        
-        if let navigationController = segue.destinationViewController as? UINavigationController,
-            let childViewController = navigationController.childViewControllers[0] as? PostDetailsTableViewController,
-            let indexPath = sender as? NSIndexPath {
-            childViewController.post = self.posts[indexPath.row]
-        }
         if let destinationViewController = segue.destinationViewController as? PostDetailsTableViewController,
             let indexPath = sender as? NSIndexPath {
             destinationViewController.post = self.posts[indexPath.row]
-        }
-        if let destinationViewController = segue.destinationViewController as? ExperienceTableViewController,
-            let indexPath = sender as? NSIndexPath {
-            if indexPath.section == 2 {
-                destinationViewController.isEducation = false
-            } else {
-                destinationViewController.isEducation = true
-            }
         }
     }
 
     // MARK: UITableViewDataSource
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 7
+        return 15
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
-            // Profile cell.
+            // ProfilePic.
             return 1
         case 1:
-            // About cell.
+            // ProfileFullName.
             return 1
         case 2:
-            return 0
-        case 3:
-            return 0
-        case 4:
-            // Top categories cells.
-            return self.topCategories.count
-        case 5:
+            // ProfileProfession.
             return 1
+        case 3:
+            // ProfileLocation.
+            return 1
+        case 4:
+            // ProfileButtons.
+            return 1
+        case 5:
+            // ProfileSegmentedControl.
+            return 1
+        case 6:
+            // PostsSmall.
+            return self.selectedSegment == 0 ? self.posts.count : 0
+        case 7:
+            // ProfileHeader About.
+            return self.selectedSegment == 0 ? 0 : 1
+        case 8:
+            // Profile About.
+            return self.selectedSegment == 0 ? 0 : 1
+        case 9:
+            // ProfileHeader TopCategories.
+            return self.selectedSegment == 0 ? 0 : 1
+        case 10:
+            // ProfileTopCategories
+            return self.selectedSegment == 0 ? 0 : self.topCategories.count
+        case 11:
+            // ProfileHeader WorkExperience.
+            return self.selectedSegment == 0 ? 0 : 1
+        case 12:
+            // WorkExperience
+            return self.selectedSegment == 0 ? 0 : 1
+        case 13:
+            // ProfileHeader Education.
+            return self.selectedSegment == 0 ? 0 : 1
+        case 14:
+            // Education
+            return self.selectedSegment == 0 ? 0 : 1
         default:
-            // Posts cells.
-            return self.posts.count
+            return 0
         }
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         switch indexPath.section {
         case 0:
-            let cell = tableView.dequeueReusableCellWithIdentifier("cellProfile", forIndexPath: indexPath) as! ProfileTableViewCell
+            let cell = tableView.dequeueReusableCellWithIdentifier("cellProfilePic", forIndexPath: indexPath) as! ProfilePicTableViewCell
             cell.profilePicImageView.image = self.user?.profilePic
+            return cell
+        case 1:
+            let cell = tableView.dequeueReusableCellWithIdentifier("cellProfileFullName", forIndexPath: indexPath) as! ProfileFullNameTableViewCell
             cell.fullNameLabel.text = self.user?.fullName
+            return cell
+        case 2:
+            let cell = tableView.dequeueReusableCellWithIdentifier("cellProfileProfession", forIndexPath: indexPath) as! ProfileProfessionTableViewCell
             cell.professionLabel.text = self.user?.profession
+            return cell
+        case 3:
+            let cell = tableView.dequeueReusableCellWithIdentifier("cellProfileLocation", forIndexPath: indexPath) as! ProfileLocationTableViewCell
             cell.locationLabel.text = self.user?.location
-            cell.postsButton.setTitle(self.postsCount.numberToString(), forState: UIControlState.Normal)
+            return cell
+        case 4:
+            let cell = tableView.dequeueReusableCellWithIdentifier("cellProfileButtons", forIndexPath: indexPath) as! ProfileButtonsTableViewCell
             if self.isCurrentUser {
                 cell.setEditButton()
                 cell.followButton.addTarget(self, action: #selector(ProfileTableViewController.editButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-            } else {
-                if self.isFollowing {
-                    cell.setFollowingButton()
-                } else {
-                    cell.setFollowButton()
-                }
-                cell.followButton.addTarget(self, action: #selector(ProfileTableViewController.followButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
             }
-            cell.selectionStyle = UITableViewCellSelectionStyle.None
-            return cell
-        case 1:
-            let cell = tableView.dequeueReusableCellWithIdentifier("cellAbout", forIndexPath: indexPath) as! ProfileAboutTableViewCell
-            cell.aboutLabel.text = self.user?.about
-            cell.selectionStyle = UITableViewCellSelectionStyle.None
-            return cell
-        case 2:
-            let cell = tableView.dequeueReusableCellWithIdentifier("cellHeader", forIndexPath: indexPath) as! ProfileHeaderTableViewCell
-            cell.headerLabel.text = "Work Experience"
-            cell.experienceImageView.image = UIImage(named: "ic_work_blue")
-            return cell
-        case 3:
-            let cell = tableView.dequeueReusableCellWithIdentifier("cellHeader", forIndexPath: indexPath) as! ProfileHeaderTableViewCell
-            cell.headerLabel.text = "Education"
-            cell.experienceImageView.image = UIImage(named: "ic_education_blue")
-            return cell
-        case 4:
-            let cell = tableView.dequeueReusableCellWithIdentifier("cellTopCategory", forIndexPath: indexPath) as! TopCategoryTableViewCell
-            cell.categoryNameLabel.text = self.topCategories[indexPath.row]
-            let numberOfPosts = self.topCategoriesNumberOfPosts[indexPath.row]
-            let numberOfPostsText = numberOfPosts > 1 ? "\(numberOfPosts.numberToString()) posts" : "\(numberOfPosts.numberToString()) post"
-            cell.numberOfPostsLabel.text = numberOfPostsText
-            cell.selectionStyle = UITableViewCellSelectionStyle.None
+            cell.numberOfPostsButton.setTitle(self.numberOfPosts?.numberToString(), forState: UIControlState.Normal)
             return cell
         case 5:
-            let cell = tableView.dequeueReusableCellWithIdentifier("cellHeaderPosts", forIndexPath: indexPath)
-            cell.selectionStyle = UITableViewCellSelectionStyle.None
+            let cell = tableView.dequeueReusableCellWithIdentifier("cellProfileSegmentedControl", forIndexPath: indexPath) as! ProfileSegmentedControlTableViewCell
+            self.selectedSegment == 0 ? cell.setPostsButtonActive() : cell.setAboutButtonActive()
+            cell.postsButton.addTarget(self, action: #selector(ProfileTableViewController.postsSegmentButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+            cell.aboutButton.addTarget(self, action: #selector(ProfileTableViewController.aboutSegmentButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
             return cell
-        default:
-            let cell = tableView.dequeueReusableCellWithIdentifier("cellPost", forIndexPath: indexPath) as! PostSmallTableViewCell
+        case 6:
+            let cell = tableView.dequeueReusableCellWithIdentifier("cellPostSmall", forIndexPath: indexPath) as! PostSmallTableViewCell
             let post = posts[indexPath.row]
             cell.postImageView.image = post.image
             cell.titleLabel.text = post.title
             cell.categoryLabel.text = post.category
             cell.timeLabel.text = post.creationDateString
-            
             return cell
+        case 7:
+            let cell = tableView.dequeueReusableCellWithIdentifier("cellProfileHeader", forIndexPath: indexPath) as! ProfileHeaderTableViewCell
+            cell.headerLabel.text = "About"
+            return cell
+        case 8:
+            let cell = tableView.dequeueReusableCellWithIdentifier("cellProfileAbout", forIndexPath: indexPath) as! ProfileAboutTableViewCell
+            cell.aboutLabel.text = self.user?.about
+            return cell
+        case 9:
+            let cell = tableView.dequeueReusableCellWithIdentifier("cellProfileHeader", forIndexPath: indexPath) as! ProfileHeaderTableViewCell
+            cell.headerLabel.text = "Top Skills"
+            return cell
+        case 10:
+            let cell = tableView.dequeueReusableCellWithIdentifier("cellProfileTopCategory", forIndexPath: indexPath) as! ProfileTopCategoryTableViewCell
+            cell.topCategoryNameLabel.text = self.topCategories[indexPath.row]
+            let numberOfPosts = self.topCategoriesNumberOfPosts[indexPath.row]
+            let numberOfPostsText = numberOfPosts > 1 ? "\(numberOfPosts.numberToString()) posts" : "\(numberOfPosts.numberToString()) post"
+            cell.numberOfPostsLabel.text = numberOfPostsText
+            return cell
+        case 11:
+            let cell = tableView.dequeueReusableCellWithIdentifier("cellProfileHeader", forIndexPath: indexPath) as! ProfileHeaderTableViewCell
+            cell.headerLabel.text = "Work Expericence"
+            return cell
+        case 12:
+            let cell = tableView.dequeueReusableCellWithIdentifier("cellProfileExperience", forIndexPath: indexPath) as! ProfileExperienceTableViewCell
+            cell.positionLabel.text = "Agricultural Engineer"
+            cell.organizationLabel.text = "Food, Inc."
+            cell.timePeriodLabel.text = "Sep 2014 - Jul 2016"
+            return cell
+        case 13:
+            let cell = tableView.dequeueReusableCellWithIdentifier("cellProfileHeader", forIndexPath: indexPath) as! ProfileHeaderTableViewCell
+            cell.headerLabel.text = "Education"
+            return cell
+        case 14:
+            let cell = tableView.dequeueReusableCellWithIdentifier("cellProfileExperience", forIndexPath: indexPath) as! ProfileExperienceTableViewCell
+            cell.positionLabel.text = "PhD in Agricultural Engineering"
+            cell.organizationLabel.text = "Stanford University"
+            cell.timePeriodLabel.text = "Sep 2006 - Jun 2010"
+            return cell
+        default:
+            return UITableViewCell()
         }
     }
     
@@ -182,35 +214,126 @@ class ProfileTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        let cell = tableView.cellForRowAtIndexPath(indexPath)
-        if cell is PostSmallTableViewCell {
-            self.performSegueWithIdentifier("segueToPostVc", sender: indexPath)
-        }
-        if indexPath.section == 2 || indexPath.section == 3 {
-            self.performSegueWithIdentifier("segueToExperienceVc", sender: indexPath)
+        if indexPath.section == 6 {
+            self.performSegueWithIdentifier("segueToPostDetailsVc", sender: indexPath)
         }
     }
     
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         cell.layoutMargins = UIEdgeInsetsZero
-        if indexPath.section == 4 {
+        cell.selectionStyle = UITableViewCellSelectionStyle.None
+        switch indexPath.section {
+        case 0:
             cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
+        case 1:
+            cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
+        case 2:
+            cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
+        case 3:
+            cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
+        case 6:
+            cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 16.0)
+            cell.selectionStyle = UITableViewCellSelectionStyle.Default
+        case 7:
+            if self.user?.about != nil {
+                cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
+            } else {
+                cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 16.0)
+            }
+        case 8:
+            cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 16.0)
+        case 9:
+            if self.topCategories.count > 0 {
+                cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
+            } else {
+                cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 16.0)
+            }
+        case 10:
+            cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
+        case 11:
+            cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
+        case 12:
+            cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 16.0)
+        case 13:
+            cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
+        case 14:
+            cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 16.0)
+        default:
+            return
         }
     }
     
     override func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if indexPath.section == 7 {
+        switch indexPath.section {
+        case 0:
+            return 141.0
+        case 1:
+            return 30.0
+        case 2:
+            return 30.0
+        case 3:
+            return 30.0
+        case 4:
+            return 106.0
+        case 5:
+            return 50.0
+        case 6:
             return 133.0
-        } else {
-            return 120.0
+        case 7:
+            return 50.0
+        case 8:
+            return 37.0
+        case 9:
+            return 50.0
+        case 10:
+            return 29.0
+        case 11:
+            return 50.0
+        case 12:
+            return 74.0
+        case 13:
+            return 50.0
+        case 14:
+            return 74.0
+        default:
+            return 0.0
         }
     }
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if indexPath.section == 7 {
-            return 133.0
-        } else {
+        switch indexPath.section {
+        case 0:
+            return 141.0
+        case 1:
             return UITableViewAutomaticDimension
+        case 2:
+            return UITableViewAutomaticDimension
+        case 3:
+            return UITableViewAutomaticDimension
+        case 4:
+            return 106.0
+        case 5:
+            return 50.0
+        case 6:
+            return 133.0
+        case 7:
+            return 50.0
+        case 8:
+            return UITableViewAutomaticDimension
+        case 9:
+            return 50.0
+        case 10:
+            return UITableViewAutomaticDimension
+        case 11:
+            return 50.0
+        case 12:
+            return UITableViewAutomaticDimension
+        case 13:
+            return 50.0
+        case 14:
+            return UITableViewAutomaticDimension
+        default:
+            return 0.0
         }
     }
     
@@ -232,7 +355,6 @@ class ProfileTableViewController: UITableViewController {
         self.performSegueWithIdentifier("segueToUsersVc", sender: self)
     }
     
-    
     // MARK: Tappers
     
     func editButtonTapped(sender: UIButton) {
@@ -243,37 +365,45 @@ class ProfileTableViewController: UITableViewController {
         self.isFollowing ? self.unfollowUser() : self.followUser()
     }
     
+    func postsSegmentButtonTapped(sender: UIButton) {
+        self.selectedSegment = 0
+        self.tableView.reloadData()
+    }
+    
+    func aboutSegmentButtonTapped(sender: UIButton) {
+        self.selectedSegment = 1
+        self.tableView.reloadData()
+    }
+    
     // MARK: AWS
     
     private func getCurrentUser() {
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         AWSClientManager.defaultClientManager().getCurrentUser({
             (task: AWSTask) in
-            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-            if let error = task.error {
-                print("getCurrentUser error: \(error.localizedDescription)")
-            } else if let awsUser = task.result as? AWSUser {
-                let user = User(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, profession: awsUser._profession, profilePicUrl: awsUser._profilePicUrl, location: awsUser._location, about: awsUser._about)
-                
-                dispatch_async(dispatch_get_main_queue(), {
-                    self.user = user
-                    self.tableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.None)
-                    self.tableView.reloadSections(NSIndexSet(index: 1), withRowAnimation: UITableViewRowAnimation.None)
-                    self.navigationItem.title = self.user?.preferredUsername
-                })
-                
-                // Get profilePic.
-                if let profilePicUrl = awsUser._profilePicUrl {
-                    self.downloadImage(profilePicUrl, indexPath: nil, isProfilePic: true)
+            dispatch_async(dispatch_get_main_queue(), {
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                if let error = task.error {
+                    print("getCurrentUser error: \(error.localizedDescription)")
+                } else {
+                    if let awsUser = task.result as? AWSUser {
+                        let user = User(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, profession: awsUser._profession, profilePicUrl: awsUser._profilePicUrl, location: awsUser._location, about: awsUser._about)
+                        self.user = user
+                        self.tableView.reloadData()
+                        self.navigationItem.title = self.user?.preferredUsername
+                        
+                        // Get profilePic.
+                        if let profilePicUrl = awsUser._profilePicUrl {
+                            self.downloadImage(profilePicUrl, indexPath: nil)
+                        }
+                        
+                        // Query user posts.
+                        if let userId = awsUser._userId {
+                            self.queryUserPostsDateSorted(userId)
+                        }
+                    }
                 }
-                
-                // Query user posts.
-                if let userId = awsUser._userId {
-                    self.queryUserPostsDateSorted(userId)
-                }
-            } else {
-                print("This should not happen with getCurrentUser!")
-            }
+            })
             return nil
         })
     }
@@ -282,47 +412,44 @@ class ProfileTableViewController: UITableViewController {
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         AWSClientManager.defaultClientManager().queryUserPostsDateSorted(userId, completionHandler: {
             (task: AWSTask) in
-            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-            if let error = task.error {
-                print("queryUserPostsDateSorted error: \(error.localizedDescription)")
-            } else {
-                if let output = task.result as? AWSDynamoDBPaginatedOutput,
-                    let awsPosts = output.items as? [AWSPost] {
-                    
-                    // Update posts count.
-                    dispatch_async(dispatch_get_main_queue(), {
-                        self.postsCount = awsPosts.count
-                        self.tableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.None)
-                    })
-                    
-                    // Update top categories.
-                    self.updateTopCategories(awsPosts.flatMap({$0._category}))
-                    
-                    // Iterate through all posts. This should change and fetch only certain or?
-                    for (index, awsPost) in awsPosts.enumerate() {
-                        let indexPath = NSIndexPath(forRow: index, inSection: 6)
+            dispatch_async(dispatch_get_main_queue(), {
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                if let error = task.error {
+                    print("queryUserPostsDateSorted error: \(error.localizedDescription)")
+                } else {
+                    if let output = task.result as? AWSDynamoDBPaginatedOutput,
+                        let awsPosts = output.items as? [AWSPost] {
                         
-                        dispatch_async(dispatch_get_main_queue(), {
+                        // Update posts count.
+                        self.numberOfPosts = awsPosts.count
+                        self.tableView.reloadSections(NSIndexSet(index: 4), withRowAnimation: UITableViewRowAnimation.None)
+                        
+                        // Update top categories.
+                        self.updateTopCategories(awsPosts.flatMap({$0._category}))
+                        
+                        // Iterate through all posts.
+                        for (index, awsPost) in awsPosts.enumerate() {
                             
+                            let indexPath = NSIndexPath(forRow: index, inSection: 6)
                             // Data is denormalized so we store user data in posts table!
                             let user = self.user
                             let post = Post(postId: awsPost._postId, title: awsPost._title, postDescription: awsPost._description, imageUrl: awsPost._imageUrl, category: awsPost._category, creationDate: awsPost._creationDate, user: user)
                             self.posts.append(post)
-                            self.tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
-                        })
-                        
-                        // Get postPic.
-                        if let imageUrl = awsPost._imageUrl {
-                            self.downloadImage(imageUrl, indexPath: indexPath, isProfilePic: false)
+                            self.tableView.reloadData()
+    
+                            // Get postPic.
+                            if let imageUrl = awsPost._imageUrl {
+                                self.downloadImage(imageUrl, indexPath: indexPath)
+                            }
                         }
                     }
                 }
-            }
+            })
             return nil
         })
     }
     
-    private func downloadImage(imageKey: String, indexPath: NSIndexPath?, isProfilePic: Bool) {
+    private func downloadImage(imageKey: String, indexPath: NSIndexPath?) {
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         
         let content = AWSUserFileManager.custom(key: "USEast1BucketManager").contentWithKey(imageKey)
@@ -332,7 +459,7 @@ class ProfileTableViewController: UITableViewController {
             print("Content cached:")
             UIApplication.sharedApplication().networkActivityIndicatorVisible = false
             image = UIImage(data: content.cachedData)
-            self.updateUIWithImage(image, indexPath: indexPath, isProfilePic: isProfilePic)
+            self.updateUIWithImage(image, indexPath: indexPath)
         } else {
             print("Download content:")
             content.downloadWithDownloadType(
@@ -344,15 +471,17 @@ class ProfileTableViewController: UITableViewController {
                 },
                 completionHandler: {
                     (content: AWSContent?, data: NSData?, error: NSError?) in
-                    UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-                    if let error = error {
-                        print("Download content error: \(error.localizedDescription)")
-                    } else if let imageData = data {
-                        image = UIImage(data: imageData)
-                        self.updateUIWithImage(image, indexPath: indexPath, isProfilePic: isProfilePic)
-                    } else {
-                        print("This should not happen with download content!")
-                    }
+                    dispatch_async(dispatch_get_main_queue(), {
+                        UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                        if let error = error {
+                            print("Download content error: \(error.localizedDescription)")
+                        } else {
+                            if let imageData = data {
+                                image = UIImage(data: imageData)
+                                self.updateUIWithImage(image, indexPath: indexPath)
+                            }
+                        }
+                    })
             })
         }
     }
@@ -432,24 +561,13 @@ class ProfileTableViewController: UITableViewController {
     
     // MARK: Helpers
     
-    private func updateUIWithImage(image: UIImage?, indexPath: NSIndexPath?, isProfilePic: Bool) {
+    private func updateUIWithImage(image: UIImage?, indexPath: NSIndexPath?) {
         if let indexPath = indexPath {
-            if isProfilePic {
-                dispatch_async(dispatch_get_main_queue(), {
-                    self.posts[indexPath.row].user?.profilePic = image
-                    self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
-                })
-            } else {
-                dispatch_async(dispatch_get_main_queue(), {
-                    self.posts[indexPath.row].image = image
-                    self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
-                })
-            }
+            self.posts[indexPath.row].image = image
+            self.tableView.reloadData()
         } else {
-            dispatch_async(dispatch_get_main_queue(), {
-                self.user?.profilePic = image
-                self.tableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.None)
-            })
+            self.user?.profilePic = image
+            self.tableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.None)
         }
     }
     
@@ -471,18 +589,18 @@ class ProfileTableViewController: UITableViewController {
             sortedCategoriesNumbers.append(categoryFrequencies[category]!)
         }
         
-        dispatch_async(dispatch_get_main_queue(), {
-            // Set only top 5 categories.
-            self.topCategories = Array(sortedCategories.prefix(5))
-            self.topCategoriesNumberOfPosts = Array(sortedCategoriesNumbers.prefix(5))
-            self.tableView.reloadSections(NSIndexSet(index: 4), withRowAnimation: UITableViewRowAnimation.None)
-        })
+        // Set only top 5 categories.
+        self.topCategories = Array(sortedCategories.prefix(5))
+        self.topCategoriesNumberOfPosts = Array(sortedCategoriesNumbers.prefix(5))
+        self.tableView.reloadData()
     }
 }
 
 extension ProfileTableViewController: EditProfileDelegate {
     
     func userUpdated(user: User?) {
-        self.configureUser(user)
+        self.user = user
+        self.tableView.reloadData()
+        self.navigationItem.title = self.user?.preferredUsername
     }
 }
