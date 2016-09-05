@@ -51,10 +51,10 @@ class AWSUserRelationshipsTable: NSObject, Table {
         return AWSUserRelationship.JSONKeyPathsByPropertyKey()[dataObjectAttributeName] as! String
     }
     
-    // Find Item with userId and followedId.
-    func getUserRelationship(userId: String, followedId: String, completionHandler: AWSContinuationBlock) {
+    // Find if user with userId is following user with followingId.
+    func getUserRelationship(userId: String, followingId: String, completionHandler: AWSContinuationBlock) {
         let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
-        objectMapper.load(AWSUserRelationship.self, hashKey: userId, rangeKey: followedId).continueWithBlock(completionHandler)
+        objectMapper.load(AWSUserRelationship.self, hashKey: userId, rangeKey: followingId).continueWithBlock(completionHandler)
         
     }
     
@@ -85,8 +85,8 @@ class AWSUserRelationshipsPrimaryIndex: NSObject, Index {
     
     // Mark: QueryWithPartitionKey
     
-    // Find all items with userId.
-    func queryUserFollowed(userId: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
+    // Find all following users.
+    func queryUserFollowing(userId: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
         let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
         let queryExpression = AWSDynamoDBQueryExpression()
         queryExpression.keyConditionExpression = "#userId = :userId"
@@ -113,14 +113,14 @@ class AWSUserRelationshipsFollowersIndex: NSObject, Index {
     
     // MARK: QueryWithPartitionKey
     
-    // Find all items with followedId.
-    func queryUserFollowers(followedId: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
+    // Find all items with followingId.
+    func queryUserFollowers(followingId: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
         let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
         let queryExpression = AWSDynamoDBQueryExpression()
         queryExpression.indexName = "FollowersIndex"
-        queryExpression.keyConditionExpression = "#followedId = :followedId"
-        queryExpression.expressionAttributeNames = ["#followedId": "followedId",]
-        queryExpression.expressionAttributeValues = [":followedId": followedId,]
+        queryExpression.keyConditionExpression = "#followingId = :followingId"
+        queryExpression.expressionAttributeNames = ["#followingId": "followingId",]
+        queryExpression.expressionAttributeValues = [":followingId": followingId,]
         
         objectMapper.query(AWSUserRelationship.self, expression: queryExpression, completionHandler: completionHandler)
     }    

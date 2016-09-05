@@ -98,8 +98,8 @@ class EditPostTableViewController: UITableViewController {
         self.postTitle = titleText.trimm().isEmpty ? nil: titleText.trimm()
         self.postDescription = descriptionText.trimm().isEmpty ? nil : descriptionText.trimm()
         
-        // Upload is on homeVc.
-        self.performSegueWithIdentifier("segueUnwindToHomeVc", sender: self)
+        // Upload is on ProfileVc.
+        self.performSegueWithIdentifier("segueUnwindToProfileVc", sender: self)
     }
     
     @IBAction func removeCategoryButtonTapped(sender: AnyObject) {
@@ -110,22 +110,6 @@ class EditPostTableViewController: UITableViewController {
         // Allow segueToAddCategoryVc.
         self.categoryAdded = false
         self.addCategoryTableViewCell.selectionStyle = UITableViewCellSelectionStyle.Default
-    }
-    
-    
-    
-    @IBAction func unwindToEditPostTableViewController(segue: UIStoryboardSegue) {
-//        if segue.identifier == "segueUnwindToEditPostVc",
-//            let sourceViewController = segue.sourceViewController as? EditCategoriesViewController {
-//            self.categories = sourceViewController.categories
-//            if self.categories.count > 0 {
-//              self.categoriesLabel.textColor = Colors.blue
-//                self.categoriesLabel.text = self.categories.joinWithSeparator(" · ")
-//            } else {
-//                self.categoriesLabel.textColor = Colors.disabled
-//                self.categoriesLabel.text = "Add categories"
-//            }
-//        }
     }
 }
 

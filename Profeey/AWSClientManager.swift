@@ -119,11 +119,6 @@ class AWSClientManager: NSObject, ClientManager {
         PRFYDynamoDBManager.defaultDynamoDBManager().getUserDynamoDB(userId, completionHandler: completionHandler)
     }
     
-    func getCurrentUser(completionHandler: AWSContinuationBlock) {
-        // DynamoDB getCurrentUser.
-        PRFYDynamoDBManager.defaultDynamoDBManager().getCurrentUserDynamoDB(completionHandler)
-    }
-    
     func updateFirstLastName(firstName: String?, lastName: String?, completionHandler: AWSContinuationBlock) {
         // UserPool updateFirstLastName.
         PRFYUserPoolManager.defaultUserPoolManager().updateFirstLastNameUserPool(firstName, lastName: lastName, completionHandler: {
@@ -152,20 +147,20 @@ class AWSClientManager: NSObject, ClientManager {
         })
     }
     
-    func updateUserProfession(profession: String?, completionHandler: AWSContinuationBlock) {
-        // DynamoDB updateUserProfession.
-        PRFYDynamoDBManager.defaultDynamoDBManager().updateUserProfessionDynamoDB(profession, completionHandler: completionHandler)
+    func updateProfession(profession: String?, completionHandler: AWSContinuationBlock) {
+        // DynamoDB updateProfession.
+        PRFYDynamoDBManager.defaultDynamoDBManager().updateProfessionDynamoDB(profession, completionHandler: completionHandler)
         // TODO should update Profession table!
     }
     
-    func updateUserLocation(location: String?, completionHandler: AWSContinuationBlock) {
-        // DynamoDB updateUserLocation.
-        PRFYDynamoDBManager.defaultDynamoDBManager().updateUserLocationDynamoDB(location, completionHandler: completionHandler)
+    func updateLocation(location: String?, completionHandler: AWSContinuationBlock) {
+        // DynamoDB updateLocation.
+        PRFYDynamoDBManager.defaultDynamoDBManager().updateLocationDynamoDB(location, completionHandler: completionHandler)
     }
     
-    func updateUserAbout(about: String?, completionHandler: AWSContinuationBlock) {
-        // DynamoDB updateUserAbout.
-        PRFYDynamoDBManager.defaultDynamoDBManager().updateUserAboutDynamoDB(about, completionHandler: completionHandler)
+    func updateAbout(about: String?, completionHandler: AWSContinuationBlock) {
+        // DynamoDB updateAbout.
+        PRFYDynamoDBManager.defaultDynamoDBManager().updateAboutDynamoDB(about, completionHandler: completionHandler)
     }
     
     func updateProfilePic(profilePicUrl: String?, completionHandler: AWSContinuationBlock) {
@@ -217,103 +212,80 @@ class AWSClientManager: NSObject, ClientManager {
         PRFYDynamoDBManager.defaultDynamoDBManager().queryPostLikersDynamoDB(postId, completionHandler: completionHandler)
     }
     
-    
-    // MARK: UserRelationsips
-    
-    func getUserRelationship(followedId: String, completionHandler: AWSContinuationBlock) {
-        // DynamoDB getUserRelationship.
-        PRFYDynamoDBManager.defaultDynamoDBManager().getUserRelationshipDynamoDB(followedId, completionHandler: completionHandler)
-    }
-    
-    func saveUserRelationship(followedId: String, completionHandler: AWSContinuationBlock) {
-        // DynamoDB saveUserRelationship.
-        PRFYDynamoDBManager.defaultDynamoDBManager().saveUserRelationshipDynamoDB(followedId, completionHandler: completionHandler)
-    }
-    
-    func removeUserRelationship(followedId: String, completionHandler: AWSContinuationBlock) {
-        // DynamoDB removeUserRelationship.
-        PRFYDynamoDBManager.defaultDynamoDBManager().removeUserRelationshipDynamoDB(followedId, completionHandler: completionHandler)
-    }
-    
-    func queryUserFollowed(userId: String, completionHandler: AWSContinuationBlock) {
-        // DynamoDB queryUserFollowed.
-        PRFYDynamoDBManager.defaultDynamoDBManager().queryUserFollowedDynamoDB(userId, completionHandler: completionHandler)
-    }
-    
     // MARK: Posts
     
-    func queryUserPosts(userId: String, completionHandler: AWSContinuationBlock) {
-        // DynamoDB queryUserPosts.
-        PRFYDynamoDBManager.defaultDynamoDBManager().queryUserPostsDynamoDB(userId, completionHandler: completionHandler)
-    }
+//    func queryUserPosts(userId: String, completionHandler: AWSContinuationBlock) {
+//        // DynamoDB queryUserPosts.
+//        PRFYDynamoDBManager.defaultDynamoDBManager().queryUserPostsDynamoDB(userId, completionHandler: completionHandler)
+//    }
+//    
+//    func queryUserPostsDateSorted(userId: String, completionHandler: AWSContinuationBlock) {
+//        // DynamoDB queryUserPostsDateSorted.
+//        PRFYDynamoDBManager.defaultDynamoDBManager().queryUserPostsDateSortedDynamoDB(userId, completionHandler: completionHandler)
+//    }
     
-    func queryUserPostsDateSorted(userId: String, completionHandler: AWSContinuationBlock) {
-        // DynamoDB queryUserPostsDateSorted.
-        PRFYDynamoDBManager.defaultDynamoDBManager().queryUserPostsDateSortedDynamoDB(userId, completionHandler: completionHandler)
-    }
+//    func savePost(imageData: NSData, title: String?, description: String?, category: String?, user: User?, isProfilePic: Bool, completionHandler: AWSContinuationBlock) {
+//        // S3 uploadImage.
+//        PRFYS3Manager.defaultDynamoDBManager().uploadImageS3(
+//            imageData,
+//            isProfilePic: isProfilePic,
+//            progressBlock: {
+//                (localContent: AWSLocalContent, progress: NSProgress) in
+//                // TODO
+//                return
+//            },
+//            completionHandler: {
+//                (task: AWSTask) in
+//                if let error = task.error {
+//                    return AWSTask(error: error).continueWithBlock(completionHandler)
+//                } else if let imageUrl = task.result as? String {
+//                    // DynamoDB savePostDynamoDb SYNC.
+//                    PRFYDynamoDBManager.defaultDynamoDBManager().savePostDynamoDB(imageUrl, title: title, description: description, category: category, user: user, completionHandler: completionHandler)
+//                    return nil
+//                } else {
+//                    print("This should not happen with savePost.")
+//                    return AWSTask().continueWithBlock(completionHandler)
+//                }
+//        })
+//    }
     
-    func savePost(imageData: NSData, title: String?, description: String?, category: String?, user: User?, isProfilePic: Bool, completionHandler: AWSContinuationBlock) {
-        // S3 uploadImage.
-        PRFYS3Manager.defaultDynamoDBManager().uploadImageS3(
-            imageData,
-            isProfilePic: isProfilePic,
-            progressBlock: {
-                (localContent: AWSLocalContent, progress: NSProgress) in
-                // TODO
-                return
-            },
-            completionHandler: {
-                (task: AWSTask) in
-                if let error = task.error {
-                    return AWSTask(error: error).continueWithBlock(completionHandler)
-                } else if let imageUrl = task.result as? String {
-                    // DynamoDB savePostDynamoDb SYNC.
-                    PRFYDynamoDBManager.defaultDynamoDBManager().savePostDynamoDB(imageUrl, title: title, description: description, category: category, user: user, completionHandler: completionHandler)
-                    return nil
-                } else {
-                    print("This should not happen with savePost.")
-                    return AWSTask().continueWithBlock(completionHandler)
-                }
-        })
-    }
-    
-    func downloadImage(imageKey: String, completionHandler: AWSContinuationBlock) {
-        // S3 downloadImage.
-        PRFYS3Manager.defaultDynamoDBManager().downloadImageS3(
-            imageKey,
-            progressBlock: {
-                (content: AWSContent, progress: NSProgress) in
-                // TODO
-                return
-            },
-            completionHandler: {
-                (task: AWSTask) in
-                if let error = task.error {
-                    return AWSTask(error: error).continueWithBlock(completionHandler)
-                } else if let data = task.result as? NSData {
-                    return AWSTask(result: data).continueWithBlock(completionHandler)
-                } else {
-                    print("This should not happen with downloadImage.")
-                    return AWSTask().continueWithBlock(completionHandler)
-                }
-        })
-    }
+//    func downloadImage(imageKey: String, completionHandler: AWSContinuationBlock) {
+//        // S3 downloadImage.
+//        PRFYS3Manager.defaultDynamoDBManager().downloadImageS3(
+//            imageKey,
+//            progressBlock: {
+//                (content: AWSContent, progress: NSProgress) in
+//                // TODO
+//                return
+//            },
+//            completionHandler: {
+//                (task: AWSTask) in
+//                if let error = task.error {
+//                    return AWSTask(error: error).continueWithBlock(completionHandler)
+//                } else if let data = task.result as? NSData {
+//                    return AWSTask(result: data).continueWithBlock(completionHandler)
+//                } else {
+//                    print("This should not happen with downloadImage.")
+//                    return AWSTask().continueWithBlock(completionHandler)
+//                }
+//        })
+//    }
     
     // In background.
-    func deleteImageS3(imageKey: String, completionHandler: AWSContinuationBlock) {
-        guard let userFileManager = self.userFileManager else {
-            return
-        }
-        let content: AWSContent = userFileManager.contentWithKey(imageKey)
-        content.removeRemoteContentWithCompletionHandler {
-            (content: AWSContent?, error: NSError?) in
-            if let error = error {
-                print("deleteImageS3 error: \(error)")
-                AWSTask(error: error).continueWithBlock(completionHandler)
-            } else {
-                print("deleteImageS3 success!")
-                AWSTask().continueWithBlock(completionHandler)
-            }
-        }
-    }
+//    func deleteImageS3(imageKey: String, completionHandler: AWSContinuationBlock) {
+//        guard let userFileManager = self.userFileManager else {
+//            return
+//        }
+//        let content: AWSContent = userFileManager.contentWithKey(imageKey)
+//        content.removeRemoteContentWithCompletionHandler {
+//            (content: AWSContent?, error: NSError?) in
+//            if let error = error {
+//                print("deleteImageS3 error: \(error)")
+//                AWSTask(error: error).continueWithBlock(completionHandler)
+//            } else {
+//                print("deleteImageS3 success!")
+//                AWSTask().continueWithBlock(completionHandler)
+//            }
+//        }
+//    }
 }

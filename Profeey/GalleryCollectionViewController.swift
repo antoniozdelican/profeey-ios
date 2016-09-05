@@ -22,6 +22,7 @@ class GalleryCollectionViewController: UICollectionViewController {
     // Used for checking if PHCachingImageManager should start caching
     var previousPreheatRect: CGRect!
     private var ITEM_INSET: CGFloat = 1.0
+    var isProfilePic: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()        
@@ -60,6 +61,7 @@ class GalleryCollectionViewController: UICollectionViewController {
             let asset = self.album?[indexPath.item] as? PHAsset {
             childViewController.asset = asset
             childViewController.isPhoto = false
+            childViewController.isProfilePic = self.isProfilePic
         }
     }
 

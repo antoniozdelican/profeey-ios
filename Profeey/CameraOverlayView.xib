@@ -10,6 +10,7 @@
             <connections>
                 <outlet property="cameraOverlayView" destination="iN0-l3-epB" id="9Is-pd-goF"/>
                 <outlet property="cameraWindowSubView" destination="XPM-WI-s1z" id="RMf-gh-ncg"/>
+                <outlet property="cameraWindowSubViewAspectRatioConstraint" destination="4Vw-kA-zWe" id="6bR-VO-wgD"/>
                 <outlet property="captureButton" destination="Dpz-Ca-7rF" id="XXt-IK-6fp"/>
             </connections>
         </placeholder>

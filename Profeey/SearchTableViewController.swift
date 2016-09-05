@@ -210,9 +210,9 @@ class SearchTableViewController: UITableViewController {
                             self.allUsers.append(user)
                             
                             // Get profilePic.
-                            if let imageUrl = awsUser._profilePicUrl {
-                                self.downloadImage(imageUrl, userIndex: index)
-                            }
+//                            if let imageUrl = awsUser._profilePicUrl {
+//                                self.downloadImage(imageUrl, userIndex: index)
+//                            }
                         }
                         // Reload tableView.
                         self.searchDelegate?.showUsers(self.allUsers)
@@ -223,29 +223,29 @@ class SearchTableViewController: UITableViewController {
         })
     }
     
-    private func downloadImage(imageKey: String, userIndex: Int) {
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-        AWSClientManager.defaultClientManager().downloadImage(
-            imageKey,
-            completionHandler: {
-                (task: AWSTask) in
-                dispatch_async(dispatch_get_main_queue(), {
-                    UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-                    if let error = task.error {
-                        print("Error: \(error.userInfo["message"])")
-                    } else {
-                        if let imageData = task.result as? NSData {
-                            let image = UIImage(data: imageData)
-                            // Set user profilePic.
-                            self.allUsers[userIndex].profilePic = image
-                            // Reload tableView.
-                            self.searchDelegate?.showUsers(self.allUsers)
-                        }
-                    }
-                })
-                return nil
-        })
-    }
+//    private func downloadImage(imageKey: String, userIndex: Int) {
+//        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+//        AWSClientManager.defaultClientManager().downloadImage(
+//            imageKey,
+//            completionHandler: {
+//                (task: AWSTask) in
+//                dispatch_async(dispatch_get_main_queue(), {
+//                    UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+//                    if let error = task.error {
+//                        print("Error: \(error.userInfo["message"])")
+//                    } else {
+//                        if let imageData = task.result as? NSData {
+//                            let image = UIImage(data: imageData)
+//                            // Set user profilePic.
+//                            self.allUsers[userIndex].profilePic = image
+//                            // Reload tableView.
+//                            self.searchDelegate?.showUsers(self.allUsers)
+//                        }
+//                    }
+//                })
+//                return nil
+//        })
+//    }
 }
 
 extension SearchTableViewController: UISearchResultsUpdating {

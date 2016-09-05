@@ -1,16 +1,16 @@
 //
-//  ProfileFullNameTableViewCell.swift
+//  HomeCategoriesTableViewCell.swift
 //  Profeey
 //
-//  Created by Antonio Zdelican on 28/08/16.
+//  Created by Antonio Zdelican on 03/09/16.
 //  Copyright © 2016 Profeey. All rights reserved.
 //
 
 import UIKit
 
-class ProfileFullNameTableViewCell: UITableViewCell {
+class HomeCategoriesTableViewCell: UITableViewCell {
 
-    @IBOutlet weak var fullNameLabel: UILabel!
+    @IBOutlet weak var categoriesCollectionView: UICollectionView!
     
     override func awakeFromNib() {
         super.awakeFromNib()

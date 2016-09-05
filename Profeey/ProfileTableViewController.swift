@@ -19,6 +19,7 @@ class ProfileTableViewController: UITableViewController {
     private var numberOfPosts: Int?
     var isCurrentUser: Bool = false
     var isFollowing: Bool = false
+    private var isUploading: Bool = false
     
     private var selectedSegment: Int = 0
     
@@ -31,19 +32,22 @@ class ProfileTableViewController: UITableViewController {
         self.navigationItem.title = nil
         self.tableView.delaysContentTouches = false
         
-        
-        
         if self.isCurrentUser {
+            // Set by MaintTabBarController.
             self.getCurrentUser()
         } else {
-            // User should already be set by other vc.
-            //self.navigationItem.title = self.user?.preferredUsername
-            // Check if this user is followed by currentUser.
-//            self.getUserRelationship()
-//            // Get posts.
-//            if let userId = self.user?.userId {
-//                self.queryUserPostsDateSorted(userId)
-//            }
+            // User should already be set by other VC.
+            if self.user?.userId == AWSClientManager.defaultClientManager().credentialsProvider?.identityId {
+                // In case current user come to this VC from another parent (example search).
+                self.isCurrentUser = true
+            }
+            self.navigationItem.title = self.user?.preferredUsername
+            self.getUserRelationship()
+            
+            // Get posts.
+            if let userId = self.user?.userId {
+                self.queryUserPostsDateSorted(userId)
+            }
         }
     }
 
@@ -71,54 +75,52 @@ class ProfileTableViewController: UITableViewController {
     // MARK: UITableViewDataSource
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 15
+        return 13
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
-            // ProfilePic.
+            // ProfileMain.
             return 1
         case 1:
-            // ProfileFullName.
-            return 1
-        case 2:
-            // ProfileProfession.
-            return 1
-        case 3:
-            // ProfileLocation.
-            return 1
-        case 4:
             // ProfileButtons.
             return 1
-        case 5:
+        case 2:
             // ProfileSegmentedControl.
             return 1
-        case 6:
+        case 3:
+            // Uploading.
+            if self.selectedSegment == 0 {
+                return self.isUploading ? 1 : 0
+            } else {
+                return 0
+            }
+        case 4:
             // PostsSmall.
             return self.selectedSegment == 0 ? self.posts.count : 0
-        case 7:
+        case 5:
             // ProfileHeader About.
             return self.selectedSegment == 0 ? 0 : 1
-        case 8:
+        case 6:
             // Profile About.
             return self.selectedSegment == 0 ? 0 : 1
-        case 9:
+        case 7:
             // ProfileHeader TopCategories.
             return self.selectedSegment == 0 ? 0 : 1
-        case 10:
+        case 8:
             // ProfileTopCategories
             return self.selectedSegment == 0 ? 0 : self.topCategories.count
-        case 11:
+        case 9:
             // ProfileHeader WorkExperience.
             return self.selectedSegment == 0 ? 0 : 1
-        case 12:
+        case 10:
             // WorkExperience
             return self.selectedSegment == 0 ? 0 : 1
-        case 13:
+        case 11:
             // ProfileHeader Education.
             return self.selectedSegment == 0 ? 0 : 1
-        case 14:
+        case 12:
             // Education
             return self.selectedSegment == 0 ? 0 : 1
         default:
@@ -129,36 +131,36 @@ class ProfileTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         switch indexPath.section {
         case 0:
-            let cell = tableView.dequeueReusableCellWithIdentifier("cellProfilePic", forIndexPath: indexPath) as! ProfilePicTableViewCell
+            let cell = tableView.dequeueReusableCellWithIdentifier("cellProfileMain", forIndexPath: indexPath) as! ProfileMainTableViewCell
             cell.profilePicImageView.image = self.user?.profilePic
-            return cell
-        case 1:
-            let cell = tableView.dequeueReusableCellWithIdentifier("cellProfileFullName", forIndexPath: indexPath) as! ProfileFullNameTableViewCell
             cell.fullNameLabel.text = self.user?.fullName
-            return cell
-        case 2:
-            let cell = tableView.dequeueReusableCellWithIdentifier("cellProfileProfession", forIndexPath: indexPath) as! ProfileProfessionTableViewCell
             cell.professionLabel.text = self.user?.profession
-            return cell
-        case 3:
-            let cell = tableView.dequeueReusableCellWithIdentifier("cellProfileLocation", forIndexPath: indexPath) as! ProfileLocationTableViewCell
             cell.locationLabel.text = self.user?.location
             return cell
-        case 4:
+        case 1:
             let cell = tableView.dequeueReusableCellWithIdentifier("cellProfileButtons", forIndexPath: indexPath) as! ProfileButtonsTableViewCell
             if self.isCurrentUser {
                 cell.setEditButton()
                 cell.followButton.addTarget(self, action: #selector(ProfileTableViewController.editButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+            } else if self.isFollowing {
+                cell.setFollowingButton()
+                cell.followButton.addTarget(self, action: #selector(ProfileTableViewController.followButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+            } else {
+                cell.setFollowButton()
+                cell.followButton.addTarget(self, action: #selector(ProfileTableViewController.followButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
             }
             cell.numberOfPostsButton.setTitle(self.numberOfPosts?.numberToString(), forState: UIControlState.Normal)
             return cell
-        case 5:
+        case 2:
             let cell = tableView.dequeueReusableCellWithIdentifier("cellProfileSegmentedControl", forIndexPath: indexPath) as! ProfileSegmentedControlTableViewCell
             self.selectedSegment == 0 ? cell.setPostsButtonActive() : cell.setAboutButtonActive()
             cell.postsButton.addTarget(self, action: #selector(ProfileTableViewController.postsSegmentButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
             cell.aboutButton.addTarget(self, action: #selector(ProfileTableViewController.aboutSegmentButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
             return cell
-        case 6:
+        case 3:
+            let cell = tableView.dequeueReusableCellWithIdentifier("cellUploading", forIndexPath: indexPath) as! UploadingTableViewCell
+            return cell
+        case 4:
             let cell = tableView.dequeueReusableCellWithIdentifier("cellPostSmall", forIndexPath: indexPath) as! PostSmallTableViewCell
             let post = posts[indexPath.row]
             cell.postImageView.image = post.image
@@ -166,40 +168,40 @@ class ProfileTableViewController: UITableViewController {
             cell.categoryLabel.text = post.category
             cell.timeLabel.text = post.creationDateString
             return cell
-        case 7:
+        case 5:
             let cell = tableView.dequeueReusableCellWithIdentifier("cellProfileHeader", forIndexPath: indexPath) as! ProfileHeaderTableViewCell
             cell.headerLabel.text = "About"
             return cell
-        case 8:
+        case 6:
             let cell = tableView.dequeueReusableCellWithIdentifier("cellProfileAbout", forIndexPath: indexPath) as! ProfileAboutTableViewCell
             cell.aboutLabel.text = self.user?.about
             return cell
-        case 9:
+        case 7:
             let cell = tableView.dequeueReusableCellWithIdentifier("cellProfileHeader", forIndexPath: indexPath) as! ProfileHeaderTableViewCell
             cell.headerLabel.text = "Top Skills"
             return cell
-        case 10:
+        case 8:
             let cell = tableView.dequeueReusableCellWithIdentifier("cellProfileTopCategory", forIndexPath: indexPath) as! ProfileTopCategoryTableViewCell
             cell.topCategoryNameLabel.text = self.topCategories[indexPath.row]
             let numberOfPosts = self.topCategoriesNumberOfPosts[indexPath.row]
             let numberOfPostsText = numberOfPosts > 1 ? "\(numberOfPosts.numberToString()) posts" : "\(numberOfPosts.numberToString()) post"
             cell.numberOfPostsLabel.text = numberOfPostsText
             return cell
-        case 11:
+        case 9:
             let cell = tableView.dequeueReusableCellWithIdentifier("cellProfileHeader", forIndexPath: indexPath) as! ProfileHeaderTableViewCell
             cell.headerLabel.text = "Work Expericence"
             return cell
-        case 12:
+        case 10:
             let cell = tableView.dequeueReusableCellWithIdentifier("cellProfileExperience", forIndexPath: indexPath) as! ProfileExperienceTableViewCell
             cell.positionLabel.text = "Agricultural Engineer"
             cell.organizationLabel.text = "Food, Inc."
             cell.timePeriodLabel.text = "Sep 2014 - Jul 2016"
             return cell
-        case 13:
+        case 11:
             let cell = tableView.dequeueReusableCellWithIdentifier("cellProfileHeader", forIndexPath: indexPath) as! ProfileHeaderTableViewCell
             cell.headerLabel.text = "Education"
             return cell
-        case 14:
+        case 12:
             let cell = tableView.dequeueReusableCellWithIdentifier("cellProfileExperience", forIndexPath: indexPath) as! ProfileExperienceTableViewCell
             cell.positionLabel.text = "PhD in Agricultural Engineering"
             cell.organizationLabel.text = "Stanford University"
@@ -214,7 +216,7 @@ class ProfileTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        if indexPath.section == 6 {
+        if indexPath.section == 4 {
             self.performSegueWithIdentifier("segueToPostDetailsVc", sender: indexPath)
         }
     }
@@ -225,38 +227,34 @@ class ProfileTableViewController: UITableViewController {
         switch indexPath.section {
         case 0:
             cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
-        case 1:
-            cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
-        case 2:
-            cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
         case 3:
             cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
-        case 6:
-            cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 16.0)
+        case 4:
+            cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
             cell.selectionStyle = UITableViewCellSelectionStyle.Default
-        case 7:
+        case 5:
             if self.user?.about != nil {
                 cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
             } else {
                 cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 16.0)
             }
-        case 8:
+        case 6:
             cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 16.0)
-        case 9:
+        case 7:
             if self.topCategories.count > 0 {
                 cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
             } else {
                 cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 16.0)
             }
-        case 10:
+        case 8:
             cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
+        case 9:
+            cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
+        case 10:
+            cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 16.0)
         case 11:
             cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
         case 12:
-            cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 16.0)
-        case 13:
-            cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
-        case 14:
             cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 16.0)
         default:
             return
@@ -266,34 +264,30 @@ class ProfileTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         switch indexPath.section {
         case 0:
-            return 141.0
+            return 112.0
         case 1:
-            return 30.0
+            return 50.0
         case 2:
-            return 30.0
+            return 50.0
         case 3:
-            return 30.0
+            return 72.0
         case 4:
-            return 106.0
+            return 108.0
         case 5:
             return 50.0
         case 6:
-            return 133.0
+            return 37.0
         case 7:
             return 50.0
         case 8:
-            return 37.0
+            return 29.0
         case 9:
             return 50.0
         case 10:
-            return 29.0
+            return 74.0
         case 11:
             return 50.0
         case 12:
-            return 74.0
-        case 13:
-            return 50.0
-        case 14:
             return 74.0
         default:
             return 0.0
@@ -303,19 +297,19 @@ class ProfileTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         switch indexPath.section {
         case 0:
-            return 141.0
+            return 112.0
         case 1:
-            return UITableViewAutomaticDimension
+            return 50.0
         case 2:
-            return UITableViewAutomaticDimension
+            return 50.0
         case 3:
-            return UITableViewAutomaticDimension
+            return 72.0
         case 4:
-            return 106.0
+            return 108.0
         case 5:
             return 50.0
         case 6:
-            return 133.0
+            return UITableViewAutomaticDimension
         case 7:
             return 50.0
         case 8:
@@ -327,10 +321,6 @@ class ProfileTableViewController: UITableViewController {
         case 11:
             return 50.0
         case 12:
-            return UITableViewAutomaticDimension
-        case 13:
-            return 50.0
-        case 14:
             return UITableViewAutomaticDimension
         default:
             return 0.0
@@ -351,8 +341,16 @@ class ProfileTableViewController: UITableViewController {
         self.presentViewController(alertController, animated: true, completion: nil)
     }
     
-    @IBAction func followersButtonTapped(sender: AnyObject) {
-        self.performSegueWithIdentifier("segueToUsersVc", sender: self)
+    @IBAction func unwindToProfileTableViewController(segue: UIStoryboardSegue) {
+        if segue.identifier == "segueUnwindToProfileVc",
+            let sourceViewController = segue.sourceViewController as? EditPostTableViewController {
+            guard let imageData = sourceViewController.imageData else {
+                    return
+            }
+            self.isUploading = true
+            self.tableView.reloadData()
+            self.uploadImage(imageData, title: sourceViewController.postTitle, description: sourceViewController.postDescription, category: sourceViewController.category)
+        }
     }
     
     // MARK: Tappers
@@ -379,12 +377,12 @@ class ProfileTableViewController: UITableViewController {
     
     private func getCurrentUser() {
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-        AWSClientManager.defaultClientManager().getCurrentUser({
+        PRFYDynamoDBManager.defaultDynamoDBManager().getCurrentUserDynamoDB({
             (task: AWSTask) in
             dispatch_async(dispatch_get_main_queue(), {
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                 if let error = task.error {
-                    print("getCurrentUser error: \(error.localizedDescription)")
+                    print("getCurrentUser error: \(error)")
                 } else {
                     if let awsUser = task.result as? AWSUser {
                         let user = User(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, profession: awsUser._profession, profilePicUrl: awsUser._profilePicUrl, location: awsUser._location, about: awsUser._about)
@@ -394,7 +392,7 @@ class ProfileTableViewController: UITableViewController {
                         
                         // Get profilePic.
                         if let profilePicUrl = awsUser._profilePicUrl {
-                            self.downloadImage(profilePicUrl, indexPath: nil)
+                            self.downloadImage(profilePicUrl, indexPath: nil, isUserProfilePic: true)
                         }
                         
                         // Query user posts.
@@ -410,19 +408,18 @@ class ProfileTableViewController: UITableViewController {
     
     private func queryUserPostsDateSorted(userId: String) {
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-        AWSClientManager.defaultClientManager().queryUserPostsDateSorted(userId, completionHandler: {
-            (task: AWSTask) in
+        PRFYDynamoDBManager.defaultDynamoDBManager().queryUserPostsDateSortedDynamoDB(userId, completionHandler: {
+            (response: AWSDynamoDBPaginatedOutput?, error: NSError?) in
             dispatch_async(dispatch_get_main_queue(), {
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-                if let error = task.error {
-                    print("queryUserPostsDateSorted error: \(error.localizedDescription)")
+                if let error = error {
+                    print("queryUserPostsDateSorted error: \(error)")
                 } else {
-                    if let output = task.result as? AWSDynamoDBPaginatedOutput,
-                        let awsPosts = output.items as? [AWSPost] {
+                    if let awsPosts = response?.items as? [AWSPost] {
                         
                         // Update posts count.
                         self.numberOfPosts = awsPosts.count
-                        self.tableView.reloadSections(NSIndexSet(index: 4), withRowAnimation: UITableViewRowAnimation.None)
+                        self.tableView.reloadData()
                         
                         // Update top categories.
                         self.updateTopCategories(awsPosts.flatMap({$0._category}))
@@ -430,18 +427,42 @@ class ProfileTableViewController: UITableViewController {
                         // Iterate through all posts.
                         for (index, awsPost) in awsPosts.enumerate() {
                             
-                            let indexPath = NSIndexPath(forRow: index, inSection: 6)
+                            let indexPath = NSIndexPath(forRow: index, inSection: 4)
                             // Data is denormalized so we store user data in posts table!
                             let user = self.user
                             let post = Post(postId: awsPost._postId, title: awsPost._title, postDescription: awsPost._description, imageUrl: awsPost._imageUrl, category: awsPost._category, creationDate: awsPost._creationDate, user: user)
                             self.posts.append(post)
                             self.tableView.reloadData()
-    
+                            
                             // Get postPic.
                             if let imageUrl = awsPost._imageUrl {
-                                self.downloadImage(imageUrl, indexPath: indexPath)
+                                self.downloadImage(imageUrl, indexPath: indexPath, isUserProfilePic: false)
                             }
                         }
+                    }
+                }
+            })
+        })
+    }
+    
+    // In background assuming it will not fail :)
+    private func savePost(imageData: NSData, imageUrl: String?, title: String?, description: String?, category: String?) {
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().savePostDynamoDB(imageUrl, title: title, description: description, category: category, user: self.user, completionHandler: {
+            (task: AWSTask) in
+            dispatch_async(dispatch_get_main_queue(), {
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                if let error = task.error {
+                    print("savePost error: \(error)")
+                } else {
+                    if let awsPost = task.result as? AWSPost {
+                        let user = self.user
+                        let post = Post(postId: awsPost._postId, title: awsPost._title, postDescription: awsPost._description, imageUrl: awsPost._imageUrl, category: awsPost._category, creationDate: awsPost._creationDate, user: user)
+                        let image = UIImage(data: imageData)
+                        post.image = image
+                        self.posts.insert(post, atIndex: 0)
+                        self.isUploading = false
+                        self.tableView.reloadData()
                     }
                 }
             })
@@ -449,17 +470,22 @@ class ProfileTableViewController: UITableViewController {
         })
     }
     
-    private func downloadImage(imageKey: String, indexPath: NSIndexPath?) {
+    private func downloadImage(imageKey: String, indexPath: NSIndexPath?, isUserProfilePic: Bool) {
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-        
         let content = AWSUserFileManager.custom(key: "USEast1BucketManager").contentWithKey(imageKey)
         // TODO check if content.isImage()
-        var image: UIImage?
         if content.cached {
             print("Content cached:")
-            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-            image = UIImage(data: content.cachedData)
-            self.updateUIWithImage(image, indexPath: indexPath)
+            dispatch_async(dispatch_get_main_queue(), {
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+            })
+            let image = UIImage(data: content.cachedData)
+            if isUserProfilePic {
+                self.user?.profilePic = image
+            } else if let indexPath = indexPath {
+                self.posts[indexPath.row].image = image
+                self.tableView.reloadData()
+            }
         } else {
             print("Download content:")
             content.downloadWithDownloadType(
@@ -474,11 +500,17 @@ class ProfileTableViewController: UITableViewController {
                     dispatch_async(dispatch_get_main_queue(), {
                         UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                         if let error = error {
-                            print("Download content error: \(error.localizedDescription)")
+                            print("downloadImage error: \(error)")
                         } else {
                             if let imageData = data {
-                                image = UIImage(data: imageData)
-                                self.updateUIWithImage(image, indexPath: indexPath)
+                                let image = UIImage(data: imageData)
+                                if isUserProfilePic {
+                                    self.user?.profilePic = image
+                                    self.tableView.reloadData()
+                                } else if let indexPath = indexPath {
+                                    self.posts[indexPath.row].image = image
+                                    self.tableView.reloadData()
+                                }
                             }
                         }
                     })
@@ -486,22 +518,53 @@ class ProfileTableViewController: UITableViewController {
         }
     }
     
+    private func uploadImage(imageData: NSData, title: String?, description: String?, category: String?) {
+        let uniqueImageName = NSUUID().UUIDString.lowercaseString.stringByReplacingOccurrencesOfString("-", withString: "")
+        let imageKey = "public/\(uniqueImageName).jpg"
+        let localContent = AWSUserFileManager.custom(key: "USEast1BucketManager").localContentWithData(imageData, key: imageKey)
+        
+        print("uploadImageS3:")
+        self.isUploading = true
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        localContent.uploadWithPinOnCompletion(
+            false,
+            progressBlock: {
+                (content: AWSLocalContent?, progress: NSProgress?) -> Void in
+                // TODO
+            }, completionHandler: {
+                (content: AWSLocalContent?, error: NSError?) -> Void in
+                dispatch_async(dispatch_get_main_queue(), {
+                    UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                    if let error = error {
+                        print("uploadImageS3 error: \(error)")
+                        self.isUploading = false
+                        self.tableView.reloadData()
+                        let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.userInfo["message"] as? String, cancelButtonTitle: "Ok")
+                        self.presentViewController(alertController, animated: true, completion: nil)
+                    } else {
+                        // Save post in DynamoDB.
+                        self.savePost(imageData, imageUrl: imageKey, title: title, description: description, category: category)
+                    }
+                })
+            })
+    }
+    
     // Check if currentUser is following this user.
     private func getUserRelationship() {
-        guard let followedId = self.user?.userId else {
+        guard let followingId = self.user?.userId else {
             return
         }
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-        AWSClientManager.defaultClientManager().getUserRelationship(followedId, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().getUserRelationshipDynamoDB(followingId, completionHandler: {
             (task: AWSTask) in
             dispatch_async(dispatch_get_main_queue(), {
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                 if let error = task.error {
-                    print("Error: \(error.userInfo["message"])")
+                    print("getUserRelationship error: \(error)")
                 } else {
                     if task.result != nil {
                         self.isFollowing = true
-                        self.tableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.None)
+                        self.tableView.reloadData()
                     }
                 }
             })
@@ -510,19 +573,26 @@ class ProfileTableViewController: UITableViewController {
     }
     
     private func followUser() {
-        guard let followedId = self.user?.userId else {
+        guard let followingId = self.user?.userId else {
             return
         }
+        // Setting following user info for faster query on Home.
+        // Data is denormalized.
+        let followingFirstName = self.user?.firstName
+        let followingLastName = self.user?.lastName
+        let followingPreferredUsername = self.user?.preferredUsername
+        let followingProfession = self.user?.profession
+        let followingProfilePicUrl = self.user?.profilePicUrl
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-        AWSClientManager.defaultClientManager().saveUserRelationship(followedId, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().saveUserRelationshipDynamoDB(followingId, followingFirstName: followingFirstName, followingLastName: followingLastName, followingPreferredUsername: followingPreferredUsername, followingProfession: followingProfession, followingProfilePicUrl: followingProfilePicUrl, numberOfNewPosts: nil,completionHandler: {
             (task: AWSTask) in
             dispatch_async(dispatch_get_main_queue(), {
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                 if let error = task.error {
-                    print("Error: \(error.userInfo["message"])")
+                    print("followUser error: \(error)")
                 } else {
                     self.isFollowing = true
-                    self.tableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.None)
+                    self.tableView.reloadData()
                 }
             })
             return nil
@@ -530,19 +600,19 @@ class ProfileTableViewController: UITableViewController {
     }
     
     private func unfollowUser() {
-        guard let followedId = self.user?.userId else {
+        guard let followingId = self.user?.userId else {
             return
         }
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-        AWSClientManager.defaultClientManager().removeUserRelationship(followedId, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().removeUserRelationshipDynamoDB(followingId, completionHandler: {
             (task: AWSTask) in
             dispatch_async(dispatch_get_main_queue(), {
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                 if let error = task.error {
-                    print("Error: \(error.userInfo["message"])")
+                    print("unfollowUser error: \(error)")
                 } else {
                     self.isFollowing = false
-                    self.tableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.None)
+                    self.tableView.reloadData()
                 }
             })
             return nil
@@ -557,18 +627,6 @@ class ProfileTableViewController: UITableViewController {
             }
             return nil
         })
-    }
-    
-    // MARK: Helpers
-    
-    private func updateUIWithImage(image: UIImage?, indexPath: NSIndexPath?) {
-        if let indexPath = indexPath {
-            self.posts[indexPath.row].image = image
-            self.tableView.reloadData()
-        } else {
-            self.user?.profilePic = image
-            self.tableView.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.None)
-        }
     }
     
     private func updateTopCategories(categories: [String]) {

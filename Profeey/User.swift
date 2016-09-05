@@ -6,6 +6,8 @@
 //  Copyright © 2016 Profeey. All rights reserved.
 //
 
+import Foundation
+
 class User: NSObject {
     
     // Properties.
@@ -20,6 +22,9 @@ class User: NSObject {
     
     // For SignUp flow.
     var email: String?
+    
+    // For UserRelationship
+    var numberOfNewPosts: NSNumber?
     
     // Generated.
     var fullName: String? {
@@ -43,6 +48,17 @@ class User: NSObject {
         self.profilePicUrl = profilePicUrl
         self.location = location
         self.about = about
+    }
+    
+    convenience init(userId: String?, firstName: String?, lastName: String?, preferredUsername: String?, profession: String?, profilePicUrl: String?, numberOfNewPosts: NSNumber?) {
+        self.init()
+        self.userId = userId
+        self.firstName = firstName
+        self.lastName = lastName
+        self.preferredUsername = preferredUsername
+        self.profession = profession
+        self.profilePicUrl = profilePicUrl
+        self.numberOfNewPosts = numberOfNewPosts
     }
     
     convenience init(firstName: String?, lastName: String?, preferredUsername: String?, profession: String?, profilePic: UIImage?) {

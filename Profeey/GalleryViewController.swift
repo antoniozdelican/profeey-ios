@@ -19,6 +19,7 @@ class GalleryViewController: UIViewController {
 
     var galleryDelegate: GalleryDelegate?
     var albumsDelegate: AlbumsDelegate?
+    var isProfilePic: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,6 +40,7 @@ class GalleryViewController: UIViewController {
         if let destinationViewController = segue.destinationViewController as? GalleryCollectionViewController {
             destinationViewController.galleryCollectionViewDelegate = self
             self.albumsDelegate = destinationViewController
+            destinationViewController.isProfilePic = self.isProfilePic
         }
         if let navigationController = segue.destinationViewController as? UINavigationController,
             let childViewController = navigationController.childViewControllers[0] as? AlbumsTableViewController {

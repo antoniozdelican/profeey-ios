@@ -64,8 +64,4 @@ class PRFYS3Manager: NSObject, S3Manager {
                 }
         })
     }
-    
-    func deleteImageS3(imageKey: String, completionHandler: AWSContinuationBlock) {
-        
-    }
 }

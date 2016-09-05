@@ -77,7 +77,7 @@ class EditLocationTableViewController: UITableViewController {
         FullScreenIndicator.show()
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         
-        AWSClientManager.defaultClientManager().updateUserLocation(location, completionHandler: {
+        AWSClientManager.defaultClientManager().updateLocation(location, completionHandler: {
             (task: AWSTask) in
             dispatch_async(dispatch_get_main_queue(), {
                 

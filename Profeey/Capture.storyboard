@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="8RV-Uw-cfX">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="GE1-TC-5oI">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -7,23 +7,6 @@
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
-        <!--Fake Capture Navigation Controller-->
-        <scene sceneID="vLm-xJ-5gS">
-            <objects>
-                <navigationController id="8RV-Uw-cfX" customClass="FakeCaptureNavigationController" customModule="Profeey" customModuleProvider="target" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" tag="2" title="" image="ic_capture" id="XTe-CH-TgN">
-                        <inset key="imageInsets" minX="0.0" minY="6" maxX="0.0" maxY="-6"/>
-                    </tabBarItem>
-                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="4te-jG-bVx">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="7sx-ka-LPi" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="415" y="278"/>
-        </scene>
         <!--Scroll View Controller-->
         <scene sceneID="u2l-AF-6mS">
             <objects>
@@ -343,15 +326,7 @@
                             <constraint firstItem="nzr-yc-T7Z" firstAttribute="top" secondItem="J1g-8Q-4Hv" secondAttribute="bottom" id="5c3-37-Xcb"/>
                             <constraint firstItem="nzr-yc-T7Z" firstAttribute="leading" secondItem="V3Q-Yv-ewE" secondAttribute="leading" id="VMC-e7-6x4"/>
                             <constraint firstAttribute="trailing" secondItem="nzr-yc-T7Z" secondAttribute="trailing" id="Z2o-V0-9Lj"/>
-                            <constraint firstItem="nzr-yc-T7Z" firstAttribute="top" secondItem="V3Q-Yv-ewE" secondAttribute="top" id="Zof-Xy-o9B"/>
-                            <constraint firstItem="ZiY-A5-9Nw" firstAttribute="top" secondItem="nzr-yc-T7Z" secondAttribute="bottom" id="tfF-nA-Ku0"/>
                         </constraints>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="Zof-Xy-o9B"/>
-                                <exclude reference="tfF-nA-Ku0"/>
-                            </mask>
-                        </variation>
                     </view>
                     <navigationItem key="navigationItem" id="3IA-35-Wkt">
                         <barButtonItem key="leftBarButtonItem" image="ic_back_blue" id="8KF-4P-bBp">
@@ -373,10 +348,13 @@
                         <outlet property="imageViewHeightConstraint" destination="fIA-Da-UiA" id="TLa-ux-VR9"/>
                         <outlet property="imageViewWidthConstraint" destination="x5o-wS-U3g" id="Ucw-N1-Dsq"/>
                         <outlet property="scrollView" destination="nzr-yc-T7Z" id="DoN-33-ccV"/>
+                        <outlet property="scrollViewAspectRatioConstraint" destination="h5C-7H-u1T" id="Rgw-ft-xhD"/>
                         <segue destination="dPG-oD-tIa" kind="show" identifier="segueToEditVc" id="oJL-Zq-Lgp"/>
+                        <segue destination="CDH-9T-M81" kind="unwind" identifier="segueUnwindToEditProfileVc" unwindAction="unwindToEditProfileTableViewController:" id="6Vg-pq-AP8"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lK9-nh-PBh" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="CDH-9T-M81" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="4737" y="969"/>
         </scene>
@@ -577,8 +555,8 @@
                         <outlet property="removeCategoryButton" destination="TDc-37-pmQ" id="9Aw-Yt-Rg8"/>
                         <outlet property="thumbnailImageView" destination="Kx5-9Q-o51" id="loQ-Kt-hdh"/>
                         <outlet property="titleTextField" destination="0jG-eK-aad" id="OTx-eC-sxD"/>
-                        <segue destination="kfA-0C-Wiv" kind="unwind" identifier="segueUnwindToHomeVc" unwindAction="unwindToHomeTableViewController:" id="2Ya-M6-2En"/>
                         <segue destination="Guk-ox-nQ3" kind="presentation" identifier="segueToAddCategoryVc" id="XA6-xp-xAV"/>
+                        <segue destination="kfA-0C-Wiv" kind="unwind" identifier="segueUnwindToProfileVc" unwindAction="unwindToProfileTableViewController:" id="T2G-0Q-TBM"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GL7-Ly-xWK" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -819,127 +797,13 @@
             </objects>
             <point key="canvasLocation" x="4061" y="-437"/>
         </scene>
-        <!--Preview Profile Pic View Controller-->
-        <scene sceneID="B22-gR-4ej">
-            <objects>
-                <viewController id="yqJ-g0-vqq" customClass="PreviewProfilePicViewController" customModule="Profeey" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="UgP-l7-9dv"/>
-                        <viewControllerLayoutGuide type="bottom" id="TJN-GL-woA"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="qe1-OA-Z4P">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="900"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" alwaysBounceHorizontal="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EMk-if-p6Z">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="900"/>
-                                <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="eRf-aC-vV9">
-                                        <rect key="frame" x="0.0" y="0.0" width="600" height="900"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="900" id="4n7-wu-QfY"/>
-                                            <constraint firstAttribute="width" constant="600" id="4ue-Y9-jgv"/>
-                                        </constraints>
-                                    </imageView>
-                                </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="bottom" secondItem="eRf-aC-vV9" secondAttribute="bottom" id="3FL-lu-bnd"/>
-                                    <constraint firstItem="eRf-aC-vV9" firstAttribute="height" secondItem="EMk-if-p6Z" secondAttribute="height" id="7di-Aw-WwY"/>
-                                    <constraint firstItem="eRf-aC-vV9" firstAttribute="leading" secondItem="EMk-if-p6Z" secondAttribute="leading" id="Hfn-ai-7Ay"/>
-                                    <constraint firstItem="eRf-aC-vV9" firstAttribute="leading" secondItem="EMk-if-p6Z" secondAttribute="leading" id="KzT-1j-PJ1"/>
-                                    <constraint firstItem="eRf-aC-vV9" firstAttribute="top" secondItem="EMk-if-p6Z" secondAttribute="top" id="Lip-St-UpW"/>
-                                    <constraint firstItem="eRf-aC-vV9" firstAttribute="top" secondItem="EMk-if-p6Z" secondAttribute="top" id="NAN-4q-k2I"/>
-                                    <constraint firstAttribute="trailing" secondItem="eRf-aC-vV9" secondAttribute="trailing" id="dTW-MW-TFQ"/>
-                                    <constraint firstAttribute="bottom" secondItem="eRf-aC-vV9" secondAttribute="bottom" id="fSk-ev-9KZ"/>
-                                    <constraint firstItem="eRf-aC-vV9" firstAttribute="width" secondItem="EMk-if-p6Z" secondAttribute="width" id="hSs-QD-5vv"/>
-                                    <constraint firstAttribute="trailing" secondItem="eRf-aC-vV9" secondAttribute="trailing" id="zeu-UZ-QGg"/>
-                                </constraints>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="7di-Aw-WwY"/>
-                                        <exclude reference="Hfn-ai-7Ay"/>
-                                        <exclude reference="NAN-4q-k2I"/>
-                                        <exclude reference="fSk-ev-9KZ"/>
-                                        <exclude reference="hSs-QD-5vv"/>
-                                        <exclude reference="zeu-UZ-QGg"/>
-                                    </mask>
-                                </variation>
-                            </scrollView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bg_crop_667h" translatesAutoresizingMaskIntoConstraints="NO" id="7k4-3P-z4r">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="900"/>
-                            </imageView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1Qg-6z-9EV" userLabel="Custom Toolbar View">
-                                <rect key="frame" x="0.0" y="806" width="600" height="94"/>
-                                <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="V9i-Mm-xAD">
-                                        <rect key="frame" x="263" y="10" width="74" height="74"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="74" id="IzP-KH-g7P"/>
-                                            <constraint firstAttribute="height" constant="74" id="WhH-gs-grF"/>
-                                        </constraints>
-                                        <state key="normal" image="btn_capture_ok"/>
-                                        <connections>
-                                            <action selector="okButtonTapped:" destination="yqJ-g0-vqq" eventType="touchUpInside" id="lvt-lm-bBy"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstItem="V9i-Mm-xAD" firstAttribute="centerY" secondItem="1Qg-6z-9EV" secondAttribute="centerY" id="BBI-Im-fw9"/>
-                                    <constraint firstItem="V9i-Mm-xAD" firstAttribute="centerX" secondItem="1Qg-6z-9EV" secondAttribute="centerX" id="ESS-rl-lsj"/>
-                                    <constraint firstAttribute="height" constant="94" id="kOx-eJ-WjO"/>
-                                </constraints>
-                            </view>
-                        </subviews>
-                        <color key="backgroundColor" red="0.98039215690000003" green="0.98039215690000003" blue="0.98039215690000003" alpha="1" colorSpace="calibratedRGB"/>
-                        <constraints>
-                            <constraint firstAttribute="trailing" secondItem="7k4-3P-z4r" secondAttribute="trailing" id="2Fo-UH-sYk"/>
-                            <constraint firstItem="TJN-GL-woA" firstAttribute="top" secondItem="7k4-3P-z4r" secondAttribute="bottom" id="CrR-xU-H7c"/>
-                            <constraint firstAttribute="trailing" secondItem="1Qg-6z-9EV" secondAttribute="trailing" id="E8Z-PZ-m0L"/>
-                            <constraint firstItem="TJN-GL-woA" firstAttribute="top" secondItem="1Qg-6z-9EV" secondAttribute="bottom" id="EH4-PI-PHU"/>
-                            <constraint firstItem="EMk-if-p6Z" firstAttribute="top" secondItem="qe1-OA-Z4P" secondAttribute="top" id="Yqc-hr-GtJ"/>
-                            <constraint firstItem="7k4-3P-z4r" firstAttribute="leading" secondItem="qe1-OA-Z4P" secondAttribute="leading" id="e7F-Mp-HgP"/>
-                            <constraint firstItem="1Qg-6z-9EV" firstAttribute="leading" secondItem="qe1-OA-Z4P" secondAttribute="leading" id="mJ0-EQ-UK9"/>
-                            <constraint firstItem="EMk-if-p6Z" firstAttribute="leading" secondItem="qe1-OA-Z4P" secondAttribute="leading" id="sEm-dj-EQK"/>
-                            <constraint firstAttribute="trailing" secondItem="EMk-if-p6Z" secondAttribute="trailing" id="vwt-Bw-S5q"/>
-                            <constraint firstItem="TJN-GL-woA" firstAttribute="top" secondItem="EMk-if-p6Z" secondAttribute="bottom" id="vyX-dZ-Uht"/>
-                            <constraint firstItem="7k4-3P-z4r" firstAttribute="top" secondItem="qe1-OA-Z4P" secondAttribute="top" id="z4b-M7-wRA"/>
-                        </constraints>
-                    </view>
-                    <navigationItem key="navigationItem" id="CDN-92-oNy">
-                        <barButtonItem key="leftBarButtonItem" image="btn_back" id="dCd-I1-Shc">
-                            <connections>
-                                <action selector="closeButtonTapped:" destination="yqJ-g0-vqq" id="s8p-pc-R0p"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
-                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <size key="freeformSize" width="600" height="900"/>
-                    <connections>
-                        <outlet property="cropImageView" destination="7k4-3P-z4r" id="chQ-Il-Mqm"/>
-                        <outlet property="imageView" destination="eRf-aC-vV9" id="Goq-f0-fhQ"/>
-                        <outlet property="imageViewHeightConstraint" destination="4n7-wu-QfY" id="QVQ-bI-9zH"/>
-                        <outlet property="imageViewWidthConstraint" destination="4ue-Y9-jgv" id="K4K-fp-qSJ"/>
-                        <outlet property="okButton" destination="V9i-Mm-xAD" id="cm5-9v-m5g"/>
-                        <outlet property="scrollView" destination="EMk-if-p6Z" id="tFF-3q-Wqw"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="gkM-cQ-Xt1" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="3895" y="2165"/>
-        </scene>
     </scenes>
     <resources>
-        <image name="bg_crop_667h" width="375" height="667"/>
-        <image name="btn_back" width="22" height="22"/>
-        <image name="btn_capture_ok" width="74" height="74"/>
         <image name="ic_arrow_down_blue" width="14" height="14"/>
         <image name="ic_arrow_down_highlighted" width="14" height="14"/>
         <image name="ic_back_blue" width="22" height="22"/>
         <image name="ic_camera" width="35" height="35"/>
         <image name="ic_camera_switch_black" width="22" height="22"/>
-        <image name="ic_capture" width="28" height="25"/>
         <image name="ic_categories_black" width="20" height="20"/>
         <image name="ic_close_black" width="22" height="22"/>
         <image name="ic_close_blue" width="22" height="22"/>

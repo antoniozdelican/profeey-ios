@@ -12,6 +12,9 @@ class ScrollViewController: UIViewController {
 
     @IBOutlet weak var scrollView: UIScrollView!
     
+    // If it's profilePic make it square.
+    var isProfilePic: Bool = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.automaticallyAdjustsScrollViewInsets = false
@@ -19,7 +22,6 @@ class ScrollViewController: UIViewController {
         // Prepare scrollView to show camera first.
         self.scrollView.layoutIfNeeded()
         self.scrollView.contentOffset = CGPointMake(self.view.bounds.width, 0.0)
-
     }
     
     override func prefersStatusBarHidden() -> Bool {
@@ -36,10 +38,12 @@ class ScrollViewController: UIViewController {
         if let navigationController = segue.destinationViewController as? UINavigationController,
             let childViewController = navigationController.childViewControllers[0] as? CaptureViewController {
             childViewController.captureDelegate = self
+            childViewController.isProfilePic = self.isProfilePic
         }
         if let navigationController = segue.destinationViewController as? UINavigationController,
             let childViewController = navigationController.childViewControllers[0] as? GalleryViewController {
             childViewController.galleryDelegate = self
+            childViewController.isProfilePic = self.isProfilePic
         }
     }
 }

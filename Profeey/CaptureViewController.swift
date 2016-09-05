@@ -20,34 +20,22 @@ class CaptureViewController: UIViewController {
     @IBOutlet weak var captureButton: UIButton!
     @IBOutlet var cameraOverlayView: UIView!
     @IBOutlet weak var cameraWindowSubView: UIView!
+    @IBOutlet weak var cameraWindowSubViewAspectRatioConstraint: NSLayoutConstraint!
     
     private var capturedPhoto: UIImage?
     var captureDelegate: CaptureDelegate?
+    var isProfilePic: Bool = false
     
     private var imagePickerController: UIImagePickerController!
-    private var isCameraAvailable: Bool = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         NSBundle.mainBundle().loadNibNamed("CameraOverlayView", owner: self, options: nil)
-        self.configureCamera()
-    }
-    
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
-        if !self.isCameraAvailable {
-            // Disable buttons.
-            self.flashButton.enabled = false
-            self.cameraSwitchButton.enabled = false
-            self.captureButton.enabled = false
-            // Present empty camera overlay view.
-            self.cameraOverlayView.frame = CGRectMake(0.0, 0.0, self.view.bounds.width, self.view.bounds.height)
-            self.view.insertSubview(self.cameraOverlayView, atIndex: 0)
-            // Present alert.
-            let alertController = self.getSimpleAlertWithTitle("No camera", message: "Your device doesn't have a camera.", cancelButtonTitle: "Ok")
-            self.presentViewController(alertController, animated: true, completion: nil)
+        if self.isProfilePic {
+            self.configureSquareAspectRatio()
         }
+        self.configureCamera()
     }
     
     override func preferredInterfaceOrientationForPresentation() -> UIInterfaceOrientation {
@@ -80,8 +68,30 @@ class CaptureViewController: UIViewController {
             self.view.insertSubview(self.imagePickerController.view, atIndex: 0)
             self.imagePickerController.didMoveToParentViewController(self)
         } else {
-            self.isCameraAvailable = false
+            // Disable buttons.
+            self.flashButton.enabled = false
+            self.cameraSwitchButton.enabled = false
+            self.captureButton.enabled = false
+            // Present empty camera overlay view.
+            self.cameraOverlayView.frame = CGRectMake(0.0, 0.0, self.view.bounds.width, self.view.bounds.height)
+            self.view.insertSubview(self.cameraOverlayView, atIndex: 0)
+            // Present alert.
+            let alertController = self.getSimpleAlertWithTitle("No camera", message: "Your device doesn't have a camera.", cancelButtonTitle: "Ok")
+            self.presentViewController(alertController, animated: true, completion: nil)
         }
+    }
+    
+    private func configureSquareAspectRatio() {
+        self.cameraWindowSubViewAspectRatioConstraint.active = false
+        let squareConstraint = NSLayoutConstraint(
+            item: self.cameraWindowSubView,
+            attribute: NSLayoutAttribute.Height,
+            relatedBy: NSLayoutRelation.Equal,
+            toItem: self.cameraWindowSubView,
+            attribute: NSLayoutAttribute.Width,
+            multiplier: 1.0,
+            constant: 0.0)
+        self.cameraWindowSubView.addConstraint(squareConstraint)
     }
     
     // MARK: Navigation
@@ -92,6 +102,7 @@ class CaptureViewController: UIViewController {
             childViewController.capturedPhoto = self.capturedPhoto
             self.capturedPhoto = nil
             childViewController.isPhoto = true
+            childViewController.isProfilePic = self.isProfilePic
         }
     }
     
@@ -160,7 +171,12 @@ extension CaptureViewController: UINavigationControllerDelegate, UIImagePickerCo
                 capturedPhoto = image
             }
         }
-        self.capturedPhoto = capturedPhoto
+        // If it's profilePic, make it square!
+        if self.isProfilePic {
+            self.capturedPhoto = capturedPhoto.crop(0.0, cropY: 0.0, cropWidth: capturedPhoto.size.width, cropHeight: capturedPhoto.size.width)
+        } else {
+          self.capturedPhoto = capturedPhoto
+        }
         self.performSegueWithIdentifier("segueToPreviewVc", sender: self)
     }
     

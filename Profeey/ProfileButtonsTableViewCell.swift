@@ -10,11 +10,9 @@ import UIKit
 
 class ProfileButtonsTableViewCell: UITableViewCell {
 
-    
-    @IBOutlet weak var followButton: UIButton!
     @IBOutlet weak var numberOfPostsButton: UIButton!
     @IBOutlet weak var numberOfFollowersButton: UIButton!
-    @IBOutlet weak var numberOfRecommendationsButton: UIButton!
+    @IBOutlet weak var followButton: UIButton!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -25,19 +23,19 @@ class ProfileButtonsTableViewCell: UITableViewCell {
     }
     
     func setEditButton() {
-        self.followButton.setTitle("EDIT", forState: UIControlState.Normal)
+        self.followButton.setTitle("Edit", forState: UIControlState.Normal)
         self.followButton.setTitleColor(Colors.greyDark, forState: UIControlState.Normal)
         self.followButton.setBackgroundImage(UIImage(named: "btn_grey_small"), forState: UIControlState.Normal)
     }
     
     func setFollowButton() {
-        self.followButton.setTitle("FOLLOW", forState: UIControlState.Normal)
+        self.followButton.setTitle("Follow", forState: UIControlState.Normal)
         self.followButton.setTitleColor(Colors.blue, forState: UIControlState.Normal)
         self.followButton.setBackgroundImage(UIImage(named: "btn_blue_small"), forState: UIControlState.Normal)
     }
     
     func setFollowingButton() {
-        self.followButton.setTitle("FOLLOWING", forState: UIControlState.Normal)
+        self.followButton.setTitle("Following", forState: UIControlState.Normal)
         self.followButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
         self.followButton.setBackgroundImage(UIImage(named: "btn_blue_small_selected"), forState: UIControlState.Normal)
     }

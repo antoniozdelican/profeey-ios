@@ -73,11 +73,9 @@ class MainTabBarController: UITabBarController {
     // MARK: Navigation
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        print("here")
         print(segue.destinationViewController)
         if let navigationController = segue.destinationViewController as? UINavigationController,
             let childViewController = navigationController.childViewControllers[0] as? ProfileTableViewController {
-            print("YEEES")
             childViewController.isCurrentUser = true
         }
     }

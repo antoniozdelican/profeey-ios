@@ -22,6 +22,7 @@ class AWSPost: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     
     var _userFirstName: String?
     var _userLastName: String?
+    var _userPreferredUsername: String?
     var _userProfession: String?
     var _userProfilePicUrl: String?
     
@@ -51,6 +52,7 @@ class AWSPost: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
             "_title" : "title",
             "_userFirstName" : "userFirstName",
             "_userLastName" : "userLastName",
+            "_userPreferredUsername" : "userPreferredUsername",
             "_userProfession" : "userProfession",
             "_userProfilePicUrl" : "userProfilePicUrl",
         ]

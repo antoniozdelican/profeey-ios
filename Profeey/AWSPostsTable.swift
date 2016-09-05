@@ -53,6 +53,21 @@ class AWSPostsTable: NSObject, Table {
         let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
         objectMapper.save(post).continueWithBlock(completionHandler)
     }
+    
+    // Find 10 posts from followed users.
+    func scanFollowedPosts(followedIds: [String], completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
+        let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
+        let scanExpression = AWSDynamoDBScanExpression()
+        
+//        scanExpression.filterExpression = "#userId IN (:followedIds)"
+//        scanExpression.expressionAttributeNames = ["#userId": "userId",]
+//        scanExpression.expressionAttributeValues = [":followedIds": "us-east-1:d513bfe7-e05a-4006-95fd-d90649aec20c" ,]
+        
+        scanExpression.limit = 10
+        
+        objectMapper.scan(AWSPost.self, expression: scanExpression, completionHandler: completionHandler)
+        
+    }
 }
 
 class AWSPostsPrimaryIndex: NSObject, Index {

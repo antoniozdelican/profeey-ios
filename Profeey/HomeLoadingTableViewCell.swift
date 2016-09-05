@@ -1,16 +1,16 @@
 //
-//  ProfileProfessionTableViewCell.swift
+//  HomeLoadingTableViewCell.swift
 //  Profeey
 //
-//  Created by Antonio Zdelican on 28/08/16.
+//  Created by Antonio Zdelican on 04/09/16.
 //  Copyright © 2016 Profeey. All rights reserved.
 //
 
 import UIKit
 
-class ProfileProfessionTableViewCell: UITableViewCell {
+class HomeLoadingTableViewCell: UITableViewCell {
 
-    @IBOutlet weak var professionLabel: UILabel!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     override func awakeFromNib() {
         super.awakeFromNib()

@@ -1,16 +1,16 @@
 //
-//  ProfileLocationTableViewCell.swift
+//  UploadingTableViewCell.swift
 //  Profeey
 //
-//  Created by Antonio Zdelican on 28/08/16.
+//  Created by Antonio Zdelican on 05/09/16.
 //  Copyright © 2016 Profeey. All rights reserved.
 //
 
 import UIKit
 
-class ProfileLocationTableViewCell: UITableViewCell {
+class UploadingTableViewCell: UITableViewCell {
 
-    @IBOutlet weak var locationLabel: UILabel!
+    @IBOutlet weak var progressView: UIProgressView!
     
     override func awakeFromNib() {
         super.awakeFromNib()

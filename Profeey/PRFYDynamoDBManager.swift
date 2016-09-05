@@ -51,19 +51,22 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
                 
                 print("getCurrentUserDynamoDB:")
                 let usersTable = AWSUsersTable()
-                usersTable.getUser(identityId, completionHandler: {
-                    (task: AWSTask) in
-                    if let error = task.error {
-                        print("getCurrentUserDynamoDB error:")
-                        return AWSTask(error: error).continueWithBlock(completionHandler)
-                    } else if (task.result as? AWSUser) != nil {
-                        print("getCurrentUserDynamoDB success!")
-                        return task.continueWithBlock(completionHandler)
-                    } else {
-                        print("This should not happen with getCurrentUserDynamoDB!")
-                        return AWSTask().continueWithBlock(completionHandler)
-                    }
-                })
+                usersTable.getUser(identityId, completionHandler: completionHandler)
+                
+//                let usersTable = AWSUsersTable()
+//                usersTable.getUser(identityId, completionHandler: {
+//                    (task: AWSTask) in
+//                    if let error = task.error {
+//                        print("getCurrentUserDynamoDB error:")
+//                        return AWSTask(error: error).continueWithBlock(completionHandler)
+//                    } else if (task.result as? AWSUser) != nil {
+//                        print("getCurrentUserDynamoDB success!")
+//                        return task.continueWithBlock(completionHandler)
+//                    } else {
+//                        print("This should not happen with getCurrentUserDynamoDB!")
+//                        return AWSTask().continueWithBlock(completionHandler)
+//                    }
+//                })
                 return nil
             } else {
                 print("This should not happen with getIdentityId!")
@@ -135,7 +138,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         })
     }
     
-    func updateUserProfessionDynamoDB(profession: String?, completionHandler: AWSContinuationBlock) {
+    func updateProfessionDynamoDB(profession: String?, completionHandler: AWSContinuationBlock) {
         AWSClientManager.defaultClientManager().credentialsProvider?.getIdentityId().continueWithBlock({
             (task: AWSTask) in
             if let error = task.error {
@@ -143,7 +146,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
                 return AWSTask(error: error).continueWithBlock(completionHandler)
             } else if let identityId = task.result as? String {
                 
-                print("updateUserProfessionDynamoDB:")
+                print("updateProfessionDynamoDB:")
                 let usersTable = AWSUsersTable()
                 let user = AWSUserProfession()
                 user._userId = identityId
@@ -151,10 +154,10 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
                 usersTable.saveUserProfession(user, completionHandler: {
                     (task: AWSTask) in
                     if let error = task.error {
-                        print("updateUserProfessionDynamoDB error:")
+                        print("updateProfessionDynamoDB error:")
                         return AWSTask(error: error).continueWithBlock(completionHandler)
                     } else {
-                        print("updateUserProfessionDynamoDB success!")
+                        print("updateProfessionDynamoDB success!")
                         return task.continueWithBlock(completionHandler)
                     }
                 })
@@ -166,7 +169,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         })
     }
     
-    func updateUserLocationDynamoDB(location: String?, completionHandler: AWSContinuationBlock) {
+    func updateLocationDynamoDB(location: String?, completionHandler: AWSContinuationBlock) {
         AWSClientManager.defaultClientManager().credentialsProvider?.getIdentityId().continueWithBlock({
             (task: AWSTask) in
             if let error = task.error {
@@ -174,7 +177,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
                 return AWSTask(error: error).continueWithBlock(completionHandler)
             } else if let identityId = task.result as? String {
                 
-                print("updateUserLocationDynamoDB:")
+                print("updateLocationDynamoDB:")
                 let usersTable = AWSUsersTable()
                 let user = AWSUserLocation()
                 user._userId = identityId
@@ -182,10 +185,10 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
                 usersTable.saveUserLocation(user, completionHandler: {
                     (task: AWSTask) in
                     if let error = task.error {
-                        print("updateUserLocationDynamoDB error:")
+                        print("updateLocationDynamoDB error:")
                         return AWSTask(error: error).continueWithBlock(completionHandler)
                     } else {
-                        print("updateUserLocationDynamoDB success!")
+                        print("updateLocationDynamoDB success!")
                         return task.continueWithBlock(completionHandler)
                     }
                 })
@@ -197,7 +200,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         })
     }
     
-    func updateUserAboutDynamoDB(about: String?, completionHandler: AWSContinuationBlock) {
+    func updateAboutDynamoDB(about: String?, completionHandler: AWSContinuationBlock) {
         AWSClientManager.defaultClientManager().credentialsProvider?.getIdentityId().continueWithBlock({
             (task: AWSTask) in
             if let error = task.error {
@@ -205,7 +208,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
                 return AWSTask(error: error).continueWithBlock(completionHandler)
             } else if let identityId = task.result as? String {
                 
-                print("updateUserAboutDynamoDB:")
+                print("updateAboutDynamoDB:")
                 let usersTable = AWSUsersTable()
                 let user = AWSUserAbout()
                 user._userId = identityId
@@ -213,10 +216,10 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
                 usersTable.saveUserAbout(user, completionHandler: {
                     (task: AWSTask) in
                     if let error = task.error {
-                        print("updateUserAboutDynamoDB error:")
+                        print("updateAboutDynamoDB error:")
                         return AWSTask(error: error).continueWithBlock(completionHandler)
                     } else {
-                        print("updateUserAboutDynamoDB success!")
+                        print("updateAboutDynamoDB success!")
                         return task.continueWithBlock(completionHandler)
                     }
                 })
@@ -229,33 +232,34 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
     }
     
     func updateProfilePicDynamoDB(profilePicUrl: String?, completionHandler: AWSContinuationBlock) {
-//        AWSClientManager.defaultClientManager().credentialsProvider?.getIdentityId().continueWithBlock({
-//            (task: AWSTask) in
-//            if let error = task.error {
-//                print("getIdentityId error: \(error.localizedDescription)")
-//                return AWSTask(error: error).continueWithBlock(completionHandler)
-//            } else if let identityId = task.result as? String {
-//                let usersTable = AWSUsersTable()
-//                let user = AWSUserProfilePic()
-//                user._userId = identityId
-//                user._profilePicUrl = profilePicUrl
-//                print("updateProfilePicDynamoDB:")
-//                usersTable.saveUserProfilePic(user, completionHandler: {
-//                    (task: AWSTask) in
-//                    if let error = task.error {
-//                        print("updateProfilePicDynamoDB error:")
-//                        return AWSTask(error: error).continueWithBlock(completionHandler)
-//                    } else {
-//                        print("updateProfilePicDynamoDB success!")
-//                        return task.continueWithBlock(completionHandler)
-//                    }
-//                })
-//                return nil
-//            } else {
-//                print("This should not happen with getIdentityId!")
-//                return AWSTask().continueWithBlock(completionHandler)
-//            }
-//        })
+        AWSClientManager.defaultClientManager().credentialsProvider?.getIdentityId().continueWithBlock({
+            (task: AWSTask) in
+            if let error = task.error {
+                print("getIdentityId error: \(error.localizedDescription)")
+                return AWSTask(error: error).continueWithBlock(completionHandler)
+            } else if let identityId = task.result as? String {
+                
+                print("updateUserProfilePicDynamoDB:")
+                let usersTable = AWSUsersTable()
+                let user = AWSUserProfilePic()
+                user._userId = identityId
+                user._profilePicUrl = profilePicUrl
+                usersTable.saveUserProfilePic(user, completionHandler: {
+                    (task: AWSTask) in
+                    if let error = task.error {
+                        print("updateUserProfilePicDynamoDB error:")
+                        return AWSTask(error: error).continueWithBlock(completionHandler)
+                    } else {
+                        print("updateUserProfilePicDynamoDB success!")
+                        return task.continueWithBlock(completionHandler)
+                    }
+                })
+                return nil
+            } else {
+                print("This should not happen with getIdentityId!")
+                return AWSTask().continueWithBlock(completionHandler)
+            }
+        })
     }
     
     func scanUsersDynamoDB(completionHandler: AWSContinuationBlock) {
@@ -275,7 +279,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
     
     // MARK: UserRelationships
     
-    func getUserRelationshipDynamoDB(followedId: String, completionHandler: AWSContinuationBlock) {
+    func getUserRelationshipDynamoDB(followingId: String, completionHandler: AWSContinuationBlock) {
         AWSClientManager.defaultClientManager().credentialsProvider?.getIdentityId().continueWithBlock({
             (task: AWSTask) in
             if let error = task.error {
@@ -285,16 +289,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
                 
                 print("getUserRelationshipDynamoDB:")
                 let userRelationshipsTable = AWSUserRelationshipsTable()
-                userRelationshipsTable.getUserRelationship(identityId, followedId: followedId, completionHandler: {
-                    (task: AWSTask) in
-                    if let error = task.error {
-                        print("getUserRelationshipDynamoDB error:")
-                        return AWSTask(error: error).continueWithBlock(completionHandler)
-                    } else {
-                        print("getUserRelationshipDynamoDB success!")
-                        return task.continueWithBlock(completionHandler)
-                    }
-                })
+                userRelationshipsTable.getUserRelationship(identityId, followingId: followingId, completionHandler: completionHandler)
                 return nil
             } else {
                 print("This should not happen with getIdentityId!")
@@ -303,7 +298,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         })
     }
     
-    func saveUserRelationshipDynamoDB(followedId: String, completionHandler: AWSContinuationBlock) {
+    func saveUserRelationshipDynamoDB(followingId: String, followingFirstName: String?, followingLastName: String?, followingPreferredUsername: String?, followingProfession: String?, followingProfilePicUrl: String?, numberOfNewPosts: NSNumber?, completionHandler: AWSContinuationBlock) {
         AWSClientManager.defaultClientManager().credentialsProvider?.getIdentityId().continueWithBlock({
             (task: AWSTask) in
             if let error = task.error {
@@ -315,17 +310,15 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
                 let userRelationshipsTable = AWSUserRelationshipsTable()
                 let userRelationship = AWSUserRelationship()
                 userRelationship._userId = identityId
-                userRelationship._followedId = followedId
-                userRelationshipsTable.saveUserRelationship(userRelationship, completionHandler: {
-                    (task: AWSTask) in
-                    if let error = task.error {
-                        print("saveUserRelationshipDynamoDB error:")
-                        return AWSTask(error: error).continueWithBlock(completionHandler)
-                    } else {
-                        print("saveUserRelationshipDynamoDB success!")
-                        return task.continueWithBlock(completionHandler)
-                    }
-                })
+                userRelationship._creationDate = NSNumber(double: NSDate().timeIntervalSince1970)
+                userRelationship._followingId = followingId
+                userRelationship._followingFirstName = followingFirstName
+                userRelationship._followingLastName = followingLastName
+                userRelationship._followingPreferredUsername = followingPreferredUsername
+                userRelationship._followingProfession = followingProfession
+                userRelationship._followingProfilePicUrl = followingProfilePicUrl
+                userRelationship._numberOfNewPosts = numberOfNewPosts
+                userRelationshipsTable.saveUserRelationship(userRelationship, completionHandler: completionHandler)
                 return nil
             } else {
                 print("This should not happen with getIdentityId!")
@@ -334,7 +327,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         })
     }
     
-    func removeUserRelationshipDynamoDB(followedId: String, completionHandler: AWSContinuationBlock) {
+    func removeUserRelationshipDynamoDB(followingId: String, completionHandler: AWSContinuationBlock) {
         AWSClientManager.defaultClientManager().credentialsProvider?.getIdentityId().continueWithBlock({
             (task: AWSTask) in
             if let error = task.error {
@@ -346,17 +339,8 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
                 let userRelationshipsTable = AWSUserRelationshipsTable()
                 let userRelationship = AWSUserRelationship()
                 userRelationship._userId = identityId
-                userRelationship._followedId = followedId
-                userRelationshipsTable.removeUserRelationship(userRelationship, completionHandler: {
-                    (task: AWSTask) in
-                    if let error = task.error {
-                        print("removeUserRelationshipDynamoDB error:")
-                        return AWSTask(error: error).continueWithBlock(completionHandler)
-                    } else {
-                        print("removeUserRelationshipDynamoDB success!")
-                        return task.continueWithBlock(completionHandler)
-                    }
-                })
+                userRelationship._followingId = followingId
+                userRelationshipsTable.removeUserRelationship(userRelationship, completionHandler: completionHandler)
                 return nil
             } else {
                 print("This should not happen with getIdentityId!")
@@ -365,19 +349,10 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         })
     }
     
-    func queryUserFollowedDynamoDB(userId: String, completionHandler: AWSContinuationBlock) {
-        print("queryUserFollowedDynamoDB:")
+    func queryUserFollowingDynamoDB(userId: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
+        print("queryUserFollowingDynamoDB:")
         let userRelationshipsPrimaryIndex = AWSUserRelationshipsPrimaryIndex()
-        userRelationshipsPrimaryIndex.queryUserFollowed(userId, completionHandler: {
-            (response: AWSDynamoDBPaginatedOutput?, error: NSError?) in
-            if let error = error {
-                print("queryUserFollowedDynamoDB error:")
-                AWSTask(error: error).continueWithBlock(completionHandler)
-            } else {
-                print("queryUserFollowedDynamoDB success!")
-                AWSTask(result: response).continueWithBlock(completionHandler)
-            }
-        })
+        userRelationshipsPrimaryIndex.queryUserFollowing(userId, completionHandler: completionHandler)
     }
     
     // MARK: Likes
@@ -491,34 +466,10 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
     
     // MARK: Posts
     
-    func queryUserPostsDynamoDB(userId: String, completionHandler: AWSContinuationBlock) {
-        print("queryUserPostsDynamoDB:")
-        let postsPrimaryIndex = AWSPostsPrimaryIndex()
-        postsPrimaryIndex.queryUserPosts(userId, completionHandler: {
-            (response: AWSDynamoDBPaginatedOutput?, error: NSError?) in
-            if let error = error {
-                print("queryUserPostsDynamoDB error:")
-                AWSTask(error: error).continueWithBlock(completionHandler)
-            } else {
-                print("queryUserPostsDynamoDB success!")
-                AWSTask(result: response).continueWithBlock(completionHandler)
-            }
-        })
-    }
-    
-    func queryUserPostsDateSortedDynamoDB(userId: String, completionHandler: AWSContinuationBlock) {
+    func queryUserPostsDateSortedDynamoDB(userId: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
         print("queryUserPostsDateSortedDynamoDB:")
         let postsDateSortedIndex = AWsPostsDateSortedIndex()
-        postsDateSortedIndex.queryUserPostsDateSorted(userId, completionHandler: {
-            (response: AWSDynamoDBPaginatedOutput?, error: NSError?) in
-            if let error = error {
-                print("queryUserPostsDateSortedDynamoDB error:")
-                AWSTask(error: error).continueWithBlock(completionHandler)
-            } else {
-                print("queryUserPostsDateSortedDynamoDB success!")
-                AWSTask(result: response).continueWithBlock(completionHandler)
-            }
-        })
+        postsDateSortedIndex.queryUserPostsDateSorted(userId, completionHandler: completionHandler)
     }
     
     func savePostDynamoDB(imageUrl: String?, title: String?, description: String?, category: String?, user: User?, completionHandler: AWSContinuationBlock) {
@@ -542,20 +493,20 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
                 
                 post._userFirstName = user?.firstName
                 post._userLastName = user?.lastName
+                post._userPreferredUsername = user?.preferredUsername
                 post._userProfession = user?.profession
                 post._userProfilePicUrl = user?.profilePicUrl
                 
+                postsTable.savePost(post, completionHandler: completionHandler)
                 postsTable.savePost(post, completionHandler: {
                     (task: AWSTask) in
                     if let error = task.error {
-                        print("savePostDynamoDB error:")
-                        return AWSTask(error: error).continueWithBlock(completionHandler)
+                        AWSTask(error: error).continueWithBlock(completionHandler)
                     } else {
-                        print("savePostDynamoDB success!")
-                        // Return AWSPost to the caller vc.
-                        return AWSTask(result: post).continueWithBlock(completionHandler)
-                        //return task.continueWithBlock(completionHandler)
+                        // Return initialized post to caller.
+                        AWSTask(result: post).continueWithBlock(completionHandler)
                     }
+                    return nil
                 })
                 return nil
             } else {
@@ -563,5 +514,11 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
                 return AWSTask().continueWithBlock(completionHandler)
             }
         })
+    }
+    
+    func scanFollowedPosts(followedIds: [String], completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
+        print("scanFollowedPosts:")
+        let postsTable = AWSPostsTable()
+        postsTable.scanFollowedPosts(followedIds, completionHandler: completionHandler)
     }
 }

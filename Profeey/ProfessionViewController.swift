@@ -57,7 +57,7 @@ class ProfessionViewController: UIViewController {
         
         FullScreenIndicator.show()
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-        AWSClientManager.defaultClientManager().updateUserProfession(self.profession, completionHandler: {
+        AWSClientManager.defaultClientManager().updateProfession(self.profession, completionHandler: {
             (task: AWSTask) in
             dispatch_async(dispatch_get_main_queue(), {
                 FullScreenIndicator.hide()

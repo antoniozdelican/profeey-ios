@@ -79,7 +79,7 @@ class EditAboutTableViewController: UITableViewController {
         FullScreenIndicator.show()
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         
-        AWSClientManager.defaultClientManager().updateUserAbout(about, completionHandler: {
+        AWSClientManager.defaultClientManager().updateAbout(about, completionHandler: {
             (task: AWSTask) in
             dispatch_async(dispatch_get_main_queue(), {
                 

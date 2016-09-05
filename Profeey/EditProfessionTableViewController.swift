@@ -77,7 +77,7 @@ class EditProfessionTableViewController: UITableViewController {
         FullScreenIndicator.show()
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         
-        AWSClientManager.defaultClientManager().updateUserProfession(profession, completionHandler: {
+        AWSClientManager.defaultClientManager().updateProfession(profession, completionHandler: {
             (task: AWSTask) in
             dispatch_async(dispatch_get_main_queue(), {
                 

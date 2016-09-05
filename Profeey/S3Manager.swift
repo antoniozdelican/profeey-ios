@@ -13,5 +13,4 @@ protocol S3Manager {
     
     func uploadImageS3(imageData: NSData, isProfilePic: Bool, progressBlock: ((AWSLocalContent, NSProgress) -> Void)?, completionHandler: AWSContinuationBlock)
     func downloadImageS3(imageKey: String, progressBlock: ((AWSContent, NSProgress) -> Void)?, completionHandler: AWSContinuationBlock)
-    func deleteImageS3(imageKey: String, completionHandler: AWSContinuationBlock)
 }
