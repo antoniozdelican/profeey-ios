@@ -34,6 +34,7 @@ protocol DynamoDBManager {
     func queryUserFollowingDynamoDB(userId: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void)
     
     // MARK: Likes
+    
     func getLikeDynamoDB(postId: String, completionHandler: AWSContinuationBlock)
     func saveLikeDynamoDB(postId: String, completionHandler: AWSContinuationBlock)
     func removeLikeDynamoDB(postId: String, completionHandler: AWSContinuationBlock)
@@ -44,5 +45,7 @@ protocol DynamoDBManager {
     func queryUserPostsDateSortedDynamoDB(userId: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void)
     func savePostDynamoDB(imageUrl: String?, title: String?, description: String?, category: String?, user: User?, completionHandler: AWSContinuationBlock)
     
-    func scanFollowedPosts(followedIds: [String], completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void)
+    // MARK: FeaturedCategories
+    
+    func scanFeaturedCategories(completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void)
 }

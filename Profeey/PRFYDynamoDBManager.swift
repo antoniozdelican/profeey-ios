@@ -516,9 +516,11 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         })
     }
     
-    func scanFollowedPosts(followedIds: [String], completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
-        print("scanFollowedPosts:")
-        let postsTable = AWSPostsTable()
-        postsTable.scanFollowedPosts(followedIds, completionHandler: completionHandler)
+    // MARK: FeaturedCategories
+    
+    func scanFeaturedCategories(completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
+        print("scanFeaturedCategories:")
+        let featuredCategoriesTable = AWSFeaturedCategoriesTable()
+        featuredCategoriesTable.scanFeaturedCategories(completionHandler)
     }
 }

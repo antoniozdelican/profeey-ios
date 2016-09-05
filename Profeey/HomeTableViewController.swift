@@ -10,28 +10,28 @@ import UIKit
 import AWSMobileHubHelper
 import AWSDynamoDB
 
+enum ImageType {
+    case CurrentUserProfilePic
+    case UserProfilePic
+    case FeaturedCategoryImage
+}
+
 class HomeTableViewController: UITableViewController {
     
     private var user: User?
     private var followingUsers: [User] = []
-    private var popularCategories: [Category] = []
+    private var featuredCategories: [FeaturedCategory] = []
     private var isLoadingFollowing: Bool = true
-    //private var posts: [Post] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.Plain, target:nil, action:nil)
         
-        // Get currentUser in background immediately for later use.
+        // Get currentUser and featured categories.
         if let currentUser = AWSClientManager.defaultClientManager().userPool?.currentUser() where currentUser.signedIn {
             self.getCurrentUser()
+            self.scanFeaturedCategories()
         }
-        
-        // MOCK
-        let category1 = Category(categoryName: "Melon Production", numberOfUsers: 2, numberOfPosts: 12, featuredImage: UIImage(named: "post_pic_ivan"))
-        let category2 = Category(categoryName: "Yachting", numberOfUsers: 2, numberOfPosts: 12, featuredImage: UIImage(named: "post_pic_filip"))
-        let category3 = Category(categoryName: "Agriculture", numberOfUsers: 2, numberOfPosts: 12, featuredImage: UIImage(named: "post_pic_ivan_2"))
-        self.popularCategories = [category1, category2, category3]
     }
 
     override func didReceiveMemoryWarning() {
@@ -56,16 +56,16 @@ class HomeTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
-            // PopularSkills Header.
+            // FeaturedSkills Header.
             return 1
         case 1:
-            // PopularSkills Header.
+            // FeaturedSkills.
             return 1
         case 2:
             // Following Header.
             return 1
         case 3:
-            // Following Header.
+            // Following Users.
             if self.isLoadingFollowing {
                 return 1
             } else if self.followingUsers.count == 0 {
@@ -82,7 +82,7 @@ class HomeTableViewController: UITableViewController {
         switch indexPath.section {
         case 0:
             let cell = tableView.dequeueReusableCellWithIdentifier("cellHomeHeader", forIndexPath: indexPath) as! HomeHeaderTableViewCell
-            cell.headerTitleLabel.text = "POPULAR SKILLS"
+            cell.headerTitleLabel.text = "FEATURED SKILLS"
             return cell
         case 1:
             let cell = tableView.dequeueReusableCellWithIdentifier("cellHomeCategories", forIndexPath: indexPath) as! HomeCategoriesTableViewCell
@@ -108,8 +108,9 @@ class HomeTableViewController: UITableViewController {
                 cell.fullNameLabel.text = user.fullName
                 cell.professionLabel.text = user.profession
                 if let numberOfNewPosts = user.numberOfNewPosts {
-                    cell.numberOfPostsLabel.text = numberOfNewPosts.intValue == 1 ? "\(numberOfNewPosts) new post" : "\(numberOfNewPosts) new posts"
-                    if numberOfNewPosts.intValue > 0 {
+                    let numberOfNewPostsInt = numberOfNewPosts.integerValue
+                    cell.numberOfPostsLabel.text = numberOfNewPostsInt == 1 ? "\(numberOfNewPostsInt) new post" : "\(numberOfNewPostsInt) new posts"
+                    if numberOfNewPostsInt > 0 {
                         cell.numberOfPostsLabel.textColor = Colors.green
                     }
                 }
@@ -210,7 +211,7 @@ class HomeTableViewController: UITableViewController {
                         
                         // Get profilePic.
                         if let profilePicUrl = awsUser._profilePicUrl {
-                            self.downloadImage(profilePicUrl, indexPath: nil, isCurrentUserProfilePic: true)
+                            self.downloadImage(profilePicUrl, imageType: .CurrentUserProfilePic, indexPath: nil)
                         }
                         
                         // Query user following.
@@ -247,7 +248,7 @@ class HomeTableViewController: UITableViewController {
                             // Get profilePic.
                             if let profilePicUrl = awsUserRelationship._followingProfilePicUrl {
                                 let indexpath = NSIndexPath(forRow: index, inSection: 3)
-                                self.downloadImage(profilePicUrl, indexPath: indexpath, isCurrentUserProfilePic: false)
+                                self.downloadImage(profilePicUrl, imageType: .UserProfilePic, indexPath: indexpath)
                             }
                         }
                     }
@@ -256,122 +257,57 @@ class HomeTableViewController: UITableViewController {
         })
     }
     
-    private func scanFollowedPosts(followedIds: [String]) {
-//        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-//        PRFYDynamoDBManager.defaultDynamoDBManager().scanFollowedPosts(followedIds, completionHandler: {
-//            (response: AWSDynamoDBPaginatedOutput?, error: NSError?) in
-//            if let error = error {
-//                print("scanFollowedPosts error: \(error)")
-//                dispatch_async(dispatch_get_main_queue(), {
-//                    UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-//                })
-//            } else {
-//                dispatch_async(dispatch_get_main_queue(), {
-//                    UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-//                    if let awsPosts = response?.items as? [AWSPost] {
-//                        for (index, awsPost) in awsPosts.enumerate() {
-//                            let user = User(userId: awsPost._userId, firstName: awsPost._userFirstName, lastName: awsPost._userLastName, preferredUsername: nil, profession: awsPost._userProfession, profilePicUrl: awsPost._userProfilePicUrl, location: nil, about: nil)
-//                            let post = Post(postId: awsPost._postId, title: awsPost._title, postDescription: awsPost._description, imageUrl: awsPost._imageUrl, category: awsPost._category, creationDate: awsPost._creationDate, user: user)
-//                            self.posts.append(post)
-//                            self.tableView.reloadData()
-//                            
-//                            let indexPath = NSIndexPath(forRow: index, inSection: 3)
-//                            
-//                            // Get profilePic.
-//                            if let profilePicUrl = awsPost._userProfilePicUrl {
-//                                self.downloadImage(profilePicUrl, indexPath: indexPath, isProfilePic: true)
-//                            }
-//                            
-//                            // Get postPic.
-//                            if let imageUrl = awsPost._imageUrl {
-//                                self.downloadImage(imageUrl, indexPath: indexPath, isProfilePic: false)
-//                            }
-//                        }
-//                    }
-//                })
-//            }
-//        })
+    private func scanFeaturedCategories() {
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().scanFeaturedCategories({
+            (response: AWSDynamoDBPaginatedOutput?, error: NSError?) in
+            dispatch_async(dispatch_get_main_queue(), {
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                if let error = error {
+                    print("scanFeaturedCategories error: \(error)")
+                } else {
+                    if let awsFeaturedCategories = response?.items as? [AWSFeaturedCategory] {
+                        
+                        for (index, awsFeaturedCategory) in awsFeaturedCategories.enumerate() {
+                            let featuredCategory = FeaturedCategory(categoryName: awsFeaturedCategory._categoryName, featuredImageUrl: awsFeaturedCategory._featuredImageUrl, numberOfPosts: awsFeaturedCategory._numberOfPosts)
+                            self.featuredCategories.append(featuredCategory)
+                            self.tableView.reloadData()
+                            
+                            // Get featuredImage.
+                            if let featuredImageUrl = awsFeaturedCategory._featuredImageUrl {
+                                let indexpath = NSIndexPath(forRow: index, inSection: 1)
+                                self.downloadImage(featuredImageUrl, imageType: .FeaturedCategoryImage, indexPath: indexpath)
+                            }
+                        }
+                    }
+                }
+            })
+        })
     }
     
-    private func queryUserPostsDateSorted(userId: String) {
-//        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-//        AWSClientManager.defaultClientManager().queryUserPostsDateSorted(userId, completionHandler: {
-//            (task: AWSTask) in
-//            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-//            if let error = task.error {
-//                print("Error: \(error.userInfo["message"])")
-//            } else {
-//                if let output = task.result as? AWSDynamoDBPaginatedOutput,
-//                    let awsPosts = output.items as? [AWSPost] {
-//                    
-//                    // Iterate through all posts. This should change and fetch only certain or?
-//                    for (index, awsPost) in awsPosts.enumerate() {
-//                        let indexPath = NSIndexPath(forRow: index, inSection: 3)
-//
-//                        dispatch_async(dispatch_get_main_queue(), {
-//                            
-//                            // Data is denormalized so we store user data in posts table!
-//                            let user = User(userId: awsPost._userId, firstName: awsPost._userFirstName, lastName: awsPost._userLastName, preferredUsername: nil, profession: awsPost._userProfession, profilePicUrl: awsPost._userProfilePicUrl, location: nil, about: nil)
-//                            let post = Post(postId: awsPost._postId, title: awsPost._title, postDescription: awsPost._description, imageUrl: awsPost._imageUrl, category: awsPost._category, creationDate: awsPost._creationDate, user: user)
-//                            self.posts.append(post)
-//                            self.tableView.reloadData()
-//                            //self.tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
-//                        })
-//                        
-//                        // Query likers.
-//                        if let postId = awsPost._postId {
-//                            self.queryPostLikers(postId, indexPath: indexPath)
-//                        }
-//                        
-//                        // Get profilePic.
-//                        if let profilePicUrl = awsPost._userProfilePicUrl {
-//                            self.downloadImage(profilePicUrl, indexPath: indexPath, isProfilePic: true)
-//                        }
-//
-//                        // Get postPic.
-//                        if let imageUrl = awsPost._imageUrl {
-//                            self.downloadImage(imageUrl, indexPath: indexPath, isProfilePic: false)
-//                        }
-//                    }
-//                }
-//            }
-//            return nil
-//        })
-    }
-    private func queryPostLikers(postId: String, indexPath: NSIndexPath) {
-//        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-//        AWSClientManager.defaultClientManager().queryPostLikers(postId, completionHandler: {
-//            (task: AWSTask) in
-//            dispatch_async(dispatch_get_main_queue(), {
-//                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-//                if let error = task.error {
-//                    print("queryPostLikers error: \(error.localizedDescription)")
-//                } else {
-//                    if let output = task.result as? AWSDynamoDBPaginatedOutput,
-//                        let awsLikes = output.items as? [AWSLike] {
-//                        self.posts[indexPath.row].numberOfLikes = awsLikes.count
-//                        //self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
-//                        self.tableView.reloadData()
-//                    }
-//                }
-//            })
-//            return nil
-//        })
-    }
-    
-    private func downloadImage(imageKey: String, indexPath: NSIndexPath?, isCurrentUserProfilePic: Bool) {
+    private func downloadImage(imageKey: String, imageType: ImageType, indexPath: NSIndexPath?) {
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         let content = AWSUserFileManager.custom(key: "USEast1BucketManager").contentWithKey(imageKey)
         // TODO check if content.isImage()
         if content.cached {
             print("Content cached:")
-            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+            dispatch_async(dispatch_get_main_queue(), {
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+            })
             let image = UIImage(data: content.cachedData)
-            if isCurrentUserProfilePic {
+            switch imageType {
+            case .CurrentUserProfilePic:
                 self.user?.profilePic = image
-            } else if let indexPath = indexPath {
-                self.followingUsers[indexPath.row].profilePic = image
-                self.tableView.reloadData()
+            case .UserProfilePic:
+                if let indexPath = indexPath {
+                    self.followingUsers[indexPath.row].profilePic = image
+                    self.tableView.reloadData()
+                }
+            case .FeaturedCategoryImage:
+                if let indexPath = indexPath {
+                    self.featuredCategories[indexPath.row].featuredImage = image
+                    self.tableView.reloadData()
+                }
             }
         } else {
             print("Download content:")
@@ -391,49 +327,25 @@ class HomeTableViewController: UITableViewController {
                         } else {
                             if let imageData = data {
                                 let image = UIImage(data: imageData)
-                                if isCurrentUserProfilePic {
+                                switch imageType {
+                                case .CurrentUserProfilePic:
                                     self.user?.profilePic = image
-                                } else if let indexPath = indexPath {
-                                    self.followingUsers[indexPath.row].profilePic = image
-                                    self.tableView.reloadData()
+                                case .UserProfilePic:
+                                    if let indexPath = indexPath {
+                                        self.followingUsers[indexPath.row].profilePic = image
+                                        self.tableView.reloadData()
+                                    }
+                                case .FeaturedCategoryImage:
+                                    if let indexPath = indexPath {
+                                        self.featuredCategories[indexPath.row].featuredImage = image
+                                        self.tableView.reloadData()
+                                    }
                                 }
                             }
                         }
                     })
             })
         }
-    }
-    
-    private func savePost(imageData: NSData, title: String?, description: String?, category: String?) {
-//        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-//        
-//        // Data is denormalized so we store some user data in posts table.
-//        AWSClientManager.defaultClientManager().savePost(imageData, title: title, description: description, category: category, user: self.user, isProfilePic: false, completionHandler: {
-//            (task: AWSTask) in
-//            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-//            if let error = task.error {
-//                dispatch_async(dispatch_get_main_queue(), {
-//                    let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.userInfo["message"] as? String, cancelButtonTitle: "Ok")
-//                    self.presentViewController(alertController, animated: true, completion: nil)
-//                })
-//            } else if let awsPost = task.result as? AWSPost {
-//                
-//                dispatch_async(dispatch_get_main_queue(), {
-//                    
-//                    let post = Post(postId: awsPost._postId, title: awsPost._title, postDescription: awsPost._description, imageUrl: awsPost._imageUrl, category: awsPost._category, creationDate: awsPost._creationDate, user: self.user)
-//                    let image = UIImage(data: imageData)
-//                    post.image = image
-//                    // Inert at the beginning.
-//                    self.posts.insert(post, atIndex: 0)
-//                    let indexPath = NSIndexPath(forRow: 0, inSection: 3)
-//                    //self.tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
-//                    self.tableView.reloadData()
-//                })
-//            } else {
-//                print("This should not happen with savePost!")
-//            }
-//            return nil
-//        })
     }
 }
 
@@ -444,18 +356,18 @@ extension HomeTableViewController: UICollectionViewDataSource, UICollectionViewD
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.popularCategories.count
+        return self.featuredCategories.count
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("cellHomeCategory", forIndexPath: indexPath) as! HomeCategoryCollectionViewCell
-        let popularCategory = self.popularCategories[indexPath.row]
-        cell.categoryImageView.image = popularCategory.featuredImage
-        cell.categoryNameLabel.text = popularCategory.categoryName
-        if let numberOfPosts = popularCategory.numberOfPosts {
-            let numberOfPostsText = numberOfPosts > 1 ? "\(numberOfPosts.numberToString()) posts" : "\(numberOfPosts.numberToString()) post"
-            cell.numberOfPostsLabel.text = numberOfPostsText
+        let featuredCategory = self.featuredCategories[indexPath.row]
+        cell.categoryNameLabel.text = featuredCategory.categoryName
+        if let numberOfPosts = featuredCategory.numberOfPosts {
+            let numberOfPostsInt = numberOfPosts.integerValue
+            cell.numberOfPostsLabel.text = numberOfPostsInt > 1 ? "\(numberOfPostsInt.numberToString()) posts" : "\(numberOfPostsInt.numberToString()) post"
         }
+        cell.categoryImageView.image = featuredCategory.featuredImage
         return cell
     }
 }

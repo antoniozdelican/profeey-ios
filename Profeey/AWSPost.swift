@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import UIKit
 import AWSDynamoDB
 
 class AWSPost: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
