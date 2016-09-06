@@ -23,10 +23,12 @@ protocol FeaturedCategoriesDelegate {
 class HomeTableViewController: UITableViewController {
     
     private var user: User?
+    
     private var followingUsers: [User] = []
     private var featuredCategories: [FeaturedCategory] = []
     private var fakeFeaturedCategories: [FeaturedCategory] = []
     private var featuredCategoriesDelegate: FeaturedCategoriesDelegate?
+    
     private var isLoadingFollowing: Bool = true
     private var isLoadingFeaturedCategories: Bool = true
 
@@ -57,6 +59,10 @@ class HomeTableViewController: UITableViewController {
         if let destinationViewController = segue.destinationViewController as? ProfileTableViewController,
             let indexPath = sender as? NSIndexPath {
             destinationViewController.user = self.followingUsers[indexPath.row]
+        }
+        if let destinationViewController = segue.destinationViewController as? CategoryTableViewController,
+            let indexPath = sender as? NSIndexPath {
+            destinationViewController.category = self.featuredCategories[indexPath.row]
         }
     }
 
@@ -378,13 +384,14 @@ extension HomeTableViewController: UICollectionViewDataSource, UICollectionViewD
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("cellHomeCategory", forIndexPath: indexPath) as! HomeCategoryCollectionViewCell
         let featuredCategory = self.isLoadingFeaturedCategories ? self.fakeFeaturedCategories[indexPath.row] : self.featuredCategories[indexPath.row]
         cell.categoryNameLabel.text = featuredCategory.categoryName
-        if let numberOfPosts = featuredCategory.numberOfPosts {
-            let numberOfPostsInt = numberOfPosts.integerValue
-            cell.numberOfPostsLabel.text = numberOfPostsInt > 1 ? "\(numberOfPostsInt.numberToString()) posts" : "\(numberOfPostsInt.numberToString()) post"
-        } else {
-            cell.numberOfPostsLabel.text = nil
-        }
+        cell.numberOfPostsLabel.text = featuredCategory.numberOfPostsString
         cell.categoryImageView.image = featuredCategory.featuredImage
         return cell
+    }
+    
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        if !self.isLoadingFeaturedCategories {
+            self.performSegueWithIdentifier("segueToCategoryVc", sender: indexPath)
+        }
     }
 }

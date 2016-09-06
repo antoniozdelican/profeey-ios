@@ -24,7 +24,7 @@ class EditPostTableViewController: UITableViewController {
     var imageData: NSData?
     var postTitle: String?
     var postDescription: String?
-    var category: String?
+    var categoryName: String?
     
     private var categoryAdded: Bool = false
     
@@ -103,7 +103,7 @@ class EditPostTableViewController: UITableViewController {
     }
     
     @IBAction func removeCategoryButtonTapped(sender: AnyObject) {
-        self.category = nil
+        self.categoryName = nil
         self.removeCategoryButton.hidden = true
         self.categoryLabel.text = "Add Skill"
         self.categoryLabel.textColor = Colors.black
@@ -130,10 +130,10 @@ extension EditPostTableViewController: UITextViewDelegate {
 
 extension EditPostTableViewController: AddCategoryDelegate {
     
-    func addCategory(category: String) {
-        self.category = category
+    func addCategory(category: Category) {
+        self.categoryName = category.categoryName
         self.removeCategoryButton.hidden = false
-        self.categoryLabel.text = category
+        self.categoryLabel.text = category.categoryName
         self.categoryLabel.textColor = Colors.blue
         // Prevent segueToAddCategoryVc.
         self.categoryAdded = true

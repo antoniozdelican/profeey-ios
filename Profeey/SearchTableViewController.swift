@@ -80,18 +80,17 @@ class SearchTableViewController: UITableViewController {
             let index = sender as? Int {
             destinationViewController.user = self.searchedUsers[index]
         }
-//        if let destinationViewController = segue.destinationViewController as? CategoryTableViewController,
-//            let indexPath = sender as? NSIndexPath,
-//            let searchController = self.searchController,
-//            let text = searchController.searchBar.text {
-//            if searchController.active {
-//                // Searched or all categories.
-////                destinationViewController.category = text.trimm().isEmpty ? self.allCategories[indexPath.row] : self.searchedCategories[indexPath.row]
-//            } else {
-//                // Popular categories.
-//                //destinationViewController.category = self.popularCategories[indexPath.row]
-//            }
-//        }
+        if let destinationViewController = segue.destinationViewController as? CategoryTableViewController,
+            let index = sender as? Int,
+            let searchController = self.searchController {
+            if searchController.active {
+                // Searched category.
+                destinationViewController.category = self.searchedCategories[index]
+            } else {
+                // Featured category.
+                destinationViewController.category = self.featuredCategories[index]
+            }
+        }
     }
 
     // MARK: UITableViewDataSource
@@ -127,8 +126,8 @@ class SearchTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        // Popular category selected.
-        self.performSegueWithIdentifier("segueToCategoryVc", sender: indexPath)
+        // Featured category selected.
+        self.performSegueWithIdentifier("segueToCategoryVc", sender: indexPath.row)
     }
     
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
@@ -315,7 +314,6 @@ extension SearchTableViewController: SelectUserDelegate {
 extension SearchTableViewController: SelectCategoryDelegate {
     
     func categorySelected(index: Int) {
-        let indexPath = NSIndexPath(forRow: index, inSection: 1)
-        self.performSegueWithIdentifier("segueToCategoryVc", sender: indexPath)
+        self.performSegueWithIdentifier("segueToCategoryVc", sender: index)
     }
 }

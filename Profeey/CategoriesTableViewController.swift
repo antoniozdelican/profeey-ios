@@ -10,9 +10,12 @@ import UIKit
 
 class CategoriesTableViewController: UITableViewController {
     
-    private var categories: [String] = []
     var scrollViewDelegate: ScrollViewDelegate?
     var addCategoryDelegate: AddCategoryDelegate?
+    
+    private var categories: [Category] = []
+    private var customCategoryName: String?
+    private var isSearching: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,25 +30,53 @@ class CategoriesTableViewController: UITableViewController {
     // MARK: UITableViewDataSource
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 1
+        return 3
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return categories.count
+        switch section {
+        case 0:
+            // Custom categoryName cell.
+            return customCategoryName != nil ? 1 : 0
+        case 1:
+            // Searching cell.
+            return self.isSearching ? 1 : 0
+        default:
+            // Category cell.
+            return self.isSearching ? 0 : self.categories.count
+        }
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let category = self.categories[indexPath.row]
-        let cell = tableView.dequeueReusableCellWithIdentifier("cellCategory", forIndexPath: indexPath) as! CategoryTableViewCell
-        cell.categoryNameLabel.text = category
-        return cell
+        switch indexPath.section {
+        case 0:
+            let cell = tableView.dequeueReusableCellWithIdentifier("cellCategory", forIndexPath: indexPath) as! SearchCategoryTableViewCell
+            cell.categoryNameLabel.text = self.customCategoryName
+            cell.numberOfUsersPostsLabel.text = nil
+            return cell
+        case 1:
+            let cell = tableView.dequeueReusableCellWithIdentifier("cellSearching", forIndexPath: indexPath) as! SearchingTableViewCell
+            cell.activityIndicator.startAnimating()
+            return cell
+        default:
+            let cell = tableView.dequeueReusableCellWithIdentifier("cellCategory", forIndexPath: indexPath) as! SearchCategoryTableViewCell
+            let category = self.categories[indexPath.row]
+            cell.categoryNameLabel.text = category.categoryName
+            cell.numberOfUsersPostsLabel.text = category.numberOfPostsString
+            return cell
+        }
     }
     
     // MARK: UITableViewDelegate
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        self.addCategoryDelegate?.addCategory(self.categories[indexPath.row])
+        if indexPath.section == 0 {
+            let newCategory = Category(categoryName: self.customCategoryName, numberOfPosts: 0)
+            self.addCategoryDelegate?.addCategory(newCategory)
+        } else if indexPath.section == 2 {
+            self.addCategoryDelegate?.addCategory(self.categories[indexPath.row])
+        }
         // Go back to EditPostVc.
         self.dismissViewControllerAnimated(true, completion: nil)
     }
@@ -60,26 +91,22 @@ class CategoriesTableViewController: UITableViewController {
         self.scrollViewDelegate?.scrollViewWillBeginDragging()
     }
     
-    // MARK: Helpers
+}
+
+// This delegate is defined in SearchResultVc.
+extension CategoriesTableViewController: SearchCategoriesDelegate {
     
-    private func filterCategoriesForSearchText(text: String) {
-        let trimmedText = text.trimm()
-        if trimmedText.isEmpty {
-            self.categories = []
-        } else {
-            if self.categories.isEmpty {
-                self.categories.insert(trimmedText, atIndex: 0)
-            } else {
-                self.categories[0] = trimmedText
-            }
-        }
+    func toggleSearchCategories(categories: [Category], isSearching: Bool) {
+        self.categories = categories
+        self.isSearching = isSearching
         self.tableView.reloadData()
     }
 }
 
-extension CategoriesTableViewController: AddCategoryTextFieldDelegate {
+extension CategoriesTableViewController: CustomCategoryNameDelegate {
     
-    func textFieldChanged(text: String) {
-        self.filterCategoriesForSearchText(text)
+    func addCustomCategoryname(customCategoryName: String?) {
+        self.customCategoryName = customCategoryName
+        self.tableView.reloadData()
     }
 }

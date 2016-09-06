@@ -11,16 +11,13 @@ import Foundation
 class Post: NSObject {
     
     // Properties.
-    //var userId: String?
+    var userId: String?
     var postId: String?
-    var category: String?
+    var categoryName: String?
     var creationDate: NSNumber?
     var postDescription: String?
     var imageUrl: String?
     var title: String?
-    
-    //Old
-    var categories: [Category]?
     
     // Generated.
     var user: User?
@@ -33,6 +30,8 @@ class Post: NSObject {
             return nil
         }
     }
+    
+    // TEST
     var numberOfLikes: Int = 0
     var numberOfComments: Int = 0
 
@@ -40,26 +39,15 @@ class Post: NSObject {
         super.init()
     }
     
-    convenience init(postId: String?, title: String?, postDescription: String?, imageUrl: String?, category: String?, creationDate: NSNumber?, user: User?) {
+    convenience init(userId: String?, postId: String?, categoryName: String?, creationDate: NSNumber?, postDescription: String?, imageUrl: String?, title: String?, user: User?) {
         self.init()
+        self.userId = userId
         self.postId = postId
-        self.title = title
-        self.postDescription = postDescription
-        self.imageUrl = imageUrl
-        self.category = category
+        self.categoryName = categoryName
         self.creationDate = creationDate
-        self.user = user
-    }
-    
-    // TEST
-    convenience init(user: User?, postDescription: String?, imageUrl: String?, title: String?, image: UIImage?, categories: [Category]?) {
-        self.init()
-        self.user = user
         self.postDescription = postDescription
         self.imageUrl = imageUrl
         self.title = title
-        self.image = image
-        self.categories = categories
+        self.user = user
     }
-    
 }

@@ -44,7 +44,7 @@ protocol DynamoDBManager {
     // MARK: Posts
     
     func queryUserPostsDateSortedDynamoDB(userId: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void)
-    func savePostDynamoDB(imageUrl: String?, title: String?, description: String?, category: String?, user: User?, completionHandler: AWSContinuationBlock)
+    func savePostDynamoDB(imageUrl: String?, title: String?, description: String?, categoryName: String?, user: User?, completionHandler: AWSContinuationBlock)
     
     // MARK: FeaturedCategories
     

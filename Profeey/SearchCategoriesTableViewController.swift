@@ -16,6 +16,7 @@ class SearchCategoriesTableViewController: UITableViewController {
     
     var scrollViewDelegate: ScrollViewDelegate?
     var selectCategoryDelegate: SelectCategoryDelegate?
+    
     private var categories: [Category] = []
     private var isSearching: Bool = false
 
@@ -44,7 +45,7 @@ class SearchCategoriesTableViewController: UITableViewController {
             // No results cell.
             return self.isSearching ? 0 : (self.categories.count > 0 ? 0 : 1)
         default:
-            // User cell.
+            // Category cell.
             return self.isSearching ? 0 : self.categories.count
         }
     }

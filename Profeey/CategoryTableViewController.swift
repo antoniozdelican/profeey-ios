@@ -22,20 +22,20 @@ class CategoryTableViewController: UITableViewController {
         self.navigationItem.title = self.category?.categoryName
         
         // MOCK
-        let user1 = User(firstName: "Ivan", lastName: "Zdelican", preferredUsername: "ivan", profession: "Fruit Grower", profilePic: UIImage(named: "pic_ivan"))
-        let user2 = User(firstName: "Filip", lastName: "Vargovic", preferredUsername: "filja", profession: "Yacht Skipper", profilePic: UIImage(named: "pic_filip"))
-        let user3 = User(firstName: "Josip", lastName: "Zdelican", preferredUsername: "jole", profession: "Agricultural Engineer", profilePic: UIImage(named: "pic_josip"))
-        
-        // MOCK
-        let category1 = Category(categoryName: "Melon Production", numberOfPosts: 12)
-        let category2 = Category(categoryName: "Yachting", numberOfPosts: 5)
-        let category3 = Category(categoryName: "Agriculture", numberOfPosts: 28)
-        let category4 = Category(categoryName: "Tobacco industry", numberOfPosts: 1)
-        
-        let post1 = Post(user: user1, postDescription: nil, imageUrl: nil, title: "Melon harvest - peak of the season", image: UIImage(named: "post_pic_ivan"), categories: [category1, category3])
-        let post2 = Post(user: user2, postDescription: nil, imageUrl: nil, title: "New boat for this summer's tour", image: UIImage(named: "post_pic_filip"), categories: [category2])
-        let post3 = Post(user: user3, postDescription: nil, imageUrl: nil, title: "Desired tobacco color of type Berlej before the final stage of drying", image: UIImage(named: "post_pic_josip"), categories: [category3, category4])
-        self.posts = [post1, post2, post3]
+//        let user1 = User(firstName: "Ivan", lastName: "Zdelican", preferredUsername: "ivan", profession: "Fruit Grower", profilePic: UIImage(named: "pic_ivan"))
+//        let user2 = User(firstName: "Filip", lastName: "Vargovic", preferredUsername: "filja", profession: "Yacht Skipper", profilePic: UIImage(named: "pic_filip"))
+//        let user3 = User(firstName: "Josip", lastName: "Zdelican", preferredUsername: "jole", profession: "Agricultural Engineer", profilePic: UIImage(named: "pic_josip"))
+//        
+//        // MOCK
+//        let category1 = Category(categoryName: "Melon Production", numberOfPosts: 12)
+//        let category2 = Category(categoryName: "Yachting", numberOfPosts: 5)
+//        let category3 = Category(categoryName: "Agriculture", numberOfPosts: 28)
+//        let category4 = Category(categoryName: "Tobacco industry", numberOfPosts: 1)
+//        
+//        let post1 = Post(user: user1, postDescription: nil, imageUrl: nil, title: "Melon harvest - peak of the season", image: UIImage(named: "post_pic_ivan"), categories: [category1, category3])
+//        let post2 = Post(user: user2, postDescription: nil, imageUrl: nil, title: "New boat for this summer's tour", image: UIImage(named: "post_pic_filip"), categories: [category2])
+//        let post3 = Post(user: user3, postDescription: nil, imageUrl: nil, title: "Desired tobacco color of type Berlej before the final stage of drying", image: UIImage(named: "post_pic_josip"), categories: [category3, category4])
+//        self.posts = [post1, post2, post3]
     }
     
     override func didReceiveMemoryWarning() {
@@ -73,16 +73,16 @@ class CategoryTableViewController: UITableViewController {
             return cell
         default:
             let cell = tableView.dequeueReusableCellWithIdentifier("cellPost", forIndexPath: indexPath) as! PostTableViewCell
-            let post = self.posts[indexPath.row]
-            let user = post.user
-            cell.profilePicImageView.image = user?.profilePic
-            cell.fullNameLabel.text = user?.fullName
-            cell.professionLabel.text = user?.profession
-            cell.postPicImageView.image = post.image
-            cell.titleLabel.text = post.title
-//            cell.categoryLabel.text = post.categories?.flatMap({ $0.categoryName }).joinWithSeparator(" · ")
-            cell.categoryLabel.text = post.category
-            cell.timeLabel.text = post.creationDateString
+//            let post = self.posts[indexPath.row]
+//            let user = post.user
+//            cell.profilePicImageView.image = user?.profilePic
+//            cell.fullNameLabel.text = user?.fullName
+//            cell.professionLabel.text = user?.profession
+//            cell.postPicImageView.image = post.image
+//            cell.titleLabel.text = post.title
+////            cell.categoryLabel.text = post.categories?.flatMap({ $0.categoryName }).joinWithSeparator(" · ")
+//            cell.categoryLabel.text = post.category
+//            cell.timeLabel.text = post.creationDateString
             return cell
         }
     }

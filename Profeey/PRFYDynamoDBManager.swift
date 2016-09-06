@@ -465,7 +465,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         postsDateSortedIndex.queryUserPostsDateSorted(userId, completionHandler: completionHandler)
     }
     
-    func savePostDynamoDB(imageUrl: String?, title: String?, description: String?, category: String?, user: User?, completionHandler: AWSContinuationBlock) {
+    func savePostDynamoDB(imageUrl: String?, title: String?, description: String?, categoryName: String?, user: User?, completionHandler: AWSContinuationBlock) {
         AWSClientManager.defaultClientManager().credentialsProvider?.getIdentityId().continueWithBlock({
             (task: AWSTask) in
             if let error = task.error {
@@ -478,11 +478,11 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
                 let post = AWSPost()
                 post._userId = identityId
                 post._postId = NSUUID().UUIDString.lowercaseString
-                post._imageUrl = imageUrl
-                post._title = title
-                post._description = description
-                post._category = category
+                post._categoryName = categoryName
                 post._creationDate = NSNumber(double: NSDate().timeIntervalSince1970)
+                post._description = description
+                post._title = title
+                post._imageUrl = imageUrl
                 
                 post._userFirstName = user?.firstName
                 post._userLastName = user?.lastName
@@ -490,7 +490,6 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
                 post._userProfession = user?.profession
                 post._userProfilePicUrl = user?.profilePicUrl
                 
-                postsTable.savePost(post, completionHandler: completionHandler)
                 postsTable.savePost(post, completionHandler: {
                     (task: AWSTask) in
                     if let error = task.error {

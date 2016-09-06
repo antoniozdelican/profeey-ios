@@ -8,12 +8,11 @@
 
 import Foundation
 
-class FeaturedCategory: NSObject {
+// Subclass of Category.
+class FeaturedCategory: Category {
     
     // Properties.
-    var categoryName: String?
     var featuredImageUrl: String?
-    var numberOfPosts: NSNumber?
     
     // Generated.
     var featuredImage: UIImage?

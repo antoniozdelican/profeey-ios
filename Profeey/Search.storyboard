@@ -297,13 +297,13 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Category" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nGx-ce-JFV">
-                                            <rect key="frame" x="12" y="14" width="576" height="17"/>
+                                            <rect key="frame" x="22" y="14" width="566" height="17"/>
                                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
                                             <color key="textColor" red="0.2901960784" green="0.2901960784" blue="0.2901960784" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0 posts" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uOF-fw-kKP">
-                                            <rect key="frame" x="12" y="33" width="576" height="17"/>
+                                            <rect key="frame" x="22" y="33" width="566" height="17"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <color key="textColor" red="0.63921568630000003" green="0.63921568630000003" blue="0.63921568630000003" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
@@ -311,10 +311,10 @@
                                     </subviews>
                                     <constraints>
                                         <constraint firstAttribute="trailing" secondItem="nGx-ce-JFV" secondAttribute="trailing" constant="12" id="C9Y-dM-rB2"/>
-                                        <constraint firstItem="uOF-fw-kKP" firstAttribute="leading" secondItem="Yu2-Vv-8sm" secondAttribute="leading" constant="12" id="WPf-FT-y2J"/>
+                                        <constraint firstItem="uOF-fw-kKP" firstAttribute="leading" secondItem="Yu2-Vv-8sm" secondAttribute="leading" constant="22" id="WPf-FT-y2J"/>
                                         <constraint firstAttribute="bottom" secondItem="uOF-fw-kKP" secondAttribute="bottom" constant="14.5" id="c9f-bt-V5N"/>
                                         <constraint firstItem="uOF-fw-kKP" firstAttribute="top" secondItem="nGx-ce-JFV" secondAttribute="bottom" constant="2" id="jOP-Vm-ukb"/>
-                                        <constraint firstItem="nGx-ce-JFV" firstAttribute="leading" secondItem="Yu2-Vv-8sm" secondAttribute="leading" constant="12" id="jfG-Si-cBo"/>
+                                        <constraint firstItem="nGx-ce-JFV" firstAttribute="leading" secondItem="Yu2-Vv-8sm" secondAttribute="leading" constant="22" id="jfG-Si-cBo"/>
                                         <constraint firstAttribute="trailing" secondItem="uOF-fw-kKP" secondAttribute="trailing" constant="12" id="yeC-SV-1kJ"/>
                                         <constraint firstItem="nGx-ce-JFV" firstAttribute="top" secondItem="Yu2-Vv-8sm" secondAttribute="top" constant="14" id="yrW-lF-fTH"/>
                                     </constraints>
@@ -332,7 +332,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Searching..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZcT-f0-edi">
-                                            <rect key="frame" x="59" y="24" width="529" height="17"/>
+                                            <rect key="frame" x="60" y="24" width="528" height="17"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <color key="textColor" red="0.63921568630000003" green="0.63921568630000003" blue="0.63921568630000003" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
@@ -346,7 +346,7 @@
                                         <constraint firstItem="dVn-99-Aoi" firstAttribute="top" secondItem="Vuq-Nx-5j7" secondAttribute="top" constant="22" id="H86-2n-FYi"/>
                                         <constraint firstItem="dVn-99-Aoi" firstAttribute="leading" secondItem="Vuq-Nx-5j7" secondAttribute="leading" constant="22" id="T5n-hD-pp8"/>
                                         <constraint firstAttribute="trailing" secondItem="ZcT-f0-edi" secondAttribute="trailing" constant="12" id="Us8-Bw-aAs"/>
-                                        <constraint firstItem="ZcT-f0-edi" firstAttribute="leading" secondItem="dVn-99-Aoi" secondAttribute="trailing" constant="17" id="av4-Gc-Ifq"/>
+                                        <constraint firstItem="ZcT-f0-edi" firstAttribute="leading" secondItem="dVn-99-Aoi" secondAttribute="trailing" constant="18" id="av4-Gc-Ifq"/>
                                         <constraint firstItem="ZcT-f0-edi" firstAttribute="top" secondItem="Vuq-Nx-5j7" secondAttribute="top" constant="24" id="lTW-Yq-8l8"/>
                                     </constraints>
                                 </tableViewCellContentView>
@@ -477,14 +477,14 @@
                                             <rect key="frame" x="22" y="22" width="20" height="20"/>
                                         </activityIndicatorView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Searching..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BHn-WX-Rz1">
-                                            <rect key="frame" x="59" y="24" width="529" height="17"/>
+                                            <rect key="frame" x="60" y="24" width="528" height="17"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <color key="textColor" red="0.63921568630000003" green="0.63921568630000003" blue="0.63921568630000003" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="BHn-WX-Rz1" firstAttribute="leading" secondItem="jGb-Fw-jR9" secondAttribute="trailing" constant="17" id="3JB-TK-dRW"/>
+                                        <constraint firstItem="BHn-WX-Rz1" firstAttribute="leading" secondItem="jGb-Fw-jR9" secondAttribute="trailing" constant="18" id="3JB-TK-dRW"/>
                                         <constraint firstAttribute="bottom" secondItem="BHn-WX-Rz1" secondAttribute="bottom" constant="24.5" id="Cai-ab-q3g"/>
                                         <constraint firstItem="BHn-WX-Rz1" firstAttribute="top" secondItem="7F9-y1-zaJ" secondAttribute="top" constant="24" id="IkO-vK-Rri"/>
                                         <constraint firstAttribute="bottom" secondItem="BHn-WX-Rz1" secondAttribute="bottom" constant="23.5" id="TSy-uE-tlZ"/>

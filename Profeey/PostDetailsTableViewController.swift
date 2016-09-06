@@ -63,7 +63,7 @@ class PostDetailsTableViewController: UITableViewController {
         }
         // Title and categories.
         self.titleLabel.text = self.post?.title
-        self.categoryLabel.text = self.post?.category
+        self.categoryLabel.text = self.post?.categoryName
         // User.
         self.profilePicImageView.layer.cornerRadius = 4.0
         self.profilePicImageView.clipsToBounds = true

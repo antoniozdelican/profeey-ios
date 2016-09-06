@@ -418,6 +418,7 @@
                     <size key="freeformSize" width="600" height="900"/>
                     <connections>
                         <segue destination="L9S-XV-FEq" kind="show" identifier="segueToProfileVc" id="bcN-4v-a2q"/>
+                        <segue destination="xPn-xr-6bw" kind="show" identifier="segueToCategoryVc" id="wzX-RA-dIC"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5s8-oY-yAi" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -431,6 +432,14 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SNz-SW-Ept" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1418" y="446"/>
+        </scene>
+        <!--Category-->
+        <scene sceneID="Hgw-Ni-ZlF">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Category" id="xPn-xr-6bw" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="jm7-84-Cy1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1418" y="219"/>
         </scene>
     </scenes>
     <resources>

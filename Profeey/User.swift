@@ -27,12 +27,12 @@ class User: NSObject {
     var numberOfNewPosts: NSNumber?
     
     // Generated.
+    var profilePic: UIImage?
     var fullName: String? {
         return [self.firstName, self.lastName].flatMap{$0}.joinWithSeparator(" ")
     }
-    var profilePic: UIImage?
     
-    var posts: [Post]?
+    //var posts: [Post]?
     
     override init() {
         super.init()
@@ -61,12 +61,12 @@ class User: NSObject {
         self.numberOfNewPosts = numberOfNewPosts
     }
     
-    convenience init(firstName: String?, lastName: String?, preferredUsername: String?, profession: String?, profilePic: UIImage?) {
-        self.init()
-        self.firstName = firstName
-        self.lastName = lastName
-        self.preferredUsername = preferredUsername
-        self.profession = profession
-        self.profilePic = profilePic
-    }
+//    convenience init(firstName: String?, lastName: String?, preferredUsername: String?, profession: String?, profilePic: UIImage?) {
+//        self.init()
+//        self.firstName = firstName
+//        self.lastName = lastName
+//        self.preferredUsername = preferredUsername
+//        self.profession = profession
+//        self.profilePic = profilePic
+//    }
 }

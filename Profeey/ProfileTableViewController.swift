@@ -165,7 +165,7 @@ class ProfileTableViewController: UITableViewController {
             let post = posts[indexPath.row]
             cell.postImageView.image = post.image
             cell.titleLabel.text = post.title
-            cell.categoryLabel.text = post.category
+            cell.categoryLabel.text = post.categoryName
             cell.timeLabel.text = post.creationDateString
             return cell
         case 5:
@@ -349,7 +349,7 @@ class ProfileTableViewController: UITableViewController {
             }
             self.isUploading = true
             self.tableView.reloadData()
-            self.uploadImage(imageData, title: sourceViewController.postTitle, description: sourceViewController.postDescription, category: sourceViewController.category)
+            self.uploadImage(imageData, title: sourceViewController.postTitle, description: sourceViewController.postDescription, categoryName: sourceViewController.categoryName)
         }
     }
     
@@ -422,7 +422,7 @@ class ProfileTableViewController: UITableViewController {
                         self.tableView.reloadData()
                         
                         // Update top categories.
-                        self.updateTopCategories(awsPosts.flatMap({$0._category}))
+                        //self.updateTopCategories(awsPosts.flatMap({$0._category}))
                         
                         // Iterate through all posts.
                         for (index, awsPost) in awsPosts.enumerate() {
@@ -430,7 +430,7 @@ class ProfileTableViewController: UITableViewController {
                             let indexPath = NSIndexPath(forRow: index, inSection: 4)
                             // Data is denormalized so we store user data in posts table!
                             let user = self.user
-                            let post = Post(postId: awsPost._postId, title: awsPost._title, postDescription: awsPost._description, imageUrl: awsPost._imageUrl, category: awsPost._category, creationDate: awsPost._creationDate, user: user)
+                            let post = Post(userId: awsPost._userId, postId: awsPost._postId, categoryName: awsPost._categoryName, creationDate: awsPost._creationDate, postDescription: awsPost._description, imageUrl: awsPost._imageUrl, title: awsPost._title, user: user)
                             self.posts.append(post)
                             self.tableView.reloadData()
                             
@@ -445,10 +445,9 @@ class ProfileTableViewController: UITableViewController {
         })
     }
     
-    // In background assuming it will not fail :)
-    private func savePost(imageData: NSData, imageUrl: String?, title: String?, description: String?, category: String?) {
+    private func savePost(imageData: NSData, imageUrl: String?, title: String?, description: String?, categoryName: String?) {
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().savePostDynamoDB(imageUrl, title: title, description: description, category: category, user: self.user, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().savePostDynamoDB(imageUrl, title: title, description: description, categoryName: categoryName, user: self.user, completionHandler: {
             (task: AWSTask) in
             dispatch_async(dispatch_get_main_queue(), {
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false
@@ -457,7 +456,8 @@ class ProfileTableViewController: UITableViewController {
                 } else {
                     if let awsPost = task.result as? AWSPost {
                         let user = self.user
-                        let post = Post(postId: awsPost._postId, title: awsPost._title, postDescription: awsPost._description, imageUrl: awsPost._imageUrl, category: awsPost._category, creationDate: awsPost._creationDate, user: user)
+                        let post = Post(userId: awsPost._userId, postId: awsPost._postId, categoryName: awsPost._categoryName, creationDate: awsPost._creationDate, postDescription: awsPost._description, imageUrl: awsPost._imageUrl, title: awsPost._title, user: user)
+                        
                         let image = UIImage(data: imageData)
                         post.image = image
                         self.posts.insert(post, atIndex: 0)
@@ -518,7 +518,7 @@ class ProfileTableViewController: UITableViewController {
         }
     }
     
-    private func uploadImage(imageData: NSData, title: String?, description: String?, category: String?) {
+    private func uploadImage(imageData: NSData, title: String?, description: String?, categoryName: String?) {
         let uniqueImageName = NSUUID().UUIDString.lowercaseString.stringByReplacingOccurrencesOfString("-", withString: "")
         let imageKey = "public/\(uniqueImageName).jpg"
         let localContent = AWSUserFileManager.custom(key: "USEast1BucketManager").localContentWithData(imageData, key: imageKey)
@@ -543,7 +543,7 @@ class ProfileTableViewController: UITableViewController {
                         self.presentViewController(alertController, animated: true, completion: nil)
                     } else {
                         // Save post in DynamoDB.
-                        self.savePost(imageData, imageUrl: imageKey, title: title, description: description, category: category)
+                        self.savePost(imageData, imageUrl: imageKey, title: title, description: description, categoryName: categoryName)
                     }
                 })
             })
