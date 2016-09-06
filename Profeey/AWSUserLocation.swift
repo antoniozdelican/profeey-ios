@@ -11,6 +11,6 @@ import Foundation
 class AWSUserLocation: AWSUser {
     
     class func ignoreAttributes() -> [String] {
-        return ["about", "firstName", "lastName", "preferredUsername", "profession", "profilePicUrl"]
+        return ["about", "firstName", "lastName", "preferredUsername", "profession", "profilePicUrl", "searchFirstName", "searchLastName"]
     }
 }

@@ -16,12 +16,19 @@ enum ImageType {
     case FeaturedCategoryImage
 }
 
+protocol FeaturedCategoriesDelegate {
+    func reloadData()
+}
+
 class HomeTableViewController: UITableViewController {
     
     private var user: User?
     private var followingUsers: [User] = []
     private var featuredCategories: [FeaturedCategory] = []
+    private var fakeFeaturedCategories: [FeaturedCategory] = []
+    private var featuredCategoriesDelegate: FeaturedCategoriesDelegate?
     private var isLoadingFollowing: Bool = true
+    private var isLoadingFeaturedCategories: Bool = true
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,6 +39,12 @@ class HomeTableViewController: UITableViewController {
             self.getCurrentUser()
             self.scanFeaturedCategories()
         }
+        
+        // Placeholders for featuredCategories before they load.
+        for _ in 0...5 {
+            self.fakeFeaturedCategories.append(FeaturedCategory(categoryName: nil, featuredImageUrl: nil, numberOfPosts: nil))
+        }
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -88,6 +101,7 @@ class HomeTableViewController: UITableViewController {
             let cell = tableView.dequeueReusableCellWithIdentifier("cellHomeCategories", forIndexPath: indexPath) as! HomeCategoriesTableViewCell
             cell.categoriesCollectionView.dataSource = self
             cell.categoriesCollectionView.delegate = self
+            self.featuredCategoriesDelegate = cell
             return cell
         case 2:
             let cell = tableView.dequeueReusableCellWithIdentifier("cellHomeHeader", forIndexPath: indexPath) as! HomeHeaderTableViewCell
@@ -259,7 +273,7 @@ class HomeTableViewController: UITableViewController {
     
     private func scanFeaturedCategories() {
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().scanFeaturedCategories({
+        PRFYDynamoDBManager.defaultDynamoDBManager().scanFeaturedCategoriesDynamoDB({
             (response: AWSDynamoDBPaginatedOutput?, error: NSError?) in
             dispatch_async(dispatch_get_main_queue(), {
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false
@@ -271,7 +285,8 @@ class HomeTableViewController: UITableViewController {
                         for (index, awsFeaturedCategory) in awsFeaturedCategories.enumerate() {
                             let featuredCategory = FeaturedCategory(categoryName: awsFeaturedCategory._categoryName, featuredImageUrl: awsFeaturedCategory._featuredImageUrl, numberOfPosts: awsFeaturedCategory._numberOfPosts)
                             self.featuredCategories.append(featuredCategory)
-                            self.tableView.reloadData()
+                            self.isLoadingFeaturedCategories = false
+                            self.featuredCategoriesDelegate?.reloadData()
                             
                             // Get featuredImage.
                             if let featuredImageUrl = awsFeaturedCategory._featuredImageUrl {
@@ -306,7 +321,7 @@ class HomeTableViewController: UITableViewController {
             case .FeaturedCategoryImage:
                 if let indexPath = indexPath {
                     self.featuredCategories[indexPath.row].featuredImage = image
-                    self.tableView.reloadData()
+                    self.featuredCategoriesDelegate?.reloadData()
                 }
             }
         } else {
@@ -338,7 +353,7 @@ class HomeTableViewController: UITableViewController {
                                 case .FeaturedCategoryImage:
                                     if let indexPath = indexPath {
                                         self.featuredCategories[indexPath.row].featuredImage = image
-                                        self.tableView.reloadData()
+                                        self.featuredCategoriesDelegate?.reloadData()
                                     }
                                 }
                             }
@@ -356,16 +371,18 @@ extension HomeTableViewController: UICollectionViewDataSource, UICollectionViewD
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.featuredCategories.count
+        return self.isLoadingFeaturedCategories ? self.fakeFeaturedCategories.count : self.featuredCategories.count
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("cellHomeCategory", forIndexPath: indexPath) as! HomeCategoryCollectionViewCell
-        let featuredCategory = self.featuredCategories[indexPath.row]
+        let featuredCategory = self.isLoadingFeaturedCategories ? self.fakeFeaturedCategories[indexPath.row] : self.featuredCategories[indexPath.row]
         cell.categoryNameLabel.text = featuredCategory.categoryName
         if let numberOfPosts = featuredCategory.numberOfPosts {
             let numberOfPostsInt = numberOfPosts.integerValue
             cell.numberOfPostsLabel.text = numberOfPostsInt > 1 ? "\(numberOfPostsInt.numberToString()) posts" : "\(numberOfPostsInt.numberToString()) post"
+        } else {
+            cell.numberOfPostsLabel.text = nil
         }
         cell.categoryImageView.image = featuredCategory.featuredImage
         return cell

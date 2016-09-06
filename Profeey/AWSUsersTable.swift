@@ -55,11 +55,27 @@ class AWSUsersTable: NSObject, Table {
         objectMapper.save(userToUpdate, configuration: updateMapperConfig).continueWithBlock(completionHandler)
     }
     
-    // Scan all users in the Users table.
+    // Scan all (upto 5) users in the Users table.
     func scanUsers(completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
         let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
         let scanExpression = AWSDynamoDBScanExpression()
         scanExpression.limit = 5
+        objectMapper.scan(AWSUser.self, expression: scanExpression, completionHandler: completionHandler)
+    }
+    
+    func scanUsersByFirstLastName(searchFirstName: String, searchLastName: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
+        let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
+        let scanExpression = AWSDynamoDBScanExpression()
+        scanExpression.filterExpression = "begins_with(#searchFirstName, :searchFirstName) OR begins_with(#searchLastName, :searchLastName)"
+        scanExpression.expressionAttributeNames = [
+            "#searchFirstName": "searchFirstName",
+            "#searchLastName": "searchLastName",
+        ]
+        scanExpression.expressionAttributeValues = [
+            ":searchFirstName": searchFirstName,
+            ":searchLastName": searchLastName,
+        ]
+        scanExpression.limit = 10
         objectMapper.scan(AWSUser.self, expression: scanExpression, completionHandler: completionHandler)
     }
     

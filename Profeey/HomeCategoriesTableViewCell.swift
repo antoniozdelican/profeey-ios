@@ -19,5 +19,11 @@ class HomeCategoriesTableViewCell: UITableViewCell {
     override func setSelected(selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
+}
 
+extension HomeCategoriesTableViewCell: FeaturedCategoriesDelegate {
+    
+    func reloadData() {
+        self.categoriesCollectionView.reloadData()
+    }
 }

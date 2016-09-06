@@ -25,6 +25,7 @@ protocol DynamoDBManager {
     func updateProfilePicDynamoDB(profilePicUrl: String?, completionHandler: AWSContinuationBlock)
     
     func scanUsersDynamoDB(completionHandler: AWSContinuationBlock)
+    func scanUsersByFirstLastNameDynamoDB(searchFirstName: String, searchLastName: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void)
     
     // MARK: UserRelationships
     
@@ -47,5 +48,5 @@ protocol DynamoDBManager {
     
     // MARK: FeaturedCategories
     
-    func scanFeaturedCategories(completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void)
+    func scanFeaturedCategoriesDynamoDB(completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void)
 }

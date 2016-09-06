@@ -15,22 +15,21 @@ protocol ScrollViewDelegate {
 }
 
 protocol SearchDelegate {
-    func showUsers(users: [User])
     func showCategories(categories: [Category])
-    func toggleSearchingIndicator(show: Bool)
+    func toggleSearchUsers(users: [User], isSearching: Bool)
 }
 
 class SearchTableViewController: UITableViewController {
     
-    var searchController: UISearchController?
-    var searchResultsController: SearchResultsViewController?
-    var searchDelegate: SearchDelegate?
+    private var searchController: UISearchController?
+    private var searchResultsController: SearchResultsViewController?
+    private var searchDelegate: SearchDelegate?
     
     private var allUsers: [User] = []
     private var searchedUsers: [User] = []
     private var allCategories: [Category] = []
     private var searchedCategories: [Category] = []
-    private var popularCategories: [Category] = []
+    private var featuredCategories: [FeaturedCategory] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,14 +39,9 @@ class SearchTableViewController: UITableViewController {
         self.automaticallyAdjustsScrollViewInsets = false
         self.configureSearchController()
         
-        // Start loading all users.
-        self.scanUsers()
-        
-        // MOCK
-//        let user1 = User(firstName: "Ivan", lastName: "Zdelican", preferredUsername: "ivan", profession: "Fruit Grower", profilePic: UIImage(named: "pic_ivan"))
-//        let user2 = User(firstName: "Filip", lastName: "Vargovic", preferredUsername: "filja", profession: "Yacht Skipper", profilePic: UIImage(named: "pic_filip"))
-//        let user3 = User(firstName: "Josip", lastName: "Zdelican", preferredUsername: "jole", profession: "Agricultural Engineer", profilePic: UIImage(named: "pic_josip"))
-//        self.allUsers = [user1, user2, user3]
+        // Get users and featured categories.
+        //self.scanUsers()
+        self.scanFeaturedCategories()
         
         // MOCK
         let category1 = Category(categoryName: "Engineering", numberOfUsers: 2, numberOfPosts: 12)
@@ -55,9 +49,6 @@ class SearchTableViewController: UITableViewController {
         let category3 = Category(categoryName: "Agriculture", numberOfUsers: 3, numberOfPosts: 28)
         let category4 = Category(categoryName: "Fruit growing", numberOfUsers: 1, numberOfPosts: 1)
         self.allCategories = [category1, category2, category3, category4]
-        
-        // MOCK
-        self.popularCategories = [category1, category2, category3, category4]
     }
 
     override func didReceiveMemoryWarning() {
@@ -68,12 +59,16 @@ class SearchTableViewController: UITableViewController {
     
     private func configureSearchController() {
         self.searchResultsController = self.storyboard?.instantiateViewControllerWithIdentifier("searchResultsViewController") as? SearchResultsViewController
+        
         // Set delegate to dismiss keyboard on drag.
         self.searchResultsController?.scrollViewDelegate = self
+        
         // Set search delegate.
         self.searchDelegate = self.searchResultsController
+        
         // Set select user delegate.
         self.searchResultsController?.selectUserDelegate = self
+        
         // Set select category delegate.
         self.searchResultsController?.selectCategoryDelegate = self
         
@@ -95,7 +90,7 @@ class SearchTableViewController: UITableViewController {
             let indexPath = sender as? NSIndexPath,
             let text = self.searchController?.searchBar.text {
             // Searched or all users.
-            destinationViewController.user = text.trimm().isEmpty ? self.allUsers[indexPath.row] : self.searchedUsers[indexPath.row]
+//            destinationViewController.user = text.trimm().isEmpty ? self.allUsers[indexPath.row] : self.searchedUsers[indexPath.row]
             destinationViewController.isCurrentUser = false
         }
         if let destinationViewController = segue.destinationViewController as? CategoryTableViewController,
@@ -107,7 +102,7 @@ class SearchTableViewController: UITableViewController {
                 destinationViewController.category = text.trimm().isEmpty ? self.allCategories[indexPath.row] : self.searchedCategories[indexPath.row]
             } else {
                 // Popular categories.
-                destinationViewController.category = self.popularCategories[indexPath.row]
+                //destinationViewController.category = self.popularCategories[indexPath.row]
             }
         }
     }
@@ -123,7 +118,7 @@ class SearchTableViewController: UITableViewController {
         case 0:
             return 1
         default:
-            return self.popularCategories.count
+            return self.featuredCategories.count
         }
     }
     
@@ -136,8 +131,7 @@ class SearchTableViewController: UITableViewController {
             return cell
         default:
             let cell = tableView.dequeueReusableCellWithIdentifier("cellPopularCategory", forIndexPath: indexPath) as! PopularCategoryTableViewCell
-            let category = self.popularCategories[indexPath.row]
-            cell.categoryNameLabel.text = category.categoryName
+            cell.categoryNameLabel.text = self.featuredCategories[indexPath.row].categoryName
             return cell
         }
     }
@@ -163,89 +157,132 @@ class SearchTableViewController: UITableViewController {
     
     private func filterContentForSearchText(searchText: String) {
         // Simulate delay
-        self.searchDelegate?.toggleSearchingIndicator(true)
-        let delayInSeconds: Double = 1.0
-        let popTime: dispatch_time_t = dispatch_time(DISPATCH_TIME_NOW, Int64(delayInSeconds * Double(NSEC_PER_SEC)))
-        dispatch_after(popTime, dispatch_get_main_queue(), {
-            () -> Void in
-            self.searchDelegate?.toggleSearchingIndicator(false)
-            
-            // Search users.
-            self.searchedUsers = self.allUsers.filter({
-                (user: User) -> Bool in
-                let firstNameMatch = user.firstName?.lowercaseString.hasPrefix(searchText.lowercaseString)
-                let lastNameMatch = user.lastName?.lowercaseString.hasPrefix(searchText.lowercaseString)
-                let fullNameMatch = user.fullName?.lowercaseString.hasPrefix(searchText.lowercaseString)
-                return (firstNameMatch != nil && firstNameMatch!) || (lastNameMatch != nil && lastNameMatch!) || (fullNameMatch != nil && fullNameMatch!)
-            })
-            self.searchDelegate?.showUsers(self.searchedUsers)
-            
-            // Search categories.
-            self.searchedCategories = self.allCategories.filter({
-                (category: Category) -> Bool in
-                let categoryNameMatch = category.categoryName?.lowercaseString.hasPrefix(searchText.lowercaseString)
-                return (categoryNameMatch != nil && categoryNameMatch!)
-            })
-            self.searchDelegate?.showCategories(self.searchedCategories)
-            
-        })
+//        self.searchDelegate?.toggleSearchingIndicator(true)
+//        let delayInSeconds: Double = 1.0
+//        let popTime: dispatch_time_t = dispatch_time(DISPATCH_TIME_NOW, Int64(delayInSeconds * Double(NSEC_PER_SEC)))
+//        dispatch_after(popTime, dispatch_get_main_queue(), {
+//            () -> Void in
+//            self.searchDelegate?.toggleSearchingIndicator(false)
+//            
+//            // Search users.
+//            self.searchedUsers = self.allUsers.filter({
+//                (user: User) -> Bool in
+//                let firstNameMatch = user.firstName?.lowercaseString.hasPrefix(searchText.lowercaseString)
+//                let lastNameMatch = user.lastName?.lowercaseString.hasPrefix(searchText.lowercaseString)
+//                let fullNameMatch = user.fullName?.lowercaseString.hasPrefix(searchText.lowercaseString)
+//                return (firstNameMatch != nil && firstNameMatch!) || (lastNameMatch != nil && lastNameMatch!) || (fullNameMatch != nil && fullNameMatch!)
+//            })
+//            self.searchDelegate?.showUsers(self.searchedUsers)
+//            
+//            // Search categories.
+//            self.searchedCategories = self.allCategories.filter({
+//                (category: Category) -> Bool in
+//                let categoryNameMatch = category.categoryName?.lowercaseString.hasPrefix(searchText.lowercaseString)
+//                return (categoryNameMatch != nil && categoryNameMatch!)
+//            })
+//            self.searchDelegate?.showCategories(self.searchedCategories)
+//            
+//        })
     }
     
     // MARK: AWS
     
-    private func scanUsers() {
+    private func scanUsersByFirsLastName(searchText: String) {
+        let searchFirstName = searchText.lowercaseString
+        let searchLastName = searchText.lowercaseString
+        
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-        AWSClientManager.defaultClientManager().scanUsers({
-            (task: AWSTask) in
+        self.searchDelegate?.toggleSearchUsers([], isSearching: true)
+        PRFYDynamoDBManager.defaultDynamoDBManager().scanUsersByFirstLastNameDynamoDB(searchFirstName, searchLastName: searchLastName, completionHandler: {
+            (response: AWSDynamoDBPaginatedOutput?, error: NSError?) in
             dispatch_async(dispatch_get_main_queue(), {
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-                if let error = task.error {
-                    print("Error: \(error.userInfo["message"])")
+                if let error = error {
+                    print("scanUsersByFirsLastName error: \(error)")
+                    self.searchDelegate?.toggleSearchUsers([], isSearching: false)
                 } else {
-                    if let output = task.result as? AWSDynamoDBPaginatedOutput,
-                        let awsUsers = output.items as? [AWSUser] {
-                        // Iterate through all users. This should change and fetch only certain or?
-                        for (index, awsUser) in awsUsers.enumerate() {
+                    if let awsUsers = response?.items as? [AWSUser] {
+                        // Should return max of 10 users.
+                        
+                        // Clear for fresh search.
+                        self.searchedUsers = []
+                        for(index, awsUser) in awsUsers.enumerate() {
+                            
                             let user = User(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, profession: awsUser._profession, profilePicUrl: awsUser._profilePicUrl, location: awsUser._location, about: awsUser._about)
-                            self.allUsers.append(user)
+                            self.searchedUsers.append(user)
                             
                             // Get profilePic.
-//                            if let imageUrl = awsUser._profilePicUrl {
-//                                self.downloadImage(imageUrl, userIndex: index)
-//                            }
+                            if let profilePicUrl = awsUser._profilePicUrl {
+                                self.downloadImage(profilePicUrl, index: index)
+                            }
                         }
-                        // Reload tableView.
-                        self.searchDelegate?.showUsers(self.allUsers)
+                        self.searchDelegate?.toggleSearchUsers(self.searchedUsers, isSearching: false)
                     }
                 }
             })
-            return nil
         })
     }
     
-//    private func downloadImage(imageKey: String, userIndex: Int) {
-//        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-//        AWSClientManager.defaultClientManager().downloadImage(
-//            imageKey,
-//            completionHandler: {
-//                (task: AWSTask) in
-//                dispatch_async(dispatch_get_main_queue(), {
-//                    UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-//                    if let error = task.error {
-//                        print("Error: \(error.userInfo["message"])")
-//                    } else {
-//                        if let imageData = task.result as? NSData {
-//                            let image = UIImage(data: imageData)
-//                            // Set user profilePic.
-//                            self.allUsers[userIndex].profilePic = image
-//                            // Reload tableView.
-//                            self.searchDelegate?.showUsers(self.allUsers)
-//                        }
-//                    }
-//                })
-//                return nil
-//        })
-//    }
+    private func scanFeaturedCategories() {
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().scanFeaturedCategoriesDynamoDB({
+            (response: AWSDynamoDBPaginatedOutput?, error: NSError?) in
+            dispatch_async(dispatch_get_main_queue(), {
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                if let error = error {
+                    print("scanFeaturedCategories error: \(error)")
+                } else {
+                    if let awsFeaturedCategories = response?.items as? [AWSFeaturedCategory] {
+                        
+                        for awsFeaturedCategory in awsFeaturedCategories {
+                            let featuredCategory = FeaturedCategory(categoryName: awsFeaturedCategory._categoryName, featuredImageUrl: awsFeaturedCategory._featuredImageUrl, numberOfPosts: awsFeaturedCategory._numberOfPosts)
+                            self.featuredCategories.append(featuredCategory)
+                            self.tableView.reloadData()
+                        }
+                    }
+                }
+            })
+        })
+    }
+    
+    private func downloadImage(imageKey: String, index: Int) {
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        let content = AWSUserFileManager.custom(key: "USEast1BucketManager").contentWithKey(imageKey)
+        // TODO check if content.isImage()
+        if content.cached {
+            print("Content cached:")
+            dispatch_async(dispatch_get_main_queue(), {
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+            })
+            let image = UIImage(data: content.cachedData)
+            self.searchedUsers[index].profilePic = image
+            self.searchDelegate?.toggleSearchUsers(self.searchedUsers, isSearching: false)
+        } else {
+            print("Download content:")
+            content.downloadWithDownloadType(
+                AWSContentDownloadType.IfNewerExists,
+                pinOnCompletion: false,
+                progressBlock: {
+                    (content: AWSContent?, progress: NSProgress?) -> Void in
+                    // TODO
+                },
+                completionHandler: {
+                    (content: AWSContent?, data: NSData?, error: NSError?) in
+                    dispatch_async(dispatch_get_main_queue(), {
+                        UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                        if let error = error {
+                            print("downloadImage error: \(error)")
+                        } else {
+                            if let imageData = data {
+                                let image = UIImage(data: imageData)
+                                self.searchedUsers[index].profilePic = image
+                                self.searchDelegate?.toggleSearchUsers(self.searchedUsers, isSearching: false)
+                            }
+                        }
+                    })
+            })
+        }
+    }
 }
 
 extension SearchTableViewController: UISearchResultsUpdating {
@@ -260,10 +297,10 @@ extension SearchTableViewController: UISearchResultsUpdating {
         if searchText.isEmpty && searchResultsController.view.hidden {
             searchController.searchResultsController?.view.hidden = false
         }
-        // If search text is empty show all users.
+        // If search text is empty show NO users.
         if searchText.isEmpty {
-            self.searchDelegate?.showUsers(self.allUsers)
-            self.searchDelegate?.showCategories(self.allCategories)
+            self.searchDelegate?.toggleSearchUsers([], isSearching: false)
+            //self.searchDelegate?.showCategories(self.allCategories)
         }
     }
 }
@@ -274,7 +311,7 @@ extension SearchTableViewController: UISearchBarDelegate {
         let searchText = searchText.trimm()
         // If search text is not empty, do the search.
         if !searchText.isEmpty {
-            self.filterContentForSearchText(searchText)
+            self.scanUsersByFirsLastName(searchText)
         }
     }
 }

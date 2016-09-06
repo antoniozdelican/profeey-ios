@@ -9,8 +9,7 @@
 import UIKit
 
 protocol SearchUsersDelegate {
-    func showUsers(users: [User])
-    func toggleSearchingIndicator(show: Bool)
+    func toggleSearchUsers(users: [User], isSearching: Bool)
 }
 
 protocol SearchCategoriesDelegate {
@@ -26,13 +25,12 @@ class SearchResultsViewController: UIViewController {
     @IBOutlet weak var peopleLabel: UILabel!
     @IBOutlet weak var categoriesImageView: UIImageView!
     @IBOutlet weak var categoriesLabel: UILabel!
-    
-    // TEST
     @IBOutlet weak var segmentedControlView: UIView!
     
     var scrollViewDelegate: ScrollViewDelegate?
     var selectUserDelegate: SelectUserDelegate?
     var selectCategoryDelegate: SelectCategoryDelegate?
+    
     private var searchUsersDelegate: SearchUsersDelegate?
     private var searchCategoriesDelegate: SearchCategoriesDelegate?
     
@@ -57,8 +55,8 @@ class SearchResultsViewController: UIViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if let destinationViewController = segue.destinationViewController as? SearchUsersTableViewController {
             destinationViewController.scrollViewDelegate = self.scrollViewDelegate
-            self.searchUsersDelegate = destinationViewController
             destinationViewController.selectUserDelegate = self.selectUserDelegate
+            self.searchUsersDelegate = destinationViewController
         }
         if let destinationViewController = segue.destinationViewController as? SearchCategoriesTableViewController {
             destinationViewController.scrollViewDelegate = self.scrollViewDelegate
@@ -118,16 +116,11 @@ extension SearchResultsViewController: UIScrollViewDelegate {
 
 extension SearchResultsViewController: SearchDelegate {
     
-    func showUsers(users: [User]) {
-        self.searchUsersDelegate?.showUsers(users)
-    }
-    
     func showCategories(categories: [Category]) {
         self.searchCategoriesDelegate?.showCategories(categories)
     }
     
-    func toggleSearchingIndicator(show: Bool) {
-        self.searchUsersDelegate?.toggleSearchingIndicator(show)
-        self.searchCategoriesDelegate?.toggleSearchingIndicator(show)
+    func toggleSearchUsers(users: [User], isSearching: Bool) {
+        self.searchUsersDelegate?.toggleSearchUsers(users, isSearching: isSearching)
     }
 }

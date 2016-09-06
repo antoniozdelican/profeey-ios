@@ -17,7 +17,7 @@ class SearchUsersTableViewController: UITableViewController {
     var scrollViewDelegate: ScrollViewDelegate?
     var selectUserDelegate: SelectUserDelegate?
     private var users: [User] = []
-    private var showSearchingIndicator: Bool = false
+    private var isSearching: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,26 +42,14 @@ class SearchUsersTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
-            if self.showSearchingIndicator {
-                // Searching cell.
-                return 1
-            } else {
-                return 0
-            }
+            // Searching cell.
+            return self.isSearching ? 1 : 0
         case 1:
-            if !self.showSearchingIndicator {
-                // No results cell.
-                return self.users.count > 0 ? 0 : 1
-            } else {
-                return 0
-            }
+            // No results cell.
+            return self.isSearching ? 0 : (self.users.count > 0 ? 0 : 1)
         default:
-            if !self.showSearchingIndicator {
-                // Users.
-                return self.users.count
-            } else {
-                return 0
-            }
+            // User cell.
+            return self.isSearching ? 0 : self.users.count
         }
     }
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -106,13 +94,9 @@ class SearchUsersTableViewController: UITableViewController {
 
 extension SearchUsersTableViewController: SearchUsersDelegate {
     
-    func showUsers(users: [User]) {
+    func toggleSearchUsers(users: [User], isSearching: Bool) {
         self.users = users
-        self.tableView.reloadData()
-    }
-    
-    func toggleSearchingIndicator(show: Bool) {
-        self.showSearchingIndicator = show
+        self.isSearching = isSearching
         self.tableView.reloadData()
     }
 }

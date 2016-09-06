@@ -52,21 +52,6 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
                 print("getCurrentUserDynamoDB:")
                 let usersTable = AWSUsersTable()
                 usersTable.getUser(identityId, completionHandler: completionHandler)
-                
-//                let usersTable = AWSUsersTable()
-//                usersTable.getUser(identityId, completionHandler: {
-//                    (task: AWSTask) in
-//                    if let error = task.error {
-//                        print("getCurrentUserDynamoDB error:")
-//                        return AWSTask(error: error).continueWithBlock(completionHandler)
-//                    } else if (task.result as? AWSUser) != nil {
-//                        print("getCurrentUserDynamoDB success!")
-//                        return task.continueWithBlock(completionHandler)
-//                    } else {
-//                        print("This should not happen with getCurrentUserDynamoDB!")
-//                        return AWSTask().continueWithBlock(completionHandler)
-//                    }
-//                })
                 return nil
             } else {
                 print("This should not happen with getIdentityId!")
@@ -89,6 +74,8 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
                 user._userId = identityId
                 user._firstName = firstName
                 user._lastName = lastName
+                user._searchFirstName = firstName?.lowercaseString
+                user._searchLastName = lastName?.lowercaseString
                 usersTable.saveUserFirstLastName(user, completionHandler: {
                     (task: AWSTask) in
                     if let error = task.error {
@@ -275,6 +262,12 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
                 AWSTask(result: response).continueWithBlock(completionHandler)
             }
         })
+    }
+    
+    func scanUsersByFirstLastNameDynamoDB(searchFirstName: String, searchLastName: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
+        print("scanUsersByFirstLastNameDynamoDB:")
+        let usersTable = AWSUsersTable()
+        usersTable.scanUsersByFirstLastName(searchFirstName, searchLastName: searchLastName, completionHandler: completionHandler)
     }
     
     // MARK: UserRelationships
@@ -518,8 +511,8 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
     
     // MARK: FeaturedCategories
     
-    func scanFeaturedCategories(completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
-        print("scanFeaturedCategories:")
+    func scanFeaturedCategoriesDynamoDB(completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
+        print("scanFeaturedCategoriesDynamoDB:")
         let featuredCategoriesTable = AWSFeaturedCategoriesTable()
         featuredCategoriesTable.scanFeaturedCategories(completionHandler)
     }
