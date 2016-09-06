@@ -516,4 +516,12 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         let featuredCategoriesTable = AWSFeaturedCategoriesTable()
         featuredCategoriesTable.scanFeaturedCategories(completionHandler)
     }
+    
+    // MARK: Categories
+    
+    func scanCategoriesByCategoryNameDynamoDB(searchCategoryName: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
+        print("scanCategoriesByCategoryNameDynamoDB:")
+        let categoriesTable = AWSCategoriesTable()
+        categoriesTable.scanCategoriesByCategoryName(searchCategoryName, completionHandler: completionHandler)
+    }
 }

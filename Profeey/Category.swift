@@ -12,28 +12,25 @@ class Category: NSObject {
     
     // Properties.
     var categoryName: String?
-    var numberOfUsers: Int?
-    var numberOfPosts: Int?
+    var numberOfPosts: NSNumber?
     
-    //TEST
-    var featuredImage: UIImage?
+    // Generated.
+    var numberOfPostsString: String? {
+        if let numberOfPosts = self.numberOfPosts {
+            let numberOfPostsInt = numberOfPosts.integerValue
+            return numberOfPostsInt == 1 ? "\(numberOfPostsInt) post" : "\(numberOfPostsInt) posts"
+        } else {
+            return nil
+        }
+    }
     
     override init() {
         super.init()
     }
     
-    convenience init(categoryName: String?, numberOfUsers: Int?, numberOfPosts: Int?) {
+    convenience init(categoryName: String?, numberOfPosts: NSNumber?) {
         self.init()
         self.categoryName = categoryName
-        self.numberOfUsers = numberOfUsers
         self.numberOfPosts = numberOfPosts
-    }
-    
-    convenience init(categoryName: String?, numberOfUsers: Int?, numberOfPosts: Int?, featuredImage: UIImage?) {
-        self.init()
-        self.categoryName = categoryName
-        self.numberOfUsers = numberOfUsers
-        self.numberOfPosts = numberOfPosts
-        self.featuredImage = featuredImage
     }
 }

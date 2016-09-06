@@ -13,8 +13,7 @@ protocol SearchUsersDelegate {
 }
 
 protocol SearchCategoriesDelegate {
-    func showCategories(categories: [Category])
-    func toggleSearchingIndicator(show: Bool)
+    func toggleSearchCategories(categories: [Category], isSearching: Bool)
 }
 
 class SearchResultsViewController: UIViewController {
@@ -60,8 +59,8 @@ class SearchResultsViewController: UIViewController {
         }
         if let destinationViewController = segue.destinationViewController as? SearchCategoriesTableViewController {
             destinationViewController.scrollViewDelegate = self.scrollViewDelegate
-            self.searchCategoriesDelegate = destinationViewController
             destinationViewController.selectCategoryDelegate = self.selectCategoryDelegate
+            self.searchCategoriesDelegate = destinationViewController
         }
     }
     
@@ -116,11 +115,11 @@ extension SearchResultsViewController: UIScrollViewDelegate {
 
 extension SearchResultsViewController: SearchDelegate {
     
-    func showCategories(categories: [Category]) {
-        self.searchCategoriesDelegate?.showCategories(categories)
-    }
-    
     func toggleSearchUsers(users: [User], isSearching: Bool) {
         self.searchUsersDelegate?.toggleSearchUsers(users, isSearching: isSearching)
+    }
+    
+    func toggleSearchCategories(categories: [Category], isSearching: Bool) {
+        self.searchCategoriesDelegate?.toggleSearchCategories(categories, isSearching: isSearching)
     }
 }

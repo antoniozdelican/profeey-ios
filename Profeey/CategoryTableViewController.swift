@@ -19,7 +19,7 @@ class CategoryTableViewController: UITableViewController {
         self.tableView.estimatedRowHeight = 155.0
         self.tableView.rowHeight = UITableViewAutomaticDimension
         self.automaticallyAdjustsScrollViewInsets = false
-//        self.navigationItem.title = self.category?.categoryName
+        self.navigationItem.title = self.category?.categoryName
         
         // MOCK
         let user1 = User(firstName: "Ivan", lastName: "Zdelican", preferredUsername: "ivan", profession: "Fruit Grower", profilePic: UIImage(named: "pic_ivan"))
@@ -27,37 +27,15 @@ class CategoryTableViewController: UITableViewController {
         let user3 = User(firstName: "Josip", lastName: "Zdelican", preferredUsername: "jole", profession: "Agricultural Engineer", profilePic: UIImage(named: "pic_josip"))
         
         // MOCK
-        let category1 = Category(categoryName: "Melon Production", numberOfUsers: 2, numberOfPosts: 12)
-        let category2 = Category(categoryName: "Yachting", numberOfUsers: 1, numberOfPosts: 5)
-        let category3 = Category(categoryName: "Agriculture", numberOfUsers: 3, numberOfPosts: 28)
-        let category4 = Category(categoryName: "Tobacco industry", numberOfUsers: 1, numberOfPosts: 1)
+        let category1 = Category(categoryName: "Melon Production", numberOfPosts: 12)
+        let category2 = Category(categoryName: "Yachting", numberOfPosts: 5)
+        let category3 = Category(categoryName: "Agriculture", numberOfPosts: 28)
+        let category4 = Category(categoryName: "Tobacco industry", numberOfPosts: 1)
         
         let post1 = Post(user: user1, postDescription: nil, imageUrl: nil, title: "Melon harvest - peak of the season", image: UIImage(named: "post_pic_ivan"), categories: [category1, category3])
         let post2 = Post(user: user2, postDescription: nil, imageUrl: nil, title: "New boat for this summer's tour", image: UIImage(named: "post_pic_filip"), categories: [category2])
         let post3 = Post(user: user3, postDescription: nil, imageUrl: nil, title: "Desired tobacco color of type Berlej before the final stage of drying", image: UIImage(named: "post_pic_josip"), categories: [category3, category4])
         self.posts = [post1, post2, post3]
-    }
-    
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
-        //TEST
-        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), forBarMetrics: .Default)
-        self.navigationController?.navigationBar.shadowImage = UIImage()
-        self.navigationController?.navigationBar.backgroundColor = UIColor.clearColor()
-        self.navigationController?.navigationBar.barTintColor = UIColor.clearColor()
-        self.navigationController?.navigationBar.translucent = true
-        self.navigationController?.navigationBar.tintColor = UIColor.whiteColor()
-    }
-    
-    override func viewWillDisappear(animated: Bool) {
-        super.viewWillDisappear(animated)
-        //TEST
-        self.navigationController?.navigationBar.setBackgroundImage(nil, forBarMetrics: .Default)
-        self.navigationController?.navigationBar.shadowImage = nil
-        self.navigationController?.navigationBar.backgroundColor = Colors.greyLight
-        self.navigationController?.navigationBar.barTintColor = Colors.greyLight
-        self.navigationController?.navigationBar.translucent = false
-        self.navigationController?.navigationBar.tintColor = Colors.blue
     }
     
     override func didReceiveMemoryWarning() {

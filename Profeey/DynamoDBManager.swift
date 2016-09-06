@@ -49,4 +49,8 @@ protocol DynamoDBManager {
     // MARK: FeaturedCategories
     
     func scanFeaturedCategoriesDynamoDB(completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void)
+    
+    // MARK: Categories
+    
+    func scanCategoriesByCategoryNameDynamoDB(searchCategoryName: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void)
 }

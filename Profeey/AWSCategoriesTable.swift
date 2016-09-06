@@ -1,8 +1,8 @@
 //
-//  AWSFeaturedCategoriesTable.swift
+//  AWSCategoriesTable.swift
 //  Profeey
 //
-//  Created by Antonio Zdelican on 05/09/16.
+//  Created by Antonio Zdelican on 06/09/16.
 //  Copyright © 2016 Profeey. All rights reserved.
 //
 
@@ -10,7 +10,7 @@ import Foundation
 import AWSDynamoDB
 import AWSMobileHubHelper
 
-class AWSFeaturedCategoriesTable: NSObject, Table {
+class AWSCategoriesTable: NSObject, Table {
     
     var tableName: String
     var partitionKeyName: String
@@ -24,12 +24,12 @@ class AWSFeaturedCategoriesTable: NSObject, Table {
     }
     var tableDisplayName: String {
         
-        return "FeaturedCategories"
+        return "Categories"
     }
     
     override init() {
         
-        model = AWSFeaturedCategory()
+        model = AWSCategory()
         
         tableName = model.classForCoder.dynamoDBTableName()
         partitionKeyName = model.classForCoder.hashKeyAttribute()
@@ -42,15 +42,20 @@ class AWSFeaturedCategoriesTable: NSObject, Table {
     }
     
     func tableAttributeName(dataObjectAttributeName: String) -> String {
-        return AWSFeaturedCategory.JSONKeyPathsByPropertyKey()[dataObjectAttributeName] as! String
+        return AWSCategory.JSONKeyPathsByPropertyKey()[dataObjectAttributeName] as! String
     }
     
-    // Scan all (10 at most) featured categories.
-    func scanFeaturedCategories(completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
+    func scanCategoriesByCategoryName(searchCategoryName: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
         let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
         let scanExpression = AWSDynamoDBScanExpression()
+        scanExpression.filterExpression = "begins_with(#searchCategoryName, :searchCategoryName)"
+        scanExpression.expressionAttributeNames = [
+            "#searchCategoryName": "searchCategoryName",
+        ]
+        scanExpression.expressionAttributeValues = [
+            ":searchCategoryName": searchCategoryName,
+        ]
         scanExpression.limit = 10
-        
-        objectMapper.scan(AWSFeaturedCategory.self, expression: scanExpression, completionHandler: completionHandler)
+        objectMapper.scan(AWSCategory.self, expression: scanExpression, completionHandler: completionHandler)
     }
 }

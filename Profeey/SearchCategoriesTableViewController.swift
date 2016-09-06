@@ -17,7 +17,7 @@ class SearchCategoriesTableViewController: UITableViewController {
     var scrollViewDelegate: ScrollViewDelegate?
     var selectCategoryDelegate: SelectCategoryDelegate?
     private var categories: [Category] = []
-    private var showSearchingIndicator: Bool = false
+    private var isSearching: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,26 +38,14 @@ class SearchCategoriesTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
-            if self.showSearchingIndicator {
-                // Searching cell.
-                return 1
-            } else {
-                return 0
-            }
+            // Searching cell.
+            return self.isSearching ? 1 : 0
         case 1:
-            if !self.showSearchingIndicator {
-                // No results cell.
-                return self.categories.count > 0 ? 0 : 1
-            } else {
-                return 0
-            }
+            // No results cell.
+            return self.isSearching ? 0 : (self.categories.count > 0 ? 0 : 1)
         default:
-            if !self.showSearchingIndicator {
-                // Users.
-                return self.categories.count
-            } else {
-                return 0
-            }
+            // User cell.
+            return self.isSearching ? 0 : self.categories.count
         }
     }
     
@@ -74,6 +62,7 @@ class SearchCategoriesTableViewController: UITableViewController {
             let cell = tableView.dequeueReusableCellWithIdentifier("cellCategory", forIndexPath: indexPath) as! SearchCategoryTableViewCell
             let category = self.categories[indexPath.row]
             cell.categoryNameLabel.text = category.categoryName
+            cell.numberOfUsersPostsLabel.text = category.numberOfPostsString
             return cell
         }
     }
@@ -101,13 +90,9 @@ class SearchCategoriesTableViewController: UITableViewController {
 
 extension SearchCategoriesTableViewController: SearchCategoriesDelegate {
     
-    func showCategories(categories: [Category]) {
+    func toggleSearchCategories(categories: [Category], isSearching: Bool) {
         self.categories = categories
-        self.tableView.reloadData()
-    }
-    
-    func toggleSearchingIndicator(show: Bool) {
-        self.showSearchingIndicator = show
+        self.isSearching = isSearching
         self.tableView.reloadData()
     }
 }
