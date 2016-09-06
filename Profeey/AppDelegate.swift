@@ -65,6 +65,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // UITextView
         UITextView.appearance().tintColor = Colors.black
+        
+        // UISearchBar
+        UISearchBar.appearance().searchBarStyle = UISearchBarStyle.Minimal
     }
 }
 

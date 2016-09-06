@@ -76,13 +76,10 @@ class SearchTableViewController: UITableViewController {
     // MARK: Navigation
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-//        if let destinationViewController = segue.destinationViewController as? ProfileTableViewController,
-//            let indexPath = sender as? NSIndexPath,
-//            let text = self.searchController?.searchBar.text {
-//            // Searched or all users.
-////            destinationViewController.user = text.trimm().isEmpty ? self.allUsers[indexPath.row] : self.searchedUsers[indexPath.row]
-//            destinationViewController.isCurrentUser = false
-//        }
+        if let destinationViewController = segue.destinationViewController as? ProfileTableViewController,
+            let index = sender as? Int {
+            destinationViewController.user = self.searchedUsers[index]
+        }
 //        if let destinationViewController = segue.destinationViewController as? CategoryTableViewController,
 //            let indexPath = sender as? NSIndexPath,
 //            let searchController = self.searchController,
@@ -311,8 +308,7 @@ extension SearchTableViewController: ScrollViewDelegate {
 extension SearchTableViewController: SelectUserDelegate {
     
     func userSelected(index: Int) {
-        let indexPath = NSIndexPath(forRow: index, inSection: 1)
-        self.performSegueWithIdentifier("segueToProfileVc", sender: indexPath)
+        self.performSegueWithIdentifier("segueToProfileVc", sender: index)
     }
 }
 
