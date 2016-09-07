@@ -291,7 +291,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         })
     }
     
-    func saveUserRelationshipDynamoDB(followingId: String, followingFirstName: String?, followingLastName: String?, followingPreferredUsername: String?, followingProfession: String?, followingProfilePicUrl: String?, numberOfNewPosts: NSNumber?, completionHandler: AWSContinuationBlock) {
+    func saveUserRelationshipDynamoDB(followingId: String, following: User?, numberOfNewPosts: NSNumber?, completionHandler: AWSContinuationBlock) {
         AWSClientManager.defaultClientManager().credentialsProvider?.getIdentityId().continueWithBlock({
             (task: AWSTask) in
             if let error = task.error {
@@ -305,11 +305,13 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
                 userRelationship._userId = identityId
                 userRelationship._creationDate = NSNumber(double: NSDate().timeIntervalSince1970)
                 userRelationship._followingId = followingId
-                userRelationship._followingFirstName = followingFirstName
-                userRelationship._followingLastName = followingLastName
-                userRelationship._followingPreferredUsername = followingPreferredUsername
-                userRelationship._followingProfession = followingProfession
-                userRelationship._followingProfilePicUrl = followingProfilePicUrl
+                
+                userRelationship._followingFirstName = following?.firstName
+                userRelationship._followingLastName = following?.lastName
+                userRelationship._followingPreferredUsername = following?.preferredUsername
+                userRelationship._followingProfession = following?.profession
+                userRelationship._followingProfilePicUrl = following?.profilePicUrl
+                
                 userRelationship._numberOfNewPosts = numberOfNewPosts
                 userRelationshipsTable.saveUserRelationship(userRelationship, completionHandler: completionHandler)
                 return nil
@@ -369,7 +371,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         })
     }
     
-    func saveLikeDynamoDB(postId: String, completionHandler: AWSContinuationBlock) {
+    func saveLikeDynamoDB(postId: String, liker: User?, completionHandler: AWSContinuationBlock) {
         AWSClientManager.defaultClientManager().credentialsProvider?.getIdentityId().continueWithBlock({
             (task: AWSTask) in
             if let error = task.error {
@@ -383,6 +385,12 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
                 like._userId = identityId
                 like._postId = postId
                 like._creationDate = NSNumber(double: NSDate().timeIntervalSince1970)
+                
+                like._likerFirstName = liker?.firstName
+                like._likerLastName = liker?.lastName
+                like._likerPreferredUsername = liker?.preferredUsername
+                like._likerProfession = liker?.profession
+                like._likerProfilePicUrl = liker?.profilePicUrl
                 likesTable.saveLike(like, completionHandler: completionHandler)
                 return nil
             } else {

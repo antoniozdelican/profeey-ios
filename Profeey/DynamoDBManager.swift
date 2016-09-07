@@ -30,14 +30,14 @@ protocol DynamoDBManager {
     // MARK: UserRelationships
     
     func getUserRelationshipDynamoDB(followingId: String, completionHandler: AWSContinuationBlock)
-    func saveUserRelationshipDynamoDB(followingId: String, followingFirstName: String?, followingLastName: String?, followingPreferredUsername: String?, followingProfession: String?, followingProfilePicUrl: String?, numberOfNewPosts: NSNumber?, completionHandler: AWSContinuationBlock)
+    func saveUserRelationshipDynamoDB(followingId: String, following: User?, numberOfNewPosts: NSNumber?, completionHandler: AWSContinuationBlock)
     func removeUserRelationshipDynamoDB(followingId: String, completionHandler: AWSContinuationBlock)
     func queryUserFollowingDynamoDB(userId: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void)
     
     // MARK: Likes
     
     func getLikeDynamoDB(postId: String, completionHandler: AWSContinuationBlock)
-    func saveLikeDynamoDB(postId: String, completionHandler: AWSContinuationBlock)
+    func saveLikeDynamoDB(postId: String, liker: User?, completionHandler: AWSContinuationBlock)
     func removeLikeDynamoDB(postId: String, completionHandler: AWSContinuationBlock)
     func queryPostLikersDynamoDB(postId: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void)
     

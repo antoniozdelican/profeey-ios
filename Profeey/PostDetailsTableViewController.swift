@@ -79,7 +79,7 @@ class PostDetailsTableViewController: UITableViewController {
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if let destinationViewController = segue.destinationViewController as? UsersTableViewController {
-            destinationViewController.isLikers = true
+            //destinationViewController.isLikers = true
         }
         if let destinationViewController = segue.destinationViewController as? CommentsViewController {
             // If button was tapped.

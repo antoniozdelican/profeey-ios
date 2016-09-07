@@ -7,27 +7,40 @@
 //
 
 import UIKit
+import AWSMobileHubHelper
+import AWSDynamoDB
 
 class UsersTableViewController: UITableViewController {
     
-    var users: [User]?
-    var isLikers: Bool = false
+    // In case of likes.
+    var postId: String?
+    // In case of followers.
+    var userId: String?
+    
+    private var users: [User] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.Plain, target:nil, action:nil)
-        self.tableView.estimatedRowHeight = 56.0
-        self.tableView.rowHeight = UITableViewAutomaticDimension
-        
-        if self.isLikers {
-            self.navigationItem.title = "Likers"
-        } else {
+        if self.postId != nil {
+            self.navigationItem.title = "Likes"
+            self.queryPostLikers()
+        } else if self.userId != nil {
             self.navigationItem.title = "Followers"
         }
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+    }
+    
+    // MARK: Navigation
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if let destinationViewController = segue.destinationViewController as? ProfileTableViewController,
+            let indexPath = sender as? NSIndexPath {
+            destinationViewController.user = self.users[indexPath.row]
+        }
     }
     
     // MARK: UITableViewDataSource
@@ -37,19 +50,15 @@ class UsersTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return self.users.count
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("cellUser", forIndexPath: indexPath) as! UserTableViewCell
-        cell.profilePicImageView.image = UIImage(named: "pic_antonio")
-        cell.fullNameLabel.text = "Antonio Zdelican"
-        cell.professionLabel.text = "Computer Engineer"
-        if indexPath.row % 2 == 0 {
-            cell.setFollowButton()
-        } else {
-            cell.setFollowingButton()
-        }
+        let user = self.users[indexPath.row]
+        cell.profilePicImageView.image = user.profilePic
+        cell.fullNameLabel.text = user.fullName
+        cell.professionLabel.text = user.profession
         return cell
     }
     
@@ -57,10 +66,110 @@ class UsersTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        self.performSegueWithIdentifier("segueToProfileVc", sender: indexPath)
     }
     
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         cell.layoutMargins = UIEdgeInsetsZero
+    }
+    
+    override func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        switch indexPath.row {
+        case 0:
+            return 65.0
+        default:
+            return 0.0
+        }
+    }
+    
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        switch indexPath.row {
+        case 0:
+            return 65.0
+        default:
+            return 0.0
+        }
+    }
+    
+    // MARK: AWS
+    
+    private func queryPostLikers() {
+        guard let postId = self.postId else {
+            return
+        }
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().queryPostLikersDynamoDB(postId, completionHandler: {
+            (response: AWSDynamoDBPaginatedOutput?, error: NSError?) in
+            dispatch_async(dispatch_get_main_queue(), {
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                if let error = error {
+                    print("queryPostLikers error: \(error)")
+                } else {
+                    if let awsLikes = response?.items as? [AWSLike] {
+                        for (index, awsLike) in awsLikes.enumerate() {
+                            let user = User(userId: awsLike._userId, firstName: awsLike._likerFirstName, lastName: awsLike._likerLastName, preferredUsername: awsLike._likerPreferredUsername, profession: awsLike._likerProfession, profilePicUrl: awsLike._likerProfilePicUrl)
+                            self.users.append(user)
+                            self.tableView.reloadData()
+                            
+                            // Get profilePic.
+                            if let profilePicUrl = awsLike._likerProfilePicUrl {
+                                let indexPath = NSIndexPath(forRow: index, inSection: 0)
+                                self.downloadImage(profilePicUrl, imageType: .UserProfilePic, indexPath: indexPath)
+                            }
+                        }
+                    }
+                }
+            })
+        })
+    }
+    
+    private func downloadImage(imageKey: String, imageType: ImageType, indexPath: NSIndexPath) {
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        let content = AWSUserFileManager.custom(key: "USEast1BucketManager").contentWithKey(imageKey)
+        // TODO check if content.isImage()
+        if content.cached {
+            print("Content cached:")
+            dispatch_async(dispatch_get_main_queue(), {
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+            })
+            let image = UIImage(data: content.cachedData)
+            switch imageType {
+            case .UserProfilePic:
+                self.users[indexPath.row].profilePic = image
+                self.tableView.reloadData()
+            default:
+                return
+            }
+        } else {
+            print("Download content:")
+            content.downloadWithDownloadType(
+                AWSContentDownloadType.IfNewerExists,
+                pinOnCompletion: false,
+                progressBlock: {
+                    (content: AWSContent?, progress: NSProgress?) -> Void in
+                    // TODO
+                },
+                completionHandler: {
+                    (content: AWSContent?, data: NSData?, error: NSError?) in
+                    dispatch_async(dispatch_get_main_queue(), {
+                        UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                        if let error = error {
+                            print("downloadImage error: \(error)")
+                        } else {
+                            if let imageData = data {
+                                let image = UIImage(data: imageData)
+                                switch imageType {
+                                case .UserProfilePic:
+                                    self.users[indexPath.row].profilePic = image
+                                    self.tableView.reloadData()
+                                default:
+                                    return
+                                }
+                            }
+                        }
+                    })
+            })
+        }
     }
 
 }

@@ -15,6 +15,7 @@ class CategoryTableViewController: UITableViewController {
     var category: Category?
     private var posts: [Post] = []
     private var isLoadingPosts: Bool = false
+    private var currentUser: User?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,8 +23,8 @@ class CategoryTableViewController: UITableViewController {
         self.automaticallyAdjustsScrollViewInsets = false
         self.navigationItem.title = self.category?.categoryName
         
-        // Query posts
-        self.queryCategoryPostsDateSorted()
+        // Get current user.
+        self.getCurrentUser()
     }
     
     override func didReceiveMemoryWarning() {
@@ -36,6 +37,10 @@ class CategoryTableViewController: UITableViewController {
         if let destinationViewController = segue.destinationViewController as? ProfileTableViewController,
             let indexPath = sender as? NSIndexPath {
             destinationViewController.user = self.posts[indexPath.section].user
+        }
+        if let destinationViewController = segue.destinationViewController as? UsersTableViewController,
+            let indexPath = sender as? NSIndexPath {
+            destinationViewController.postId = self.posts[indexPath.section].postId
         }
     }
     
@@ -82,8 +87,12 @@ class CategoryTableViewController: UITableViewController {
             return cell
         case 5:
             let cell = tableView.dequeueReusableCellWithIdentifier("cellPostButtons", forIndexPath: indexPath) as! PostButtonsTableViewCell
+            
             post.isLikedByCurrentUser ? cell.setSelectedLikeButton() : cell.setUnselectedLikeButton()
             cell.likeButton.addTarget(self, action: #selector(CategoryTableViewController.likeButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+            
+            cell.numberOfLikesButton.setTitle(post.numberOfLikesString, forState: UIControlState.Normal)
+            cell.numberOfLikesButton.addTarget(self, action: #selector(CategoryTableViewController.numberOfLikesButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
             return cell
         default:
             return UITableViewCell()
@@ -152,25 +161,58 @@ class CategoryTableViewController: UITableViewController {
     
     func likeButtonTapped(sender: UIButton) {
         let buttonPoint = sender.convertPoint(CGPointZero, toView: self.tableView)
-        if let indexPath = tableView.indexPathForRowAtPoint(buttonPoint) {
-            let post = self.posts[indexPath.section]
-            if let postId = post.postId {
-                if post.isLikedByCurrentUser {
-                    post.isLikedByCurrentUser = false
-                    self.tableView.reloadData()
-                    // In background.
-                    self.removeLike(postId)
-                } else {
-                    post.isLikedByCurrentUser = true
-                    self.tableView.reloadData()
-                    // In background.
-                    self.saveLike(postId)
-                }
-            }
+        guard let indexPath = tableView.indexPathForRowAtPoint(buttonPoint) else {
+            return
+        }
+        let post = self.posts[indexPath.section]
+        guard let postId = post.postId else {
+            return
+        }
+        if post.isLikedByCurrentUser {
+            post.isLikedByCurrentUser = false
+            self.tableView.reloadData()
+            // In background.
+            self.removeLike(postId)
+        } else {
+            post.isLikedByCurrentUser = true
+            self.tableView.reloadData()
+            // In background.
+            self.saveLike(postId)
         }
     }
     
+    func numberOfLikesButtonTapped(sender: UIButton) {
+        let buttonPoint = sender.convertPoint(CGPointZero, toView: self.tableView)
+        guard let indexPath = tableView.indexPathForRowAtPoint(buttonPoint) else {
+            return
+        }
+        self.performSegueWithIdentifier("segueToUsersVc", sender: indexPath)
+    }
+    
     // MARK: AWS
+    
+    // Get currentUser data so we can perform actions (like, comment)
+    private func getCurrentUser() {
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().getCurrentUserDynamoDB({
+            (task: AWSTask) in
+            dispatch_async(dispatch_get_main_queue(), {
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                if let error = task.error {
+                    print("getCurrentUser error: \(error)")
+                } else {
+                    if let awsUser = task.result as? AWSUser {
+                        let user = User(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, profession: awsUser._profession, profilePicUrl: awsUser._profilePicUrl)
+                        self.currentUser = user
+                        
+                        // Only now query posts.
+                        self.queryCategoryPostsDateSorted()
+                    }
+                }
+            })
+            return nil
+        })
+    }
     
     private func queryCategoryPostsDateSorted() {
         guard let categoryName = self.category?.categoryName else {
@@ -187,7 +229,7 @@ class CategoryTableViewController: UITableViewController {
                     if let awsPosts = reponse?.items as? [AWSPost] {
                         for (index, awsPost) in awsPosts.enumerate() {
                             let user = User(userId: awsPost._userId, firstName: awsPost._userFirstName, lastName: awsPost._userLastName, preferredUsername: awsPost._userPreferredUsername, profession: awsPost._userProfession, profilePicUrl: awsPost._userProfilePicUrl)
-                            let post = Post(userId: awsPost._userId, postId: awsPost._postId, categoryName: awsPost._categoryName, creationDate: awsPost._creationDate, postDescription: awsPost._description, imageUrl: awsPost._imageUrl, title: awsPost._title, user: user)
+                            let post = Post(userId: awsPost._userId, postId: awsPost._postId, categoryName: awsPost._categoryName, creationDate: awsPost._creationDate, postDescription: awsPost._description, imageUrl: awsPost._imageUrl, numberOfLikes: awsPost._numberOfLikes, title: awsPost._title, user: user)
                             self.posts.append(post)
                             self.tableView.reloadData()
                             
@@ -292,7 +334,7 @@ class CategoryTableViewController: UITableViewController {
     
     private func saveLike(postId: String) {
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().saveLikeDynamoDB(postId, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().saveLikeDynamoDB(postId, liker: self.currentUser, completionHandler: {
             (task: AWSTask) in
             dispatch_async(dispatch_get_main_queue(), {
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false

@@ -17,6 +17,7 @@ class AWSPost: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     var _creationDate: NSNumber?
     var _description: String?
     var _imageUrl: String?
+    var _numberOfLikes: NSNumber?
     var _title: String?
     
     var _userFirstName: String?
@@ -48,6 +49,7 @@ class AWSPost: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
             "_creationDate" : "creationDate",
             "_description" : "description",
             "_imageUrl" : "imageUrl",
+            "_numberOfLikes" : "numberOfLikes",
             "_title" : "title",
             "_userFirstName" : "userFirstName",
             "_userLastName" : "userLastName",

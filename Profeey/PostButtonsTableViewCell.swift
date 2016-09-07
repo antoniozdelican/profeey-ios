@@ -12,7 +12,6 @@ class PostButtonsTableViewCell: UITableViewCell {
     
     @IBOutlet weak var likeButton: UIButton!
     @IBOutlet weak var numberOfLikesButton: UIButton!
-    @IBOutlet weak var numberOfCommentsButton: UIButton!
 
     override func awakeFromNib() {
         super.awakeFromNib()

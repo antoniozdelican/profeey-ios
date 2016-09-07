@@ -192,7 +192,7 @@
                                             <state key="normal" image="ic_like_blue_big"/>
                                         </button>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ytc-Kg-j7a">
-                                            <rect key="frame" x="453" y="0.0" width="42" height="49"/>
+                                            <rect key="frame" x="546" y="0.0" width="42" height="49"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="49" id="5CH-jo-OLV"/>
                                             </constraints>
@@ -201,29 +201,16 @@
                                                 <color key="titleColor" red="0.2901960784" green="0.2901960784" blue="0.2901960784" alpha="1" colorSpace="calibratedRGB"/>
                                             </state>
                                         </button>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EW2-el-luG">
-                                            <rect key="frame" x="507" y="0.0" width="81" height="49"/>
-                                            <constraints>
-                                                <constraint firstAttribute="height" constant="49" id="JHJ-rM-DkT"/>
-                                            </constraints>
-                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                            <state key="normal" title="0 comments">
-                                                <color key="titleColor" red="0.2901960784" green="0.2901960784" blue="0.2901960784" alpha="1" colorSpace="calibratedRGB"/>
-                                            </state>
-                                        </button>
                                     </subviews>
                                     <constraints>
+                                        <constraint firstAttribute="trailing" secondItem="Ytc-Kg-j7a" secondAttribute="trailing" constant="12" id="0b4-xs-UXZ"/>
                                         <constraint firstItem="fcV-rt-vmM" firstAttribute="leading" secondItem="jgO-6f-AZI" secondAttribute="leading" id="AGm-ua-hlg"/>
                                         <constraint firstItem="fcV-rt-vmM" firstAttribute="top" secondItem="jgO-6f-AZI" secondAttribute="top" id="AMt-IU-ej5"/>
-                                        <constraint firstItem="EW2-el-luG" firstAttribute="leading" secondItem="Ytc-Kg-j7a" secondAttribute="trailing" constant="12" id="AxL-9S-IfQ"/>
                                         <constraint firstItem="Ytc-Kg-j7a" firstAttribute="top" secondItem="jgO-6f-AZI" secondAttribute="top" id="C81-VI-Abr"/>
-                                        <constraint firstAttribute="trailing" secondItem="EW2-el-luG" secondAttribute="trailing" constant="12" id="Z42-pu-j8y"/>
-                                        <constraint firstItem="EW2-el-luG" firstAttribute="top" secondItem="jgO-6f-AZI" secondAttribute="top" id="z8b-J8-ysj"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="likeButton" destination="fcV-rt-vmM" id="BBG-uR-NOy"/>
-                                    <outlet property="numberOfCommentsButton" destination="EW2-el-luG" id="p1E-Yc-eZq"/>
                                     <outlet property="numberOfLikesButton" destination="Ytc-Kg-j7a" id="KsD-B3-mRD"/>
                                 </connections>
                             </tableViewCell>
@@ -239,6 +226,7 @@
                     <size key="freeformSize" width="600" height="900"/>
                     <connections>
                         <segue destination="8lh-Vm-Xev" kind="show" identifier="segueToProfileVc" id="Xrx-Kr-4Go"/>
+                        <segue destination="cdL-yv-kBH" kind="show" identifier="segueToUsersVc" id="GMK-xp-sZe"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Qeh-s0-fR3" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -252,6 +240,14 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mPg-y7-CXB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1513.5" y="-436"/>
+        </scene>
+        <!--Users-->
+        <scene sceneID="hp6-Pv-AGN">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Users" id="cdL-yv-kBH" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="7R5-aq-hBH" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1452.5" y="-142"/>
         </scene>
     </scenes>
     <resources>

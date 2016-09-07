@@ -16,6 +16,13 @@ class AWSLike: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     var _postId: String?
     var _creationDate: NSNumber?
     
+    var _likerFirstName: String?
+    var _likerLastName: String?
+    var _likerPreferredUsername: String?
+    var _likerProfession: String?
+    var _likerProfilePicUrl: String?
+    
+    
     class func dynamoDBTableName() -> String {
         
         return "profeey-mobilehub-294297648-Likes"
@@ -36,6 +43,11 @@ class AWSLike: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
             "_userId" : "userId",
             "_postId" : "postId",
             "_creationDate" : "creationDate",
+            "_likerFirstName" : "likerFirstName",
+            "_likerLastName" : "likerLastName",
+            "_likerPreferredUsername" : "likerPreferredUsername",
+            "_likerProfession" : "likerProfession",
+            "_likerProfilePicUrl" : "likerProfilePicUrl",
         ]
     }
 }

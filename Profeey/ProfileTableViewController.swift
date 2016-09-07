@@ -64,7 +64,7 @@ class ProfileTableViewController: UITableViewController {
         }
         if let destinationViewController = segue.destinationViewController as? UsersTableViewController {
             // Followers.
-            destinationViewController.isLikers = false
+            //destinationViewController.isLikers = false
         }
         if let destinationViewController = segue.destinationViewController as? PostDetailsTableViewController,
             let indexPath = sender as? NSIndexPath {
@@ -428,7 +428,7 @@ class ProfileTableViewController: UITableViewController {
                             let indexPath = NSIndexPath(forRow: index, inSection: 4)
                             // Data is denormalized so we store user data in posts table!
                             let user = User(userId: awsPost._userId, firstName: awsPost._userFirstName, lastName: awsPost._userLastName, preferredUsername: awsPost._userPreferredUsername, profession: awsPost._userProfession, profilePicUrl: awsPost._userProfilePicUrl)
-                            let post = Post(userId: awsPost._userId, postId: awsPost._postId, categoryName: awsPost._categoryName, creationDate: awsPost._creationDate, postDescription: awsPost._description, imageUrl: awsPost._imageUrl, title: awsPost._title, user: user)
+                            let post = Post(userId: awsPost._userId, postId: awsPost._postId, categoryName: awsPost._categoryName, creationDate: awsPost._creationDate, postDescription: awsPost._description, imageUrl: awsPost._imageUrl, numberOfLikes: awsPost._numberOfLikes, title: awsPost._title, user: user)
                             self.posts.append(post)
                             self.tableView.reloadData()
                             
@@ -455,7 +455,7 @@ class ProfileTableViewController: UITableViewController {
                     if let awsPost = task.result as? AWSPost {
                         // Initialize basic user.
                         let user = User(userId: awsPost._userId, firstName: awsPost._userFirstName, lastName: awsPost._userLastName, preferredUsername: awsPost._userPreferredUsername, profession: awsPost._userProfession, profilePicUrl: awsPost._userProfilePicUrl)
-                        let post = Post(userId: awsPost._userId, postId: awsPost._postId, categoryName: awsPost._categoryName, creationDate: awsPost._creationDate, postDescription: awsPost._description, imageUrl: awsPost._imageUrl, title: awsPost._title, user: user)
+                        let post = Post(userId: awsPost._userId, postId: awsPost._postId, categoryName: awsPost._categoryName, creationDate: awsPost._creationDate, postDescription: awsPost._description, imageUrl: awsPost._imageUrl, numberOfLikes: awsPost._numberOfLikes, title: awsPost._title, user: user)
                         
                         let image = UIImage(data: imageData)
                         post.image = image
@@ -575,15 +575,8 @@ class ProfileTableViewController: UITableViewController {
         guard let followingId = self.user?.userId else {
             return
         }
-        // Setting following user info for faster query on Home.
-        // Data is denormalized.
-        let followingFirstName = self.user?.firstName
-        let followingLastName = self.user?.lastName
-        let followingPreferredUsername = self.user?.preferredUsername
-        let followingProfession = self.user?.profession
-        let followingProfilePicUrl = self.user?.profilePicUrl
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().saveUserRelationshipDynamoDB(followingId, followingFirstName: followingFirstName, followingLastName: followingLastName, followingPreferredUsername: followingPreferredUsername, followingProfession: followingProfession, followingProfilePicUrl: followingProfilePicUrl, numberOfNewPosts: nil,completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().saveUserRelationshipDynamoDB(followingId, following: self.user, numberOfNewPosts: nil,completionHandler: {
             (task: AWSTask) in
             dispatch_async(dispatch_get_main_queue(), {
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false
