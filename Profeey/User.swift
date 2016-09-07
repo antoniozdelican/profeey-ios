@@ -61,12 +61,15 @@ class User: NSObject {
         self.numberOfNewPosts = numberOfNewPosts
     }
     
-//    convenience init(firstName: String?, lastName: String?, preferredUsername: String?, profession: String?, profilePic: UIImage?) {
-//        self.init()
-//        self.firstName = firstName
-//        self.lastName = lastName
-//        self.preferredUsername = preferredUsername
-//        self.profession = profession
-//        self.profilePic = profilePic
-//    }
+    // Basic user got from post.
+    // Should be used as default and then load location, about and other attributes when we open ProfileTableVc.
+    convenience init(userId: String?, firstName: String?, lastName: String?, preferredUsername: String?, profession: String?, profilePicUrl: String?) {
+        self.init()
+        self.userId = userId
+        self.firstName = firstName
+        self.lastName = lastName
+        self.preferredUsername = preferredUsername
+        self.profession = profession
+        self.profilePicUrl = profilePicUrl
+    }
 }

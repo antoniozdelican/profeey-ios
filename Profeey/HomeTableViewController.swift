@@ -14,6 +14,7 @@ enum ImageType {
     case CurrentUserProfilePic
     case UserProfilePic
     case FeaturedCategoryImage
+    case PostPic
 }
 
 protocol FeaturedCategoriesDelegate {
@@ -329,6 +330,8 @@ class HomeTableViewController: UITableViewController {
                     self.featuredCategories[indexPath.row].featuredImage = image
                     self.featuredCategoriesDelegate?.reloadData()
                 }
+            default:
+                return
             }
         } else {
             print("Download content:")
@@ -361,6 +364,8 @@ class HomeTableViewController: UITableViewController {
                                         self.featuredCategories[indexPath.row].featuredImage = image
                                         self.featuredCategoriesDelegate?.reloadData()
                                     }
+                                default:
+                                    return
                                 }
                             }
                         }

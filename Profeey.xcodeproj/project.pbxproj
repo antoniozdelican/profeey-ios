@@ -90,9 +90,9 @@
 		A9B318E71D7384E800FF8E2E /* ProfileAboutTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B318E61D7384E800FF8E2E /* ProfileAboutTableViewCell.swift */; };
 		A9B6A89B1D7F2E5D001EE407 /* AWSCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B6A89A1D7F2E5D001EE407 /* AWSCategory.swift */; };
 		A9B6A89D1D7F2ED4001EE407 /* AWSCategoriesTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B6A89C1D7F2ED4001EE407 /* AWSCategoriesTable.swift */; };
+		A9B6A89F1D7F8063001EE407 /* PostUserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B6A89E1D7F8063001EE407 /* PostUserTableViewCell.swift */; };
 		A9B7A2441D65A562009DA340 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B7A2431D65A562009DA340 /* Category.swift */; };
 		A9B7A2461D65BF64009DA340 /* PopularCategoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B7A2451D65BF64009DA340 /* PopularCategoryTableViewCell.swift */; };
-		A9B7A2481D65D8B2009DA340 /* PostTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B7A2471D65D8B2009DA340 /* PostTableViewCell.swift */; };
 		A9B7A24A1D65D8C0009DA340 /* HomeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B7A2491D65D8C0009DA340 /* HomeTableViewController.swift */; };
 		A9B934B01D1BD9BB00ACC2B8 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B934AF1D1BD9BB00ACC2B8 /* OnboardingViewController.swift */; };
 		A9BCF7421D4C085B001B2EEA /* CaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9BCF7411D4C085B001B2EEA /* CaptureViewController.swift */; };
@@ -142,6 +142,11 @@
 		A9D21B431D5B5F6900B5847D /* AWSS3.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A9D21B2E1D5B5F5A00B5847D /* AWSS3.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A9D21B451D5B662100B5847D /* PRFYUserPoolManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D21B441D5B662100B5847D /* PRFYUserPoolManager.swift */; };
 		A9D21B471D5B664F00B5847D /* UserPoolManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D21B461D5B664F00B5847D /* UserPoolManager.swift */; };
+		A9D334081D800D8D005565C2 /* PostImageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D334071D800D8D005565C2 /* PostImageTableViewCell.swift */; };
+		A9D3340C1D801693005565C2 /* PostInfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D3340B1D801693005565C2 /* PostInfoTableViewCell.swift */; };
+		A9D3340E1D801B5C005565C2 /* PostCategoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D3340D1D801B5C005565C2 /* PostCategoryTableViewCell.swift */; };
+		A9D334101D801B66005565C2 /* PostTimeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D3340F1D801B66005565C2 /* PostTimeTableViewCell.swift */; };
+		A9D334121D801B70005565C2 /* PostButtonsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D334111D801B70005565C2 /* PostButtonsTableViewCell.swift */; };
 		A9D5623A1D74591100ED1A1C /* ProfileExperienceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D562391D74591100ED1A1C /* ProfileExperienceTableViewCell.swift */; };
 		A9D716A91D57486100300135 /* PostSmallTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D716A81D57486100300135 /* PostSmallTableViewCell.swift */; };
 		A9D960661D32FFE700273A78 /* AWSUserFirstLastName.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D960651D32FFE700273A78 /* AWSUserFirstLastName.swift */; };
@@ -279,9 +284,9 @@
 		A9B318E61D7384E800FF8E2E /* ProfileAboutTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileAboutTableViewCell.swift; sourceTree = "<group>"; };
 		A9B6A89A1D7F2E5D001EE407 /* AWSCategory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSCategory.swift; sourceTree = "<group>"; };
 		A9B6A89C1D7F2ED4001EE407 /* AWSCategoriesTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSCategoriesTable.swift; sourceTree = "<group>"; };
+		A9B6A89E1D7F8063001EE407 /* PostUserTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostUserTableViewCell.swift; sourceTree = "<group>"; };
 		A9B7A2431D65A562009DA340 /* Category.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		A9B7A2451D65BF64009DA340 /* PopularCategoryTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopularCategoryTableViewCell.swift; sourceTree = "<group>"; };
-		A9B7A2471D65D8B2009DA340 /* PostTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostTableViewCell.swift; sourceTree = "<group>"; };
 		A9B7A2491D65D8C0009DA340 /* HomeTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeTableViewController.swift; sourceTree = "<group>"; };
 		A9B934AF1D1BD9BB00ACC2B8 /* OnboardingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		A9BCF7411D4C085B001B2EEA /* CaptureViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CaptureViewController.swift; sourceTree = "<group>"; };
@@ -317,6 +322,11 @@
 		A9D21B2E1D5B5F5A00B5847D /* AWSS3.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSS3.framework; path = Profeey/AWSS3.framework; sourceTree = "<group>"; };
 		A9D21B441D5B662100B5847D /* PRFYUserPoolManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PRFYUserPoolManager.swift; sourceTree = "<group>"; };
 		A9D21B461D5B664F00B5847D /* UserPoolManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserPoolManager.swift; sourceTree = "<group>"; };
+		A9D334071D800D8D005565C2 /* PostImageTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostImageTableViewCell.swift; sourceTree = "<group>"; };
+		A9D3340B1D801693005565C2 /* PostInfoTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostInfoTableViewCell.swift; sourceTree = "<group>"; };
+		A9D3340D1D801B5C005565C2 /* PostCategoryTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostCategoryTableViewCell.swift; sourceTree = "<group>"; };
+		A9D3340F1D801B66005565C2 /* PostTimeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostTimeTableViewCell.swift; sourceTree = "<group>"; };
+		A9D334111D801B70005565C2 /* PostButtonsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostButtonsTableViewCell.swift; sourceTree = "<group>"; };
 		A9D562391D74591100ED1A1C /* ProfileExperienceTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileExperienceTableViewCell.swift; sourceTree = "<group>"; };
 		A9D716A81D57486100300135 /* PostSmallTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostSmallTableViewCell.swift; sourceTree = "<group>"; };
 		A9D960651D32FFE700273A78 /* AWSUserFirstLastName.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSUserFirstLastName.swift; sourceTree = "<group>"; };
@@ -745,7 +755,6 @@
 				A9EC34501D7B7DC60037A25C /* HomeCategoryCollectionViewCell.swift */,
 				A9135A481D7C1E4B00C3B44C /* HomeLoadingTableViewCell.swift */,
 				A9EC344C1D7B73B60037A25C /* HomeUserTableViewCell.swift */,
-				A9B7A2471D65D8B2009DA340 /* PostTableViewCell.swift */,
 			);
 			name = Home;
 			sourceTree = "<group>";
@@ -856,6 +865,12 @@
 			children = (
 				A9FF2EF01D6AEE9E0022AB0C /* Category.storyboard */,
 				A9FF2EF21D6AF9280022AB0C /* CategoryTableViewController.swift */,
+				A9B6A89E1D7F8063001EE407 /* PostUserTableViewCell.swift */,
+				A9D334071D800D8D005565C2 /* PostImageTableViewCell.swift */,
+				A9D3340B1D801693005565C2 /* PostInfoTableViewCell.swift */,
+				A9D3340D1D801B5C005565C2 /* PostCategoryTableViewCell.swift */,
+				A9D3340F1D801B66005565C2 /* PostTimeTableViewCell.swift */,
+				A9D334111D801B70005565C2 /* PostButtonsTableViewCell.swift */,
 			);
 			name = Category;
 			sourceTree = "<group>";
@@ -1028,12 +1043,12 @@
 				A9C22CF81D7E0B90002A1D6E /* AWSFeaturedCategory.swift in Sources */,
 				A9193A331D6F137500E38F56 /* AWSUserRelationshipsTable.swift in Sources */,
 				A9BF16411D64DA4600060A9E /* SearchCategoriesTableViewController.swift in Sources */,
+				A9D334101D801B66005565C2 /* PostTimeTableViewCell.swift in Sources */,
 				A903EB591D16A39700B33025 /* UIImage+FixOrientation.m in Sources */,
 				A9B318E51D737DBF00FF8E2E /* ProfileHeaderTableViewCell.swift in Sources */,
 				A975529C1D4F4D0300F773FF /* PreviewViewController.swift in Sources */,
 				A9BF16471D64DDAC00060A9E /* SearchCategoryTableViewCell.swift in Sources */,
 				A9C1EBDA1D6DAAFB00D574F1 /* EditProfessionTableViewController.swift in Sources */,
-				A9B7A2481D65D8B2009DA340 /* PostTableViewCell.swift in Sources */,
 				A961875F1D3FA67B0028DEA7 /* ClientManager.swift in Sources */,
 				A9E4507A1D59E6C500D14553 /* CommentTableViewCell.swift in Sources */,
 				A9D960661D32FFE700273A78 /* AWSUserFirstLastName.swift in Sources */,
@@ -1042,10 +1057,12 @@
 				A96622051D0EC49700298CE7 /* Colors.swift in Sources */,
 				A98787301D64986A009F54B8 /* SearchResultsViewController.swift in Sources */,
 				A9CF75381D40BA1F0047BB1A /* SignUpNavigationController.swift in Sources */,
+				A9D334121D801B70005565C2 /* PostButtonsTableViewCell.swift in Sources */,
 				A9B318E71D7384E800FF8E2E /* ProfileAboutTableViewCell.swift in Sources */,
 				A94797A71D2E3451007CBF08 /* User.swift in Sources */,
 				A9A30DF51D7844740086083A /* ProfessionViewController.swift in Sources */,
 				A9E53B731D1067E800CD1D6C /* MainTabBarController.swift in Sources */,
+				A9D3340C1D801693005565C2 /* PostInfoTableViewCell.swift in Sources */,
 				A913FC721D51FAD6000D10A6 /* PRFYDynamoDBManager.swift in Sources */,
 				A9135A491D7C1E4B00C3B44C /* HomeLoadingTableViewCell.swift in Sources */,
 				A9EC344D1D7B73B60037A25C /* HomeUserTableViewCell.swift in Sources */,
@@ -1055,10 +1072,12 @@
 				A9604F7E1D33721000F23B33 /* AWSUserPreferredUsername.swift in Sources */,
 				A9604F801D33722100F23B33 /* AWSUserAbout.swift in Sources */,
 				A9C0ED3A1D3C21C30036F791 /* Post.swift in Sources */,
+				A9B6A89F1D7F8063001EE407 /* PostUserTableViewCell.swift in Sources */,
 				A903EB571D16A39700B33025 /* LLSimpleCamera.m in Sources */,
 				A9EC34511D7B7DC60037A25C /* HomeCategoryCollectionViewCell.swift in Sources */,
 				A9193A311D6F132200E38F56 /* AWSUserRelationship.swift in Sources */,
 				A9BF16451D64DC5F00060A9E /* SearchUserTableViewCell.swift in Sources */,
+				A9D334081D800D8D005565C2 /* PostImageTableViewCell.swift in Sources */,
 				A9A8DD111D4529B2009B3C24 /* LogInNavigationController.swift in Sources */,
 				A9C1EBDC1D6DAF6300D574F1 /* EditLocationTableViewController.swift in Sources */,
 				A99030F91D464FEE00336D26 /* GalleryCollectionViewCell.swift in Sources */,
@@ -1066,6 +1085,7 @@
 				A9E4507E1D59E6E400D14553 /* CommentsViewController.swift in Sources */,
 				A95E40D01D35410500FD61F9 /* CaptureNavigationController.swift in Sources */,
 				A99030FB1D46632500336D26 /* AlbumsTableViewController.swift in Sources */,
+				A9D3340E1D801B5C005565C2 /* PostCategoryTableViewCell.swift in Sources */,
 				A9F49D571D379D01002EB68B /* AWSPost.swift in Sources */,
 				A9C6CB7F1D2929AA00863816 /* Extensions.swift in Sources */,
 				A98B42E31D43DD040089A769 /* ProfessionsCollectionViewController.swift in Sources */,

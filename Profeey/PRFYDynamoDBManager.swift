@@ -360,16 +360,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
                 
                 print("getLikeDynamoDB:")
                 let likesTable = AWSLikesTable()
-                likesTable.getLike(identityId, postId: postId, completionHandler: {
-                    (task: AWSTask) in
-                    if let error = task.error {
-                        print("getLikeDynamoDB error:")
-                        return AWSTask(error: error).continueWithBlock(completionHandler)
-                    } else {
-                        print("getLikeDynamoDB success!")
-                        return task.continueWithBlock(completionHandler)
-                    }
-                })
+                likesTable.getLike(identityId, postId: postId, completionHandler: completionHandler)
                 return nil
             } else {
                 print("This should not happen with getIdentityId!")
@@ -392,16 +383,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
                 like._userId = identityId
                 like._postId = postId
                 like._creationDate = NSNumber(double: NSDate().timeIntervalSince1970)
-                likesTable.saveLike(like, completionHandler: {
-                    (task: AWSTask) in
-                    if let error = task.error {
-                        print("saveLikeDynamoDB error:")
-                        return AWSTask(error: error).continueWithBlock(completionHandler)
-                    } else {
-                        print("saveLikeDynamoDB success!")
-                        return task.continueWithBlock(completionHandler)
-                    }
-                })
+                likesTable.saveLike(like, completionHandler: completionHandler)
                 return nil
             } else {
                 print("This should not happen with getIdentityId!")
@@ -423,16 +405,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
                 let like = AWSLike()
                 like._userId = identityId
                 like._postId = postId
-                likesTable.removeLike(like, completionHandler: {
-                    (task: AWSTask) in
-                    if let error = task.error {
-                        print("removeLikeDynamoDB error:")
-                        return AWSTask(error: error).continueWithBlock(completionHandler)
-                    } else {
-                        print("removeLikeDynamoDB success!")
-                        return task.continueWithBlock(completionHandler)
-                    }
-                })
+                likesTable.removeLike(like, completionHandler: completionHandler)
                 return nil
             } else {
                 print("This should not happen with getIdentityId!")
@@ -441,19 +414,10 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         })
     }
     
-    func queryPostLikersDynamoDB(postId: String, completionHandler: AWSContinuationBlock) {
+    func queryPostLikersDynamoDB(postId: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
         print("queryPostLikersDynamoDB:")
         let likesPostIndex = AWSLikesPostIndex()
-        likesPostIndex.queryPostLikers(postId, completionHandler: {
-            (response: AWSDynamoDBPaginatedOutput?, error: NSError?) in
-            if let error = error {
-                print("queryPostLikersDynamoDB error:")
-                AWSTask(error: error).continueWithBlock(completionHandler)
-            } else {
-                print("queryPostLikersDynamoDB success!")
-                AWSTask(result: response).continueWithBlock(completionHandler)
-            }
-        })
+        likesPostIndex.queryPostLikers(postId, completionHandler: completionHandler)
     }
     
     
@@ -461,8 +425,14 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
     
     func queryUserPostsDateSortedDynamoDB(userId: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
         print("queryUserPostsDateSortedDynamoDB:")
-        let postsDateSortedIndex = AWsPostsDateSortedIndex()
+        let postsDateSortedIndex = AWSPostsDateSortedIndex()
         postsDateSortedIndex.queryUserPostsDateSorted(userId, completionHandler: completionHandler)
+    }
+    
+    func queryCategoryPostsDateSortedDynamoDB(categoryName: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
+        print("queryCategoryPostsDateSortedDynamoDB:")
+        let postsCategoryNameIndex = AWSPostsCategoryNameIndex()
+        postsCategoryNameIndex.queryCategoryPostsDateSorted(categoryName, completionHandler: completionHandler)
     }
     
     func savePostDynamoDB(imageUrl: String?, title: String?, description: String?, categoryName: String?, user: User?, completionHandler: AWSContinuationBlock) {

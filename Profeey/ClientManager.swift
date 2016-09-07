@@ -31,32 +31,14 @@ protocol ClientManager {
     func updateProfession(profession: String?, completionHandler: AWSContinuationBlock)
     func updateLocation(location: String?, completionHandler: AWSContinuationBlock)
     func updateAbout(about: String?, completionHandler: AWSContinuationBlock)
-    func updateProfilePic(profilePicUrl: String?, completionHandler: AWSContinuationBlock)
+    //func updateProfilePic(profilePicUrl: String?, completionHandler: AWSContinuationBlock)
     
     func scanUsers(completionHandler: AWSContinuationBlock)
     
-    // MARK: UserRelationships
-    
-//    func getUserRelationship(followedId: String, completionHandler: AWSContinuationBlock)
-//    func saveUserRelationship(followedId: String, completionHandler: AWSContinuationBlock)
-//    func removeUserRelationship(followedId: String, completionHandler: AWSContinuationBlock)
-//    func queryUserFollowed(userId: String, completionHandler: AWSContinuationBlock)
-    
     // MARK: Likes
     
-    func getLike(postId: String, completionHandler: AWSContinuationBlock)
-    func saveLike(postId: String, completionHandler: AWSContinuationBlock)
-    func removeLike(postId: String, completionHandler: AWSContinuationBlock)
-    func queryPostLikers(postId: String, completionHandler: AWSContinuationBlock)
-    
-    // MARK: Posts
-    
-//    func queryUserPosts(userId: String, completionHandler: AWSContinuationBlock)
-//    func queryUserPostsDateSorted(userId: String, completionHandler: AWSContinuationBlock)
-//    func savePost(imageData: NSData, title: String?, description: String?, category: String?, user: User?, isProfilePic: Bool, completionHandler: AWSContinuationBlock)
-    
-    // MARK: S3
-//    func downloadImage(imageKey: String, completionHandler: AWSContinuationBlock)
-//    
-//    func deleteImageS3(imageKey: String, completionHandler: AWSContinuationBlock)
+//    func getLike(postId: String, completionHandler: AWSContinuationBlock)
+//    func saveLike(postId: String, completionHandler: AWSContinuationBlock)
+//    func removeLike(postId: String, completionHandler: AWSContinuationBlock)
+//    func queryPostLikers(postId: String, completionHandler: AWSContinuationBlock)
 }

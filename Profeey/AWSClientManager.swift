@@ -163,65 +163,8 @@ class AWSClientManager: NSObject, ClientManager {
         PRFYDynamoDBManager.defaultDynamoDBManager().updateAboutDynamoDB(about, completionHandler: completionHandler)
     }
     
-    func updateProfilePic(profilePicUrl: String?, completionHandler: AWSContinuationBlock) {
-//        var attributes: [AWSCognitoIdentityUserAttributeType] = []
-//        let profilePicAttribute = AWSCognitoIdentityUserAttributeType()
-//        profilePicAttribute.name = "picture"
-//        profilePicAttribute.value = profilePicUrl != nil ? profilePicUrl : ""
-//        attributes.append(profilePicAttribute)
-//        
-//        print("updateProfilePic:")
-//        self.userPool?.currentUser()?.updateAttributes(attributes).continueWithBlock({
-//            (task: AWSTask) in
-//            if let error = task.error {
-//                print("updateProfilePic error:")
-//                return AWSTask(error: error).continueWithBlock(completionHandler)
-//            } else {
-//                print("updateProfilePic success!")
-//                // Update DynamoDB.
-//                PRFYDynamoDBManager.defaultDynamoDBManager().updateProfilePicDynamoDB(profilePicUrl, completionHandler: completionHandler)
-//                return nil
-//            }
-//        })
-    }
-    
     func scanUsers(completionHandler: AWSContinuationBlock) {
         // DynamoDB scanUsers.
         PRFYDynamoDBManager.defaultDynamoDBManager().scanUsersDynamoDB(completionHandler)
     }
-    
-    // MARK: Likes
-    
-    func getLike(postId: String, completionHandler: AWSContinuationBlock) {
-        // DynamoDB getLike.
-        PRFYDynamoDBManager.defaultDynamoDBManager().getLikeDynamoDB(postId, completionHandler: completionHandler)
-    }
-    
-    func saveLike(postId: String, completionHandler: AWSContinuationBlock) {
-        // DynamoDB saveLike.
-        PRFYDynamoDBManager.defaultDynamoDBManager().saveLikeDynamoDB(postId, completionHandler: completionHandler)
-    }
-    
-    func removeLike(postId: String, completionHandler: AWSContinuationBlock) {
-        // DynamoDB removeLike.
-        PRFYDynamoDBManager.defaultDynamoDBManager().removeLikeDynamoDB(postId, completionHandler: completionHandler)
-    }
-    
-    func queryPostLikers(postId: String, completionHandler: AWSContinuationBlock) {
-        // DynamoDB queryPostLikers.
-        PRFYDynamoDBManager.defaultDynamoDBManager().queryPostLikersDynamoDB(postId, completionHandler: completionHandler)
-    }
-    
-    // MARK: Posts
-    
-//    func queryUserPosts(userId: String, completionHandler: AWSContinuationBlock) {
-//        // DynamoDB queryUserPosts.
-//        PRFYDynamoDBManager.defaultDynamoDBManager().queryUserPostsDynamoDB(userId, completionHandler: completionHandler)
-//    }
-//    
-//    func queryUserPostsDateSorted(userId: String, completionHandler: AWSContinuationBlock) {
-//        // DynamoDB queryUserPostsDateSorted.
-//        PRFYDynamoDBManager.defaultDynamoDBManager().queryUserPostsDateSortedDynamoDB(userId, completionHandler: completionHandler)
-//    }
-    
 }

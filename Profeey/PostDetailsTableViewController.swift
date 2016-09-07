@@ -42,8 +42,8 @@ class PostDetailsTableViewController: UITableViewController {
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.Plain, target:nil, action:nil)
         self.configurePost()
         
-        self.getLike()
-        self.queryPostLikers()
+        //self.getLike()
+        //self.queryPostLikers()
     }
 
     override func didReceiveMemoryWarning() {
@@ -158,14 +158,14 @@ class PostDetailsTableViewController: UITableViewController {
             self.numberOfLikes -= 1
             let likesTitle = self.numberOfLikes > 1 ? "\(self.numberOfLikes) likes" : "\(self.numberOfLikes) like"
             //self.numberOfLikesButton.setTitle(likesTitle, forState: UIControlState.Normal)
-            self.removeLike()
+            //self.removeLike()
         } else {
             self.likeButton.setImage(UIImage(named: "ic_like_blue_big_selected"), forState: UIControlState.Normal)
             self.isLiked = true
             self.numberOfLikes += 1
             let likesTitle = self.numberOfLikes > 1 ? "\(self.numberOfLikes) likes" : "\(self.numberOfLikes) like"
             //self.numberOfLikesButton.setTitle(likesTitle, forState: UIControlState.Normal)
-            self.saveLike()
+            //self.saveLike()
         }
     }
     
@@ -184,93 +184,93 @@ class PostDetailsTableViewController: UITableViewController {
     
     // MARK: AWS
     
-    // Check if currentUser already liked this post.
-    private func getLike() {
-        guard let postId = self.post?.postId else {
-            return
-        }
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-        AWSClientManager.defaultClientManager().getLike(postId, completionHandler: {
-            (task: AWSTask) in
-            dispatch_async(dispatch_get_main_queue(), {
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-                if let error = task.error {
-                    print("getLike error: \(error.localizedDescription)")
-                } else {
-                    if task.result != nil {
-                        self.isLiked = true
-                        self.likeButton.setImage(UIImage(named: "ic_like_blue_big_selected"), forState: UIControlState.Normal)
-                    } else {
-                        self.isLiked = false
-                        self.likeButton.setImage(UIImage(named: "ic_like_blue_big"), forState: UIControlState.Normal)
-                    }
-                }
-            })
-            return nil
-        })
-    }
-    
-    // In background.
-    private func saveLike() {
-        guard let postId = self.post?.postId else {
-            return
-        }
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-        AWSClientManager.defaultClientManager().saveLike(postId, completionHandler: {
-            (task: AWSTask) in
-            dispatch_async(dispatch_get_main_queue(), {
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-                if let error = task.error {
-                    print("saveLike error: \(error.localizedDescription)")
-                } else {
-                    print("saveLike success!")
-                }
-            })
-            return nil
-        })
-    }
-    
-    // In background.
-    private func removeLike() {
-        guard let postId = self.post?.postId else {
-            return
-        }
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-        AWSClientManager.defaultClientManager().removeLike(postId, completionHandler: {
-            (task: AWSTask) in
-            dispatch_async(dispatch_get_main_queue(), {
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-                if let error = task.error {
-                    print("removeLike error: \(error.localizedDescription)")
-                } else {
-                    print("removeLike success!")
-                }
-            })
-            return nil
-        })
-    }
-    
-    private func queryPostLikers() {
-        guard let postId = self.post?.postId else {
-            return
-        }
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-        AWSClientManager.defaultClientManager().queryPostLikers(postId, completionHandler: {
-            (task: AWSTask) in
-            dispatch_async(dispatch_get_main_queue(), {
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-                if let error = task.error {
-                    print("queryPostLikers error: \(error.localizedDescription)")
-                } else {
-                    if let output = task.result as? AWSDynamoDBPaginatedOutput,
-                        let awsLikes = output.items as? [AWSLike] {
-                        self.numberOfLikes = awsLikes.count
-                        let likesTitle = self.numberOfLikes > 1 ? "\(self.numberOfLikes) likes" : "\(self.numberOfLikes) like"
-                        //self.numberOfLikesButton.setTitle(likesTitle, forState: UIControlState.Normal)
-                    }
-                }
-            })
-            return nil
-        })
-    }
+//    // Check if currentUser already liked this post.
+//    private func getLike() {
+//        guard let postId = self.post?.postId else {
+//            return
+//        }
+//        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+//        AWSClientManager.defaultClientManager().getLike(postId, completionHandler: {
+//            (task: AWSTask) in
+//            dispatch_async(dispatch_get_main_queue(), {
+//                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+//                if let error = task.error {
+//                    print("getLike error: \(error.localizedDescription)")
+//                } else {
+//                    if task.result != nil {
+//                        self.isLiked = true
+//                        self.likeButton.setImage(UIImage(named: "ic_like_blue_big_selected"), forState: UIControlState.Normal)
+//                    } else {
+//                        self.isLiked = false
+//                        self.likeButton.setImage(UIImage(named: "ic_like_blue_big"), forState: UIControlState.Normal)
+//                    }
+//                }
+//            })
+//            return nil
+//        })
+//    }
+//    
+//    // In background.
+//    private func saveLike() {
+//        guard let postId = self.post?.postId else {
+//            return
+//        }
+//        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+//        AWSClientManager.defaultClientManager().saveLike(postId, completionHandler: {
+//            (task: AWSTask) in
+//            dispatch_async(dispatch_get_main_queue(), {
+//                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+//                if let error = task.error {
+//                    print("saveLike error: \(error.localizedDescription)")
+//                } else {
+//                    print("saveLike success!")
+//                }
+//            })
+//            return nil
+//        })
+//    }
+//    
+//    // In background.
+//    private func removeLike() {
+//        guard let postId = self.post?.postId else {
+//            return
+//        }
+//        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+//        AWSClientManager.defaultClientManager().removeLike(postId, completionHandler: {
+//            (task: AWSTask) in
+//            dispatch_async(dispatch_get_main_queue(), {
+//                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+//                if let error = task.error {
+//                    print("removeLike error: \(error.localizedDescription)")
+//                } else {
+//                    print("removeLike success!")
+//                }
+//            })
+//            return nil
+//        })
+//    }
+//    
+//    private func queryPostLikers() {
+//        guard let postId = self.post?.postId else {
+//            return
+//        }
+//        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+//        AWSClientManager.defaultClientManager().queryPostLikers(postId, completionHandler: {
+//            (task: AWSTask) in
+//            dispatch_async(dispatch_get_main_queue(), {
+//                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+//                if let error = task.error {
+//                    print("queryPostLikers error: \(error.localizedDescription)")
+//                } else {
+//                    if let output = task.result as? AWSDynamoDBPaginatedOutput,
+//                        let awsLikes = output.items as? [AWSLike] {
+//                        self.numberOfLikes = awsLikes.count
+//                        let likesTitle = self.numberOfLikes > 1 ? "\(self.numberOfLikes) likes" : "\(self.numberOfLikes) like"
+//                        //self.numberOfLikesButton.setTitle(likesTitle, forState: UIControlState.Normal)
+//                    }
+//                }
+//            })
+//            return nil
+//        })
+//    }
 }

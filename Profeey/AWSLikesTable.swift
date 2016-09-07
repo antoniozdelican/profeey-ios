@@ -49,20 +49,18 @@ class AWSLikesTable: NSObject, Table {
         return AWSUserRelationship.JSONKeyPathsByPropertyKey()[dataObjectAttributeName] as! String
     }
     
-    // Find Like with userId and postId.
+    // Get Like with userId and postId.
     func getLike(userId: String, postId: String, completionHandler: AWSContinuationBlock) {
         let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
         objectMapper.load(AWSLike.self, hashKey: userId, rangeKey: postId).continueWithBlock(completionHandler)
         
     }
     
-    // Save Like.
     func saveLike(like: AWSLike, completionHandler: AWSContinuationBlock) {
         let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
         objectMapper.save(like).continueWithBlock(completionHandler)
     }
     
-    // Remove Like.
     func removeLike(like: AWSLike, completionHandler: AWSContinuationBlock) {
         let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
         objectMapper.remove(like).continueWithBlock(completionHandler)
@@ -97,7 +95,7 @@ class AWSLikesPostIndex: NSObject, Index {
     
     // MARK: QueryWithPartitionKey
     
-    // Find all likes with postId.
+    // Query all likes with postId.
     func queryPostLikers(postId: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
         let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
         let queryExpression = AWSDynamoDBQueryExpression()

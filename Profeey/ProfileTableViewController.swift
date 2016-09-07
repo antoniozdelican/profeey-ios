@@ -424,12 +424,10 @@ class ProfileTableViewController: UITableViewController {
                         // Update top categories.
                         //self.updateTopCategories(awsPosts.flatMap({$0._category}))
                         
-                        // Iterate through all posts.
                         for (index, awsPost) in awsPosts.enumerate() {
-                            
                             let indexPath = NSIndexPath(forRow: index, inSection: 4)
                             // Data is denormalized so we store user data in posts table!
-                            let user = self.user
+                            let user = User(userId: awsPost._userId, firstName: awsPost._userFirstName, lastName: awsPost._userLastName, preferredUsername: awsPost._userPreferredUsername, profession: awsPost._userProfession, profilePicUrl: awsPost._userProfilePicUrl)
                             let post = Post(userId: awsPost._userId, postId: awsPost._postId, categoryName: awsPost._categoryName, creationDate: awsPost._creationDate, postDescription: awsPost._description, imageUrl: awsPost._imageUrl, title: awsPost._title, user: user)
                             self.posts.append(post)
                             self.tableView.reloadData()
@@ -455,7 +453,8 @@ class ProfileTableViewController: UITableViewController {
                     print("savePost error: \(error)")
                 } else {
                     if let awsPost = task.result as? AWSPost {
-                        let user = self.user
+                        // Initialize basic user.
+                        let user = User(userId: awsPost._userId, firstName: awsPost._userFirstName, lastName: awsPost._userLastName, preferredUsername: awsPost._userPreferredUsername, profession: awsPost._userProfession, profilePicUrl: awsPost._userProfilePicUrl)
                         let post = Post(userId: awsPost._userId, postId: awsPost._postId, categoryName: awsPost._categoryName, creationDate: awsPost._creationDate, postDescription: awsPost._description, imageUrl: awsPost._imageUrl, title: awsPost._title, user: user)
                         
                         let image = UIImage(data: imageData)

@@ -39,6 +39,8 @@ class AWSPostsTable: NSObject, Table {
             
             AWSPostsPrimaryIndex(),
             
+            AWSPostsDateSortedIndex(),
+            
         ]
         //sortKeyName = model.classForCoder.rangeKeyAttribute!()
         sortKeyType = "String"
@@ -81,7 +83,7 @@ class AWSPostsPrimaryIndex: NSObject, Index {
     }
 }
 
-class AWsPostsDateSortedIndex: NSObject, Index {
+class AWSPostsDateSortedIndex: NSObject, Index {
     
     var indexName: String? {
         
@@ -116,6 +118,48 @@ class AWsPostsDateSortedIndex: NSObject, Index {
         
         // Set desc ordering.
         queryExpression.scanIndexForward = false
+        
+        objectMapper.query(AWSPost.self, expression: queryExpression, completionHandler: completionHandler)
+    }
+}
+
+class AWSPostsCategoryNameIndex: NSObject, Index {
+    
+    var indexName: String? {
+        
+        return "CategoryNameIndex"
+    }
+    
+    func supportedOperations() -> [String] {
+        return [
+            QueryWithPartitionKeyAndSortKey,
+        ]
+    }
+    
+    // MARK: QueryWithPartitionKeyAndSortKey
+    
+    // Find all (upto 10) posts with categoryName and creationDate <= currentDate.
+    func queryCategoryPostsDateSorted(categoryName: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
+        let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
+        let queryExpression = AWSDynamoDBQueryExpression()
+        queryExpression.indexName = "CategoryNameIndex"
+        queryExpression.keyConditionExpression = "#categoryName = :categoryName AND #creationDate <= :creationDate"
+        queryExpression.expressionAttributeNames = [
+            "#categoryName": "categoryName",
+            "#creationDate": "creationDate",
+        ]
+        
+        let currentDateNumber = NSNumber(double: NSDate().timeIntervalSince1970)
+        
+        queryExpression.expressionAttributeValues = [
+            ":categoryName": categoryName,
+            ":creationDate": currentDateNumber,
+        ]
+        
+        // Set desc ordering.
+        queryExpression.scanIndexForward = false
+        
+        queryExpression.limit = 10
         
         objectMapper.query(AWSPost.self, expression: queryExpression, completionHandler: completionHandler)
     }

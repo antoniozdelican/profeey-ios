@@ -45,15 +45,15 @@ class AWSUsersTable: NSObject, Table {
     }
     
     // TEST
-    func saveUser(user: AWSDynamoDBObjectModel, completionHandler: AWSContinuationBlock) {
-        let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
-        
-        // Set config to skip null attributes.
-        let updateMapperConfig = AWSDynamoDBObjectMapperConfiguration()
-        updateMapperConfig.saveBehavior = AWSDynamoDBObjectMapperSaveBehavior.UpdateSkipNullAttributes
-        let userToUpdate: AWSUser = user as! AWSUser
-        objectMapper.save(userToUpdate, configuration: updateMapperConfig).continueWithBlock(completionHandler)
-    }
+//    func saveUser(user: AWSDynamoDBObjectModel, completionHandler: AWSContinuationBlock) {
+//        let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
+//        
+//        // Set config to skip null attributes.
+//        let updateMapperConfig = AWSDynamoDBObjectMapperConfiguration()
+//        updateMapperConfig.saveBehavior = AWSDynamoDBObjectMapperSaveBehavior.UpdateSkipNullAttributes
+//        let userToUpdate: AWSUser = user as! AWSUser
+//        objectMapper.save(userToUpdate, configuration: updateMapperConfig).continueWithBlock(completionHandler)
+//    }
     
     // Scan all (upto 5) users in the Users table.
     func scanUsers(completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {

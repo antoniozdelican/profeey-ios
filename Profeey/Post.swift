@@ -34,11 +34,31 @@ class Post: NSObject {
     // TEST
     var numberOfLikes: Int = 0
     var numberOfComments: Int = 0
+    
+    var isLikedByCurrentUser: Bool = false
 
     override init() {
         super.init()
     }
     
+//    convenience init(userId: String?, postId: String?, categoryName: String?, creationDate: NSNumber?, postDescription: String?, imageUrl: String?, title: String?, userFirstName: String?, userLastName: String?, userPreferredUsername: String?, userProfession: String?, userProfilePicUrl: String?) {
+//        self.init()
+//        self.userId = userId
+//        self.postId = postId
+//        self.categoryName = categoryName
+//        self.creationDate = creationDate
+//        self.postDescription = postDescription
+//        self.imageUrl = imageUrl
+//        self.title = title
+//        
+//        self.userFirstName = userFirstName
+//        self.userLastName = userLastName
+//        self.userPreferredUsername = userPreferredUsername
+//        self.userProfession = userProfession
+//        self.userProfilePicUrl = userProfilePicUrl
+//    }
+    
+    // Send only basic user object!
     convenience init(userId: String?, postId: String?, categoryName: String?, creationDate: NSNumber?, postDescription: String?, imageUrl: String?, title: String?, user: User?) {
         self.init()
         self.userId = userId
@@ -48,6 +68,7 @@ class Post: NSObject {
         self.postDescription = postDescription
         self.imageUrl = imageUrl
         self.title = title
+        
         self.user = user
     }
 }
