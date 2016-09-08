@@ -37,8 +37,8 @@ protocol DynamoDBManager {
     // MARK: Likes
     
     func getLikeDynamoDB(postId: String, completionHandler: AWSContinuationBlock)
-    func saveLikeDynamoDB(postId: String, liker: User?, completionHandler: AWSContinuationBlock)
-    func removeLikeDynamoDB(postId: String, completionHandler: AWSContinuationBlock)
+    func saveLikeDynamoDB(postId: String, postUserId: String, liker: User?, completionHandler: AWSContinuationBlock)
+    func removeLikeDynamoDB(postId: String, postUserId: String, completionHandler: AWSContinuationBlock)
     func queryPostLikersDynamoDB(postId: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void)
     
     // MARK: Posts

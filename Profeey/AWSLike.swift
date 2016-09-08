@@ -14,6 +14,8 @@ class AWSLike: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     
     var _userId: String?
     var _postId: String?
+    // Need because Post key is combo of userId (postUserId) and postId.
+    var _postUserId: String?
     var _creationDate: NSNumber?
     
     var _likerFirstName: String?
@@ -42,6 +44,7 @@ class AWSLike: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
         return [
             "_userId" : "userId",
             "_postId" : "postId",
+            "_postUserId" : "postUserId",
             "_creationDate" : "creationDate",
             "_likerFirstName" : "likerFirstName",
             "_likerLastName" : "likerLastName",

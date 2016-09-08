@@ -165,19 +165,20 @@ class CategoryTableViewController: UITableViewController {
             return
         }
         let post = self.posts[indexPath.section]
-        guard let postId = post.postId else {
+        guard let postId = post.postId,
+            let postUserId = post.userId else {
             return
         }
         if post.isLikedByCurrentUser {
             post.isLikedByCurrentUser = false
             self.tableView.reloadData()
             // In background.
-            self.removeLike(postId)
+            self.removeLike(postId, postUserId: postUserId)
         } else {
             post.isLikedByCurrentUser = true
             self.tableView.reloadData()
             // In background.
-            self.saveLike(postId)
+            self.saveLike(postId, postUserId: postUserId)
         }
     }
     
@@ -332,9 +333,9 @@ class CategoryTableViewController: UITableViewController {
         })
     }
     
-    private func saveLike(postId: String) {
+    private func saveLike(postId: String, postUserId: String) {
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().saveLikeDynamoDB(postId, liker: self.currentUser, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().saveLikeDynamoDB(postId, postUserId: postUserId, liker: self.currentUser, completionHandler: {
             (task: AWSTask) in
             dispatch_async(dispatch_get_main_queue(), {
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false
@@ -348,9 +349,9 @@ class CategoryTableViewController: UITableViewController {
         })
     }
     
-    private func removeLike(postId: String) {
+    private func removeLike(postId: String, postUserId: String) {
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().removeLikeDynamoDB(postId, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().removeLikeDynamoDB(postId, postUserId: postUserId, completionHandler: {
             (task: AWSTask) in
             dispatch_async(dispatch_get_main_queue(), {
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false

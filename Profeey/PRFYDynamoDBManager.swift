@@ -371,7 +371,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         })
     }
     
-    func saveLikeDynamoDB(postId: String, liker: User?, completionHandler: AWSContinuationBlock) {
+    func saveLikeDynamoDB(postId: String, postUserId: String, liker: User?, completionHandler: AWSContinuationBlock) {
         AWSClientManager.defaultClientManager().credentialsProvider?.getIdentityId().continueWithBlock({
             (task: AWSTask) in
             if let error = task.error {
@@ -384,6 +384,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
                 let like = AWSLike()
                 like._userId = identityId
                 like._postId = postId
+                like._postUserId = postUserId
                 like._creationDate = NSNumber(double: NSDate().timeIntervalSince1970)
                 
                 like._likerFirstName = liker?.firstName
@@ -400,7 +401,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         })
     }
     
-    func removeLikeDynamoDB(postId: String, completionHandler: AWSContinuationBlock) {
+    func removeLikeDynamoDB(postId: String, postUserId: String, completionHandler: AWSContinuationBlock) {
         AWSClientManager.defaultClientManager().credentialsProvider?.getIdentityId().continueWithBlock({
             (task: AWSTask) in
             if let error = task.error {
@@ -413,6 +414,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
                 let like = AWSLike()
                 like._userId = identityId
                 like._postId = postId
+                like._postUserId = postUserId
                 likesTable.removeLike(like, completionHandler: completionHandler)
                 return nil
             } else {
@@ -459,8 +461,9 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
                 post._categoryName = categoryName
                 post._creationDate = NSNumber(double: NSDate().timeIntervalSince1970)
                 post._description = description
-                post._title = title
                 post._imageUrl = imageUrl
+                post._numberOfLikes = 0
+                post._title = title
                 
                 post._userFirstName = user?.firstName
                 post._userLastName = user?.lastName
