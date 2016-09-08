@@ -91,8 +91,11 @@ class CategoryTableViewController: UITableViewController {
             post.isLikedByCurrentUser ? cell.setSelectedLikeButton() : cell.setUnselectedLikeButton()
             cell.likeButton.addTarget(self, action: #selector(CategoryTableViewController.likeButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
             
-            cell.numberOfLikesButton.setTitle(post.numberOfLikesString, forState: UIControlState.Normal)
             cell.numberOfLikesButton.addTarget(self, action: #selector(CategoryTableViewController.numberOfLikesButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+            if post.numberOfLikesString == nil {
+                cell.numberOfLikesButton.hidden = true
+            }
+            cell.numberOfLikesLabel.text = post.numberOfLikesString
             return cell
         default:
             return UITableViewCell()
@@ -171,11 +174,19 @@ class CategoryTableViewController: UITableViewController {
         }
         if post.isLikedByCurrentUser {
             post.isLikedByCurrentUser = false
+            if let oldNumberOfLikes = post.numberOfLikes?.integerValue {
+                let newNumberOfLikes = oldNumberOfLikes - 1
+                post.numberOfLikes = NSNumber(integer: newNumberOfLikes)
+            }
             self.tableView.reloadData()
             // In background.
             self.removeLike(postId, postUserId: postUserId)
         } else {
             post.isLikedByCurrentUser = true
+            if let oldNumberOfLikes = post.numberOfLikes?.integerValue {
+                let newNumberOfLikes = oldNumberOfLikes + 1
+                post.numberOfLikes = NSNumber(integer: newNumberOfLikes)
+            }
             self.tableView.reloadData()
             // In background.
             self.saveLike(postId, postUserId: postUserId)

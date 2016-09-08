@@ -32,12 +32,17 @@ class Post: NSObject {
         }
     }
     var numberOfLikesString: String? {
-        if let numberOfLikes = self.numberOfLikes {
-            let numberOfLikesInt = numberOfLikes.integerValue
-            return numberOfLikesInt == 1 ? "\(numberOfLikesInt) like" : "\(numberOfLikesInt) likes"
-        } else {
+        guard let numberOfLikes = self.numberOfLikes else {
             return nil
         }
+        let numberOfLikesInt = numberOfLikes.integerValue
+        guard numberOfLikesInt > 0 else {
+            return nil
+        }
+        guard numberOfLikesInt > 1 else {
+            return "\(numberOfLikesInt) like"
+        }
+        return "\(numberOfLikesInt) likes"
     }
     
     

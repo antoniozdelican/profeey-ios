@@ -191,27 +191,34 @@
                                             </constraints>
                                             <state key="normal" image="ic_like_blue_big"/>
                                         </button>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ytc-Kg-j7a">
-                                            <rect key="frame" x="546" y="0.0" width="42" height="49"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0 likes" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ib6-hx-CuD">
+                                            <rect key="frame" x="546" y="0.0" width="41.5" height="49"/>
                                             <constraints>
-                                                <constraint firstAttribute="height" constant="49" id="5CH-jo-OLV"/>
+                                                <constraint firstAttribute="height" constant="49" id="pGC-hJ-ePX"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                            <state key="normal" title="0 likes">
-                                                <color key="titleColor" red="0.2901960784" green="0.2901960784" blue="0.2901960784" alpha="1" colorSpace="calibratedRGB"/>
-                                            </state>
+                                            <color key="textColor" red="0.2901960784" green="0.2901960784" blue="0.2901960784" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6Pt-Ku-GIK">
+                                            <rect key="frame" x="546" y="0.0" width="41.5" height="48.5"/>
                                         </button>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstAttribute="trailing" secondItem="Ytc-Kg-j7a" secondAttribute="trailing" constant="12" id="0b4-xs-UXZ"/>
                                         <constraint firstItem="fcV-rt-vmM" firstAttribute="leading" secondItem="jgO-6f-AZI" secondAttribute="leading" id="AGm-ua-hlg"/>
                                         <constraint firstItem="fcV-rt-vmM" firstAttribute="top" secondItem="jgO-6f-AZI" secondAttribute="top" id="AMt-IU-ej5"/>
-                                        <constraint firstItem="Ytc-Kg-j7a" firstAttribute="top" secondItem="jgO-6f-AZI" secondAttribute="top" id="C81-VI-Abr"/>
+                                        <constraint firstAttribute="trailing" secondItem="Ib6-hx-CuD" secondAttribute="trailing" constant="12" id="AOO-86-JVw"/>
+                                        <constraint firstItem="6Pt-Ku-GIK" firstAttribute="height" secondItem="Ib6-hx-CuD" secondAttribute="height" id="CDq-zM-gom"/>
+                                        <constraint firstItem="6Pt-Ku-GIK" firstAttribute="top" secondItem="jgO-6f-AZI" secondAttribute="top" id="CuE-Qt-gBB"/>
+                                        <constraint firstAttribute="trailing" secondItem="6Pt-Ku-GIK" secondAttribute="trailing" constant="12.5" id="Vu6-Wi-6de"/>
+                                        <constraint firstItem="Ib6-hx-CuD" firstAttribute="top" secondItem="jgO-6f-AZI" secondAttribute="top" id="vle-cx-MTD"/>
+                                        <constraint firstItem="6Pt-Ku-GIK" firstAttribute="width" secondItem="Ib6-hx-CuD" secondAttribute="width" id="yIX-1f-AxC"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="likeButton" destination="fcV-rt-vmM" id="BBG-uR-NOy"/>
-                                    <outlet property="numberOfLikesButton" destination="Ytc-Kg-j7a" id="KsD-B3-mRD"/>
+                                    <outlet property="numberOfLikesButton" destination="6Pt-Ku-GIK" id="J3H-BT-4zd"/>
+                                    <outlet property="numberOfLikesLabel" destination="Ib6-hx-CuD" id="TcC-IJ-M0r"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
