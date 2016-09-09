@@ -218,7 +218,7 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="jTm-9F-eYG" kind="presentation" id="5BF-fm-83n"/>
+                                            <segue destination="jTm-9F-eYG" kind="presentation" identifier="segueToLocationVc" id="5BF-fm-83n"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="76" id="Q29-Ge-sK4">
@@ -754,7 +754,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="hMm-p6-jbS" kind="relationship" relationship="rootViewController" id="h4n-Bf-E4S"/>
+                        <segue destination="7CP-td-fpt" kind="relationship" relationship="rootViewController" id="vCz-f8-jxb"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VE4-Cm-Dma" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -768,12 +768,12 @@
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="NBH-lR-PNu">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <sections>
                             <tableViewSection id="gqc-NJ-fJj">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="76" id="lj1-jG-QfP">
-                                        <rect key="frame" x="0.0" y="64" width="600" height="76"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="600" height="76"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="lj1-jG-QfP" id="jtN-WE-zMJ">
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="75.5"/>
@@ -840,6 +840,81 @@
                 <exit id="5YQ-Pa-zIx" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="3373" y="956"/>
+        </scene>
+        <!--Location-->
+        <scene sceneID="JIj-D4-VBe">
+            <objects>
+                <tableViewController id="7CP-td-fpt" customClass="LocationTableViewController" customModule="Profeey" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="63" sectionHeaderHeight="28" sectionFooterHeight="28" id="CH6-Fo-obn">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <searchBar key="tableHeaderView" contentMode="redraw" placeholder="Search a location" id="8p9-tI-fj0">
+                            <rect key="frame" x="0.0" y="64" width="600" height="44"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            <color key="barTintColor" red="0.90980392156862744" green="0.90980392156862744" blue="0.90980392156862744" alpha="1" colorSpace="calibratedRGB"/>
+                            <textInputTraits key="textInputTraits"/>
+                        </searchBar>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellLocation" rowHeight="64" id="P3i-a3-8ve" customClass="LocationTableViewCell" customModule="Profeey" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="136" width="600" height="64"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="P3i-a3-8ve" id="TPy-DN-4Ld">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="63.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="wGV-Rt-wuc">
+                                            <rect key="frame" x="12" y="12" width="576" height="40"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wIH-8U-E4a">
+                                                    <rect key="frame" x="0.0" y="0.0" width="576" height="20.5"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                    <color key="textColor" red="0.2901960784" green="0.2901960784" blue="0.2901960784" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O0G-e7-ntg">
+                                                    <rect key="frame" x="0.0" y="22" width="576" height="17.5"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <color key="textColor" red="0.63921568630000003" green="0.63921568630000003" blue="0.63921568630000003" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </stackView>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="trailing" secondItem="wGV-Rt-wuc" secondAttribute="trailing" constant="12" id="AOz-aS-oWY"/>
+                                        <constraint firstItem="wGV-Rt-wuc" firstAttribute="top" secondItem="TPy-DN-4Ld" secondAttribute="top" constant="12" id="N9J-5d-kEV"/>
+                                        <constraint firstAttribute="bottom" secondItem="wGV-Rt-wuc" secondAttribute="bottom" constant="12" id="q6G-kT-ZeS"/>
+                                        <constraint firstItem="wGV-Rt-wuc" firstAttribute="leading" secondItem="TPy-DN-4Ld" secondAttribute="leading" constant="12" id="yKl-Kf-4cy"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="subtitleLabel" destination="O0G-e7-ntg" id="ncE-Sc-QWe"/>
+                                    <outlet property="titleLabel" destination="wIH-8U-E4a" id="wic-1v-0qG"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="7CP-td-fpt" id="7b9-1Q-2HP"/>
+                            <outlet property="delegate" destination="7CP-td-fpt" id="zdi-fr-qwq"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Location" id="oUO-To-ud4">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="68N-vO-pRc">
+                            <connections>
+                                <action selector="cancelButtonTapped:" destination="7CP-td-fpt" id="dmg-Kh-bRY"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="searchBar" destination="8p9-tI-fj0" id="gWu-ln-Hd1"/>
+                        <segue destination="M1R-EZ-4pO" kind="unwind" identifier="segueUnwindToEditProfileTableVc" unwindAction="unwindToEditProfileTableViewController:" id="glg-02-clC"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="oZK-Wb-DSj" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="M1R-EZ-4pO" userLabel="Exit" sceneMemberID="exit"/>
+            </objects>
+            <point key="canvasLocation" x="4059" y="962"/>
         </scene>
     </scenes>
     <resources>

@@ -8,6 +8,7 @@
 
 import UIKit
 import AWSMobileHubHelper
+import MapKit
 
 protocol EditProfileDelegate {
     // Notify profileTableVc that user is updated.
@@ -80,6 +81,34 @@ class EditProfileTableViewController: UITableViewController {
         }
     }
     
+    override func shouldPerformSegueWithIdentifier(identifier: String, sender: AnyObject?) -> Bool {
+        guard identifier == "segueToLocationVc" else {
+            return true
+        }
+        // Ask for location authorization.
+        let status = CLLocationManager.authorizationStatus()
+        if (status == CLAuthorizationStatus.Restricted) || (status == CLAuthorizationStatus.Denied) {
+            print("Location Restricted or Denied")
+            let alertController = UIAlertController(title: "Enable Location Services", message: "To use location services, please allow it in the Settings", preferredStyle: UIAlertControllerStyle.Alert)
+            let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: nil)
+            let openSettingsAction = UIAlertAction(title: "Open Settings", style: UIAlertActionStyle.Default, handler: {
+                (alertAction: UIAlertAction) in
+                // Open Settings.
+                dispatch_async(dispatch_get_main_queue(), {
+                    if let appSettings = NSURL(string: UIApplicationOpenSettingsURLString) {
+                        UIApplication.sharedApplication().openURL(appSettings)
+                    }
+                })
+            })
+            alertController.addAction(cancelAction)
+            alertController.addAction(openSettingsAction)
+            presentViewController(alertController, animated: true, completion: nil)
+            return false
+        } else {
+            return true
+        }
+    }
+    
     // MARK: UITableViewDelegate
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -142,6 +171,22 @@ class EditProfileTableViewController: UITableViewController {
             }
             self.uploadImageS3(imageData)
         }
+    }
+    
+    // MARK: Helpers
+    
+    private func checkLocationAuthorization() -> Bool {
+        // Ask for location authorization.
+        let status = CLLocationManager.authorizationStatus()
+        guard status != CLAuthorizationStatus.Restricted else {
+            print("Location Restricted")
+            return false
+        }
+        guard status != CLAuthorizationStatus.Denied else {
+            print("Location Denied")
+            return false
+        }
+        return true
     }
     
     // MARK: AWS

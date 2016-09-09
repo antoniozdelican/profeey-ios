@@ -35,9 +35,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        UINavigationBar.appearance().shadowImage = UIImage()
 //        UINavigationBar.appearance().backgroundColor = Colors.greyLight
 //        UINavigationBar.appearance().barTintColor = Colors.greyLight
-        UINavigationBar.appearance().backgroundColor = UIColor.whiteColor()
-        UINavigationBar.appearance().barTintColor = UIColor.whiteColor()
-        UINavigationBar.appearance().translucent = false
+//        UINavigationBar.appearance().backgroundColor = UIColor.whiteColor()
+//        UINavigationBar.appearance().barTintColor = UIColor.whiteColor()
+//        UINavigationBar.appearance().translucent = false
+        // TEST
+        UINavigationBar.appearance().backgroundColor = Colors.greyLight
+        UINavigationBar.appearance().barTintColor = Colors.greyLight
+        UINavigationBar.appearance().translucent = true
         UINavigationBar.appearance().tintColor = Colors.blue
         UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: Colors.blue]
         
@@ -61,7 +65,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // UITextField
         UITextField.appearance().tintColor = Colors.black
-        UITextField.appearanceWhenContainedInInstancesOfClasses([UISearchBar.self]).backgroundColor = UIColor.blackColor()
+//        UITextField.appearanceWhenContainedInInstancesOfClasses([UISearchBar.self]).backgroundColor = UIColor.blackColor()
         
         // UITextView
         UITextView.appearance().tintColor = Colors.black
