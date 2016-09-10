@@ -60,11 +60,21 @@ class CaptureViewController: UIViewController {
             self.imagePickerController.cameraFlashMode = UIImagePickerControllerCameraFlashMode.Off
             
             self.cameraOverlayView.frame = self.imagePickerController.cameraOverlayView!.frame
+            if self.isProfilePic {
+                //self.configureSquareAspectRatio()
+            }
             self.imagePickerController.cameraOverlayView = self.cameraOverlayView
             self.cameraOverlayView = nil
             
             self.addChildViewController(self.imagePickerController)
+//            self.imagePickerController.view.frame = CGRectMake(0.0, 0.0, self.view.bounds.width, self.view.bounds.height)
+            
+            print(self.view.bounds.size)
+            
             self.imagePickerController.view.frame = CGRectMake(0.0, 0.0, self.view.bounds.width, self.view.bounds.height)
+            
+            
+            
             self.view.insertSubview(self.imagePickerController.view, atIndex: 0)
             self.imagePickerController.didMoveToParentViewController(self)
         } else {
@@ -91,7 +101,8 @@ class CaptureViewController: UIViewController {
             attribute: NSLayoutAttribute.Width,
             multiplier: 1.0,
             constant: 0.0)
-        self.cameraWindowSubView.addConstraint(squareConstraint)
+        squareConstraint.active = true
+        
     }
     
     // MARK: Navigation

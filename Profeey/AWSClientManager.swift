@@ -107,6 +107,8 @@ class AWSClientManager: NSObject, ClientManager {
         PRFYUserPoolManager.defaultUserPoolManager().signOutUserPool(completionHandler)
         // Credentials provider cleanUp.
         self.credentialsProvider?.clearKeychain()
+        // User file manager cleanUp.
+        self.userFileManager?.clearCache()
     }
     
     func getUserDetails(completionHandler: AWSContinuationBlock) {

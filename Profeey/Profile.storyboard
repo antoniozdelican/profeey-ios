@@ -423,7 +423,7 @@
                     <size key="freeformSize" width="600" height="1200"/>
                     <connections>
                         <outlet property="settingsButton" destination="NEd-gv-rRB" id="nln-If-CK4"/>
-                        <segue destination="zmm-U3-ZYH" kind="show" identifier="segueToEditProfileVc" id="r7x-1P-Mce"/>
+                        <segue destination="zmm-U3-ZYH" kind="presentation" identifier="segueToEditProfileVc" id="r7x-1P-Mce"/>
                         <segue destination="LOy-ln-t47" kind="show" identifier="segueToPostDetailsVc" id="TOP-0B-6XP"/>
                         <segue destination="vT4-Dc-5Mt" kind="show" identifier="segueToUsersVc" id="FBr-ld-hwP"/>
                     </connections>

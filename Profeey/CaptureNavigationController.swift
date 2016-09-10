@@ -12,9 +12,7 @@ class CaptureNavigationController: UINavigationController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-//        self.navigationBar.setBackgroundImage(UIImage(), forBarMetrics: .Default)
-//        self.navigationBar.shadowImage = UIImage()
-//        self.navigationBar.backgroundColor = UIColor.clearColor()
+        // Override appearance.
         self.navigationBar.tintColor = Colors.black
     }
 

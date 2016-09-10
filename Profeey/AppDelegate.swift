@@ -41,7 +41,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // TEST
         UINavigationBar.appearance().backgroundColor = Colors.greyLight
         UINavigationBar.appearance().barTintColor = Colors.greyLight
-        UINavigationBar.appearance().translucent = true
+        // DON'T FCKING CHANGE translucent!! it messes up capture.
+        UINavigationBar.appearance().translucent = false
         UINavigationBar.appearance().tintColor = Colors.blue
         UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: Colors.blue]
         

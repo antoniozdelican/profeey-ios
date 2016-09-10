@@ -58,14 +58,15 @@ class ProfileTableViewController: UITableViewController {
     // MARK: Navigation
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if let destinationViewController = segue.destinationViewController as? EditProfileTableViewController {
-            destinationViewController.user = self.user
-            destinationViewController.editProfileDelegate = self
+        if let destinationViewController = segue.destinationViewController as? UINavigationController,
+            let childViewController = destinationViewController.childViewControllers[0] as? EditProfileTableViewController {
+            childViewController.user = self.user
+            childViewController.editProfileDelegate = self
         }
-        if let destinationViewController = segue.destinationViewController as? UsersTableViewController {
-            // Followers.
-            //destinationViewController.isLikers = false
-        }
+//        if let destinationViewController = segue.destinationViewController as? UsersTableViewController {
+//            // Followers.
+//            //destinationViewController.isLikers = false
+//        }
         if let destinationViewController = segue.destinationViewController as? PostDetailsTableViewController,
             let indexPath = sender as? NSIndexPath {
             destinationViewController.post = self.posts[indexPath.row]
@@ -351,6 +352,10 @@ class ProfileTableViewController: UITableViewController {
             self.tableView.reloadData()
             self.uploadImage(imageData, title: sourceViewController.postTitle, description: sourceViewController.postDescription, categoryName: sourceViewController.categoryName)
         }
+        if segue.identifier == "segueUnwindToProfileVc",
+            let sourceViewController = segue.sourceViewController as? EditProfileTableViewController {
+            
+        }
     }
     
     // MARK: Tappers
@@ -542,10 +547,31 @@ class ProfileTableViewController: UITableViewController {
                         self.presentViewController(alertController, animated: true, completion: nil)
                     } else {
                         // Save post in DynamoDB.
+                        print("uploadImageS3 success")
                         self.savePost(imageData, imageUrl: imageKey, title: title, description: description, categoryName: categoryName)
                     }
                 })
             })
+    }
+    
+    // In background always.
+    private func removeImage(imageKey: String) {
+        let content = AWSUserFileManager.custom(key: "USEast1BucketManager").contentWithKey(imageKey)
+        
+        print("removeImageS3:")
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        content.removeRemoteContentWithCompletionHandler({
+            (content: AWSContent?, error: NSError?) -> Void in
+            dispatch_async(dispatch_get_main_queue(), {
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                if let error = error {
+                   print("removeImageS3 error: \(error)")
+                } else {
+                    print("removeImageS3 success")
+                    content?.removeLocal()
+                }
+            })
+        })
     }
     
     // Check if currentUser is following this user.
@@ -648,9 +674,14 @@ class ProfileTableViewController: UITableViewController {
 
 extension ProfileTableViewController: EditProfileDelegate {
     
-    func userUpdated(user: User?) {
+    func userUpdated(user: User?, profilePicUrlToRemove: String?) {
         self.user = user
         self.tableView.reloadData()
         self.navigationItem.title = self.user?.preferredUsername
+        
+        // Remove image in background.
+        if let profilePicUrlToRemove = profilePicUrlToRemove {
+            self.removeImage(profilePicUrlToRemove)
+        }
     }
 }

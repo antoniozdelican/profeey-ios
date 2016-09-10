@@ -85,6 +85,11 @@ class AWSUsersTable: NSObject, Table {
         objectMapper.load(AWSUser.self, hashKey: userId, rangeKey: nil).continueWithBlock(completionHandler)
     }
     
+    func saveUser(user: AWSUser, completionHandler: AWSContinuationBlock) {
+        let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
+        objectMapper.save(user).continueWithBlock(completionHandler)
+    }
+    
     func saveUserFirstLastName(user: AWSUserFirstLastName, completionHandler: AWSContinuationBlock) {
         let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
         objectMapper.save(user).continueWithBlock(completionHandler)

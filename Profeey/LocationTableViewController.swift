@@ -19,19 +19,24 @@ class LocationTableViewController: UITableViewController {
     
     // TEST
     private var region: MKCoordinateRegion?
+    
+    var location: String?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.configureLocationManager()
         self.configureLocalSearchCompleter()
-        //self.configureSearchController()
         
-        // Overrie appearance.
+        // Override appearance.
         self.searchBar.searchBarStyle = UISearchBarStyle.Default
         self.searchBar.delegate = self
+        if let location = self.location {
+            self.searchBar.text = location
+            self.localSearchCompleter?.queryFragment = self.searchBar.text!
+        }
         
-        // Overrie appearance.
+        // Override appearance.
         self.tableView.tableFooterView = nil
         self.tableView.separatorInset = UIEdgeInsetsMake(0.0, 12.0, 0.0, 0.0)
     }
@@ -102,6 +107,9 @@ class LocationTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        // Update location and unwind to EditProfileVc
+        self.location = self.locations[indexPath.row].title
+        self.performSegueWithIdentifier("segueUnwindToEditProfileVc", sender: self)
     }
     
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
@@ -125,6 +133,13 @@ class LocationTableViewController: UITableViewController {
     
     // MARK: IBActions
     
+    
+    @IBAction func doneButtonTapped(sender: AnyObject) {
+        // Update location and unwind to EditProfileVc
+        self.location = self.searchBar.text?.trimm()
+        self.performSegueWithIdentifier("segueUnwindToEditProfileVc", sender: self)
+    }
+    
     @IBAction func cancelButtonTapped(sender: AnyObject) {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
@@ -134,7 +149,7 @@ extension LocationTableViewController: UISearchBarDelegate {
     
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
         if !searchText.trimm().isEmpty {
-            // Update search completere aka do the search!
+            // Update search completer aka do the search!
             self.localSearchCompleter?.queryFragment = searchText
         }
     }
@@ -149,6 +164,7 @@ extension LocationTableViewController: CLLocationManagerDelegate {
     }
     
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        // Not needed atm but will be used later.
         if let location = locations.first {
             let region = MKCoordinateRegionMakeWithDistance(location.coordinate, 5000, 5000)
             self.region = region

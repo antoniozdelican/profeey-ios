@@ -17,6 +17,8 @@ protocol DynamoDBManager {
     func getUserDynamoDB(userId: String, completionHandler: AWSContinuationBlock)
     func getCurrentUserDynamoDB(completionHandler: AWSContinuationBlock)
     
+    func saveUserDynamoDB(user: User?, completionHandler: AWSContinuationBlock)
+    
     func updateFirstLastNameDynamoDB(firstName: String?, lastName: String?, completionHandler: AWSContinuationBlock)
     func updatePreferredUsernameDynamoDB(preferredUsername: String?, completionHandler: AWSContinuationBlock)
     func updateProfessionDynamoDB(profession: String?, completionHandler: AWSContinuationBlock)
