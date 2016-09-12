@@ -23,7 +23,7 @@ class AWSPost: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     var _userFirstName: String?
     var _userLastName: String?
     var _userPreferredUsername: String?
-    var _userProfession: String?
+    var _userProfessionName: String?
     var _userProfilePicUrl: String?
     
     class func dynamoDBTableName() -> String {
@@ -54,7 +54,7 @@ class AWSPost: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
             "_userFirstName" : "userFirstName",
             "_userLastName" : "userLastName",
             "_userPreferredUsername" : "userPreferredUsername",
-            "_userProfession" : "userProfession",
+            "_userProfessionName" : "userProfessionName",
             "_userProfilePicUrl" : "userProfilePicUrl",
         ]
     }

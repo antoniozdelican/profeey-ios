@@ -10,27 +10,21 @@ import UIKit
 import AWSMobileHubHelper
 import MapKit
 
-protocol EditProfileDelegate {
-    // Notify profileTableVc that user is updated.
-    // Remove profilePic in background on profileTableVc.
-    func userUpdated(user: User?, profilePicUrlToRemove: String?)
-}
-
 class EditProfileTableViewController: UITableViewController {
 
     @IBOutlet weak var profilePicImageView: UIImageView!
     @IBOutlet weak var firstNameTextField: UITextField!
     @IBOutlet weak var lastNameTextField: UITextField!
-    @IBOutlet weak var preferredUsernameTextField: UITextField!
     @IBOutlet weak var aboutFakePlaceholderLabel: UILabel!
     @IBOutlet weak var aboutTextView: UITextView!
-    @IBOutlet weak var professionLabel: UILabel!
-    @IBOutlet weak var locationLabel: UILabel!
+    @IBOutlet weak var professionNameLabel: UILabel!
+    @IBOutlet weak var locationNameLabel: UILabel!
     
     var user: User?
-    var editProfileDelegate: EditProfileDelegate?
     private var newProfilePicImageData: NSData?
-    private var profilePicUrlToRemove: String?
+    
+    var profilePicUrlToRemove: String?
+    var updatedUser: User?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,21 +53,18 @@ class EditProfileTableViewController: UITableViewController {
         self.lastNameTextField.delegate = self
         self.lastNameTextField.text = self.user?.lastName
         
-        self.preferredUsernameTextField.delegate = self
-        self.preferredUsernameTextField.text = self.user?.preferredUsername
-        
         self.aboutTextView.delegate = self
         self.aboutTextView.text = self.user?.about
         self.aboutFakePlaceholderLabel.hidden = !self.aboutTextView.text.isEmpty
         
-        if let profession = self.user?.profession {
-            self.professionLabel.text = profession
-            self.professionLabel.textColor = Colors.black
+        if let professionName = self.user?.professionName {
+            self.professionNameLabel.text = professionName
+            self.professionNameLabel.textColor = Colors.black
         }
         
-        if let location = self.user?.location {
-            self.locationLabel.text = location
-            self.locationLabel.textColor = Colors.black
+        if let locationName = self.user?.locationName {
+            self.locationNameLabel.text = locationName
+            self.locationNameLabel.textColor = Colors.black
         }
     }
     
@@ -81,9 +72,15 @@ class EditProfileTableViewController: UITableViewController {
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if let destinationViewController = segue.destinationViewController as? UINavigationController,
-            let childViewController = destinationViewController.childViewControllers[0] as? LocationTableViewController {
-            if self.locationLabel.textColor == Colors.black {
-                childViewController.location = self.locationLabel.text
+            let childViewController = destinationViewController.childViewControllers[0] as? ProfessionsTableViewController {
+            if self.professionNameLabel.textColor == Colors.black {
+                childViewController.professionName = self.professionNameLabel.text
+            }
+        }
+        if let destinationViewController = segue.destinationViewController as? UINavigationController,
+            let childViewController = destinationViewController.childViewControllers[0] as? LocationsTableViewController {
+            if self.locationNameLabel.textColor == Colors.black {
+                childViewController.locationName = self.locationNameLabel.text
             }
         }
         if let destinationViewController = segue.destinationViewController as? ScrollViewController {
@@ -139,8 +136,9 @@ class EditProfileTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         cell.layoutMargins = UIEdgeInsetsZero
+        cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0)
         cell.selectionStyle = UITableViewCellSelectionStyle.None
-        if indexPath.row == 5 || indexPath.row == 6 {
+        if indexPath.row == 4 || indexPath.row == 5 {
            cell.selectionStyle = UITableViewCellSelectionStyle.Default
         }
     }
@@ -176,16 +174,28 @@ class EditProfileTableViewController: UITableViewController {
     // MARK: IBActions
     
     @IBAction func unwindToEditProfileTableViewController(segue: UIStoryboardSegue) {
-        if let sourceViewController = segue.sourceViewController as? LocationTableViewController {
-            guard let location = sourceViewController.location else {
+        if let sourceViewController = segue.sourceViewController as? ProfessionsTableViewController {
+            guard let professionName = sourceViewController.professionName else {
                 return
             }
-            if location.isEmpty {
-                self.locationLabel.text = "Add location"
-                self.locationLabel.textColor = Colors.disabled
+            if professionName.isEmpty {
+                self.professionNameLabel.text = "Add profession"
+                self.professionNameLabel.textColor = Colors.disabled
             } else {
-                self.locationLabel.text = location
-                self.locationLabel.textColor = Colors.black
+                self.professionNameLabel.text = professionName
+                self.professionNameLabel.textColor = Colors.black
+            }
+        }
+        if let sourceViewController = segue.sourceViewController as? LocationsTableViewController {
+            guard let locationName = sourceViewController.locationName else {
+                return
+            }
+            if locationName.isEmpty {
+                self.locationNameLabel.text = "Add location"
+                self.locationNameLabel.textColor = Colors.disabled
+            } else {
+                self.locationNameLabel.text = locationName
+                self.locationNameLabel.textColor = Colors.black
             }
         }
         if let sourceViewController = segue.sourceViewController as? PreviewViewController {
@@ -216,14 +226,11 @@ class EditProfileTableViewController: UITableViewController {
         }
     }
     
-    
-    
     // MARK: AWS
     
     private func saveUser() {
         guard let firstNameText = self.firstNameTextField.text,
             let lastNameText = self.lastNameTextField.text,
-            let preferredUsernameText = self.preferredUsernameTextField.text,
             let aboutText = self.aboutTextView.text else {
                 return
         }
@@ -231,22 +238,11 @@ class EditProfileTableViewController: UITableViewController {
         // Take new (or old) values from textFields/labels
         let firstName: String? = firstNameText.trimm().isEmpty ? nil : firstNameText.trimm()
         let lastName: String? = lastNameText.trimm().isEmpty ? nil : lastNameText.trimm()
-        let preferredUsername: String? = preferredUsernameText.trimm().isEmpty ? nil : preferredUsernameText.trimm()
         let about: String? = aboutText.trimm().isEmpty ? nil : aboutText.trimm()
-        let profession: String?
-        if self.professionLabel.textColor == Colors.black {
-            profession = self.professionLabel.text?.trimm()
-        } else {
-            profession = nil
-        }
-        let location: String?
-        if self.locationLabel.textColor == Colors.black {
-            location = self.locationLabel.text?.trimm()
-        } else {
-            location = nil
-        }
+        let professionName: String? = (self.professionNameLabel.textColor == Colors.black) ? self.professionNameLabel.text?.trimm() : nil
+        let locationName: String? = (self.locationNameLabel.textColor == Colors.black) ? self.locationNameLabel.text?.trimm() : nil
         
-        let user = User(userId: self.user?.userId, firstName: firstName, lastName: lastName, preferredUsername: preferredUsername, profession: profession, profilePicUrl: self.user?.profilePicUrl, location: location, about: about)
+        self.updatedUser = User(userId: self.user?.userId, firstName: firstName, lastName: lastName, preferredUsername: self.user?.preferredUsername, professionName: professionName, profilePicUrl: self.user?.profilePicUrl, locationName: locationName, about: about)
         
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         PRFYDynamoDBManager.defaultDynamoDBManager().saveUserDynamoDB(user, completionHandler: {
@@ -259,8 +255,8 @@ class EditProfileTableViewController: UITableViewController {
                     self.presentViewController(alertController, animated: true, completion: nil)
                 } else {
                     // Update user object for ProfileVc.
-                    user.profilePic = self.profilePicImageView.image
-                    self.editProfileDelegate?.userUpdated(user, profilePicUrlToRemove: self.profilePicUrlToRemove)
+                    self.updatedUser?.profilePic = self.profilePicImageView.image
+                    //self.editProfileDelegate?.userUpdated(user, profilePicUrlToRemove: self.profilePicUrlToRemove)
                     self.performSegueWithIdentifier("segueUnwindToProfileVc", sender: self)
                 }
             })
@@ -305,9 +301,6 @@ extension EditProfileTableViewController: UITextFieldDelegate {
         case self.firstNameTextField:
             self.firstNameTextField.resignFirstResponder()
             self.lastNameTextField.becomeFirstResponder()
-        case self.lastNameTextField:
-            self.lastNameTextField.resignFirstResponder()
-            self.preferredUsernameTextField.becomeFirstResponder()
         default:
             return true
         }

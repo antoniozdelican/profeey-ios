@@ -75,10 +75,10 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
                 awsUser._firstName = user?.firstName
                 awsUser._lastName = user?.lastName
                 awsUser._preferredUsername = user?.preferredUsername
-                awsUser._profession = user?.profession
+                awsUser._professionName = user?.professionName
                 awsUser._profilePicUrl = user?.profilePicUrl
                 awsUser._about = user?.about
-                awsUser._location = user?.location
+                awsUser._locationName = user?.locationName
                 awsUser._searchFirstName = user?.firstName?.lowercaseString
                 awsUser._searchLastName = user?.lastName?.lowercaseString
                 usersTable.saveUser(awsUser, completionHandler: completionHandler)
@@ -155,7 +155,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         })
     }
     
-    func updateProfessionDynamoDB(profession: String?, completionHandler: AWSContinuationBlock) {
+    func updateProfessionDynamoDB(professionName: String?, completionHandler: AWSContinuationBlock) {
         AWSClientManager.defaultClientManager().credentialsProvider?.getIdentityId().continueWithBlock({
             (task: AWSTask) in
             if let error = task.error {
@@ -167,7 +167,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
                 let usersTable = AWSUsersTable()
                 let user = AWSUserProfession()
                 user._userId = identityId
-                user._profession = profession
+                user._professionName = professionName
                 usersTable.saveUserProfession(user, completionHandler: {
                     (task: AWSTask) in
                     if let error = task.error {
@@ -186,7 +186,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         })
     }
     
-    func updateLocationDynamoDB(location: String?, completionHandler: AWSContinuationBlock) {
+    func updateLocationDynamoDB(locationName: String?, completionHandler: AWSContinuationBlock) {
         AWSClientManager.defaultClientManager().credentialsProvider?.getIdentityId().continueWithBlock({
             (task: AWSTask) in
             if let error = task.error {
@@ -198,7 +198,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
                 let usersTable = AWSUsersTable()
                 let user = AWSUserLocation()
                 user._userId = identityId
-                user._location = location
+                user._locationName = locationName
                 usersTable.saveUserLocation(user, completionHandler: {
                     (task: AWSTask) in
                     if let error = task.error {
@@ -339,7 +339,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
                 userRelationship._followingFirstName = following?.firstName
                 userRelationship._followingLastName = following?.lastName
                 userRelationship._followingPreferredUsername = following?.preferredUsername
-                userRelationship._followingProfession = following?.profession
+                userRelationship._followingProfession = following?.professionName
                 userRelationship._followingProfilePicUrl = following?.profilePicUrl
                 
                 userRelationship._numberOfNewPosts = numberOfNewPosts
@@ -420,7 +420,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
                 like._likerFirstName = liker?.firstName
                 like._likerLastName = liker?.lastName
                 like._likerPreferredUsername = liker?.preferredUsername
-                like._likerProfession = liker?.profession
+                like._likerProfession = liker?.professionName
                 like._likerProfilePicUrl = liker?.profilePicUrl
                 likesTable.saveLike(like, completionHandler: completionHandler)
                 return nil
@@ -498,7 +498,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
                 post._userFirstName = user?.firstName
                 post._userLastName = user?.lastName
                 post._userPreferredUsername = user?.preferredUsername
-                post._userProfession = user?.profession
+                post._userProfessionName = user?.professionName
                 post._userProfilePicUrl = user?.profilePicUrl
                 
                 postsTable.savePost(post, completionHandler: {
@@ -533,5 +533,13 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         print("scanCategoriesByCategoryNameDynamoDB:")
         let categoriesTable = AWSCategoriesTable()
         categoriesTable.scanCategoriesByCategoryName(searchCategoryName, completionHandler: completionHandler)
+    }
+    
+    // MARK: Professions
+    
+    func scanProfessionsByProfessionNameDynamoDB(searchProfessionName: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
+        print("scanProfessionsByProfessionNameDynamoDB:")
+        let professionsTable = AWSProfessionsTable()
+        professionsTable.scanProfessionsByProfessionName(searchProfessionName, completionHandler: completionHandler)
     }
 }

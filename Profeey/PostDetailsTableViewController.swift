@@ -69,7 +69,7 @@ class PostDetailsTableViewController: UITableViewController {
         self.profilePicImageView.clipsToBounds = true
         self.profilePicImageView.image = self.post?.user?.profilePic
         self.fullNameLabel.text = self.post?.user?.fullName
-        self.professionLabel.text = self.post?.user?.profession
+        self.professionLabel.text = self.post?.user?.professionName
         // Other.
         //self.descriptionLabel.text = self.post?.postDescription
         //self.timeLabel.text = self.post?.creationDateString

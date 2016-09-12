@@ -19,15 +19,15 @@ class CommentsTableViewController: UITableViewController {
         self.tableView.rowHeight = UITableViewAutomaticDimension
         self.tableView.contentOffset = CGPointMake(0.0, CGFloat.max)
         
-        let user1 = User(userId: nil, firstName: "Antonio", lastName: "Zdelican", preferredUsername: "antonio", profession: "Engineer", profilePicUrl: nil, location: nil, about: nil)
-        let comment1 = Comment(user: user1, commentText: "Currently discovering iOS and energy management.")
-        let comment2 = Comment(user: user1, commentText: "Awesome")
-        let comment3 = Comment(user: user1, commentText: "Bla")
-        let comment4 = Comment(user: user1, commentText: "Lorem ipsum dolor sit amet, eu mea legendos scribentur, an est paulo soluta aliquid, enim duis ut cum. Nostro meliore phaedrum et has. In mea essent dicunt, solum tation regione id eum, at assum legendos his. Minim nobis vitae nec in, volutpat adipiscing pri in. Nam cu audiam volutpat expetenda, docendi copiosae oportere et quo. Eu impedit periculis qui. Eu cum vitae lobortis necessitatibus, eum dictas docendi epicuri ut. Sale voluptua at eos. Homero audiam legendos sea ei, et usu odio putent tincidunt.")
-        let comment5 = Comment(user: user1, commentText: "Lorem ipsum dolor sit amet, eu mea legendos scribentur, an est paulo soluta aliquid, enim duis ut cum. Nostro meliore phaedrum et has. In mea essent dicunt, solum tation regione id eum, at assum legendos his. Minim nobis vitae nec in, volutpat adipiscing pri in. Nam cu audiam volutpat expetenda, docendi copiosae oportere et quo. Eu impedit periculis qui. Eu cum vitae lobortis necessitatibus, eum dictas docendi epicuri ut. Sale voluptua at eos. Homero audiam legendos sea ei, et usu odio putent tincidunt.")
-        let comment6 = Comment(user: user1, commentText: "Lorem ipsum dolor sit amet, eu mea legendos scribentur, an est paulo soluta aliquid, enim duis ut cum. Nostro meliore phaedrum et has. In mea essent dicunt, solum tation regione id eum, at assum legendos his. Minim nobis vitae nec in, volutpat adipiscing pri in. Nam cu audiam volutpat expetenda, docendi copiosae oportere et quo. Eu impedit periculis qui. Eu cum vitae lobortis necessitatibus, eum dictas docendi epicuri ut. Sale voluptua at eos. Homero audiam legendos sea ei, et usu odio putent tincidunt.")
-        
-        self.comments = [comment1, comment2, comment3, comment4, comment5, comment6]
+//        let user1 = User(userId: nil, firstName: "Antonio", lastName: "Zdelican", preferredUsername: "antonio", profession: "Engineer", profilePicUrl: nil, location: nil, about: nil)
+//        let comment1 = Comment(user: user1, commentText: "Currently discovering iOS and energy management.")
+//        let comment2 = Comment(user: user1, commentText: "Awesome")
+//        let comment3 = Comment(user: user1, commentText: "Bla")
+//        let comment4 = Comment(user: user1, commentText: "Lorem ipsum dolor sit amet, eu mea legendos scribentur, an est paulo soluta aliquid, enim duis ut cum. Nostro meliore phaedrum et has. In mea essent dicunt, solum tation regione id eum, at assum legendos his. Minim nobis vitae nec in, volutpat adipiscing pri in. Nam cu audiam volutpat expetenda, docendi copiosae oportere et quo. Eu impedit periculis qui. Eu cum vitae lobortis necessitatibus, eum dictas docendi epicuri ut. Sale voluptua at eos. Homero audiam legendos sea ei, et usu odio putent tincidunt.")
+//        let comment5 = Comment(user: user1, commentText: "Lorem ipsum dolor sit amet, eu mea legendos scribentur, an est paulo soluta aliquid, enim duis ut cum. Nostro meliore phaedrum et has. In mea essent dicunt, solum tation regione id eum, at assum legendos his. Minim nobis vitae nec in, volutpat adipiscing pri in. Nam cu audiam volutpat expetenda, docendi copiosae oportere et quo. Eu impedit periculis qui. Eu cum vitae lobortis necessitatibus, eum dictas docendi epicuri ut. Sale voluptua at eos. Homero audiam legendos sea ei, et usu odio putent tincidunt.")
+//        let comment6 = Comment(user: user1, commentText: "Lorem ipsum dolor sit amet, eu mea legendos scribentur, an est paulo soluta aliquid, enim duis ut cum. Nostro meliore phaedrum et has. In mea essent dicunt, solum tation regione id eum, at assum legendos his. Minim nobis vitae nec in, volutpat adipiscing pri in. Nam cu audiam volutpat expetenda, docendi copiosae oportere et quo. Eu impedit periculis qui. Eu cum vitae lobortis necessitatibus, eum dictas docendi epicuri ut. Sale voluptua at eos. Homero audiam legendos sea ei, et usu odio putent tincidunt.")
+//        
+//        self.comments = [comment1, comment2, comment3, comment4, comment5, comment6]
         
         if let comments = self.comments {
             self.commentsArray = comments
@@ -54,7 +54,7 @@ class CommentsTableViewController: UITableViewController {
         let user = comment.user
         cell.profilePicImageView.image = user?.profilePic
         cell.fullNameLabel.text = user?.fullName
-        cell.professionLabel.text = user?.profession
+        cell.professionLabel.text = user?.professionName
         cell.commentLabel.text = comment.commentText
         cell.timeLabel.text = "2 minutes ago"
         return cell

@@ -15,9 +15,9 @@ class User: NSObject {
     var about: String?
     var firstName: String?
     var lastName: String?
-    var location: String?
+    var locationName: String?
     var preferredUsername: String?
-    var profession: String?
+    var professionName: String?
     var profilePicUrl: String?
     
     // For SignUp flow.
@@ -38,38 +38,38 @@ class User: NSObject {
         super.init()
     }
     
-    convenience init(userId: String?, firstName: String?, lastName: String?, preferredUsername: String?, profession: String?, profilePicUrl: String?, location: String?, about: String?) {
+    convenience init(userId: String?, firstName: String?, lastName: String?, preferredUsername: String?, professionName: String?, profilePicUrl: String?, locationName: String?, about: String?) {
         self.init()
         self.userId = userId
         self.firstName = firstName
         self.lastName = lastName
         self.preferredUsername = preferredUsername
-        self.profession = profession
+        self.professionName = professionName
         self.profilePicUrl = profilePicUrl
-        self.location = location
+        self.locationName = locationName
         self.about = about
     }
     
-    convenience init(userId: String?, firstName: String?, lastName: String?, preferredUsername: String?, profession: String?, profilePicUrl: String?, numberOfNewPosts: NSNumber?) {
+    convenience init(userId: String?, firstName: String?, lastName: String?, preferredUsername: String?, professionName: String?, profilePicUrl: String?, numberOfNewPosts: NSNumber?) {
         self.init()
         self.userId = userId
         self.firstName = firstName
         self.lastName = lastName
         self.preferredUsername = preferredUsername
-        self.profession = profession
+        self.professionName = professionName
         self.profilePicUrl = profilePicUrl
         self.numberOfNewPosts = numberOfNewPosts
     }
     
     // Basic user got from post.
     // Should be used as default and then load location, about and other attributes when we open ProfileTableVc.
-    convenience init(userId: String?, firstName: String?, lastName: String?, preferredUsername: String?, profession: String?, profilePicUrl: String?) {
+    convenience init(userId: String?, firstName: String?, lastName: String?, preferredUsername: String?, professionName: String?, profilePicUrl: String?) {
         self.init()
         self.userId = userId
         self.firstName = firstName
         self.lastName = lastName
         self.preferredUsername = preferredUsername
-        self.profession = profession
+        self.professionName = professionName
         self.profilePicUrl = profilePicUrl
     }
 }

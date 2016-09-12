@@ -63,7 +63,7 @@ class CategoryTableViewController: UITableViewController {
             let user = post.user
             cell.profilePicImageView.image = user?.profilePic
             cell.fullNameLabel.text = user?.fullName
-            cell.professionLabel.text = user?.profession
+            cell.professionLabel.text = user?.professionName
             return cell
         case 1:
             let cell = tableView.dequeueReusableCellWithIdentifier("cellPostImage", forIndexPath: indexPath) as! PostImageTableViewCell
@@ -214,7 +214,7 @@ class CategoryTableViewController: UITableViewController {
                     print("getCurrentUser error: \(error)")
                 } else {
                     if let awsUser = task.result as? AWSUser {
-                        let user = User(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, profession: awsUser._profession, profilePicUrl: awsUser._profilePicUrl)
+                        let user = User(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl)
                         self.currentUser = user
                         
                         // Only now query posts.
@@ -240,7 +240,7 @@ class CategoryTableViewController: UITableViewController {
                 } else {
                     if let awsPosts = reponse?.items as? [AWSPost] {
                         for (index, awsPost) in awsPosts.enumerate() {
-                            let user = User(userId: awsPost._userId, firstName: awsPost._userFirstName, lastName: awsPost._userLastName, preferredUsername: awsPost._userPreferredUsername, profession: awsPost._userProfession, profilePicUrl: awsPost._userProfilePicUrl)
+                            let user = User(userId: awsPost._userId, firstName: awsPost._userFirstName, lastName: awsPost._userLastName, preferredUsername: awsPost._userPreferredUsername, professionName: awsPost._userProfessionName, profilePicUrl: awsPost._userProfilePicUrl)
                             let post = Post(userId: awsPost._userId, postId: awsPost._postId, categoryName: awsPost._categoryName, creationDate: awsPost._creationDate, postDescription: awsPost._description, imageUrl: awsPost._imageUrl, numberOfLikes: awsPost._numberOfLikes, title: awsPost._title, user: user)
                             self.posts.append(post)
                             self.tableView.reloadData()

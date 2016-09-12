@@ -62,7 +62,7 @@ class SearchUsersTableViewController: UITableViewController {
             let user = self.users[indexPath.row]
             cell.profilePicImageView.image = user.profilePic
             cell.fullNameLabel.text = user.fullName
-            cell.professionLabel.text = user.profession
+            cell.professionLabel.text = user.professionName
             return cell
         }
     }

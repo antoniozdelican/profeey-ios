@@ -127,7 +127,7 @@ class HomeTableViewController: UITableViewController {
                 let user = self.followingUsers[indexPath.row]
                 cell.profilePicImageView.image = user.profilePic
                 cell.fullNameLabel.text = user.fullName
-                cell.professionLabel.text = user.profession
+                cell.professionLabel.text = user.professionName
                 if let numberOfNewPosts = user.numberOfNewPosts {
                     let numberOfNewPostsInt = numberOfNewPosts.integerValue
                     cell.numberOfPostsLabel.text = numberOfNewPostsInt == 1 ? "\(numberOfNewPostsInt) new post" : "\(numberOfNewPostsInt) new posts"
@@ -227,7 +227,7 @@ class HomeTableViewController: UITableViewController {
                     print("getCurrentUser error: \(error)")
                 } else {
                     if let awsUser = task.result as? AWSUser {
-                        let user = User(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, profession: awsUser._profession, profilePicUrl: awsUser._profilePicUrl, location: awsUser._location, about: awsUser._about)
+                        let user = User(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationName: awsUser._locationName, about: awsUser._about)
                         self.user = user
                         
                         // Get profilePic.
@@ -262,7 +262,7 @@ class HomeTableViewController: UITableViewController {
                         
                         for (index, awsUserRelationship) in awsUserRelationships.enumerate() {
                             
-                            let followingUser = User(userId: awsUserRelationship._followingId, firstName: awsUserRelationship._followingFirstName, lastName: awsUserRelationship._followingLastName, preferredUsername: awsUserRelationship._followingPreferredUsername, profession: awsUserRelationship._followingProfession, profilePicUrl: awsUserRelationship._followingProfilePicUrl, numberOfNewPosts: awsUserRelationship._numberOfNewPosts)
+                            let followingUser = User(userId: awsUserRelationship._followingId, firstName: awsUserRelationship._followingFirstName, lastName: awsUserRelationship._followingLastName, preferredUsername: awsUserRelationship._followingPreferredUsername, professionName: awsUserRelationship._followingProfession, profilePicUrl: awsUserRelationship._followingProfilePicUrl, numberOfNewPosts: awsUserRelationship._numberOfNewPosts)
                             self.followingUsers.append(followingUser)
                             self.tableView.reloadData()
                             

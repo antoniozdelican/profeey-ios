@@ -70,8 +70,8 @@
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="fullNameLabel" destination="sWn-py-cBk" id="YzO-Ok-KB6"/>
-                                    <outlet property="locationLabel" destination="EYq-Xj-yju" id="gz8-E7-CRa"/>
-                                    <outlet property="professionLabel" destination="se1-K6-giz" id="Xht-nV-sd8"/>
+                                    <outlet property="locationNameLabel" destination="EYq-Xj-yju" id="kGp-UX-Kp7"/>
+                                    <outlet property="professionNameLabel" destination="se1-K6-giz" id="cSP-4I-LVr"/>
                                     <outlet property="profilePicImageView" destination="fbL-u0-eOi" id="pqT-Q7-jGU"/>
                                 </connections>
                             </tableViewCell>
@@ -240,7 +240,7 @@
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="categoryLabel" destination="vrd-IQ-L2M" id="HkJ-8T-jg9"/>
+                                    <outlet property="categoryNameLabel" destination="vrd-IQ-L2M" id="3tb-tF-dtT"/>
                                     <outlet property="postImageView" destination="4y8-2M-xfl" id="Ysz-kW-YUG"/>
                                     <outlet property="timeLabel" destination="WRi-uh-Qav" id="E3u-Y1-Jtt"/>
                                     <outlet property="titleLabel" destination="S1N-nK-Pta" id="0vJ-9f-bLS"/>

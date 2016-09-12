@@ -9,18 +9,19 @@
 import UIKit
 import MapKit
 
-class LocationTableViewController: UITableViewController {
+class LocationsTableViewController: UITableViewController {
     
     @IBOutlet weak var searchBar: UISearchBar!
     
     private var locationManager: CLLocationManager?
     private var localSearchCompleter: MKLocalSearchCompleter?
     private var locations: [MKLocalSearchCompletion] = []
+    private var recentLocations: [MKLocalSearchCompletion] = []
+    
+    var locationName: String?
     
     // TEST
     private var region: MKCoordinateRegion?
-    
-    var location: String?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,20 +31,13 @@ class LocationTableViewController: UITableViewController {
         
         // Override appearance.
         self.searchBar.searchBarStyle = UISearchBarStyle.Default
+        self.tableView.tableFooterView = nil
+        
         self.searchBar.delegate = self
-        if let location = self.location {
-            self.searchBar.text = location
+        if let locationName = self.locationName {
+            self.searchBar.text = locationName
             self.localSearchCompleter?.queryFragment = self.searchBar.text!
         }
-        
-        // Override appearance.
-        self.tableView.tableFooterView = nil
-        self.tableView.separatorInset = UIEdgeInsetsMake(0.0, 12.0, 0.0, 0.0)
-    }
-    
-    deinit {
-        // For bug on dismiss Vc and SearchController.
-        //self.searchController?.loadViewIfNeeded()
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -72,19 +66,6 @@ class LocationTableViewController: UITableViewController {
         self.localSearchCompleter = MKLocalSearchCompleter()
         self.localSearchCompleter?.delegate = self
     }
-    
-    private func configureSearchController() {
-//        self.searchController = UISearchController(searchResultsController: nil)
-//        self.searchController?.searchResultsUpdater = self
-//        self.searchController?.hidesNavigationBarDuringPresentation = false
-//        self.searchController?.dimsBackgroundDuringPresentation = false
-//        self.searchController?.searchBar.searchBarStyle = UISearchBarStyle.Default
-//        self.searchController?.searchBar.barTintColor = Colors.grey
-//        self.searchController?.searchBar.placeholder = "Search a location"
-//        
-//        self.definesPresentationContext = true
-//        self.tableView.tableHeaderView = self.searchController?.searchBar
-    }
 
     // MARK: UITableViewDataSource
 
@@ -93,13 +74,30 @@ class LocationTableViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.locations.count
+        guard let searchText = self.searchBar.text else {
+            return 0
+        }
+        return searchText.isEmpty ? self.recentLocations.count : self.locations.count
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        guard let searchText = self.searchBar.text else {
+            return UITableViewCell()
+        }
         let cell = tableView.dequeueReusableCellWithIdentifier("cellLocation", forIndexPath: indexPath) as! LocationTableViewCell
-        cell.titleLabel.text = self.locations[indexPath.row].title
-        cell.subtitleLabel.text = self.locations[indexPath.row].subtitle
+        let location = searchText.isEmpty ? self.recentLocations[indexPath.row] : self.locations[indexPath.row]
+        cell.titleLabel.text = location.title
+        cell.subtitleLabel.text = location.subtitle
+        return cell
+    }
+    
+    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard let searchText = self.searchBar.text else {
+            return nil
+        }
+        let cell = tableView.dequeueReusableCellWithIdentifier("cellHeader") as! HeaderTableViewCell
+        cell.headerTitle.text = searchText.isEmpty ? "RECENT" : "BEST MATCHES"
+        cell.backgroundColor = UIColor.whiteColor()
         return cell
     }
     
@@ -107,14 +105,17 @@ class LocationTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        // Update location and unwind to EditProfileVc
-        self.location = self.locations[indexPath.row].title
-        self.performSegueWithIdentifier("segueUnwindToEditProfileVc", sender: self)
+        let cell = tableView.cellForRowAtIndexPath(indexPath)
+        if cell is LocationTableViewCell {
+            // Update location and unwind to EditProfileVc
+            self.locationName = self.locations[indexPath.row].title
+            self.performSegueWithIdentifier("segueUnwindToEditProfileVc", sender: self)
+        }
     }
     
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         cell.layoutMargins = UIEdgeInsetsZero
-        cell.separatorInset = UIEdgeInsetsMake(0.0, 12.0, 0.0, 0.0)
+        cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0)
     }
     
     override func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -125,6 +126,10 @@ class LocationTableViewController: UITableViewController {
         return 64.0
     }
     
+    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 32.0
+    }
+    
     // MARK: UIScrollViewDelegate
     
     override func scrollViewDidScroll(scrollView: UIScrollView) {
@@ -133,10 +138,9 @@ class LocationTableViewController: UITableViewController {
     
     // MARK: IBActions
     
-    
     @IBAction func doneButtonTapped(sender: AnyObject) {
         // Update location and unwind to EditProfileVc
-        self.location = self.searchBar.text?.trimm()
+        self.locationName = self.searchBar.text?.trimm()
         self.performSegueWithIdentifier("segueUnwindToEditProfileVc", sender: self)
     }
     
@@ -145,17 +149,20 @@ class LocationTableViewController: UITableViewController {
     }
 }
 
-extension LocationTableViewController: UISearchBarDelegate {
+extension LocationsTableViewController: UISearchBarDelegate {
     
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
-        if !searchText.trimm().isEmpty {
+        if searchText.trimm().isEmpty {
+            // Show cached recentLocations.
+            self.tableView.reloadData()
+        } else {
             // Update search completer aka do the search!
             self.localSearchCompleter?.queryFragment = searchText
         }
     }
 }
 
-extension LocationTableViewController: CLLocationManagerDelegate {
+extension LocationsTableViewController: CLLocationManagerDelegate {
     
     func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
         if status == CLAuthorizationStatus.AuthorizedWhenInUse {
@@ -168,8 +175,6 @@ extension LocationTableViewController: CLLocationManagerDelegate {
         if let location = locations.first {
             let region = MKCoordinateRegionMakeWithDistance(location.coordinate, 5000, 5000)
             self.region = region
-            
-            print(region)
         }
     }
     
@@ -178,7 +183,7 @@ extension LocationTableViewController: CLLocationManagerDelegate {
     }
 }
 
-extension LocationTableViewController: MKLocalSearchCompleterDelegate {
+extension LocationsTableViewController: MKLocalSearchCompleterDelegate {
     
     func completerDidUpdateResults(completer: MKLocalSearchCompleter) {
         // Reload search results.

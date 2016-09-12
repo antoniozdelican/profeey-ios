@@ -58,7 +58,7 @@ class UsersTableViewController: UITableViewController {
         let user = self.users[indexPath.row]
         cell.profilePicImageView.image = user.profilePic
         cell.fullNameLabel.text = user.fullName
-        cell.professionLabel.text = user.profession
+        cell.professionLabel.text = user.professionName
         return cell
     }
     
@@ -107,7 +107,7 @@ class UsersTableViewController: UITableViewController {
                 } else {
                     if let awsLikes = response?.items as? [AWSLike] {
                         for (index, awsLike) in awsLikes.enumerate() {
-                            let user = User(userId: awsLike._userId, firstName: awsLike._likerFirstName, lastName: awsLike._likerLastName, preferredUsername: awsLike._likerPreferredUsername, profession: awsLike._likerProfession, profilePicUrl: awsLike._likerProfilePicUrl)
+                            let user = User(userId: awsLike._userId, firstName: awsLike._likerFirstName, lastName: awsLike._likerLastName, preferredUsername: awsLike._likerPreferredUsername, professionName: awsLike._likerProfession, profilePicUrl: awsLike._likerProfilePicUrl)
                             self.users.append(user)
                             self.tableView.reloadData()
                             

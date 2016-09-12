@@ -12,7 +12,6 @@ import AWSDynamoDB
 class AWSCategory: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     
     var _categoryName: String?
-    var _creationDate: NSNumber?
     var _numberOfPosts: NSNumber?
     var _searchCategoryName: String?
     
@@ -29,7 +28,6 @@ class AWSCategory: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     override class func JSONKeyPathsByPropertyKey() -> [NSObject : AnyObject] {
         return [
             "_categoryName" : "categoryName",
-            "_creationDate" : "creationDate",
             "_numberOfPosts" : "numberOfPosts",
             "_searchCategoryName" : "searchCategoryName",
         ]

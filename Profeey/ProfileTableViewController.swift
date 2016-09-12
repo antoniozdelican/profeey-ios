@@ -61,12 +61,7 @@ class ProfileTableViewController: UITableViewController {
         if let destinationViewController = segue.destinationViewController as? UINavigationController,
             let childViewController = destinationViewController.childViewControllers[0] as? EditProfileTableViewController {
             childViewController.user = self.user
-            childViewController.editProfileDelegate = self
         }
-//        if let destinationViewController = segue.destinationViewController as? UsersTableViewController {
-//            // Followers.
-//            //destinationViewController.isLikers = false
-//        }
         if let destinationViewController = segue.destinationViewController as? PostDetailsTableViewController,
             let indexPath = sender as? NSIndexPath {
             destinationViewController.post = self.posts[indexPath.row]
@@ -135,8 +130,8 @@ class ProfileTableViewController: UITableViewController {
             let cell = tableView.dequeueReusableCellWithIdentifier("cellProfileMain", forIndexPath: indexPath) as! ProfileMainTableViewCell
             cell.profilePicImageView.image = self.user?.profilePic
             cell.fullNameLabel.text = self.user?.fullName
-            cell.professionLabel.text = self.user?.profession
-            cell.locationLabel.text = self.user?.location
+            cell.professionNameLabel.text = self.user?.professionName
+            cell.locationNameLabel.text = self.user?.locationName
             return cell
         case 1:
             let cell = tableView.dequeueReusableCellWithIdentifier("cellProfileButtons", forIndexPath: indexPath) as! ProfileButtonsTableViewCell
@@ -166,7 +161,7 @@ class ProfileTableViewController: UITableViewController {
             let post = posts[indexPath.row]
             cell.postImageView.image = post.image
             cell.titleLabel.text = post.title
-            cell.categoryLabel.text = post.categoryName
+            cell.categoryNameLabel.text = post.categoryName
             cell.timeLabel.text = post.creationDateString
             return cell
         case 5:
@@ -352,9 +347,16 @@ class ProfileTableViewController: UITableViewController {
             self.tableView.reloadData()
             self.uploadImage(imageData, title: sourceViewController.postTitle, description: sourceViewController.postDescription, categoryName: sourceViewController.categoryName)
         }
-        if segue.identifier == "segueUnwindToProfileVc",
-            let sourceViewController = segue.sourceViewController as? EditProfileTableViewController {
+        if let sourceViewController = segue.sourceViewController as? EditProfileTableViewController {
+            let updatedUser = sourceViewController.updatedUser
+            self.user = updatedUser
+            self.tableView.reloadData()
+            self.navigationItem.title = updatedUser?.preferredUsername
             
+            // Remove image in background.
+            if let profilePicUrlToRemove = sourceViewController.profilePicUrlToRemove {
+                self.removeImage(profilePicUrlToRemove)
+            }
         }
     }
     
@@ -390,7 +392,7 @@ class ProfileTableViewController: UITableViewController {
                     print("getCurrentUser error: \(error)")
                 } else {
                     if let awsUser = task.result as? AWSUser {
-                        let user = User(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, profession: awsUser._profession, profilePicUrl: awsUser._profilePicUrl, location: awsUser._location, about: awsUser._about)
+                        let user = User(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationName: awsUser._locationName, about: awsUser._about)
                         self.user = user
                         self.tableView.reloadData()
                         self.navigationItem.title = self.user?.preferredUsername
@@ -432,7 +434,7 @@ class ProfileTableViewController: UITableViewController {
                         for (index, awsPost) in awsPosts.enumerate() {
                             let indexPath = NSIndexPath(forRow: index, inSection: 4)
                             // Data is denormalized so we store user data in posts table!
-                            let user = User(userId: awsPost._userId, firstName: awsPost._userFirstName, lastName: awsPost._userLastName, preferredUsername: awsPost._userPreferredUsername, profession: awsPost._userProfession, profilePicUrl: awsPost._userProfilePicUrl)
+                            let user = User(userId: awsPost._userId, firstName: awsPost._userFirstName, lastName: awsPost._userLastName, preferredUsername: awsPost._userPreferredUsername, professionName: awsPost._userProfessionName, profilePicUrl: awsPost._userProfilePicUrl)
                             let post = Post(userId: awsPost._userId, postId: awsPost._postId, categoryName: awsPost._categoryName, creationDate: awsPost._creationDate, postDescription: awsPost._description, imageUrl: awsPost._imageUrl, numberOfLikes: awsPost._numberOfLikes, title: awsPost._title, user: user)
                             self.posts.append(post)
                             self.tableView.reloadData()
@@ -459,7 +461,7 @@ class ProfileTableViewController: UITableViewController {
                 } else {
                     if let awsPost = task.result as? AWSPost {
                         // Initialize basic user.
-                        let user = User(userId: awsPost._userId, firstName: awsPost._userFirstName, lastName: awsPost._userLastName, preferredUsername: awsPost._userPreferredUsername, profession: awsPost._userProfession, profilePicUrl: awsPost._userProfilePicUrl)
+                        let user = User(userId: awsPost._userId, firstName: awsPost._userFirstName, lastName: awsPost._userLastName, preferredUsername: awsPost._userPreferredUsername, professionName: awsPost._userProfessionName, profilePicUrl: awsPost._userProfilePicUrl)
                         let post = Post(userId: awsPost._userId, postId: awsPost._postId, categoryName: awsPost._categoryName, creationDate: awsPost._creationDate, postDescription: awsPost._description, imageUrl: awsPost._imageUrl, numberOfLikes: awsPost._numberOfLikes, title: awsPost._title, user: user)
                         
                         let image = UIImage(data: imageData)
@@ -669,19 +671,5 @@ class ProfileTableViewController: UITableViewController {
         self.topCategories = Array(sortedCategories.prefix(5))
         self.topCategoriesNumberOfPosts = Array(sortedCategoriesNumbers.prefix(5))
         self.tableView.reloadData()
-    }
-}
-
-extension ProfileTableViewController: EditProfileDelegate {
-    
-    func userUpdated(user: User?, profilePicUrlToRemove: String?) {
-        self.user = user
-        self.tableView.reloadData()
-        self.navigationItem.title = self.user?.preferredUsername
-        
-        // Remove image in background.
-        if let profilePicUrlToRemove = profilePicUrlToRemove {
-            self.removeImage(profilePicUrlToRemove)
-        }
     }
 }

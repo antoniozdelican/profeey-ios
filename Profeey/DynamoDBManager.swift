@@ -21,8 +21,8 @@ protocol DynamoDBManager {
     
     func updateFirstLastNameDynamoDB(firstName: String?, lastName: String?, completionHandler: AWSContinuationBlock)
     func updatePreferredUsernameDynamoDB(preferredUsername: String?, completionHandler: AWSContinuationBlock)
-    func updateProfessionDynamoDB(profession: String?, completionHandler: AWSContinuationBlock)
-    func updateLocationDynamoDB(location: String?, completionHandler: AWSContinuationBlock)
+    func updateProfessionDynamoDB(professionName: String?, completionHandler: AWSContinuationBlock)
+    func updateLocationDynamoDB(locationName: String?, completionHandler: AWSContinuationBlock)
     func updateAboutDynamoDB(about: String?, completionHandler: AWSContinuationBlock)
     func updateProfilePicDynamoDB(profilePicUrl: String?, completionHandler: AWSContinuationBlock)
     
@@ -56,4 +56,8 @@ protocol DynamoDBManager {
     // MARK: Categories
     
     func scanCategoriesByCategoryNameDynamoDB(searchCategoryName: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void)
+    
+    // MARK: Professions
+    
+    func scanProfessionsByProfessionNameDynamoDB(searchProfessionName: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void)
 }

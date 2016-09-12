@@ -15,9 +15,9 @@ class AWSUser: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     var _about: String?
     var _firstName: String?
     var _lastName: String?
-    var _location: String?
+    var _locationName: String?
     var _preferredUsername: String?
-    var _profession: String?
+    var _professionName: String?
     var _profilePicUrl: String?
     var _searchFirstName: String?
     var _searchLastName: String?
@@ -38,9 +38,9 @@ class AWSUser: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
             "_about" : "about",
             "_firstName" : "firstName",
             "_lastName" : "lastName",
-            "_location" : "location",
+            "_locationName" : "locationName",
             "_preferredUsername" : "preferredUsername",
-            "_profession" : "profession",
+            "_professionName" : "professionName",
             "_profilePicUrl" : "profilePicUrl",
             "_searchFirstName" : "searchFirstName",
             "_searchLastName" : "searchLastName",

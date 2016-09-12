@@ -1,17 +1,16 @@
 //
-//  ProfessionTableViewCell.swift
+//  HeaderTableViewCell.swift
 //  Profeey
 //
-//  Created by Antonio Zdelican on 23/07/16.
+//  Created by Antonio Zdelican on 11/09/16.
 //  Copyright © 2016 Profeey. All rights reserved.
 //
 
 import UIKit
 
-class ProfessionTableViewCell: UITableViewCell {
-
-    @IBOutlet weak var professionNameLabel: UILabel!
-    @IBOutlet weak var numberOfUsersLabel: UILabel!
+class HeaderTableViewCell: UITableViewCell {
+    
+    @IBOutlet weak var headerTitle: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
