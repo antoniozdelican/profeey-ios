@@ -65,6 +65,9 @@ class ProfileTableViewController: UITableViewController {
         if let destinationViewController = segue.destinationViewController as? PostDetailsTableViewController,
             let indexPath = sender as? NSIndexPath {
             destinationViewController.post = self.posts[indexPath.row]
+            // For likes delegate.
+            destinationViewController.postIndexPath = indexPath
+            destinationViewController.likeDelegate = self
         }
     }
 
@@ -163,6 +166,7 @@ class ProfileTableViewController: UITableViewController {
             cell.titleLabel.text = post.title
             cell.categoryNameLabel.text = post.categoryName
             cell.timeLabel.text = post.creationDateString
+            cell.numberOfLikesLabel.text = post.numberOfLikesSmallString
             return cell
         case 5:
             let cell = tableView.dequeueReusableCellWithIdentifier("cellProfileHeader", forIndexPath: indexPath) as! ProfileHeaderTableViewCell
@@ -223,6 +227,8 @@ class ProfileTableViewController: UITableViewController {
         switch indexPath.section {
         case 0:
             cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
+        case 2:
+            cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
         case 3:
             cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
         case 4:
@@ -264,7 +270,7 @@ class ProfileTableViewController: UITableViewController {
         case 1:
             return 50.0
         case 2:
-            return 50.0
+            return 48.0
         case 3:
             return 72.0
         case 4:
@@ -297,7 +303,7 @@ class ProfileTableViewController: UITableViewController {
         case 1:
             return 50.0
         case 2:
-            return 50.0
+            return 48.0
         case 3:
             return 72.0
         case 4:
@@ -352,7 +358,6 @@ class ProfileTableViewController: UITableViewController {
             self.user = updatedUser
             self.tableView.reloadData()
             self.navigationItem.title = updatedUser?.preferredUsername
-            
             // Remove image in background.
             if let profilePicUrlToRemove = sourceViewController.profilePicUrlToRemove {
                 self.removeImage(profilePicUrlToRemove)
@@ -396,10 +401,11 @@ class ProfileTableViewController: UITableViewController {
                         self.user = user
                         self.tableView.reloadData()
                         self.navigationItem.title = self.user?.preferredUsername
+                        let indexPath = NSIndexPath(forRow: 0, inSection: 0)
                         
                         // Get profilePic.
                         if let profilePicUrl = awsUser._profilePicUrl {
-                            self.downloadImage(profilePicUrl, indexPath: nil, isUserProfilePic: true)
+                            self.downloadImage(profilePicUrl, imageType: .UserProfilePic, indexPath: indexPath)
                         }
                         
                         // Query user posts.
@@ -432,16 +438,14 @@ class ProfileTableViewController: UITableViewController {
                         //self.updateTopCategories(awsPosts.flatMap({$0._category}))
                         
                         for (index, awsPost) in awsPosts.enumerate() {
-                            let indexPath = NSIndexPath(forRow: index, inSection: 4)
-                            // Data is denormalized so we store user data in posts table!
-                            let user = User(userId: awsPost._userId, firstName: awsPost._userFirstName, lastName: awsPost._userLastName, preferredUsername: awsPost._userPreferredUsername, professionName: awsPost._userProfessionName, profilePicUrl: awsPost._userProfilePicUrl)
-                            let post = Post(userId: awsPost._userId, postId: awsPost._postId, categoryName: awsPost._categoryName, creationDate: awsPost._creationDate, postDescription: awsPost._description, imageUrl: awsPost._imageUrl, numberOfLikes: awsPost._numberOfLikes, title: awsPost._title, user: user)
+                            let post = Post(userId: awsPost._userId, postId: awsPost._postId, categoryName: awsPost._categoryName, creationDate: awsPost._creationDate, postDescription: awsPost._description, imageUrl: awsPost._imageUrl, numberOfLikes: awsPost._numberOfLikes, title: awsPost._title, user: self.user)
                             self.posts.append(post)
                             self.tableView.reloadData()
+                            let indexPath = NSIndexPath(forRow: index, inSection: 4)
                             
                             // Get postPic.
                             if let imageUrl = awsPost._imageUrl {
-                                self.downloadImage(imageUrl, indexPath: indexPath, isUserProfilePic: false)
+                                self.downloadImage(imageUrl, imageType: .PostPic, indexPath: indexPath)
                             }
                         }
                     }
@@ -476,7 +480,7 @@ class ProfileTableViewController: UITableViewController {
         })
     }
     
-    private func downloadImage(imageKey: String, indexPath: NSIndexPath?, isUserProfilePic: Bool) {
+    private func downloadImage(imageKey: String, imageType: ImageType, indexPath: NSIndexPath) {
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         let content = AWSUserFileManager.custom(key: "USEast1BucketManager").contentWithKey(imageKey)
         // TODO check if content.isImage()
@@ -486,11 +490,15 @@ class ProfileTableViewController: UITableViewController {
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false
             })
             let image = UIImage(data: content.cachedData)
-            if isUserProfilePic {
+            switch imageType {
+            case .UserProfilePic:
                 self.user?.profilePic = image
-            } else if let indexPath = indexPath {
+                self.tableView.reloadData()
+            case .PostPic:
                 self.posts[indexPath.row].image = image
                 self.tableView.reloadData()
+            default:
+                return
             }
         } else {
             print("Download content:")
@@ -510,12 +518,15 @@ class ProfileTableViewController: UITableViewController {
                         } else {
                             if let imageData = data {
                                 let image = UIImage(data: imageData)
-                                if isUserProfilePic {
+                                switch imageType {
+                                case .UserProfilePic:
                                     self.user?.profilePic = image
                                     self.tableView.reloadData()
-                                } else if let indexPath = indexPath {
+                                case .PostPic:
                                     self.posts[indexPath.row].image = image
                                     self.tableView.reloadData()
+                                default:
+                                    return
                                 }
                             }
                         }
@@ -649,27 +660,41 @@ class ProfileTableViewController: UITableViewController {
         })
     }
     
-    private func updateTopCategories(categories: [String]) {
-        // Get frequency of each category (aka number of posts).
-        var categoryFrequencies = [String: Int]()
-        for category in categories {
-            if categoryFrequencies[category] == nil {
-                categoryFrequencies[category] = 1
-            } else {
-                categoryFrequencies[category] = categoryFrequencies[category]! + 1
-            }
+//    private func updateTopCategories(categories: [String]) {
+//        // Get frequency of each category (aka number of posts).
+//        var categoryFrequencies = [String: Int]()
+//        for category in categories {
+//            if categoryFrequencies[category] == nil {
+//                categoryFrequencies[category] = 1
+//            } else {
+//                categoryFrequencies[category] = categoryFrequencies[category]! + 1
+//            }
+//        }
+//        
+//        // Sorted categories by number of frequency (aka number posts).
+//        let sortedCategories = Array(categoryFrequencies.keys).sort({ categoryFrequencies[$0] > categoryFrequencies[$1] })
+//        var sortedCategoriesNumbers = [Int]()
+//        for category in sortedCategories {
+//            sortedCategoriesNumbers.append(categoryFrequencies[category]!)
+//        }
+//        
+//        // Set only top 5 categories.
+//        self.topCategories = Array(sortedCategories.prefix(5))
+//        self.topCategoriesNumberOfPosts = Array(sortedCategoriesNumbers.prefix(5))
+//        self.tableView.reloadData()
+//    }
+}
+
+extension ProfileTableViewController: LikeDelegate {
+    
+    func togglePostLike(postIndexPath: NSIndexPath?, numberOfLikes: NSNumber?) {
+        guard let indexPath = postIndexPath else {
+            return
         }
-        
-        // Sorted categories by number of frequency (aka number posts).
-        let sortedCategories = Array(categoryFrequencies.keys).sort({ categoryFrequencies[$0] > categoryFrequencies[$1] })
-        var sortedCategoriesNumbers = [Int]()
-        for category in sortedCategories {
-            sortedCategoriesNumbers.append(categoryFrequencies[category]!)
+        guard let numberOfLikes = numberOfLikes else {
+            return
         }
-        
-        // Set only top 5 categories.
-        self.topCategories = Array(sortedCategories.prefix(5))
-        self.topCategoriesNumberOfPosts = Array(sortedCategoriesNumbers.prefix(5))
-        self.tableView.reloadData()
+        self.posts[indexPath.row].numberOfLikes = numberOfLikes
+        self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .None)
     }
 }

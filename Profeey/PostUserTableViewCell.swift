@@ -12,7 +12,7 @@ class PostUserTableViewCell: UITableViewCell {
     
     @IBOutlet weak var profilePicImageView: UIImageView!
     @IBOutlet weak var fullNameLabel: UILabel!
-    @IBOutlet weak var professionLabel: UILabel!
+    @IBOutlet weak var professionNameLabel: UILabel!
 
     override func awakeFromNib() {
         super.awakeFromNib()

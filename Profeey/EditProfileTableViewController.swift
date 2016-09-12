@@ -137,6 +137,9 @@ class EditProfileTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         cell.layoutMargins = UIEdgeInsetsZero
         cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0)
+        if indexPath.row == 0 {
+            cell.separatorInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0)
+        }
         cell.selectionStyle = UITableViewCellSelectionStyle.None
         if indexPath.row == 4 || indexPath.row == 5 {
            cell.selectionStyle = UITableViewCellSelectionStyle.Default
@@ -216,6 +219,8 @@ class EditProfileTableViewController: UITableViewController {
     
     @IBAction func saveButtonTapped(sender: AnyObject) {
         self.view.endEditing(true)
+        
+        FullScreenIndicator.show()
         if let newProfilePicImageData = self.newProfilePicImageData {
             self.uploadImage(newProfilePicImageData)
         } else {
@@ -249,6 +254,7 @@ class EditProfileTableViewController: UITableViewController {
             (task: AWSTask) in
             dispatch_async(dispatch_get_main_queue(), {
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                FullScreenIndicator.hide()
                 if let error = task.error {
                     print("saveUser error: \(error)")
                     let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.userInfo["message"] as? String, cancelButtonTitle: "Ok")
@@ -256,7 +262,6 @@ class EditProfileTableViewController: UITableViewController {
                 } else {
                     // Update user object for ProfileVc.
                     self.updatedUser?.profilePic = self.profilePicImageView.image
-                    //self.editProfileDelegate?.userUpdated(user, profilePicUrlToRemove: self.profilePicUrlToRemove)
                     self.performSegueWithIdentifier("segueUnwindToProfileVc", sender: self)
                 }
             })
@@ -281,6 +286,7 @@ class EditProfileTableViewController: UITableViewController {
                 dispatch_async(dispatch_get_main_queue(), {
                     UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                     if let error = error {
+                        FullScreenIndicator.hide()
                         print("uploadImageS3 error: \(error)")
                         let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.userInfo["message"] as? String, cancelButtonTitle: "Ok")
                         self.presentViewController(alertController, animated: true, completion: nil)

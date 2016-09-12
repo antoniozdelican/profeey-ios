@@ -24,12 +24,11 @@ class Post: NSObject {
     var user: User?
     var image: UIImage?
     var creationDateString: String? {
-        if let creationDate = self.creationDate {
-            let currentDate = NSDate()
-            return currentDate.offsetFrom(NSDate(timeIntervalSince1970: NSTimeInterval(creationDate)))
-        } else {
+        guard let creationDate = self.creationDate else {
             return nil
         }
+        let currentDate = NSDate()
+        return currentDate.offsetFrom(NSDate(timeIntervalSince1970: NSTimeInterval(creationDate)))
     }
     var numberOfLikesString: String? {
         guard let numberOfLikes = self.numberOfLikes else {
@@ -43,6 +42,13 @@ class Post: NSObject {
             return "\(numberOfLikesInt) like"
         }
         return "\(numberOfLikesInt) likes"
+    }
+    var numberOfLikesSmallString: String? {
+        guard let numberOfLikes = self.numberOfLikes else {
+            return "0"
+        }
+        let numberOfLikesInt = numberOfLikes.integerValue
+        return numberOfLikesInt.numberToString()
     }
     
     

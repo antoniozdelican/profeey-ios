@@ -10,8 +10,14 @@ import UIKit
 import AWSMobileHubHelper
 import AWSDynamoDB
 
+enum UsersType {
+    case Likers
+    case Followers
+}
+
 class UsersTableViewController: UITableViewController {
     
+    var usersType: UsersType?
     // In case of likes.
     var postId: String?
     // In case of followers.
@@ -22,10 +28,10 @@ class UsersTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.Plain, target:nil, action:nil)
-        if self.postId != nil {
+        if self.usersType == .Likers {
             self.navigationItem.title = "Likes"
             self.queryPostLikers()
-        } else if self.userId != nil {
+        } else if self.usersType == .Followers {
             self.navigationItem.title = "Followers"
         }
     }

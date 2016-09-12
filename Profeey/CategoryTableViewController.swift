@@ -63,7 +63,7 @@ class CategoryTableViewController: UITableViewController {
             let user = post.user
             cell.profilePicImageView.image = user?.profilePic
             cell.fullNameLabel.text = user?.fullName
-            cell.professionLabel.text = user?.professionName
+            cell.professionNameLabel.text = user?.professionName
             return cell
         case 1:
             let cell = tableView.dequeueReusableCellWithIdentifier("cellPostImage", forIndexPath: indexPath) as! PostImageTableViewCell
