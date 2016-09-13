@@ -60,13 +60,20 @@ class HomeTableViewController: UITableViewController {
             let indexPath = sender as? NSIndexPath {
             destinationViewController.user = self.posts[indexPath.section].user
         }
-        if let destinationViewController = segue.destinationViewController as? PostDetailsTableViewController,
-            let indexPath = sender as? NSIndexPath {
-            destinationViewController.post = self.posts[indexPath.section]
-        }
         if let destinationViewController = segue.destinationViewController as? CategoryTableViewController,
             let indexPath = sender as? NSIndexPath {
             destinationViewController.categoryName = self.featuredCategories[indexPath.row].categoryName
+        }
+        if let destinationViewController = segue.destinationViewController as? UsersTableViewController,
+            let indexPath = sender as? NSIndexPath {
+            destinationViewController.usersType = UsersType.Likers
+            destinationViewController.postId = self.posts[indexPath.section].postId
+        }
+        
+        // TEST
+        if let destinationViewController = segue.destinationViewController as? PostDetailsTableViewController,
+            let indexPath = sender as? NSIndexPath {
+            destinationViewController.post = self.posts[indexPath.section]
         }
     }
 
@@ -132,8 +139,11 @@ class HomeTableViewController: UITableViewController {
             return cell
         case 5:
             let cell = tableView.dequeueReusableCellWithIdentifier("cellPostButtons", forIndexPath: indexPath) as! PostButtonsTableViewCell
-            //cell.likeButton.text = post.categoryName
-            cell.numberOfLikesLabel.text = post.numberOfLikesString
+            post.isLikedByCurrentUser ? cell.setSelectedLikeButton() : cell.setUnselectedLikeButton()
+            cell.likeButton.addTarget(self, action: #selector(HomeTableViewController.likeButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+            cell.numberOfLikesButton.hidden = (post.numberOfLikesString != nil) ? false : true
+            cell.numberOfLikesButton.setTitle(post.numberOfLikesString, forState: UIControlState.Normal)
+            cell.numberOfLikesButton.addTarget(self, action: #selector(HomeTableViewController.numberOfLikesButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
             return cell
         default:
             return UITableViewCell()
@@ -221,6 +231,42 @@ class HomeTableViewController: UITableViewController {
         self.queryUserActivitiesDateSorted(userId)
     }
     
+    func likeButtonTapped(sender: AnyObject) {
+        let point = sender.convertPoint(CGPointZero, toView: self.tableView)
+        guard let indexPath = self.tableView.indexPathForRowAtPoint(point) else {
+            return
+        }
+        let post = self.posts[indexPath.section]
+        guard let postId = post.postId else {
+            return
+        }
+        guard let postUserId = post.userId else {
+            return
+        }
+        guard let numberOfLikes = post.numberOfLikes else {
+            return
+        }
+        let numberOfLikesInteger = numberOfLikes.integerValue
+        if post.isLikedByCurrentUser {
+            post.isLikedByCurrentUser = false
+            post.numberOfLikes = NSNumber(integer: (numberOfLikesInteger - 1))
+            self.removeLike(postId, postUserId: postUserId)
+        } else {
+            post.isLikedByCurrentUser = true
+            post.numberOfLikes = NSNumber(integer: (numberOfLikesInteger + 1))
+            self.saveLike(postId, postUserId: postUserId)
+        }
+        self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
+    }
+    
+    func numberOfLikesButtonTapped(sender: AnyObject) {
+        let point = sender.convertPoint(CGPointZero, toView: self.tableView)
+        guard let indexPath = self.tableView.indexPathForRowAtPoint(point) else {
+            return
+        }
+        self.performSegueWithIdentifier("segueToUsersVc", sender: indexPath)
+    }
+    
     // MARK: IBActions
     
     @IBAction func unwindToHomeTableViewController(segue: UIStoryboardSegue) {
@@ -293,9 +339,13 @@ class HomeTableViewController: UITableViewController {
                                 let indexPath = NSIndexPath(forRow: 1, inSection: index)
                                 self.downloadImage(imageUrl, imageType: .PostPic, indexPath: indexPath)
                             }
+                            if let postId = awsActivity._postId {
+                                let indexPath = NSIndexPath(forRow: 5, inSection: index)
+                                self.getLike(postId, indexPath: indexPath)
+                            }
                         }
                     }
-                    
+                    // End refreshing tableView.
                     self.refreshControl?.endRefreshing()
                 }
             })
@@ -415,7 +465,6 @@ class HomeTableViewController: UITableViewController {
             false,
             progressBlock: {
                 (content: AWSLocalContent?, progress: NSProgress?) -> Void in
-                // TODO
                 dispatch_async(dispatch_get_main_queue(), {
                     self.newPostProgress = progress
                     let indexPath = NSIndexPath(forRow: 1, inSection: 0)
@@ -466,6 +515,55 @@ class HomeTableViewController: UITableViewController {
                         self.posts.insert(post, atIndex: 0)
                         self.tableView.reloadData()
                     }
+                }
+            })
+            return nil
+        })
+    }
+    
+    // Check if currentUser liked a post.
+    private func getLike(postId: String, indexPath: NSIndexPath) {
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().getLikeDynamoDB(postId, completionHandler: {
+            (task: AWSTask) in
+            dispatch_async(dispatch_get_main_queue(), {
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                if let error = task.error {
+                    print("getLike error: \(error)")
+                } else {
+                    if task.result != nil {
+                        self.posts[indexPath.section].isLikedByCurrentUser = true
+                        self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
+                    }
+                }
+            })
+            return nil
+        })
+    }
+    
+    // Save and remove like are done in background.
+    private func saveLike(postId: String, postUserId: String) {
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().saveLikeDynamoDB(postId, postUserId: postUserId, liker: self.user, completionHandler: {
+            (task: AWSTask) in
+            dispatch_async(dispatch_get_main_queue(), {
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                if let error = task.error {
+                    print("saveLike error: \(error)")
+                }
+            })
+            return nil
+        })
+    }
+    
+    private func removeLike(postId: String, postUserId: String) {
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().removeLikeDynamoDB(postId, postUserId: postUserId, completionHandler: {
+            (task: AWSTask) in
+            dispatch_async(dispatch_get_main_queue(), {
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                if let error = task.error {
+                    print("removeLike error: \(error)")
                 }
             })
             return nil

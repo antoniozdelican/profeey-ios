@@ -105,7 +105,7 @@ class PostDetailsTableViewController: UITableViewController {
             
             cell.numberOfLikesButton.addTarget(self, action: #selector(CategoryTableViewController.numberOfLikesButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
             cell.numberOfLikesButton.hidden = (post.numberOfLikesString == nil) ? true : false
-            cell.numberOfLikesLabel.text = post.numberOfLikesString
+            //cell.numberOfLikesLabel.text = post.numberOfLikesString
             return cell
         default:
             return UITableViewCell()

@@ -95,7 +95,7 @@ class CategoryTableViewController: UITableViewController {
             if post.numberOfLikesString == nil {
                 cell.numberOfLikesButton.hidden = true
             }
-            cell.numberOfLikesLabel.text = post.numberOfLikesString
+            //cell.numberOfLikesLabel.text = post.numberOfLikesString
             return cell
         default:
             return UITableViewCell()

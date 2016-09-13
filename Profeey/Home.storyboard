@@ -460,35 +460,27 @@
                                             </constraints>
                                             <state key="normal" image="ic_heart_blue_big"/>
                                         </button>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0 likes" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iLM-tp-c2f">
-                                            <rect key="frame" x="546" y="0.0" width="41.5" height="49"/>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yyo-Bj-go6">
+                                            <rect key="frame" x="545.5" y="0.0" width="42" height="48.5"/>
                                             <constraints>
-                                                <constraint firstAttribute="height" constant="49" id="gX5-rN-3Rk"/>
+                                                <constraint firstAttribute="height" constant="49" id="ZBu-0k-BMT"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                            <color key="textColor" red="0.2901960784" green="0.2901960784" blue="0.2901960784" alpha="1" colorSpace="calibratedRGB"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yyo-Bj-go6">
-                                            <rect key="frame" x="546" y="0.0" width="41.5" height="48.5"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <state key="normal" title="0 likes">
+                                                <color key="titleColor" red="0.2901960784" green="0.2901960784" blue="0.2901960784" alpha="1" colorSpace="calibratedRGB"/>
+                                            </state>
                                         </button>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="iLM-tp-c2f" firstAttribute="top" secondItem="pvZ-58-lru" secondAttribute="top" id="3I0-Rs-ubm"/>
-                                        <constraint firstItem="yyo-Bj-go6" firstAttribute="height" secondItem="iLM-tp-c2f" secondAttribute="height" id="5Tf-gh-WAm"/>
                                         <constraint firstItem="L1Y-4r-QCD" firstAttribute="top" secondItem="pvZ-58-lru" secondAttribute="top" id="A5D-II-MKb"/>
                                         <constraint firstItem="L1Y-4r-QCD" firstAttribute="leading" secondItem="pvZ-58-lru" secondAttribute="leading" id="LQS-h4-0Z0"/>
-                                        <constraint firstAttribute="trailing" secondItem="iLM-tp-c2f" secondAttribute="trailing" constant="12" id="Zg4-3v-FNn"/>
                                         <constraint firstItem="yyo-Bj-go6" firstAttribute="top" secondItem="pvZ-58-lru" secondAttribute="top" id="okK-sv-rIR"/>
-                                        <constraint firstItem="yyo-Bj-go6" firstAttribute="width" secondItem="iLM-tp-c2f" secondAttribute="width" id="uf6-Pd-i4U"/>
-                                        <constraint firstAttribute="trailing" secondItem="yyo-Bj-go6" secondAttribute="trailing" constant="12.5" id="yfg-EF-5Ew"/>
+                                        <constraint firstAttribute="trailing" secondItem="yyo-Bj-go6" secondAttribute="trailing" constant="12" id="yfg-EF-5Ew"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="likeButton" destination="L1Y-4r-QCD" id="WDs-HL-J53"/>
                                     <outlet property="numberOfLikesButton" destination="yyo-Bj-go6" id="s9M-oX-8Gf"/>
-                                    <outlet property="numberOfLikesLabel" destination="iLM-tp-c2f" id="pCD-ZI-5HG"/>
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellUploading" rowHeight="40" id="a5x-57-e3X" customClass="UploadingTableViewCell" customModule="Profeey" customModuleProvider="target">
@@ -536,6 +528,7 @@
                         <segue destination="L9S-XV-FEq" kind="show" identifier="segueToProfileVc" id="bcN-4v-a2q"/>
                         <segue destination="xPn-xr-6bw" kind="show" identifier="segueToCategoryVc" id="wzX-RA-dIC"/>
                         <segue destination="qWo-LC-FDY" kind="show" identifier="segueToPostDetailsVc" id="EYo-lM-ero"/>
+                        <segue destination="P1G-ba-iDt" kind="show" identifier="segueToUsersVc" id="N0X-PW-F6Q"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5s8-oY-yAi" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -548,7 +541,7 @@
                 <viewControllerPlaceholder storyboardName="Profile" id="L9S-XV-FEq" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SNz-SW-Ept" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1418" y="446"/>
+            <point key="canvasLocation" x="1411" y="214"/>
         </scene>
         <!--PostDetails-->
         <scene sceneID="gsj-ZA-4Ia">
@@ -556,7 +549,7 @@
                 <viewControllerPlaceholder storyboardName="PostDetails" id="qWo-LC-FDY" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="f3c-1r-9vG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1418" y="596"/>
+            <point key="canvasLocation" x="1418" y="830"/>
         </scene>
         <!--Category-->
         <scene sceneID="Hgw-Ni-ZlF">
@@ -564,7 +557,15 @@
                 <viewControllerPlaceholder storyboardName="Category" id="xPn-xr-6bw" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jm7-84-Cy1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1418" y="219"/>
+            <point key="canvasLocation" x="1411" y="411"/>
+        </scene>
+        <!--Users-->
+        <scene sceneID="rUB-IK-IiU">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Users" id="P1G-ba-iDt" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="LpQ-V5-HTZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1413" y="552"/>
         </scene>
     </scenes>
     <resources>
