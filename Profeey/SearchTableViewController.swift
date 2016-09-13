@@ -85,10 +85,10 @@ class SearchTableViewController: UITableViewController {
             let searchController = self.searchController {
             if searchController.active {
                 // Searched category.
-                destinationViewController.category = self.searchedCategories[index]
+                destinationViewController.categoryName = self.searchedCategories[index].categoryName
             } else {
                 // Featured category.
-                destinationViewController.category = self.featuredCategories[index]
+                destinationViewController.categoryName = self.featuredCategories[index].categoryName
             }
         }
     }

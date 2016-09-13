@@ -24,14 +24,17 @@ protocol FeaturedCategoriesDelegate {
 class HomeTableViewController: UITableViewController {
     
     private var user: User?
+    private var posts: [Post] = []
     
-    private var followingUsers: [User] = []
+    //private var followingUsers: [User] = []
+    
     private var featuredCategories: [FeaturedCategory] = []
     private var fakeFeaturedCategories: [FeaturedCategory] = []
     private var featuredCategoriesDelegate: FeaturedCategoriesDelegate?
     
-    private var isLoadingFollowing: Bool = true
+    //private var isLoadingFollowing: Bool = true
     private var isLoadingFeaturedCategories: Bool = true
+    private var isUploading: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,84 +62,84 @@ class HomeTableViewController: UITableViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if let destinationViewController = segue.destinationViewController as? ProfileTableViewController,
             let indexPath = sender as? NSIndexPath {
-            destinationViewController.user = self.followingUsers[indexPath.row]
+            destinationViewController.user = self.posts[indexPath.section].user
+        }
+        if let destinationViewController = segue.destinationViewController as? PostDetailsTableViewController,
+            let indexPath = sender as? NSIndexPath {
+            destinationViewController.post = self.posts[indexPath.section]
         }
         if let destinationViewController = segue.destinationViewController as? CategoryTableViewController,
             let indexPath = sender as? NSIndexPath {
-            destinationViewController.category = self.featuredCategories[indexPath.row]
+            destinationViewController.categoryName = self.featuredCategories[indexPath.row].categoryName
         }
     }
 
     // MARK: UITableViewDataSource
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 4
+//        if self.isUploading {
+//            return 1 + self.posts.count
+//        } else {
+//            return self.posts.count
+//        }
+        return self.posts.count
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch section {
-        case 0:
-            // FeaturedSkills Header.
-            return 1
-        case 1:
-            // FeaturedSkills.
-            return 1
-        case 2:
-            // Following Header.
-            return 1
-        case 3:
-            // Following Users.
-            if self.isLoadingFollowing {
-                return 1
-            } else if self.followingUsers.count == 0 {
-                return 1
-            } else {
-                return self.followingUsers.count
-            }
-        default:
-            return 0
+        if section == 0 && self.isUploading {
+            return 2
+        } else {
+            return 6
         }
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        switch indexPath.section {
+        if indexPath.section == 0 && self.isUploading {
+            let user = self.user
+            switch indexPath.row {
+            case 0:
+                let cell = tableView.dequeueReusableCellWithIdentifier("cellPostUser", forIndexPath: indexPath) as! PostUserTableViewCell
+                cell.profilePicImageView.image = user?.profilePic
+                cell.fullNameLabel.text = user?.fullName
+                cell.professionNameLabel.text = user?.professionName
+                return cell
+            case 1:
+                let cell = tableView.dequeueReusableCellWithIdentifier("cellUploading", forIndexPath: indexPath) as! UploadingTableViewCell
+                return cell
+            default:
+                return UITableViewCell()
+            }
+        }
+        let post = self.posts[indexPath.section]
+        let user = post.user
+        switch indexPath.row {
         case 0:
-            let cell = tableView.dequeueReusableCellWithIdentifier("cellHomeHeader", forIndexPath: indexPath) as! HomeHeaderTableViewCell
-            cell.headerTitleLabel.text = "FEATURED SKILLS"
+            let cell = tableView.dequeueReusableCellWithIdentifier("cellPostUser", forIndexPath: indexPath) as! PostUserTableViewCell
+            cell.profilePicImageView.image = user?.profilePic
+            cell.fullNameLabel.text = user?.fullName
+            cell.professionNameLabel.text = user?.professionName
             return cell
         case 1:
-            let cell = tableView.dequeueReusableCellWithIdentifier("cellHomeCategories", forIndexPath: indexPath) as! HomeCategoriesTableViewCell
-            cell.categoriesCollectionView.dataSource = self
-            cell.categoriesCollectionView.delegate = self
-            self.featuredCategoriesDelegate = cell
+            let cell = tableView.dequeueReusableCellWithIdentifier("cellPostImage", forIndexPath: indexPath) as! PostImageTableViewCell
+            cell.postImageView.image = post.image
             return cell
         case 2:
-            let cell = tableView.dequeueReusableCellWithIdentifier("cellHomeHeader", forIndexPath: indexPath) as! HomeHeaderTableViewCell
-            cell.headerTitleLabel.text = "FOLLOWING"
+            let cell = tableView.dequeueReusableCellWithIdentifier("cellPostInfo", forIndexPath: indexPath) as! PostInfoTableViewCell
+            cell.titleLabel.text = post.title
             return cell
         case 3:
-            if self.isLoadingFollowing {
-                let cell = tableView.dequeueReusableCellWithIdentifier("cellHomeLoading", forIndexPath: indexPath) as! HomeLoadingTableViewCell
-                cell.activityIndicator.startAnimating()
-                return cell
-            } else if self.followingUsers.count == 0 {
-                let cell = tableView.dequeueReusableCellWithIdentifier("cellNotFollowing", forIndexPath: indexPath)
-                return cell
-            } else {
-                let cell = tableView.dequeueReusableCellWithIdentifier("cellHomeUser", forIndexPath: indexPath) as! HomeUserTableViewCell
-                let user = self.followingUsers[indexPath.row]
-                cell.profilePicImageView.image = user.profilePic
-                cell.fullNameLabel.text = user.fullName
-                cell.professionLabel.text = user.professionName
-                if let numberOfNewPosts = user.numberOfNewPosts {
-                    let numberOfNewPostsInt = numberOfNewPosts.integerValue
-                    cell.numberOfPostsLabel.text = numberOfNewPostsInt == 1 ? "\(numberOfNewPostsInt) new post" : "\(numberOfNewPostsInt) new posts"
-                    if numberOfNewPostsInt > 0 {
-                        cell.numberOfPostsLabel.textColor = Colors.green
-                    }
-                }
-                return cell
-            }
+            let cell = tableView.dequeueReusableCellWithIdentifier("cellPostCategory", forIndexPath: indexPath) as! PostCategoryTableViewCell
+            cell.categoryNameLabel.text = post.categoryName
+            return cell
+        case 4:
+            let cell = tableView.dequeueReusableCellWithIdentifier("cellPostTime", forIndexPath: indexPath) as! PostTimeTableViewCell
+            cell.timeLabel.text = post.creationDateString
+            return cell
+        case 5:
+            let cell = tableView.dequeueReusableCellWithIdentifier("cellPostButtons", forIndexPath: indexPath) as! PostButtonsTableViewCell
+            //cell.likeButton.text = post.categoryName
+            cell.numberOfLikesLabel.text = post.numberOfLikesString
+            return cell
         default:
             return UITableViewCell()
         }
@@ -147,70 +150,82 @@ class HomeTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
         let cell = tableView.cellForRowAtIndexPath(indexPath)
-        if cell is HomeUserTableViewCell {
+        if cell is PostUserTableViewCell {
            self.performSegueWithIdentifier("segueToProfileVc", sender: indexPath)
+        }
+        if cell is PostSmallTableViewCell {
+            self.performSegueWithIdentifier("segueToPostDetailsVc", sender: indexPath)
         }
     }
     
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         cell.layoutMargins = UIEdgeInsetsZero
         cell.selectionStyle = UITableViewCellSelectionStyle.None
-        switch indexPath.section {
-        case 0:
-            cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
-        case 2:
-            cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
-        case 3:
-            if self.isLoadingFollowing {
-                cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
-            } else if self.followingUsers.count == 0 {
-                cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
-            }
-            cell.selectionStyle = UITableViewCellSelectionStyle.Default
-        default:
-            return
+        cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
+        if indexPath.row == 5 {
+           cell.separatorInset = UIEdgeInsetsMake(0.0, 12.0, 0.0, 12.0)
         }
     }
     
     override func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        switch indexPath.section {
+        switch indexPath.row {
         case 0:
-            return 40.0
+            return 65.0
         case 1:
-            return 163.0
-        case 2:
-            return 40.0
-        case 3:
-            if self.isLoadingFollowing {
-                return 120.0
-            } else if self.followingUsers.count == 0 {
-                return 120.0
-            } else {
-                return 85.0
+            if indexPath.section == 0 && self.isUploading {
+                return 40.0
             }
+            let width = tableView.bounds.width - 24.0
+            let height = width / 1.5
+            return height
+        case 2:
+            return 30.0
+        case 3:
+            return 21.0
+        case 4:
+            return 21.0
+        case 5:
+            return 49.0
         default:
-            return 0.0
+            return 0
         }
     }
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        switch indexPath.section {
+        switch indexPath.row {
         case 0:
-            return 40.0
+            return 65.0
         case 1:
-            return 163.0
-        case 2:
-            return 40.0
-        case 3:
-            if self.isLoadingFollowing {
-                return 120.0
-            } else if self.followingUsers.count == 0 {
-                return 120.0
-            } else {
-                return UITableViewAutomaticDimension
+            if indexPath.section == 0 && self.isUploading {
+                return 40.0
             }
+            let width = tableView.bounds.width - 24.0
+            let height = width / 1.5
+            return height
+        case 2:
+            return UITableViewAutomaticDimension
+        case 3:
+            return UITableViewAutomaticDimension
+        case 4:
+            return 21.0
+        case 5:
+            return 49.0
         default:
-            return 0.0
+            return 0
+        }
+    }
+    
+    // MARK: IBActions
+    
+    @IBAction func unwindToHomeTableViewController(segue: UIStoryboardSegue) {
+        if let sourceViewController = segue.sourceViewController as? EditPostTableViewController {
+            guard let imageData = sourceViewController.imageData else {
+                return
+            }
+            self.isUploading = true
+            self.posts.insert(Post(), atIndex: 0)
+            self.tableView.reloadData()
+            //self.uploadImage(imageData, title: sourceViewController.postTitle, description: sourceViewController.postDescription, categoryName: sourceViewController.categoryName)
         }
     }
     
@@ -230,14 +245,11 @@ class HomeTableViewController: UITableViewController {
                         let user = User(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationName: awsUser._locationName, about: awsUser._about)
                         self.user = user
                         
-                        // Get profilePic.
                         if let profilePicUrl = awsUser._profilePicUrl {
                             self.downloadImage(profilePicUrl, imageType: .CurrentUserProfilePic, indexPath: nil)
                         }
-                        
-                        // Query user following.
                         if let userId = awsUser._userId {
-                            self.queryUserFollowing(userId)
+                            self.queryUserActivitiesDateSorted(userId)
                         }
                     }
                 }
@@ -246,30 +258,30 @@ class HomeTableViewController: UITableViewController {
         })
     }
     
-    private func queryUserFollowing(userId: String) {
+    // Query the FEED!!!
+    private func queryUserActivitiesDateSorted(userId: String) {
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().queryUserFollowingDynamoDB(userId, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().queryUserActivitiesDateSortedDynamoDB(userId, completionHandler: {
             (response: AWSDynamoDBPaginatedOutput?, error: NSError?) in
             dispatch_async(dispatch_get_main_queue(), {
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                 if let error = error {
-                    print("queryUserFollowing error: \(error)")
+                    print("queryUserActivitiesDateSorted error: \(error)")
                 } else {
-                    if let awsUserRelationships = response?.items as? [AWSUserRelationship] {
-                        
-                        self.isLoadingFollowing = false
-                        self.tableView.reloadData()
-                        
-                        for (index, awsUserRelationship) in awsUserRelationships.enumerate() {
-                            
-                            let followingUser = User(userId: awsUserRelationship._followingId, firstName: awsUserRelationship._followingFirstName, lastName: awsUserRelationship._followingLastName, preferredUsername: awsUserRelationship._followingPreferredUsername, professionName: awsUserRelationship._followingProfession, profilePicUrl: awsUserRelationship._followingProfilePicUrl, numberOfNewPosts: awsUserRelationship._numberOfNewPosts)
-                            self.followingUsers.append(followingUser)
+                    if let awsActivities = response?.items as? [AWSActivity] {
+                        for (index, awsActivity) in awsActivities.enumerate() {
+                            let user = User(userId: awsActivity._postUserId, firstName: awsActivity._firstName, lastName: awsActivity._lastName, preferredUsername: awsActivity._preferredUsername, professionName: awsActivity._professionName, profilePicUrl: awsActivity._profilePicUrl)
+                            let post = Post(userId: awsActivity._postUserId, postId: awsActivity._postId, categoryName: awsActivity._categoryName, creationDate: awsActivity._creationDate, postDescription: awsActivity._description, imageUrl: awsActivity._imageUrl, numberOfLikes: awsActivity._numberOfLikes, title: awsActivity._title, user: user)
+                            self.posts.append(post)
                             self.tableView.reloadData()
                             
-                            // Get profilePic.
-                            if let profilePicUrl = awsUserRelationship._followingProfilePicUrl {
-                                let indexpath = NSIndexPath(forRow: index, inSection: 3)
-                                self.downloadImage(profilePicUrl, imageType: .UserProfilePic, indexPath: indexpath)
+                            if let profilePicUrl = awsActivity._profilePicUrl {
+                                let indexPath = NSIndexPath(forRow: 0, inSection: index)
+                                self.downloadImage(profilePicUrl, imageType: .UserProfilePic, indexPath: indexPath)
+                            }
+                            if let imageUrl = awsActivity._imageUrl {
+                                let indexPath = NSIndexPath(forRow: 1, inSection: index)
+                                self.downloadImage(imageUrl, imageType: .PostPic, indexPath: indexPath)
                             }
                         }
                     }
@@ -292,7 +304,7 @@ class HomeTableViewController: UITableViewController {
                         for (index, awsFeaturedCategory) in awsFeaturedCategories.enumerate() {
                             let featuredCategory = FeaturedCategory(categoryName: awsFeaturedCategory._categoryName, featuredImageUrl: awsFeaturedCategory._featuredImageUrl, numberOfPosts: awsFeaturedCategory._numberOfPosts)
                             self.featuredCategories.append(featuredCategory)
-                            self.isLoadingFeaturedCategories = false
+                            //self.isLoadingFeaturedCategories = false
                             self.featuredCategoriesDelegate?.reloadData()
                             
                             // Get featuredImage.
@@ -322,7 +334,12 @@ class HomeTableViewController: UITableViewController {
                 self.user?.profilePic = image
             case .UserProfilePic:
                 if let indexPath = indexPath {
-                    self.followingUsers[indexPath.row].profilePic = image
+                    self.posts[indexPath.section].user?.profilePic = image
+                    self.tableView.reloadData()
+                }
+            case .PostPic:
+                if let indexPath = indexPath {
+                    self.posts[indexPath.section].image = image
                     self.tableView.reloadData()
                 }
             case .FeaturedCategoryImage:
@@ -330,8 +347,6 @@ class HomeTableViewController: UITableViewController {
                     self.featuredCategories[indexPath.row].featuredImage = image
                     self.featuredCategoriesDelegate?.reloadData()
                 }
-            default:
-                return
             }
         } else {
             print("Download content:")
@@ -356,7 +371,12 @@ class HomeTableViewController: UITableViewController {
                                     self.user?.profilePic = image
                                 case .UserProfilePic:
                                     if let indexPath = indexPath {
-                                        self.followingUsers[indexPath.row].profilePic = image
+                                        self.posts[indexPath.section].user?.profilePic = image
+                                        self.tableView.reloadData()
+                                    }
+                                case .PostPic:
+                                    if let indexPath = indexPath {
+                                        self.posts[indexPath.section].image = image
                                         self.tableView.reloadData()
                                     }
                                 case .FeaturedCategoryImage:
@@ -364,14 +384,44 @@ class HomeTableViewController: UITableViewController {
                                         self.featuredCategories[indexPath.row].featuredImage = image
                                         self.featuredCategoriesDelegate?.reloadData()
                                     }
-                                default:
-                                    return
                                 }
                             }
                         }
                     })
             })
         }
+    }
+    
+    private func uploadImage(imageData: NSData, title: String?, description: String?, categoryName: String?) {
+        let uniqueImageName = NSUUID().UUIDString.lowercaseString.stringByReplacingOccurrencesOfString("-", withString: "")
+        let imageKey = "public/\(uniqueImageName).jpg"
+        let localContent = AWSUserFileManager.custom(key: "USEast1BucketManager").localContentWithData(imageData, key: imageKey)
+        
+        print("uploadImageS3:")
+        //self.isUploading = true
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        localContent.uploadWithPinOnCompletion(
+            false,
+            progressBlock: {
+                (content: AWSLocalContent?, progress: NSProgress?) -> Void in
+                // TODO
+            }, completionHandler: {
+                (content: AWSLocalContent?, error: NSError?) -> Void in
+                dispatch_async(dispatch_get_main_queue(), {
+                    UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                    if let error = error {
+                        print("uploadImageS3 error: \(error)")
+                        //self.isUploading = false
+                        self.tableView.reloadData()
+                        let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.userInfo["message"] as? String, cancelButtonTitle: "Ok")
+                        self.presentViewController(alertController, animated: true, completion: nil)
+                    } else {
+                        // Save post in DynamoDB.
+                        print("uploadImageS3 success")
+//                        self.savePost(imageData, imageUrl: imageKey, title: title, description: description, categoryName: categoryName)
+                    }
+                })
+        })
     }
 }
 

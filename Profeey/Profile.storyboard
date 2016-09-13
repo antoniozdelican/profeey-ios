@@ -422,37 +422,6 @@
                                     <outlet property="timePeriodLabel" destination="nvy-7Z-KhY" id="cb3-tR-q1E"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellUploading" rowHeight="72" id="iVc-qj-GMP" customClass="UploadingTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="604" width="600" height="72"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="iVc-qj-GMP" id="XDe-Zo-ETD">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="71.5"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Uploading..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zdn-Qw-1ZM">
-                                            <rect key="frame" x="261" y="16" width="78" height="17"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                            <color key="textColor" red="0.2901960784" green="0.2901960784" blue="0.2901960784" alpha="1" colorSpace="calibratedRGB"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                        <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="POG-eQ-rIj">
-                                            <rect key="frame" x="16" y="45" width="568" height="2"/>
-                                            <color key="progressTintColor" red="0.2901960784" green="0.56470588239999997" blue="0.8862745098" alpha="1" colorSpace="calibratedRGB"/>
-                                            <color key="trackTintColor" red="0.63921568630000003" green="0.63921568630000003" blue="0.63921568630000003" alpha="1" colorSpace="calibratedRGB"/>
-                                        </progressView>
-                                    </subviews>
-                                    <constraints>
-                                        <constraint firstItem="POG-eQ-rIj" firstAttribute="top" secondItem="zdn-Qw-1ZM" secondAttribute="bottom" constant="12" id="7rM-Ub-9s6"/>
-                                        <constraint firstAttribute="trailing" secondItem="POG-eQ-rIj" secondAttribute="trailing" constant="16" id="ApP-3d-Eci"/>
-                                        <constraint firstItem="POG-eQ-rIj" firstAttribute="leading" secondItem="XDe-Zo-ETD" secondAttribute="leading" constant="16" id="E6i-Qw-rcx"/>
-                                        <constraint firstItem="zdn-Qw-1ZM" firstAttribute="top" secondItem="XDe-Zo-ETD" secondAttribute="top" constant="16" id="Oku-gv-lT8"/>
-                                        <constraint firstItem="zdn-Qw-1ZM" firstAttribute="centerX" secondItem="XDe-Zo-ETD" secondAttribute="centerX" id="nWB-dE-LD0"/>
-                                    </constraints>
-                                </tableViewCellContentView>
-                                <connections>
-                                    <outlet property="progressView" destination="POG-eQ-rIj" id="Dhx-7d-Q6A"/>
-                                </connections>
-                            </tableViewCell>
                         </prototypes>
                         <connections>
                             <outlet property="dataSource" destination="54j-13-VgR" id="a9U-IW-lRx"/>

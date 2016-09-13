@@ -495,11 +495,11 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
                 post._numberOfLikes = 0
                 post._title = title
                 
-                post._userFirstName = user?.firstName
-                post._userLastName = user?.lastName
-                post._userPreferredUsername = user?.preferredUsername
-                post._userProfessionName = user?.professionName
-                post._userProfilePicUrl = user?.profilePicUrl
+                post._firstName = user?.firstName
+                post._lastName = user?.lastName
+                post._preferredUsername = user?.preferredUsername
+                post._professionName = user?.professionName
+                post._profilePicUrl = user?.profilePicUrl
                 
                 postsTable.savePost(post, completionHandler: {
                     (task: AWSTask) in
@@ -541,5 +541,13 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         print("scanProfessionsByProfessionNameDynamoDB:")
         let professionsTable = AWSProfessionsTable()
         professionsTable.scanProfessionsByProfessionName(searchProfessionName, completionHandler: completionHandler)
+    }
+    
+    // MARK: Activities
+    
+    func queryUserActivitiesDateSortedDynamoDB(userId: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
+        print("queryUserActivitiesDateSortedDynamoDB:")
+        let activitiesDateSortedIndex = AWSActivitiesDateSortedIndex()
+        activitiesDateSortedIndex.queryUserActivitiesDateSorted(userId, completionHandler: completionHandler)
     }
 }

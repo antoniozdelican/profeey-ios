@@ -80,21 +80,11 @@ class UsersTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        switch indexPath.row {
-        case 0:
-            return 65.0
-        default:
-            return 0.0
-        }
+        return 65.0
     }
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        switch indexPath.row {
-        case 0:
-            return 65.0
-        default:
-            return 0.0
-        }
+        return 65.0
     }
     
     // MARK: AWS

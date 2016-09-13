@@ -60,4 +60,8 @@ protocol DynamoDBManager {
     // MARK: Professions
     
     func scanProfessionsByProfessionNameDynamoDB(searchProfessionName: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void)
+    
+    // MARK: Activities
+    
+    func queryUserActivitiesDateSortedDynamoDB(userId: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void)
 }

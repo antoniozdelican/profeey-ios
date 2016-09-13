@@ -46,6 +46,9 @@ class PostDetailsTableViewController: UITableViewController {
         if let destinationViewController = segue.destinationViewController as? ProfileTableViewController {
             destinationViewController.user = self.post?.user
         }
+        if let destinationViewController = segue.destinationViewController as? CategoryTableViewController {
+            destinationViewController.categoryName = self.post?.categoryName
+        }
         if let destinationViewController = segue.destinationViewController as? UsersTableViewController {
             destinationViewController.usersType = UsersType.Likers
             destinationViewController.postId = self.post?.postId
@@ -117,6 +120,9 @@ class PostDetailsTableViewController: UITableViewController {
         if cell is PostUserTableViewCell {
             self.performSegueWithIdentifier("segueToProfileVc", sender: indexPath)
         }
+        if cell is PostCategoryTableViewCell {
+            self.performSegueWithIdentifier("segueToCategoryVc", sender: indexPath)
+        }
         
     }
     
@@ -182,8 +188,6 @@ class PostDetailsTableViewController: UITableViewController {
                 
             }
             self.tableView.reloadData()
-            print("here")
-            print(self.post?.numberOfLikes)
             // In background.
             self.removeLike(postId, postUserId: postUserId)
         } else {

@@ -66,6 +66,7 @@
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="fullNameLabel" destination="Cyv-7e-zaz" id="xa7-lD-V4k"/>
+                                    <outlet property="professionNameLabel" destination="3QB-oW-6x7" id="sJI-uj-zMm"/>
                                     <outlet property="profilePicImageView" destination="Mn2-gr-aDP" id="s7y-9r-mRH"/>
                                 </connections>
                             </tableViewCell>
@@ -189,7 +190,7 @@
                                                 <constraint firstAttribute="width" constant="49" id="lLq-Nr-WSG"/>
                                                 <constraint firstAttribute="height" constant="49" id="zRu-v6-j4M"/>
                                             </constraints>
-                                            <state key="normal" image="ic_like_blue_big"/>
+                                            <state key="normal" image="ic_heart_blue_big"/>
                                         </button>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0 likes" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ib6-hx-CuD">
                                             <rect key="frame" x="546" y="0.0" width="41.5" height="49"/>
@@ -259,6 +260,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="ic_like_blue_big" width="25" height="25"/>
+        <image name="ic_heart_blue_big" width="25" height="25"/>
     </resources>
 </document>

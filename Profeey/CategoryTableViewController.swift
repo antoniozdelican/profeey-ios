@@ -12,7 +12,7 @@ import AWSDynamoDB
 
 class CategoryTableViewController: UITableViewController {
 
-    var category: Category?
+    var categoryName: String?
     private var posts: [Post] = []
     private var isLoadingPosts: Bool = false
     private var currentUser: User?
@@ -21,7 +21,7 @@ class CategoryTableViewController: UITableViewController {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.Plain, target:nil, action:nil)
         self.automaticallyAdjustsScrollViewInsets = false
-        self.navigationItem.title = self.category?.categoryName
+        self.navigationItem.title = self.categoryName
         
         // Get current user.
         self.getCurrentUser()
@@ -227,7 +227,7 @@ class CategoryTableViewController: UITableViewController {
     }
     
     private func queryCategoryPostsDateSorted() {
-        guard let categoryName = self.category?.categoryName else {
+        guard let categoryName = self.categoryName else {
             return
         }
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
@@ -240,7 +240,7 @@ class CategoryTableViewController: UITableViewController {
                 } else {
                     if let awsPosts = reponse?.items as? [AWSPost] {
                         for (index, awsPost) in awsPosts.enumerate() {
-                            let user = User(userId: awsPost._userId, firstName: awsPost._userFirstName, lastName: awsPost._userLastName, preferredUsername: awsPost._userPreferredUsername, professionName: awsPost._userProfessionName, profilePicUrl: awsPost._userProfilePicUrl)
+                            let user = User(userId: awsPost._userId, firstName: awsPost._firstName, lastName: awsPost._lastName, preferredUsername: awsPost._preferredUsername, professionName: awsPost._professionName, profilePicUrl: awsPost._profilePicUrl)
                             let post = Post(userId: awsPost._userId, postId: awsPost._postId, categoryName: awsPost._categoryName, creationDate: awsPost._creationDate, postDescription: awsPost._description, imageUrl: awsPost._imageUrl, numberOfLikes: awsPost._numberOfLikes, title: awsPost._title, user: user)
                             self.posts.append(post)
                             self.tableView.reloadData()
@@ -252,7 +252,7 @@ class CategoryTableViewController: UITableViewController {
                             }
                             
                             // Get profilePic
-                            if let profilePicUrl = awsPost._userProfilePicUrl {
+                            if let profilePicUrl = awsPost._profilePicUrl {
                                 let indexPath = NSIndexPath(forRow: 0, inSection: index)
                                 self.downloadImage(profilePicUrl, imageType: .UserProfilePic, indexPath: indexPath)
                             }

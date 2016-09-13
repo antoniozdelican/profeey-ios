@@ -465,7 +465,7 @@ class ProfileTableViewController: UITableViewController {
                 } else {
                     if let awsPost = task.result as? AWSPost {
                         // Initialize basic user.
-                        let user = User(userId: awsPost._userId, firstName: awsPost._userFirstName, lastName: awsPost._userLastName, preferredUsername: awsPost._userPreferredUsername, professionName: awsPost._userProfessionName, profilePicUrl: awsPost._userProfilePicUrl)
+                        let user = User(userId: awsPost._userId, firstName: awsPost._firstName, lastName: awsPost._lastName, preferredUsername: awsPost._preferredUsername, professionName: awsPost._professionName, profilePicUrl: awsPost._profilePicUrl)
                         let post = Post(userId: awsPost._userId, postId: awsPost._postId, categoryName: awsPost._categoryName, creationDate: awsPost._creationDate, postDescription: awsPost._description, imageUrl: awsPost._imageUrl, numberOfLikes: awsPost._numberOfLikes, title: awsPost._title, user: user)
                         
                         let image = UIImage(data: imageData)
@@ -653,11 +653,25 @@ class ProfileTableViewController: UITableViewController {
     private func signOut() {
         AWSClientManager.defaultClientManager().signOut({
             (task: AWSTask) in
-            if let error = task.error {
-                print(error)
-            }
+            dispatch_async(dispatch_get_main_queue(), {
+                if let error = task.error {
+                    print("signOut error: \(error)")
+                } else {
+                    self.redirectToOnboarding()
+                }
+            })
             return nil
         })
+    }
+    
+    // MARK: Helpers
+    
+    private func redirectToOnboarding() {
+        guard let window = UIApplication.sharedApplication().keyWindow,
+            let initialViewController = UIStoryboard(name: "Onboarding", bundle: nil).instantiateInitialViewController() else {
+                return
+        }
+        window.rootViewController = initialViewController
     }
     
 //    private func updateTopCategories(categories: [String]) {

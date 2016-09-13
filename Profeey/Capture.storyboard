@@ -556,7 +556,7 @@
                         <outlet property="thumbnailImageView" destination="Kx5-9Q-o51" id="loQ-Kt-hdh"/>
                         <outlet property="titleTextField" destination="0jG-eK-aad" id="OTx-eC-sxD"/>
                         <segue destination="Guk-ox-nQ3" kind="presentation" identifier="segueToAddCategoryVc" id="XA6-xp-xAV"/>
-                        <segue destination="kfA-0C-Wiv" kind="unwind" identifier="segueUnwindToProfileVc" unwindAction="unwindToProfileTableViewController:" id="T2G-0Q-TBM"/>
+                        <segue destination="kfA-0C-Wiv" kind="unwind" identifier="segueUnwindToHomeVc" unwindAction="unwindToHomeTableViewController:" id="HbV-UK-mq0"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GL7-Ly-xWK" userLabel="First Responder" sceneMemberID="firstResponder"/>

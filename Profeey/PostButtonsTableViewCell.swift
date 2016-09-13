@@ -40,11 +40,11 @@ class PostButtonsTableViewCell: UITableViewCell {
     }
     
     func setSelectedLikeButton() {
-        self.likeButton.setImage(UIImage(named: "ic_like_blue_big_selected"), forState: UIControlState.Normal)
+        self.likeButton.setImage(UIImage(named: "ic_heart_blue_big_selected"), forState: UIControlState.Normal)
     }
     
     func setUnselectedLikeButton() {
-        self.likeButton.setImage(UIImage(named: "ic_like_blue_big"), forState: UIControlState.Normal)
+        self.likeButton.setImage(UIImage(named: "ic_heart_blue_big"), forState: UIControlState.Normal)
     }
 
 }

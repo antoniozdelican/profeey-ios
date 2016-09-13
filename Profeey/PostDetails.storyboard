@@ -59,8 +59,8 @@
                                     </constraints>
                                     <variation key="default">
                                         <mask key="constraints">
-                                            <exclude reference="oiM-Wt-kTn"/>
                                             <exclude reference="9t3-sp-Wer"/>
+                                            <exclude reference="oiM-Wt-kTn"/>
                                         </mask>
                                     </variation>
                                 </tableViewCellContentView>
@@ -190,7 +190,7 @@
                                                 <constraint firstAttribute="height" constant="49" id="seo-9E-UnZ"/>
                                                 <constraint firstAttribute="width" constant="49" id="vSS-Aq-UUF"/>
                                             </constraints>
-                                            <state key="normal" image="ic_like_blue_big"/>
+                                            <state key="normal" image="ic_heart_blue_big"/>
                                         </button>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0 likes" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sXz-1B-0UQ">
                                             <rect key="frame" x="546" y="0.0" width="41.5" height="49"/>
@@ -240,6 +240,7 @@
                         <segue destination="GmU-3V-Lf2" kind="show" identifier="segueToUsersVc" id="ntr-fS-cxk">
                             <nil key="action"/>
                         </segue>
+                        <segue destination="6Tt-a2-513" kind="show" identifier="segueToCategoryVc" id="fcn-Kk-3xF"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kH2-Fa-gF7" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -260,10 +261,18 @@
                 <viewControllerPlaceholder storyboardName="Users" id="GmU-3V-Lf2" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ctc-tL-xH8" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1494" y="172"/>
+            <point key="canvasLocation" x="1494" y="5"/>
+        </scene>
+        <!--Category-->
+        <scene sceneID="wzn-v5-duY">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Category" id="6Tt-a2-513" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6Dr-gG-x0a" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1494" y="148"/>
         </scene>
     </scenes>
     <resources>
-        <image name="ic_like_blue_big" width="25" height="25"/>
+        <image name="ic_heart_blue_big" width="25" height="25"/>
     </resources>
 </document>

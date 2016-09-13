@@ -98,8 +98,8 @@ class EditPostTableViewController: UITableViewController {
         self.postTitle = titleText.trimm().isEmpty ? nil: titleText.trimm()
         self.postDescription = descriptionText.trimm().isEmpty ? nil : descriptionText.trimm()
         
-        // Upload is on ProfileVc.
-        self.performSegueWithIdentifier("segueUnwindToProfileVc", sender: self)
+        // Upload is on HomeVc.
+        self.performSegueWithIdentifier("segueUnwindToHomeVc", sender: self)
     }
     
     @IBAction func removeCategoryButtonTapped(sender: AnyObject) {

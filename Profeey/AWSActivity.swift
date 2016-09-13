@@ -1,18 +1,19 @@
 //
-//  AWSPost.swift
+//  AWSActivity.swift
 //  Profeey
 //
-//  Created by Antonio Zdelican on 14/07/16.
+//  Created by Antonio Zdelican on 13/09/16.
 //  Copyright © 2016 Profeey. All rights reserved.
 //
 
 import Foundation
 import AWSDynamoDB
 
-class AWSPost: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
+class AWSActivity: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     
     var _userId: String?
     var _postId: String?
+    var _postUserId: String?
     var _categoryName: String?
     var _creationDate: NSNumber?
     var _description: String?
@@ -28,7 +29,7 @@ class AWSPost: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     
     class func dynamoDBTableName() -> String {
         
-        return "profeey-mobilehub-294297648-Posts"
+        return "profeey-mobilehub-294297648-Activities"
     }
     
     class func hashKeyAttribute() -> String {
@@ -45,6 +46,7 @@ class AWSPost: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
         return [
             "_userId" : "userId",
             "_postId" : "postId",
+            "_postUserId" : "postUserId",
             "_categoryName" : "categoryName",
             "_creationDate" : "creationDate",
             "_description" : "description",
