@@ -529,6 +529,9 @@
                     <navigationItem key="navigationItem" title="Home" id="odO-LM-84T"/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="600" height="1500"/>
+                    <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="pv7-Wk-vhh">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </refreshControl>
                     <connections>
                         <segue destination="L9S-XV-FEq" kind="show" identifier="segueToProfileVc" id="bcN-4v-a2q"/>
                         <segue destination="xPn-xr-6bw" kind="show" identifier="segueToCategoryVc" id="wzX-RA-dIC"/>

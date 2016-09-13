@@ -103,12 +103,12 @@ class UsersTableViewController: UITableViewController {
                 } else {
                     if let awsLikes = response?.items as? [AWSLike] {
                         for (index, awsLike) in awsLikes.enumerate() {
-                            let user = User(userId: awsLike._userId, firstName: awsLike._likerFirstName, lastName: awsLike._likerLastName, preferredUsername: awsLike._likerPreferredUsername, professionName: awsLike._likerProfession, profilePicUrl: awsLike._likerProfilePicUrl)
+                            let user = User(userId: awsLike._userId, firstName: awsLike._firstName, lastName: awsLike._lastName, preferredUsername: awsLike._preferredUsername, professionName: awsLike._professionName, profilePicUrl: awsLike._profilePicUrl)
                             self.users.append(user)
                             self.tableView.reloadData()
                             
                             // Get profilePic.
-                            if let profilePicUrl = awsLike._likerProfilePicUrl {
+                            if let profilePicUrl = awsLike._profilePicUrl {
                                 let indexPath = NSIndexPath(forRow: index, inSection: 0)
                                 self.downloadImage(profilePicUrl, imageType: .UserProfilePic, indexPath: indexPath)
                             }

@@ -41,18 +41,12 @@ class HomeTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.Plain, target:nil, action:nil)
+        self.refreshControl?.addTarget(self, action: #selector(HomeTableViewController.refresh(_:)), forControlEvents: UIControlEvents.ValueChanged)
         
         // Get currentUser.
         if let currentUser = AWSClientManager.defaultClientManager().userPool?.currentUser() where currentUser.signedIn {
             self.getCurrentUser()
-            //self.scanFeaturedCategories()
         }
-        
-        // Placeholders for featuredCategories before they load.
-        for _ in 0...5 {
-            self.fakeFeaturedCategories.append(FeaturedCategory(categoryName: nil, featuredImageUrl: nil, numberOfPosts: nil))
-        }
-        
     }
 
     override func didReceiveMemoryWarning() {
@@ -216,6 +210,17 @@ class HomeTableViewController: UITableViewController {
         }
     }
     
+    // MARK: Tappers
+    
+    func refresh(sender: AnyObject) {
+        guard let userId = self.user?.userId else {
+            self.refreshControl?.endRefreshing()
+            return
+        }
+        self.posts = []
+        self.queryUserActivitiesDateSorted(userId)
+    }
+    
     // MARK: IBActions
     
     @IBAction func unwindToHomeTableViewController(segue: UIStoryboardSegue) {
@@ -290,6 +295,8 @@ class HomeTableViewController: UITableViewController {
                             }
                         }
                     }
+                    
+                    self.refreshControl?.endRefreshing()
                 }
             })
         })

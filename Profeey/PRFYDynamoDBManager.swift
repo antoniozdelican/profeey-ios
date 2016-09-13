@@ -417,11 +417,11 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
                 like._postUserId = postUserId
                 like._creationDate = NSNumber(double: NSDate().timeIntervalSince1970)
                 
-                like._likerFirstName = liker?.firstName
-                like._likerLastName = liker?.lastName
-                like._likerPreferredUsername = liker?.preferredUsername
-                like._likerProfession = liker?.professionName
-                like._likerProfilePicUrl = liker?.profilePicUrl
+                like._firstName = liker?.firstName
+                like._lastName = liker?.lastName
+                like._preferredUsername = liker?.preferredUsername
+                like._professionName = liker?.professionName
+                like._profilePicUrl = liker?.profilePicUrl
                 likesTable.saveLike(like, completionHandler: completionHandler)
                 return nil
             } else {
