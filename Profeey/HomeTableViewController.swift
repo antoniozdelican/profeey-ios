@@ -34,16 +34,18 @@ class HomeTableViewController: UITableViewController {
     
     //private var isLoadingFollowing: Bool = true
     private var isLoadingFeaturedCategories: Bool = true
+    
     private var isUploading: Bool = false
-
+    private var newPostProgress: NSProgress?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.Plain, target:nil, action:nil)
         
-        // Get currentUser and featured categories.
+        // Get currentUser.
         if let currentUser = AWSClientManager.defaultClientManager().userPool?.currentUser() where currentUser.signedIn {
             self.getCurrentUser()
-            self.scanFeaturedCategories()
+            //self.scanFeaturedCategories()
         }
         
         // Placeholders for featuredCategories before they load.
@@ -77,11 +79,6 @@ class HomeTableViewController: UITableViewController {
     // MARK: UITableViewDataSource
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-//        if self.isUploading {
-//            return 1 + self.posts.count
-//        } else {
-//            return self.posts.count
-//        }
         return self.posts.count
     }
 
@@ -95,7 +92,8 @@ class HomeTableViewController: UITableViewController {
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if indexPath.section == 0 && self.isUploading {
-            let user = self.user
+            // Dummy post user.
+            let user = self.posts[indexPath.section].user
             switch indexPath.row {
             case 0:
                 let cell = tableView.dequeueReusableCellWithIdentifier("cellPostUser", forIndexPath: indexPath) as! PostUserTableViewCell
@@ -105,6 +103,9 @@ class HomeTableViewController: UITableViewController {
                 return cell
             case 1:
                 let cell = tableView.dequeueReusableCellWithIdentifier("cellUploading", forIndexPath: indexPath) as! UploadingTableViewCell
+                if let progress = self.newPostProgress {
+                    cell.progressView.progress = Float(progress.fractionCompleted)
+                }
                 return cell
             default:
                 return UITableViewCell()
@@ -223,9 +224,13 @@ class HomeTableViewController: UITableViewController {
                 return
             }
             self.isUploading = true
-            self.posts.insert(Post(), atIndex: 0)
+            // Add dummy post for uploading.
+            let dummyPost = Post()
+            dummyPost.user = self.user
+            self.posts.insert(dummyPost, atIndex: 0)
             self.tableView.reloadData()
-            //self.uploadImage(imageData, title: sourceViewController.postTitle, description: sourceViewController.postDescription, categoryName: sourceViewController.categoryName)
+            
+            self.uploadImage(imageData, title: sourceViewController.postTitle, description: sourceViewController.postDescription, categoryName: sourceViewController.categoryName)
         }
     }
     
@@ -398,29 +403,65 @@ class HomeTableViewController: UITableViewController {
         let localContent = AWSUserFileManager.custom(key: "USEast1BucketManager").localContentWithData(imageData, key: imageKey)
         
         print("uploadImageS3:")
-        //self.isUploading = true
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         localContent.uploadWithPinOnCompletion(
             false,
             progressBlock: {
                 (content: AWSLocalContent?, progress: NSProgress?) -> Void in
                 // TODO
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.newPostProgress = progress
+                    let indexPath = NSIndexPath(forRow: 1, inSection: 0)
+                    self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
+                })
             }, completionHandler: {
                 (content: AWSLocalContent?, error: NSError?) -> Void in
                 dispatch_async(dispatch_get_main_queue(), {
                     UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                     if let error = error {
                         print("uploadImageS3 error: \(error)")
-                        //self.isUploading = false
+                        self.isUploading = false
+                        // Remove dummy post.
+                        self.posts.removeAtIndex(0)
                         self.tableView.reloadData()
                         let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.userInfo["message"] as? String, cancelButtonTitle: "Ok")
                         self.presentViewController(alertController, animated: true, completion: nil)
                     } else {
                         // Save post in DynamoDB.
-                        print("uploadImageS3 success")
-//                        self.savePost(imageData, imageUrl: imageKey, title: title, description: description, categoryName: categoryName)
+                        self.savePost(imageData, imageUrl: imageKey, title: title, description: description, categoryName: categoryName)
                     }
                 })
+        })
+    }
+    
+    private func savePost(imageData: NSData, imageUrl: String?, title: String?, description: String?, categoryName: String?) {
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().savePostDynamoDB(imageUrl, title: title, description: description, categoryName: categoryName, user: self.user, completionHandler: {
+            (task: AWSTask) in
+            dispatch_async(dispatch_get_main_queue(), {
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                if let error = task.error {
+                    print("savePost error: \(error)")
+                    self.isUploading = false
+                    // Remove dummy post.
+                    self.posts.removeAtIndex(0)
+                    self.tableView.reloadData()
+                } else {
+                    if let awsPost = task.result as? AWSPost {
+                        let post = Post(userId: awsPost._userId, postId: awsPost._postId, categoryName: awsPost._categoryName, creationDate: awsPost._creationDate, postDescription: awsPost._description, imageUrl: awsPost._imageUrl, numberOfLikes: awsPost._numberOfLikes, title: awsPost._title, user: self.user)
+                        let image = UIImage(data: imageData)
+                        post.image = image
+                        
+                        self.isUploading = false
+                        // Remove dummy post.
+                        self.posts.removeAtIndex(0)
+                        // Add new post.
+                        self.posts.insert(post, atIndex: 0)
+                        self.tableView.reloadData()
+                    }
+                }
+            })
+            return nil
         })
     }
 }
