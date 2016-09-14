@@ -177,50 +177,42 @@
                                     <outlet property="timeLabel" destination="QcD-5d-eYE" id="XMf-5I-Pj5"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellPostButtons" rowHeight="49" id="CoV-xG-5T1" customClass="PostButtonsTableViewCell" customModule="Profeey" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellPostButtons" rowHeight="49" id="e3q-j1-5wN" customClass="PostButtonsTableViewCell" customModule="Profeey" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="529" width="600" height="49"/>
                                 <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="CoV-xG-5T1" id="jgO-6f-AZI">
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="e3q-j1-5wN" id="bok-kC-rei">
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="48.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fcV-rt-vmM">
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cjA-Z8-Byl">
                                             <rect key="frame" x="0.0" y="0.0" width="49" height="49"/>
                                             <constraints>
-                                                <constraint firstAttribute="width" constant="49" id="lLq-Nr-WSG"/>
-                                                <constraint firstAttribute="height" constant="49" id="zRu-v6-j4M"/>
+                                                <constraint firstAttribute="height" constant="49" id="Vte-9G-ImK"/>
+                                                <constraint firstAttribute="width" constant="49" id="bjK-KZ-Vem"/>
                                             </constraints>
                                             <state key="normal" image="ic_heart_blue_big"/>
                                         </button>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0 likes" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ib6-hx-CuD">
-                                            <rect key="frame" x="546" y="0.0" width="41.5" height="49"/>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PlR-kl-GYg">
+                                            <rect key="frame" x="545.5" y="0.0" width="42" height="48.5"/>
                                             <constraints>
-                                                <constraint firstAttribute="height" constant="49" id="pGC-hJ-ePX"/>
+                                                <constraint firstAttribute="height" constant="49" id="7bZ-HT-mxr"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                            <color key="textColor" red="0.2901960784" green="0.2901960784" blue="0.2901960784" alpha="1" colorSpace="calibratedRGB"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6Pt-Ku-GIK">
-                                            <rect key="frame" x="546" y="0.0" width="41.5" height="48.5"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <state key="normal" title="0 likes">
+                                                <color key="titleColor" red="0.2901960784" green="0.2901960784" blue="0.2901960784" alpha="1" colorSpace="calibratedRGB"/>
+                                            </state>
                                         </button>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="fcV-rt-vmM" firstAttribute="leading" secondItem="jgO-6f-AZI" secondAttribute="leading" id="AGm-ua-hlg"/>
-                                        <constraint firstItem="fcV-rt-vmM" firstAttribute="top" secondItem="jgO-6f-AZI" secondAttribute="top" id="AMt-IU-ej5"/>
-                                        <constraint firstAttribute="trailing" secondItem="Ib6-hx-CuD" secondAttribute="trailing" constant="12" id="AOO-86-JVw"/>
-                                        <constraint firstItem="6Pt-Ku-GIK" firstAttribute="height" secondItem="Ib6-hx-CuD" secondAttribute="height" id="CDq-zM-gom"/>
-                                        <constraint firstItem="6Pt-Ku-GIK" firstAttribute="top" secondItem="jgO-6f-AZI" secondAttribute="top" id="CuE-Qt-gBB"/>
-                                        <constraint firstAttribute="trailing" secondItem="6Pt-Ku-GIK" secondAttribute="trailing" constant="12.5" id="Vu6-Wi-6de"/>
-                                        <constraint firstItem="Ib6-hx-CuD" firstAttribute="top" secondItem="jgO-6f-AZI" secondAttribute="top" id="vle-cx-MTD"/>
-                                        <constraint firstItem="6Pt-Ku-GIK" firstAttribute="width" secondItem="Ib6-hx-CuD" secondAttribute="width" id="yIX-1f-AxC"/>
+                                        <constraint firstItem="cjA-Z8-Byl" firstAttribute="leading" secondItem="bok-kC-rei" secondAttribute="leading" id="68s-8L-wrt"/>
+                                        <constraint firstAttribute="trailing" secondItem="PlR-kl-GYg" secondAttribute="trailing" constant="12" id="dY2-aN-D73"/>
+                                        <constraint firstItem="cjA-Z8-Byl" firstAttribute="top" secondItem="bok-kC-rei" secondAttribute="top" id="fsr-Nc-sCU"/>
+                                        <constraint firstItem="PlR-kl-GYg" firstAttribute="top" secondItem="bok-kC-rei" secondAttribute="top" id="u8P-3i-ufg"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="likeButton" destination="fcV-rt-vmM" id="BBG-uR-NOy"/>
-                                    <outlet property="numberOfLikesButton" destination="6Pt-Ku-GIK" id="J3H-BT-4zd"/>
-                                    <outlet property="numberOfLikesLabel" destination="Ib6-hx-CuD" id="TcC-IJ-M0r"/>
+                                    <outlet property="likeButton" destination="cjA-Z8-Byl" id="tcL-Zf-K1P"/>
+                                    <outlet property="numberOfLikesButton" destination="PlR-kl-GYg" id="m9u-sZ-fEF"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>

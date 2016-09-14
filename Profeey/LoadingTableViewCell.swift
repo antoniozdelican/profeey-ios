@@ -1,16 +1,14 @@
 //
-//  HomeLoadingTableViewCell.swift
+//  LoadingTableViewCell.swift
 //  Profeey
 //
-//  Created by Antonio Zdelican on 04/09/16.
+//  Created by Antonio Zdelican on 14/09/16.
 //  Copyright © 2016 Profeey. All rights reserved.
 //
 
 import UIKit
 
-class HomeLoadingTableViewCell: UITableViewCell {
-
-    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+class LoadingTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()

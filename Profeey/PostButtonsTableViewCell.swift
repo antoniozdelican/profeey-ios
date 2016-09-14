@@ -11,10 +11,7 @@ import UIKit
 class PostButtonsTableViewCell: UITableViewCell {
     
     @IBOutlet weak var likeButton: UIButton!
-    
-    // Invisible button.
     @IBOutlet weak var numberOfLikesButton: UIButton!
-    //@IBOutlet weak var numberOfLikesLabel: UILabel!
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -36,8 +33,6 @@ class PostButtonsTableViewCell: UITableViewCell {
         let fontDescriptor = UIFont.systemFontOfSize(14.0, weight: UIFontWeightRegular).fontDescriptor().fontDescriptorByAddingAttributes(
             [UIFontDescriptorFeatureSettingsAttribute: features]
         )
-        //self.numberOfLikesLabel.font = UIFont(descriptor: fontDescriptor, size: UIFont.systemFontOfSize(14.0, weight: UIFontWeightRegular).pointSize)
-        
         self.numberOfLikesButton.titleLabel?.font = UIFont(descriptor: fontDescriptor, size: UIFont.systemFontOfSize(14.0, weight: UIFontWeightRegular).pointSize)
     }
     
@@ -48,5 +43,4 @@ class PostButtonsTableViewCell: UITableViewCell {
     func setUnselectedLikeButton() {
         self.likeButton.setImage(UIImage(named: "ic_heart_blue_big"), forState: UIControlState.Normal)
     }
-
 }

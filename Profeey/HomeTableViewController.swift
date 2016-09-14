@@ -13,35 +13,22 @@ import AWSDynamoDB
 enum ImageType {
     case CurrentUserProfilePic
     case UserProfilePic
-    case FeaturedCategoryImage
     case PostPic
-}
-
-protocol FeaturedCategoriesDelegate {
-    func reloadData()
 }
 
 class HomeTableViewController: UITableViewController {
     
     private var user: User?
     private var posts: [Post] = []
-    
-    //private var followingUsers: [User] = []
-    
-    private var featuredCategories: [FeaturedCategory] = []
-    private var fakeFeaturedCategories: [FeaturedCategory] = []
-    private var featuredCategoriesDelegate: FeaturedCategoriesDelegate?
-    
-    //private var isLoadingFollowing: Bool = true
-    private var isLoadingFeaturedCategories: Bool = true
-    
+    // Before any post is loaded.
+    private var isLoadingPosts: Bool = true
+    // When uploading new post.
     private var isUploading: Bool = false
     private var newPostProgress: NSProgress?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.Plain, target:nil, action:nil)
-        self.refreshControl?.addTarget(self, action: #selector(HomeTableViewController.refresh(_:)), forControlEvents: UIControlEvents.ValueChanged)
         
         // Get currentUser.
         if let currentUser = AWSClientManager.defaultClientManager().userPool?.currentUser() where currentUser.signedIn {
@@ -62,7 +49,7 @@ class HomeTableViewController: UITableViewController {
         }
         if let destinationViewController = segue.destinationViewController as? CategoryTableViewController,
             let indexPath = sender as? NSIndexPath {
-            destinationViewController.categoryName = self.featuredCategories[indexPath.row].categoryName
+            destinationViewController.categoryName = self.posts[indexPath.section].categoryName
         }
         if let destinationViewController = segue.destinationViewController as? UsersTableViewController,
             let indexPath = sender as? NSIndexPath {
@@ -80,18 +67,38 @@ class HomeTableViewController: UITableViewController {
     // MARK: UITableViewDataSource
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        if self.isLoadingPosts {
+            return 1
+        }
+        if !self.isLoadingPosts && self.posts.count == 0 {
+            return 1
+        }
         return self.posts.count
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if self.isLoadingPosts {
+            return 1
+        }
+        if !self.isLoadingPosts && self.posts.count == 0 {
+            return 1
+        }
         if section == 0 && self.isUploading {
             return 2
-        } else {
-            return 6
         }
+        return 6
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        if self.isLoadingPosts {
+            let cell = tableView.dequeueReusableCellWithIdentifier("cellLoading", forIndexPath: indexPath) as! LoadingTableViewCell
+            return cell
+        }
+        if !self.isLoadingPosts && self.posts.count == 0 {
+            let cell = tableView.dequeueReusableCellWithIdentifier("cellEmpty", forIndexPath: indexPath) as! EmptyTableViewCell
+            cell.emptyMessageLabel.text = "You are not following anyone. \n Connect with people and discover their skills."
+            return cell
+        }
         if indexPath.section == 0 && self.isUploading {
             // Dummy post user.
             let user = self.posts[indexPath.section].user
@@ -158,6 +165,9 @@ class HomeTableViewController: UITableViewController {
         if cell is PostUserTableViewCell {
            self.performSegueWithIdentifier("segueToProfileVc", sender: indexPath)
         }
+        if cell is PostCategoryTableViewCell {
+            self.performSegueWithIdentifier("segueToCategoryVc", sender: indexPath)
+        }
         if cell is PostSmallTableViewCell {
             self.performSegueWithIdentifier("segueToPostDetailsVc", sender: indexPath)
         }
@@ -173,6 +183,12 @@ class HomeTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        if self.isLoadingPosts {
+            return 120.0
+        }
+        if !self.isLoadingPosts && self.posts.count == 0 {
+            return 120.0
+        }
         switch indexPath.row {
         case 0:
             return 65.0
@@ -197,6 +213,12 @@ class HomeTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        if self.isLoadingPosts {
+            return 120.0
+        }
+        if !self.isLoadingPosts && self.posts.count == 0 {
+            return 120.0
+        }
         switch indexPath.row {
         case 0:
             return 65.0
@@ -221,15 +243,6 @@ class HomeTableViewController: UITableViewController {
     }
     
     // MARK: Tappers
-    
-    func refresh(sender: AnyObject) {
-        guard let userId = self.user?.userId else {
-            self.refreshControl?.endRefreshing()
-            return
-        }
-        self.posts = []
-        self.queryUserActivitiesDateSorted(userId)
-    }
     
     func likeButtonTapped(sender: AnyObject) {
         let point = sender.convertPoint(CGPointZero, toView: self.tableView)
@@ -268,6 +281,15 @@ class HomeTableViewController: UITableViewController {
     }
     
     // MARK: IBActions
+    
+    @IBAction func refreshControlChanged(sender: AnyObject) {
+        guard let userId = self.user?.userId else {
+            self.refreshControl?.endRefreshing()
+            return
+        }
+        self.posts = []
+        self.queryUserActivitiesDateSorted(userId)
+    }
     
     @IBAction func unwindToHomeTableViewController(segue: UIStoryboardSegue) {
         if let sourceViewController = segue.sourceViewController as? EditPostTableViewController {
@@ -323,59 +345,43 @@ class HomeTableViewController: UITableViewController {
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                 if let error = error {
                     print("queryUserActivitiesDateSorted error: \(error)")
-                } else {
-                    if let awsActivities = response?.items as? [AWSActivity] {
-                        for (index, awsActivity) in awsActivities.enumerate() {
-                            let user = User(userId: awsActivity._postUserId, firstName: awsActivity._firstName, lastName: awsActivity._lastName, preferredUsername: awsActivity._preferredUsername, professionName: awsActivity._professionName, profilePicUrl: awsActivity._profilePicUrl)
-                            let post = Post(userId: awsActivity._postUserId, postId: awsActivity._postId, categoryName: awsActivity._categoryName, creationDate: awsActivity._creationDate, postDescription: awsActivity._description, imageUrl: awsActivity._imageUrl, numberOfLikes: awsActivity._numberOfLikes, title: awsActivity._title, user: user)
-                            self.posts.append(post)
-                            self.tableView.reloadData()
-                            
-                            if let profilePicUrl = awsActivity._profilePicUrl {
-                                let indexPath = NSIndexPath(forRow: 0, inSection: index)
-                                self.downloadImage(profilePicUrl, imageType: .UserProfilePic, indexPath: indexPath)
-                            }
-                            if let imageUrl = awsActivity._imageUrl {
-                                let indexPath = NSIndexPath(forRow: 1, inSection: index)
-                                self.downloadImage(imageUrl, imageType: .PostPic, indexPath: indexPath)
-                            }
-                            if let postId = awsActivity._postId {
-                                let indexPath = NSIndexPath(forRow: 5, inSection: index)
-                                self.getLike(postId, indexPath: indexPath)
-                            }
-                        }
-                    }
-                    // End refreshing tableView.
+                    self.isLoadingPosts = false
+                    self.tableView.reloadData()
                     self.refreshControl?.endRefreshing()
-                }
-            })
-        })
-    }
-    
-    private func scanFeaturedCategories() {
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().scanFeaturedCategoriesDynamoDB({
-            (response: AWSDynamoDBPaginatedOutput?, error: NSError?) in
-            dispatch_async(dispatch_get_main_queue(), {
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-                if let error = error {
-                    print("scanFeaturedCategories error: \(error)")
                 } else {
-                    if let awsFeaturedCategories = response?.items as? [AWSFeaturedCategory] {
+                    guard let awsActivities = response?.items as? [AWSActivity] else {
+                        self.isLoadingPosts = false
+                        self.tableView.reloadData()
+                        self.refreshControl?.endRefreshing()
+                        return
+                    }
+                    guard awsActivities.count > 0 else {
+                        self.isLoadingPosts = false
+                        self.tableView.reloadData()
+                        self.refreshControl?.endRefreshing()
+                        return
+                    }
+                    for (index, awsActivity) in awsActivities.enumerate() {
+                        let user = User(userId: awsActivity._postUserId, firstName: awsActivity._firstName, lastName: awsActivity._lastName, preferredUsername: awsActivity._preferredUsername, professionName: awsActivity._professionName, profilePicUrl: awsActivity._profilePicUrl)
+                        let post = Post(userId: awsActivity._postUserId, postId: awsActivity._postId, categoryName: awsActivity._categoryName, creationDate: awsActivity._creationDate, postDescription: awsActivity._description, imageUrl: awsActivity._imageUrl, numberOfLikes: awsActivity._numberOfLikes, title: awsActivity._title, user: user)
+                        self.posts.append(post)
+                        self.isLoadingPosts = false
+                        self.tableView.reloadData()
                         
-                        for (index, awsFeaturedCategory) in awsFeaturedCategories.enumerate() {
-                            let featuredCategory = FeaturedCategory(categoryName: awsFeaturedCategory._categoryName, featuredImageUrl: awsFeaturedCategory._featuredImageUrl, numberOfPosts: awsFeaturedCategory._numberOfPosts)
-                            self.featuredCategories.append(featuredCategory)
-                            //self.isLoadingFeaturedCategories = false
-                            self.featuredCategoriesDelegate?.reloadData()
-                            
-                            // Get featuredImage.
-                            if let featuredImageUrl = awsFeaturedCategory._featuredImageUrl {
-                                let indexpath = NSIndexPath(forRow: index, inSection: 1)
-                                self.downloadImage(featuredImageUrl, imageType: .FeaturedCategoryImage, indexPath: indexpath)
-                            }
+                        if let profilePicUrl = awsActivity._profilePicUrl {
+                            let indexPath = NSIndexPath(forRow: 0, inSection: index)
+                            self.downloadImage(profilePicUrl, imageType: .UserProfilePic, indexPath: indexPath)
+                        }
+                        if let imageUrl = awsActivity._imageUrl {
+                            let indexPath = NSIndexPath(forRow: 1, inSection: index)
+                            self.downloadImage(imageUrl, imageType: .PostPic, indexPath: indexPath)
+                        }
+                        if let postId = awsActivity._postId {
+                            let indexPath = NSIndexPath(forRow: 5, inSection: index)
+                            self.getLike(postId, indexPath: indexPath)
                         }
                     }
+                    self.refreshControl?.endRefreshing()
                 }
             })
         })
@@ -403,11 +409,6 @@ class HomeTableViewController: UITableViewController {
                 if let indexPath = indexPath {
                     self.posts[indexPath.section].image = image
                     self.tableView.reloadData()
-                }
-            case .FeaturedCategoryImage:
-                if let indexPath = indexPath {
-                    self.featuredCategories[indexPath.row].featuredImage = image
-                    self.featuredCategoriesDelegate?.reloadData()
                 }
             }
         } else {
@@ -440,11 +441,6 @@ class HomeTableViewController: UITableViewController {
                                     if let indexPath = indexPath {
                                         self.posts[indexPath.section].image = image
                                         self.tableView.reloadData()
-                                    }
-                                case .FeaturedCategoryImage:
-                                    if let indexPath = indexPath {
-                                        self.featuredCategories[indexPath.row].featuredImage = image
-                                        self.featuredCategoriesDelegate?.reloadData()
                                     }
                                 }
                             }
@@ -568,31 +564,5 @@ class HomeTableViewController: UITableViewController {
             })
             return nil
         })
-    }
-}
-
-extension HomeTableViewController: UICollectionViewDataSource, UICollectionViewDelegate {
-    
-    func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
-        return 1
-    }
-    
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.isLoadingFeaturedCategories ? self.fakeFeaturedCategories.count : self.featuredCategories.count
-    }
-    
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("cellHomeCategory", forIndexPath: indexPath) as! HomeCategoryCollectionViewCell
-        let featuredCategory = self.isLoadingFeaturedCategories ? self.fakeFeaturedCategories[indexPath.row] : self.featuredCategories[indexPath.row]
-        cell.categoryNameLabel.text = featuredCategory.categoryName
-        cell.numberOfPostsLabel.text = featuredCategory.numberOfPostsString
-        cell.categoryImageView.image = featuredCategory.featuredImage
-        return cell
-    }
-    
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        if !self.isLoadingFeaturedCategories {
-            self.performSegueWithIdentifier("segueToCategoryVc", sender: indexPath)
-        }
     }
 }

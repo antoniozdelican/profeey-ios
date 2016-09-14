@@ -111,8 +111,7 @@ class SearchTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         switch indexPath.section {
         case 0:
-            let cell = tableView.dequeueReusableCellWithIdentifier("cellHeader", forIndexPath: indexPath) as! HomeHeaderTableViewCell
-            cell.headerTitleLabel.text = "Popular Skills"
+            let cell = tableView.dequeueReusableCellWithIdentifier("cellHeader", forIndexPath: indexPath) as! HeaderTableViewCell
             cell.selectionStyle = UITableViewCellSelectionStyle.None
             return cell
         default:

@@ -1,16 +1,16 @@
 //
-//  HomeHeaderTableViewCell.swift
+//  EmptyTableViewCell.swift
 //  Profeey
 //
-//  Created by Antonio Zdelican on 19/08/16.
+//  Created by Antonio Zdelican on 14/09/16.
 //  Copyright © 2016 Profeey. All rights reserved.
 //
 
 import UIKit
 
-class HomeHeaderTableViewCell: UITableViewCell {
+class EmptyTableViewCell: UITableViewCell {
 
-    @IBOutlet weak var headerTitleLabel: UILabel!
+    @IBOutlet weak var emptyMessageLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
