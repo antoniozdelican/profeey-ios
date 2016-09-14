@@ -247,7 +247,7 @@ class EditProfileTableViewController: UITableViewController {
         let professionName: String? = (self.professionNameLabel.textColor == Colors.black) ? self.professionNameLabel.text?.trimm() : nil
         let locationName: String? = (self.locationNameLabel.textColor == Colors.black) ? self.locationNameLabel.text?.trimm() : nil
         
-        self.updatedUser = User(userId: self.user?.userId, firstName: firstName, lastName: lastName, preferredUsername: self.user?.preferredUsername, professionName: professionName, profilePicUrl: self.user?.profilePicUrl, locationName: locationName, about: about)
+        self.updatedUser = User(userId: self.user?.userId, firstName: firstName, lastName: lastName, preferredUsername: self.user?.preferredUsername, professionName: professionName, profilePicUrl: self.user?.profilePicUrl, about: about, locationName: locationName, numberOfFollowers: self.user?.numberOfFollowers, numberOfPosts: self.user?.numberOfPosts)
         
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         PRFYDynamoDBManager.defaultDynamoDBManager().saveUserDynamoDB(user, completionHandler: {

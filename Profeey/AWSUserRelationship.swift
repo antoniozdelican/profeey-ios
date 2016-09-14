@@ -14,12 +14,13 @@ class AWSUserRelationship: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     var _userId: String?
     var _creationDate: NSNumber?
     var _followingId: String?
-    var _followingFirstName: String?
-    var _followingLastName: String?
-    var _followingPreferredUsername: String?
-    var _followingProfession: String?
-    var _followingProfilePicUrl: String?
-    var _numberOfNewPosts: NSNumber?
+    
+    // Following data.
+    var _firstName: String?
+    var _lastName: String?
+    var _preferredUsername: String?
+    var _professionName: String?
+    var _profilePicUrl: String?
     
     class func dynamoDBTableName() -> String {
         
@@ -41,12 +42,11 @@ class AWSUserRelationship: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
             "_userId" : "userId",
             "_creationDate" : "creationDate",
             "_followingId" : "followingId",
-            "_followingFirstName" : "followingFirstName",
-            "_followingLastName" : "followingLastName",
-            "_followingPreferredUsername" : "followingPreferredUsername",
-            "_followingProfession" : "followingProfession",
-            "_followingProfilePicUrl" : "followingProfilePicUrl",
-            "_numberOfNewPosts" : "numberOfNewPosts",
+            "_firstName" : "firstName",
+            "_lastName" : "lastName",
+            "_preferredUsername" : "preferredUsername",
+            "_professionName" : "professionName",
+            "_profilePicUrl" : "profilePicUrl",
         ]
     }
 }

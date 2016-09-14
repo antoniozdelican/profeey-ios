@@ -13,9 +13,12 @@ class AWSUser: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     
     var _userId: String?
     var _about: String?
+    var _creationDate: NSNumber?
     var _firstName: String?
     var _lastName: String?
     var _locationName: String?
+    var _numberOfFollowers: NSNumber?
+    var _numberOfPosts: NSNumber?
     var _preferredUsername: String?
     var _professionName: String?
     var _profilePicUrl: String?
@@ -36,9 +39,12 @@ class AWSUser: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
         return [
             "_userId" : "userId",
             "_about" : "about",
+            "_creationDate" : "creationDate",
             "_firstName" : "firstName",
             "_lastName" : "lastName",
             "_locationName" : "locationName",
+            "_numberOfFollowers" : "numberOfFollowers",
+            "_numberOfPosts" : "numberOfPosts",
             "_preferredUsername" : "preferredUsername",
             "_professionName" : "professionName",
             "_profilePicUrl" : "profilePicUrl",

@@ -40,10 +40,10 @@ class ProfileTableViewController: UITableViewController {
                 self.isCurrentUser = true
             }
             self.navigationItem.title = self.user?.preferredUsername
-            self.getUserRelationship()
             
-            // Get posts.
             if let userId = self.user?.userId {
+                let indexPath = NSIndexPath(forRow: 1, inSection: 0)
+                self.getUserRelationship(userId, indexPath: indexPath)
                 self.queryUserPostsDateSorted(userId)
             }
         }
@@ -105,14 +105,13 @@ class ProfileTableViewController: UITableViewController {
                 return cell
             case 1:
                 let cell = tableView.dequeueReusableCellWithIdentifier("cellProfileButtons", forIndexPath: indexPath) as! ProfileButtonsTableViewCell
+                cell.numberOfPostsButton.setTitle(self.user?.numberOfPostsSmallString, forState: UIControlState.Normal)
+                cell.numberOfFollowersButton.setTitle(self.user?.numberOfFollowersSmallString, forState: UIControlState.Normal)
                 if self.isCurrentUser {
                     cell.setEditButton()
                     cell.followButton.addTarget(self, action: #selector(ProfileTableViewController.editButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-                } else if self.isFollowing {
-                    cell.setFollowingButton()
-                    cell.followButton.addTarget(self, action: #selector(ProfileTableViewController.followButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
                 } else {
-                    cell.setFollowButton()
+                    self.isFollowing ? cell.setFollowingButton() : cell.setFollowButton()
                     cell.followButton.addTarget(self, action: #selector(ProfileTableViewController.followButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
                 }
                 return cell
@@ -259,12 +258,33 @@ class ProfileTableViewController: UITableViewController {
     
     // MARK: Tappers
     
-    func editButtonTapped(sender: UIButton) {
+    func editButtonTapped(sender: AnyObject) {
         self.performSegueWithIdentifier("segueToEditProfileVc", sender: self)
     }
     
-    func followButtonTapped(sender: UIButton) {
-        self.isFollowing ? self.unfollowUser() : self.followUser()
+    func followButtonTapped(sender: AnyObject) {
+        let point = sender.convertPoint(CGPointZero, toView: self.tableView)
+        guard let indexPath = self.tableView.indexPathForRowAtPoint(point) else {
+            return
+        }
+        guard let user = self.user else {
+            return
+        }
+        guard let followingId = user.userId else {
+            return
+        }
+        let numberOfFollowers = (user.numberOfFollowers != nil) ? user.numberOfFollowers! : 0
+        let numberOfFollowersInteger = numberOfFollowers.integerValue
+        if self.isFollowing {
+            self.isFollowing = false
+            user.numberOfFollowers = NSNumber(integer: (numberOfFollowersInteger - 1))
+            self.unfollowUser(followingId)
+        } else {
+            self.isFollowing = true
+            user.numberOfFollowers = NSNumber(integer: (numberOfFollowersInteger + 1))
+            self.followUser(followingId)
+        }
+        self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
     }
     
     func postsSegmentButtonTapped(sender: UIButton) {
@@ -307,7 +327,7 @@ class ProfileTableViewController: UITableViewController {
                     guard let awsUser = task.result as? AWSUser else {
                         return
                     }
-                    let user = User(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationName: awsUser._locationName, about: awsUser._about)
+                    let user = User(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, about: awsUser._about, locationName: awsUser._locationName, numberOfFollowers: awsUser._numberOfFollowers, numberOfPosts: awsUser._numberOfPosts)
                     self.user = user
                     self.navigationItem.title = self.user?.preferredUsername
                     let indexPath = NSIndexPath(forRow: 0, inSection: 0)
@@ -443,10 +463,7 @@ class ProfileTableViewController: UITableViewController {
     }
     
     // Check if currentUser is following this user.
-    private func getUserRelationship() {
-        guard let followingId = self.user?.userId else {
-            return
-        }
+    private func getUserRelationship(followingId: String, indexPath: NSIndexPath) {
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         PRFYDynamoDBManager.defaultDynamoDBManager().getUserRelationshipDynamoDB(followingId, completionHandler: {
             (task: AWSTask) in
@@ -457,7 +474,7 @@ class ProfileTableViewController: UITableViewController {
                 } else {
                     if task.result != nil {
                         self.isFollowing = true
-                        self.tableView.reloadData()
+                        self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
                     }
                 }
             })
@@ -465,30 +482,22 @@ class ProfileTableViewController: UITableViewController {
         })
     }
     
-    private func followUser() {
-        guard let followingId = self.user?.userId else {
-            return
-        }
+    // Followings are done in background.
+    private func followUser(followingId: String) {
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().saveUserRelationshipDynamoDB(followingId, following: self.user, numberOfNewPosts: nil,completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().saveUserRelationshipDynamoDB(followingId, following: self.user,completionHandler: {
             (task: AWSTask) in
             dispatch_async(dispatch_get_main_queue(), {
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                 if let error = task.error {
                     print("followUser error: \(error)")
-                } else {
-                    self.isFollowing = true
-                    self.tableView.reloadData()
                 }
             })
             return nil
         })
     }
     
-    private func unfollowUser() {
-        guard let followingId = self.user?.userId else {
-            return
-        }
+    private func unfollowUser(followingId: String) {
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         PRFYDynamoDBManager.defaultDynamoDBManager().removeUserRelationshipDynamoDB(followingId, completionHandler: {
             (task: AWSTask) in
@@ -496,9 +505,6 @@ class ProfileTableViewController: UITableViewController {
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                 if let error = task.error {
                     print("unfollowUser error: \(error)")
-                } else {
-                    self.isFollowing = false
-                    self.tableView.reloadData()
                 }
             })
             return nil

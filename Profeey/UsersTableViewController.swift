@@ -24,15 +24,22 @@ class UsersTableViewController: UITableViewController {
     var userId: String?
     
     private var users: [User] = []
+    private var isLoadingUsers: Bool = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.Plain, target:nil, action:nil)
-        if self.usersType == .Likers {
-            self.navigationItem.title = "Likes"
-            self.queryPostLikers()
-        } else if self.usersType == .Followers {
-            self.navigationItem.title = "Followers"
+        
+        if let usersType = self.usersType {
+            switch usersType {
+            case .Likers:
+                self.navigationItem.title = "Likes"
+                if let postId = self.postId {
+                    self.queryPostLikers(postId)
+                }
+            case .Followers:
+                self.navigationItem.title = "Followers"
+            }
         }
     }
     
@@ -89,10 +96,7 @@ class UsersTableViewController: UITableViewController {
     
     // MARK: AWS
     
-    private func queryPostLikers() {
-        guard let postId = self.postId else {
-            return
-        }
+    private func queryPostLikers(postId: String) {
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         PRFYDynamoDBManager.defaultDynamoDBManager().queryPostLikersDynamoDB(postId, completionHandler: {
             (response: AWSDynamoDBPaginatedOutput?, error: NSError?) in
@@ -100,20 +104,29 @@ class UsersTableViewController: UITableViewController {
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                 if let error = error {
                     print("queryPostLikers error: \(error)")
+                    self.isLoadingUsers = false
+                    self.tableView.reloadData()
+                    self.refreshControl?.endRefreshing()
                 } else {
-                    if let awsLikes = response?.items as? [AWSLike] {
-                        for (index, awsLike) in awsLikes.enumerate() {
-                            let user = User(userId: awsLike._userId, firstName: awsLike._firstName, lastName: awsLike._lastName, preferredUsername: awsLike._preferredUsername, professionName: awsLike._professionName, profilePicUrl: awsLike._profilePicUrl)
-                            self.users.append(user)
-                            self.tableView.reloadData()
-                            
-                            // Get profilePic.
-                            if let profilePicUrl = awsLike._profilePicUrl {
-                                let indexPath = NSIndexPath(forRow: index, inSection: 0)
-                                self.downloadImage(profilePicUrl, imageType: .UserProfilePic, indexPath: indexPath)
-                            }
+                    guard let awsLikes = response?.items as? [AWSLike] else {
+                        self.isLoadingUsers = false
+                        self.tableView.reloadData()
+                        self.refreshControl?.endRefreshing()
+                        return
+                    }
+                    for (index, awsLike) in awsLikes.enumerate() {
+                        let user = User(userId: awsLike._userId, firstName: awsLike._firstName, lastName: awsLike._lastName, preferredUsername: awsLike._preferredUsername, professionName: awsLike._professionName, profilePicUrl: awsLike._profilePicUrl)
+                        self.users.append(user)
+                        self.isLoadingUsers = false
+                        self.tableView.reloadData()
+                        
+                        // Get profilePic.
+                        if let profilePicUrl = awsLike._profilePicUrl {
+                            let indexPath = NSIndexPath(forRow: index, inSection: 0)
+                            self.downloadImage(profilePicUrl, imageType: .UserProfilePic, indexPath: indexPath)
                         }
                     }
+                    self.refreshControl?.endRefreshing()
                 }
             })
         })
@@ -152,15 +165,16 @@ class UsersTableViewController: UITableViewController {
                         if let error = error {
                             print("downloadImage error: \(error)")
                         } else {
-                            if let imageData = data {
-                                let image = UIImage(data: imageData)
-                                switch imageType {
-                                case .UserProfilePic:
-                                    self.users[indexPath.row].profilePic = image
-                                    self.tableView.reloadData()
-                                default:
-                                    return
-                                }
+                            guard let imageData = data else {
+                                return
+                            }
+                            let image = UIImage(data: imageData)
+                            switch imageType {
+                            case .UserProfilePic:
+                                self.users[indexPath.row].profilePic = image
+                                self.tableView.reloadData()
+                            default:
+                                return
                             }
                         }
                     })

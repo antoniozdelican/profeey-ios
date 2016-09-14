@@ -159,7 +159,7 @@ class SearchTableViewController: UITableViewController {
                         // Clear for fresh search.
                         self.searchedUsers = []
                         for(index, awsUser) in awsUsers.enumerate() {
-                            let user = User(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationName: awsUser._locationName, about: awsUser._about)
+                            let user = User(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl)
                             self.searchedUsers.append(user)
                             
                             // Get profilePic.

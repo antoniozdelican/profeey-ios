@@ -256,9 +256,7 @@ class HomeTableViewController: UITableViewController {
         guard let postUserId = post.userId else {
             return
         }
-        guard let numberOfLikes = post.numberOfLikes else {
-            return
-        }
+        let numberOfLikes = (post.numberOfLikes != nil) ? post.numberOfLikes! : 0
         let numberOfLikesInteger = numberOfLikes.integerValue
         if post.isLikedByCurrentUser {
             post.isLikedByCurrentUser = false
@@ -320,7 +318,7 @@ class HomeTableViewController: UITableViewController {
                     print("getCurrentUser error: \(error)")
                 } else {
                     if let awsUser = task.result as? AWSUser {
-                        let user = User(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationName: awsUser._locationName, about: awsUser._about)
+                        let user = User(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl)
                         self.user = user
                         
                         if let profilePicUrl = awsUser._profilePicUrl {
