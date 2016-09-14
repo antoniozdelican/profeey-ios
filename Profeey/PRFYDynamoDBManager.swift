@@ -23,24 +23,6 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
     
     // MARK: Users
     
-    func getUserDynamoDB(userId: String, completionHandler: AWSContinuationBlock) {
-        print("getUserDynamoDB:")
-        let usersTable = AWSUsersTable()
-        usersTable.getUser(userId, completionHandler: {
-            (task: AWSTask) in
-            if let error = task.error {
-                print("getUserDynamoDB error:")
-                return AWSTask(error: error).continueWithBlock(completionHandler)
-            } else if (task.result as? AWSUser) != nil {
-                print("getUserDynamoDB success!")
-                return task.continueWithBlock(completionHandler)
-            } else {
-                print("This should not happen with getUserDynamoDB!")
-                return AWSTask().continueWithBlock(completionHandler)
-            }
-        })
-    }
-    
     func getCurrentUserDynamoDB(completionHandler: AWSContinuationBlock) {
         AWSClientManager.defaultClientManager().credentialsProvider?.getIdentityId().continueWithBlock({
             (task: AWSTask) in
@@ -60,6 +42,12 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         })
     }
     
+    func getUserDynamoDB(userId: String, completionHandler: AWSContinuationBlock) {
+        print("getUserDynamoDB:")
+        let usersTable = AWSUsersTable()
+        usersTable.getUser(userId, completionHandler: completionHandler)
+    }
+    
     func saveUserDynamoDB(user: User?, completionHandler: AWSContinuationBlock) {
         AWSClientManager.defaultClientManager().credentialsProvider?.getIdentityId().continueWithBlock({
             (task: AWSTask) in
@@ -70,18 +58,17 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
                 
                 print("saveUserDynamoDB:")
                 let usersTable = AWSUsersTable()
-                let awsUser = AWSUser()
-                awsUser._userId = identityId
-                awsUser._firstName = user?.firstName
-                awsUser._lastName = user?.lastName
-                awsUser._preferredUsername = user?.preferredUsername
-                awsUser._professionName = user?.professionName
-                awsUser._profilePicUrl = user?.profilePicUrl
-                awsUser._about = user?.about
-                awsUser._locationName = user?.locationName
-                awsUser._searchFirstName = user?.firstName?.lowercaseString
-                awsUser._searchLastName = user?.lastName?.lowercaseString
-                usersTable.saveUser(awsUser, completionHandler: completionHandler)
+                let awsUserUpdate = AWSUserUpdate()
+                awsUserUpdate._userId = identityId
+                awsUserUpdate._firstName = user?.firstName
+                awsUserUpdate._lastName = user?.lastName
+                awsUserUpdate._professionName = user?.professionName
+                awsUserUpdate._profilePicUrl = user?.profilePicUrl
+                awsUserUpdate._about = user?.about
+                awsUserUpdate._locationName = user?.locationName
+                awsUserUpdate._searchFirstName = user?.firstName?.lowercaseString
+                awsUserUpdate._searchLastName = user?.lastName?.lowercaseString
+                usersTable.saveUser(awsUserUpdate, completionHandler: completionHandler)
                 return nil
             } else {
                 print("This should not happen with getIdentityId!")
@@ -321,7 +308,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         })
     }
     
-    func saveUserRelationshipDynamoDB(followingId: String, following: User?, completionHandler: AWSContinuationBlock) {
+    func saveUserRelationshipDynamoDB(followingId: String, follower: User?, completionHandler: AWSContinuationBlock) {
         AWSClientManager.defaultClientManager().credentialsProvider?.getIdentityId().continueWithBlock({
             (task: AWSTask) in
             if let error = task.error {
@@ -336,11 +323,11 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
                 userRelationship._creationDate = NSNumber(double: NSDate().timeIntervalSince1970)
                 userRelationship._followingId = followingId
                 
-                userRelationship._firstName = following?.firstName
-                userRelationship._lastName = following?.lastName
-                userRelationship._preferredUsername = following?.preferredUsername
-                userRelationship._professionName = following?.professionName
-                userRelationship._profilePicUrl = following?.profilePicUrl
+                userRelationship._firstName = follower?.firstName
+                userRelationship._lastName = follower?.lastName
+                userRelationship._preferredUsername = follower?.preferredUsername
+                userRelationship._professionName = follower?.professionName
+                userRelationship._profilePicUrl = follower?.profilePicUrl
                 
                 userRelationshipsTable.saveUserRelationship(userRelationship, completionHandler: completionHandler)
                 return nil
@@ -373,10 +360,10 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         })
     }
     
-    func queryUserFollowingDynamoDB(userId: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
-        print("queryUserFollowingDynamoDB:")
-        let userRelationshipsPrimaryIndex = AWSUserRelationshipsPrimaryIndex()
-        userRelationshipsPrimaryIndex.queryUserFollowing(userId, completionHandler: completionHandler)
+    func queryUserFollowersDynamoDB(followingId: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
+        print("queryUserFollowersDynamoDB:")
+        let userRelationshipsFollowersIndex = AWSUserRelationshipsFollowersIndex()
+        userRelationshipsFollowersIndex.queryUserFollowers(followingId, completionHandler: completionHandler)
     }
     
     // MARK: Likes

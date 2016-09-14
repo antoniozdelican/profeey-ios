@@ -39,5 +39,13 @@ class ProfileButtonsTableViewCell: UITableViewCell {
         self.followButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
         self.followButton.setBackgroundImage(UIImage(named: "btn_blue_small_selected"), forState: UIControlState.Normal)
     }
+    
+    func setEnabledNumberOfFollowersButton() {
+        self.numberOfFollowersButton.setTitleColor(Colors.black, forState: UIControlState.Normal)
+    }
+    
+    func setDisabledNumberOfFollowersButton() {
+        self.numberOfFollowersButton.setTitleColor(Colors.disabled, forState: UIControlState.Normal)
+    }
 
 }

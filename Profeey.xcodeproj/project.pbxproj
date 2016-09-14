@@ -166,6 +166,7 @@
 		A9EB35621D4B9A3600E9C77A /* GalleryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9EB35611D4B9A3600E9C77A /* GalleryViewController.swift */; };
 		A9F49D571D379D01002EB68B /* AWSPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F49D561D379D01002EB68B /* AWSPost.swift */; };
 		A9F49D5A1D379D70002EB68B /* AWSPostsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F49D591D379D70002EB68B /* AWSPostsTable.swift */; };
+		A9FAB36D1D8A114900E871CD /* AWSUserUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9FAB36C1D8A114900E871CD /* AWSUserUpdate.swift */; };
 		A9FF2EF11D6AEE9E0022AB0C /* Category.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9FF2EF01D6AEE9E0022AB0C /* Category.storyboard */; };
 		A9FF2EF31D6AF9280022AB0C /* CategoryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9FF2EF21D6AF9280022AB0C /* CategoryTableViewController.swift */; };
 /* End PBXBuildFile section */
@@ -343,6 +344,7 @@
 		A9EB35611D4B9A3600E9C77A /* GalleryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GalleryViewController.swift; sourceTree = "<group>"; };
 		A9F49D561D379D01002EB68B /* AWSPost.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSPost.swift; sourceTree = "<group>"; };
 		A9F49D591D379D70002EB68B /* AWSPostsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSPostsTable.swift; sourceTree = "<group>"; };
+		A9FAB36C1D8A114900E871CD /* AWSUserUpdate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSUserUpdate.swift; sourceTree = "<group>"; };
 		A9FF2EF01D6AEE9E0022AB0C /* Category.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Category.storyboard; sourceTree = "<group>"; };
 		A9FF2EF21D6AF9280022AB0C /* CategoryTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryTableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -457,6 +459,7 @@
 			isa = PBXGroup;
 			children = (
 				A9A5039E1D2FE0810030A472 /* AWSUser.swift */,
+				A9FAB36C1D8A114900E871CD /* AWSUserUpdate.swift */,
 				A9D960651D32FFE700273A78 /* AWSUserFirstLastName.swift */,
 				A9604F7D1D33721000F23B33 /* AWSUserPreferredUsername.swift */,
 				A985F1121D6C5D1300560013 /* AWSUserProfession.swift */,
@@ -1099,6 +1102,7 @@
 				A9BF16451D64DC5F00060A9E /* SearchUserTableViewCell.swift in Sources */,
 				A9D334081D800D8D005565C2 /* PostImageTableViewCell.swift in Sources */,
 				A9A8DD111D4529B2009B3C24 /* LogInNavigationController.swift in Sources */,
+				A9FAB36D1D8A114900E871CD /* AWSUserUpdate.swift in Sources */,
 				A99030F91D464FEE00336D26 /* GalleryCollectionViewCell.swift in Sources */,
 				A9E4507E1D59E6E400D14553 /* CommentsViewController.swift in Sources */,
 				A95E40D01D35410500FD61F9 /* CaptureNavigationController.swift in Sources */,

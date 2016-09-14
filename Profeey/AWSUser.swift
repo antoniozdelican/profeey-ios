@@ -52,4 +52,6 @@ class AWSUser: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
             "_searchLastName" : "searchLastName",
         ]
     }
+    
+    // Watch for creationDate update so you don't delete it!
 }

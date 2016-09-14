@@ -15,38 +15,27 @@ class ProfileTableViewController: UITableViewController {
     @IBOutlet weak var settingsButton: UIBarButtonItem!
     
     var user: User?
-    private var posts: [Post] = []
-    // Before any post is loaded.
-    private var isLoadingPosts: Bool = true
-    
     var isCurrentUser: Bool = false
-    var isFollowing: Bool = false
     
+    private var currentUser: User?
+    private var posts: [Post] = []
+    private var isLoadingPosts: Bool = true
+    private var isFollowing: Bool = false
     private var selectedSegment: Int = 0
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.Plain, target:nil, action:nil)
-        self.navigationItem.title = nil
         self.tableView.delaysContentTouches = false
+        self.navigationItem.title = self.user?.preferredUsername
         
-        if self.isCurrentUser {
-            // Set by MaintTabBarController.
-            self.getCurrentUser()
-        } else {
-            // User should already be set by other VC.
-            if self.user?.userId == AWSClientManager.defaultClientManager().credentialsProvider?.identityId {
-                // In case current user come to this VC from another parent (example search).
-                self.isCurrentUser = true
-            }
-            self.navigationItem.title = self.user?.preferredUsername
-            
-            if let userId = self.user?.userId {
-                let indexPath = NSIndexPath(forRow: 1, inSection: 0)
-                self.getUserRelationship(userId, indexPath: indexPath)
-                self.queryUserPostsDateSorted(userId)
-            }
+        // In case we come from another Vc.
+        if self.user?.userId == AWSClientManager.defaultClientManager().credentialsProvider?.identityId {
+            self.isCurrentUser = true
         }
+        
+        // Get currentUser.
+        self.getCurrentUser()
     }
 
     override func didReceiveMemoryWarning() {
@@ -59,6 +48,10 @@ class ProfileTableViewController: UITableViewController {
         if let destinationViewController = segue.destinationViewController as? UINavigationController,
             let childViewController = destinationViewController.childViewControllers[0] as? EditProfileTableViewController {
             childViewController.user = self.user
+        }
+        if let destinationViewController = segue.destinationViewController as? UsersTableViewController {
+            destinationViewController.usersType = UsersType.Followers
+            destinationViewController.userId = self.user?.userId
         }
         if let destinationViewController = segue.destinationViewController as? PostDetailsTableViewController,
             let indexPath = sender as? NSIndexPath {
@@ -105,8 +98,18 @@ class ProfileTableViewController: UITableViewController {
                 return cell
             case 1:
                 let cell = tableView.dequeueReusableCellWithIdentifier("cellProfileButtons", forIndexPath: indexPath) as! ProfileButtonsTableViewCell
-                cell.numberOfPostsButton.setTitle(self.user?.numberOfPostsSmallString, forState: UIControlState.Normal)
-                cell.numberOfFollowersButton.setTitle(self.user?.numberOfFollowersSmallString, forState: UIControlState.Normal)
+                cell.numberOfPostsButton.setTitle(self.user?.numberOfPostsInt.numberToString(), forState: UIControlState.Normal)
+                
+                cell.numberOfFollowersButton.setTitle(self.user?.numberOfFollowersInt.numberToString(), forState: UIControlState.Normal)
+                cell.numberOfFollowersButton.addTarget(self, action: #selector(ProfileTableViewController.followersButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+                if self.user?.numberOfFollowersInt == 0 {
+                    cell.numberOfFollowersButton.enabled = false
+                    cell.setDisabledNumberOfFollowersButton()
+                } else {
+                    cell.numberOfFollowersButton.enabled = true
+                    cell.setEnabledNumberOfFollowersButton()
+                }
+                
                 if self.isCurrentUser {
                     cell.setEditButton()
                     cell.followButton.addTarget(self, action: #selector(ProfileTableViewController.editButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
@@ -151,7 +154,8 @@ class ProfileTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        if indexPath.section == 4 {
+        let cell = tableView.cellForRowAtIndexPath(indexPath)
+        if cell is PostSmallTableViewCell {
             self.performSegueWithIdentifier("segueToPostDetailsVc", sender: indexPath)
         }
     }
@@ -248,7 +252,6 @@ class ProfileTableViewController: UITableViewController {
             let updatedUser = sourceViewController.updatedUser
             self.user = updatedUser
             self.tableView.reloadData()
-            self.navigationItem.title = updatedUser?.preferredUsername
             // Remove image in background.
             if let profilePicUrlToRemove = sourceViewController.profilePicUrlToRemove {
                 self.removeImage(profilePicUrlToRemove)
@@ -257,6 +260,10 @@ class ProfileTableViewController: UITableViewController {
     }
     
     // MARK: Tappers
+    
+    func followersButtonTapped(sender: AnyObject) {
+        self.performSegueWithIdentifier("segueToUsersVc", sender: self)
+    }
     
     func editButtonTapped(sender: AnyObject) {
         self.performSegueWithIdentifier("segueToEditProfileVc", sender: self)
@@ -311,10 +318,7 @@ class ProfileTableViewController: UITableViewController {
     
     // MARK: AWS
     
-    private func getUser(userId: String) {
-        // TODO
-    }
-    
+    // So we can do actions!
     private func getCurrentUser() {
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         PRFYDynamoDBManager.defaultDynamoDBManager().getCurrentUserDynamoDB({
@@ -327,12 +331,49 @@ class ProfileTableViewController: UITableViewController {
                     guard let awsUser = task.result as? AWSUser else {
                         return
                     }
+                    let currentUser = User(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl)
+                    self.currentUser = currentUser
+                    
+                    // In case it's an actual app user.
+                    // Set by MainTabBarVc or if we come from another Vc.
+                    // We duplicate call here to fetch all the data but that doesn't matter.
+                    if self.isCurrentUser {
+                        if let userId = currentUser.userId {
+                            self.getUser(userId)
+                        }
+                    } else {
+                        if let userId = self.user?.userId {
+                            self.getUser(userId)
+                            let indexPath = NSIndexPath(forRow: 1, inSection: 0)
+                            self.getUserRelationship(userId, indexPath: indexPath)
+                        }
+                    }
+                }
+            })
+            return nil
+        })
+    }
+    
+    private func getUser(userId: String) {
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().getUserDynamoDB(userId, completionHandler: {
+            (task: AWSTask) in
+            dispatch_async(dispatch_get_main_queue(), {
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                if let error = task.error {
+                    print("getUser error: \(error)")
+                    self.refreshControl?.endRefreshing()
+                } else {
+                    guard let awsUser = task.result as? AWSUser else {
+                        self.refreshControl?.endRefreshing()
+                        return
+                    }
                     let user = User(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, about: awsUser._about, locationName: awsUser._locationName, numberOfFollowers: awsUser._numberOfFollowers, numberOfPosts: awsUser._numberOfPosts)
                     self.user = user
                     self.navigationItem.title = self.user?.preferredUsername
                     let indexPath = NSIndexPath(forRow: 0, inSection: 0)
                     self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
-
+                    
                     if let profilePicUrl = awsUser._profilePicUrl {
                         self.downloadImage(profilePicUrl, imageType: .UserProfilePic, indexPath: indexPath)
                     }
@@ -485,7 +526,7 @@ class ProfileTableViewController: UITableViewController {
     // Followings are done in background.
     private func followUser(followingId: String) {
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().saveUserRelationshipDynamoDB(followingId, following: self.user,completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().saveUserRelationshipDynamoDB(followingId, follower: self.currentUser,completionHandler: {
             (task: AWSTask) in
             dispatch_async(dispatch_get_main_queue(), {
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false

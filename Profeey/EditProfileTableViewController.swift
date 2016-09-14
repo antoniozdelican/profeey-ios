@@ -247,10 +247,10 @@ class EditProfileTableViewController: UITableViewController {
         let professionName: String? = (self.professionNameLabel.textColor == Colors.black) ? self.professionNameLabel.text?.trimm() : nil
         let locationName: String? = (self.locationNameLabel.textColor == Colors.black) ? self.locationNameLabel.text?.trimm() : nil
         
-        self.updatedUser = User(userId: self.user?.userId, firstName: firstName, lastName: lastName, preferredUsername: self.user?.preferredUsername, professionName: professionName, profilePicUrl: self.user?.profilePicUrl, about: about, locationName: locationName, numberOfFollowers: self.user?.numberOfFollowers, numberOfPosts: self.user?.numberOfPosts)
+        self.updatedUser = User(userId: self.user?.userId, firstName: firstName, lastName: lastName, professionName: professionName, profilePicUrl: self.user?.profilePicUrl, about: about, locationName: locationName)
         
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().saveUserDynamoDB(user, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().saveUserDynamoDB(self.updatedUser, completionHandler: {
             (task: AWSTask) in
             dispatch_async(dispatch_get_main_queue(), {
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false

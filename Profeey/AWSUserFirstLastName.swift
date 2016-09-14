@@ -13,7 +13,7 @@ import Foundation
  */
 class AWSUserFirstLastName: AWSUser {
     
-    class func ignoreAttributes() -> [String] {
-        return ["about", "location", "preferredUsername", "profession", "profilePicUrl"]
-    }
+//    class func ignoreAttributes() -> [String] {
+//        return ["about", "location", "preferredUsername", "profession", "profilePicUrl"]
+//    }
 }

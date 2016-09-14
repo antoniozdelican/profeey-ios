@@ -32,19 +32,17 @@ class User: NSObject {
     var fullName: String? {
         return [self.firstName, self.lastName].flatMap{$0}.joinWithSeparator(" ")
     }
-    var numberOfFollowersSmallString: String? {
-        guard let numberOfFollowers = self.numberOfFollowers else {
-            return "0"
+    var numberOfPostsInt: Int {
+        guard let numberOfPostsInt = self.numberOfPosts else {
+            return 0
         }
-        let numberOfFollowersInt = numberOfFollowers.integerValue
-        return numberOfFollowersInt.numberToString()
+        return numberOfPostsInt.integerValue
     }
-    var numberOfPostsSmallString: String? {
-        guard let numberOfPosts = self.numberOfPosts else {
-            return "0"
+    var numberOfFollowersInt: Int {
+        guard let numberOfFollowers = self.numberOfFollowers else {
+            return 0
         }
-        let numberOfPostsInt = numberOfPosts.integerValue
-        return numberOfPostsInt.numberToString()
+        return numberOfFollowers.integerValue
     }
     
     override init() {
@@ -61,6 +59,19 @@ class User: NSObject {
         self.preferredUsername = preferredUsername
         self.professionName = professionName
         self.profilePicUrl = profilePicUrl
+    }
+    
+    // Partial user for EditVc
+    convenience init(userId: String?, firstName: String?, lastName: String?, professionName: String?, profilePicUrl: String?, about: String?, locationName: String?) {
+        self.init()
+        self.userId = userId
+        self.firstName = firstName
+        self.lastName = lastName
+        self.professionName = professionName
+        self.profilePicUrl = profilePicUrl
+        
+        self.about = about
+        self.locationName = locationName
     }
     
     // Full user for ProfileVc.
