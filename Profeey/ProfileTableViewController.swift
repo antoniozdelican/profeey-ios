@@ -311,9 +311,7 @@ class ProfileTableViewController: UITableViewController {
             self.refreshControl?.endRefreshing()
             return
         }
-        // self.getUser(userId)
-        self.posts = []
-        self.queryUserPostsDateSorted(userId)
+        self.getUser(userId)
     }
     
     // MARK: AWS
@@ -371,10 +369,11 @@ class ProfileTableViewController: UITableViewController {
                     let user = User(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, about: awsUser._about, locationName: awsUser._locationName, numberOfFollowers: awsUser._numberOfFollowers, numberOfPosts: awsUser._numberOfPosts)
                     self.user = user
                     self.navigationItem.title = self.user?.preferredUsername
-                    let indexPath = NSIndexPath(forRow: 0, inSection: 0)
-                    self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
+                    let indexSet = NSIndexSet(index: 0)
+                    self.tableView.reloadSections(indexSet, withRowAnimation: UITableViewRowAnimation.None)
                     
                     if let profilePicUrl = awsUser._profilePicUrl {
+                        let indexPath = NSIndexPath(forRow: 0, inSection: 0)
                         self.downloadImage(profilePicUrl, imageType: .UserProfilePic, indexPath: indexPath)
                     }
                     if let userId = awsUser._userId {
@@ -410,6 +409,8 @@ class ProfileTableViewController: UITableViewController {
                         self.refreshControl?.endRefreshing()
                         return
                     }
+                    // Reset posts.
+                    self.posts = []
                     for (index, awsPost) in awsPosts.enumerate() {
                         let post = Post(userId: awsPost._userId, postId: awsPost._postId, categoryName: awsPost._categoryName, creationDate: awsPost._creationDate, postDescription: awsPost._description, imageUrl: awsPost._imageUrl, numberOfLikes: awsPost._numberOfLikes, title: awsPost._title, user: self.user)
                         self.posts.append(post)
