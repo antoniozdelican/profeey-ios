@@ -168,6 +168,7 @@ class HomeTableViewController: UITableViewController {
         if cell is PostCategoryTableViewCell {
             self.performSegueWithIdentifier("segueToCategoryVc", sender: indexPath)
         }
+        // TEST
         if cell is PostSmallTableViewCell {
             self.performSegueWithIdentifier("segueToPostDetailsVc", sender: indexPath)
         }
@@ -317,16 +318,17 @@ class HomeTableViewController: UITableViewController {
                 if let error = task.error {
                     print("getCurrentUser error: \(error)")
                 } else {
-                    if let awsUser = task.result as? AWSUser {
-                        let user = User(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl)
-                        self.user = user
-                        
-                        if let profilePicUrl = awsUser._profilePicUrl {
-                            self.downloadImage(profilePicUrl, imageType: .CurrentUserProfilePic, indexPath: nil)
-                        }
-                        if let userId = awsUser._userId {
-                            self.queryUserActivitiesDateSorted(userId)
-                        }
+                    guard let awsUser = task.result as? AWSUser else {
+                        return
+                    }
+                    let user = User(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl)
+                    self.user = user
+                    
+                    if let profilePicUrl = awsUser._profilePicUrl {
+                        self.downloadImage(profilePicUrl, imageType: .CurrentUserProfilePic, indexPath: nil)
+                    }
+                    if let userId = awsUser._userId {
+                        self.queryUserActivitiesDateSorted(userId)
                     }
                 }
             })

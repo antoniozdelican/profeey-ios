@@ -24,7 +24,7 @@ class UsersTableViewController: UITableViewController {
     var userId: String?
     
     private var users: [User] = []
-    private var isLoadingUsers: Bool = true
+    private var isLoadingUsers: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,11 +35,13 @@ class UsersTableViewController: UITableViewController {
             case .Likers:
                 self.navigationItem.title = "Likes"
                 if let postId = self.postId {
+                    self.isLoadingUsers = true
                     self.queryPostLikers(postId)
                 }
             case .Followers:
                 self.navigationItem.title = "Followers"
                 if let followingId = self.userId {
+                    self.isLoadingUsers = true
                     self.queryUserFollowers(followingId)
                 }
             }

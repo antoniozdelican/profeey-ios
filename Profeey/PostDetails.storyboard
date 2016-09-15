@@ -177,50 +177,42 @@
                                     <outlet property="timeLabel" destination="gOY-1f-9gx" id="aFR-42-cfK"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellPostButtons" rowHeight="49" id="gSG-OK-BLN" customClass="PostButtonsTableViewCell" customModule="Profeey" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellPostButtons" rowHeight="49" id="Hd8-kL-Uk6" customClass="PostButtonsTableViewCell" customModule="Profeey" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="529" width="600" height="49"/>
                                 <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="gSG-OK-BLN" id="Jxm-4t-tjx">
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Hd8-kL-Uk6" id="dAH-D9-l73">
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="48.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w5A-0O-foI">
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="faH-sK-MuZ">
                                             <rect key="frame" x="0.0" y="0.0" width="49" height="49"/>
                                             <constraints>
-                                                <constraint firstAttribute="height" constant="49" id="seo-9E-UnZ"/>
-                                                <constraint firstAttribute="width" constant="49" id="vSS-Aq-UUF"/>
+                                                <constraint firstAttribute="height" constant="49" id="Kvl-yf-8gO"/>
+                                                <constraint firstAttribute="width" constant="49" id="cJR-61-fmR"/>
                                             </constraints>
                                             <state key="normal" image="ic_heart_blue_big"/>
                                         </button>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0 likes" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sXz-1B-0UQ">
-                                            <rect key="frame" x="546" y="0.0" width="41.5" height="49"/>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="F7F-tS-Wy6">
+                                            <rect key="frame" x="545.5" y="0.0" width="42" height="48.5"/>
                                             <constraints>
-                                                <constraint firstAttribute="height" constant="49" id="IGx-0J-1G9"/>
+                                                <constraint firstAttribute="height" constant="49" id="sia-UZ-vQx"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                            <color key="textColor" red="0.2901960784" green="0.2901960784" blue="0.2901960784" alpha="1" colorSpace="calibratedRGB"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7it-a2-UX3">
-                                            <rect key="frame" x="546" y="0.0" width="41.5" height="48.5"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <state key="normal" title="0 likes">
+                                                <color key="titleColor" red="0.2901960784" green="0.2901960784" blue="0.2901960784" alpha="1" colorSpace="calibratedRGB"/>
+                                            </state>
                                         </button>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstAttribute="trailing" secondItem="7it-a2-UX3" secondAttribute="trailing" constant="12.5" id="8zN-sI-SL7"/>
-                                        <constraint firstItem="w5A-0O-foI" firstAttribute="top" secondItem="Jxm-4t-tjx" secondAttribute="top" id="W77-Eh-xcq"/>
-                                        <constraint firstItem="sXz-1B-0UQ" firstAttribute="top" secondItem="Jxm-4t-tjx" secondAttribute="top" id="YxH-Vl-mst"/>
-                                        <constraint firstItem="7it-a2-UX3" firstAttribute="width" secondItem="sXz-1B-0UQ" secondAttribute="width" id="arY-oQ-vkV"/>
-                                        <constraint firstItem="7it-a2-UX3" firstAttribute="top" secondItem="Jxm-4t-tjx" secondAttribute="top" id="bvH-J7-uDW"/>
-                                        <constraint firstItem="w5A-0O-foI" firstAttribute="leading" secondItem="Jxm-4t-tjx" secondAttribute="leading" id="dBy-cu-5AO"/>
-                                        <constraint firstItem="7it-a2-UX3" firstAttribute="height" secondItem="sXz-1B-0UQ" secondAttribute="height" id="sYy-Lg-chi"/>
-                                        <constraint firstAttribute="trailing" secondItem="sXz-1B-0UQ" secondAttribute="trailing" constant="12" id="zl3-cg-qz6"/>
+                                        <constraint firstItem="faH-sK-MuZ" firstAttribute="top" secondItem="dAH-D9-l73" secondAttribute="top" id="4tk-p1-mOG"/>
+                                        <constraint firstAttribute="trailing" secondItem="F7F-tS-Wy6" secondAttribute="trailing" constant="12" id="MSY-3h-9EC"/>
+                                        <constraint firstItem="F7F-tS-Wy6" firstAttribute="top" secondItem="dAH-D9-l73" secondAttribute="top" id="ZaK-Xn-qCp"/>
+                                        <constraint firstItem="faH-sK-MuZ" firstAttribute="leading" secondItem="dAH-D9-l73" secondAttribute="leading" id="sYw-iW-16q"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="likeButton" destination="w5A-0O-foI" id="irb-KA-2rs"/>
-                                    <outlet property="numberOfLikesButton" destination="7it-a2-UX3" id="YGQ-TM-ubq"/>
-                                    <outlet property="numberOfLikesLabel" destination="sXz-1B-0UQ" id="xkz-Ui-0eK"/>
+                                    <outlet property="likeButton" destination="faH-sK-MuZ" id="oaK-de-8v3"/>
+                                    <outlet property="numberOfLikesButton" destination="F7F-tS-Wy6" id="ZtG-Es-8NP"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>

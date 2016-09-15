@@ -32,7 +32,8 @@ class PostDetailsTableViewController: UITableViewController {
         
         // Check if liked by currentUser.
         if let postId = self.post?.postId {
-            self.getLike(postId)
+            let indexPath = NSIndexPath(forRow: 5, inSection: 0)
+            self.getLike(postId, indexPath: indexPath)
         }
     }
     
@@ -66,46 +67,41 @@ class PostDetailsTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        guard let post = self.post else {
-            return UITableViewCell()
-        }
         switch indexPath.row {
         case 0:
             let cell = tableView.dequeueReusableCellWithIdentifier("cellPostUser", forIndexPath: indexPath) as! PostUserTableViewCell
-            let user = post.user
+            let user = self.post?.user
             cell.profilePicImageView.image = user?.profilePic
             cell.fullNameLabel.text = user?.fullName
             cell.professionNameLabel.text = user?.professionName
             return cell
         case 1:
             let cell = tableView.dequeueReusableCellWithIdentifier("cellPostImage", forIndexPath: indexPath) as! PostImageTableViewCell
-            cell.postImageView.image = post.image
-            if let image = post.image {
+            cell.postImageView.image = self.post?.image
+            if let image = self.post?.image {
                 let aspectRatio = image.size.width / image.size.height
                 cell.postImageViewHeightConstraint.constant = tableView.bounds.width / aspectRatio
             }
             return cell
         case 2:
             let cell = tableView.dequeueReusableCellWithIdentifier("cellPostInfo", forIndexPath: indexPath) as! PostInfoTableViewCell
-            cell.titleLabel.text = post.title
+            cell.titleLabel.text = self.post?.title
             return cell
         case 3:
             let cell = tableView.dequeueReusableCellWithIdentifier("cellPostCategory", forIndexPath: indexPath) as! PostCategoryTableViewCell
-            cell.categoryNameLabel.text = post.categoryName
+            cell.categoryNameLabel.text = self.post?.categoryName
             return cell
         case 4:
             let cell = tableView.dequeueReusableCellWithIdentifier("cellPostTime", forIndexPath: indexPath) as! PostTimeTableViewCell
-            cell.timeLabel.text = post.creationDateString
+            cell.timeLabel.text = self.post?.creationDateString
             return cell
         case 5:
             let cell = tableView.dequeueReusableCellWithIdentifier("cellPostButtons", forIndexPath: indexPath) as! PostButtonsTableViewCell
-            
-            post.isLikedByCurrentUser ? cell.setSelectedLikeButton() : cell.setUnselectedLikeButton()
-            cell.likeButton.addTarget(self, action: #selector(CategoryTableViewController.likeButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-            
-            cell.numberOfLikesButton.addTarget(self, action: #selector(CategoryTableViewController.numberOfLikesButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-            cell.numberOfLikesButton.hidden = (post.numberOfLikesString == nil) ? true : false
-            //cell.numberOfLikesLabel.text = post.numberOfLikesString
+            self.post!.isLikedByCurrentUser ? cell.setSelectedLikeButton() : cell.setUnselectedLikeButton()
+            cell.likeButton.addTarget(self, action: #selector(HomeTableViewController.likeButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+            cell.numberOfLikesButton.hidden = (self.post?.numberOfLikesString != nil) ? false : true
+            cell.numberOfLikesButton.setTitle(self.post?.numberOfLikesString, forState: UIControlState.Normal)
+            cell.numberOfLikesButton.addTarget(self, action: #selector(HomeTableViewController.numberOfLikesButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
             return cell
         default:
             return UITableViewCell()
@@ -176,31 +172,33 @@ class PostDetailsTableViewController: UITableViewController {
     // MARK: Tappers
     
     func likeButtonTapped(sender: UIButton) {
-        guard let postId = post?.postId,
-            let postUserId = post?.userId else {
-                return
+        let point = sender.convertPoint(CGPointZero, toView: self.tableView)
+        guard let indexPath = self.tableView.indexPathForRowAtPoint(point) else {
+            return
         }
-        if self.post!.isLikedByCurrentUser {
-            self.post?.isLikedByCurrentUser = false
-            if let oldNumberOfLikes = self.post?.numberOfLikes?.integerValue {
-                let newNumberOfLikes = oldNumberOfLikes - 1
-                self.post?.numberOfLikes = NSNumber(integer: newNumberOfLikes)
-                
-            }
-            self.tableView.reloadData()
-            // In background.
+        guard let post = self.post else {
+            return
+        }
+        guard let postId = post.postId else {
+            return
+        }
+        guard let postUserId = post.userId else {
+            return
+        }
+        let numberOfLikes = (post.numberOfLikes != nil) ? post.numberOfLikes! : 0
+        let numberOfLikesInteger = numberOfLikes.integerValue
+        if post.isLikedByCurrentUser {
+            post.isLikedByCurrentUser = false
+            post.numberOfLikes = NSNumber(integer: (numberOfLikesInteger - 1))
             self.removeLike(postId, postUserId: postUserId)
         } else {
-            self.post?.isLikedByCurrentUser = true
-            if let oldNumberOfLikes = self.post?.numberOfLikes?.integerValue {
-                let newNumberOfLikes = oldNumberOfLikes + 1
-                self.post?.numberOfLikes = NSNumber(integer: newNumberOfLikes)
-            }
-            self.tableView.reloadData()
-            // In background.
+            post.isLikedByCurrentUser = true
+            post.numberOfLikes = NSNumber(integer: (numberOfLikesInteger + 1))
             self.saveLike(postId, postUserId: postUserId)
         }
-        self.likeDelegate?.togglePostLike(self.postIndexPath, numberOfLikes: self.post?.numberOfLikes)
+        self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
+        
+        //self.likeDelegate?.togglePostLike(self.postIndexPath, numberOfLikes: self.post?.numberOfLikes)
     }
     
     func numberOfLikesButtonTapped(sender: UIButton) {
@@ -219,10 +217,11 @@ class PostDetailsTableViewController: UITableViewController {
                 if let error = task.error {
                     print("getCurrentUser error: \(error)")
                 } else {
-                    if let awsUser = task.result as? AWSUser {
-                        let user = User(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl)
-                        self.currentUser = user
+                    guard let awsUser = task.result as? AWSUser else {
+                        return
                     }
+                    let user = User(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl)
+                    self.currentUser = user
                 }
             })
             return nil
@@ -230,7 +229,7 @@ class PostDetailsTableViewController: UITableViewController {
     }
     
     // Check if currentUser liked a post.
-    private func getLike(postId: String) {
+    private func getLike(postId: String, indexPath: NSIndexPath) {
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         PRFYDynamoDBManager.defaultDynamoDBManager().getLikeDynamoDB(postId, completionHandler: {
             (task: AWSTask) in
@@ -241,7 +240,7 @@ class PostDetailsTableViewController: UITableViewController {
                 } else {
                     if task.result != nil {
                         self.post?.isLikedByCurrentUser = true
-                        self.tableView.reloadData()
+                        self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
                     }
                 }
             })
@@ -257,8 +256,6 @@ class PostDetailsTableViewController: UITableViewController {
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                 if let error = task.error {
                     print("saveLike error: \(error)")
-                } else {
-                    print("saveLike success!")
                 }
             })
             return nil
@@ -273,8 +270,6 @@ class PostDetailsTableViewController: UITableViewController {
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                 if let error = task.error {
                     print("removeLike error: \(error)")
-                } else {
-                    print("removeLike success!")
                 }
             })
             return nil

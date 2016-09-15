@@ -14,7 +14,7 @@ class CategoryTableViewController: UITableViewController {
 
     var categoryName: String?
     private var posts: [Post] = []
-    private var isLoadingPosts: Bool = false
+    private var isLoadingPosts: Bool = true
     private var currentUser: User?
     
     override func viewDidLoad() {
@@ -40,6 +40,7 @@ class CategoryTableViewController: UITableViewController {
         }
         if let destinationViewController = segue.destinationViewController as? UsersTableViewController,
             let indexPath = sender as? NSIndexPath {
+            destinationViewController.usersType = UsersType.Likers
             destinationViewController.postId = self.posts[indexPath.section].postId
         }
     }
@@ -87,15 +88,11 @@ class CategoryTableViewController: UITableViewController {
             return cell
         case 5:
             let cell = tableView.dequeueReusableCellWithIdentifier("cellPostButtons", forIndexPath: indexPath) as! PostButtonsTableViewCell
-            
             post.isLikedByCurrentUser ? cell.setSelectedLikeButton() : cell.setUnselectedLikeButton()
-            cell.likeButton.addTarget(self, action: #selector(CategoryTableViewController.likeButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-            
-            cell.numberOfLikesButton.addTarget(self, action: #selector(CategoryTableViewController.numberOfLikesButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-            if post.numberOfLikesString == nil {
-                cell.numberOfLikesButton.hidden = true
-            }
-            //cell.numberOfLikesLabel.text = post.numberOfLikesString
+            cell.likeButton.addTarget(self, action: #selector(HomeTableViewController.likeButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+            cell.numberOfLikesButton.hidden = (post.numberOfLikesString != nil) ? false : true
+            cell.numberOfLikesButton.setTitle(post.numberOfLikesString, forState: UIControlState.Normal)
+            cell.numberOfLikesButton.addTarget(self, action: #selector(HomeTableViewController.numberOfLikesButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
             return cell
         default:
             return UITableViewCell()
@@ -110,19 +107,25 @@ class CategoryTableViewController: UITableViewController {
         if cell is PostUserTableViewCell {
             self.performSegueWithIdentifier("segueToProfileVc", sender: indexPath)
         }
+//        if cell is PostCategoryTableViewCell {
+//            self.performSegueWithIdentifier("segueToCategoryVc", sender: indexPath)
+//        }
         
     }
     
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         cell.layoutMargins = UIEdgeInsetsZero
-        cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
         cell.selectionStyle = UITableViewCellSelectionStyle.None
+        cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
         if indexPath.row == 5 {
             cell.separatorInset = UIEdgeInsetsMake(0.0, 12.0, 0.0, 12.0)
         }
     }
     
     override func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        if self.isLoadingPosts {
+            return 120.0
+        }
         switch indexPath.row {
         case 0:
             return 65.0
@@ -142,6 +145,9 @@ class CategoryTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        if self.isLoadingPosts {
+            return 120.0
+        }
         switch indexPath.row {
         case 0:
             return 65.0
@@ -162,43 +168,49 @@ class CategoryTableViewController: UITableViewController {
     
     // MARK: Tappers
     
-    func likeButtonTapped(sender: UIButton) {
-        let buttonPoint = sender.convertPoint(CGPointZero, toView: self.tableView)
-        guard let indexPath = tableView.indexPathForRowAtPoint(buttonPoint) else {
+    func likeButtonTapped(sender: AnyObject) {
+        let point = sender.convertPoint(CGPointZero, toView: self.tableView)
+        guard let indexPath = self.tableView.indexPathForRowAtPoint(point) else {
             return
         }
         let post = self.posts[indexPath.section]
-        guard let postId = post.postId,
-            let postUserId = post.userId else {
+        guard let postId = post.postId else {
             return
         }
+        guard let postUserId = post.userId else {
+            return
+        }
+        let numberOfLikes = (post.numberOfLikes != nil) ? post.numberOfLikes! : 0
+        let numberOfLikesInteger = numberOfLikes.integerValue
         if post.isLikedByCurrentUser {
             post.isLikedByCurrentUser = false
-            if let oldNumberOfLikes = post.numberOfLikes?.integerValue {
-                let newNumberOfLikes = oldNumberOfLikes - 1
-                post.numberOfLikes = NSNumber(integer: newNumberOfLikes)
-            }
-            self.tableView.reloadData()
-            // In background.
+            post.numberOfLikes = NSNumber(integer: (numberOfLikesInteger - 1))
             self.removeLike(postId, postUserId: postUserId)
         } else {
             post.isLikedByCurrentUser = true
-            if let oldNumberOfLikes = post.numberOfLikes?.integerValue {
-                let newNumberOfLikes = oldNumberOfLikes + 1
-                post.numberOfLikes = NSNumber(integer: newNumberOfLikes)
-            }
-            self.tableView.reloadData()
-            // In background.
+            post.numberOfLikes = NSNumber(integer: (numberOfLikesInteger + 1))
             self.saveLike(postId, postUserId: postUserId)
         }
+        self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
     }
     
-    func numberOfLikesButtonTapped(sender: UIButton) {
-        let buttonPoint = sender.convertPoint(CGPointZero, toView: self.tableView)
-        guard let indexPath = tableView.indexPathForRowAtPoint(buttonPoint) else {
+    func numberOfLikesButtonTapped(sender: AnyObject) {
+        let point = sender.convertPoint(CGPointZero, toView: self.tableView)
+        guard let indexPath = self.tableView.indexPathForRowAtPoint(point) else {
             return
         }
         self.performSegueWithIdentifier("segueToUsersVc", sender: indexPath)
+    }
+    
+    // MARK: IBActions
+    
+    @IBAction func refreshControlChanged(sender: AnyObject) {
+        guard let categoryName = self.categoryName else {
+            self.refreshControl?.endRefreshing()
+            return
+        }
+        self.posts = []
+        self.queryCategoryPostsDateSorted(categoryName)
     }
     
     // MARK: AWS
@@ -213,12 +225,14 @@ class CategoryTableViewController: UITableViewController {
                 if let error = task.error {
                     print("getCurrentUser error: \(error)")
                 } else {
-                    if let awsUser = task.result as? AWSUser {
-                        let user = User(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl)
-                        self.currentUser = user
-                        
-                        // Only now query posts.
-                        self.queryCategoryPostsDateSorted()
+                    guard let awsUser = task.result as? AWSUser else {
+                        return
+                    }
+                    let user = User(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl)
+                    self.currentUser = user
+                    
+                    if let categoryName = self.categoryName {
+                        self.queryCategoryPostsDateSorted(categoryName)
                     }
                 }
             })
@@ -226,10 +240,7 @@ class CategoryTableViewController: UITableViewController {
         })
     }
     
-    private func queryCategoryPostsDateSorted() {
-        guard let categoryName = self.categoryName else {
-            return
-        }
+    private func queryCategoryPostsDateSorted(categoryName: String) {
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         PRFYDynamoDBManager.defaultDynamoDBManager().queryCategoryPostsDateSortedDynamoDB(categoryName, completionHandler: {
             (reponse: AWSDynamoDBPaginatedOutput?, error: NSError?) in
@@ -237,33 +248,43 @@ class CategoryTableViewController: UITableViewController {
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                 if let error = error {
                     print("queryCategoryPostsDateSorted error: \(error)")
+                    self.isLoadingPosts = false
+                    self.tableView.reloadData()
+                    self.refreshControl?.endRefreshing()
                 } else {
-                    if let awsPosts = reponse?.items as? [AWSPost] {
-                        for (index, awsPost) in awsPosts.enumerate() {
-                            let user = User(userId: awsPost._userId, firstName: awsPost._firstName, lastName: awsPost._lastName, preferredUsername: awsPost._preferredUsername, professionName: awsPost._professionName, profilePicUrl: awsPost._profilePicUrl)
-                            let post = Post(userId: awsPost._userId, postId: awsPost._postId, categoryName: awsPost._categoryName, creationDate: awsPost._creationDate, postDescription: awsPost._description, imageUrl: awsPost._imageUrl, numberOfLikes: awsPost._numberOfLikes, title: awsPost._title, user: user)
-                            self.posts.append(post)
-                            self.tableView.reloadData()
-                            
-                            // Get like
-                            if let postId = awsPost._postId {
-                                let indexPath = NSIndexPath(forRow: 5, inSection: index)
-                                self.getLike(postId, indexPath: indexPath)
-                            }
-                            
-                            // Get profilePic
-                            if let profilePicUrl = awsPost._profilePicUrl {
-                                let indexPath = NSIndexPath(forRow: 0, inSection: index)
-                                self.downloadImage(profilePicUrl, imageType: .UserProfilePic, indexPath: indexPath)
-                            }
-                            
-                            // Get postPic.
-                            if let imageUrl = awsPost._imageUrl {
-                                let indexPath = NSIndexPath(forRow: 1, inSection: index)
-                                self.downloadImage(imageUrl, imageType: .PostPic, indexPath: indexPath)
-                            }
+                    guard let awsPosts = reponse?.items as? [AWSPost] else {
+                        self.isLoadingPosts = false
+                        self.tableView.reloadData()
+                        self.refreshControl?.endRefreshing()
+                        return
+                    }
+                    guard awsPosts.count > 0 else {
+                        self.isLoadingPosts = false
+                        self.tableView.reloadData()
+                        self.refreshControl?.endRefreshing()
+                        return
+                    }
+                    for (index, awsPost) in awsPosts.enumerate() {
+                        let user = User(userId: awsPost._userId, firstName: awsPost._firstName, lastName: awsPost._lastName, preferredUsername: awsPost._preferredUsername, professionName: awsPost._professionName, profilePicUrl: awsPost._profilePicUrl)
+                        let post = Post(userId: awsPost._userId, postId: awsPost._postId, categoryName: awsPost._categoryName, creationDate: awsPost._creationDate, postDescription: awsPost._description, imageUrl: awsPost._imageUrl, numberOfLikes: awsPost._numberOfLikes, title: awsPost._title, user: user)
+                        self.posts.append(post)
+                        self.isLoadingPosts = false
+                        self.tableView.reloadData()
+                        
+                        if let profilePicUrl = awsPost._profilePicUrl {
+                            let indexPath = NSIndexPath(forRow: 0, inSection: index)
+                            self.downloadImage(profilePicUrl, imageType: .UserProfilePic, indexPath: indexPath)
+                        }
+                        if let imageUrl = awsPost._imageUrl {
+                            let indexPath = NSIndexPath(forRow: 1, inSection: index)
+                            self.downloadImage(imageUrl, imageType: .PostPic, indexPath: indexPath)
+                        }
+                        if let postId = awsPost._postId {
+                            let indexPath = NSIndexPath(forRow: 5, inSection: index)
+                            self.getLike(postId, indexPath: indexPath)
                         }
                     }
+                    self.refreshControl?.endRefreshing()
                 }
             })
         })
@@ -352,8 +373,6 @@ class CategoryTableViewController: UITableViewController {
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                 if let error = task.error {
                     print("saveLike error: \(error)")
-                } else {
-                    print("saveLike success!")
                 }
             })
             return nil
@@ -368,8 +387,6 @@ class CategoryTableViewController: UITableViewController {
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                 if let error = task.error {
                     print("removeLike error: \(error)")
-                } else {
-                    print("removeLike success!")
                 }
             })
             return nil
