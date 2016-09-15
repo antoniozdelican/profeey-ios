@@ -215,6 +215,31 @@
                                     <outlet property="numberOfLikesButton" destination="PlR-kl-GYg" id="m9u-sZ-fEF"/>
                                 </connections>
                             </tableViewCell>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellLoading" rowHeight="120" id="qq5-Cp-1Ii" customClass="LoadingTableViewCell" customModule="Profeey" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="578" width="600" height="120"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="qq5-Cp-1Ii" id="2wK-Sa-bsT">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="119.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="IuC-zu-Xs6">
+                                            <rect key="frame" x="240" y="50" width="20" height="20"/>
+                                        </activityIndicatorView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading..." lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hra-Za-gJL">
+                                            <rect key="frame" x="268" y="51" width="64" height="17"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <color key="textColor" red="0.2901960784" green="0.2901960784" blue="0.2901960784" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="Hra-Za-gJL" firstAttribute="centerY" secondItem="2wK-Sa-bsT" secondAttribute="centerY" id="VkQ-a3-58q"/>
+                                        <constraint firstItem="IuC-zu-Xs6" firstAttribute="centerY" secondItem="2wK-Sa-bsT" secondAttribute="centerY" id="oSb-A4-oSP"/>
+                                        <constraint firstItem="Hra-Za-gJL" firstAttribute="leading" secondItem="IuC-zu-Xs6" secondAttribute="trailing" constant="8" id="rfO-pa-N8E"/>
+                                        <constraint firstItem="Hra-Za-gJL" firstAttribute="centerX" secondItem="2wK-Sa-bsT" secondAttribute="centerX" id="tqT-gU-C33"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                            </tableViewCell>
                         </prototypes>
                         <connections>
                             <outlet property="dataSource" destination="6he-hA-o2D" id="gAf-eH-k1e"/>

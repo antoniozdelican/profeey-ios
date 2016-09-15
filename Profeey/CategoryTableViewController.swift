@@ -48,20 +48,29 @@ class CategoryTableViewController: UITableViewController {
     // MARK: UITableViewDataSource
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        if self.isLoadingPosts {
+            return 1
+        }
         return self.posts.count
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if self.isLoadingPosts {
+            return 1
+        }
         return 6
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        if self.isLoadingPosts {
+            let cell = tableView.dequeueReusableCellWithIdentifier("cellLoading", forIndexPath: indexPath) as! LoadingTableViewCell
+            return cell
+        }
         let post = self.posts[indexPath.section]
-        
+        let user = post.user
         switch indexPath.row {
         case 0:
             let cell = tableView.dequeueReusableCellWithIdentifier("cellPostUser", forIndexPath: indexPath) as! PostUserTableViewCell
-            let user = post.user
             cell.profilePicImageView.image = user?.profilePic
             cell.fullNameLabel.text = user?.fullName
             cell.professionNameLabel.text = user?.professionName
