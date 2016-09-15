@@ -98,7 +98,9 @@ class ProfileTableViewController: UITableViewController {
                 return cell
             case 1:
                 let cell = tableView.dequeueReusableCellWithIdentifier("cellProfileButtons", forIndexPath: indexPath) as! ProfileButtonsTableViewCell
+                
                 cell.numberOfPostsButton.setTitle(self.user?.numberOfPostsInt.numberToString(), forState: UIControlState.Normal)
+                cell.numberOfPostsButton.addTarget(self, action: #selector(ProfileTableViewController.postsButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
                 
                 cell.numberOfFollowersButton.setTitle(self.user?.numberOfFollowersInt.numberToString(), forState: UIControlState.Normal)
                 cell.numberOfFollowersButton.addTarget(self, action: #selector(ProfileTableViewController.followersButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
@@ -260,6 +262,11 @@ class ProfileTableViewController: UITableViewController {
     }
     
     // MARK: Tappers
+    
+    func postsButtonTapped(sender: AnyObject) {
+        let indexPath = NSIndexPath(forRow: 0, inSection: 1)
+        self.tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition.Top, animated: true)
+    }
     
     func followersButtonTapped(sender: AnyObject) {
         self.performSegueWithIdentifier("segueToUsersVc", sender: self)
