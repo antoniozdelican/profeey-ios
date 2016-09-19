@@ -9,7 +9,7 @@
 import UIKit
 
 protocol SelectUserDelegate {
-    func userSelected(index: Int)
+    func userSelected(indexPath: NSIndexPath)
 }
 
 class SearchUsersTableViewController: UITableViewController {
@@ -21,8 +21,6 @@ class SearchUsersTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.tableView.estimatedRowHeight = 65.0
-        self.tableView.rowHeight = UITableViewAutomaticDimension
     }
     
     override func didReceiveMemoryWarning() {
@@ -32,39 +30,40 @@ class SearchUsersTableViewController: UITableViewController {
     // MARK: UITableViewDataSource
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 3
+        if self.isSearching {
+            return 1
+        }
+        if !self.isSearching && self.users.count == 0 {
+            return 1
+        }
+        return 1
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch section {
-        case 0:
-            // Searching cell.
-            return self.isSearching ? 1 : 0
-        case 1:
-            // No results cell.
-            return self.isSearching ? 0 : (self.users.count > 0 ? 0 : 1)
-        default:
-            // User cell.
-            return self.isSearching ? 0 : self.users.count
+        if self.isSearching {
+            return 1
         }
+        if !self.isSearching && self.users.count == 0 {
+            return 1
+        }
+        return self.users.count
     }
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        switch indexPath.section {
-        case 0:
+        if self.isSearching {
             let cell = tableView.dequeueReusableCellWithIdentifier("cellSearching", forIndexPath: indexPath) as! SearchingTableViewCell
             cell.activityIndicator.startAnimating()
             return cell
-        case 1:
+        }
+        if !self.isSearching && self.users.count == 0 {
             let cell = tableView.dequeueReusableCellWithIdentifier("cellNoResults", forIndexPath: indexPath) as! NoResultsTableViewCell
             return cell
-        default:
-            let cell = tableView.dequeueReusableCellWithIdentifier("cellUser", forIndexPath: indexPath) as! SearchUserTableViewCell
-            let user = self.users[indexPath.row]
-            cell.profilePicImageView.image = user.profilePic
-            cell.fullNameLabel.text = user.fullName
-            cell.professionLabel.text = user.professionName
-            return cell
         }
+        let user = self.users[indexPath.row]
+        let cell = tableView.dequeueReusableCellWithIdentifier("cellSearchUser", forIndexPath: indexPath) as! SearchUserTableViewCell
+        cell.profilePicImageView.image = user.profilePic
+        cell.fullNameLabel.text = user.fullName
+        cell.professionLabel.text = user.professionName
+        return cell
     }
     
     // MARK: UITableViewDelegate
@@ -73,12 +72,21 @@ class SearchUsersTableViewController: UITableViewController {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
         let cell = tableView.cellForRowAtIndexPath(indexPath)
         if cell is SearchUserTableViewCell {
-            self.selectUserDelegate?.userSelected(indexPath.row)
+            self.selectUserDelegate?.userSelected(indexPath)
         }
     }
     
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         cell.layoutMargins = UIEdgeInsetsZero
+        cell.separatorInset = UIEdgeInsetsMake(0.0, 12.0, 0.0, 12.0)
+    }
+    
+    override func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return 65.0
+    }
+    
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return 65.0
     }
     
     // MARK: UIScrollViewDelegate

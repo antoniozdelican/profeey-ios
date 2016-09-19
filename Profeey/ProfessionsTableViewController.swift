@@ -59,6 +59,8 @@ class ProfessionsTableViewController: UITableViewController {
         return cell
     }
     
+    // MARK: UITableViewDelegate
+    
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let text = self.professionTextField.text else {
             return nil
@@ -69,8 +71,6 @@ class ProfessionsTableViewController: UITableViewController {
         cell.backgroundColor = UIColor.whiteColor()
         return cell
     }
-    
-    // MARK: UITableViewDelegate
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
@@ -144,19 +144,19 @@ class ProfessionsTableViewController: UITableViewController {
                 if let error = error {
                     print("scanProfessionsByProfessionName error: \(error)")
                 } else {
-                    if let awsProfessions = response?.items as? [AWSProfession] {
-                        var searchedProfessions: [Profession] = []
-                        for awsProfession in awsProfessions {
-                            let profession = Profession(professionName: awsProfession._professionName, numberOfUsers: awsProfession._numberOfUsers)
-                            searchedProfessions.append(profession)
-                        }
-                        self.professions = searchedProfessions
-                        self.tableView.reloadData()
+                    guard let awsProfessions = response?.items as? [AWSProfession] else {
+                        return
                     }
+                    var searchedProfessions: [Profession] = []
+                    for awsProfession in awsProfessions {
+                        let profession = Profession(professionName: awsProfession._professionName, numberOfUsers: awsProfession._numberOfUsers)
+                        searchedProfessions.append(profession)
+                    }
+                    self.professions = searchedProfessions
+                    self.tableView.reloadData()
                 }
             })
         })
         
     }
-    
 }

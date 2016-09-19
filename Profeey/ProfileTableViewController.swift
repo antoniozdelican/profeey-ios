@@ -19,6 +19,7 @@ class ProfileTableViewController: UITableViewController {
     
     private var currentUser: User?
     private var posts: [Post] = []
+    private var topCategories: [Category] = []
     private var isLoadingPosts: Bool = true
     private var isFollowing: Bool = false
     private var selectedSegment: Int = 0
@@ -65,7 +66,7 @@ class ProfileTableViewController: UITableViewController {
     // MARK: UITableViewDataSource
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 2
+        return 5
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -73,6 +74,9 @@ class ProfileTableViewController: UITableViewController {
         case 0:
             return 3
         case 1:
+            guard self.selectedSegment == 0 else {
+                return 0
+            }
             if self.isLoadingPosts {
                 return 1
             }
@@ -80,6 +84,21 @@ class ProfileTableViewController: UITableViewController {
                 return 1
             }
             return self.posts.count
+        case 2:
+            guard self.selectedSegment == 1 else {
+                return 0
+            }
+            return self.topCategories.count
+        case 3:
+            guard self.selectedSegment == 1 else {
+                return 0
+            }
+            return 0
+        case 4:
+            guard self.selectedSegment == 1 else {
+                return 0
+            }
+            return 0
         default:
             return 0
         }
@@ -95,6 +114,7 @@ class ProfileTableViewController: UITableViewController {
                 cell.fullNameLabel.text = self.user?.fullName
                 cell.professionNameLabel.text = self.user?.professionName
                 cell.locationNameLabel.text = self.user?.locationName
+                cell.aboutLabel.text = self.user?.about
                 return cell
             case 1:
                 let cell = tableView.dequeueReusableCellWithIdentifier("cellProfileButtons", forIndexPath: indexPath) as! ProfileButtonsTableViewCell
@@ -124,7 +144,7 @@ class ProfileTableViewController: UITableViewController {
                 let cell = tableView.dequeueReusableCellWithIdentifier("cellProfileSegmentedControl", forIndexPath: indexPath) as! ProfileSegmentedControlTableViewCell
                 self.selectedSegment == 0 ? cell.setPostsButtonActive() : cell.setAboutButtonActive()
                 cell.postsButton.addTarget(self, action: #selector(ProfileTableViewController.postsSegmentButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-                cell.aboutButton.addTarget(self, action: #selector(ProfileTableViewController.aboutSegmentButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+                cell.aboutButton.addTarget(self, action: #selector(ProfileTableViewController.experienceSegmentButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
                 return cell
             default:
                 return UITableViewCell()
@@ -140,19 +160,50 @@ class ProfileTableViewController: UITableViewController {
                 return cell
             }
             let cell = tableView.dequeueReusableCellWithIdentifier("cellPostSmall", forIndexPath: indexPath) as! PostSmallTableViewCell
-            let post = posts[indexPath.row]
+            let post = self.posts[indexPath.row]
             cell.postImageView.image = post.image
             cell.titleLabel.text = post.title
             cell.categoryNameLabel.text = post.categoryName
             cell.timeLabel.text = post.creationDateString
             cell.numberOfLikesLabel.text = post.numberOfLikesSmallString
             return cell
+        case 2:
+            let cell = tableView.dequeueReusableCellWithIdentifier("cellTopCategory", forIndexPath: indexPath) as! TopCategoryTableViewCell
+            let topCategory = self.topCategories[indexPath.row]
+            cell.topCategoryNameLabel.text = topCategory.categoryName
+            cell.numberOfPostsLabel.text = topCategory.numberOfPostsString
+            return cell
+        case 3:
+            return UITableViewCell()
+        case 4:
+            return UITableViewCell()
         default:
             return UITableViewCell()
         }
     }
     
     // MARK: UITableViewDelegate
+    
+    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard self.selectedSegment == 1 else {
+            return UITableViewCell()
+        }
+        guard section == 2 || section == 3 || section == 4 else {
+            return UITableViewCell()
+        }
+        let cell = tableView.dequeueReusableCellWithIdentifier("cellHeader") as! HeaderTableViewCell
+        if section == 2 {
+            cell.headerTitle.text = "TOP SKILLS"
+        }
+        if section == 3 {
+            cell.headerTitle.text = "WORK EXPERIENCE"
+        }
+        if section == 4 {
+            cell.headerTitle.text = "EDUCATION"
+        }
+        cell.backgroundColor = UIColor.whiteColor()
+        return cell
+    }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
@@ -178,6 +229,8 @@ class ProfileTableViewController: UITableViewController {
         case 1:
             cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
             cell.selectionStyle = UITableViewCellSelectionStyle.Default
+        case 2:
+            cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
         default:
             return
         }
@@ -204,6 +257,8 @@ class ProfileTableViewController: UITableViewController {
                 return 120.0
             }
             return 108.0
+        case 2:
+            return 25.0
         default:
             return 0.0
         }
@@ -214,7 +269,8 @@ class ProfileTableViewController: UITableViewController {
         case 0:
             switch indexPath.row {
             case 0:
-                return 112.0
+                //return 112.0
+                return UITableViewAutomaticDimension
             case 1:
                 return 50.0
             case 2:
@@ -230,9 +286,21 @@ class ProfileTableViewController: UITableViewController {
                 return 120.0
             }
             return 108.0
+        case 2:
+            return UITableViewAutomaticDimension
         default:
             return 0.0
         }
+    }
+    
+    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        guard self.selectedSegment == 1 else {
+            return 0.0
+        }
+        guard section == 2 || section == 3 || section == 4 else {
+            return 0.0
+        }
+        return 32.0
     }
     
     // MARK: IBActions
@@ -306,7 +374,7 @@ class ProfileTableViewController: UITableViewController {
         self.tableView.reloadData()
     }
     
-    func aboutSegmentButtonTapped(sender: UIButton) {
+    func experienceSegmentButtonTapped(sender: UIButton) {
         self.selectedSegment = 1
         self.tableView.reloadData()
     }
@@ -373,7 +441,7 @@ class ProfileTableViewController: UITableViewController {
                         self.refreshControl?.endRefreshing()
                         return
                     }
-                    let user = User(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, about: awsUser._about, locationName: awsUser._locationName, numberOfFollowers: awsUser._numberOfFollowers, numberOfPosts: awsUser._numberOfPosts)
+                    let user = User(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, about: awsUser._about, locationName: awsUser._locationName, numberOfFollowers: awsUser._numberOfFollowers, numberOfPosts: awsUser._numberOfPosts, topCategories: awsUser._topCategories)
                     self.user = user
                     self.navigationItem.title = self.user?.preferredUsername
                     let indexSet = NSIndexSet(index: 0)
@@ -384,11 +452,43 @@ class ProfileTableViewController: UITableViewController {
                         self.downloadImage(profilePicUrl, imageType: .UserProfilePic, indexPath: indexPath)
                     }
                     if let userId = awsUser._userId {
+                        self.queryUserCategoriesNumberOfPostsSorted(userId)
                         self.queryUserPostsDateSorted(userId)
                     }
                 }
             })
             return nil
+        })
+    }
+    
+    private func queryUserCategoriesNumberOfPostsSorted(userId: String) {
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().queryUserCategoriesNumberOfPostsSortedDynamoDB(userId, completionHandler: {
+            (response: AWSDynamoDBPaginatedOutput?, error: NSError?) in
+            dispatch_async(dispatch_get_main_queue(), {
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                if let error = error {
+                    print("queryUserCategoriesNumberOfPostsSorted error: \(error)")
+                    self.refreshControl?.endRefreshing()
+                } else {
+                    guard let awsUserCategories = response?.items as? [AWSUserCategory] else {
+                        self.refreshControl?.endRefreshing()
+                        return
+                    }
+                    guard awsUserCategories.count > 0 else {
+                        self.refreshControl?.endRefreshing()
+                        return
+                    }
+                    // Reset topCategories.
+                    self.topCategories = []
+                    for (_, awsUserCategory) in awsUserCategories.enumerate() {
+                        let category = Category(categoryName: awsUserCategory._categoryName, numberOfPosts: awsUserCategory._numberOfPosts)
+                        self.topCategories.append(category)
+                    }
+                    self.tableView.reloadData()
+                    self.refreshControl?.endRefreshing()
+                }
+            })
         })
     }
     

@@ -2,7 +2,7 @@
 //  SearchUserTableViewCell.swift
 //  Profeey
 //
-//  Created by Antonio Zdelican on 17/08/16.
+//  Created by Antonio Zdelican on 15/09/16.
 //  Copyright © 2016 Profeey. All rights reserved.
 //
 
@@ -13,7 +13,7 @@ class SearchUserTableViewCell: UITableViewCell {
     @IBOutlet weak var profilePicImageView: UIImageView!
     @IBOutlet weak var fullNameLabel: UILabel!
     @IBOutlet weak var professionLabel: UILabel!
-    
+
     override func awakeFromNib() {
         super.awakeFromNib()
         self.profilePicImageView.layer.cornerRadius = 20.0

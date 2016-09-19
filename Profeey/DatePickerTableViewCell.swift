@@ -1,17 +1,17 @@
 //
-//  ProfileHeaderTableViewCell.swift
+//  DatePickerTableViewCell.swift
 //  Profeey
 //
-//  Created by Antonio Zdelican on 28/08/16.
+//  Created by Antonio Zdelican on 19/09/16.
 //  Copyright © 2016 Profeey. All rights reserved.
 //
 
 import UIKit
 
-class ProfileHeaderTableViewCell: UITableViewCell {
-    
-    @IBOutlet weak var headerLabel: UILabel!
+class DatePickerTableViewCell: UITableViewCell {
 
+    @IBOutlet weak var pickerView: UIPickerView!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
     }

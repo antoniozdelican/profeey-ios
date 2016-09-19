@@ -9,7 +9,7 @@
 import UIKit
 
 protocol SelectCategoryDelegate {
-    func categorySelected(index: Int)
+    func categorySelected(indexPath: NSIndexPath)
 }
 
 class SearchCategoriesTableViewController: UITableViewController {
@@ -33,39 +33,40 @@ class SearchCategoriesTableViewController: UITableViewController {
     // MARK: UITableViewDataSource
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 3
+        if self.isSearching {
+            return 1
+        }
+        if !self.isSearching && self.categories.count == 0 {
+            return 1
+        }
+        return 1
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch section {
-        case 0:
-            // Searching cell.
-            return self.isSearching ? 1 : 0
-        case 1:
-            // No results cell.
-            return self.isSearching ? 0 : (self.categories.count > 0 ? 0 : 1)
-        default:
-            // Category cell.
-            return self.isSearching ? 0 : self.categories.count
+        if self.isSearching {
+            return 1
         }
+        if !self.isSearching && self.categories.count == 0 {
+            return 1
+        }
+        return self.categories.count
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        switch indexPath.section {
-        case 0:
+        if self.isSearching {
             let cell = tableView.dequeueReusableCellWithIdentifier("cellSearching", forIndexPath: indexPath) as! SearchingTableViewCell
             cell.activityIndicator.startAnimating()
             return cell
-        case 1:
+        }
+        if !self.isSearching && self.categories.count == 0 {
             let cell = tableView.dequeueReusableCellWithIdentifier("cellNoResults", forIndexPath: indexPath) as! NoResultsTableViewCell
             return cell
-        default:
-            let cell = tableView.dequeueReusableCellWithIdentifier("cellCategory", forIndexPath: indexPath) as! SearchCategoryTableViewCell
-            let category = self.categories[indexPath.row]
-            cell.categoryNameLabel.text = category.categoryName
-            cell.numberOfUsersPostsLabel.text = category.numberOfPostsString
-            return cell
         }
+        let category = self.categories[indexPath.row]
+        let cell = tableView.dequeueReusableCellWithIdentifier("cellSearchCategory", forIndexPath: indexPath) as! SearchCategoryTableViewCell
+        cell.categoryNameLabel.text = category.categoryName
+        cell.numberOfUsersPostsLabel.text = category.numberOfPostsString
+        return cell
     }
     
     // MARK: UITableViewDelegate
@@ -74,12 +75,13 @@ class SearchCategoriesTableViewController: UITableViewController {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
         let cell = tableView.cellForRowAtIndexPath(indexPath)
         if cell is SearchCategoryTableViewCell {
-            self.selectCategoryDelegate?.categorySelected(indexPath.row)
+            self.selectCategoryDelegate?.categorySelected(indexPath)
         }
     }
     
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         cell.layoutMargins = UIEdgeInsetsZero
+        cell.separatorInset = UIEdgeInsetsMake(0.0, 12.0, 0.0, 12.0)
     }
     
     // MARK: UIScrollViewDelegate

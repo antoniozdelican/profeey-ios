@@ -24,6 +24,7 @@ class AWSUser: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     var _profilePicUrl: String?
     var _searchFirstName: String?
     var _searchLastName: String?
+    var _topCategories: [String: String]?
     
     class func dynamoDBTableName() -> String {
         
@@ -50,6 +51,7 @@ class AWSUser: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
             "_profilePicUrl" : "profilePicUrl",
             "_searchFirstName" : "searchFirstName",
             "_searchLastName" : "searchLastName",
+            "_topCategories" : "topCategories",
         ]
     }
     

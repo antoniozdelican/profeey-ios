@@ -1,17 +1,17 @@
 //
-//  ProfileTopCategoryTableViewCell.swift
+//  CurrentlyWorkingTableViewCell.swift
 //  Profeey
 //
-//  Created by Antonio Zdelican on 29/08/16.
+//  Created by Antonio Zdelican on 19/09/16.
 //  Copyright © 2016 Profeey. All rights reserved.
 //
 
 import UIKit
 
-class ProfileTopCategoryTableViewCell: UITableViewCell {
+class CurrentlyWorkingTableViewCell: UITableViewCell {
 
-    @IBOutlet weak var topCategoryNameLabel: UILabel!
-    @IBOutlet weak var numberOfPostsLabel: UILabel!
+    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var currentlyWorkingSwitch: UISwitch!
     
     override func awakeFromNib() {
         super.awakeFromNib()

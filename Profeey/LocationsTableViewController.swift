@@ -91,6 +91,8 @@ class LocationsTableViewController: UITableViewController {
         return cell
     }
     
+    // MARK: UITableViewDelegate
+    
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let searchText = self.searchBar.text else {
             return nil
@@ -100,8 +102,6 @@ class LocationsTableViewController: UITableViewController {
         cell.backgroundColor = UIColor.whiteColor()
         return cell
     }
-    
-    // MARK: UITableViewDelegate
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)

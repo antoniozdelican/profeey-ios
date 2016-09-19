@@ -15,7 +15,7 @@ class EditPostTableViewController: UITableViewController {
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var descriptionTextView: UITextView!
     @IBOutlet weak var descriptionFakePlaceholderLabel: UILabel!
-    @IBOutlet weak var categoryLabel: UILabel!
+    @IBOutlet weak var categoryNameLabel: UILabel!
     @IBOutlet weak var removeCategoryButton: UIButton!
     @IBOutlet weak var addCategoryTableViewCell: UITableViewCell!
     
@@ -50,10 +50,12 @@ class EditPostTableViewController: UITableViewController {
     
     // MARK: Navigation
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if let navigationController = segue.destinationViewController as? UINavigationController,
-            let childViewController = navigationController.childViewControllers[0] as? AddCategoryViewController {
-            childViewController.addCategoryDelegate = self
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {        
+        if let destinationViewController = segue.destinationViewController as? UINavigationController,
+            let childViewController = destinationViewController.childViewControllers[0] as? CategoriesTableViewController {
+            if self.categoryNameLabel.textColor == Colors.blue {
+                childViewController.categoryName = self.categoryNameLabel.text
+            }
         }
     }
     
@@ -71,18 +73,19 @@ class EditPostTableViewController: UITableViewController {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
         let cell = tableView.cellForRowAtIndexPath(indexPath)
         if cell == self.addCategoryTableViewCell && !self.categoryAdded {
-            self.performSegueWithIdentifier("segueToAddCategoryVc", sender: self)
+            self.performSegueWithIdentifier("segueToCategoriesVc", sender: self)
         }
     }
     
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         cell.layoutMargins = UIEdgeInsetsZero
+        cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0)
     }
     
     // MARK: UIScrollViewDelegate
     
     override func scrollViewWillBeginDragging(scrollView: UIScrollView) {
-        self.descriptionTextView.resignFirstResponder()
+        self.view.endEditing(true)
     }
     
     // MARK: IBActions
@@ -105,11 +108,34 @@ class EditPostTableViewController: UITableViewController {
     @IBAction func removeCategoryButtonTapped(sender: AnyObject) {
         self.categoryName = nil
         self.removeCategoryButton.hidden = true
-        self.categoryLabel.text = "Add Skill"
-        self.categoryLabel.textColor = Colors.black
-        // Allow segueToAddCategoryVc.
+        self.categoryNameLabel.text = "Add Skill"
+        self.categoryNameLabel.textColor = Colors.black
+        // Allow segueToCategoriesVc.
         self.categoryAdded = false
         self.addCategoryTableViewCell.selectionStyle = UITableViewCellSelectionStyle.Default
+    }
+    
+    @IBAction func unwindToEditPostTableViewController(segue: UIStoryboardSegue) {
+        if let sourceViewController = segue.sourceViewController as? CategoriesTableViewController {
+            guard let categoryName = sourceViewController.categoryName else {
+                return
+            }
+            if categoryName.isEmpty {
+                self.categoryName = nil
+                self.categoryNameLabel.text = "Add Skill"
+                self.categoryNameLabel.textColor = Colors.black
+                self.removeCategoryButton.hidden = true
+                self.categoryAdded = false
+                self.addCategoryTableViewCell.selectionStyle = UITableViewCellSelectionStyle.Default
+            } else {
+                self.categoryName = categoryName
+                self.categoryNameLabel.text = categoryName
+                self.categoryNameLabel.textColor = Colors.blue
+                self.removeCategoryButton.hidden = false
+                self.categoryAdded = true
+                self.addCategoryTableViewCell.selectionStyle = UITableViewCellSelectionStyle.None
+            }
+        }
     }
 }
 
@@ -125,18 +151,5 @@ extension EditPostTableViewController: UITextViewDelegate {
         self.tableView.endUpdates()
         UIView.setAnimationsEnabled(true)
         self.tableView.setContentOffset(currentOffset, animated: false)
-    }
-}
-
-extension EditPostTableViewController: AddCategoryDelegate {
-    
-    func addCategory(category: Category) {
-        self.categoryName = category.categoryName
-        self.removeCategoryButton.hidden = false
-        self.categoryLabel.text = category.categoryName
-        self.categoryLabel.textColor = Colors.blue
-        // Prevent segueToAddCategoryVc.
-        self.categoryAdded = true
-        self.addCategoryTableViewCell.selectionStyle = UITableViewCellSelectionStyle.None
     }
 }

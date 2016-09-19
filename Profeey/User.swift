@@ -23,6 +23,7 @@ class User: NSObject {
     var locationName: String?
     var numberOfFollowers: NSNumber?
     var numberOfPosts: NSNumber?
+    var topCategories: [String: String]?
     
     // For SignUp flow.
     var email: String?
@@ -75,7 +76,7 @@ class User: NSObject {
     }
     
     // Full user for ProfileVc.
-    convenience init(userId: String?, firstName: String?, lastName: String?, preferredUsername: String?, professionName: String?, profilePicUrl: String?, about: String?, locationName: String?, numberOfFollowers: NSNumber?, numberOfPosts: NSNumber?) {
+    convenience init(userId: String?, firstName: String?, lastName: String?, preferredUsername: String?, professionName: String?, profilePicUrl: String?, about: String?, locationName: String?, numberOfFollowers: NSNumber?, numberOfPosts: NSNumber?, topCategories: [String: String]?) {
         self.init()
         self.userId = userId
         self.firstName = firstName
@@ -88,5 +89,6 @@ class User: NSObject {
         self.locationName = locationName
         self.numberOfFollowers = numberOfFollowers
         self.numberOfPosts = numberOfPosts
+        self.topCategories = topCategories
     }
 }
