@@ -62,7 +62,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let colorView = UIView()
         colorView.backgroundColor = Colors.greyLight
         UITableViewCell.appearance().selectedBackgroundView = colorView
-        UITableViewCell.appearance().backgroundColor = UIColor.clearColor()
+        //UITableViewCell.appearance().backgroundColor = UIColor.clearColor()
         
         // UITextField
         UITextField.appearance().tintColor = Colors.black

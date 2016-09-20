@@ -2,7 +2,7 @@
 //  EditProfileTableViewController.swift
 //  Profeey
 //
-//  Created by Antonio Zdelican on 08/07/16.
+//  Created by Antonio Zdelican on 20/09/16.
 //  Copyright © 2016 Profeey. All rights reserved.
 //
 
@@ -10,30 +10,31 @@ import UIKit
 import AWSMobileHubHelper
 import MapKit
 
-class EditProfileTableViewController: UITableViewController {
+protocol EditAboutDelegate {
+    func toggleAboutFakePlaceholderLabel(hidden: Bool)
+}
 
-    @IBOutlet weak var profilePicImageView: UIImageView!
-    @IBOutlet weak var firstNameTextField: UITextField!
-    @IBOutlet weak var lastNameTextField: UITextField!
-    @IBOutlet weak var aboutFakePlaceholderLabel: UILabel!
-    @IBOutlet weak var aboutTextView: UITextView!
-    @IBOutlet weak var professionNameLabel: UILabel!
-    @IBOutlet weak var locationNameLabel: UILabel!
+class EditProfileTableViewController: UITableViewController {
     
     var user: User?
-    private var newProfilePicImageData: NSData?
+    
+    // Properties.
+    var profilePic: UIImage?
+    var profilePicUrl: String?
+    var firstName: String?
+    var lastName: String?
+    var about: String?
+    var locationName: String?
+    var professionName: String?
     
     var profilePicUrlToRemove: String?
-    var updatedUser: User?
+    private var newProfilePicImageData: NSData?
     
+    private var editAboutDelegate: EditAboutDelegate?
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.configureProfile()
-    }
-    
-    override func viewWillDisappear(animated: Bool) {
-        super.viewWillDisappear(animated)
-        self.view.endEditing(true)
+        self.configureUserData()
     }
 
     override func didReceiveMemoryWarning() {
@@ -42,46 +43,26 @@ class EditProfileTableViewController: UITableViewController {
     
     // MARK: Configuration
     
-    private func configureProfile() {
-        self.profilePicImageView.layer.cornerRadius = 40.0
-        self.profilePicImageView.clipsToBounds = true
-        self.profilePicImageView.image = self.user?.profilePic
-        
-        self.firstNameTextField.delegate = self
-        self.firstNameTextField.text = self.user?.firstName
-        
-        self.lastNameTextField.delegate = self
-        self.lastNameTextField.text = self.user?.lastName
-        
-        self.aboutTextView.delegate = self
-        self.aboutTextView.text = self.user?.about
-        self.aboutFakePlaceholderLabel.hidden = !self.aboutTextView.text.isEmpty
-        
-        if let professionName = self.user?.professionName {
-            self.professionNameLabel.text = professionName
-            self.professionNameLabel.textColor = Colors.black
-        }
-        
-        if let locationName = self.user?.locationName {
-            self.locationNameLabel.text = locationName
-            self.locationNameLabel.textColor = Colors.black
-        }
+    private func configureUserData() {
+        self.profilePic = self.user?.profilePic
+        self.profilePicUrl = self.user?.profilePicUrl
+        self.firstName = self.user?.firstName
+        self.lastName = self.user?.lastName
+        self.about = self.user?.about
+        self.locationName = self.user?.locationName
+        self.professionName = self.user?.professionName
     }
     
     // MARK: Navigation
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if let destinationViewController = segue.destinationViewController as? UINavigationController,
-            let childViewController = destinationViewController.childViewControllers[0] as? ProfessionsTableViewController {
-            if self.professionNameLabel.textColor == Colors.black {
-                childViewController.professionName = self.professionNameLabel.text
-            }
+            let childViewController = destinationViewController.childViewControllers[0] as? LocationsTableViewController {
+            childViewController.locationName = self.locationName
         }
         if let destinationViewController = segue.destinationViewController as? UINavigationController,
-            let childViewController = destinationViewController.childViewControllers[0] as? LocationsTableViewController {
-            if self.locationNameLabel.textColor == Colors.black {
-                childViewController.locationName = self.locationNameLabel.text
-            }
+            let childViewController = destinationViewController.childViewControllers[0] as? ProfessionsTableViewController {
+            childViewController.professionName = self.professionName
         }
         if let destinationViewController = segue.destinationViewController as? ScrollViewController {
             // Capture.
@@ -90,7 +71,7 @@ class EditProfileTableViewController: UITableViewController {
     }
     
     override func shouldPerformSegueWithIdentifier(identifier: String, sender: AnyObject?) -> Bool {
-        guard identifier == "segueToLocationVc" else {
+        guard identifier == "segueToLocationsVc" else {
             return true
         }
         // Ask for location authorization.
@@ -116,33 +97,189 @@ class EditProfileTableViewController: UITableViewController {
             return true
         }
     }
+
+    // MARK: UITableViewDataSource
+
+    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return 3
+    }
+
+    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        switch section {
+        case 0:
+            return 6
+        case 1:
+            return 1
+        case 2:
+            return 1
+        default:
+            return 0
+        }
+    }
+
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        switch indexPath.section {
+        case 0:
+            switch indexPath.row {
+            case 0:
+                let cell = tableView.dequeueReusableCellWithIdentifier("cellEditProfilePic", forIndexPath: indexPath) as! EditProfilePicTableViewCell
+                cell.profilePicImageView.image = self.profilePic
+                return cell
+            case 1:
+                let cell = tableView.dequeueReusableCellWithIdentifier("cellEditFirstName", forIndexPath: indexPath) as! EditFirstNameTableViewCell
+                cell.firstNameTextField.text = self.firstName
+                cell.firstNameTextField.addTarget(self, action: #selector(EditProfileTableViewController.firstNameTextFieldChanged(_:)), forControlEvents: UIControlEvents.EditingChanged)
+                return cell
+            case 2:
+                let cell = tableView.dequeueReusableCellWithIdentifier("cellEditLastName", forIndexPath: indexPath) as! EditLastNameTableViewCell
+                cell.lastNameTextField.text = self.lastName
+                cell.lastNameTextField.addTarget(self, action: #selector(EditProfileTableViewController.lastNameTextFieldChanged(_:)), forControlEvents: UIControlEvents.EditingChanged)
+                return cell
+            case 3:
+                let cell = tableView.dequeueReusableCellWithIdentifier("cellEditAbout", forIndexPath: indexPath) as! EditAboutTableViewCell
+                cell.aboutTextView.text = self.about
+                cell.aboutTextView.delegate = self
+                if let about = self.about {
+                    cell.aboutFakePlaceholderLabel.hidden = !about.isEmpty
+                }
+                self.editAboutDelegate = cell
+                return cell
+            case 4:
+                let cell = tableView.dequeueReusableCellWithIdentifier("cellEditLocation", forIndexPath: indexPath) as! EditLocationTableViewCell
+                if let locationName = self.locationName {
+                    cell.locationNameLabel.text = locationName
+                    cell.locationNameLabel.textColor = Colors.black
+                } else {
+                    cell.locationNameLabel.text = "Add location"
+                    cell.locationNameLabel.textColor = Colors.disabled
+                }
+                return cell
+            case 5:
+                let cell = tableView.dequeueReusableCellWithIdentifier("cellEditProfession", forIndexPath: indexPath) as! EditProfessionTableViewCell
+                if let professionName = self.professionName {
+                    cell.professionNameLabel.text = professionName
+                    cell.professionNameLabel.textColor = Colors.black
+                } else {
+                    cell.professionNameLabel.text = "Add profession"
+                    cell.professionNameLabel.textColor = Colors.disabled
+                }
+                return cell
+            default:
+                return UITableViewCell()
+            }
+        case 1:
+            let cell = tableView.dequeueReusableCellWithIdentifier("cellAddExperience", forIndexPath: indexPath)
+            return cell
+        case 2:
+            let cell = tableView.dequeueReusableCellWithIdentifier("cellAddExperience", forIndexPath: indexPath)
+            return cell
+        default:
+            return UITableViewCell()
+        }
+    }
     
     // MARK: UITableViewDelegate
     
-    override func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 52.0
-    }
-    
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return UITableViewAutomaticDimension
-    }
-    
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        if indexPath.row == 0 {
-            self.editProfilePicCellTapped()
+    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        switch section {
+        case 1:
+            let cell = tableView.dequeueReusableCellWithIdentifier("cellHeader") as! HeaderTableViewCell
+            cell.headerTitle.text = "WORK EXPERIENCE"
+            // for bug returning contentView
+            return cell.contentView
+        case 2:
+            let cell = tableView.dequeueReusableCellWithIdentifier("cellHeader") as! HeaderTableViewCell
+            cell.headerTitle.text = "EDUCATION"
+            // for bug returning contentView
+            return cell.contentView
+        default:
+            return nil
         }
     }
     
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         cell.layoutMargins = UIEdgeInsetsZero
         cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0)
-        if indexPath.row == 0 {
-            cell.separatorInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0)
-        }
         cell.selectionStyle = UITableViewCellSelectionStyle.None
-        if indexPath.row == 4 || indexPath.row == 5 {
-           cell.selectionStyle = UITableViewCellSelectionStyle.Default
+        switch indexPath.section {
+        case 0:
+            switch indexPath.row {
+            case 0:
+                cell.separatorInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0)
+            case 4:
+                cell.selectionStyle = UITableViewCellSelectionStyle.Default
+            case 5:
+                cell.selectionStyle = UITableViewCellSelectionStyle.Default
+                cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0)
+            default:
+                return
+            }
+        case 1:
+            switch indexPath.row {
+            case 0:
+                cell.selectionStyle = UITableViewCellSelectionStyle.Default
+            default:
+                return
+            }
+        default:
+            return
+        }
+    }
+    
+    override func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        switch indexPath.section {
+        case 0:
+            switch indexPath.row {
+            case 0:
+                return 112.0
+            default:
+                return 52.0
+            }
+        default:
+            return 52.0
+        }
+    }
+    
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        switch indexPath.section {
+        case 0:
+            switch indexPath.row {
+            case 0:
+                return 112.0
+            case 1:
+                return 52.0
+            case 2:
+                return 52.0
+            default:
+                return UITableViewAutomaticDimension
+            }
+        default:
+            return UITableViewAutomaticDimension
+        }
+    }
+    
+    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        switch section {
+        case 1:
+            return 52.0
+        case 2:
+            return 52.0
+        default:
+            return 0.0
+        }
+    }
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        let cell = tableView.cellForRowAtIndexPath(indexPath)
+        if cell is EditProfilePicTableViewCell {
+            self.editProfilePicCellTapped()
+        }
+        if cell is EditLocationTableViewCell {
+            self.performSegueWithIdentifier("segueToLocationsVc", sender: self)
+        }
+        if cell is EditProfessionTableViewCell {
+            self.performSegueWithIdentifier("segueToProfessionsVc", sender: self)
         }
     }
     
@@ -154,13 +291,89 @@ class EditProfileTableViewController: UITableViewController {
     
     // MARK: Tappers
     
+    func firstNameTextFieldChanged(sender: AnyObject) {
+        guard let textField = sender as? UITextField else {
+            return
+        }
+        guard let text = textField.text else {
+            return
+        }
+        self.firstName = text.trimm().isEmpty ? nil : text.trimm()
+    }
+    
+    func lastNameTextFieldChanged(sender: AnyObject) {
+        guard let textField = sender as? UITextField else {
+            return
+        }
+        guard let text = textField.text else {
+            return
+        }
+        self.lastName = text.trimm().isEmpty ? nil : text.trimm()
+    }
+    
+    // MARK: IBActions
+    
+    @IBAction func saveButtonTapped(sender: AnyObject) {
+        self.view.endEditing(true)
+        FullScreenIndicator.show()
+        if let newProfilePicImageData = self.newProfilePicImageData {
+            self.uploadImage(newProfilePicImageData)
+        } else {
+            self.saveUser()
+        }
+    }
+    
+    @IBAction func cancelButtonTapped(sender: AnyObject) {
+        self.view.endEditing(true)
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    @IBAction func unwindToEditProfileTableViewController(segue: UIStoryboardSegue) {
+        if let sourceViewController = segue.sourceViewController as? LocationsTableViewController {
+            guard let locationName = sourceViewController.locationName else {
+                self.locationName = nil
+                self.tableView.reloadData()
+                return
+            }
+            self.locationName = locationName.isEmpty ? nil : locationName
+            self.tableView.reloadData()
+        }
+        if let sourceViewController = segue.sourceViewController as? ProfessionsTableViewController {
+            guard let professionName = sourceViewController.professionName else {
+                self.professionName = nil
+                self.tableView.reloadData()
+                return
+            }
+            self.professionName = professionName.isEmpty ? nil : professionName
+            self.tableView.reloadData()
+        }
+        if let sourceViewController = segue.sourceViewController as? PreviewViewController {
+            guard let finalImage = sourceViewController.finalImage,
+                let imageData = UIImageJPEGRepresentation(finalImage, 0.6)  else {
+                return
+            }
+            self.newProfilePicImageData = imageData
+            if self.profilePicUrl != nil {
+                self.profilePicUrlToRemove = self.profilePicUrl
+                self.profilePicUrl = nil
+            }
+            self.profilePic = finalImage
+            self.tableView.reloadData()
+        }
+    }
+    
+    // MARK: Helpers
+    
     private func editProfilePicCellTapped() {
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
         let removePhotoAction = UIAlertAction(title: "Remove Photo", style: UIAlertActionStyle.Destructive, handler: {
             (alert: UIAlertAction) in
             self.newProfilePicImageData = nil
-            self.profilePicUrlToRemove = self.user?.profilePicUrl
-            self.profilePicImageView.image = nil
+            if self.profilePicUrl != nil {
+                self.profilePicUrlToRemove = self.profilePicUrl
+                self.profilePicUrl = nil
+            }
+            self.profilePic = nil
             self.tableView.reloadData()
         })
         alertController.addAction(removePhotoAction)
@@ -174,83 +387,13 @@ class EditProfileTableViewController: UITableViewController {
         self.presentViewController(alertController, animated: true, completion: nil)
     }
     
-    // MARK: IBActions
-    
-    @IBAction func unwindToEditProfileTableViewController(segue: UIStoryboardSegue) {
-        if let sourceViewController = segue.sourceViewController as? ProfessionsTableViewController {
-            guard let professionName = sourceViewController.professionName else {
-                return
-            }
-            if professionName.isEmpty {
-                self.professionNameLabel.text = "Add profession"
-                self.professionNameLabel.textColor = Colors.disabled
-            } else {
-                self.professionNameLabel.text = professionName
-                self.professionNameLabel.textColor = Colors.black
-            }
-        }
-        if let sourceViewController = segue.sourceViewController as? LocationsTableViewController {
-            guard let locationName = sourceViewController.locationName else {
-                return
-            }
-            if locationName.isEmpty {
-                self.locationNameLabel.text = "Add location"
-                self.locationNameLabel.textColor = Colors.disabled
-            } else {
-                self.locationNameLabel.text = locationName
-                self.locationNameLabel.textColor = Colors.black
-            }
-        }
-        if let sourceViewController = segue.sourceViewController as? PreviewViewController {
-            guard let finalImage = sourceViewController.finalImage,
-                let imageData = UIImageJPEGRepresentation(finalImage, 0.6)  else {
-                return
-            }
-            self.newProfilePicImageData = imageData
-            self.profilePicUrlToRemove = self.user?.profilePicUrl
-            self.profilePicImageView.image = finalImage
-            self.tableView.reloadData()
-        }
-    }
-    
-    @IBAction func cancelButtonTapped(sender: AnyObject) {
-        self.dismissViewControllerAnimated(true, completion: nil)
-    }
-    
-    @IBAction func saveButtonTapped(sender: AnyObject) {
-        self.view.endEditing(true)
-        
-        FullScreenIndicator.show()
-        if let newProfilePicImageData = self.newProfilePicImageData {
-            self.uploadImage(newProfilePicImageData)
-        } else {
-            if self.profilePicUrlToRemove != nil {
-                self.user?.profilePicUrl = nil
-            }
-            self.saveUser()
-        }
-    }
-    
     // MARK: AWS
     
     private func saveUser() {
-        guard let firstNameText = self.firstNameTextField.text,
-            let lastNameText = self.lastNameTextField.text,
-            let aboutText = self.aboutTextView.text else {
-                return
-        }
-        
-        // Take new (or old) values from textFields/labels
-        let firstName: String? = firstNameText.trimm().isEmpty ? nil : firstNameText.trimm()
-        let lastName: String? = lastNameText.trimm().isEmpty ? nil : lastNameText.trimm()
-        let about: String? = aboutText.trimm().isEmpty ? nil : aboutText.trimm()
-        let professionName: String? = (self.professionNameLabel.textColor == Colors.black) ? self.professionNameLabel.text?.trimm() : nil
-        let locationName: String? = (self.locationNameLabel.textColor == Colors.black) ? self.locationNameLabel.text?.trimm() : nil
-        
-        self.updatedUser = User(userId: self.user?.userId, firstName: firstName, lastName: lastName, professionName: professionName, profilePicUrl: self.user?.profilePicUrl, about: about, locationName: locationName)
+        let updatedUser = User(userId: self.user?.userId, firstName: self.firstName, lastName: self.lastName, professionName: self.professionName, profilePicUrl: self.profilePicUrl, about: self.about, locationName: self.locationName)
         
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().saveUserDynamoDB(self.updatedUser, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().saveUserDynamoDB(updatedUser, completionHandler: {
             (task: AWSTask) in
             dispatch_async(dispatch_get_main_queue(), {
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false
@@ -260,8 +403,6 @@ class EditProfileTableViewController: UITableViewController {
                     let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.userInfo["message"] as? String, cancelButtonTitle: "Ok")
                     self.presentViewController(alertController, animated: true, completion: nil)
                 } else {
-                    // Update user object for ProfileVc.
-                    self.updatedUser?.profilePic = self.profilePicImageView.image
                     self.performSegueWithIdentifier("segueUnwindToProfileVc", sender: self)
                 }
             })
@@ -292,32 +433,24 @@ class EditProfileTableViewController: UITableViewController {
                         self.presentViewController(alertController, animated: true, completion: nil)
                     } else {
                         print("uploadImageS3 success!")
-                        self.user?.profilePicUrl = imageKey
+                        self.profilePicUrl = imageKey
                         self.saveUser()
                     }
                 })
         })
     }
-}
-
-extension EditProfileTableViewController: UITextFieldDelegate {
     
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
-        switch textField {
-        case self.firstNameTextField:
-            self.firstNameTextField.resignFirstResponder()
-            self.lastNameTextField.becomeFirstResponder()
-        default:
-            return true
-        }
-        return true
-    }
 }
 
 extension EditProfileTableViewController: UITextViewDelegate {
     
     func textViewDidChange(textView: UITextView) {
-        self.aboutFakePlaceholderLabel.hidden = !textView.text.isEmpty
+        if textView.text.trimm().isEmpty {
+            self.editAboutDelegate?.toggleAboutFakePlaceholderLabel(false)
+        } else {
+            self.editAboutDelegate?.toggleAboutFakePlaceholderLabel(true)
+        }
+        self.about = textView.text.trimm().isEmpty ? nil : textView.text.trimm()
         
         // Changing height of the cell
         let currentOffset = self.tableView.contentOffset

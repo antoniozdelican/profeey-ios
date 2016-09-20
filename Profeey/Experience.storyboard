@@ -5,7 +5,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <scenes>
-        <!--Root View Controller-->
+        <!--Experience-->
         <scene sceneID="Ez6-ZV-zK9">
             <objects>
                 <tableViewController id="Nhn-DR-YF1" customClass="ExperienceTableViewController" customModule="Profeey" customModuleProvider="target" sceneMemberID="viewController">
@@ -168,7 +168,18 @@
                             <outlet property="delegate" destination="Nhn-DR-YF1" id="otk-En-GDR"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Root View Controller" id="cl3-Ik-ptM"/>
+                    <navigationItem key="navigationItem" title="Experience" id="cl3-Ik-ptM">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="m2t-L3-Kit">
+                            <connections>
+                                <action selector="cancelButtonTapped:" destination="Nhn-DR-YF1" id="Jd0-hG-EU9"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="qTO-A7-IcV">
+                            <connections>
+                                <action selector="doneButtonTapped:" destination="Nhn-DR-YF1" id="JOA-aj-D6Y"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FuT-Oe-NmA" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

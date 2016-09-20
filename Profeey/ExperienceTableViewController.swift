@@ -12,36 +12,42 @@ class ExperienceTableViewController: UITableViewController {
     
     var userExperience: UserExperience?
     
+    private var position: String?
+    private var organization: String?
+    private var fromMonth: Int?
+    private var fromYear: Int?
+    private var toMonth: Int?
+    private var toYear: Int?
+    
     private var fromDatePickerActive: Bool = false
     private var toDatePickerActive: Bool = false
     private var isCurrentlyWorking: Bool = true
     private var months: [Int] = []
     private var years: [Int] = []
-    
     private var currentMonth: Int!
     private var currentYear: Int!
-    
-    private var fromMonth: Int?
-    private var fromYear: Int?
-    private var toMonth: Int?
-    private var toYear: Int?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.configureDate()
         
         // TEST
-        let fromDate = NSNumber(double: NSDate().timeIntervalSince1970)
-        self.userExperience = UserExperience(userId: nil, position: nil, organization: nil, fromDate: fromDate, toDate: nil, experienceType: 0)
+        self.userExperience = UserExperience()
+        
+        // Configuration
+        self.position = self.userExperience?.position
+        self.organization = self.userExperience?.organization
         if let fromDate = self.userExperience?.fromDate {
             self.fromMonth = fromDate.getMonth()
             self.fromYear = fromDate.getYear()
+        } else {
+            self.fromMonth = self.currentMonth
+            self.fromYear = self.currentYear
         }
         if let toDate = self.userExperience?.toDate {
             self.toMonth = toDate.getMonth()
             self.toYear = toDate.getYear()
         } else {
-            // In case currentlyWorking is on.
             self.toMonth = self.currentMonth
             self.toYear = self.currentYear
         }
@@ -95,13 +101,15 @@ class ExperienceTableViewController: UITableViewController {
             switch indexPath.row {
             case 0:
                 let cell = tableView.dequeueReusableCellWithIdentifier("cellPosition", forIndexPath: indexPath) as! PositionTableViewCell
-                cell.positionTextField.text = self.userExperience?.position
-                cell.positionTextField.addTarget(self, action: #selector(ExperienceTableViewController.positionTextFieldTapped(_:)), forControlEvents: UIControlEvents.EditingDidBegin)
+                cell.positionTextField.text = self.position
+                cell.positionTextField.delegate = self
+                cell.positionTextField.addTarget(self, action: #selector(ExperienceTableViewController.positionTextFieldDidEndEditing(_:)), forControlEvents: UIControlEvents.EditingDidEnd)
                 return cell
             case 1:
                 let cell = tableView.dequeueReusableCellWithIdentifier("cellOrganization", forIndexPath: indexPath) as! OrganizationTableViewCell
-                cell.organizationTextField.text = self.userExperience?.organization
-                cell.organizationTextField.addTarget(self, action: #selector(ExperienceTableViewController.organizationTextFieldTapped(_:)), forControlEvents: UIControlEvents.EditingDidBegin)
+                cell.organizationTextField.text = self.organization
+                cell.organizationTextField.delegate = self
+                cell.organizationTextField.addTarget(self, action: #selector(ExperienceTableViewController.organizationTextFieldDidEndEditing(_:)), forControlEvents: UIControlEvents.EditingDidEnd)
                 return cell
             default:
                 return UITableViewCell()
@@ -238,12 +246,18 @@ class ExperienceTableViewController: UITableViewController {
     
     // MARK: Tappers
     
-    func positionTextFieldTapped(sender: AnyObject) {
-        self.removeDatePickers()
+    func positionTextFieldDidEndEditing(sender: AnyObject) {
+        guard let textField = sender as? UITextField, let text = textField.text else {
+            return
+        }
+        self.position = text.trimm().isEmpty ? nil : text.trimm()
     }
     
-    func organizationTextFieldTapped(sender: AnyObject) {
-        self.removeDatePickers()
+    func organizationTextFieldDidEndEditing(sender: AnyObject) {
+        guard let textField = sender as? UITextField, let text = textField.text else {
+            return
+        }
+        self.organization = text.trimm().isEmpty ? nil : text.trimm()
     }
     
     func currentlyWorkingSwitchChanged(sender: AnyObject) {
@@ -266,6 +280,26 @@ class ExperienceTableViewController: UITableViewController {
             self.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 2)], withRowAnimation: UITableViewRowAnimation.Automatic)
             self.tableView.endUpdates()
         }
+    }
+    
+    // MARK: IBActions
+    
+    @IBAction func doneButtonTapped(sender: AnyObject) {
+        self.view.endEditing(true)
+        print(self.position)
+        print(self.organization)
+        print(self.fromMonth)
+        print(self.fromYear)
+        if self.isCurrentlyWorking {
+            // Remove toDate
+        }
+        
+    }
+    
+    
+    @IBAction func cancelButtonTapped(sender: AnyObject) {
+        self.view.endEditing(true)
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
     
     // MARK: Helpers
@@ -324,5 +358,12 @@ extension ExperienceTableViewController: UIPickerViewDataSource, UIPickerViewDel
             }
             self.tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 2)], withRowAnimation: UITableViewRowAnimation.None)
         }
+    }
+}
+
+extension ExperienceTableViewController: UITextFieldDelegate {
+    
+    func textFieldDidBeginEditing(textField: UITextField) {
+        self.removeDatePickers()
     }
 }

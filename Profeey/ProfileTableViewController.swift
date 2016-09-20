@@ -46,6 +46,7 @@ class ProfileTableViewController: UITableViewController {
     // MARK: Navigation
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        //NEW
         if let destinationViewController = segue.destinationViewController as? UINavigationController,
             let childViewController = destinationViewController.childViewControllers[0] as? EditProfileTableViewController {
             childViewController.user = self.user
@@ -319,8 +320,13 @@ class ProfileTableViewController: UITableViewController {
     
     @IBAction func unwindToProfileTableViewController(segue: UIStoryboardSegue) {
         if let sourceViewController = segue.sourceViewController as? EditProfileTableViewController {
-            let updatedUser = sourceViewController.updatedUser
-            self.user = updatedUser
+            self.user?.profilePic = sourceViewController.profilePic
+            self.user?.profilePicUrl = sourceViewController.profilePicUrl
+            self.user?.firstName = sourceViewController.firstName
+            self.user?.lastName = sourceViewController.lastName
+            self.user?.professionName = sourceViewController.professionName
+            self.user?.about = sourceViewController.about
+            self.user?.locationName = sourceViewController.locationName
             self.tableView.reloadData()
             // Remove image in background.
             if let profilePicUrlToRemove = sourceViewController.profilePicUrlToRemove {
