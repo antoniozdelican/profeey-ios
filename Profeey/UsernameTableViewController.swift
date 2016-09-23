@@ -66,6 +66,7 @@ class UsernameTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
         if indexPath.row == 0 {
             self.editProfilePicCellTapped()
         }
@@ -111,6 +112,7 @@ class UsernameTableViewController: UITableViewController {
     // MARK: Helpers
     
     private func editProfilePicCellTapped() {
+        self.view.endEditing(true)
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
         let removePhotoAction = UIAlertAction(title: "Remove Photo", style: UIAlertActionStyle.Destructive, handler: {
             (alert: UIAlertAction) in
@@ -184,7 +186,7 @@ class UsernameTableViewController: UITableViewController {
                     self.presentViewController(alertController, animated: true, completion: nil)
                 } else {
                     FullScreenIndicator.hide()
-                    print("SUCCESS")
+                    self.performSegueWithIdentifier("segueToWelcomeProfessionsVc", sender: self)
                 }
             })
             return nil

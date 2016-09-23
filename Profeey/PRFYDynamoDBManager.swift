@@ -100,6 +100,28 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         })
     }
     
+    func saveUserProfessionDynamoDB(professionName: String, completionHandler: AWSContinuationBlock) {
+        AWSClientManager.defaultClientManager().credentialsProvider?.getIdentityId().continueWithBlock({
+            (task: AWSTask) in
+            if let error = task.error {
+                print("getIdentityId error: \(error.localizedDescription)")
+                return AWSTask(error: error).continueWithBlock(completionHandler)
+            } else if let identityId = task.result as? String {
+                
+                print("saveUserProfessionDynamoDB:")
+                let awsUsersTable = AWSUsersTable()
+                let awsUser = AWSUser()
+                awsUser._userId = identityId
+                awsUser._professionName = professionName
+                awsUsersTable.saveUserSkipNull(awsUser, completionHandler: completionHandler)
+                return nil
+            } else {
+                print("This should not happen with getIdentityId!")
+                return AWSTask().continueWithBlock(completionHandler)
+            }
+        })
+    }
+    
     func saveUserDynamoDB(user: User?, completionHandler: AWSContinuationBlock) {
         AWSClientManager.defaultClientManager().credentialsProvider?.getIdentityId().continueWithBlock({
             (task: AWSTask) in
@@ -385,6 +407,12 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
     }
     
     // MARK: Professions
+    
+    func scanProfessionsDynamoDB(completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
+        print("scanProfessions:")
+        let professionsTable = AWSProfessionsTable()
+        professionsTable.scanProfessions(completionHandler)
+    }
     
     func scanProfessionsByProfessionNameDynamoDB(searchProfessionName: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
         print("scanProfessionsByProfessionNameDynamoDB:")

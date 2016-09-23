@@ -40,7 +40,7 @@
                                     </constraints>
                                     <color key="textColor" red="0.2901960784" green="0.2901960784" blue="0.2901960784" alpha="1" colorSpace="calibratedRGB"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                    <textInputTraits key="textInputTraits" autocorrectionType="no"/>
+                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no"/>
                                     <connections>
                                         <action selector="professionTextFieldChanged:" destination="Hi8-Ey-38y" eventType="editingChanged" id="Oe1-Rj-ele"/>
                                     </connections>

@@ -61,8 +61,6 @@
 		A990ECB81D6A5F6A00C3C9CE /* Comments.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A990ECB71D6A5F6A00C3C9CE /* Comments.storyboard */; };
 		A99ADA1F1D0F189E0050E329 /* Welcome.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A99ADA1E1D0F189E0050E329 /* Welcome.storyboard */; };
 		A9A21DB51D95397A0093F162 /* UsernameTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9A21DB41D95397A0093F162 /* UsernameTableViewController.swift */; };
-		A9A30DF51D7844740086083A /* ProfessionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9A30DF41D7844740086083A /* ProfessionViewController.swift */; };
-		A9A30DF71D7844850086083A /* ProfessionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9A30DF61D7844850086083A /* ProfessionTableViewController.swift */; };
 		A9A503991D2FA9180030A472 /* LocalService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9A503981D2FA9180030A472 /* LocalService.swift */; };
 		A9A5039F1D2FE0810030A472 /* AWSUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9A5039E1D2FE0810030A472 /* AWSUser.swift */; };
 		A9A503A11D2FE0A90030A472 /* AWSUsersTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9A503A01D2FE0A90030A472 /* AWSUsersTable.swift */; };
@@ -149,6 +147,7 @@
 		A9D334101D801B66005565C2 /* PostTimeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D3340F1D801B66005565C2 /* PostTimeTableViewCell.swift */; };
 		A9D334121D801B70005565C2 /* PostButtonsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D334111D801B70005565C2 /* PostButtonsTableViewCell.swift */; };
 		A9D716A91D57486100300135 /* PostSmallTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D716A81D57486100300135 /* PostSmallTableViewCell.swift */; };
+		A9D97BF81D95718C00D6F22E /* WelcomeProfessionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D97BF71D95718C00D6F22E /* WelcomeProfessionsTableViewController.swift */; };
 		A9E050F41D83065D00DD992D /* LocationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E050F31D83065D00DD992D /* LocationTableViewCell.swift */; };
 		A9E3DD3F1D86A33C00DED8C8 /* AWSProfession.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E3DD3E1D86A33C00DED8C8 /* AWSProfession.swift */; };
 		A9E3DD411D86A37600DED8C8 /* AWSProfessionsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E3DD401D86A37600DED8C8 /* AWSProfessionsTable.swift */; };
@@ -260,8 +259,6 @@
 		A990ECB71D6A5F6A00C3C9CE /* Comments.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Comments.storyboard; sourceTree = "<group>"; };
 		A99ADA1E1D0F189E0050E329 /* Welcome.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Welcome.storyboard; sourceTree = "<group>"; };
 		A9A21DB41D95397A0093F162 /* UsernameTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsernameTableViewController.swift; sourceTree = "<group>"; };
-		A9A30DF41D7844740086083A /* ProfessionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfessionViewController.swift; sourceTree = "<group>"; };
-		A9A30DF61D7844850086083A /* ProfessionTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfessionTableViewController.swift; sourceTree = "<group>"; };
 		A9A503981D2FA9180030A472 /* LocalService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalService.swift; sourceTree = "<group>"; };
 		A9A5039E1D2FE0810030A472 /* AWSUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSUser.swift; sourceTree = "<group>"; };
 		A9A503A01D2FE0A90030A472 /* AWSUsersTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSUsersTable.swift; sourceTree = "<group>"; };
@@ -334,6 +331,7 @@
 		A9D3340F1D801B66005565C2 /* PostTimeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostTimeTableViewCell.swift; sourceTree = "<group>"; };
 		A9D334111D801B70005565C2 /* PostButtonsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostButtonsTableViewCell.swift; sourceTree = "<group>"; };
 		A9D716A81D57486100300135 /* PostSmallTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostSmallTableViewCell.swift; sourceTree = "<group>"; };
+		A9D97BF71D95718C00D6F22E /* WelcomeProfessionsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeProfessionsTableViewController.swift; sourceTree = "<group>"; };
 		A9E050F31D83065D00DD992D /* LocationTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationTableViewCell.swift; sourceTree = "<group>"; };
 		A9E3DD3E1D86A33C00DED8C8 /* AWSProfession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSProfession.swift; sourceTree = "<group>"; };
 		A9E3DD401D86A37600DED8C8 /* AWSProfessionsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSProfessionsTable.swift; sourceTree = "<group>"; };
@@ -594,18 +592,9 @@
 				A99ADA1E1D0F189E0050E329 /* Welcome.storyboard */,
 				A90A09571D43E5A7006AC49D /* WelcomeNavigationController.swift */,
 				A9A21DB41D95397A0093F162 /* UsernameTableViewController.swift */,
-				A9A30DF31D78445D0086083A /* Profession */,
+				A9D97BF71D95718C00D6F22E /* WelcomeProfessionsTableViewController.swift */,
 			);
 			name = Welcome;
-			sourceTree = "<group>";
-		};
-		A9A30DF31D78445D0086083A /* Profession */ = {
-			isa = PBXGroup;
-			children = (
-				A9A30DF41D7844740086083A /* ProfessionViewController.swift */,
-				A9A30DF61D7844850086083A /* ProfessionTableViewController.swift */,
-			);
-			name = Profession;
 			sourceTree = "<group>";
 		};
 		A9A503971D2FA7DB0030A472 /* Local */ = {
@@ -1048,7 +1037,6 @@
 				A9B7A2461D65BF64009DA340 /* PopularCategoryTableViewCell.swift in Sources */,
 				A90A09581D43E5A7006AC49D /* WelcomeNavigationController.swift in Sources */,
 				A9D21B451D5B662100B5847D /* PRFYUserPoolManager.swift in Sources */,
-				A9A30DF71D7844850086083A /* ProfessionTableViewController.swift in Sources */,
 				A9B70C9F1D871CD400B9882A /* PostDetailsTableViewController.swift in Sources */,
 				A9C808151D916C1B0018109C /* EditProfilePicTableViewCell.swift in Sources */,
 				A9B7A24A1D65D8C0009DA340 /* HomeTableViewController.swift in Sources */,
@@ -1085,6 +1073,7 @@
 				A9BF16411D64DA4600060A9E /* SearchCategoriesTableViewController.swift in Sources */,
 				A9D334101D801B66005565C2 /* PostTimeTableViewCell.swift in Sources */,
 				A903EB591D16A39700B33025 /* UIImage+FixOrientation.m in Sources */,
+				A9D97BF81D95718C00D6F22E /* WelcomeProfessionsTableViewController.swift in Sources */,
 				A975529C1D4F4D0300F773FF /* PreviewViewController.swift in Sources */,
 				A9BF16471D64DDAC00060A9E /* SearchCategoryTableViewCell.swift in Sources */,
 				A961875F1D3FA67B0028DEA7 /* ClientManager.swift in Sources */,
@@ -1097,7 +1086,6 @@
 				A9E050F41D83065D00DD992D /* LocationTableViewCell.swift in Sources */,
 				A9B318E71D7384E800FF8E2E /* ProfileAboutTableViewCell.swift in Sources */,
 				A94797A71D2E3451007CBF08 /* User.swift in Sources */,
-				A9A30DF51D7844740086083A /* ProfessionViewController.swift in Sources */,
 				A9C808181D916C4A0018109C /* EditFirstNameTableViewCell.swift in Sources */,
 				A9E53B731D1067E800CD1D6C /* MainTabBarController.swift in Sources */,
 				A9D3340C1D801693005565C2 /* PostInfoTableViewCell.swift in Sources */,

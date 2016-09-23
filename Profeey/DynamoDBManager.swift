@@ -19,6 +19,7 @@ protocol DynamoDBManager {
     
     func createUserDynamoDB(email: String, firstName: String, lastName: String, completionHandler: AWSContinuationBlock)
     func saveUserPreferredUsernameAndProfilePicDynamoDB(preferredUsername: String, profilePicUrl: String?, completionHandler: AWSContinuationBlock)
+    func saveUserProfessionDynamoDB(professionName: String, completionHandler: AWSContinuationBlock)
     
     func saveUserDynamoDB(user: User?, completionHandler: AWSContinuationBlock)
     
@@ -55,6 +56,7 @@ protocol DynamoDBManager {
     
     // MARK: Professions
     
+    func scanProfessionsDynamoDB(completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void)
     func scanProfessionsByProfessionNameDynamoDB(searchProfessionName: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void)
     
     // MARK: Activities

@@ -48,17 +48,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //UITableView.appearance().backgroundColor = Colors.greyLight
         UITableView.appearance().tableFooterView = UIView()
         UITableView.appearance().separatorColor = Colors.grey
-        UITableView.appearance().separatorInset = UIEdgeInsetsZero
+        // WARNING
+        //UITableView.appearance().separatorInset = UIEdgeInsetsZero
         
         // UITableViewCell
         let colorView = UIView()
         colorView.backgroundColor = Colors.greyLight
         UITableViewCell.appearance().selectedBackgroundView = colorView
-        //UITableViewCell.appearance().backgroundColor = UIColor.clearColor()
         
         // UITextField
         UITextField.appearance().tintColor = Colors.black
-//        UITextField.appearanceWhenContainedInInstancesOfClasses([UISearchBar.self]).backgroundColor = UIColor.blackColor()
         
         // UITextView
         UITextView.appearance().tintColor = Colors.black
@@ -93,13 +92,13 @@ extension AppDelegate: IncompleteSignUpDelegate {
     
     func preferredUsernameNotSet() {
         print("PreferredUsername not set:")
-        let storyboard = UIStoryboard(name: "Welcome", bundle: nil)
-        if let navigationViewController = storyboard.instantiateInitialViewController() as? UINavigationController,
-        let _ = navigationViewController.childViewControllers[0] as? UsernameViewController {
-            dispatch_async(dispatch_get_main_queue(), {
-                self.window?.rootViewController = navigationViewController
-            })
-        }
+//        let storyboard = UIStoryboard(name: "Welcome", bundle: nil)
+//        if let navigationViewController = storyboard.instantiateInitialViewController() as? UINavigationController,
+//        let _ = navigationViewController.childViewControllers[0] as? UsernameViewController {
+//            dispatch_async(dispatch_get_main_queue(), {
+//                self.window?.rootViewController = navigationViewController
+//            })
+//        }
     }
 }
 
