@@ -17,14 +17,10 @@ protocol DynamoDBManager {
     func getCurrentUserDynamoDB(completionHandler: AWSContinuationBlock)
     func getUserDynamoDB(userId: String, completionHandler: AWSContinuationBlock)
     
-    func saveUserDynamoDB(user: User?, completionHandler: AWSContinuationBlock)
+    func createUserDynamoDB(email: String, firstName: String, lastName: String, completionHandler: AWSContinuationBlock)
+    func saveUserPreferredUsernameAndProfilePicDynamoDB(preferredUsername: String, profilePicUrl: String?, completionHandler: AWSContinuationBlock)
     
-    func updateFirstLastNameDynamoDB(firstName: String?, lastName: String?, completionHandler: AWSContinuationBlock)
-    func updatePreferredUsernameDynamoDB(preferredUsername: String?, completionHandler: AWSContinuationBlock)
-    func updateProfessionDynamoDB(professionName: String?, completionHandler: AWSContinuationBlock)
-    func updateLocationDynamoDB(locationName: String?, completionHandler: AWSContinuationBlock)
-    func updateAboutDynamoDB(about: String?, completionHandler: AWSContinuationBlock)
-    func updateProfilePicDynamoDB(profilePicUrl: String?, completionHandler: AWSContinuationBlock)
+    func saveUserDynamoDB(user: User?, completionHandler: AWSContinuationBlock)
     
     func scanUsersDynamoDB(completionHandler: AWSContinuationBlock)
     func scanUsersByFirstLastNameDynamoDB(searchFirstName: String, searchLastName: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void)
@@ -68,4 +64,10 @@ protocol DynamoDBManager {
     // MARK: UserCategories
     
     func queryUserCategoriesNumberOfPostsSortedDynamoDB(userId: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void)
+    
+    // MARK: UserExperiences
+    
+    func queryUserExperiencesDynamoDB(userId: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void)
+    func saveUserExperienceDynamoDB(experienceId: String?, position: String?, organization: String?, fromDate: NSNumber?, toDate: NSNumber?, experienceType: NSNumber?, completionHandler: AWSContinuationBlock)
+    func removeUserExperienceDynamoDB(experienceId: String, completionHandler: AWSContinuationBlock)
 }

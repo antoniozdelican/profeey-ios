@@ -1,14 +1,15 @@
 //
-//  WelcomeNavigationController.swift
+//  OnboardingNavigationController.swift
 //  Profeey
 //
-//  Created by Antonio Zdelican on 23/07/16.
+//  Created by Antonio Zdelican on 22/09/16.
 //  Copyright © 2016 Profeey. All rights reserved.
 //
 
 import UIKit
+import AWSCognitoIdentityProvider
 
-class WelcomeNavigationController: UINavigationController {
+class OnboardingNavigationController: UINavigationController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,5 +23,16 @@ class WelcomeNavigationController: UINavigationController {
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+    }
+}
+
+extension OnboardingNavigationController: AWSCognitoIdentityPasswordAuthentication {
+    
+    func getPasswordAuthenticationDetails(authenticationInput: AWSCognitoIdentityPasswordAuthenticationInput, passwordAuthenticationCompletionSource: AWSTaskCompletionSource) {
+        // Do nothing.
+    }
+    
+    func didCompletePasswordAuthenticationStepWithError(error: NSError?) {
+        // Do nothing.
     }
 }

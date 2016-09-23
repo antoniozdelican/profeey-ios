@@ -1,5 +1,5 @@
 //
-//  ScrollViewController.swift
+//  CaptureScrollViewController.swift
 //  Profeey
 //
 //  Created by Antonio Zdelican on 29/07/16.
@@ -8,12 +8,13 @@
 
 import UIKit
 
-class ScrollViewController: UIViewController {
+class CaptureScrollViewController: UIViewController {
 
     @IBOutlet weak var scrollView: UIScrollView!
     
     // If it's profilePic make it square.
     var isProfilePic: Bool = false
+    var profilePicUnwind: ProfilePicUnwind?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,16 +40,18 @@ class ScrollViewController: UIViewController {
             let childViewController = navigationController.childViewControllers[0] as? CaptureViewController {
             childViewController.captureDelegate = self
             childViewController.isProfilePic = self.isProfilePic
+            childViewController.profilePicUnwind = self.profilePicUnwind
         }
         if let navigationController = segue.destinationViewController as? UINavigationController,
             let childViewController = navigationController.childViewControllers[0] as? GalleryViewController {
             childViewController.galleryDelegate = self
             childViewController.isProfilePic = self.isProfilePic
+            childViewController.profilePicUnwind = self.profilePicUnwind
         }
     }
 }
 
-extension ScrollViewController: CaptureDelegate {
+extension CaptureScrollViewController: CaptureDelegate {
     
     func galleryButtonTapped() {
         // Scroll to gallery.
@@ -56,7 +59,7 @@ extension ScrollViewController: CaptureDelegate {
     }
 }
 
-extension ScrollViewController: GalleryDelegate {
+extension CaptureScrollViewController: GalleryDelegate {
     
     func cameraButtonTapped() {
         // Scroll to camera.

@@ -8,11 +8,11 @@
 
 import Foundation
 
-// Use this for user update.
+// Use this for user update on EditProfileVc.
 
 class AWSUserUpdate: AWSUser {
     
     class func ignoreAttributes() -> [String] {
-        return ["creationDate", "numberOfFollowers", "numberOfPosts", "preferredUsername", "topCategories"]
+        return ["creationDate", "email", "numberOfFollowers", "numberOfPosts", "preferredUsername","searchPreferredUsername", "topCategories"]
     }
 }

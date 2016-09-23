@@ -13,6 +13,7 @@ class AWSUser: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     
     var _userId: String?
     var _about: String?
+    var _email: String?
     var _creationDate: NSNumber?
     var _firstName: String?
     var _lastName: String?
@@ -24,6 +25,7 @@ class AWSUser: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     var _profilePicUrl: String?
     var _searchFirstName: String?
     var _searchLastName: String?
+    var _searchPreferredUsername: String?
     var _topCategories: [String: String]?
     
     class func dynamoDBTableName() -> String {
@@ -40,6 +42,7 @@ class AWSUser: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
         return [
             "_userId" : "userId",
             "_about" : "about",
+            "_email" : "email",
             "_creationDate" : "creationDate",
             "_firstName" : "firstName",
             "_lastName" : "lastName",
@@ -51,6 +54,7 @@ class AWSUser: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
             "_profilePicUrl" : "profilePicUrl",
             "_searchFirstName" : "searchFirstName",
             "_searchLastName" : "searchLastName",
+            "_searchPreferredUsername" : "searchPreferredUsername",
             "_topCategories" : "topCategories",
         ]
     }

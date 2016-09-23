@@ -64,9 +64,9 @@ class EditProfileTableViewController: UITableViewController {
             let childViewController = destinationViewController.childViewControllers[0] as? ProfessionsTableViewController {
             childViewController.professionName = self.professionName
         }
-        if let destinationViewController = segue.destinationViewController as? ScrollViewController {
-            // Capture.
+        if let destinationViewController = segue.destinationViewController as? CaptureScrollViewController {
             destinationViewController.isProfilePic = true
+            destinationViewController.profilePicUnwind = ProfilePicUnwind.EditProfileVc
         }
     }
     
@@ -101,17 +101,13 @@ class EditProfileTableViewController: UITableViewController {
     // MARK: UITableViewDataSource
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 3
+        return 1
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
             return 6
-        case 1:
-            return 1
-        case 2:
-            return 1
         default:
             return 0
         }
@@ -167,35 +163,12 @@ class EditProfileTableViewController: UITableViewController {
             default:
                 return UITableViewCell()
             }
-        case 1:
-            let cell = tableView.dequeueReusableCellWithIdentifier("cellAddExperience", forIndexPath: indexPath)
-            return cell
-        case 2:
-            let cell = tableView.dequeueReusableCellWithIdentifier("cellAddExperience", forIndexPath: indexPath)
-            return cell
         default:
             return UITableViewCell()
         }
     }
     
     // MARK: UITableViewDelegate
-    
-    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        switch section {
-        case 1:
-            let cell = tableView.dequeueReusableCellWithIdentifier("cellHeader") as! HeaderTableViewCell
-            cell.headerTitle.text = "WORK EXPERIENCE"
-            // for bug returning contentView
-            return cell.contentView
-        case 2:
-            let cell = tableView.dequeueReusableCellWithIdentifier("cellHeader") as! HeaderTableViewCell
-            cell.headerTitle.text = "EDUCATION"
-            // for bug returning contentView
-            return cell.contentView
-        default:
-            return nil
-        }
-    }
     
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         cell.layoutMargins = UIEdgeInsetsZero
@@ -211,13 +184,6 @@ class EditProfileTableViewController: UITableViewController {
             case 5:
                 cell.selectionStyle = UITableViewCellSelectionStyle.Default
                 cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0)
-            default:
-                return
-            }
-        case 1:
-            switch indexPath.row {
-            case 0:
-                cell.selectionStyle = UITableViewCellSelectionStyle.Default
             default:
                 return
             }
@@ -255,17 +221,6 @@ class EditProfileTableViewController: UITableViewController {
             }
         default:
             return UITableViewAutomaticDimension
-        }
-    }
-    
-    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        switch section {
-        case 1:
-            return 52.0
-        case 2:
-            return 52.0
-        default:
-            return 0.0
         }
     }
     
@@ -439,7 +394,6 @@ class EditProfileTableViewController: UITableViewController {
                 })
         })
     }
-    
 }
 
 extension EditProfileTableViewController: UITextViewDelegate {

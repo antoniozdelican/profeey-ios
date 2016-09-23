@@ -20,6 +20,9 @@ class ProfileTableViewController: UITableViewController {
     private var currentUser: User?
     private var posts: [Post] = []
     private var topCategories: [Category] = []
+    private var userExperiences: [UserExperience] = []
+    private var workExperiences: [UserExperience] = []
+    private var educationExperiences: [UserExperience] = []
     private var isLoadingPosts: Bool = true
     private var isFollowing: Bool = false
     private var selectedSegment: Int = 0
@@ -46,7 +49,6 @@ class ProfileTableViewController: UITableViewController {
     // MARK: Navigation
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        //NEW
         if let destinationViewController = segue.destinationViewController as? UINavigationController,
             let childViewController = destinationViewController.childViewControllers[0] as? EditProfileTableViewController {
             childViewController.user = self.user
@@ -61,6 +63,9 @@ class ProfileTableViewController: UITableViewController {
             // For likes delegate.
             destinationViewController.postIndexPath = indexPath
             destinationViewController.likeDelegate = self
+        }
+        if let destinationViewController = segue.destinationViewController as? ExperiencesTableViewController {
+            destinationViewController.userExperiences = self.userExperiences
         }
     }
 
@@ -94,12 +99,12 @@ class ProfileTableViewController: UITableViewController {
             guard self.selectedSegment == 1 else {
                 return 0
             }
-            return 0
+            return self.workExperiences.count
         case 4:
             guard self.selectedSegment == 1 else {
                 return 0
             }
-            return 0
+            return self.educationExperiences.count
         default:
             return 0
         }
@@ -175,9 +180,19 @@ class ProfileTableViewController: UITableViewController {
             cell.numberOfPostsLabel.text = topCategory.numberOfPostsString
             return cell
         case 3:
-            return UITableViewCell()
+            let workExperience = self.workExperiences[indexPath.row]
+            let cell = tableView.dequeueReusableCellWithIdentifier("cellExperience", forIndexPath: indexPath) as! ExperienceTableViewCell
+            cell.positionLabel.text = workExperience.position
+            cell.organizationLabel.text = workExperience.organization
+            cell.timePeriodLabel.text = workExperience.timePeriod
+            return cell
         case 4:
-            return UITableViewCell()
+            let educationExperience = self.educationExperiences[indexPath.row]
+            let cell = tableView.dequeueReusableCellWithIdentifier("cellExperience", forIndexPath: indexPath) as! ExperienceTableViewCell
+            cell.positionLabel.text = educationExperience.position
+            cell.organizationLabel.text = educationExperience.organization
+            cell.timePeriodLabel.text = educationExperience.timePeriod
+            return cell
         default:
             return UITableViewCell()
         }
@@ -187,23 +202,26 @@ class ProfileTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard self.selectedSegment == 1 else {
-            return UITableViewCell()
+            return nil
         }
         guard section == 2 || section == 3 || section == 4 else {
-            return UITableViewCell()
+            return nil
         }
         let cell = tableView.dequeueReusableCellWithIdentifier("cellHeader") as! HeaderTableViewCell
         if section == 2 {
             cell.headerTitle.text = "TOP SKILLS"
+            cell.editButton?.hidden = true
         }
         if section == 3 {
             cell.headerTitle.text = "WORK EXPERIENCE"
+            cell.editButton?.addTarget(self, action: #selector(ProfileTableViewController.editExperiencesButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         }
         if section == 4 {
             cell.headerTitle.text = "EDUCATION"
+            cell.editButton?.addTarget(self, action: #selector(ProfileTableViewController.editExperiencesButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         }
-        cell.backgroundColor = UIColor.whiteColor()
-        return cell
+        cell.contentView.backgroundColor = UIColor.whiteColor()
+        return cell.contentView
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
@@ -260,6 +278,10 @@ class ProfileTableViewController: UITableViewController {
             return 108.0
         case 2:
             return 25.0
+        case 3:
+            return 100.0
+        case 4:
+            return 100.0
         default:
             return 0.0
         }
@@ -289,6 +311,10 @@ class ProfileTableViewController: UITableViewController {
             return 108.0
         case 2:
             return UITableViewAutomaticDimension
+        case 3:
+            return 100.0
+        case 4:
+            return 100.0
         default:
             return 0.0
         }
@@ -385,6 +411,13 @@ class ProfileTableViewController: UITableViewController {
         self.tableView.reloadData()
     }
     
+    func editExperiencesButtonTapped(sender: AnyObject) {
+        guard let editButton = sender as? UIButton else {
+            return
+        }
+        self.performSegueWithIdentifier("segueToExperiencesVc", sender: editButton)
+    }
+    
     // MARK: IBActions
     
     @IBAction func refreshControlChanged(sender: AnyObject) {
@@ -460,6 +493,7 @@ class ProfileTableViewController: UITableViewController {
                     if let userId = awsUser._userId {
                         self.queryUserCategoriesNumberOfPostsSorted(userId)
                         self.queryUserPostsDateSorted(userId)
+                        self.queryUserExperiences(userId)
                     }
                 }
             })
@@ -600,7 +634,6 @@ class ProfileTableViewController: UITableViewController {
     // In background when user deletes/changes profilePic.
     private func removeImage(imageKey: String) {
         let content = AWSUserFileManager.custom(key: "USEast1BucketManager").contentWithKey(imageKey)
-        
         print("removeImageS3:")
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         content.removeRemoteContentWithCompletionHandler({
@@ -663,6 +696,41 @@ class ProfileTableViewController: UITableViewController {
                 }
             })
             return nil
+        })
+    }
+    
+    private func queryUserExperiences(userId: String) {
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().queryUserExperiencesDynamoDB(userId, completionHandler: {
+            (response: AWSDynamoDBPaginatedOutput?, error: NSError?) in
+            dispatch_async(dispatch_get_main_queue(), {
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                if let error = error {
+                    print("queryUserExperiences error: \(error)")
+                } else {
+                    guard let awsUserExperiences = response?.items as? [AWSUserExperience] else {
+                        return
+                    }
+                    guard awsUserExperiences.count > 0 else {
+                        return
+                    }
+                    // Reset userExperiences.
+                    self.userExperiences = []
+                    self.workExperiences = []
+                    self.educationExperiences = []
+                    for awsUserExperience in awsUserExperiences {
+                        let userExperience = UserExperience(userId: awsUserExperience._userId, experienceId: awsUserExperience._experienceId, position: awsUserExperience._position, organization: awsUserExperience._organization, fromDate: awsUserExperience._fromDate, toDate: awsUserExperience._toDate, experienceType: awsUserExperience._experienceType)
+                        self.userExperiences.append(userExperience)
+                    }
+                    self.workExperiences = self.userExperiences.filter({$0.experienceType == 0})
+                    self.educationExperiences = self.userExperiences.filter({$0.experienceType == 1})
+                    let workIndexSet = NSIndexSet(index: 3)
+                    let educationIndexSet = NSIndexSet(index: 4)
+                    //self.tableView.reloadSections(workIndexSet, withRowAnimation: UITableViewRowAnimation.None)
+                    //self.tableView.reloadSections(educationIndexSet, withRowAnimation: UITableViewRowAnimation.None)
+                    self.tableView.reloadData()
+                }
+            })
         })
     }
     

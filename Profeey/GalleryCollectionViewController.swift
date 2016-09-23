@@ -23,6 +23,7 @@ class GalleryCollectionViewController: UICollectionViewController {
     var previousPreheatRect: CGRect!
     private var ITEM_INSET: CGFloat = 1.0
     var isProfilePic: Bool = false
+    var profilePicUnwind: ProfilePicUnwind?
 
     override func viewDidLoad() {
         super.viewDidLoad()        
@@ -62,6 +63,7 @@ class GalleryCollectionViewController: UICollectionViewController {
             childViewController.asset = asset
             childViewController.isPhoto = false
             childViewController.isProfilePic = self.isProfilePic
+            childViewController.profilePicUnwind = self.profilePicUnwind
         }
     }
 

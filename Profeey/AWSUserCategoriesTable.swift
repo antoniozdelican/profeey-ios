@@ -49,23 +49,6 @@ class AWSUserCategoriesTable: NSObject, Table {
     func tableAttributeName(dataObjectAttributeName: String) -> String {
         return AWSUserCategory.JSONKeyPathsByPropertyKey()[dataObjectAttributeName] as! String
     }
-    
-    // Find if user with userId is following user with followingId.
-//    func getUserRelationship(userId: String, followingId: String, completionHandler: AWSContinuationBlock) {
-//        let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
-//        objectMapper.load(AWSUserRelationship.self, hashKey: userId, rangeKey: followingId).continueWithBlock(completionHandler)
-//        
-//    }
-//    
-//    func saveUserRelationship(userRelationship: AWSUserRelationship, completionHandler: AWSContinuationBlock) {
-//        let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
-//        objectMapper.save(userRelationship).continueWithBlock(completionHandler)
-//    }
-//    
-//    func removeUserRelationship(userRelationship: AWSUserRelationship, completionHandler: AWSContinuationBlock) {
-//        let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
-//        objectMapper.remove(userRelationship).continueWithBlock(completionHandler)
-//    }
 }
 
 class AWSUserCategoriesPrimaryIndex: NSObject, Index {

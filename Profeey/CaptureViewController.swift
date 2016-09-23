@@ -25,6 +25,7 @@ class CaptureViewController: UIViewController {
     private var capturedPhoto: UIImage?
     var captureDelegate: CaptureDelegate?
     var isProfilePic: Bool = false
+    var profilePicUnwind: ProfilePicUnwind?
     
     private var imagePickerController: UIImagePickerController!
     
@@ -104,6 +105,7 @@ class CaptureViewController: UIViewController {
             self.capturedPhoto = nil
             childViewController.isPhoto = true
             childViewController.isProfilePic = self.isProfilePic
+            childViewController.profilePicUnwind = self.profilePicUnwind
         }
     }
     

@@ -18,27 +18,8 @@ protocol ClientManager {
     
     // MARK: User
     
-    func logIn(username: String, password: String, completionHandler: AWSContinuationBlock)
-    func signUp(username: String, password: String, email: String, firstName: String?, lastName: String?, completionHandler: AWSContinuationBlock)
     func signOut(completionHandler: AWSContinuationBlock)
     
     func getUserDetails(completionHandler: AWSContinuationBlock)
     func getUser(userId: String, completionHandler: AWSContinuationBlock)
-//    func getCurrentUser(completionHandler: AWSContinuationBlock)
-    
-    func updateFirstLastName(firstName: String?, lastName: String?, completionHandler: AWSContinuationBlock)
-    func updatePreferredUsername(preferredUsername: String, completionHandler: AWSContinuationBlock)
-    func updateProfession(profession: String?, completionHandler: AWSContinuationBlock)
-    func updateLocation(location: String?, completionHandler: AWSContinuationBlock)
-    func updateAbout(about: String?, completionHandler: AWSContinuationBlock)
-    //func updateProfilePic(profilePicUrl: String?, completionHandler: AWSContinuationBlock)
-    
-    func scanUsers(completionHandler: AWSContinuationBlock)
-    
-    // MARK: Likes
-    
-//    func getLike(postId: String, completionHandler: AWSContinuationBlock)
-//    func saveLike(postId: String, completionHandler: AWSContinuationBlock)
-//    func removeLike(postId: String, completionHandler: AWSContinuationBlock)
-//    func queryPostLikers(postId: String, completionHandler: AWSContinuationBlock)
 }

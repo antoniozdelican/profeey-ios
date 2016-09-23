@@ -112,7 +112,6 @@
                                         </mask>
                                     </variation>
                                 </tableViewCellContentView>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
                                     <outlet property="firstNameTextField" destination="oYI-U7-VMC" id="Q8w-Mp-KqA"/>
                                 </connections>
@@ -157,7 +156,6 @@
                                         </mask>
                                     </variation>
                                 </tableViewCellContentView>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
                                     <outlet property="lastNameTextField" destination="C0X-0O-7mo" id="PoM-yv-35v"/>
                                 </connections>
@@ -169,23 +167,14 @@
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="51.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="BIO" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0S9-Ul-Ave">
-                                            <rect key="frame" x="16" y="19" width="82" height="15"/>
-                                            <constraints>
-                                                <constraint firstAttribute="width" constant="82" id="aHA-7b-23V"/>
-                                            </constraints>
-                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                            <color key="textColor" red="0.63921568630000003" green="0.63921568630000003" blue="0.63921568630000003" alpha="1" colorSpace="calibratedRGB"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Bio" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wU7-4P-LhO">
-                                            <rect key="frame" x="110" y="16" width="23" height="20"/>
+                                            <rect key="frame" x="16" y="16" width="23" height="20"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                             <color key="textColor" red="0.78039215689999997" green="0.78039215689999997" blue="0.80392156859999997" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="rnj-hu-T65">
-                                            <rect key="frame" x="106" y="8" width="478" height="35"/>
+                                            <rect key="frame" x="12" y="8" width="572" height="35"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             <color key="textColor" red="0.2901960784" green="0.2901960784" blue="0.2901960784" alpha="1" colorSpace="calibratedRGB"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
@@ -193,17 +182,14 @@
                                         </textView>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="rnj-hu-T65" firstAttribute="leading" secondItem="0S9-Ul-Ave" secondAttribute="trailing" constant="8" id="0I6-Np-N1b"/>
                                         <constraint firstItem="wU7-4P-LhO" firstAttribute="top" secondItem="u9n-87-tJg" secondAttribute="top" constant="16" id="4os-EP-xhI"/>
                                         <constraint firstItem="rnj-hu-T65" firstAttribute="top" secondItem="u9n-87-tJg" secondAttribute="top" constant="8" id="F9x-iG-e1C"/>
-                                        <constraint firstItem="0S9-Ul-Ave" firstAttribute="leading" secondItem="u9n-87-tJg" secondAttribute="leading" constant="16" id="Gx1-Xd-pmh"/>
-                                        <constraint firstItem="0S9-Ul-Ave" firstAttribute="top" secondItem="u9n-87-tJg" secondAttribute="top" constant="19" id="KBj-Qh-QjU"/>
+                                        <constraint firstItem="rnj-hu-T65" firstAttribute="leading" secondItem="u9n-87-tJg" secondAttribute="leading" constant="12" id="GPd-30-3wf"/>
+                                        <constraint firstItem="wU7-4P-LhO" firstAttribute="leading" secondItem="u9n-87-tJg" secondAttribute="leading" constant="16" id="OEL-bg-Uay"/>
                                         <constraint firstAttribute="bottom" secondItem="rnj-hu-T65" secondAttribute="bottom" constant="8" id="Qql-bV-MOz"/>
-                                        <constraint firstItem="wU7-4P-LhO" firstAttribute="leading" secondItem="0S9-Ul-Ave" secondAttribute="trailing" constant="12" id="bOl-5h-UGY"/>
                                         <constraint firstAttribute="trailing" secondItem="rnj-hu-T65" secondAttribute="trailing" constant="16" id="hCt-gJ-R5B"/>
                                     </constraints>
                                 </tableViewCellContentView>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
                                     <outlet property="aboutFakePlaceholderLabel" destination="wU7-4P-LhO" id="0Dx-9D-yFY"/>
                                     <outlet property="aboutTextView" destination="rnj-hu-T65" id="cHo-hi-qxE"/>
@@ -250,7 +236,6 @@
                                         <constraint firstItem="jOJ-dx-rec" firstAttribute="top" secondItem="qIn-tL-6jb" secondAttribute="top" constant="19" id="tqT-dC-tpt"/>
                                     </constraints>
                                 </tableViewCellContentView>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
                                     <outlet property="locationNameLabel" destination="3hB-Oo-dJB" id="QHw-BZ-Cny"/>
                                 </connections>
@@ -296,7 +281,6 @@
                                         <constraint firstItem="9c6-eW-QyE" firstAttribute="leading" secondItem="ORU-8H-vAl" secondAttribute="trailing" constant="12" id="zej-rL-6X8"/>
                                     </constraints>
                                 </tableViewCellContentView>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
                                     <outlet property="professionNameLabel" destination="9c6-eW-QyE" id="AM7-g1-OTn"/>
                                 </connections>
@@ -357,7 +341,7 @@
                                     <outlet property="headerTitle" destination="DKg-wB-36p" id="7fa-Hw-ceX"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellAddExperience" rowHeight="52" id="Yur-qu-9LR">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellAddExperience" rowHeight="52" id="Yur-qu-9LR" customClass="AddExperienceTableViewCell" customModule="Profeey" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="516" width="600" height="52"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Yur-qu-9LR" id="1TL-4g-JhA">
@@ -377,6 +361,9 @@
                                         <constraint firstAttribute="bottom" secondItem="j4S-MF-3g2" secondAttribute="bottom" constant="16" id="uMj-dI-m5y"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="addExperienceLabel" destination="j4S-MF-3g2" id="zl4-lM-hYG"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>

@@ -5,14 +5,14 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <scenes>
-        <!--Experience-->
+        <!--Edit Experience-->
         <scene sceneID="Ez6-ZV-zK9">
             <objects>
-                <tableViewController id="Nhn-DR-YF1" customClass="ExperienceTableViewController" customModule="Profeey" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="Nhn-DR-YF1" customClass="EditExperienceTableViewController" customModule="Profeey" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="85" sectionHeaderHeight="28" sectionFooterHeight="28" id="Vaw-3E-a61">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.98039215686274506" green="0.98039215686274506" blue="0.98039215686274506" alpha="1" colorSpace="calibratedRGB"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellPosition" rowHeight="52" id="BIP-9v-VVo" customClass="PositionTableViewCell" customModule="Profeey" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="92" width="600" height="52"/>
@@ -162,26 +162,54 @@
                                     <outlet property="titleLabel" destination="MDG-JZ-XsV" id="7j7-b2-qyJ"/>
                                 </connections>
                             </tableViewCell>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellDeleteExperience" rowHeight="52" id="otd-Vs-lRV" customClass="DeleteExperienceTableViewCell" customModule="Profeey" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="516" width="600" height="52"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="otd-Vs-lRV" id="yIa-EQ-1y2">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="51.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Delete experience" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b7O-QX-ErJ">
+                                            <rect key="frame" x="235" y="16" width="131" height="19.5"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                            <color key="textColor" red="0.86274509799999999" green="0.25490196079999999" blue="0.25490196079999999" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="b7O-QX-ErJ" firstAttribute="centerY" secondItem="yIa-EQ-1y2" secondAttribute="centerY" id="8Nn-vv-nUw"/>
+                                        <constraint firstItem="b7O-QX-ErJ" firstAttribute="centerX" secondItem="yIa-EQ-1y2" secondAttribute="centerX" id="ben-lz-dl3"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="deleteExperienceLabel" destination="b7O-QX-ErJ" id="1sb-HL-QA2"/>
+                                </connections>
+                            </tableViewCell>
                         </prototypes>
                         <connections>
                             <outlet property="dataSource" destination="Nhn-DR-YF1" id="AHm-Gg-A7c"/>
                             <outlet property="delegate" destination="Nhn-DR-YF1" id="otk-En-GDR"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Experience" id="cl3-Ik-ptM">
+                    <navigationItem key="navigationItem" title="Edit Experience" id="cl3-Ik-ptM">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="m2t-L3-Kit">
                             <connections>
                                 <action selector="cancelButtonTapped:" destination="Nhn-DR-YF1" id="Jd0-hG-EU9"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="qTO-A7-IcV">
+                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="qTO-A7-IcV">
                             <connections>
-                                <action selector="doneButtonTapped:" destination="Nhn-DR-YF1" id="JOA-aj-D6Y"/>
+                                <action selector="saveButtonTapped:" destination="Nhn-DR-YF1" id="K36-va-rpU"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="saveButton" destination="qTO-A7-IcV" id="d7h-Yi-ZMP"/>
+                        <segue destination="lDK-Zp-Z4e" kind="unwind" identifier="segueUnwindToExperiencesVc" unwindAction="unwindToExperiencesTableViewController:" id="o2p-KK-d1l"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FuT-Oe-NmA" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="lDK-Zp-Z4e" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="961" y="180"/>
         </scene>

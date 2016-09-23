@@ -9,6 +9,11 @@
 import UIKit
 import PhotosUI
 
+enum ProfilePicUnwind {
+    case EditProfileVc
+    case UsernameVc
+}
+
 class PreviewViewController: UIViewController {
     
     @IBOutlet weak var scrollView: UIScrollView!
@@ -29,7 +34,9 @@ class PreviewViewController: UIViewController {
     private var scale: CGFloat?
     private var alreadyConfigured: Bool = false
     var finalImage: UIImage?
+    // Determine if it's profile and unwind respectively.
     var isProfilePic: Bool = false
+    var profilePicUnwind: ProfilePicUnwind?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -201,11 +208,20 @@ class PreviewViewController: UIViewController {
         // Scale.
         // Profile pic is 400 x 400, others 1080 in width or less.
         if self.isProfilePic {
+            guard let profilePicUnwind = self.profilePicUnwind else {
+                return
+            }
             let scaledWidth: CGFloat = 400.0
             let scaledHeight: CGFloat = 400.0
             let scaledImage = croppedImage.scale(scaledWidth, height: scaledHeight, scale: croppedImage.scale)
             self.finalImage = scaledImage
-            self.performSegueWithIdentifier("segueUnwindToEditProfileVc", sender: self)
+            
+            switch profilePicUnwind {
+            case .EditProfileVc:
+                self.performSegueWithIdentifier("segueUnwindToEditProfileVc", sender: self)
+            case .UsernameVc:
+                self.performSegueWithIdentifier("segueUnwindToUsernameVc", sender: self)
+            }
             
         } else if croppedImage.size.width > 1080.0 {
             let aspectRatio = croppedImage.size.width / croppedImage.size.height

@@ -80,28 +80,6 @@ class AWSClientManager: NSObject, ClientManager {
         
     }
     
-    func logIn(username: String, password: String, completionHandler: AWSContinuationBlock) {
-        // UserPool logIn.
-        PRFYUserPoolManager.defaultUserPoolManager().logInUserPool(username, password: password, completionHandler: completionHandler)
-    }
-    
-    func signUp(username: String, password: String, email: String, firstName: String?, lastName: String?, completionHandler: AWSContinuationBlock) {
-        // UserPool signUp.
-        PRFYUserPoolManager.defaultUserPoolManager().signUpUserPool(username, password: password, email: email, firstName: firstName, lastName: lastName, completionHandler: {
-            (task: AWSTask) in
-            if let error = task.error {
-                return AWSTask(error: error).continueWithBlock(completionHandler)
-            } else {
-                // DynamoDB updateFirstLastName ASYNC.
-                PRFYDynamoDBManager.defaultDynamoDBManager().updateFirstLastNameDynamoDB(firstName, lastName: lastName, completionHandler: {
-                    (task: AWSTask) in
-                    return nil
-                })
-                return task.continueWithBlock(completionHandler)
-            }
-        })
-    }
-    
     func signOut(completionHandler: AWSContinuationBlock) {
         // UserPool signOut.
         PRFYUserPoolManager.defaultUserPoolManager().signOutUserPool(completionHandler)
@@ -119,54 +97,5 @@ class AWSClientManager: NSObject, ClientManager {
     func getUser(userId: String, completionHandler: AWSContinuationBlock) {
         // DynamoDB getUser.
         PRFYDynamoDBManager.defaultDynamoDBManager().getUserDynamoDB(userId, completionHandler: completionHandler)
-    }
-    
-    func updateFirstLastName(firstName: String?, lastName: String?, completionHandler: AWSContinuationBlock) {
-        // UserPool updateFirstLastName.
-        PRFYUserPoolManager.defaultUserPoolManager().updateFirstLastNameUserPool(firstName, lastName: lastName, completionHandler: {
-            (task: AWSTask) in
-            if let error = task.error {
-                return AWSTask(error: error).continueWithBlock(completionHandler)
-            } else {
-                // DynamoDB updateFirstLastName SYNC.
-                PRFYDynamoDBManager.defaultDynamoDBManager().updateFirstLastNameDynamoDB(firstName, lastName: lastName, completionHandler: completionHandler)
-                return nil
-            }
-        })
-    }
-    
-    func updatePreferredUsername(preferredUsername: String, completionHandler: AWSContinuationBlock) {
-        // UserPool updatePreferredUsername.
-        PRFYUserPoolManager.defaultUserPoolManager().updatePreferredUsernameUserPool(preferredUsername, completionHandler: {
-            (task: AWSTask) in
-            if let error = task.error {
-                return AWSTask(error: error).continueWithBlock(completionHandler)
-            } else {
-                // DynamoDB updatePreferredUsername SYNC.
-                PRFYDynamoDBManager.defaultDynamoDBManager().updatePreferredUsernameDynamoDB(preferredUsername, completionHandler: completionHandler)
-                return nil
-            }
-        })
-    }
-    
-    func updateProfession(profession: String?, completionHandler: AWSContinuationBlock) {
-        // DynamoDB updateProfession.
-        PRFYDynamoDBManager.defaultDynamoDBManager().updateProfessionDynamoDB(profession, completionHandler: completionHandler)
-        // TODO should update Profession table!
-    }
-    
-    func updateLocation(location: String?, completionHandler: AWSContinuationBlock) {
-        // DynamoDB updateLocation.
-        PRFYDynamoDBManager.defaultDynamoDBManager().updateLocationDynamoDB(location, completionHandler: completionHandler)
-    }
-    
-    func updateAbout(about: String?, completionHandler: AWSContinuationBlock) {
-        // DynamoDB updateAbout.
-        PRFYDynamoDBManager.defaultDynamoDBManager().updateAboutDynamoDB(about, completionHandler: completionHandler)
-    }
-    
-    func scanUsers(completionHandler: AWSContinuationBlock) {
-        // DynamoDB scanUsers.
-        PRFYDynamoDBManager.defaultDynamoDBManager().scanUsersDynamoDB(completionHandler)
     }
 }

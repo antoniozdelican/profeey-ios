@@ -31,14 +31,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     private func configureUI() {
         // UINavigationBar
-//        UINavigationBar.appearance().setBackgroundImage(UIImage(), forBarMetrics: .Default)
-//        UINavigationBar.appearance().shadowImage = UIImage()
-//        UINavigationBar.appearance().backgroundColor = Colors.greyLight
-//        UINavigationBar.appearance().barTintColor = Colors.greyLight
-//        UINavigationBar.appearance().backgroundColor = UIColor.whiteColor()
-//        UINavigationBar.appearance().barTintColor = UIColor.whiteColor()
-//        UINavigationBar.appearance().translucent = false
-        // TEST
         UINavigationBar.appearance().backgroundColor = Colors.greyLight
         UINavigationBar.appearance().barTintColor = Colors.greyLight
         // DON'T FCKING CHANGE translucent!! it messes up capture.
@@ -78,18 +70,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 extension AppDelegate: AWSCognitoIdentityInteractiveAuthenticationDelegate {
     
-    // Set up password authentication ui to retrieve username and password from the user.
     func startPasswordAuthentication() -> AWSCognitoIdentityPasswordAuthentication {
         print("Started password authentication:")
         // If calling from LogInViewController stay there.
-        if let rootViewController = self.window?.rootViewController,
-            let presentedViewController = rootViewController.presentedViewController as? UINavigationController,
-            let logInViewController = presentedViewController.topViewController as? LogInViewController {
-            print("Called from logInViewController.")
-            return logInViewController
-        }
+//        if let rootViewController = self.window?.rootViewController,
+//            let presentedViewController = rootViewController.presentedViewController as? UINavigationController,
+//            let logInViewController = presentedViewController.topViewController as? LogInViewController {
+//            print("Called from logInViewController.")
+//            return logInViewController
+//        }
         let storyboard = UIStoryboard(name: "Onboarding", bundle: nil)
-        let rootViewController = storyboard.instantiateInitialViewController() as! OnboardingViewController
+        let rootViewController = storyboard.instantiateInitialViewController() as! OnboardingNavigationController
         dispatch_async(dispatch_get_main_queue(), {
             self.window?.rootViewController = rootViewController
         })

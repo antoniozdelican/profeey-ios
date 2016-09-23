@@ -1,19 +1,18 @@
 //
-//  HeaderTableViewCell.swift
+//  ExperienceTableViewCell.swift
 //  Profeey
 //
-//  Created by Antonio Zdelican on 11/09/16.
+//  Created by Antonio Zdelican on 21/09/16.
 //  Copyright © 2016 Profeey. All rights reserved.
 //
 
 import UIKit
 
-class HeaderTableViewCell: UITableViewCell {
-    
-    @IBOutlet weak var headerTitle: UILabel!
-    
-    @IBOutlet weak var addButton: UIButton?
-    @IBOutlet weak var editButton: UIButton?
+class ExperienceTableViewCell: UITableViewCell {
+
+    @IBOutlet weak var positionLabel: UILabel!
+    @IBOutlet weak var organizationLabel: UILabel!
+    @IBOutlet weak var timePeriodLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()

@@ -1,18 +1,16 @@
 //
-//  ProfileExperienceTableViewCell.swift
+//  DeleteExperienceTableViewCell.swift
 //  Profeey
 //
-//  Created by Antonio Zdelican on 29/08/16.
+//  Created by Antonio Zdelican on 21/09/16.
 //  Copyright © 2016 Profeey. All rights reserved.
 //
 
 import UIKit
 
-class ProfileExperienceTableViewCell: UITableViewCell {
+class DeleteExperienceTableViewCell: UITableViewCell {
 
-    @IBOutlet weak var positionLabel: UILabel!
-    @IBOutlet weak var organizationLabel: UILabel!
-    @IBOutlet weak var timePeriodLabel: UILabel!
+    @IBOutlet weak var deleteExperienceLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()

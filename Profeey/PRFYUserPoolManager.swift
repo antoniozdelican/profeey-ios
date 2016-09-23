@@ -24,20 +24,21 @@ class PRFYUserPoolManager: NSObject, UserPoolManager {
     func logInUserPool(username: String, password: String, completionHandler: AWSContinuationBlock) {
         print("logInUserPool:")
         let user = AWSClientManager.defaultClientManager().userPool?.getUser()
+        user?.getSession(username, password: password, validationData: nil).continueWithBlock(completionHandler)
         
-        user?.getSession(username, password: password, validationData: nil).continueWithBlock({
-            (task: AWSTask) in
-            if let error = task.error {
-                print("logInUserPool error:")
-                return AWSTask(error: error).continueWithBlock(completionHandler)
-            } else {
-                print("logInUserPool success!")
-                return task.continueWithBlock(completionHandler)
-            }
-        })
+//        user?.getSession(username, password: password, validationData: nil).continueWithBlock({
+//            (task: AWSTask) in
+//            if let error = task.error {
+//                print("logInUserPool error:")
+//                return AWSTask(error: error).continueWithBlock(completionHandler)
+//            } else {
+//                print("logInUserPool success!")
+//                return task.continueWithBlock(completionHandler)
+//            }
+//        })
     }
     
-    func signUpUserPool(username: String, password: String, email: String, firstName: String?, lastName: String?, completionHandler: AWSContinuationBlock) {
+    func signUpUserPool(username: String, password: String, email: String, firstName: String, lastName: String, completionHandler: AWSContinuationBlock) {
         print("signUpUserPool:")
         var attributes: [AWSCognitoIdentityUserAttributeType] = []
         let emailAttribute = AWSCognitoIdentityUserAttributeType()
@@ -46,25 +47,27 @@ class PRFYUserPoolManager: NSObject, UserPoolManager {
         attributes.append(emailAttribute)
         let firstNameAttribute = AWSCognitoIdentityUserAttributeType()
         firstNameAttribute.name = "given_name"
-        firstNameAttribute.value = firstName != nil ? firstName : ""
+        firstNameAttribute.value = firstName
         attributes.append(firstNameAttribute)
         let lastNameAttribute = AWSCognitoIdentityUserAttributeType()
         lastNameAttribute.name = "family_name"
-        lastNameAttribute.value = lastName != nil ? lastName : ""
+        lastNameAttribute.value = lastName
         attributes.append(lastNameAttribute)
         
-        AWSClientManager.defaultClientManager().userPool?.signUp(username, password: password, userAttributes: attributes, validationData: nil).continueWithBlock({
-            (task: AWSTask) in
-            if let error = task.error {
-                print("signUpUserPool error:")
-                return AWSTask(error: error).continueWithBlock(completionHandler)
-            } else {
-                print("signUpUserPool success!")
-                // Proceed to logIn.
-                self.logInUserPool(username, password: password, completionHandler: completionHandler)
-                return nil
-            }
-        })
+        AWSClientManager.defaultClientManager().userPool?.signUp(username, password: password, userAttributes: attributes, validationData: nil).continueWithBlock(completionHandler)
+        
+//        AWSClientManager.defaultClientManager().userPool?.signUp(username, password: password, userAttributes: attributes, validationData: nil).continueWithBlock({
+//            (task: AWSTask) in
+//            if let error = task.error {
+//                print("signUpUserPool error:")
+//                return AWSTask(error: error).continueWithBlock(completionHandler)
+//            } else {
+//                print("signUpUserPool success!")
+//                // Proceed to logIn.
+//                self.logInUserPool(username, password: password, completionHandler: completionHandler)
+//                return nil
+//            }
+//        })
     }
     
     func signOutUserPool(completionHandler: AWSContinuationBlock) {
@@ -90,38 +93,16 @@ class PRFYUserPoolManager: NSObject, UserPoolManager {
         })
     }
     
-    func updateUserUserPool(preferredUsername: String, firstName: String?, lastName: String?, completionHandler: AWSContinuationBlock) {
-        print("updateUser:")
-        var attributes: [AWSCognitoIdentityUserAttributeType] = []
-        
-        let preferredUsernameAttribute = AWSCognitoIdentityUserAttributeType()
-        preferredUsernameAttribute.name = "preferred_username"
-        preferredUsernameAttribute.value = preferredUsername
-        attributes.append(preferredUsernameAttribute)
-        
-        let firstNameAttribute = AWSCognitoIdentityUserAttributeType()
-        firstNameAttribute.name = "given_name"
-        firstNameAttribute.value = firstName != nil ? firstName : ""
-        attributes.append(firstNameAttribute)
-        
-        let lastNameAttribute = AWSCognitoIdentityUserAttributeType()
-        lastNameAttribute.name = "family_name"
-        lastNameAttribute.value = lastName != nil ? lastName : ""
-        attributes.append(lastNameAttribute)
-        
-        AWSClientManager.defaultClientManager().userPool?.currentUser()?.updateAttributes(attributes).continueWithBlock(completionHandler)
-    }
-    
-    func updateFirstLastNameUserPool(firstName: String?, lastName: String?, completionHandler: AWSContinuationBlock) {
+    func updateFirstLastNameUserPool(firstName: String, lastName: String, completionHandler: AWSContinuationBlock) {
         print("updateFirstLastNameUserPool:")
         var attributes: [AWSCognitoIdentityUserAttributeType] = []
         let firstNameAttribute = AWSCognitoIdentityUserAttributeType()
         firstNameAttribute.name = "given_name"
-        firstNameAttribute.value = firstName != nil ? firstName : ""
+        firstNameAttribute.value = firstName
         attributes.append(firstNameAttribute)
         let lastNameAttribute = AWSCognitoIdentityUserAttributeType()
         lastNameAttribute.name = "family_name"
-        lastNameAttribute.value = lastName != nil ? lastName : ""
+        lastNameAttribute.value = lastName
         attributes.append(lastNameAttribute)
         
         AWSClientManager.defaultClientManager().userPool?.currentUser()?.updateAttributes(attributes).continueWithBlock(completionHandler)
@@ -146,19 +127,17 @@ class PRFYUserPoolManager: NSObject, UserPoolManager {
         preferredUsernameAttribute.value = preferredUsername
         attributes.append(preferredUsernameAttribute)
         
-        AWSClientManager.defaultClientManager().userPool?.currentUser()?.updateAttributes(attributes).continueWithBlock({
-            (task: AWSTask) in
-            if let error = task.error {
-                print("updatePreferredUsernameUserPool error:")
-                return AWSTask(error: error).continueWithBlock(completionHandler)
-            } else {
-                print("updatePreferredUsernameUserPool success!")
-                return task.continueWithBlock(completionHandler)
-            }
-        })
-    }
-    
-    func updateProfilePicUrlUserPool(profilePicUrl: String?, completionHandler: AWSContinuationBlock) {
-        // TODO
+        AWSClientManager.defaultClientManager().userPool?.currentUser()?.updateAttributes(attributes).continueWithBlock(completionHandler)
+        
+//        AWSClientManager.defaultClientManager().userPool?.currentUser()?.updateAttributes(attributes).continueWithBlock({
+//            (task: AWSTask) in
+//            if let error = task.error {
+//                print("updatePreferredUsernameUserPool error:")
+//                return AWSTask(error: error).continueWithBlock(completionHandler)
+//            } else {
+//                print("updatePreferredUsernameUserPool success!")
+//                return task.continueWithBlock(completionHandler)
+//            }
+//        })
     }
 }

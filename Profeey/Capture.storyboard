@@ -7,10 +7,10 @@
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
-        <!--Scroll View Controller-->
+        <!--Capture Scroll View Controller-->
         <scene sceneID="u2l-AF-6mS">
             <objects>
-                <viewController storyboardIdentifier="captureScrollViewController" id="GE1-TC-5oI" customClass="ScrollViewController" customModule="Profeey" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="captureScrollViewController" id="GE1-TC-5oI" customClass="CaptureScrollViewController" customModule="Profeey" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="m7p-WB-EwB"/>
                         <viewControllerLayoutGuide type="bottom" id="hWY-zQ-KRl"/>
@@ -351,6 +351,7 @@
                         <outlet property="scrollViewAspectRatioConstraint" destination="h5C-7H-u1T" id="Rgw-ft-xhD"/>
                         <segue destination="dPG-oD-tIa" kind="show" identifier="segueToEditVc" id="oJL-Zq-Lgp"/>
                         <segue destination="CDH-9T-M81" kind="unwind" identifier="segueUnwindToEditProfileVc" unwindAction="unwindToEditProfileTableViewController:" id="6Vg-pq-AP8"/>
+                        <segue destination="CDH-9T-M81" kind="unwind" identifier="segueUnwindToUsernameVc" unwindAction="unwindToUsernameTableViewController:" id="YOk-HN-Ll4"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lK9-nh-PBh" userLabel="First Responder" sceneMemberID="firstResponder"/>

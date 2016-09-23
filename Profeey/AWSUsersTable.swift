@@ -44,17 +44,6 @@ class AWSUsersTable: NSObject, Table {
         return AWSUser.JSONKeyPathsByPropertyKey()[dataObjectAttributeName] as! String
     }
     
-    // TEST
-//    func saveUser(user: AWSDynamoDBObjectModel, completionHandler: AWSContinuationBlock) {
-//        let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
-//        
-//        // Set config to skip null attributes.
-//        let updateMapperConfig = AWSDynamoDBObjectMapperConfiguration()
-//        updateMapperConfig.saveBehavior = AWSDynamoDBObjectMapperSaveBehavior.UpdateSkipNullAttributes
-//        let userToUpdate: AWSUser = user as! AWSUser
-//        objectMapper.save(userToUpdate, configuration: updateMapperConfig).continueWithBlock(completionHandler)
-//    }
-    
     // Scan all (upto 5) users in the Users table.
     func scanUsers(completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
         let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
@@ -90,33 +79,13 @@ class AWSUsersTable: NSObject, Table {
         objectMapper.save(user).continueWithBlock(completionHandler)
     }
     
-    func saveUserFirstLastName(user: AWSUserFirstLastName, completionHandler: AWSContinuationBlock) {
+    // Skip null attributes (landing flow)
+    func saveUserSkipNull(user: AWSUser, completionHandler: AWSContinuationBlock) {
         let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
-        objectMapper.save(user).continueWithBlock(completionHandler)
-    }
-    
-    func saveUserPreferredUsername(user: AWSUserPreferredUsername, completionHandler: AWSContinuationBlock) {
-        let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
-        objectMapper.save(user).continueWithBlock(completionHandler)
-    }
-    
-    func saveUserProfession(user: AWSUserProfession, completionHandler: AWSContinuationBlock) {
-        let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
-        objectMapper.save(user).continueWithBlock(completionHandler)
-    }
-    
-    func saveUserLocation(user: AWSUserLocation, completionHandler: AWSContinuationBlock) {
-        let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
-        objectMapper.save(user).continueWithBlock(completionHandler)
-    }
-    
-    func saveUserAbout(user: AWSUserAbout, completionHandler: AWSContinuationBlock) {
-        let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
-        objectMapper.save(user).continueWithBlock(completionHandler)
-    }
-    
-    func saveUserProfilePic(user: AWSUserProfilePic, completionHandler: AWSContinuationBlock) {
-        let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
-        objectMapper.save(user).continueWithBlock(completionHandler)
+        
+        let updateMapperConfig = AWSDynamoDBObjectMapperConfiguration()
+        updateMapperConfig.saveBehavior = AWSDynamoDBObjectMapperSaveBehavior.UpdateSkipNullAttributes
+        
+        objectMapper.save(user, configuration: updateMapperConfig).continueWithBlock(completionHandler)
     }
 }
