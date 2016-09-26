@@ -61,6 +61,11 @@ class SearchViewController: UIViewController {
         super.viewWillAppear(animated)
         self.indicatorScrollView.contentOffset.x = -self.mainScrollView.contentOffset.x / 2
     }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.searchController?.searchBar.resignFirstResponder()
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -74,7 +79,8 @@ class SearchViewController: UIViewController {
         self.searchController?.dimsBackgroundDuringPresentation = false
         self.searchController?.searchBar.delegate = self
         
-        self.definesPresentationContext = true
+        //self.definesPresentationContext = true
+        self.definesPresentationContext = false
         self.navigationItem.titleView = self.searchController?.searchBar
     }
     
@@ -84,10 +90,20 @@ class SearchViewController: UIViewController {
         if let destinationViewController = segue.destinationViewController as? SearchUsersTableViewController {
             self.searchUsersDelegate = destinationViewController
             destinationViewController.scrollViewDelegate = self
+            destinationViewController.selectUserDelegate = self
         }
         if let destinationViewController = segue.destinationViewController as? SearchCategoriesTableViewController {
             self.searchCategoriesDelegate = destinationViewController
             destinationViewController.scrollViewDelegate = self
+            destinationViewController.selectCategoryDelegate = self
+        }
+        if let destinationViewController = segue.destinationViewController as? ProfileTableViewController,
+            let indexPath = sender as? NSIndexPath {
+            destinationViewController.user = self.showRecentUsers ? self.recentUsers[indexPath.row] : self.searchedUsers[indexPath.row]
+        }
+        if let destinationViewController = segue.destinationViewController as? CategoryTableViewController,
+            let indexPath = sender as? NSIndexPath {
+            destinationViewController.categoryName = self.showRecentCategories ? self.recentCategories[indexPath.row].categoryName : self.searchedCategories[indexPath.row].categoryName
         }
     }
     
@@ -324,5 +340,19 @@ extension SearchViewController: ScrollViewDelegate {
     
     func didScroll() {
         self.searchController?.searchBar.resignFirstResponder()
+    }
+}
+
+extension SearchViewController: SelectUserDelegate {
+    
+    func didSelectUser(indexPath: NSIndexPath) {
+        self.performSegueWithIdentifier("segueToProfileVc", sender: indexPath)
+    }
+}
+
+extension SearchViewController: SelectCategoryDelegate {
+    
+    func didSelectCategory(indexPath: NSIndexPath) {
+        self.performSegueWithIdentifier("segueToCategoryVc", sender: indexPath)
     }
 }

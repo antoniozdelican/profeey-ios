@@ -134,16 +134,16 @@
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="S7D-D7-vPQ">
                                 <rect key="frame" x="0.0" y="124" width="600" height="427"/>
                                 <subviews>
-                                    <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3QB-0R-4Pq">
-                                        <rect key="frame" x="0.0" y="0.0" width="600" height="427"/>
-                                        <connections>
-                                            <segue destination="m1h-eb-pCm" kind="embed" id="iwi-8y-BqE"/>
-                                        </connections>
-                                    </containerView>
                                     <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hXq-hp-TlA">
                                         <rect key="frame" x="600" y="0.0" width="600" height="427"/>
                                         <connections>
                                             <segue destination="YMu-Tg-axq" kind="embed" id="bky-oA-ubo"/>
+                                        </connections>
+                                    </containerView>
+                                    <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3QB-0R-4Pq">
+                                        <rect key="frame" x="0.0" y="0.0" width="600" height="427"/>
+                                        <connections>
+                                            <segue destination="m1h-eb-pCm" kind="embed" id="iwi-8y-BqE"/>
                                         </connections>
                                     </containerView>
                                 </subviews>
@@ -184,6 +184,8 @@
                         <outlet property="peopleImageView" destination="rUf-qQ-V3L" id="to5-Op-AJU"/>
                         <outlet property="peopleLabel" destination="gh6-BA-nOj" id="gFb-8f-njS"/>
                         <outlet property="segmentedControlView" destination="Nxb-p6-Mr7" id="xsJ-zn-PIe"/>
+                        <segue destination="slj-Ya-RBv" kind="show" identifier="segueToProfileVc" id="Vib-xh-EYa"/>
+                        <segue destination="fw7-WA-1jp" kind="show" identifier="segueToCategoryVc" id="WQ1-OZ-3cu"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IMO-ut-TpA" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -199,6 +201,14 @@
                 </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="893" y="-1095"/>
+        </scene>
+        <!--Profile-->
+        <scene sceneID="abo-lx-Z93">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Profile" id="slj-Ya-RBv" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="sBm-xE-lAI" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1513" y="-1154"/>
         </scene>
         <!--Search Users Table View Controller-->
         <scene sceneID="ns6-5x-6RB">
@@ -535,6 +545,14 @@
                 </tableViewController>
             </objects>
             <point key="canvasLocation" x="1256" y="-352.5"/>
+        </scene>
+        <!--Category-->
+        <scene sceneID="L63-hS-IMp">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Category" id="fw7-WA-1jp" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="68C-cv-LxD" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1513.5" y="-1036"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="RoH-nw-PjZ">

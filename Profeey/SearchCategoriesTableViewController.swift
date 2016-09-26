@@ -8,9 +8,14 @@
 
 import UIKit
 
+protocol SelectCategoryDelegate {
+    func didSelectCategory(indexPath: NSIndexPath)
+}
+
 class SearchCategoriesTableViewController: UITableViewController {
     
     var scrollViewDelegate: ScrollViewDelegate?
+    var selectCategoryDelegate: SelectCategoryDelegate?
     private var categories: [Category] = []
     private var showRecentCategories: Bool = true
     private var isSearchingCategories: Bool = false
@@ -67,6 +72,7 @@ class SearchCategoriesTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        self.selectCategoryDelegate?.didSelectCategory(indexPath)
     }
     
     override func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {

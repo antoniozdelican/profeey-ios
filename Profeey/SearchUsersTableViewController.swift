@@ -7,10 +7,16 @@
 //
 
 import UIKit
+import AWSMobileHubHelper
+
+protocol SelectUserDelegate {
+    func didSelectUser(indexPath: NSIndexPath)
+}
 
 class SearchUsersTableViewController: UITableViewController {
     
     var scrollViewDelegate: ScrollViewDelegate?
+    var selectUserDelegate: SelectUserDelegate?
     private var users: [User] = []
     private var showRecentUsers: Bool = true
     private var isSearchingUsers: Bool = false
@@ -68,6 +74,7 @@ class SearchUsersTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        self.selectUserDelegate?.didSelectUser(indexPath)
     }
     
     override func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -87,6 +94,58 @@ class SearchUsersTableViewController: UITableViewController {
     override func scrollViewDidScroll(scrollView: UIScrollView) {
         self.scrollViewDelegate?.didScroll()
     }
+    
+    // MARK: AWS
+    
+    private func downloadImage(imageKey: String, imageType: ImageType, indexPath: NSIndexPath) {
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        let content = AWSUserFileManager.custom(key: "USEast1BucketManager").contentWithKey(imageKey)
+        // TODO check if content.isImage()
+        if content.cached {
+            print("Content cached:")
+            dispatch_async(dispatch_get_main_queue(), {
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+            })
+            let image = UIImage(data: content.cachedData)
+            switch imageType {
+            case .UserProfilePic:
+                self.users[indexPath.row].profilePic = image
+                self.tableView.reloadData()
+            default:
+                return
+            }
+        } else {
+            print("Download content:")
+            content.downloadWithDownloadType(
+                AWSContentDownloadType.IfNewerExists,
+                pinOnCompletion: false,
+                progressBlock: {
+                    (content: AWSContent?, progress: NSProgress?) -> Void in
+                    // TODO
+                },
+                completionHandler: {
+                    (content: AWSContent?, data: NSData?, error: NSError?) in
+                    dispatch_async(dispatch_get_main_queue(), {
+                        UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                        if let error = error {
+                            print("downloadImage error: \(error)")
+                        } else {
+                            guard let imageData = data else {
+                                return
+                            }
+                            let image = UIImage(data: imageData)
+                            switch imageType {
+                            case .UserProfilePic:
+                                self.users[indexPath.row].profilePic = image
+                                self.tableView.reloadData()
+                            default:
+                                return
+                            }
+                        }
+                    })
+            })
+        }
+    }
 }
 
 extension SearchUsersTableViewController: SearchUsersDelegate {
@@ -100,5 +159,12 @@ extension SearchUsersTableViewController: SearchUsersDelegate {
         self.users = users
         self.showRecentUsers = showRecentUsers
         self.tableView.reloadData()
+        
+        for (index, user) in users.enumerate() {
+            if let profilePicUrl = user.profilePicUrl {
+                let indexPath = NSIndexPath(forRow: index, inSection: 0)
+                self.downloadImage(profilePicUrl, imageType: ImageType.UserProfilePic, indexPath: indexPath)
+            }
+        }
     }
 }
