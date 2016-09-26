@@ -122,7 +122,8 @@ class WelcomeProfessionsTableViewController: UITableViewController {
         guard let text = self.addProfessionTextField.text else {
             return
         }
-        if text.trimm().isEmpty {
+        let searchText = text.trimm()
+        if searchText.isEmpty {
             self.showRecentProfessions = true
             self.tableView.reloadData()
         } else {
@@ -130,7 +131,7 @@ class WelcomeProfessionsTableViewController: UITableViewController {
             // Clear searched.
             self.searchedProfessions = []
             self.tableView.reloadData()
-            self.scanProfessionsByProfessionName(text)
+            self.scanProfessionsByProfessionName(searchText)
         }
     }
     
@@ -166,7 +167,6 @@ class WelcomeProfessionsTableViewController: UITableViewController {
                         self.recentProfessions.append(profession)
                     }
                     self.tableView.reloadData()
-                    
                 }
             })
         })

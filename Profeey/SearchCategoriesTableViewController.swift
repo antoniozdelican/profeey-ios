@@ -2,63 +2,50 @@
 //  SearchCategoriesTableViewController.swift
 //  Profeey
 //
-//  Created by Antonio Zdelican on 17/08/16.
+//  Created by Antonio Zdelican on 26/09/16.
 //  Copyright © 2016 Profeey. All rights reserved.
 //
 
 import UIKit
 
-protocol SelectCategoryDelegate {
-    func categorySelected(indexPath: NSIndexPath)
-}
-
 class SearchCategoriesTableViewController: UITableViewController {
     
-    var scrollViewDelegate: ScrollViewDelegate?
-    var selectCategoryDelegate: SelectCategoryDelegate?
-    
     private var categories: [Category] = []
-    private var isSearching: Bool = false
+    private var showRecentCategories: Bool = true
+    private var isSearchingCategories: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.tableView.estimatedRowHeight = 65.0
-        self.tableView.rowHeight = UITableViewAutomaticDimension
     }
-    
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
     }
-    
+
     // MARK: UITableViewDataSource
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        if self.isSearching {
-            return 1
-        }
-        if !self.isSearching && self.categories.count == 0 {
-            return 1
-        }
         return 1
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if self.isSearching {
+        if self.isSearchingCategories {
             return 1
         }
-        if !self.isSearching && self.categories.count == 0 {
+        if !self.showRecentCategories && self.categories.count == 0 {
             return 1
         }
         return self.categories.count
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if self.isSearching {
+        if self.isSearchingCategories {
             let cell = tableView.dequeueReusableCellWithIdentifier("cellSearching", forIndexPath: indexPath) as! SearchingTableViewCell
             cell.activityIndicator.startAnimating()
             return cell
         }
-        if !self.isSearching && self.categories.count == 0 {
+        if !self.showRecentCategories && self.categories.count == 0 {
             let cell = tableView.dequeueReusableCellWithIdentifier("cellNoResults", forIndexPath: indexPath) as! NoResultsTableViewCell
             return cell
         }
@@ -71,31 +58,40 @@ class SearchCategoriesTableViewController: UITableViewController {
     
     // MARK: UITableViewDelegate
     
+    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let cell = tableView.dequeueReusableCellWithIdentifier("cellHeader") as! HeaderTableViewCell
+        cell.headerTitle.text = self.showRecentCategories ? "RECENT" : "BEST MATCHES"
+        cell.contentView.backgroundColor = UIColor.whiteColor()
+        return cell.contentView
+    }
+    
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        let cell = tableView.cellForRowAtIndexPath(indexPath)
-        if cell is SearchCategoryTableViewCell {
-            self.selectCategoryDelegate?.categorySelected(indexPath)
-        }
     }
     
-    override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        cell.layoutMargins = UIEdgeInsetsZero
-        cell.separatorInset = UIEdgeInsetsMake(0.0, 12.0, 0.0, 12.0)
+    override func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return 64.0
     }
     
-    // MARK: UIScrollViewDelegate
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return 64.0
+    }
     
-    override func scrollViewWillBeginDragging(scrollView: UIScrollView) {
-        self.scrollViewDelegate?.scrollViewWillBeginDragging()
+    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 32.0
     }
 }
 
 extension SearchCategoriesTableViewController: SearchCategoriesDelegate {
     
-    func toggleSearchCategories(categories: [Category], isSearching: Bool) {
+    func searchingCategories(isSearchingCategories: Bool) {
+        self.isSearchingCategories = isSearchingCategories
+        self.tableView.reloadData()
+    }
+    
+    func showCategories(categories: [Category], showRecentCategories: Bool) {
         self.categories = categories
-        self.isSearching = isSearching
+        self.showRecentCategories = showRecentCategories
         self.tableView.reloadData()
     }
 }

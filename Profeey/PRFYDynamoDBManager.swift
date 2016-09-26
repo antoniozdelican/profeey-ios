@@ -151,19 +151,9 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         })
     }
     
-    func scanUsersDynamoDB(completionHandler: AWSContinuationBlock) {
-        print("scanUsersDynamoDB:")
+    func scanUsersDynamoDB(completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
         let usersTable = AWSUsersTable()
-        usersTable.scanUsers({
-            (response: AWSDynamoDBPaginatedOutput?, error: NSError?) in
-            if let error = error {
-                print("scanUsersDynamoDB error:")
-                AWSTask(error: error).continueWithBlock(completionHandler)
-            } else {
-                print("scanUsersDynamoDB success!")
-                AWSTask(result: response).continueWithBlock(completionHandler)
-            }
-        })
+        usersTable.scanUsers(completionHandler)
     }
     
     func scanUsersByFirstLastNameDynamoDB(searchFirstName: String, searchLastName: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
@@ -399,6 +389,12 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
     }
     
     // MARK: Categories
+    
+    func scanCategoriesDynamoDB(completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
+        print("scanCategoriesDynamoDB:")
+        let categoriesTable = AWSCategoriesTable()
+        categoriesTable.scanCategories(completionHandler)
+    }
     
     func scanCategoriesByCategoryNameDynamoDB(searchCategoryName: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
         print("scanCategoriesByCategoryNameDynamoDB:")

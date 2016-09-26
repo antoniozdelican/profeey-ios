@@ -2,59 +2,49 @@
 //  SearchUsersTableViewController.swift
 //  Profeey
 //
-//  Created by Antonio Zdelican on 17/08/16.
+//  Created by Antonio Zdelican on 26/09/16.
 //  Copyright © 2016 Profeey. All rights reserved.
 //
 
 import UIKit
 
-protocol SelectUserDelegate {
-    func userSelected(indexPath: NSIndexPath)
-}
-
 class SearchUsersTableViewController: UITableViewController {
     
-    var scrollViewDelegate: ScrollViewDelegate?
-    var selectUserDelegate: SelectUserDelegate?
     private var users: [User] = []
-    private var isSearching: Bool = false
+    private var showRecentUsers: Bool = true
+    private var isSearchingUsers: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
     }
-    
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
-    
+
     // MARK: UITableViewDataSource
-    
+
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        if self.isSearching {
-            return 1
-        }
-        if !self.isSearching && self.users.count == 0 {
-            return 1
-        }
         return 1
     }
-    
+
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if self.isSearching {
+        if self.isSearchingUsers {
             return 1
         }
-        if !self.isSearching && self.users.count == 0 {
+        if !self.showRecentUsers && self.users.count == 0 {
             return 1
         }
         return self.users.count
     }
+
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if self.isSearching {
+        if self.isSearchingUsers {
             let cell = tableView.dequeueReusableCellWithIdentifier("cellSearching", forIndexPath: indexPath) as! SearchingTableViewCell
             cell.activityIndicator.startAnimating()
             return cell
         }
-        if !self.isSearching && self.users.count == 0 {
+        if !self.showRecentUsers && self.users.count == 0 {
             let cell = tableView.dequeueReusableCellWithIdentifier("cellNoResults", forIndexPath: indexPath) as! NoResultsTableViewCell
             return cell
         }
@@ -68,39 +58,40 @@ class SearchUsersTableViewController: UITableViewController {
     
     // MARK: UITableViewDelegate
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        let cell = tableView.cellForRowAtIndexPath(indexPath)
-        if cell is SearchUserTableViewCell {
-            self.selectUserDelegate?.userSelected(indexPath)
-        }
+    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let cell = tableView.dequeueReusableCellWithIdentifier("cellHeader") as! HeaderTableViewCell
+        cell.headerTitle.text = self.showRecentUsers ? "RECENT" : "BEST MATCHES"
+        cell.contentView.backgroundColor = UIColor.whiteColor()
+        return cell.contentView
     }
     
-    override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        cell.layoutMargins = UIEdgeInsetsZero
-        cell.separatorInset = UIEdgeInsetsMake(0.0, 12.0, 0.0, 12.0)
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
     
     override func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 65.0
+        return 64.0
     }
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 65.0
+        return 64.0
     }
     
-    // MARK: UIScrollViewDelegate
-    
-    override func scrollViewWillBeginDragging(scrollView: UIScrollView) {
-        self.scrollViewDelegate?.scrollViewWillBeginDragging()
+    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 32.0
     }
 }
 
 extension SearchUsersTableViewController: SearchUsersDelegate {
     
-    func toggleSearchUsers(users: [User], isSearching: Bool) {
+    func searchingUsers(isSearchingUsers: Bool) {
+        self.isSearchingUsers = isSearchingUsers
+        self.tableView.reloadData()
+    }
+    
+    func showUsers(users: [User], showRecentUsers: Bool) {
         self.users = users
-        self.isSearching = isSearching
+        self.showRecentUsers = showRecentUsers
         self.tableView.reloadData()
     }
 }

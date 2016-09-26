@@ -23,7 +23,7 @@ protocol DynamoDBManager {
     
     func saveUserDynamoDB(user: User?, completionHandler: AWSContinuationBlock)
     
-    func scanUsersDynamoDB(completionHandler: AWSContinuationBlock)
+    func scanUsersDynamoDB(completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void)
     func scanUsersByFirstLastNameDynamoDB(searchFirstName: String, searchLastName: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void)
     
     // MARK: UserRelationships
@@ -52,6 +52,7 @@ protocol DynamoDBManager {
     
     // MARK: Categories
     
+    func scanCategoriesDynamoDB(completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void)
     func scanCategoriesByCategoryNameDynamoDB(searchCategoryName: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void)
     
     // MARK: Professions

@@ -44,11 +44,11 @@ class AWSUsersTable: NSObject, Table {
         return AWSUser.JSONKeyPathsByPropertyKey()[dataObjectAttributeName] as! String
     }
     
-    // Scan all (upto 5) users in the Users table.
+    // Scan all (upto 10) users in the Users table.
     func scanUsers(completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
         let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
         let scanExpression = AWSDynamoDBScanExpression()
-        scanExpression.limit = 5
+        scanExpression.limit = 10
         objectMapper.scan(AWSUser.self, expression: scanExpression, completionHandler: completionHandler)
     }
     
