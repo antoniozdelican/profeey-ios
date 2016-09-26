@@ -20,6 +20,10 @@ protocol SearchCategoriesDelegate {
     func searchingCategories(isSearchingCategories: Bool)
 }
 
+protocol ScrollViewDelegate {
+    func didScroll()
+}
+
 class SearchViewController: UIViewController {
     
     @IBOutlet weak var indicatorScrollView: UIScrollView!
@@ -66,9 +70,10 @@ class SearchViewController: UIViewController {
     
     private func configureSearchController() {
         self.searchController = UISearchController(searchResultsController: nil)
-        self.searchController?.searchResultsUpdater = self
         self.searchController?.hidesNavigationBarDuringPresentation = false
         self.searchController?.dimsBackgroundDuringPresentation = false
+        self.searchController?.searchBar.delegate = self
+        
         self.definesPresentationContext = true
         self.navigationItem.titleView = self.searchController?.searchBar
     }
@@ -78,9 +83,11 @@ class SearchViewController: UIViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if let destinationViewController = segue.destinationViewController as? SearchUsersTableViewController {
             self.searchUsersDelegate = destinationViewController
+            destinationViewController.scrollViewDelegate = self
         }
         if let destinationViewController = segue.destinationViewController as? SearchCategoriesTableViewController {
             self.searchCategoriesDelegate = destinationViewController
+            destinationViewController.scrollViewDelegate = self
         }
     }
     
@@ -260,13 +267,22 @@ class SearchViewController: UIViewController {
     }
 }
 
-extension SearchViewController: UISearchResultsUpdating {
+extension SearchViewController: UIScrollViewDelegate {
     
-    func updateSearchResultsForSearchController(searchController: UISearchController) {
-        guard let text = searchController.searchBar.text else {
-            return
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        self.indicatorScrollView.contentOffset.x = -scrollView.contentOffset.x / 2
+        if scrollView.contentOffset.x > scrollView.bounds.width / 2 {
+            self.adjustSegment(1)
+        } else {
+            self.adjustSegment(0)
         }
-        let searchText = text.trimm()
+    }
+}
+
+extension SearchViewController: UISearchBarDelegate {
+    
+    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+        let searchText = searchText.trimm()
         if searchText.isEmpty {
             // Users.
             self.showRecentUsers = true
@@ -277,7 +293,7 @@ extension SearchViewController: UISearchResultsUpdating {
             self.showRecentCategories = true
             self.searchCategoriesDelegate?.searchingCategories(false)
             self.searchCategoriesDelegate?.showCategories(self.recentCategories, showRecentCategories: self.showRecentCategories)
-
+            
         } else {
             // Users.
             self.showRecentUsers = false
@@ -290,16 +306,23 @@ extension SearchViewController: UISearchResultsUpdating {
             self.scanCategoriesByCategoryName(searchText)
         }
     }
+    
+    func searchBarCancelButtonClicked(searchBar: UISearchBar) {
+        // Users.
+        self.showRecentUsers = true
+        self.searchUsersDelegate?.searchingUsers(false)
+        self.searchUsersDelegate?.showUsers(self.recentUsers, showRecentUsers: self.showRecentUsers)
+        
+        // Categories.
+        self.showRecentCategories = true
+        self.searchCategoriesDelegate?.searchingCategories(false)
+        self.searchCategoriesDelegate?.showCategories(self.recentCategories, showRecentCategories: self.showRecentCategories)
+    }
 }
 
-extension SearchViewController: UIScrollViewDelegate {
+extension SearchViewController: ScrollViewDelegate {
     
-    func scrollViewDidScroll(scrollView: UIScrollView) {
-        self.indicatorScrollView.contentOffset.x = -scrollView.contentOffset.x / 2
-        if scrollView.contentOffset.x > scrollView.bounds.width / 2 {
-            self.adjustSegment(1)
-        } else {
-            self.adjustSegment(0)
-        }
+    func didScroll() {
+        self.searchController?.searchBar.resignFirstResponder()
     }
 }

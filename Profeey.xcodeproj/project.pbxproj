@@ -46,8 +46,6 @@
 		A975529C1D4F4D0300F773FF /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A975529B1D4F4D0300F773FF /* PreviewViewController.swift */; };
 		A97A9AEB1D85C03B00507517 /* HeaderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A97A9AEA1D85C03B00507517 /* HeaderTableViewCell.swift */; };
 		A97A9AED1D85D0ED00507517 /* ProfessionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A97A9AEC1D85D0ED00507517 /* ProfessionsTableViewController.swift */; };
-		A980F8271D981E45006271C2 /* ExploreCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = A980F8261D981E45006271C2 /* ExploreCollectionViewFlowLayout.swift */; };
-		A980F8291D98205C006271C2 /* SearchNewTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A980F8281D98205C006271C2 /* SearchNewTableViewController.swift */; };
 		A98A38241D8C076C00C9CA75 /* AWSUserCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98A38231D8C076C00C9CA75 /* AWSUserCategory.swift */; };
 		A98A38261D8C07DA00C9CA75 /* AWSUserCategoriesTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98A38251D8C07DA00C9CA75 /* AWSUserCategoriesTable.swift */; };
 		A98B42E11D43C95A0089A769 /* ProfessionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98B42E01D43C95A0089A769 /* ProfessionTableViewCell.swift */; };
@@ -244,8 +242,6 @@
 		A975529B1D4F4D0300F773FF /* PreviewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreviewViewController.swift; sourceTree = "<group>"; };
 		A97A9AEA1D85C03B00507517 /* HeaderTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeaderTableViewCell.swift; sourceTree = "<group>"; };
 		A97A9AEC1D85D0ED00507517 /* ProfessionsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfessionsTableViewController.swift; sourceTree = "<group>"; };
-		A980F8261D981E45006271C2 /* ExploreCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExploreCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
-		A980F8281D98205C006271C2 /* SearchNewTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchNewTableViewController.swift; sourceTree = "<group>"; };
 		A98A38231D8C076C00C9CA75 /* AWSUserCategory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSUserCategory.swift; sourceTree = "<group>"; };
 		A98A38251D8C07DA00C9CA75 /* AWSUserCategoriesTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSUserCategoriesTable.swift; sourceTree = "<group>"; };
 		A98B42E01D43C95A0089A769 /* ProfessionTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfessionTableViewCell.swift; sourceTree = "<group>"; };
@@ -727,15 +723,6 @@
 			name = AWSFeaturedCategories;
 			sourceTree = "<group>";
 		};
-		A9C4D2711D992024000E1F35 /* Test */ = {
-			isa = PBXGroup;
-			children = (
-				A980F8281D98205C006271C2 /* SearchNewTableViewController.swift */,
-				A980F8261D981E45006271C2 /* ExploreCollectionViewFlowLayout.swift */,
-			);
-			name = Test;
-			sourceTree = "<group>";
-		};
 		A9C6CB7D1D29296B00863816 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -826,7 +813,6 @@
 				A9DC4E381D994EA000AF4AB8 /* Categories */,
 				A9BF16481D6514C900060A9E /* NoResultsTableViewCell.swift */,
 				A9BF164A1D6519D100060A9E /* SearchingTableViewCell.swift */,
-				A9C4D2711D992024000E1F35 /* Test */,
 			);
 			name = Search;
 			sourceTree = "<group>";
@@ -1093,7 +1079,6 @@
 				A98A38261D8C07DA00C9CA75 /* AWSUserCategoriesTable.swift in Sources */,
 				A9C22CF81D7E0B90002A1D6E /* AWSFeaturedCategory.swift in Sources */,
 				A9193A331D6F137500E38F56 /* AWSUserRelationshipsTable.swift in Sources */,
-				A980F8291D98205C006271C2 /* SearchNewTableViewController.swift in Sources */,
 				A9D334101D801B66005565C2 /* PostTimeTableViewCell.swift in Sources */,
 				A903EB591D16A39700B33025 /* UIImage+FixOrientation.m in Sources */,
 				A9D97BF81D95718C00D6F22E /* WelcomeProfessionsTableViewController.swift in Sources */,
@@ -1135,7 +1120,6 @@
 				A9DC4E361D994B8900AF4AB8 /* SearchCategoriesTableViewController.swift in Sources */,
 				A99030FB1D46632500336D26 /* AlbumsTableViewController.swift in Sources */,
 				A9C8081C1D916C660018109C /* EditAboutTableViewCell.swift in Sources */,
-				A980F8271D981E45006271C2 /* ExploreCollectionViewFlowLayout.swift in Sources */,
 				A9D3340E1D801B5C005565C2 /* PostCategoryTableViewCell.swift in Sources */,
 				A9AFFB061D8AD9DE00219627 /* SearchUserTableViewCell.swift in Sources */,
 				A9F49D571D379D01002EB68B /* AWSPost.swift in Sources */,

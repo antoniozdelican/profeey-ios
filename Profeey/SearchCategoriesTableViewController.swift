@@ -10,6 +10,7 @@ import UIKit
 
 class SearchCategoriesTableViewController: UITableViewController {
     
+    var scrollViewDelegate: ScrollViewDelegate?
     private var categories: [Category] = []
     private var showRecentCategories: Bool = true
     private var isSearchingCategories: Bool = false
@@ -20,7 +21,6 @@ class SearchCategoriesTableViewController: UITableViewController {
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 
     // MARK: UITableViewDataSource
@@ -79,6 +79,12 @@ class SearchCategoriesTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 32.0
+    }
+    
+    // MARK: UIScrollViewDelegate
+    
+    override func scrollViewDidScroll(scrollView: UIScrollView) {
+        self.scrollViewDelegate?.didScroll()
     }
 }
 

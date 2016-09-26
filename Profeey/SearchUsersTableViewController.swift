@@ -10,6 +10,7 @@ import UIKit
 
 class SearchUsersTableViewController: UITableViewController {
     
+    var scrollViewDelegate: ScrollViewDelegate?
     private var users: [User] = []
     private var showRecentUsers: Bool = true
     private var isSearchingUsers: Bool = false
@@ -79,6 +80,12 @@ class SearchUsersTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 32.0
+    }
+    
+    // MARK: UIScrollViewDelegate
+    
+    override func scrollViewDidScroll(scrollView: UIScrollView) {
+        self.scrollViewDelegate?.didScroll()
     }
 }
 
