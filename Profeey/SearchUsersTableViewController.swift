@@ -60,6 +60,7 @@ class SearchUsersTableViewController: UITableViewController {
         cell.profilePicImageView.image = user.profilePic
         cell.fullNameLabel.text = user.fullName
         cell.professionLabel.text = user.professionName
+        cell.locationNameLabel.text = user.locationName
         return cell
     }
     
@@ -78,11 +79,12 @@ class SearchUsersTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 64.0
+        return 84.0
     }
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 64.0
+        //return 84.0
+        return UITableViewAutomaticDimension
     }
     
     override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {

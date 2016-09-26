@@ -160,7 +160,7 @@ class SearchViewController: UIViewController {
                         return
                     }
                     for awsUser in awsUsers {
-                        let user = User(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl)
+                        let user = User(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationName: awsUser._locationName)
                         self.recentUsers.append(user)
                     }
                     if self.showRecentUsers {
@@ -207,7 +207,7 @@ class SearchViewController: UIViewController {
                     // Clear searched
                     self.searchedUsers = []
                     for awsUser in awsUsers {
-                        let user = User(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl)
+                        let user = User(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationName: awsUser._locationName)
                         self.searchedUsers.append(user)
                     }
                     if !self.showRecentUsers {
