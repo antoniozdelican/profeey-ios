@@ -13,9 +13,9 @@ import AWSMobileHubHelper
 
 extension UIViewController {
     
-    func getSimpleAlertWithTitle(title: String, message: String?, cancelButtonTitle cancelTitle: String) -> UIAlertController {
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: .Alert)
-        let cancelAction = UIAlertAction(title: cancelTitle, style: .Cancel, handler: nil)
+    func getSimpleAlertWithTitle(_ title: String, message: String?, cancelButtonTitle cancelTitle: String) -> UIAlertController {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: cancelTitle, style: .cancel, handler: nil)
         alertController.addAction(cancelAction)
         return alertController
     }
@@ -23,25 +23,25 @@ extension UIViewController {
 
 extension UIImage {
     
-    func scale(width: CGFloat, height: CGFloat, scale: CGFloat) -> UIImage {
-        let scaleRect = CGRectMake(0.0, 0.0, width, height)
-        let newSize = CGSizeMake(width, height)
+    func scale(_ width: CGFloat, height: CGFloat, scale: CGFloat) -> UIImage {
+        let scaleRect = CGRect(x: 0.0, y: 0.0, width: width, height: height)
+        let newSize = CGSize(width: width, height: height)
         UIGraphicsBeginImageContextWithOptions(newSize, false, scale)
-        self.drawInRect(scaleRect)
+        self.draw(in: scaleRect)
         let newImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-        return newImage
+        return newImage!
     }
     
     func aspectRatio() -> CGFloat {
         return self.size.width / self.size.height
     }
     
-    func crop(cropX: CGFloat, cropY: CGFloat, cropWidth: CGFloat, cropHeight: CGFloat) -> UIImage {
-        let cropRect = CGRectMake(cropX, cropY, cropWidth, cropHeight)
-        let cgiImage = self.CGImage
-        if let imageRef = CGImageCreateWithImageInRect(cgiImage, cropRect) {
-            return UIImage(CGImage: imageRef, scale: self.scale, orientation: self.imageOrientation)
+    func crop(_ cropX: CGFloat, cropY: CGFloat, cropWidth: CGFloat, cropHeight: CGFloat) -> UIImage {
+        let cropRect = CGRect(x: cropX, y: cropY, width: cropWidth, height: cropHeight)
+        let cgiImage = self.cgImage
+        if let imageRef = cgiImage?.cropping(to: cropRect) {
+            return UIImage(cgImage: imageRef, scale: self.scale, orientation: self.imageOrientation)
         } else {
             return self
         }
@@ -51,11 +51,11 @@ extension UIImage {
 extension UICollectionView {
     
     // Returns empty Array, rather than nil, when no elements in rect
-    func indexPathsForElementsInRect(rect: CGRect) -> [NSIndexPath] {
-        guard let allLayoutAttributes = self.collectionViewLayout.layoutAttributesForElementsInRect(rect) else {
+    func indexPathsForElementsInRect(_ rect: CGRect) -> [IndexPath] {
+        guard let allLayoutAttributes = self.collectionViewLayout.layoutAttributesForElements(in: rect) else {
             return []
         }
-        var indexPaths: [NSIndexPath] = []
+        var indexPaths: [IndexPath] = []
         for layoutAttributes in allLayoutAttributes {
             let indexPath = layoutAttributes.indexPath
             indexPaths.append(indexPath)
@@ -65,14 +65,17 @@ extension UICollectionView {
     
 }
 
-extension NSIndexSet {
+extension IndexSet {
     
-    func indexPathsFromIndexesWithSection(section: Int) -> [NSIndexPath] {
-        var indexPaths: [NSIndexPath] = []
+    func indexPathsFromIndexesWithSection(_ section: Int) -> [IndexPath] {
+        var indexPaths: [IndexPath] = []
         indexPaths.reserveCapacity(self.count)
-        self.enumerateIndexesUsingBlock{idx, stop in
-            indexPaths.append(NSIndexPath(forItem: idx, inSection: section))
+        for (idx, _) in self.enumerated() {
+            indexPaths.append(IndexPath(item: idx, section: section))
         }
+//        (self as NSIndexSet).enumerate{idx, stop in
+//            indexPaths.append(IndexPath(item: idx, section: section))
+//        }
         return indexPaths
     }
     
@@ -80,7 +83,7 @@ extension NSIndexSet {
 
 extension AWSContent {
     func isAudioVideo() -> Bool {
-        let lowerCaseKey = self.key.lowercaseString
+        let lowerCaseKey = self.key.lowercased()
         return lowerCaseKey.hasSuffix(".mov")
             || lowerCaseKey.hasSuffix(".mp4")
             || lowerCaseKey.hasSuffix(".mpv")
@@ -91,7 +94,7 @@ extension AWSContent {
     }
     
     func isImage() -> Bool {
-        let lowerCaseKey = self.key.lowercaseString
+        let lowerCaseKey = self.key.lowercased()
         return lowerCaseKey.hasSuffix(".jpg")
             || lowerCaseKey.hasSuffix(".png")
             || lowerCaseKey.hasSuffix(".jpeg")
@@ -162,59 +165,59 @@ extension Int {
 
 extension String {
     func getLastPathComponent() -> String {
-        let nsstringValue: NSString = self
+        let nsstringValue: NSString = self as NSString
         return nsstringValue.lastPathComponent
     }
     
     func trimm() -> String {
-        return self.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
+        return self.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
     }
     
     func isEmail() -> Bool {
         let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
         let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
-        return emailTest.evaluateWithObject(self)
+        return emailTest.evaluate(with: self)
     }
     
     func isPassword() -> Bool {
         let passwordRegEx = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$"
         let passwordTest = NSPredicate(format:"SELF MATCHES %@", passwordRegEx)
-        return passwordTest.evaluateWithObject(self)
+        return passwordTest.evaluate(with: self)
     }
 }
 
-extension NSDate {
-    func yearsFrom(date: NSDate) -> Int {
-        return NSCalendar.currentCalendar().components(.Year, fromDate: date, toDate: self, options: []).year
+extension Date {
+    func yearsFrom(_ date: Date) -> Int {
+        return (Calendar.current as NSCalendar).components(.year, from: date, to: self, options: []).year!
     }
     
-    func monthsFrom(date: NSDate) -> Int {
-        return NSCalendar.currentCalendar().components(.Month, fromDate: date, toDate: self, options: []).month
+    func monthsFrom(_ date: Date) -> Int {
+        return (Calendar.current as NSCalendar).components(.month, from: date, to: self, options: []).month!
     }
     
-    func weeksFrom(date: NSDate) -> Int {
-        return NSCalendar.currentCalendar().components(.WeekOfYear, fromDate: date, toDate: self, options: []).weekOfYear
+    func weeksFrom(_ date: Date) -> Int {
+        return (Calendar.current as NSCalendar).components(.weekOfYear, from: date, to: self, options: []).weekOfYear!
     }
     
-    func daysFrom(date: NSDate) -> Int {
-        return NSCalendar.currentCalendar().components(.Day, fromDate: date, toDate: self, options: []).day
+    func daysFrom(_ date: Date) -> Int {
+        return (Calendar.current as NSCalendar).components(.day, from: date, to: self, options: []).day!
     }
     
-    func hoursFrom(date: NSDate) -> Int {
-        return NSCalendar.currentCalendar().components(.Hour, fromDate: date, toDate: self, options: []).hour
+    func hoursFrom(_ date: Date) -> Int {
+        return (Calendar.current as NSCalendar).components(.hour, from: date, to: self, options: []).hour!
     }
     
-    func minutesFrom(date: NSDate) -> Int{
-        return NSCalendar.currentCalendar().components(.Minute, fromDate: date, toDate: self, options: []).minute
+    func minutesFrom(_ date: Date) -> Int{
+        return (Calendar.current as NSCalendar).components(.minute, from: date, to: self, options: []).minute!
     }
     
-    func secondsFrom(date: NSDate) -> Int{
-        return NSCalendar.currentCalendar().components(.Second, fromDate: date, toDate: self, options: []).second
+    func secondsFrom(_ date: Date) -> Int{
+        return (Calendar.current as NSCalendar).components(.second, from: date, to: self, options: []).second!
     }
     
     // Calculate currentDate distance from creationDate for example.
     // currentDate.offsetFrom(creationDate)
-    func offsetFrom(date: NSDate) -> String {
+    func offsetFrom(_ date: Date) -> String {
         if yearsFrom(date)   > 0 {
             return yearsFrom(date) > 1 ? "\(yearsFrom(date)) years ago" : "\(yearsFrom(date)) year ago"
         }
@@ -243,14 +246,14 @@ extension NSDate {
 extension NSNumber {
     
     func getMonth() -> Int {
-        let date = NSDate(timeIntervalSince1970: NSTimeInterval(self))
-        let month = NSCalendar.currentCalendar().components([.Month], fromDate: date).month
-        return month
+        let date = Date(timeIntervalSince1970: TimeInterval(self))
+        let month = (Calendar.current as NSCalendar).components([.month], from: date).month
+        return month!
     }
     
     func getYear() -> Int {
-        let date = NSDate(timeIntervalSince1970: NSTimeInterval(self))
-        let year = NSCalendar.currentCalendar().components([.Year], fromDate: date).year
-        return year
+        let date = Date(timeIntervalSince1970: TimeInterval(self))
+        let year = (Calendar.current as NSCalendar).components([.year], from: date).year
+        return year!
     }
 }

@@ -10,7 +10,7 @@ import UIKit
 import PhotosUI
 
 protocol GalleryCollectionViewDelegate {
-    func updateAlbumName(name: String?)
+    func updateAlbumName(_ name: String?)
 }
 
 class GalleryCollectionViewController: UICollectionViewController {
@@ -18,10 +18,10 @@ class GalleryCollectionViewController: UICollectionViewController {
     var galleryCollectionViewDelegate: GalleryCollectionViewDelegate?
     var imageManager: PHCachingImageManager?
     var thumbnailSize: CGSize!
-    var album :PHFetchResult?
+    var album :PHFetchResult<PHAsset>?
     // Used for checking if PHCachingImageManager should start caching
     var previousPreheatRect: CGRect!
-    private var ITEM_INSET: CGFloat = 1.0
+    fileprivate var ITEM_INSET: CGFloat = 1.0
     var isProfilePic: Bool = false
     var profilePicUnwind: ProfilePicUnwind?
 
@@ -32,14 +32,14 @@ class GalleryCollectionViewController: UICollectionViewController {
         
         if self.album == nil {
             let allPhotosOptions = PHFetchOptions()
-            allPhotosOptions.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.Image.rawValue)
+            allPhotosOptions.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
             allPhotosOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
-            self.album = PHAsset.fetchAssetsWithOptions(allPhotosOptions)
+            self.album = PHAsset.fetchAssets(with: allPhotosOptions)
             self.galleryCollectionViewDelegate?.updateAlbumName("All Photos")
         }
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         // Begin caching assets in and around collection view's visible rect
         self.updateCachedAssets()
@@ -51,15 +51,15 @@ class GalleryCollectionViewController: UICollectionViewController {
     
     // MARK: Navigation
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if let navigationController = segue.destinationViewController as? UINavigationController,
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let navigationController = segue.destination as? UINavigationController,
             let childViewController = navigationController.childViewControllers[0] as? AlbumsTableViewController {
             childViewController.albumsDelegate = self
         }
-        if let navigationController = segue.destinationViewController as? UINavigationController,
+        if let navigationController = segue.destination as? UINavigationController,
             let childViewController = navigationController.childViewControllers[0] as? PreviewViewController,
-            let indexPath = sender as? NSIndexPath,
-            let asset = self.album?[indexPath.item] as? PHAsset {
+            let indexPath = sender as? IndexPath,
+            let asset = self.album?[indexPath.row] {
             childViewController.asset = asset
             childViewController.isPhoto = false
             childViewController.isProfilePic = self.isProfilePic
@@ -69,11 +69,11 @@ class GalleryCollectionViewController: UICollectionViewController {
 
     // MARK: UICollectionViewDataSource
 
-    override func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+    override func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
 
-    override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if let album = self.album {
             return album.count
         } else {
@@ -81,20 +81,20 @@ class GalleryCollectionViewController: UICollectionViewController {
         }
     }
 
-    override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("cellGallery", forIndexPath: indexPath) as! GalleryCollectionViewCell
-        let asset = self.album?[indexPath.item] as! PHAsset
-        cell.representedAssetIdentifier = asset.localIdentifier;
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellGallery", for: indexPath) as! GalleryCollectionViewCell
+        let asset = self.album![indexPath.item]
+        cell.representedAssetIdentifier = asset.localIdentifier as NSString!;
         
         // Request an image for the asset from the PHCachingImageManager
-        self.imageManager?.requestImageForAsset(
-            asset,
+        self.imageManager?.requestImage(
+            for: asset,
             targetSize: thumbnailSize!,
-            contentMode: PHImageContentMode.AspectFill,
+            contentMode: PHImageContentMode.aspectFill,
             options: nil,
             resultHandler: {result, info in
                 // Set the cell's thumbnail image if it's still showing the same asset
-                if cell.representedAssetIdentifier == asset.localIdentifier {
+                if cell.representedAssetIdentifier == asset.localIdentifier as NSString {
                     cell.thumbnailImageView.image = result
                 }
         })
@@ -103,29 +103,29 @@ class GalleryCollectionViewController: UICollectionViewController {
     
     // MARK: UICollectionViewDelegate
     
-    override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        self.performSegueWithIdentifier("segueToPreviewVc", sender: indexPath)
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        self.performSegue(withIdentifier: "segueToPreviewVc", sender: indexPath)
     }
     
     //MARK: UIScrollViewDelegate
     
-    override func scrollViewDidScroll(scrollView: UIScrollView) {
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         // Update cached assets for the new visible area
         self.updateCachedAssets()
     }
     
-    @IBAction func unwindToGalleryCollectionViewController(segue: UIStoryboardSegue) {
+    @IBAction func unwindToGalleryCollectionViewController(_ segue: UIStoryboardSegue) {
     }
     
     // MARK: Asset Caching
     
-    private func resetCachedAssets() {
+    fileprivate func resetCachedAssets() {
         self.imageManager?.stopCachingImagesForAllAssets()
-        self.previousPreheatRect = CGRectZero;
+        self.previousPreheatRect = CGRect.zero;
     }
     
-    private func updateCachedAssets() {
-        guard self.isViewLoaded() && self.view.window != nil else {
+    fileprivate func updateCachedAssets() {
+        guard self.isViewLoaded && self.view.window != nil else {
             return
         }
         
@@ -135,15 +135,15 @@ class GalleryCollectionViewController: UICollectionViewController {
         
         // The preheat window is twice the height of the visible rect
         var preheatRect = galleryCollectionView.bounds
-        preheatRect = CGRectInset(preheatRect, 0.0, -0.5 * CGRectGetHeight(preheatRect))
+        preheatRect = preheatRect.insetBy(dx: 0.0, dy: -0.5 * preheatRect.height)
         
         // Check if the collection view is showing an area that is significantly different to the last preheated area
-        let delta = abs(CGRectGetMidY(preheatRect) - CGRectGetMidY(self.previousPreheatRect))
-        if delta > CGRectGetHeight(galleryCollectionView.bounds) / 3.0 {
+        let delta = abs(preheatRect.midY - self.previousPreheatRect.midY)
+        if delta > galleryCollectionView.bounds.height / 3.0 {
             
             // Compute the assets to start caching and to stop caching.
-            var addedIndexPaths: [NSIndexPath] = []
-            var removedIndexPaths: [NSIndexPath] = []
+            var addedIndexPaths: [IndexPath] = []
+            var removedIndexPaths: [IndexPath] = []
             
             self.computeDifferenceBetweenRect(
                 previousPreheatRect,
@@ -161,16 +161,16 @@ class GalleryCollectionViewController: UICollectionViewController {
             let assetsToStopCaching = self.assetsAtIndexPaths(removedIndexPaths)
             
             // Update the assets the PHCachingImageManager is caching
-            self.imageManager?.startCachingImagesForAssets(
-                assetsToStartCaching,
+            self.imageManager?.startCachingImages(
+                for: assetsToStartCaching,
                 targetSize: self.thumbnailSize,
-                contentMode: PHImageContentMode.AspectFill,
+                contentMode: PHImageContentMode.aspectFill,
                 options: nil
             )
-            self.imageManager?.stopCachingImagesForAssets(
-                assetsToStopCaching,
+            self.imageManager?.stopCachingImages(
+                for: assetsToStopCaching,
                 targetSize: self.thumbnailSize,
-                contentMode: PHImageContentMode.AspectFill,
+                contentMode: PHImageContentMode.aspectFill,
                 options: nil
             )
             
@@ -179,30 +179,30 @@ class GalleryCollectionViewController: UICollectionViewController {
         }
     }
     
-    private func computeDifferenceBetweenRect(oldRect: CGRect, andRect newRect: CGRect, removedHandler: (CGRect)-> Void, addedHandler: (CGRect)-> Void) {
-        if CGRectIntersectsRect(newRect, oldRect) {
-            let oldMaxY = CGRectGetMaxY(oldRect)
-            let oldMinY = CGRectGetMinY(oldRect)
-            let newMaxY = CGRectGetMaxY(newRect)
-            let newMinY = CGRectGetMinY(newRect)
+    fileprivate func computeDifferenceBetweenRect(_ oldRect: CGRect, andRect newRect: CGRect, removedHandler: (CGRect)-> Void, addedHandler: (CGRect)-> Void) {
+        if newRect.intersects(oldRect) {
+            let oldMaxY = oldRect.maxY
+            let oldMinY = oldRect.minY
+            let newMaxY = newRect.maxY
+            let newMinY = newRect.minY
             
             if newMaxY > oldMaxY {
-                let rectToAdd = CGRectMake(newRect.origin.x, oldMaxY, newRect.size.width, (newMaxY - oldMaxY))
+                let rectToAdd = CGRect(x: newRect.origin.x, y: oldMaxY, width: newRect.size.width, height: (newMaxY - oldMaxY))
                 addedHandler(rectToAdd)
             }
             
             if oldMinY > newMinY {
-                let rectToAdd = CGRectMake(newRect.origin.x, newMinY, newRect.size.width, (oldMinY - newMinY))
+                let rectToAdd = CGRect(x: newRect.origin.x, y: newMinY, width: newRect.size.width, height: (oldMinY - newMinY))
                 addedHandler(rectToAdd)
             }
             
             if newMaxY < oldMaxY {
-                let rectToRemove = CGRectMake(newRect.origin.x, newMaxY, newRect.size.width, (oldMaxY - newMaxY))
+                let rectToRemove = CGRect(x: newRect.origin.x, y: newMaxY, width: newRect.size.width, height: (oldMaxY - newMaxY))
                 removedHandler(rectToRemove)
             }
             
             if oldMinY < newMinY {
-                let rectToRemove = CGRectMake(newRect.origin.x, oldMinY, newRect.size.width, (newMinY - oldMinY))
+                let rectToRemove = CGRect(x: newRect.origin.x, y: oldMinY, width: newRect.size.width, height: (newMinY - oldMinY))
                 removedHandler(rectToRemove)
             }
         } else {
@@ -211,10 +211,10 @@ class GalleryCollectionViewController: UICollectionViewController {
         }
     }
     
-    private func assetsAtIndexPaths(indexPaths: [NSIndexPath]) -> [PHAsset] {
+    fileprivate func assetsAtIndexPaths(_ indexPaths: [IndexPath]) -> [PHAsset] {
         var assets: [PHAsset] = []
         for indexPath in indexPaths {
-            let asset = self.album?[indexPath.item] as! PHAsset
+            let asset = self.album![indexPath.item]
             assets.append(asset)
         }
         return assets
@@ -223,9 +223,10 @@ class GalleryCollectionViewController: UICollectionViewController {
 
 extension GalleryCollectionViewController: PHPhotoLibraryChangeObserver {
     
-    func photoLibraryDidChange(changeInstance: PHChange) {
+    func photoLibraryDidChange(_ changeInstance: PHChange) {
         // Check if there are changes to the assets we are showing.
-        guard let assetsFetchResults = self.album, collectionChanges = changeInstance.changeDetailsForFetchResult(assetsFetchResults) else {
+        guard let assetsFetchResults = self.album,
+            let collectionChanges = changeInstance.changeDetails(for: assetsFetchResults) else {
             return
         }
         
@@ -233,7 +234,7 @@ extension GalleryCollectionViewController: PHPhotoLibraryChangeObserver {
          Change notifications may be made on a background queue. Re-dispatch to the
          main queue before acting on the change as we'll be updating the UI.
          */
-        dispatch_async(dispatch_get_main_queue()) {
+        DispatchQueue.main.async {
             // Get the new fetch result.
             self.album = collectionChanges.fetchResultAfterChanges
             
@@ -250,18 +251,18 @@ extension GalleryCollectionViewController: PHPhotoLibraryChangeObserver {
                  */
                 collectionView.performBatchUpdates({
                     if let removedIndexes = collectionChanges.removedIndexes
-                        where removedIndexes.count > 0 {
-                        collectionView.deleteItemsAtIndexPaths(removedIndexes.indexPathsFromIndexesWithSection(0))
+                        , removedIndexes.count > 0 {
+                        collectionView.deleteItems(at: removedIndexes.indexPathsFromIndexesWithSection(0))
                     }
                     
                     if let insertedIndexes = collectionChanges.insertedIndexes
-                        where insertedIndexes.count > 0 {
-                        collectionView.insertItemsAtIndexPaths(insertedIndexes.indexPathsFromIndexesWithSection(0))
+                        , insertedIndexes.count > 0 {
+                        collectionView.insertItems(at: insertedIndexes.indexPathsFromIndexesWithSection(0))
                     }
                     
                     if let changedIndexes = collectionChanges.changedIndexes
-                        where changedIndexes.count > 0 {
-                        collectionView.reloadItemsAtIndexPaths(changedIndexes.indexPathsFromIndexesWithSection(0))
+                        , changedIndexes.count > 0 {
+                        collectionView.reloadItems(at: changedIndexes.indexPathsFromIndexesWithSection(0))
                     }
                     }, completion:  nil)
             }
@@ -273,34 +274,34 @@ extension GalleryCollectionViewController: PHPhotoLibraryChangeObserver {
 
 extension GalleryCollectionViewController: UICollectionViewDelegateFlowLayout {
     
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return self.ITEM_INSET
     }
     
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return self.ITEM_INSET
     }
     
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let numberOfColumns:CGFloat = 3
         let itemWidth = ceil((self.view.frame.width - ((numberOfColumns - 1) * self.ITEM_INSET + 2 * self.ITEM_INSET)) / numberOfColumns)
         let itemHeight = itemWidth
         
         // Set thumbnailSize for fetching Photos for retina displays
-        let scale = UIScreen.mainScreen().scale
-        self.thumbnailSize = CGSizeMake(itemWidth * scale, itemWidth * scale)
+        let scale = UIScreen.main.scale
+        self.thumbnailSize = CGSize(width: itemWidth * scale, height: itemWidth * scale)
         
-        return CGSizeMake(itemHeight, itemWidth)
+        return CGSize(width: itemHeight, height: itemWidth)
     }
 }
 
 extension GalleryCollectionViewController: AlbumsDelegate {
     
-    func albumSelected(album: PHFetchResult, title: String?) {
+    func albumSelected(_ album: PHFetchResult<PHAsset>, title: String?) {
         self.resetCachedAssets()
         self.album = album
         self.updateCachedAssets()
-        self.collectionView?.setContentOffset(CGPointMake(0.0, -44.0), animated: false)
+        self.collectionView?.setContentOffset(CGPoint(x: 0.0, y: -44.0), animated: false)
         self.collectionView?.reloadData()
         self.galleryCollectionViewDelegate?.updateAlbumName(title)
     }

@@ -8,15 +8,16 @@
 
 import Foundation
 import AWSMobileHubHelper
+import AWSCognitoIdentityProvider
 
 protocol UserPoolManager {
     
-    func logInUserPool(username: String, password: String, completionHandler: AWSContinuationBlock)
-    func signUpUserPool(username: String, password: String, email: String, firstName: String, lastName: String, completionHandler: AWSContinuationBlock)
-    func signOutUserPool(completionHandler: AWSContinuationBlock)
+    func logInUserPool(_ username: String, password: String, completionHandler: @escaping (AWSTask<AWSCognitoIdentityUserSession>) -> Any?)
+    func signUpUserPool(_ username: String, password: String, email: String, firstName: String, lastName: String, completionHandler: @escaping (AWSTask<AWSCognitoIdentityUserPoolSignUpResponse>) -> Any?)
+    func signOutUserPool(_ completionHandler: @escaping AWSContinuationBlock)
     
-    func getUserDetailsUserPool(completionHandler: AWSContinuationBlock)
-    func updateFirstLastNameUserPool(firstName: String, lastName: String, completionHandler: AWSContinuationBlock)
-    func updatePreferredUsernameUserPool(preferredUsername: String, completionHandler: AWSContinuationBlock)
+    func getUserDetailsUserPool(_ completionHandler: @escaping (AWSTask<AWSCognitoIdentityUserGetDetailsResponse>) -> Any?)
+    func updateFirstLastNameUserPool(_ firstName: String, lastName: String, completionHandler: @escaping (AWSTask<AWSCognitoIdentityUserUpdateAttributesResponse>) -> Any?)
+    func updatePreferredUsernameUserPool(_ preferredUsername: String, completionHandler: @escaping (AWSTask<AWSCognitoIdentityUserUpdateAttributesResponse>) -> Any?)
     
 }

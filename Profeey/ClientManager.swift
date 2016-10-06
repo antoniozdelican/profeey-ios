@@ -9,6 +9,10 @@
 import Foundation
 import AWSMobileHubHelper
 import AWSCognitoIdentityProvider
+import AWSDynamoDB
+
+typealias AWSContinuationBlock = (AWSTask<AnyObject>) -> Any?
+typealias AWSDynamoDBContinuationBlock = (AWSTask<AWSDynamoDBPaginatedOutput>) -> Any?
 
 protocol ClientManager {
     
@@ -18,8 +22,8 @@ protocol ClientManager {
     
     // MARK: User
     
-    func signOut(completionHandler: AWSContinuationBlock)
+    func signOut(_ completionHandler: @escaping AWSContinuationBlock)
     
-    func getUserDetails(completionHandler: AWSContinuationBlock)
-    func getUser(userId: String, completionHandler: AWSContinuationBlock)
+    func getUserDetails(_ completionHandler: @escaping (AWSTask<AWSCognitoIdentityUserGetDetailsResponse>) -> Any?)
+    func getUser(_ userId: String, completionHandler: @escaping AWSContinuationBlock)
 }

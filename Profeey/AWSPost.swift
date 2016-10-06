@@ -13,12 +13,11 @@ class AWSPost: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     
     var _userId: String?
     var _postId: String?
+    var _caption: String?
     var _categoryName: String?
     var _creationDate: NSNumber?
-    var _description: String?
     var _imageUrl: String?
     var _numberOfLikes: NSNumber?
-    var _title: String?
     
     var _firstName: String?
     var _lastName: String?
@@ -41,16 +40,15 @@ class AWSPost: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
         return "_postId"
     }
     
-    override class func JSONKeyPathsByPropertyKey() -> [NSObject : AnyObject] {
+    override class func jsonKeyPathsByPropertyKey() -> [AnyHashable: Any] {
         return [
             "_userId" : "userId",
             "_postId" : "postId",
+            "_caption" : "caption",
             "_categoryName" : "categoryName",
             "_creationDate" : "creationDate",
-            "_description" : "description",
             "_imageUrl" : "imageUrl",
             "_numberOfLikes" : "numberOfLikes",
-            "_title" : "title",
             "_firstName" : "firstName",
             "_lastName" : "lastName",
             "_preferredUsername" : "preferredUsername",

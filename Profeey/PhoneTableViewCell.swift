@@ -1,22 +1,22 @@
 //
-//  PostTimeTableViewCell.swift
+//  PhoneTableViewCell.swift
 //  Profeey
 //
-//  Created by Antonio Zdelican on 07/09/16.
+//  Created by Antonio Zdelican on 01/10/16.
 //  Copyright © 2016 Profeey. All rights reserved.
 //
 
 import UIKit
 
-class PostTimeTableViewCell: UITableViewCell {
+class PhoneTableViewCell: UITableViewCell {
     
-    @IBOutlet weak var timeLabel: UILabel!
+    @IBOutlet weak var phoneLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
     }
 
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
 

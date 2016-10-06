@@ -92,7 +92,7 @@
         <scene sceneID="LVl-tf-v3F">
             <objects>
                 <navigationController id="ngN-Xw-YX1" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" tag="3" title="" image="ic_notifications" id="fpA-8k-wvf">
+                    <tabBarItem key="tabBarItem" tag="2" title="" image="ic_notifications" id="fpA-8k-wvf">
                         <inset key="imageInsets" minX="0.0" minY="6" maxX="0.0" maxY="-6"/>
                     </tabBarItem>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>

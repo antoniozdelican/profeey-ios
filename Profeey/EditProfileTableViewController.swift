@@ -11,7 +11,7 @@ import AWSMobileHubHelper
 import MapKit
 
 protocol EditAboutDelegate {
-    func toggleAboutFakePlaceholderLabel(hidden: Bool)
+    func toggleAboutFakePlaceholderLabel(_ hidden: Bool)
 }
 
 class EditProfileTableViewController: UITableViewController {
@@ -28,9 +28,9 @@ class EditProfileTableViewController: UITableViewController {
     var professionName: String?
     
     var profilePicUrlToRemove: String?
-    private var newProfilePicImageData: NSData?
+    fileprivate var newProfilePicImageData: Data?
     
-    private var editAboutDelegate: EditAboutDelegate?
+    fileprivate var editAboutDelegate: EditAboutDelegate?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,7 +43,7 @@ class EditProfileTableViewController: UITableViewController {
     
     // MARK: Configuration
     
-    private func configureUserData() {
+    fileprivate func configureUserData() {
         self.profilePic = self.user?.profilePic
         self.profilePicUrl = self.user?.profilePicUrl
         self.firstName = self.user?.firstName
@@ -55,43 +55,43 @@ class EditProfileTableViewController: UITableViewController {
     
     // MARK: Navigation
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if let destinationViewController = segue.destinationViewController as? UINavigationController,
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let destinationViewController = segue.destination as? UINavigationController,
             let childViewController = destinationViewController.childViewControllers[0] as? LocationsTableViewController {
             childViewController.locationName = self.locationName
         }
-        if let destinationViewController = segue.destinationViewController as? UINavigationController,
+        if let destinationViewController = segue.destination as? UINavigationController,
             let childViewController = destinationViewController.childViewControllers[0] as? ProfessionsTableViewController {
             childViewController.professionName = self.professionName
         }
-        if let destinationViewController = segue.destinationViewController as? CaptureScrollViewController {
+        if let destinationViewController = segue.destination as? CaptureScrollViewController {
             destinationViewController.isProfilePic = true
-            destinationViewController.profilePicUnwind = ProfilePicUnwind.EditProfileVc
+            destinationViewController.profilePicUnwind = ProfilePicUnwind.editProfileVc
         }
     }
     
-    override func shouldPerformSegueWithIdentifier(identifier: String, sender: AnyObject?) -> Bool {
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
         guard identifier == "segueToLocationsVc" else {
             return true
         }
         // Ask for location authorization.
         let status = CLLocationManager.authorizationStatus()
-        if (status == CLAuthorizationStatus.Restricted) || (status == CLAuthorizationStatus.Denied) {
+        if (status == CLAuthorizationStatus.restricted) || (status == CLAuthorizationStatus.denied) {
             print("Location Restricted or Denied")
-            let alertController = UIAlertController(title: "Enable Location Services", message: "To use location services, please allow it in the Settings", preferredStyle: UIAlertControllerStyle.Alert)
-            let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: nil)
-            let openSettingsAction = UIAlertAction(title: "Open Settings", style: UIAlertActionStyle.Default, handler: {
+            let alertController = UIAlertController(title: "Enable Location Services", message: "To use location services, please allow it in the Settings", preferredStyle: UIAlertControllerStyle.alert)
+            let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil)
+            let openSettingsAction = UIAlertAction(title: "Open Settings", style: UIAlertActionStyle.default, handler: {
                 (alertAction: UIAlertAction) in
                 // Open Settings.
-                dispatch_async(dispatch_get_main_queue(), {
-                    if let appSettings = NSURL(string: UIApplicationOpenSettingsURLString) {
-                        UIApplication.sharedApplication().openURL(appSettings)
+                DispatchQueue.main.async(execute: {
+                    if let appSettings = URL(string: UIApplicationOpenSettingsURLString) {
+                        UIApplication.shared.openURL(appSettings)
                     }
                 })
             })
             alertController.addAction(cancelAction)
             alertController.addAction(openSettingsAction)
-            presentViewController(alertController, animated: true, completion: nil)
+            present(alertController, animated: true, completion: nil)
             return false
         } else {
             return true
@@ -100,11 +100,11 @@ class EditProfileTableViewController: UITableViewController {
 
     // MARK: UITableViewDataSource
 
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
             return 6
@@ -113,35 +113,35 @@ class EditProfileTableViewController: UITableViewController {
         }
     }
 
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        switch indexPath.section {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        switch (indexPath as NSIndexPath).section {
         case 0:
-            switch indexPath.row {
+            switch (indexPath as NSIndexPath).row {
             case 0:
-                let cell = tableView.dequeueReusableCellWithIdentifier("cellEditProfilePic", forIndexPath: indexPath) as! EditProfilePicTableViewCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellEditProfilePic", for: indexPath) as! EditProfilePicTableViewCell
                 cell.profilePicImageView.image = self.profilePic
                 return cell
             case 1:
-                let cell = tableView.dequeueReusableCellWithIdentifier("cellEditFirstName", forIndexPath: indexPath) as! EditFirstNameTableViewCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellEditFirstName", for: indexPath) as! EditFirstNameTableViewCell
                 cell.firstNameTextField.text = self.firstName
-                cell.firstNameTextField.addTarget(self, action: #selector(EditProfileTableViewController.firstNameTextFieldChanged(_:)), forControlEvents: UIControlEvents.EditingChanged)
+                cell.firstNameTextField.addTarget(self, action: #selector(EditProfileTableViewController.firstNameTextFieldChanged(_:)), for: UIControlEvents.editingChanged)
                 return cell
             case 2:
-                let cell = tableView.dequeueReusableCellWithIdentifier("cellEditLastName", forIndexPath: indexPath) as! EditLastNameTableViewCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellEditLastName", for: indexPath) as! EditLastNameTableViewCell
                 cell.lastNameTextField.text = self.lastName
-                cell.lastNameTextField.addTarget(self, action: #selector(EditProfileTableViewController.lastNameTextFieldChanged(_:)), forControlEvents: UIControlEvents.EditingChanged)
+                cell.lastNameTextField.addTarget(self, action: #selector(EditProfileTableViewController.lastNameTextFieldChanged(_:)), for: UIControlEvents.editingChanged)
                 return cell
             case 3:
-                let cell = tableView.dequeueReusableCellWithIdentifier("cellEditAbout", forIndexPath: indexPath) as! EditAboutTableViewCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellEditAbout", for: indexPath) as! EditAboutTableViewCell
                 cell.aboutTextView.text = self.about
                 cell.aboutTextView.delegate = self
                 if let about = self.about {
-                    cell.aboutFakePlaceholderLabel.hidden = !about.isEmpty
+                    cell.aboutFakePlaceholderLabel.isHidden = !about.isEmpty
                 }
                 self.editAboutDelegate = cell
                 return cell
             case 4:
-                let cell = tableView.dequeueReusableCellWithIdentifier("cellEditLocation", forIndexPath: indexPath) as! EditLocationTableViewCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellEditLocation", for: indexPath) as! EditLocationTableViewCell
                 if let locationName = self.locationName {
                     cell.locationNameLabel.text = locationName
                     cell.locationNameLabel.textColor = Colors.black
@@ -151,7 +151,7 @@ class EditProfileTableViewController: UITableViewController {
                 }
                 return cell
             case 5:
-                let cell = tableView.dequeueReusableCellWithIdentifier("cellEditProfession", forIndexPath: indexPath) as! EditProfessionTableViewCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellEditProfession", for: indexPath) as! EditProfessionTableViewCell
                 if let professionName = self.professionName {
                     cell.professionNameLabel.text = professionName
                     cell.professionNameLabel.textColor = Colors.black
@@ -170,19 +170,19 @@ class EditProfileTableViewController: UITableViewController {
     
     // MARK: UITableViewDelegate
     
-    override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        cell.layoutMargins = UIEdgeInsetsZero
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.layoutMargins = UIEdgeInsets.zero
         cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0)
-        cell.selectionStyle = UITableViewCellSelectionStyle.None
-        switch indexPath.section {
+        cell.selectionStyle = UITableViewCellSelectionStyle.none
+        switch (indexPath as NSIndexPath).section {
         case 0:
-            switch indexPath.row {
+            switch (indexPath as NSIndexPath).row {
             case 0:
                 cell.separatorInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0)
             case 4:
-                cell.selectionStyle = UITableViewCellSelectionStyle.Default
+                cell.selectionStyle = UITableViewCellSelectionStyle.default
             case 5:
-                cell.selectionStyle = UITableViewCellSelectionStyle.Default
+                cell.selectionStyle = UITableViewCellSelectionStyle.default
                 cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0)
             default:
                 return
@@ -192,10 +192,10 @@ class EditProfileTableViewController: UITableViewController {
         }
     }
     
-    override func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        switch indexPath.section {
+    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        switch (indexPath as NSIndexPath).section {
         case 0:
-            switch indexPath.row {
+            switch (indexPath as NSIndexPath).row {
             case 0:
                 return 112.0
             default:
@@ -206,10 +206,10 @@ class EditProfileTableViewController: UITableViewController {
         }
     }
     
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        switch indexPath.section {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        switch (indexPath as NSIndexPath).section {
         case 0:
-            switch indexPath.row {
+            switch (indexPath as NSIndexPath).row {
             case 0:
                 return 112.0
             case 1:
@@ -224,29 +224,29 @@ class EditProfileTableViewController: UITableViewController {
         }
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        let cell = tableView.cellForRowAtIndexPath(indexPath)
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        let cell = tableView.cellForRow(at: indexPath)
         if cell is EditProfilePicTableViewCell {
             self.editProfilePicCellTapped()
         }
         if cell is EditLocationTableViewCell {
-            self.performSegueWithIdentifier("segueToLocationsVc", sender: self)
+            self.performSegue(withIdentifier: "segueToLocationsVc", sender: self)
         }
         if cell is EditProfessionTableViewCell {
-            self.performSegueWithIdentifier("segueToProfessionsVc", sender: self)
+            self.performSegue(withIdentifier: "segueToProfessionsVc", sender: self)
         }
     }
     
     // MARK: UIScrollViewDelegate
     
-    override func scrollViewDidScroll(scrollView: UIScrollView) {
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         self.view.endEditing(true)
     }
     
     // MARK: Tappers
     
-    func firstNameTextFieldChanged(sender: AnyObject) {
+    func firstNameTextFieldChanged(_ sender: AnyObject) {
         guard let textField = sender as? UITextField else {
             return
         }
@@ -256,7 +256,7 @@ class EditProfileTableViewController: UITableViewController {
         self.firstName = text.trimm().isEmpty ? nil : text.trimm()
     }
     
-    func lastNameTextFieldChanged(sender: AnyObject) {
+    func lastNameTextFieldChanged(_ sender: AnyObject) {
         guard let textField = sender as? UITextField else {
             return
         }
@@ -268,7 +268,7 @@ class EditProfileTableViewController: UITableViewController {
     
     // MARK: IBActions
     
-    @IBAction func saveButtonTapped(sender: AnyObject) {
+    @IBAction func saveButtonTapped(_ sender: AnyObject) {
         self.view.endEditing(true)
         FullScreenIndicator.show()
         if let newProfilePicImageData = self.newProfilePicImageData {
@@ -278,13 +278,13 @@ class EditProfileTableViewController: UITableViewController {
         }
     }
     
-    @IBAction func cancelButtonTapped(sender: AnyObject) {
+    @IBAction func cancelButtonTapped(_ sender: AnyObject) {
         self.view.endEditing(true)
-        self.dismissViewControllerAnimated(true, completion: nil)
+        self.dismiss(animated: true, completion: nil)
     }
     
-    @IBAction func unwindToEditProfileTableViewController(segue: UIStoryboardSegue) {
-        if let sourceViewController = segue.sourceViewController as? LocationsTableViewController {
+    @IBAction func unwindToEditProfileTableViewController(_ segue: UIStoryboardSegue) {
+        if let sourceViewController = segue.source as? LocationsTableViewController {
             guard let locationName = sourceViewController.locationName else {
                 self.locationName = nil
                 self.tableView.reloadData()
@@ -293,7 +293,7 @@ class EditProfileTableViewController: UITableViewController {
             self.locationName = locationName.isEmpty ? nil : locationName
             self.tableView.reloadData()
         }
-        if let sourceViewController = segue.sourceViewController as? ProfessionsTableViewController {
+        if let sourceViewController = segue.source as? ProfessionsTableViewController {
             guard let professionName = sourceViewController.professionName else {
                 self.professionName = nil
                 self.tableView.reloadData()
@@ -302,7 +302,7 @@ class EditProfileTableViewController: UITableViewController {
             self.professionName = professionName.isEmpty ? nil : professionName
             self.tableView.reloadData()
         }
-        if let sourceViewController = segue.sourceViewController as? PreviewViewController {
+        if let sourceViewController = segue.source as? PreviewViewController {
             guard let finalImage = sourceViewController.finalImage,
                 let imageData = UIImageJPEGRepresentation(finalImage, 0.6)  else {
                 return
@@ -319,9 +319,9 @@ class EditProfileTableViewController: UITableViewController {
     
     // MARK: Helpers
     
-    private func editProfilePicCellTapped() {
-        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
-        let removePhotoAction = UIAlertAction(title: "Remove Photo", style: UIAlertActionStyle.Destructive, handler: {
+    fileprivate func editProfilePicCellTapped() {
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
+        let removePhotoAction = UIAlertAction(title: "Remove Photo", style: UIAlertActionStyle.destructive, handler: {
             (alert: UIAlertAction) in
             self.newProfilePicImageData = nil
             if self.profilePicUrl != nil {
@@ -332,60 +332,60 @@ class EditProfileTableViewController: UITableViewController {
             self.tableView.reloadData()
         })
         alertController.addAction(removePhotoAction)
-        let changePhotoAction = UIAlertAction(title: "Change Photo", style: UIAlertActionStyle.Default, handler: {
+        let changePhotoAction = UIAlertAction(title: "Change Photo", style: UIAlertActionStyle.default, handler: {
             (alert: UIAlertAction) in
-            self.performSegueWithIdentifier("segueToCaptureVc", sender: self)
+            self.performSegue(withIdentifier: "segueToCaptureVc", sender: self)
         })
         alertController.addAction(changePhotoAction)
-        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: nil)
+        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil)
         alertController.addAction(cancelAction)
-        self.presentViewController(alertController, animated: true, completion: nil)
+        self.present(alertController, animated: true, completion: nil)
     }
     
     // MARK: AWS
     
-    private func saveUser() {
+    fileprivate func saveUser() {
         let updatedUser = User(userId: self.user?.userId, firstName: self.firstName, lastName: self.lastName, professionName: self.professionName, profilePicUrl: self.profilePicUrl, about: self.about, locationName: self.locationName)
         
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
         PRFYDynamoDBManager.defaultDynamoDBManager().saveUserDynamoDB(updatedUser, completionHandler: {
             (task: AWSTask) in
-            dispatch_async(dispatch_get_main_queue(), {
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 FullScreenIndicator.hide()
                 if let error = task.error {
                     print("saveUser error: \(error)")
-                    let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.userInfo["message"] as? String, cancelButtonTitle: "Ok")
-                    self.presentViewController(alertController, animated: true, completion: nil)
+                    let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.localizedDescription, cancelButtonTitle: "Ok")
+                    self.present(alertController, animated: true, completion: nil)
                 } else {
-                    self.performSegueWithIdentifier("segueUnwindToProfileVc", sender: self)
+                    self.performSegue(withIdentifier: "segueUnwindToProfileVc", sender: self)
                 }
             })
             return nil
         })
     }
     
-    private func uploadImage(imageData: NSData) {
-        let uniqueImageName = NSUUID().UUIDString.lowercaseString.stringByReplacingOccurrencesOfString("-", withString: "")
+    fileprivate func uploadImage(_ imageData: Data) {
+        let uniqueImageName = NSUUID().uuidString.lowercased().replacingOccurrences(of: "-", with: "")
         let imageKey = "public/profile_pics/\(uniqueImageName).jpg"
-        let localContent = AWSUserFileManager.custom(key: "USEast1BucketManager").localContentWithData(imageData, key: imageKey)
+        let localContent = AWSUserFileManager.custom(key: "USEast1BucketManager").localContent(with: imageData, key: imageKey)
         
         print("uploadImageS3:")
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-        localContent.uploadWithPinOnCompletion(
-            false,
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        localContent.uploadWithPin(
+            onCompletion: false,
             progressBlock: {
-                (content: AWSLocalContent?, progress: NSProgress?) -> Void in
+                (content: AWSLocalContent?, progress: Progress?) -> Void in
                 // TODO
             }, completionHandler: {
-                (content: AWSLocalContent?, error: NSError?) -> Void in
-                dispatch_async(dispatch_get_main_queue(), {
-                    UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                (content: AWSLocalContent?, error: Error?) -> Void in
+                DispatchQueue.main.async(execute: {
+                    UIApplication.shared.isNetworkActivityIndicatorVisible = false
                     if let error = error {
                         FullScreenIndicator.hide()
                         print("uploadImageS3 error: \(error)")
-                        let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.userInfo["message"] as? String, cancelButtonTitle: "Ok")
-                        self.presentViewController(alertController, animated: true, completion: nil)
+                        let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.localizedDescription, cancelButtonTitle: "Ok")
+                        self.present(alertController, animated: true, completion: nil)
                     } else {
                         print("uploadImageS3 success!")
                         self.profilePicUrl = imageKey
@@ -398,7 +398,7 @@ class EditProfileTableViewController: UITableViewController {
 
 extension EditProfileTableViewController: UITextViewDelegate {
     
-    func textViewDidChange(textView: UITextView) {
+    func textViewDidChange(_ textView: UITextView) {
         if textView.text.trimm().isEmpty {
             self.editAboutDelegate?.toggleAboutFakePlaceholderLabel(false)
         } else {

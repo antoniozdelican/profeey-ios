@@ -17,7 +17,7 @@ class Category: NSObject {
     // Generated.
     var numberOfPostsString: String? {
         if let numberOfPosts = self.numberOfPosts {
-            let numberOfPostsInt = numberOfPosts.integerValue
+            let numberOfPostsInt = numberOfPosts.intValue
             return numberOfPostsInt == 1 ? "\(numberOfPostsInt) post" : "\(numberOfPostsInt) posts"
         } else {
             return nil

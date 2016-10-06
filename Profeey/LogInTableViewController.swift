@@ -21,10 +21,10 @@ class LogInTableViewController: UITableViewController {
         self.configureForgotPasswordLabel()
         self.usernameTextField.delegate = self
         self.passwordTextField.delegate = self
-        self.logInButton.enabled = false
+        self.logInButton.isEnabled = false
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.view.endEditing(true)
     }
@@ -35,61 +35,61 @@ class LogInTableViewController: UITableViewController {
     
     // MARK: Configuration
     
-    private func configureForgotPasswordLabel() {
-        let forgotPasswordAttributedString = NSAttributedString(string: "Forgot password?", attributes: [NSUnderlineStyleAttributeName: NSUnderlineStyle.StyleSingle.rawValue])
+    fileprivate func configureForgotPasswordLabel() {
+        let forgotPasswordAttributedString = NSAttributedString(string: "Forgot password?", attributes: [NSUnderlineStyleAttributeName: NSUnderlineStyle.styleSingle.rawValue])
         self.forgotPasswordLabel.attributedText = forgotPasswordAttributedString
     }
 
     // MARK: UITableViewDataSource
 
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 3
     }
     
     // MARK: UITableViewDelegate
     
-    override func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         return 76.0
     }
     
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableViewAutomaticDimension
     }
     
     // MARK: UIScrollViewDelegate
     
-    override func scrollViewDidScroll(scrollView: UIScrollView) {
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         self.view.endEditing(true)
     }
     
     // MARK: IBActions
     
-    @IBAction func textFieldChanged(sender: AnyObject) {
+    @IBAction func textFieldChanged(_ sender: AnyObject) {
         guard let usernameText = self.usernameTextField.text,
             let passwordText = self.passwordTextField.text else {
                 return
         }
         guard !usernameText.trimm().isEmpty &&
             !passwordText.trimm().isEmpty else {
-                self.logInButton.enabled = false
+                self.logInButton.isEnabled = false
                 return
         }
-        self.logInButton.enabled = true
+        self.logInButton.isEnabled = true
     }
     
     
-    @IBAction func logInButtonTapped(sender: AnyObject) {
+    @IBAction func logInButtonTapped(_ sender: AnyObject) {
         self.view.endEditing(true)
         self.prepareForLogIn()
     }
     
     // MARK: Helpers
     
-    private func prepareForLogIn() {
+    fileprivate func prepareForLogIn() {
         guard let usernameText = self.usernameTextField.text,
             let passwordText = self.passwordTextField.text else {
                 return
@@ -104,8 +104,8 @@ class LogInTableViewController: UITableViewController {
         self.logInUserPool(username, password: password)
     }
     
-    private func redirectToMain() {
-        guard let window = UIApplication.sharedApplication().keyWindow,
+    fileprivate func redirectToMain() {
+        guard let window = UIApplication.shared.keyWindow,
             let initialViewController = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController() else {
                 return
         }
@@ -114,19 +114,19 @@ class LogInTableViewController: UITableViewController {
     
     // MARK: AWS
     
-    private func logInUserPool(username: String, password: String) {
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+    fileprivate func logInUserPool(_ username: String, password: String) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
         PRFYUserPoolManager.defaultUserPoolManager().logInUserPool(username, password: password, completionHandler: {
             (task: AWSTask) in
-            dispatch_async(dispatch_get_main_queue(), {
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 if let error = task.error {
                     FullScreenIndicator.hide()
                     print("logInUserPool error: \(error)")
-                    let alertController = UIAlertController(title: "Login failed", message: error.userInfo["message"] as? String, preferredStyle: UIAlertControllerStyle.Alert)
-                    let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil)
+                    let alertController = UIAlertController(title: "Login failed", message: error.localizedDescription, preferredStyle: UIAlertControllerStyle.alert)
+                    let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil)
                     alertController.addAction(okAction)
-                    self.presentViewController(alertController, animated: true, completion: nil)
+                    self.present(alertController, animated: true, completion: nil)
                 } else {
                     FullScreenIndicator.hide()
                     self.redirectToMain()
@@ -139,7 +139,7 @@ class LogInTableViewController: UITableViewController {
 
 extension LogInTableViewController: UITextFieldDelegate {
     
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         switch textField {
         case self.usernameTextField:
             self.usernameTextField.resignFirstResponder()

@@ -46,8 +46,8 @@ class AWSUserCategoriesTable: NSObject, Table {
         super.init()
     }
     
-    func tableAttributeName(dataObjectAttributeName: String) -> String {
-        return AWSUserCategory.JSONKeyPathsByPropertyKey()[dataObjectAttributeName] as! String
+    func tableAttributeName(_ dataObjectAttributeName: String) -> String {
+        return AWSUserCategory.jsonKeyPathsByPropertyKey()[dataObjectAttributeName] as! String
     }
 }
 
@@ -80,8 +80,8 @@ class AWSUserCategoriesNumberOfPostsIndex: NSObject, Index {
     // MARK: QueryWithPartitionKey
     
     // Query all user categories (skills) with userId and ordered by numberOfPosts.
-    func queryUserCategoriesNumberOfPostsSorted(userId: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
-        let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
+    func queryUserCategoriesNumberOfPostsSorted(_ userId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+        let objectMapper = AWSDynamoDBObjectMapper.default()
         let queryExpression = AWSDynamoDBQueryExpression()
         queryExpression.indexName = "NumberOfPostsIndex"
         queryExpression.keyConditionExpression = "#userId = :userId AND #numberOfPosts > :numberOfPosts"

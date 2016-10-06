@@ -25,7 +25,7 @@ class AWSCategory: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
         return "_categoryName"
     }
     
-    override class func JSONKeyPathsByPropertyKey() -> [NSObject : AnyObject] {
+    override class func jsonKeyPathsByPropertyKey() -> [AnyHashable: Any] {
         return [
             "_categoryName" : "categoryName",
             "_numberOfPosts" : "numberOfPosts",

@@ -12,9 +12,9 @@ import AWSDynamoDB
 class WelcomeProfessionsTableViewController: UITableViewController {
     
     @IBOutlet weak var addProfessionTextField: UITextField!
-    private var recentProfessions: [Profession] = []
-    private var searchedProfessions: [Profession] = []
-    private var showRecentProfessions: Bool = true
+    fileprivate var recentProfessions: [Profession] = []
+    fileprivate var searchedProfessions: [Profession] = []
+    fileprivate var showRecentProfessions: Bool = true
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,7 +22,7 @@ class WelcomeProfessionsTableViewController: UITableViewController {
         self.scanProfessions()
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.view.endEditing(true)
     }
@@ -33,11 +33,11 @@ class WelcomeProfessionsTableViewController: UITableViewController {
 
     // MARK: UITableViewDataSource
 
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if self.showRecentProfessions {
             return self.recentProfessions.count
         } else {
@@ -45,9 +45,9 @@ class WelcomeProfessionsTableViewController: UITableViewController {
         }
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let profession = self.showRecentProfessions ? self.recentProfessions[indexPath.row] : self.searchedProfessions[indexPath.row]
-        let cell = tableView.dequeueReusableCellWithIdentifier("cellProfession", forIndexPath: indexPath) as! ProfessionTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cellProfession", for: indexPath) as! ProfessionTableViewCell
         cell.professionNameLabel.text = profession.professionName
         cell.numberOfUsersLabel.text = profession.numberOfUsersString
         return cell
@@ -55,18 +55,18 @@ class WelcomeProfessionsTableViewController: UITableViewController {
     
     // MARK: UITableViewDelegate
     
-    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let cell = tableView.dequeueReusableCellWithIdentifier("cellHeader") as! HeaderTableViewCell
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cellHeader") as! HeaderTableViewCell
         cell.headerTitle.text = self.showRecentProfessions ? "RECENT" : "BEST MATCHES"
-        cell.contentView.backgroundColor = UIColor.whiteColor()
+        cell.contentView.backgroundColor = UIColor.white
         return cell.contentView
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         if indexPath.section == 0 {
             let profession = self.showRecentProfessions ? self.recentProfessions[indexPath.row] : self.searchedProfessions[indexPath.row]
-            self.self.addProfessionTextField.text = profession.professionName
+            self.addProfessionTextField.text = profession.professionName
             
             // Clear table.
             self.showRecentProfessions = false
@@ -75,41 +75,41 @@ class WelcomeProfessionsTableViewController: UITableViewController {
         }
     }
     
-    override func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         return 64.0
     }
     
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 64.0
     }
     
-    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 52.0
     }
     
     // MARK: UIScrollViewDelegate
     
-    override func scrollViewDidScroll(scrollView: UIScrollView) {
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         self.view.endEditing(true)
     }
     
     // MARK: IBActions
     
-    @IBAction func nextButtonTapped(sender: AnyObject) {
+    @IBAction func nextButtonTapped(_ sender: AnyObject) {
         guard let text = self.addProfessionTextField.text else {
             return
         }
         let professionName = text.trimm()
         if professionName.isEmpty {
-            let alertController = UIAlertController(title: "Empty profession", message: "Are you sure you don't want to pick a profession?", preferredStyle: UIAlertControllerStyle.Alert)
-            let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: nil)
-            let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: {
+            let alertController = UIAlertController(title: "Empty profession", message: "Are you sure you don't want to pick a profession?", preferredStyle: UIAlertControllerStyle.alert)
+            let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil)
+            let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: {
                 (alertAction: UIAlertAction) in
                 self.redirectToMain()
             })
             alertController.addAction(cancelAction)
             alertController.addAction(okAction)
-            self.presentViewController(alertController, animated: true, completion: nil)
+            self.present(alertController, animated: true, completion: nil)
         } else {
             self.view.endEditing(true)
             FullScreenIndicator.show()
@@ -118,7 +118,7 @@ class WelcomeProfessionsTableViewController: UITableViewController {
     }
     
     
-    @IBAction func addProfessionTextFieldChanged(sender: AnyObject) {
+    @IBAction func addProfessionTextFieldChanged(_ sender: AnyObject) {
         guard let text = self.addProfessionTextField.text else {
             return
         }
@@ -137,8 +137,8 @@ class WelcomeProfessionsTableViewController: UITableViewController {
     
     // MARK: Helpers
     
-    private func redirectToMain() {
-        guard let window = UIApplication.sharedApplication().keyWindow,
+    fileprivate func redirectToMain() {
+        guard let window = UIApplication.shared.keyWindow,
             let initialViewController = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController() else {
                 return
         }
@@ -147,12 +147,12 @@ class WelcomeProfessionsTableViewController: UITableViewController {
     
     // MARK: AWS
     
-    private func scanProfessions() {
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+    fileprivate func scanProfessions() {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
         PRFYDynamoDBManager.defaultDynamoDBManager().scanProfessionsDynamoDB({
-            (response: AWSDynamoDBPaginatedOutput?, error: NSError?) in
-            dispatch_async(dispatch_get_main_queue(), {
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 if let error = error {
                     print("scanProfessions error: \(error)")
                 } else {
@@ -172,13 +172,13 @@ class WelcomeProfessionsTableViewController: UITableViewController {
         })
     }
     
-    private func scanProfessionsByProfessionName(professionName: String) {
-        let searchProfessionName = professionName.lowercaseString
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+    fileprivate func scanProfessionsByProfessionName(_ professionName: String) {
+        let searchProfessionName = professionName.lowercased()
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
         PRFYDynamoDBManager.defaultDynamoDBManager().scanProfessionsByProfessionNameDynamoDB(searchProfessionName, completionHandler: {
-            (response: AWSDynamoDBPaginatedOutput?, error: NSError?) in
-            dispatch_async(dispatch_get_main_queue(), {
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 if let error = error {
                     print("scanProfessionsByProfessionName error: \(error)")
                 } else {
@@ -203,19 +203,19 @@ class WelcomeProfessionsTableViewController: UITableViewController {
         })
     }
     
-    private func saveUserProfession(professionName: String) {
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+    fileprivate func saveUserProfession(_ professionName: String) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
         PRFYDynamoDBManager.defaultDynamoDBManager().saveUserProfessionDynamoDB(professionName, completionHandler: {
             (task: AWSTask) in
-            dispatch_async(dispatch_get_main_queue(), {
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 if let error = task.error {
                     FullScreenIndicator.hide()
                     print("saveUserProfession error: \(error)")
-                    let alertController = UIAlertController(title: "Save profession failed", message: error.userInfo["message"] as? String, preferredStyle: UIAlertControllerStyle.Alert)
-                    let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil)
+                    let alertController = UIAlertController(title: "Save profession failed", message: error.localizedDescription, preferredStyle: UIAlertControllerStyle.alert)
+                    let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil)
                     alertController.addAction(okAction)
-                    self.presentViewController(alertController, animated: true, completion: nil)
+                    self.present(alertController, animated: true, completion: nil)
                 } else {
                     FullScreenIndicator.hide()
                     self.redirectToMain()

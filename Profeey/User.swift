@@ -31,19 +31,25 @@ class User: NSObject {
     // Generated.
     var profilePic: UIImage?
     var fullName: String? {
-        return [self.firstName, self.lastName].flatMap{$0}.joinWithSeparator(" ")
+        return [self.firstName, self.lastName].flatMap{$0}.joined(separator: " ")
+    }
+    var fullUsername: String? {
+        guard let preferredUsername = self.preferredUsername else {
+            return nil
+        }
+        return "@\(preferredUsername)"
     }
     var numberOfPostsInt: Int {
         guard let numberOfPostsInt = self.numberOfPosts else {
             return 0
         }
-        return numberOfPostsInt.integerValue
+        return numberOfPostsInt.intValue
     }
     var numberOfFollowersInt: Int {
         guard let numberOfFollowers = self.numberOfFollowers else {
             return 0
         }
-        return numberOfFollowers.integerValue
+        return numberOfFollowers.intValue
     }
     
     override init() {

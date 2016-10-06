@@ -18,21 +18,21 @@ class DateTableViewCell: UITableViewCell {
         super.awakeFromNib()
     }
 
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
     
-    private func setMonospacedFont() {
+    fileprivate func setMonospacedFont() {
         let features = [
             [
                 UIFontFeatureTypeIdentifierKey: kNumberSpacingType,
                 UIFontFeatureSelectorIdentifierKey: kMonospacedNumbersSelector
             ]
         ]
-        let fontDescriptor = UIFont.systemFontOfSize(16.0, weight: UIFontWeightRegular).fontDescriptor().fontDescriptorByAddingAttributes(
+        let fontDescriptor = UIFont.systemFont(ofSize: 16.0, weight: UIFontWeightRegular).fontDescriptor.addingAttributes(
             [UIFontDescriptorFeatureSettingsAttribute: features]
         )
-        self.yearLabel.font = UIFont(descriptor: fontDescriptor, size: UIFont.systemFontOfSize(16.0, weight: UIFontWeightRegular).pointSize)
+        self.yearLabel.font = UIFont(descriptor: fontDescriptor, size: UIFont.systemFont(ofSize: 16.0, weight: UIFontWeightRegular).pointSize)
     }
 
 }

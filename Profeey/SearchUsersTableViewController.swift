@@ -10,16 +10,16 @@ import UIKit
 import AWSMobileHubHelper
 
 protocol SelectUserDelegate {
-    func didSelectUser(indexPath: NSIndexPath)
+    func didSelectUser(_ indexPath: IndexPath)
 }
 
 class SearchUsersTableViewController: UITableViewController {
     
     var scrollViewDelegate: ScrollViewDelegate?
     var selectUserDelegate: SelectUserDelegate?
-    private var users: [User] = []
-    private var showRecentUsers: Bool = true
-    private var isSearchingUsers: Bool = false
+    fileprivate var users: [User] = []
+    fileprivate var showRecentUsers: Bool = true
+    fileprivate var isSearchingUsers: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,11 +31,11 @@ class SearchUsersTableViewController: UITableViewController {
 
     // MARK: UITableViewDataSource
 
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if self.isSearchingUsers {
             return 1
         }
@@ -45,18 +45,18 @@ class SearchUsersTableViewController: UITableViewController {
         return self.users.count
     }
 
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if self.isSearchingUsers {
-            let cell = tableView.dequeueReusableCellWithIdentifier("cellSearching", forIndexPath: indexPath) as! SearchingTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellSearching", for: indexPath) as! SearchingTableViewCell
             cell.activityIndicator.startAnimating()
             return cell
         }
         if !self.showRecentUsers && self.users.count == 0 {
-            let cell = tableView.dequeueReusableCellWithIdentifier("cellNoResults", forIndexPath: indexPath) as! NoResultsTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellNoResults", for: indexPath) as! NoResultsTableViewCell
             return cell
         }
-        let user = self.users[indexPath.row]
-        let cell = tableView.dequeueReusableCellWithIdentifier("cellSearchUser", forIndexPath: indexPath) as! SearchUserTableViewCell
+        let user = self.users[(indexPath as NSIndexPath).row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cellSearchUser", for: indexPath) as! SearchUserTableViewCell
         cell.profilePicImageView.image = user.profilePic
         cell.fullNameLabel.text = user.fullName
         cell.professionLabel.text = user.professionName
@@ -66,51 +66,54 @@ class SearchUsersTableViewController: UITableViewController {
     
     // MARK: UITableViewDelegate
     
-    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let cell = tableView.dequeueReusableCellWithIdentifier("cellHeader") as! HeaderTableViewCell
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0)
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cellHeader") as! HeaderTableViewCell
         cell.headerTitle.text = self.showRecentUsers ? "RECENT" : "BEST MATCHES"
-        cell.contentView.backgroundColor = UIColor.whiteColor()
+        cell.contentView.backgroundColor = UIColor.white
         return cell.contentView
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         self.selectUserDelegate?.didSelectUser(indexPath)
     }
     
-    override func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         return 84.0
     }
     
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        //return 84.0
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableViewAutomaticDimension
     }
     
-    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 32.0
     }
     
     // MARK: UIScrollViewDelegate
     
-    override func scrollViewDidScroll(scrollView: UIScrollView) {
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         self.scrollViewDelegate?.didScroll()
     }
     
     // MARK: AWS
     
-    private func downloadImage(imageKey: String, imageType: ImageType, indexPath: NSIndexPath) {
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-        let content = AWSUserFileManager.custom(key: "USEast1BucketManager").contentWithKey(imageKey)
+    fileprivate func downloadImage(_ imageKey: String, imageType: ImageType, indexPath: IndexPath) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        let content = AWSUserFileManager.custom(key: "USEast1BucketManager").content(withKey: imageKey)
         // TODO check if content.isImage()
-        if content.cached {
+        if content.isCached {
             print("Content cached:")
-            dispatch_async(dispatch_get_main_queue(), {
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
             })
             let image = UIImage(data: content.cachedData)
             switch imageType {
-            case .UserProfilePic:
+            case .userProfilePic:
                 self.users[indexPath.row].profilePic = image
                 self.tableView.reloadData()
             default:
@@ -118,17 +121,17 @@ class SearchUsersTableViewController: UITableViewController {
             }
         } else {
             print("Download content:")
-            content.downloadWithDownloadType(
-                AWSContentDownloadType.IfNewerExists,
+            content.download(
+                with: AWSContentDownloadType.ifNewerExists,
                 pinOnCompletion: false,
                 progressBlock: {
-                    (content: AWSContent?, progress: NSProgress?) -> Void in
+                    (content: AWSContent?, progress: Progress?) -> Void in
                     // TODO
                 },
                 completionHandler: {
-                    (content: AWSContent?, data: NSData?, error: NSError?) in
-                    dispatch_async(dispatch_get_main_queue(), {
-                        UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                    (content: AWSContent?, data: Data?, error: Error?) in
+                    DispatchQueue.main.async(execute: {
+                        UIApplication.shared.isNetworkActivityIndicatorVisible = false
                         if let error = error {
                             print("downloadImage error: \(error)")
                         } else {
@@ -137,7 +140,7 @@ class SearchUsersTableViewController: UITableViewController {
                             }
                             let image = UIImage(data: imageData)
                             switch imageType {
-                            case .UserProfilePic:
+                            case .userProfilePic:
                                 self.users[indexPath.row].profilePic = image
                                 self.tableView.reloadData()
                             default:
@@ -152,20 +155,20 @@ class SearchUsersTableViewController: UITableViewController {
 
 extension SearchUsersTableViewController: SearchUsersDelegate {
     
-    func searchingUsers(isSearchingUsers: Bool) {
+    func searchingUsers(_ isSearchingUsers: Bool) {
         self.isSearchingUsers = isSearchingUsers
         self.tableView.reloadData()
     }
     
-    func showUsers(users: [User], showRecentUsers: Bool) {
+    func showUsers(_ users: [User], showRecentUsers: Bool) {
         self.users = users
         self.showRecentUsers = showRecentUsers
         self.tableView.reloadData()
         
-        for (index, user) in users.enumerate() {
+        for (index, user) in users.enumerated() {
             if let profilePicUrl = user.profilePicUrl {
-                let indexPath = NSIndexPath(forRow: index, inSection: 0)
-                self.downloadImage(profilePicUrl, imageType: ImageType.UserProfilePic, indexPath: indexPath)
+                let indexPath = IndexPath(row: index, section: 0)
+                self.downloadImage(profilePicUrl, imageType: ImageType.userProfilePic, indexPath: indexPath)
             }
         }
     }

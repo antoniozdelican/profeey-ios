@@ -42,18 +42,18 @@ class AWSUserExperiencesTable: NSObject, Table {
         super.init()
     }
     
-    func tableAttributeName(dataObjectAttributeName: String) -> String {
-        return AWSUserExperience.JSONKeyPathsByPropertyKey()[dataObjectAttributeName] as! String
+    func tableAttributeName(_ dataObjectAttributeName: String) -> String {
+        return AWSUserExperience.jsonKeyPathsByPropertyKey()[dataObjectAttributeName] as! String
     }
     
-    func saveUserExperience(userExperience: AWSUserExperience, completionHandler: AWSContinuationBlock) {
-        let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
-        objectMapper.save(userExperience).continueWithBlock(completionHandler)
+    func saveUserExperience(_ userExperience: AWSUserExperience?, completionHandler: @escaping AWSContinuationBlock) {
+        let objectMapper = AWSDynamoDBObjectMapper.default()
+        objectMapper.save(userExperience!).continue(completionHandler)
     }
     
-    func removeUserExperience(userExperience: AWSUserExperience, completionHandler: AWSContinuationBlock) {
-        let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
-        objectMapper.remove(userExperience).continueWithBlock(completionHandler)
+    func removeUserExperience(_ userExperience: AWSUserExperience?, completionHandler: @escaping AWSContinuationBlock) {
+        let objectMapper = AWSDynamoDBObjectMapper.default()
+        objectMapper.remove(userExperience!).continue(completionHandler)
     }
 }
 
@@ -72,8 +72,8 @@ class AWSUserExperiencesPrimaryIndex: NSObject, Index {
     // Mark: QueryWithPartitionKey
     
     // Query all experiences from user.
-    func queryUserExperiences(userId: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
-        let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
+    func queryUserExperiences(_ userId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+        let objectMapper = AWSDynamoDBObjectMapper.default()
         let queryExpression = AWSDynamoDBQueryExpression()
         queryExpression.keyConditionExpression = "#userId = :userId"
         queryExpression.expressionAttributeNames = ["#userId": "userId",]

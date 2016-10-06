@@ -25,10 +25,10 @@ class SignUpTableViewController: UITableViewController {
         self.lastNameTextField.delegate = self
         self.emailTextField.delegate = self
         self.passwordTextField.delegate = self
-        self.signUpButton.enabled = false
+        self.signUpButton.isEnabled = false
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.view.endEditing(true)
     }
@@ -39,46 +39,46 @@ class SignUpTableViewController: UITableViewController {
     
     // MARK: Configuration
     
-    private func configureLegalLabel() {
+    fileprivate func configureLegalLabel() {
         let legalMutableAttributedString = NSMutableAttributedString(string: "By signing up, you agree to our ")
-        let termsOfServiceAttributedString = NSAttributedString(string: "Terms of service", attributes: [NSUnderlineStyleAttributeName: NSUnderlineStyle.StyleSingle.rawValue])
-        let privacyPolicyAttributedString = NSAttributedString(string: "Privacy Policy", attributes: [NSUnderlineStyleAttributeName: NSUnderlineStyle.StyleSingle.rawValue])
-        legalMutableAttributedString.appendAttributedString(termsOfServiceAttributedString)
-        legalMutableAttributedString.appendAttributedString(NSAttributedString(string: " and "))
-        legalMutableAttributedString.appendAttributedString(privacyPolicyAttributedString)
-        legalMutableAttributedString.appendAttributedString(NSAttributedString(string: "."))
+        let termsOfServiceAttributedString = NSAttributedString(string: "Terms of service", attributes: [NSUnderlineStyleAttributeName: NSUnderlineStyle.styleSingle.rawValue])
+        let privacyPolicyAttributedString = NSAttributedString(string: "Privacy Policy", attributes: [NSUnderlineStyleAttributeName: NSUnderlineStyle.styleSingle.rawValue])
+        legalMutableAttributedString.append(termsOfServiceAttributedString)
+        legalMutableAttributedString.append(NSAttributedString(string: " and "))
+        legalMutableAttributedString.append(privacyPolicyAttributedString)
+        legalMutableAttributedString.append(NSAttributedString(string: "."))
         self.legalLabel.attributedText = legalMutableAttributedString
     }
 
     // MARK: UITableViewDataSource
 
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 3
     }
     
     // MARK: UITableViewDelegate
     
-    override func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         return 76.0
     }
     
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableViewAutomaticDimension
     }
     
     // MARK: UIScrollViewDelegate
     
-    override func scrollViewDidScroll(scrollView: UIScrollView) {
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         self.view.endEditing(true)
     }
     
     // MARK: IBActions
     
-    @IBAction func textFieldChanged(sender: AnyObject) {
+    @IBAction func textFieldChanged(_ sender: AnyObject) {
         guard let firstNameText = self.firstNameTextField.text,
             let lastNameText = self.lastNameTextField.text,
             let emailText = self.emailTextField.text,
@@ -89,21 +89,21 @@ class SignUpTableViewController: UITableViewController {
             !lastNameText.trimm().isEmpty &&
             !emailText.trimm().isEmpty &&
             !passwordText.trimm().isEmpty else {
-                self.signUpButton.enabled = false
+                self.signUpButton.isEnabled = false
                 return
         }
-        self.signUpButton.enabled = true
+        self.signUpButton.isEnabled = true
     }
     
     
-    @IBAction func signUpButtonTapped(sender: AnyObject) {
+    @IBAction func signUpButtonTapped(_ sender: AnyObject) {
         self.view.endEditing(true)
         self.prepareForSignUp()
     }
     
     // MARK: Helpers
     
-    private func prepareForSignUp() {
+    fileprivate func prepareForSignUp() {
         guard let firstNameText = self.firstNameTextField.text,
             let lastNameText = self.lastNameTextField.text,
             let emailText = self.emailTextField.text,
@@ -116,32 +116,32 @@ class SignUpTableViewController: UITableViewController {
             !passwordText.trimm().isEmpty else {
                 return
         }
-        let username = NSUUID().UUIDString.lowercaseString
+        let username = NSUUID().uuidString.lowercased()
         let firstName = firstNameText.trimm()
         let lastName = lastNameText.trimm()
         let email = emailText.trimm()
         let password = passwordText.trimm()
         // Basic validation, stringer is on server side.
         guard email.isEmail() else {
-            let alertController = UIAlertController(title: "Invalid Email ", message: "The email you entered is not valid. Please try again.", preferredStyle: UIAlertControllerStyle.Alert)
-            let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil)
+            let alertController = UIAlertController(title: "Invalid Email ", message: "The email you entered is not valid. Please try again.", preferredStyle: UIAlertControllerStyle.alert)
+            let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil)
             alertController.addAction(okAction)
-            self.presentViewController(alertController, animated: true, completion: nil)
+            self.present(alertController, animated: true, completion: nil)
             return
         }
         guard password.isPassword() else {
-            let alertController = UIAlertController(title: "Invalid Password", message: "For your security, password should be at least 8 characters, uppercase, lowercase and numeric.", preferredStyle: UIAlertControllerStyle.Alert)
-            let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil)
+            let alertController = UIAlertController(title: "Invalid Password", message: "For your security, password should be at least 8 characters, uppercase, lowercase and numeric.", preferredStyle: UIAlertControllerStyle.alert)
+            let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil)
             alertController.addAction(okAction)
-            self.presentViewController(alertController, animated: true, completion: nil)
+            self.present(alertController, animated: true, completion: nil)
             return
         }
         FullScreenIndicator.show()
         self.signUpUserPool(username, password: password, email: email, firstName: firstName, lastName: lastName)
     }
     
-    private func redirectToWelcome() {
-        guard let window = UIApplication.sharedApplication().keyWindow,
+    fileprivate func redirectToWelcome() {
+        guard let window = UIApplication.shared.keyWindow,
             let initialViewController = UIStoryboard(name: "Welcome", bundle: nil).instantiateInitialViewController() else {
                 return
         }
@@ -151,19 +151,19 @@ class SignUpTableViewController: UITableViewController {
     
     // MARK: AWS
     
-    private func signUpUserPool(username: String, password: String, email: String, firstName: String, lastName: String) {
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+    fileprivate func signUpUserPool(_ username: String, password: String, email: String, firstName: String, lastName: String) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
         PRFYUserPoolManager.defaultUserPoolManager().signUpUserPool(username, password: password, email: email, firstName: firstName, lastName: lastName, completionHandler: {
             (task: AWSTask) in
-            dispatch_async(dispatch_get_main_queue(), {
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 if let error = task.error {
                     FullScreenIndicator.hide()
                     print("signUpUserPool error: \(error)")
-                    let alertController = UIAlertController(title: "Uups", message: error.userInfo["message"] as? String, preferredStyle: UIAlertControllerStyle.Alert)
-                    let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil)
+                    let alertController = UIAlertController(title: "Uups", message: error.localizedDescription, preferredStyle: UIAlertControllerStyle.alert)
+                    let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil)
                     alertController.addAction(okAction)
-                    self.presentViewController(alertController, animated: true, completion: nil)
+                    self.present(alertController, animated: true, completion: nil)
                 } else {
                     self.logInUserPool(username, password: password, email: email, firstName: firstName, lastName: lastName)
                 }
@@ -173,19 +173,19 @@ class SignUpTableViewController: UITableViewController {
         
     }
     
-    private func logInUserPool(username: String, password: String, email: String, firstName: String, lastName: String) {
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+    fileprivate func logInUserPool(_ username: String, password: String, email: String, firstName: String, lastName: String) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
         PRFYUserPoolManager.defaultUserPoolManager().logInUserPool(username, password: password, completionHandler: {
             (task: AWSTask) in
-            dispatch_async(dispatch_get_main_queue(), {
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 if let error = task.error {
                     FullScreenIndicator.hide()
                     print("signUpUserPool error: \(error)")
-                    let alertController = UIAlertController(title: "Uups", message: error.userInfo["message"] as? String, preferredStyle: UIAlertControllerStyle.Alert)
-                    let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil)
+                    let alertController = UIAlertController(title: "Uups", message: error.localizedDescription, preferredStyle: UIAlertControllerStyle.alert)
+                    let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil)
                     alertController.addAction(okAction)
-                    self.presentViewController(alertController, animated: true, completion: nil)
+                    self.present(alertController, animated: true, completion: nil)
                 } else {
                     self.createUser(email, firstName: firstName, lastName: lastName)
                 }
@@ -194,19 +194,19 @@ class SignUpTableViewController: UITableViewController {
         })
     }
     
-    private func createUser(email: String, firstName: String, lastName: String) {
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+    fileprivate func createUser(_ email: String, firstName: String, lastName: String) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
         PRFYDynamoDBManager.defaultDynamoDBManager().createUserDynamoDB(email, firstName: firstName, lastName: lastName, completionHandler: {
             (task: AWSTask) in
-            dispatch_async(dispatch_get_main_queue(), {
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 if let error = task.error {
                     FullScreenIndicator.hide()
                     print("signUpUserPool error: \(error)")
-                    let alertController = UIAlertController(title: "Uups", message: "\(error.userInfo["message"])", preferredStyle: UIAlertControllerStyle.Alert)
-                    let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil)
+                    let alertController = UIAlertController(title: "Uups", message: error.localizedDescription, preferredStyle: UIAlertControllerStyle.alert)
+                    let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil)
                     alertController.addAction(okAction)
-                    self.presentViewController(alertController, animated: true, completion: nil)
+                    self.present(alertController, animated: true, completion: nil)
                 } else {
                     FullScreenIndicator.hide()
                     self.redirectToWelcome()
@@ -220,7 +220,7 @@ class SignUpTableViewController: UITableViewController {
 
 extension SignUpTableViewController: UITextFieldDelegate {
     
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         switch textField {
         case self.firstNameTextField:
             self.firstNameTextField.resignFirstResponder()

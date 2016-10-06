@@ -17,19 +17,19 @@ class ProfeeySimpleCamera: LLSimpleCamera {
         self.setCustomFocusBox()
     }
     
-    override func attachToViewController(vc: UIViewController!, withFrame frame: CGRect) {
+    override func attach(to vc: UIViewController!, withFrame frame: CGRect) {
         vc.addChildViewController(self)
         self.view.frame = frame
-        vc.view.insertSubview(self.view, atIndex: 0)
-        self.didMoveToParentViewController(vc)
+        vc.view.insertSubview(self.view, at: 0)
+        self.didMove(toParentViewController: vc)
     }
     
     func setCustomFocusBox() {
         let focusBox = CALayer()
         focusBox.cornerRadius = 4.0
-        focusBox.bounds = CGRectMake(0.0, 0.0, 80.0, 80.0)
+        focusBox.bounds = CGRect(x: 0.0, y: 0.0, width: 80.0, height: 80.0)
         focusBox.borderWidth = 4.0
-        focusBox.borderColor = UIColor.whiteColor().CGColor
+        focusBox.borderColor = UIColor.white.cgColor
         focusBox.opacity = 0.0
         self.view.layer.addSublayer(focusBox)
         
@@ -37,8 +37,8 @@ class ProfeeySimpleCamera: LLSimpleCamera {
         focusBoxAnimation.duration = 0.75
         focusBoxAnimation.autoreverses = false
         focusBoxAnimation.repeatCount = 0.0
-        focusBoxAnimation.fromValue = NSNumber(float: 1.0)
-        focusBoxAnimation.toValue = NSNumber(float: 0.0)
+        focusBoxAnimation.fromValue = NSNumber(value: 1.0 as Float)
+        focusBoxAnimation.toValue = NSNumber(value: 0.0 as Float)
         
         self.alterFocusBox(focusBox, animation: focusBoxAnimation)
     }

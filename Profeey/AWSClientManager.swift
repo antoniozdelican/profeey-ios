@@ -17,7 +17,7 @@ protocol IncompleteSignUpDelegate {
 
 class AWSClientManager: NSObject, ClientManager {
     
-    private static var sharedInstance: AWSClientManager!
+    fileprivate static var sharedInstance: AWSClientManager!
     
     // Properties.
     var credentialsProvider: AWSCognitoCredentialsProvider?
@@ -35,11 +35,11 @@ class AWSClientManager: NSObject, ClientManager {
         return sharedInstance
     }
     
-    private func configure() {
+    fileprivate func configure() {
         print("Configuring client...")
         
         // Setup logging.
-        AWSLogger.defaultLogger().logLevel = AWSLogLevel.Verbose
+        AWSLogger.default().logLevel = AWSLogLevel.verbose
         
         // Service.
         let serviceConfiguration = AWSServiceConfiguration(
@@ -51,8 +51,8 @@ class AWSClientManager: NSObject, ClientManager {
             clientId: AWSConstants.COGNITO_USER_POOL_CLIENT_ID,
             clientSecret: AWSConstants.COGNITO_USER_POOL_CLIENT_SECRET,
             poolId: AWSConstants.COGNITO_USER_POOL_ID)
-        AWSCognitoIdentityUserPool.registerCognitoIdentityUserPoolWithConfiguration(
-            serviceConfiguration,
+        AWSCognitoIdentityUserPool.register(
+            with: serviceConfiguration,
             userPoolConfiguration: userPoolConfiguration,
             forKey: "UserPool")
         self.userPool = AWSCognitoIdentityUserPool(forKey: "UserPool")
@@ -67,20 +67,20 @@ class AWSClientManager: NSObject, ClientManager {
         let defaultServiceConfiguration = AWSServiceConfiguration(
             region: AWSConstants.COGNITO_REGIONTYPE,
             credentialsProvider: self.credentialsProvider)
-        AWSServiceManager.defaultServiceManager().defaultServiceConfiguration = defaultServiceConfiguration
+        AWSServiceManager.default().defaultServiceConfiguration = defaultServiceConfiguration
         
         // Default userFileManager.
         let userFileManagerConfiguration = AWSUserFileManagerConfiguration(
             bucketName: AWSConstants.BUCKET_NAME,
             serviceConfiguration: defaultServiceConfiguration)
-        AWSUserFileManager.registerUserFileManagerWithConfiguration(
-            userFileManagerConfiguration,
+        AWSUserFileManager.register(
+            with: userFileManagerConfiguration,
             forKey: "USEast1BucketManager")
         self.userFileManager = AWSUserFileManager.custom(key: "USEast1BucketManager")
         
     }
     
-    func signOut(completionHandler: AWSContinuationBlock) {
+    func signOut(_ completionHandler: @escaping AWSContinuationBlock) {
         // UserPool signOut.
         PRFYUserPoolManager.defaultUserPoolManager().signOutUserPool(completionHandler)
         // Credentials provider cleanUp.
@@ -89,12 +89,12 @@ class AWSClientManager: NSObject, ClientManager {
         self.userFileManager?.clearCache()
     }
     
-    func getUserDetails(completionHandler: AWSContinuationBlock) {
+    func getUserDetails(_ completionHandler: @escaping (AWSTask<AWSCognitoIdentityUserGetDetailsResponse>) -> Any?) {
         // UserPool getUserDetails.
         PRFYUserPoolManager.defaultUserPoolManager().getUserDetailsUserPool(completionHandler)
     }
     
-    func getUser(userId: String, completionHandler: AWSContinuationBlock) {
+    func getUser(_ userId: String, completionHandler: @escaping AWSContinuationBlock) {
         // DynamoDB getUser.
         PRFYDynamoDBManager.defaultDynamoDBManager().getUserDynamoDB(userId, completionHandler: completionHandler)
     }

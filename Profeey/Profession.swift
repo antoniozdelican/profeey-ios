@@ -17,7 +17,7 @@ class Profession: NSObject {
     // Generated.
     var numberOfUsersString: String? {
         if let numberOfUsers = self.numberOfUsers {
-            let numberOfUsersInt = numberOfUsers.integerValue
+            let numberOfUsersInt = numberOfUsers.intValue
             return numberOfUsersInt == 1 ? "\(numberOfUsersInt) person" : "\(numberOfUsersInt) people"
         } else {
             return nil

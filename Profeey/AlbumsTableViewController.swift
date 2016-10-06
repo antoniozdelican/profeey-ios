@@ -10,14 +10,14 @@ import UIKit
 import PhotosUI
 
 protocol AlbumsDelegate {
-    func albumSelected(album: PHFetchResult, title: String?)
+    func albumSelected(_ album: PHFetchResult<PHAsset>, title: String?)
 }
 
 class AlbumsTableViewController: UITableViewController {
     
     var albumsDelegate: AlbumsDelegate?
-    private var fetchResults: [PHFetchResult] = []
-    private var titles: [String] = []
+    fileprivate var fetchResults: [PHFetchResult<PHAsset>] = []
+    fileprivate var titles: [String] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,51 +25,63 @@ class AlbumsTableViewController: UITableViewController {
         self.tableView.rowHeight = UITableViewAutomaticDimension
         
         let fetchOptions = PHFetchOptions()
-        fetchOptions.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.Image.rawValue)
+        fetchOptions.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
         fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         
         // Fetch allPhotos.
-        let allPhotosFetchResult = PHAsset.fetchAssetsWithOptions(fetchOptions)
+        let allPhotosFetchResult = PHAsset.fetchAssets(with: fetchOptions)
         self.fetchResults.append(allPhotosFetchResult)
         self.titles.append("All Photos")
 
         // Fetch selfies album.
-        let selfiesAssetCollections = PHAssetCollection.fetchAssetCollectionsWithType(PHAssetCollectionType.SmartAlbum, subtype: PHAssetCollectionSubtype.SmartAlbumSelfPortraits, options: nil)
-        if let assetCollection = selfiesAssetCollections[0] as? PHAssetCollection {
-            let fetchResult = PHAsset.fetchAssetsInAssetCollection(assetCollection, options: fetchOptions)
-            let title = (assetCollection.localizedTitle != nil) ? assetCollection.localizedTitle! : ""
-            self.fetchResults.append(fetchResult)
-            self.titles.append(title)
-        }
+        let selfiesAssetCollections = PHAssetCollection.fetchAssetCollections(with: PHAssetCollectionType.smartAlbum, subtype: PHAssetCollectionSubtype.smartAlbumSelfPortraits, options: nil)
+        let assetCollection = selfiesAssetCollections[0]
+        let fetchResult = PHAsset.fetchAssets(in: assetCollection, options: fetchOptions)
+        let title = (assetCollection.localizedTitle != nil) ? assetCollection.localizedTitle! : ""
+        self.fetchResults.append(fetchResult)
+        self.titles.append(title)
+        
+//        if let assetCollection = selfiesAssetCollections[0] as? PHAssetCollection {
+//            let fetchResult = PHAsset.fetchAssets(in: assetCollection, options: fetchOptions)
+//            let title = (assetCollection.localizedTitle != nil) ? assetCollection.localizedTitle! : ""
+//            self.fetchResults.append(fetchResult)
+//            self.titles.append(title)
+//        }
         
         // Fetch screenshots album.
-        let screenshotsAssetCollections = PHAssetCollection.fetchAssetCollectionsWithType(PHAssetCollectionType.SmartAlbum, subtype: PHAssetCollectionSubtype.SmartAlbumScreenshots, options: nil)
-        if let assetCollection = screenshotsAssetCollections[0] as? PHAssetCollection {
-            let fetchResult = PHAsset.fetchAssetsInAssetCollection(assetCollection, options: fetchOptions)
-            let title = (assetCollection.localizedTitle != nil) ? assetCollection.localizedTitle! : ""
-            self.fetchResults.append(fetchResult)
-            self.titles.append(title)
-        }
+        let screenshotsAssetCollections = PHAssetCollection.fetchAssetCollections(with: PHAssetCollectionType.smartAlbum, subtype: PHAssetCollectionSubtype.smartAlbumScreenshots, options: nil)
+        let screenshotsAssetCollection = screenshotsAssetCollections[0]
+        let screenshotsFetchResult = PHAsset.fetchAssets(in: screenshotsAssetCollection, options: fetchOptions)
+        let screenshotsTitle = (assetCollection.localizedTitle != nil) ? screenshotsAssetCollection.localizedTitle! : ""
+        self.fetchResults.append(screenshotsFetchResult)
+        self.titles.append(screenshotsTitle)
+        
+//        if let assetCollection = screenshotsAssetCollections[0] as? PHAssetCollection {
+//            let fetchResult = PHAsset.fetchAssets(in: assetCollection, options: fetchOptions)
+//            let title = (assetCollection.localizedTitle != nil) ? assetCollection.localizedTitle! : ""
+//            self.fetchResults.append(fetchResult)
+//            self.titles.append(title)
+//        }
         
         // Fetch other albums.
-        let topLevelUserCollections = PHCollectionList.fetchTopLevelUserCollectionsWithOptions(nil)
+        let topLevelUserCollections = PHCollectionList.fetchTopLevelUserCollections(with: nil)
         for i in 0...(topLevelUserCollections.count - 1) {
             if let assetCollection = topLevelUserCollections[i] as? PHAssetCollection {
-                let fetchResult = PHAsset.fetchAssetsInAssetCollection(assetCollection, options: fetchOptions)
+                let fetchResult = PHAsset.fetchAssets(in: assetCollection, options: fetchOptions)
                 let title = (assetCollection.localizedTitle != nil) ? assetCollection.localizedTitle! : ""
                 self.fetchResults.append(fetchResult)
                 self.titles.append(title)
             }
         }
         
-        PHPhotoLibrary.sharedPhotoLibrary().registerChangeObserver(self)
+        PHPhotoLibrary.shared().register(self)
     }
     
     deinit {
-        PHPhotoLibrary.sharedPhotoLibrary().unregisterChangeObserver(self)
+        PHPhotoLibrary.shared().unregisterChangeObserver(self)
     }
     
-    override func prefersStatusBarHidden() -> Bool {
+    override var prefersStatusBarHidden : Bool {
         return true
     }
 
@@ -79,49 +91,49 @@ class AlbumsTableViewController: UITableViewController {
 
     // MARK: UITableViewDataSource
 
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 
         return self.fetchResults.count
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("cellAlbum", forIndexPath: indexPath) as! AlbumTableViewCell
-        cell.albumTitleLabel.text = self.titles[indexPath.row]
-        cell.numberOfAssets.text = "\(self.fetchResults[indexPath.row].count)"
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cellAlbum", for: indexPath) as! AlbumTableViewCell
+        cell.albumTitleLabel.text = self.titles[(indexPath as NSIndexPath).row]
+        cell.numberOfAssets.text = "\(self.fetchResults[(indexPath as NSIndexPath).row].count)"
         return cell
     }
     
     // MARK: UITableViewDelegate
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         self.albumsDelegate?.albumSelected(self.fetchResults[indexPath.row], title: self.titles[indexPath.row])
-        self.performSegueWithIdentifier("unwindToGalleryCollectionVc", sender: self)
+        self.performSegue(withIdentifier: "unwindToGalleryCollectionVc", sender: self)
     }
     
-    override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        cell.layoutMargins = UIEdgeInsetsZero
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.layoutMargins = UIEdgeInsets.zero
     }
 }
 
 extension AlbumsTableViewController: PHPhotoLibraryChangeObserver {
     
-    func photoLibraryDidChange(changeInstance: PHChange) {
+    func photoLibraryDidChange(_ changeInstance: PHChange) {
         /*
          Change notifications may be made on a background queue. Re-dispatch to the
          main queue before acting on the change as we'll be updating the UI.
          */
-        dispatch_async(dispatch_get_main_queue(), {
+        DispatchQueue.main.async(execute: {
             // Loop through the section fetch results, replacing any fetch results that have been updated.
             var updatedFetchResults: [PHFetchResult] = self.fetchResults
             var reloadRequired = false
             
-            for (index, fetchResult) in self.fetchResults.enumerate() {
-                let changeDetails = changeInstance.changeDetailsForFetchResult(fetchResult)
+            for (index, fetchResult) in self.fetchResults.enumerated() {
+                let changeDetails = changeInstance.changeDetails(for: fetchResult)
                 if changeDetails != nil {
                    updatedFetchResults[index] = changeDetails!.fetchResultAfterChanges
                     reloadRequired = true

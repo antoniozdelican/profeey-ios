@@ -10,8 +10,8 @@ import UIKit
 import PhotosUI
 
 enum ProfilePicUnwind {
-    case EditProfileVc
-    case UsernameVc
+    case editProfileVc
+    case usernameVc
 }
 
 class PreviewViewController: UIViewController {
@@ -28,11 +28,11 @@ class PreviewViewController: UIViewController {
     var isPhoto: Bool = true
     
     // Adjusting imageView in scrollView.
-    private var newImageViewWidth: CGFloat = 0.0
-    private var newImageViewHeight: CGFloat = 0.0
+    fileprivate var newImageViewWidth: CGFloat = 0.0
+    fileprivate var newImageViewHeight: CGFloat = 0.0
     
-    private var scale: CGFloat?
-    private var alreadyConfigured: Bool = false
+    fileprivate var scale: CGFloat?
+    fileprivate var alreadyConfigured: Bool = false
     var finalImage: UIImage?
     // Determine if it's profile and unwind respectively.
     var isProfilePic: Bool = false
@@ -41,14 +41,14 @@ class PreviewViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.automaticallyAdjustsScrollViewInsets = false
-        self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.Plain, target:nil, action:nil)
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.plain, target:nil, action:nil)
         if self.isProfilePic {
             self.configureSquareAspectRatio()
         }
         self.configureScrollView()
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         // Skip if we come back from EditVc.
         if !self.alreadyConfigured {
@@ -57,8 +57,8 @@ class PreviewViewController: UIViewController {
         }
     }
     
-    override func prefersStatusBarHidden() -> Bool {
-        return true
+    override var prefersStatusBarHidden : Bool {
+        return false
     }
     
     override func didReceiveMemoryWarning() {
@@ -67,7 +67,7 @@ class PreviewViewController: UIViewController {
     
     // MARK: Configuration
     
-    private func configureScrollView() {
+    fileprivate func configureScrollView() {
         self.scrollView.delegate = self
         self.scrollView.decelerationRate = UIScrollViewDecelerationRateFast
         self.scrollView.minimumZoomScale = 1.0
@@ -75,7 +75,7 @@ class PreviewViewController: UIViewController {
         self.scrollView.zoomScale = 1.0
     }
     
-    private func configurePhoto() {
+    fileprivate func configurePhoto() {
         // Fix orientation for the bug.
         guard let image = self.capturedPhoto?.fixOrientation() else {
             return
@@ -83,15 +83,15 @@ class PreviewViewController: UIViewController {
         self.adjustImageSize(image)
     }
     
-    private func configureAsset() {
+    fileprivate func configureAsset() {
         if let asset = self.asset {
-            PHImageManager.defaultManager().requestImageForAsset(
-                asset,
+            PHImageManager.default().requestImage(
+                for: asset,
                 targetSize: PHImageManagerMaximumSize,
-                contentMode: PHImageContentMode.Default,
+                contentMode: PHImageContentMode.default,
                 options: nil,
                 resultHandler: {
-                    (result: UIImage?, info: [NSObject : AnyObject]?) in
+                    (result: UIImage?, info: [AnyHashable: Any]?) in
                     if let image = result {
                         self.adjustImageSize(image)
                     }
@@ -99,14 +99,14 @@ class PreviewViewController: UIViewController {
         }
     }
     
-    private func configureSquareAspectRatio() {
-        self.scrollViewAspectRatioConstraint.active = false
+    fileprivate func configureSquareAspectRatio() {
+        self.scrollViewAspectRatioConstraint.isActive = false
         let squareConstraint = NSLayoutConstraint(
             item: self.scrollView,
-            attribute: NSLayoutAttribute.Height,
-            relatedBy: NSLayoutRelation.Equal,
+            attribute: NSLayoutAttribute.height,
+            relatedBy: NSLayoutRelation.equal,
             toItem: self.scrollView,
-            attribute: NSLayoutAttribute.Width,
+            attribute: NSLayoutAttribute.width,
             multiplier: 1.0,
             constant: 0.0)
         self.scrollView.addConstraint(squareConstraint)
@@ -114,25 +114,25 @@ class PreviewViewController: UIViewController {
     
     // MARK: Navigation
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if let destinationViewController = segue.destinationViewController as? EditPostTableViewController {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let destinationViewController = segue.destination as? EditPost2TableViewController {
             destinationViewController.finalImage = self.finalImage
         }
     }
     
     // MARK: IBActions
     
-    @IBAction func nextButtonTapped(sender: AnyObject) {
+    @IBAction func nextButtonTapped(_ sender: AnyObject) {
         self.prepareFinalImage()
     }
     
-    @IBAction func backButtonTapped(sender: AnyObject) {
-        self.dismissViewControllerAnimated(false, completion: nil)
+    @IBAction func backButtonTapped(_ sender: AnyObject) {
+        self.dismiss(animated: false, completion: nil)
     }
     
     // MARK: Helpers
     
-    private func adjustImageSize(image: UIImage) {
+    fileprivate func adjustImageSize(_ image: UIImage) {
         let aspectRatio = image.size.width / image.size.height
         
         // ImageView.
@@ -165,7 +165,7 @@ class PreviewViewController: UIViewController {
         self.imageView.image = image
     }
     
-    private func adjustScrollViewInset() {
+    fileprivate func adjustScrollViewInset() {
         let zoomScale = self.scrollView.zoomScale
         var topInset: CGFloat
         var bottomInset: CGFloat
@@ -186,13 +186,13 @@ class PreviewViewController: UIViewController {
         self.scrollView.contentInset = UIEdgeInsetsMake(topInset, leftInset, bottomInset, rightInset)
     }
     
-    private func adjustScrollViewOffset() {
+    fileprivate func adjustScrollViewOffset() {
         let offsetX = -ceil((self.scrollView.bounds.width - self.newImageViewWidth) / 2)
         let offsetY = -ceil((self.scrollView.bounds.height - self.newImageViewHeight) / 2)
-        self.scrollView.contentOffset = CGPointMake(offsetX, offsetY)
+        self.scrollView.contentOffset = CGPoint(x: offsetX, y: offsetY)
     }
     
-    private func prepareFinalImage() {
+    fileprivate func prepareFinalImage() {
         guard let scale = self.scale, let image = self.imageView.image else {
             return
         }
@@ -217,10 +217,10 @@ class PreviewViewController: UIViewController {
             self.finalImage = scaledImage
             
             switch profilePicUnwind {
-            case .EditProfileVc:
-                self.performSegueWithIdentifier("segueUnwindToEditProfileVc", sender: self)
-            case .UsernameVc:
-                self.performSegueWithIdentifier("segueUnwindToUsernameVc", sender: self)
+            case .editProfileVc:
+                self.performSegue(withIdentifier: "segueUnwindToEditProfileVc", sender: self)
+            case .usernameVc:
+                self.performSegue(withIdentifier: "segueUnwindToUsernameVc", sender: self)
             }
             
         } else if croppedImage.size.width > 1080.0 {
@@ -232,17 +232,17 @@ class PreviewViewController: UIViewController {
         } else {
            self.finalImage = croppedImage
         }
-        self.performSegueWithIdentifier("segueToEditVc", sender: self)
+        self.performSegue(withIdentifier: "segueToEditVc", sender: self)
     }
 }
 
 extension PreviewViewController: UIScrollViewDelegate {
     
-    func viewForZoomingInScrollView(scrollView: UIScrollView) -> UIView? {
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return self.imageView
     }
     
-    func scrollViewDidZoom(scrollView: UIScrollView) {
+    func scrollViewDidZoom(_ scrollView: UIScrollView) {
         self.adjustScrollViewInset()
     }
 }

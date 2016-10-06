@@ -25,7 +25,7 @@ class AWSProfession: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
         return "_professionName"
     }
     
-    override class func JSONKeyPathsByPropertyKey() -> [NSObject : AnyObject] {
+    override class func jsonKeyPathsByPropertyKey() -> [AnyHashable: Any] {
         return [
             "_professionName" : "professionName",
             "_numberOfUsers" : "numberOfUsers",

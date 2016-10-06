@@ -10,8 +10,8 @@ import UIKit
 import AWSMobileHubHelper
 
 enum ExperienceType {
-    case Work
-    case Education
+    case work
+    case education
 }
 
 class EditExperienceTableViewController: UITableViewController {
@@ -21,42 +21,42 @@ class EditExperienceTableViewController: UITableViewController {
     // Incoming data.
     var userExperience: UserExperience?
     var experienceType: ExperienceType?
-    var experienceIndexPath: NSIndexPath?
+    var experienceIndexPath: IndexPath?
     
     // Outgoing data.
     var savedUserExperience: UserExperience?
     
-    private var experienceId: String?
-    private var position: String?
-    private var organization: String?
-    private var fromDate: NSNumber?
-    private var toDate: NSNumber?
-    private var experienceTypeNumber: NSNumber?
+    fileprivate var experienceId: String?
+    fileprivate var position: String?
+    fileprivate var organization: String?
+    fileprivate var fromDate: NSNumber?
+    fileprivate var toDate: NSNumber?
+    fileprivate var experienceTypeNumber: NSNumber?
     
-    private var fromMonth: Int?
-    private var fromYear: Int?
-    private var toMonth: Int?
-    private var toYear: Int?
+    fileprivate var fromMonth: Int?
+    fileprivate var fromYear: Int?
+    fileprivate var toMonth: Int?
+    fileprivate var toYear: Int?
     
-    private var fromDatePickerActive: Bool = false
-    private var toDatePickerActive: Bool = false
-    private var isCurrentlyWorking: Bool = true
-    private var months: [Int] = []
-    private var years: [Int] = []
-    private var currentMonth: Int!
-    private var currentYear: Int!
+    fileprivate var fromDatePickerActive: Bool = false
+    fileprivate var toDatePickerActive: Bool = false
+    fileprivate var isCurrentlyWorking: Bool = true
+    fileprivate var months: [Int] = []
+    fileprivate var years: [Int] = []
+    fileprivate var currentMonth: Int!
+    fileprivate var currentYear: Int!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.configureDate()
         self.configureExperienceData()
-        if self.experienceType == .Work {
+        if self.experienceType == .work {
             self.navigationItem.title = self.experienceIndexPath != nil ? "Edit work experience" : "Add work experience"
         }
-        if self.experienceType == .Education {
+        if self.experienceType == .education {
             self.navigationItem.title = self.experienceIndexPath != nil ? "Edit education" : "Add education"
         }
-        self.saveButton.enabled = (self.experienceIndexPath != nil)
+        self.saveButton.isEnabled = (self.experienceIndexPath != nil)
         if self.experienceIndexPath != nil {
             self.isCurrentlyWorking = (self.userExperience?.toDate == nil)
         } else {
@@ -70,19 +70,19 @@ class EditExperienceTableViewController: UITableViewController {
     
     // MARK: Configuration
     
-    private func configureDate() {
-        let date = NSDate()
-        let calendar = NSCalendar.currentCalendar()
-        let components = calendar.components([.Year, .Month], fromDate: date)
+    fileprivate func configureDate() {
+        let date = Date()
+        let calendar = Calendar.current
+        let components = (calendar as NSCalendar).components([.year, .month], from: date)
         self.currentMonth = components.month
         self.currentYear = components.year
         self.months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-        for year in components.year.stride(to: 1950, by: -1) {
+        for year in stride(from: currentYear, to: 1950, by: -1) {
             self.years.append(year)
         }
     }
     
-    private func configureExperienceData() {
+    fileprivate func configureExperienceData() {
         self.experienceId = self.userExperience?.experienceId
         self.position = self.userExperience?.position
         self.organization = self.userExperience?.organization
@@ -94,14 +94,14 @@ class EditExperienceTableViewController: UITableViewController {
 
     // MARK: UITableViewDataSource
 
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         if self.experienceIndexPath != nil {
             return 5
         }
         return 4
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
             return 2
@@ -121,41 +121,41 @@ class EditExperienceTableViewController: UITableViewController {
         }
     }
 
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        switch indexPath.section {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        switch (indexPath as NSIndexPath).section {
         case 0:
-            switch indexPath.row {
+            switch (indexPath as NSIndexPath).row {
             case 0:
-                let cell = tableView.dequeueReusableCellWithIdentifier("cellPosition", forIndexPath: indexPath) as! PositionTableViewCell
-                if self.experienceType == .Work {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellPosition", for: indexPath) as! PositionTableViewCell
+                if self.experienceType == .work {
                     cell.positionTextField.placeholder = "Position"
                 }
-                if self.experienceType == .Education {
+                if self.experienceType == .education {
                     cell.positionTextField.placeholder = "Degree"
                 }
                 cell.positionTextField.text = self.position
                 cell.positionTextField.delegate = self
-                cell.positionTextField.addTarget(self, action: #selector(EditExperienceTableViewController.positionTextFieldDidEndEditing(_:)), forControlEvents: UIControlEvents.EditingChanged)
+                cell.positionTextField.addTarget(self, action: #selector(EditExperienceTableViewController.positionTextFieldDidEndEditing(_:)), for: UIControlEvents.editingChanged)
                 return cell
             case 1:
-                let cell = tableView.dequeueReusableCellWithIdentifier("cellOrganization", forIndexPath: indexPath) as! OrganizationTableViewCell
-                if self.experienceType == .Work {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellOrganization", for: indexPath) as! OrganizationTableViewCell
+                if self.experienceType == .work {
                     cell.organizationTextField.placeholder = "Organization"
                 }
-                if self.experienceType == .Education {
+                if self.experienceType == .education {
                     cell.organizationTextField.placeholder = "School"
                 }
                 cell.organizationTextField.text = self.organization
                 cell.organizationTextField.delegate = self
-                cell.organizationTextField.addTarget(self, action: #selector(EditExperienceTableViewController.organizationTextFieldDidEndEditing(_:)), forControlEvents: UIControlEvents.EditingChanged)
+                cell.organizationTextField.addTarget(self, action: #selector(EditExperienceTableViewController.organizationTextFieldDidEndEditing(_:)), for: UIControlEvents.editingChanged)
                 return cell
             default:
                 return UITableViewCell()
             }
         case 1:
-            switch indexPath.row {
+            switch (indexPath as NSIndexPath).row {
             case 0:
-                let cell = tableView.dequeueReusableCellWithIdentifier("cellDate", forIndexPath: indexPath) as! DateTableViewCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellDate", for: indexPath) as! DateTableViewCell
                 cell.titleLabel.text = "From"
                 if let fromMonth = self.fromMonth {
                     cell.monthLabel.text = fromMonth.numberToMonth()
@@ -165,13 +165,13 @@ class EditExperienceTableViewController: UITableViewController {
                 }
                 return cell
             case 1:
-                let cell = tableView.dequeueReusableCellWithIdentifier("cellDatePicker", forIndexPath: indexPath) as! DatePickerTableViewCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellDatePicker", for: indexPath) as! DatePickerTableViewCell
                 cell.pickerView.dataSource = self
                 cell.pickerView.delegate = self
-                if let fromMonth = self.fromMonth, let fromMonthIndex = self.months.indexOf(fromMonth) {
+                if let fromMonth = self.fromMonth, let fromMonthIndex = self.months.index(of: fromMonth) {
                     cell.pickerView.selectRow(fromMonthIndex, inComponent: 0, animated: false)
                 }
-                if let fromYear = self.fromYear, let fromYearIndex = self.years.indexOf(fromYear) {
+                if let fromYear = self.fromYear, let fromYearIndex = self.years.index(of: fromYear) {
                     cell.pickerView.selectRow(fromYearIndex, inComponent: 1, animated: false)
                 }
                 return cell
@@ -179,9 +179,9 @@ class EditExperienceTableViewController: UITableViewController {
                 return UITableViewCell()
             }
         case 2:
-            switch indexPath.row {
+            switch (indexPath as NSIndexPath).row {
             case 0:
-                let cell = tableView.dequeueReusableCellWithIdentifier("cellDate", forIndexPath: indexPath) as! DateTableViewCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellDate", for: indexPath) as! DateTableViewCell
                 cell.titleLabel.text = "To"
                 if let toMonth = self.toMonth {
                     cell.monthLabel.text = toMonth.numberToMonth()
@@ -191,13 +191,13 @@ class EditExperienceTableViewController: UITableViewController {
                 }
                 return cell
             case 1:
-                let cell = tableView.dequeueReusableCellWithIdentifier("cellDatePicker", forIndexPath: indexPath) as! DatePickerTableViewCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellDatePicker", for: indexPath) as! DatePickerTableViewCell
                 cell.pickerView.dataSource = self
                 cell.pickerView.delegate = self
-                if let toMonth = self.toMonth, let toMonthIndex = self.months.indexOf(toMonth) {
+                if let toMonth = self.toMonth, let toMonthIndex = self.months.index(of: toMonth) {
                     cell.pickerView.selectRow(toMonthIndex, inComponent: 0, animated: false)
                 }
-                if let toYear = self.toYear, let toYearIndex = self.years.indexOf(toYear) {
+                if let toYear = self.toYear, let toYearIndex = self.years.index(of: toYear) {
                     cell.pickerView.selectRow(toYearIndex, inComponent: 1, animated: false)
                 }
                 return cell
@@ -205,19 +205,19 @@ class EditExperienceTableViewController: UITableViewController {
                 return UITableViewCell()
             }
         case 3:
-            let cell = tableView.dequeueReusableCellWithIdentifier("cellCurrentlyWorking", forIndexPath: indexPath) as! CurrentlyWorkingTableViewCell
-            if self.experienceType == .Work {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellCurrentlyWorking", for: indexPath) as! CurrentlyWorkingTableViewCell
+            if self.experienceType == .work {
                 cell.titleLabel.text = "I currently work here"
             }
-            if self.experienceType == .Education {
+            if self.experienceType == .education {
                 cell.titleLabel.text = "I currently study here"
             }
             cell.currentlyWorkingSwitch.setOn(self.isCurrentlyWorking, animated: false)
-            cell.currentlyWorkingSwitch.addTarget(self, action: #selector(EditExperienceTableViewController.currentlyWorkingSwitchChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
+            cell.currentlyWorkingSwitch.addTarget(self, action: #selector(EditExperienceTableViewController.currentlyWorkingSwitchChanged(_:)), for: UIControlEvents.valueChanged)
             return cell
         case 4:
-            let cell = tableView.dequeueReusableCellWithIdentifier("cellDeleteExperience", forIndexPath: indexPath) as! DeleteExperienceTableViewCell
-            cell.deleteExperienceLabel.text = (self.experienceType == .Work) ? "Delete experience" : "Delete education"
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellDeleteExperience", for: indexPath) as! DeleteExperienceTableViewCell
+            cell.deleteExperienceLabel.text = (self.experienceType == .work) ? "Delete experience" : "Delete education"
             return cell
         default:
             return UITableViewCell()
@@ -226,72 +226,72 @@ class EditExperienceTableViewController: UITableViewController {
     
     // MARK: UITableViewDelegate
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        if indexPath == NSIndexPath(forRow: 0, inSection: 1) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        if indexPath == IndexPath(row: 0, section: 1) {
             tableView.beginUpdates()
             if self.fromDatePickerActive {
                 self.fromDatePickerActive = false
-                tableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: 1, inSection: 1)], withRowAnimation: UITableViewRowAnimation.Automatic)
+                tableView.deleteRows(at: [IndexPath(row: 1, section: 1)], with: UITableViewRowAnimation.automatic)
             } else {
                 if self.toDatePickerActive {
                     self.toDatePickerActive = false
-                    tableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: 1, inSection: 2)], withRowAnimation: UITableViewRowAnimation.Automatic)
+                    tableView.deleteRows(at: [IndexPath(row: 1, section: 2)], with: UITableViewRowAnimation.automatic)
                 }
                 self.fromDatePickerActive = true
-                tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: 1, inSection: 1)], withRowAnimation: UITableViewRowAnimation.Automatic)
+                tableView.insertRows(at: [IndexPath(row: 1, section: 1)], with: UITableViewRowAnimation.automatic)
             }
             tableView.endUpdates()
             self.view.endEditing(true)
         }
-        if indexPath == NSIndexPath(forRow: 0, inSection: 2) {
+        if indexPath == IndexPath(row: 0, section: 2) {
             tableView.beginUpdates()
             if self.toDatePickerActive {
                 self.toDatePickerActive = false
-                tableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: 1, inSection: 2)], withRowAnimation: UITableViewRowAnimation.Automatic)
+                tableView.deleteRows(at: [IndexPath(row: 1, section: 2)], with: UITableViewRowAnimation.automatic)
             } else {
                 if self.fromDatePickerActive {
                     self.fromDatePickerActive = false
-                    tableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: 1, inSection: 1)], withRowAnimation: UITableViewRowAnimation.Automatic)
+                    tableView.deleteRows(at: [IndexPath(row: 1, section: 1)], with: UITableViewRowAnimation.automatic)
                 }
                 self.toDatePickerActive = true
-                tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: 1, inSection: 2)], withRowAnimation: UITableViewRowAnimation.Automatic)
+                tableView.insertRows(at: [IndexPath(row: 1, section: 2)], with: UITableViewRowAnimation.automatic)
             }
             tableView.endUpdates()
             self.view.endEditing(true)
         }
-        if indexPath == NSIndexPath(forRow: 0, inSection: 4) {
+        if indexPath == IndexPath(row: 0, section: 4) {
             self.prepareForRemove()
         }
     }
     
-    override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        cell.layoutMargins = UIEdgeInsetsZero
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.layoutMargins = UIEdgeInsets.zero
         cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0)
-        cell.selectionStyle = UITableViewCellSelectionStyle.None
+        cell.selectionStyle = UITableViewCellSelectionStyle.none
         if cell is DateTableViewCell {
-            cell.selectionStyle = UITableViewCellSelectionStyle.Default
+            cell.selectionStyle = UITableViewCellSelectionStyle.default
         }
         if cell is DeleteExperienceTableViewCell {
-            cell.selectionStyle = UITableViewCellSelectionStyle.Default
+            cell.selectionStyle = UITableViewCellSelectionStyle.default
         }
     }
     
-    override func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if indexPath == NSIndexPath(forRow: 1, inSection: 1) {
+    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath == IndexPath(row: 1, section: 1) {
             return 216.0
         }
-        if indexPath == NSIndexPath(forRow: 1, inSection: 2) {
+        if indexPath == IndexPath(row: 1, section: 2) {
             return 216.0
         }
         return 52.0
     }
     
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if indexPath == NSIndexPath(forRow: 1, inSection: 1) {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath == IndexPath(row: 1, section: 1) {
             return 216.0
         }
-        if indexPath == NSIndexPath(forRow: 1, inSection: 2) {
+        if indexPath == IndexPath(row: 1, section: 2) {
             return 216.0
         }
         return 52.0
@@ -299,93 +299,93 @@ class EditExperienceTableViewController: UITableViewController {
     
     // MARK: UIScrollViewDelegate
     
-    override func scrollViewDidScroll(scrollView: UIScrollView) {
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         self.view.endEditing(true)
     }
     
     // MARK: Tappers
     
-    func positionTextFieldDidEndEditing(sender: AnyObject) {
+    func positionTextFieldDidEndEditing(_ sender: AnyObject) {
         guard let textField = sender as? UITextField, let text = textField.text else {
             return
         }
         self.position = text.trimm().isEmpty ? nil : text.trimm()
-        self.saveButton.enabled = (self.position != nil && self.organization != nil)
+        self.saveButton.isEnabled = (self.position != nil && self.organization != nil)
     }
     
-    func organizationTextFieldDidEndEditing(sender: AnyObject) {
+    func organizationTextFieldDidEndEditing(_ sender: AnyObject) {
         guard let textField = sender as? UITextField, let text = textField.text else {
             return
         }
         self.organization = text.trimm().isEmpty ? nil : text.trimm()
-        self.saveButton.enabled = (self.position != nil && self.organization != nil)
+        self.saveButton.isEnabled = (self.position != nil && self.organization != nil)
     }
     
-    func currentlyWorkingSwitchChanged(sender: AnyObject) {
+    func currentlyWorkingSwitchChanged(_ sender: AnyObject) {
         guard let currentlyWorkingSwitch = sender as? UISwitch else {
             return
         }
         //self.removeDatePickers()
-        if currentlyWorkingSwitch.on {
+        if currentlyWorkingSwitch.isOn {
             self.isCurrentlyWorking = true
             self.tableView.beginUpdates()
-            self.tableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 2)], withRowAnimation: UITableViewRowAnimation.Automatic)
+            self.tableView.deleteRows(at: [IndexPath(row: 0, section: 2)], with: UITableViewRowAnimation.automatic)
             if self.toDatePickerActive {
                 self.toDatePickerActive = false
-                self.tableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: 1, inSection: 2)], withRowAnimation: UITableViewRowAnimation.Automatic)
+                self.tableView.deleteRows(at: [IndexPath(row: 1, section: 2)], with: UITableViewRowAnimation.automatic)
             }
             self.tableView.endUpdates()
         } else {
             self.isCurrentlyWorking = false
             self.tableView.beginUpdates()
-            self.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 2)], withRowAnimation: UITableViewRowAnimation.Automatic)
+            self.tableView.insertRows(at: [IndexPath(row: 0, section: 2)], with: UITableViewRowAnimation.automatic)
             self.tableView.endUpdates()
         }
     }
     
     // MARK: IBActions
     
-    @IBAction func saveButtonTapped(sender: AnyObject) {
+    @IBAction func saveButtonTapped(_ sender: AnyObject) {
         self.view.endEditing(true)
         self.prepareForSave()
     }
     
     
-    @IBAction func cancelButtonTapped(sender: AnyObject) {
+    @IBAction func cancelButtonTapped(_ sender: AnyObject) {
         self.view.endEditing(true)
-        self.dismissViewControllerAnimated(true, completion: nil)
+        self.dismiss(animated: true, completion: nil)
     }
     
     // MARK: Helpers
     
-    private func removeDatePickers() {
+    fileprivate func removeDatePickers() {
         if self.fromDatePickerActive {
             self.tableView.beginUpdates()
-            tableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: 1, inSection: 1)], withRowAnimation: UITableViewRowAnimation.Automatic)
+            tableView.deleteRows(at: [IndexPath(row: 1, section: 1)], with: UITableViewRowAnimation.automatic)
             self.fromDatePickerActive = false
             self.tableView.endUpdates()
         }
         if self.toDatePickerActive {
             self.tableView.beginUpdates()
-            tableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: 1, inSection: 2)], withRowAnimation: UITableViewRowAnimation.Automatic)
+            tableView.deleteRows(at: [IndexPath(row: 1, section: 2)], with: UITableViewRowAnimation.automatic)
             self.toDatePickerActive = false
             self.tableView.endUpdates()
         }
     }
     
-    private func prepareForSave() {
+    fileprivate func prepareForSave() {
         // Set fromDate.
         guard let fromMonth = self.fromMonth, let fromYear = self.fromYear else {
             return
         }
-        let calendar = NSCalendar.currentCalendar()
-        let dateCompontents = NSDateComponents()
-        dateCompontents.setValue(fromMonth, forComponent: .Month)
-        dateCompontents.setValue(fromYear, forComponent: .Year)
-        guard let fromDate = calendar.dateFromComponents(dateCompontents) else {
+        let calendar = Calendar.current
+        let dateCompontents = DateComponents()
+        (dateCompontents as NSDateComponents).setValue(fromMonth, forComponent: .month)
+        (dateCompontents as NSDateComponents).setValue(fromYear, forComponent: .year)
+        guard let fromDate = calendar.date(from: dateCompontents) else {
             return
         }
-        self.fromDate = NSNumber(double: fromDate.timeIntervalSince1970)
+        self.fromDate = NSNumber(value: fromDate.timeIntervalSince1970 as Double)
         
         // Set toDate.
         if self.isCurrentlyWorking {
@@ -394,73 +394,73 @@ class EditExperienceTableViewController: UITableViewController {
             guard let toMonth = self.toMonth, let toYear = self.toYear else {
                 return
             }
-            dateCompontents.setValue(toMonth, forComponent: .Month)
-            dateCompontents.setValue(toYear, forComponent: .Year)
-            guard let toDate = calendar.dateFromComponents(dateCompontents) else {
+            (dateCompontents as NSDateComponents).setValue(toMonth, forComponent: .month)
+            (dateCompontents as NSDateComponents).setValue(toYear, forComponent: .year)
+            guard let toDate = calendar.date(from: dateCompontents) else {
                 return
             }
-            self.toDate = NSNumber(double: toDate.timeIntervalSince1970)
+            self.toDate = NSNumber(value: toDate.timeIntervalSince1970 as Double)
         }
-        self.experienceTypeNumber = (self.experienceType == .Work) ? 0 : 1
+        self.experienceTypeNumber = (self.experienceType == .work) ? 0 : 1
         self.saveUserExperience()
     }
     
-    private func prepareForRemove() {
-        let alertController = UIAlertController(title: "Deleting experience", message: "Are you sure you want to delete this experience.", preferredStyle: UIAlertControllerStyle.Alert)
-        let noAction = UIAlertAction(title: "No", style: UIAlertActionStyle.Cancel, handler: nil)
-        let yesAction = UIAlertAction(title: "Yes", style: UIAlertActionStyle.Default, handler: {
+    fileprivate func prepareForRemove() {
+        let alertController = UIAlertController(title: "Deleting experience", message: "Are you sure you want to delete this experience.", preferredStyle: UIAlertControllerStyle.alert)
+        let noAction = UIAlertAction(title: "No", style: UIAlertActionStyle.cancel, handler: nil)
+        let yesAction = UIAlertAction(title: "Yes", style: UIAlertActionStyle.default, handler: {
             (alertAction: UIAlertAction) in
             self.removeUserExperience()
         })
         alertController.addAction(noAction)
         alertController.addAction(yesAction)
-        presentViewController(alertController, animated: true, completion: nil)
+        self.present(alertController, animated: true, completion: nil)
     }
     
     // MARK: AWS
     
-    private func saveUserExperience() {
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+    fileprivate func saveUserExperience() {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
         FullScreenIndicator.show()
         PRFYDynamoDBManager.defaultDynamoDBManager().saveUserExperienceDynamoDB(self.experienceId, position: self.position, organization: self.organization, fromDate: self.fromDate, toDate: self.toDate, experienceType: self.experienceTypeNumber, completionHandler: {
             (task: AWSTask) in
-            dispatch_async(dispatch_get_main_queue(), {
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 FullScreenIndicator.hide()
                 if let error = task.error {
                     print("saveUserExperience error: \(error)")
-                    let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.userInfo["message"] as? String, cancelButtonTitle: "Ok")
-                    self.presentViewController(alertController, animated: true, completion: nil)
+                    let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.localizedDescription, cancelButtonTitle: "Ok")
+                    self.present(alertController, animated: true, completion: nil)
                 } else {
                     guard let awsUserExperience = task.result as? AWSUserExperience else {
                         return
                     }
                     self.savedUserExperience = UserExperience(userId: awsUserExperience._userId, experienceId: awsUserExperience._experienceId, position: awsUserExperience._position, organization: awsUserExperience._organization, fromDate: awsUserExperience._fromDate, toDate: awsUserExperience._toDate, experienceType: awsUserExperience._experienceType)
-                    self.performSegueWithIdentifier("segueUnwindToExperiencesVc", sender: self)
+                    self.performSegue(withIdentifier: "segueUnwindToExperiencesVc", sender: self)
                 }
             })
             return nil
         })
     }
     
-    private func removeUserExperience() {
+    fileprivate func removeUserExperience() {
         guard let experienceId = self.experienceId else {
             return
         }
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
         FullScreenIndicator.show()
         PRFYDynamoDBManager.defaultDynamoDBManager().removeUserExperienceDynamoDB(experienceId, completionHandler: {
             (task: AWSTask) in
-            dispatch_async(dispatch_get_main_queue(), {
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 FullScreenIndicator.hide()
                 if let error = task.error {
                     print("removeUserExperience error: \(error)")
-                    let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.userInfo["message"] as? String, cancelButtonTitle: "Ok")
-                    self.presentViewController(alertController, animated: true, completion: nil)
+                    let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.localizedDescription, cancelButtonTitle: "Ok")
+                    self.present(alertController, animated: true, completion: nil)
                 } else {
                     self.savedUserExperience = nil
-                    self.performSegueWithIdentifier("segueUnwindToExperiencesVc", sender: self)
+                    self.performSegue(withIdentifier: "segueUnwindToExperiencesVc", sender: self)
                 }
             })
             return nil
@@ -470,11 +470,11 @@ class EditExperienceTableViewController: UITableViewController {
 
 extension EditExperienceTableViewController: UIPickerViewDataSource, UIPickerViewDelegate {
     
-    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 2
     }
     
-    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         if component == 0 {
             return self.months.count
         } else {
@@ -482,7 +482,7 @@ extension EditExperienceTableViewController: UIPickerViewDataSource, UIPickerVie
         }
     }
     
-    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         if component == 0 {
             return self.months[row].numberToMonth()
         } else {
@@ -490,28 +490,28 @@ extension EditExperienceTableViewController: UIPickerViewDataSource, UIPickerVie
         }
     }
     
-    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         if self.fromDatePickerActive {
             if component == 0 {
                 self.fromMonth = self.months[row]
             } else if component == 1 {
                 self.fromYear = self.years[row]
             }
-            self.tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 1)], withRowAnimation: UITableViewRowAnimation.None)
+            self.tableView.reloadRows(at: [IndexPath(row: 0, section: 1)], with: UITableViewRowAnimation.none)
         } else if self.toDatePickerActive {
             if component == 0 {
                 self.toMonth = self.months[row]
             } else if component == 1 {
                 self.toYear = self.years[row]
             }
-            self.tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 2)], withRowAnimation: UITableViewRowAnimation.None)
+            self.tableView.reloadRows(at: [IndexPath(row: 0, section: 2)], with: UITableViewRowAnimation.none)
         }
     }
 }
 
 extension EditExperienceTableViewController: UITextFieldDelegate {
     
-    func textFieldDidBeginEditing(textField: UITextField) {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
         self.removeDatePickers()
     }
 }

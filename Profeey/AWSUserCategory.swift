@@ -30,7 +30,7 @@ class AWSUserCategory: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
         return "_categoryName"
     }
     
-    override class func JSONKeyPathsByPropertyKey() -> [NSObject : AnyObject] {
+    override class func jsonKeyPathsByPropertyKey() -> [AnyHashable: Any] {
         return [
             "_userId" : "userId",
             "_categoryName" : "categoryName",

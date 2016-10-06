@@ -41,13 +41,13 @@ class AWSFeaturedCategoriesTable: NSObject, Table {
         super.init()
     }
     
-    func tableAttributeName(dataObjectAttributeName: String) -> String {
-        return AWSFeaturedCategory.JSONKeyPathsByPropertyKey()[dataObjectAttributeName] as! String
+    func tableAttributeName(_ dataObjectAttributeName: String) -> String {
+        return AWSFeaturedCategory.jsonKeyPathsByPropertyKey()[dataObjectAttributeName] as! String
     }
     
     // Scan all (10 at most) featured categories.
-    func scanFeaturedCategories(completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
-        let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
+    func scanFeaturedCategories(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+        let objectMapper = AWSDynamoDBObjectMapper.default()
         let scanExpression = AWSDynamoDBScanExpression()
         scanExpression.limit = 10
         

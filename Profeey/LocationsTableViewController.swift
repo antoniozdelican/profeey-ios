@@ -13,15 +13,15 @@ class LocationsTableViewController: UITableViewController {
     
     @IBOutlet weak var searchBar: UISearchBar!
     
-    private var locationManager: CLLocationManager?
-    private var localSearchCompleter: MKLocalSearchCompleter?
-    private var locations: [MKLocalSearchCompletion] = []
-    private var recentLocations: [MKLocalSearchCompletion] = []
+    fileprivate var locationManager: CLLocationManager?
+    fileprivate var localSearchCompleter: MKLocalSearchCompleter?
+    fileprivate var locations: [MKLocalSearchCompletion] = []
+    fileprivate var recentLocations: [MKLocalSearchCompletion] = []
     
     var locationName: String?
     
     // TEST
-    private var region: MKCoordinateRegion?
+    fileprivate var region: MKCoordinateRegion?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,7 +30,7 @@ class LocationsTableViewController: UITableViewController {
         self.configureLocalSearchCompleter()
         
         // Override appearance.
-        self.searchBar.searchBarStyle = UISearchBarStyle.Default
+        self.searchBar.searchBarStyle = UISearchBarStyle.default
         self.tableView.tableFooterView = nil
         
         self.searchBar.delegate = self
@@ -40,7 +40,7 @@ class LocationsTableViewController: UITableViewController {
         }
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.searchBar.resignFirstResponder()
     }
@@ -51,41 +51,41 @@ class LocationsTableViewController: UITableViewController {
     
     // Mark: Configuration
     
-    private func configureLocationManager() {
+    fileprivate func configureLocationManager() {
         self.locationManager = CLLocationManager()
         self.locationManager?.delegate = self
         self.locationManager?.desiredAccuracy = kCLLocationAccuracyBest
-        if  CLLocationManager.authorizationStatus() == CLAuthorizationStatus.NotDetermined {
+        if  CLLocationManager.authorizationStatus() == CLAuthorizationStatus.notDetermined {
             self.locationManager?.requestWhenInUseAuthorization()
         } else {
             self.locationManager?.requestLocation()
         }
     }
     
-    private func configureLocalSearchCompleter() {
+    fileprivate func configureLocalSearchCompleter() {
         self.localSearchCompleter = MKLocalSearchCompleter()
         self.localSearchCompleter?.delegate = self
     }
 
     // MARK: UITableViewDataSource
 
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard let searchText = self.searchBar.text else {
             return 0
         }
         return searchText.isEmpty ? self.recentLocations.count : self.locations.count
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let searchText = self.searchBar.text else {
             return UITableViewCell()
         }
-        let cell = tableView.dequeueReusableCellWithIdentifier("cellLocation", forIndexPath: indexPath) as! LocationTableViewCell
-        let location = searchText.isEmpty ? self.recentLocations[indexPath.row] : self.locations[indexPath.row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cellLocation", for: indexPath) as! LocationTableViewCell
+        let location = searchText.isEmpty ? self.recentLocations[(indexPath as NSIndexPath).row] : self.locations[(indexPath as NSIndexPath).row]
         cell.titleLabel.text = location.title
         cell.subtitleLabel.text = location.subtitle
         return cell
@@ -93,65 +93,65 @@ class LocationsTableViewController: UITableViewController {
     
     // MARK: UITableViewDelegate
     
-    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let searchText = self.searchBar.text else {
             return nil
         }
-        let cell = tableView.dequeueReusableCellWithIdentifier("cellHeader") as! HeaderTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cellHeader") as! HeaderTableViewCell
         cell.headerTitle.text = searchText.isEmpty ? "RECENT" : "BEST MATCHES"
-        cell.backgroundColor = UIColor.whiteColor()
+        cell.backgroundColor = UIColor.white
         return cell
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        let cell = tableView.cellForRowAtIndexPath(indexPath)
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        let cell = tableView.cellForRow(at: indexPath)
         if cell is LocationTableViewCell {
             // Update location and unwind to EditProfileVc
-            self.locationName = self.locations[indexPath.row].title
-            self.performSegueWithIdentifier("segueUnwindToEditProfileVc", sender: self)
+            self.locationName = self.locations[(indexPath as NSIndexPath).row].title
+            self.performSegue(withIdentifier: "segueUnwindToEditProfileVc", sender: self)
         }
     }
     
-    override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        cell.layoutMargins = UIEdgeInsetsZero
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.layoutMargins = UIEdgeInsets.zero
         cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0)
     }
     
-    override func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         return 64.0
     }
     
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 64.0
     }
     
-    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 32.0
     }
     
     // MARK: UIScrollViewDelegate
     
-    override func scrollViewDidScroll(scrollView: UIScrollView) {
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         self.searchBar.resignFirstResponder()
     }
     
     // MARK: IBActions
     
-    @IBAction func doneButtonTapped(sender: AnyObject) {
+    @IBAction func doneButtonTapped(_ sender: AnyObject) {
         // Update location and unwind to EditProfileVc
         self.locationName = self.searchBar.text?.trimm()
-        self.performSegueWithIdentifier("segueUnwindToEditProfileVc", sender: self)
+        self.performSegue(withIdentifier: "segueUnwindToEditProfileVc", sender: self)
     }
     
-    @IBAction func cancelButtonTapped(sender: AnyObject) {
-        self.dismissViewControllerAnimated(true, completion: nil)
+    @IBAction func cancelButtonTapped(_ sender: AnyObject) {
+        self.dismiss(animated: true, completion: nil)
     }
 }
 
 extension LocationsTableViewController: UISearchBarDelegate {
     
-    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchText.trimm().isEmpty {
             // Show cached recentLocations.
             self.tableView.reloadData()
@@ -164,13 +164,13 @@ extension LocationsTableViewController: UISearchBarDelegate {
 
 extension LocationsTableViewController: CLLocationManagerDelegate {
     
-    func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
-        if status == CLAuthorizationStatus.AuthorizedWhenInUse {
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        if status == CLAuthorizationStatus.authorizedWhenInUse {
             self.locationManager?.requestLocation()
         }
     }
     
-    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         // Not needed atm but will be used later.
         if let location = locations.first {
             let region = MKCoordinateRegionMakeWithDistance(location.coordinate, 5000, 5000)
@@ -178,20 +178,20 @@ extension LocationsTableViewController: CLLocationManagerDelegate {
         }
     }
     
-    func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print("locationManager error: \(error)")
     }
 }
 
 extension LocationsTableViewController: MKLocalSearchCompleterDelegate {
     
-    func completerDidUpdateResults(completer: MKLocalSearchCompleter) {
+    func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
         // Reload search results.
         self.locations = completer.results
         self.tableView.reloadData()
     }
     
-    func completer(completer: MKLocalSearchCompleter, didFailWithError error: NSError) {
+    func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
         print("completer error: \(error)")
     }
 }

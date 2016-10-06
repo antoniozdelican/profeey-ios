@@ -22,11 +22,11 @@ class CaptureScrollViewController: UIViewController {
         
         // Prepare scrollView to show camera first.
         self.scrollView.layoutIfNeeded()
-        self.scrollView.contentOffset = CGPointMake(self.view.bounds.width, 0.0)
+        self.scrollView.contentOffset = CGPoint(x: self.view.bounds.width, y: 0.0)
     }
     
-    override func prefersStatusBarHidden() -> Bool {
-        return true
+    override var prefersStatusBarHidden : Bool {
+        return false
     }
 
     override func didReceiveMemoryWarning() {
@@ -35,14 +35,14 @@ class CaptureScrollViewController: UIViewController {
     
     // MARK: Navigation
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if let navigationController = segue.destinationViewController as? UINavigationController,
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let navigationController = segue.destination as? UINavigationController,
             let childViewController = navigationController.childViewControllers[0] as? CaptureViewController {
             childViewController.captureDelegate = self
             childViewController.isProfilePic = self.isProfilePic
             childViewController.profilePicUnwind = self.profilePicUnwind
         }
-        if let navigationController = segue.destinationViewController as? UINavigationController,
+        if let navigationController = segue.destination as? UINavigationController,
             let childViewController = navigationController.childViewControllers[0] as? GalleryViewController {
             childViewController.galleryDelegate = self
             childViewController.isProfilePic = self.isProfilePic
@@ -55,7 +55,7 @@ extension CaptureScrollViewController: CaptureDelegate {
     
     func galleryButtonTapped() {
         // Scroll to gallery.
-        self.scrollView.setContentOffset(CGPointMake(0.0, 0.0), animated: true)
+        self.scrollView.setContentOffset(CGPoint(x: 0.0, y: 0.0), animated: true)
     }
 }
 
@@ -63,6 +63,6 @@ extension CaptureScrollViewController: GalleryDelegate {
     
     func cameraButtonTapped() {
         // Scroll to camera.
-        self.scrollView.setContentOffset(CGPointMake(self.view.bounds.width, 0.0), animated: true)
+        self.scrollView.setContentOffset(CGPoint(x: self.view.bounds.width, y: 0.0), animated: true)
     }
 }

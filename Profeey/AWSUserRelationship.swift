@@ -37,7 +37,7 @@ class AWSUserRelationship: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
         return "_followingId"
     }
     
-    override class func JSONKeyPathsByPropertyKey() -> [NSObject : AnyObject] {
+    override class func jsonKeyPathsByPropertyKey() -> [AnyHashable: Any] {
         return [
             "_userId" : "userId",
             "_creationDate" : "creationDate",

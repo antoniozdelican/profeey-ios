@@ -45,25 +45,25 @@ class AWSLikesTable: NSObject, Table {
         super.init()
     }
     
-    func tableAttributeName(dataObjectAttributeName: String) -> String {
-        return AWSUserRelationship.JSONKeyPathsByPropertyKey()[dataObjectAttributeName] as! String
+    func tableAttributeName(_ dataObjectAttributeName: String) -> String {
+        return AWSUserRelationship.jsonKeyPathsByPropertyKey()[dataObjectAttributeName] as! String
     }
     
     // Get Like with userId (likerId) and postId.
-    func getLike(userId: String, postId: String, completionHandler: AWSContinuationBlock) {
-        let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
-        objectMapper.load(AWSLike.self, hashKey: userId, rangeKey: postId).continueWithBlock(completionHandler)
+    func getLike(_ userId: String, postId: String, completionHandler: @escaping AWSContinuationBlock) {
+        let objectMapper = AWSDynamoDBObjectMapper.default()
+        objectMapper.load(AWSLike.self, hashKey: userId, rangeKey: postId).continue(completionHandler)
         
     }
     
-    func saveLike(like: AWSLike, completionHandler: AWSContinuationBlock) {
-        let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
-        objectMapper.save(like).continueWithBlock(completionHandler)
+    func saveLike(_ like: AWSLike?, completionHandler: @escaping AWSContinuationBlock) {
+        let objectMapper = AWSDynamoDBObjectMapper.default()
+        objectMapper.save(like!).continue(completionHandler)
     }
     
-    func removeLike(like: AWSLike, completionHandler: AWSContinuationBlock) {
-        let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
-        objectMapper.remove(like).continueWithBlock(completionHandler)
+    func removeLike(_ like: AWSLike?, completionHandler: @escaping AWSContinuationBlock) {
+        let objectMapper = AWSDynamoDBObjectMapper.default()
+        objectMapper.remove(like!).continue(completionHandler)
     }
 }
 
@@ -96,8 +96,8 @@ class AWSLikesPostIndex: NSObject, Index {
     // MARK: QueryWithPartitionKey
     
     // Query all likes with postId.
-    func queryPostLikers(postId: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
-        let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
+    func queryPostLikers(_ postId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+        let objectMapper = AWSDynamoDBObjectMapper.default()
         let queryExpression = AWSDynamoDBQueryExpression()
         queryExpression.indexName = "PostIndex"
         queryExpression.keyConditionExpression = "#postId = :postId"

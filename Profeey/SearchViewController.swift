@@ -11,13 +11,13 @@ import AWSMobileHubHelper
 import AWSDynamoDB
 
 protocol SearchUsersDelegate {
-    func showUsers(users: [User], showRecentUsers: Bool)
-    func searchingUsers(isSearchingUsers: Bool)
+    func showUsers(_ users: [User], showRecentUsers: Bool)
+    func searchingUsers(_ isSearchingUsers: Bool)
 }
 
 protocol SearchCategoriesDelegate {
-    func showCategories(categories: [Category], showRecentCategories: Bool)
-    func searchingCategories(isSearchingCategories: Bool)
+    func showCategories(_ categories: [Category], showRecentCategories: Bool)
+    func searchingCategories(_ isSearchingCategories: Bool)
 }
 
 protocol ScrollViewDelegate {
@@ -34,21 +34,21 @@ class SearchViewController: UIViewController {
     @IBOutlet weak var categoriesLabel: UILabel!
     @IBOutlet weak var segmentedControlView: UIView!
     
-    private var searchController: UISearchController?
-    private var searchUsersDelegate: SearchUsersDelegate?
-    private var searchCategoriesDelegate: SearchCategoriesDelegate?
+    fileprivate var searchController: UISearchController?
+    fileprivate var searchUsersDelegate: SearchUsersDelegate?
+    fileprivate var searchCategoriesDelegate: SearchCategoriesDelegate?
     
-    private var recentUsers: [User] = []
-    private var searchedUsers: [User] = []
-    private var showRecentUsers: Bool = true
+    fileprivate var recentUsers: [User] = []
+    fileprivate var searchedUsers: [User] = []
+    fileprivate var showRecentUsers: Bool = true
     
-    private var recentCategories: [Category] = []
-    private var searchedCategories: [Category] = []
-    private var showRecentCategories: Bool = true
+    fileprivate var recentCategories: [Category] = []
+    fileprivate var searchedCategories: [Category] = []
+    fileprivate var showRecentCategories: Bool = true
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .Plain, target: nil, action: nil)
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         self.configureSearchController()
         self.mainScrollView.delegate = self
         self.adjustSegment(0)
@@ -57,12 +57,12 @@ class SearchViewController: UIViewController {
         self.scanCategories()
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.indicatorScrollView.contentOffset.x = -self.mainScrollView.contentOffset.x / 2
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.searchController?.searchBar.resignFirstResponder()
     }
@@ -73,55 +73,59 @@ class SearchViewController: UIViewController {
     
     // MARK: Configuration
     
-    private func configureSearchController() {
+    fileprivate func configureSearchController() {
         self.searchController = UISearchController(searchResultsController: nil)
         self.searchController?.hidesNavigationBarDuringPresentation = false
         self.searchController?.dimsBackgroundDuringPresentation = false
         self.searchController?.searchBar.delegate = self
         
-        //self.definesPresentationContext = true
-        self.definesPresentationContext = false
+        self.definesPresentationContext = true
+        //self.definesPresentationContext = false
         self.navigationItem.titleView = self.searchController?.searchBar
     }
     
     // MARK: Navigation
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if let destinationViewController = segue.destinationViewController as? SearchUsersTableViewController {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let destinationViewController = segue.destination as? SearchUsersTableViewController {
             self.searchUsersDelegate = destinationViewController
             destinationViewController.scrollViewDelegate = self
             destinationViewController.selectUserDelegate = self
         }
-        if let destinationViewController = segue.destinationViewController as? SearchCategoriesTableViewController {
+        if let destinationViewController = segue.destination as? SearchCategoriesTableViewController {
             self.searchCategoriesDelegate = destinationViewController
             destinationViewController.scrollViewDelegate = self
             destinationViewController.selectCategoryDelegate = self
         }
-        if let destinationViewController = segue.destinationViewController as? ProfileTableViewController,
-            let indexPath = sender as? NSIndexPath {
-            destinationViewController.user = self.showRecentUsers ? self.recentUsers[indexPath.row] : self.searchedUsers[indexPath.row]
+        if let destinationViewController = segue.destination as? ProfileTableViewController,
+            let indexPath = sender as? IndexPath {
+            destinationViewController.user = self.showRecentUsers ? self.recentUsers[(indexPath as NSIndexPath).row] : self.searchedUsers[(indexPath as NSIndexPath).row]
         }
-        if let destinationViewController = segue.destinationViewController as? CategoryTableViewController,
-            let indexPath = sender as? NSIndexPath {
-            destinationViewController.categoryName = self.showRecentCategories ? self.recentCategories[indexPath.row].categoryName : self.searchedCategories[indexPath.row].categoryName
+        if let destinationViewController = segue.destination as? CategoryTableViewController,
+            let indexPath = sender as? IndexPath {
+            destinationViewController.categoryName = self.showRecentCategories ? self.recentCategories[(indexPath as NSIndexPath).row].categoryName : self.searchedCategories[(indexPath as NSIndexPath).row].categoryName
+        }
+        if let destinationViewController = segue.destination as? Category2TableViewController,
+            let indexPath = sender as? IndexPath {
+            destinationViewController.category = self.showRecentCategories ? self.recentCategories[(indexPath as NSIndexPath).row] : self.searchedCategories[(indexPath as NSIndexPath).row]
         }
     }
     
     // MARK: IBActions
     
-    @IBAction func peopleSegmentTapped(sender: AnyObject) {
-        let rect = CGRectMake(0.0, 0.0, self.mainScrollView.bounds.width, self.mainScrollView.bounds.height)
+    @IBAction func peopleSegmentTapped(_ sender: AnyObject) {
+        let rect = CGRect(x: 0.0, y: 0.0, width: self.mainScrollView.bounds.width, height: self.mainScrollView.bounds.height)
         self.mainScrollView.scrollRectToVisible(rect, animated: true)
     }
     
-    @IBAction func categoriesSegmentTapped(sender: AnyObject) {
-        let rect = CGRectMake(self.view.bounds.width, 0.0, self.mainScrollView.bounds.width, self.mainScrollView.bounds.height)
+    @IBAction func categoriesSegmentTapped(_ sender: AnyObject) {
+        let rect = CGRect(x: self.view.bounds.width, y: 0.0, width: self.mainScrollView.bounds.width, height: self.mainScrollView.bounds.height)
         self.mainScrollView.scrollRectToVisible(rect, animated: true)
     }
     
     // MARK: Helper
     
-    private func adjustSegment(segmentIndex: Int) {
+    fileprivate func adjustSegment(_ segmentIndex: Int) {
         switch segmentIndex {
         case 0:
             if self.peopleLabel.textColor != Colors.black {
@@ -144,12 +148,12 @@ class SearchViewController: UIViewController {
     
     // MARK: AWS
     
-    private func scanUsers() {
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+    fileprivate func scanUsers() {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
         PRFYDynamoDBManager.defaultDynamoDBManager().scanUsersDynamoDB({
-            (response: AWSDynamoDBPaginatedOutput?, error: NSError?) in
-            dispatch_async(dispatch_get_main_queue(), {
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 if let error = error {
                     print("scanUsers error: \(error)")
                 } else {
@@ -171,15 +175,15 @@ class SearchViewController: UIViewController {
         })
     }
     
-    private func scanUsersByFirstLastName(searchText: String) {
-        let searchFirstName = searchText.lowercaseString
-        let searchLastName = searchText.lowercaseString
+    fileprivate func scanUsersByFirstLastName(_ searchText: String) {
+        let searchFirstName = searchText.lowercased()
+        let searchLastName = searchText.lowercased()
         
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
         PRFYDynamoDBManager.defaultDynamoDBManager().scanUsersByFirstLastNameDynamoDB(searchFirstName, searchLastName: searchLastName, completionHandler: {
-            (response: AWSDynamoDBPaginatedOutput?, error: NSError?) in
-            dispatch_async(dispatch_get_main_queue(), {
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 if let error = error {
                     print("scanUsers error: \(error)")
                     self.searchedUsers = []
@@ -219,16 +223,16 @@ class SearchViewController: UIViewController {
         })
     }
     
-    private func scanCategories() {
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+    fileprivate func scanCategories() {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
         PRFYDynamoDBManager.defaultDynamoDBManager().scanCategoriesDynamoDB({
-            (response: AWSDynamoDBPaginatedOutput?, error: NSError?) in
-            dispatch_async(dispatch_get_main_queue(), {
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 if let error = error {
                     print("scanCategories error: \(error)")
                 } else {
-                    guard let awsCategories = response?.items as? [AWSCategory] where awsCategories.count > 0 else {
+                    guard let awsCategories = response?.items as? [AWSCategory] , awsCategories.count > 0 else {
                         return
                     }
                     for awsCategory in awsCategories {
@@ -243,14 +247,14 @@ class SearchViewController: UIViewController {
         })
     }
     
-    private func scanCategoriesByCategoryName(searchText: String) {
-        let searchCategoryName = searchText.lowercaseString
+    fileprivate func scanCategoriesByCategoryName(_ searchText: String) {
+        let searchCategoryName = searchText.lowercased()
         
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
         PRFYDynamoDBManager.defaultDynamoDBManager().scanCategoriesByCategoryNameDynamoDB(searchCategoryName, completionHandler: {
-            (response: AWSDynamoDBPaginatedOutput?, error: NSError?) in
-            dispatch_async(dispatch_get_main_queue(), {
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 if let error = error {
                     print("scanCategoriesByCategoryName error: \(error)")
                     self.searchedCategories = []
@@ -259,7 +263,7 @@ class SearchViewController: UIViewController {
                         self.searchCategoriesDelegate?.showCategories(self.searchedCategories, showRecentCategories: false)
                     }
                 } else {
-                    guard let awsCategories = response?.items as? [AWSCategory] where awsCategories.count > 0 else {
+                    guard let awsCategories = response?.items as? [AWSCategory] , awsCategories.count > 0 else {
                         self.searchedCategories = []
                         if !self.showRecentCategories {
                             self.searchCategoriesDelegate?.searchingCategories(false)
@@ -285,7 +289,7 @@ class SearchViewController: UIViewController {
 
 extension SearchViewController: UIScrollViewDelegate {
     
-    func scrollViewDidScroll(scrollView: UIScrollView) {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
         self.indicatorScrollView.contentOffset.x = -scrollView.contentOffset.x / 2
         if scrollView.contentOffset.x > scrollView.bounds.width / 2 {
             self.adjustSegment(1)
@@ -297,7 +301,7 @@ extension SearchViewController: UIScrollViewDelegate {
 
 extension SearchViewController: UISearchBarDelegate {
     
-    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         let searchText = searchText.trimm()
         if searchText.isEmpty {
             // Users.
@@ -323,7 +327,7 @@ extension SearchViewController: UISearchBarDelegate {
         }
     }
     
-    func searchBarCancelButtonClicked(searchBar: UISearchBar) {
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         // Users.
         self.showRecentUsers = true
         self.searchUsersDelegate?.searchingUsers(false)
@@ -345,14 +349,14 @@ extension SearchViewController: ScrollViewDelegate {
 
 extension SearchViewController: SelectUserDelegate {
     
-    func didSelectUser(indexPath: NSIndexPath) {
-        self.performSegueWithIdentifier("segueToProfileVc", sender: indexPath)
+    func didSelectUser(_ indexPath: IndexPath) {
+        self.performSegue(withIdentifier: "segueToProfileVc", sender: indexPath)
     }
 }
 
 extension SearchViewController: SelectCategoryDelegate {
     
-    func didSelectCategory(indexPath: NSIndexPath) {
-        self.performSegueWithIdentifier("segueToCategoryVc", sender: indexPath)
+    func didSelectCategory(_ indexPath: IndexPath) {
+        self.performSegue(withIdentifier: "segueToCategoryVc", sender: indexPath)
     }
 }

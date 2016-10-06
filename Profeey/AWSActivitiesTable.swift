@@ -48,8 +48,8 @@ class AWSActivitiesTable: NSObject, Table {
         super.init()
     }
     
-    func tableAttributeName(dataObjectAttributeName: String) -> String {
-        return AWSActivity.JSONKeyPathsByPropertyKey()[dataObjectAttributeName] as! String
+    func tableAttributeName(_ dataObjectAttributeName: String) -> String {
+        return AWSActivity.jsonKeyPathsByPropertyKey()[dataObjectAttributeName] as! String
     }
 }
 
@@ -68,13 +68,13 @@ class AWSActivitiesPrimaryIndex: NSObject, Index {
     // Mark: QueryWithPartitionKey
     
     // Query all activities with userId.
-    func queryUserActivities(userId: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
-        let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
+    func queryUserActivities(_ userId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+        let objectMapper = AWSDynamoDBObjectMapper.default()
         let queryExpression = AWSDynamoDBQueryExpression()
         queryExpression.keyConditionExpression = "#userId = :userId"
         queryExpression.expressionAttributeNames = ["#userId": "userId",]
         queryExpression.expressionAttributeValues = [":userId": userId,]
-        
+    
         objectMapper.query(AWSActivity.self, expression: queryExpression, completionHandler: completionHandler)
     }
 }
@@ -95,8 +95,8 @@ class AWSActivitiesDateSortedIndex: NSObject, Index {
     // MARK: QueryWithPartitionKeyAndSortKey
     
     // Query all activities with userId and creationDate <= currentDate.
-    func queryUserActivitiesDateSorted(userId: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
-        let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
+    func queryUserActivitiesDateSorted(_ userId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+        let objectMapper = AWSDynamoDBObjectMapper.default()
         let queryExpression = AWSDynamoDBQueryExpression()
         queryExpression.indexName = "DateSortedIndex"
         queryExpression.keyConditionExpression = "#userId = :userId AND #creationDate <= :creationDate"
@@ -105,7 +105,7 @@ class AWSActivitiesDateSortedIndex: NSObject, Index {
             "#creationDate": "creationDate",
         ]
         
-        let currentDateNumber = NSNumber(double: NSDate().timeIntervalSince1970)
+        let currentDateNumber = NSNumber(value: Date().timeIntervalSince1970 as Double)
         
         queryExpression.expressionAttributeValues = [
             ":userId": userId,

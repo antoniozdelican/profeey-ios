@@ -12,7 +12,7 @@ import AWSCore
 struct AWSConstants {
     
     // MARK: Cognito
-    static let COGNITO_REGIONTYPE = AWSRegionType.USEast1
+    static let COGNITO_REGIONTYPE = AWSRegionType.usEast1
     static let COGNITO_IDENTITY_POOL_ID = "us-east-1:a29f1a34-0cdb-4ad4-b084-2a1a3c165375"
     
     // MARK: UserPool

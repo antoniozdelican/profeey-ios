@@ -14,63 +14,61 @@ protocol DynamoDBManager {
     
     // MARK: Users
     
-    func getCurrentUserDynamoDB(completionHandler: AWSContinuationBlock)
-    func getUserDynamoDB(userId: String, completionHandler: AWSContinuationBlock)
+    func getCurrentUserDynamoDB(_ completionHandler: @escaping AWSContinuationBlock)
+    func getUserDynamoDB(_ userId: String, completionHandler: @escaping AWSContinuationBlock)
     
-    func createUserDynamoDB(email: String, firstName: String, lastName: String, completionHandler: AWSContinuationBlock)
-    func saveUserPreferredUsernameAndProfilePicDynamoDB(preferredUsername: String, profilePicUrl: String?, completionHandler: AWSContinuationBlock)
-    func saveUserProfessionDynamoDB(professionName: String, completionHandler: AWSContinuationBlock)
+    func createUserDynamoDB(_ email: String, firstName: String, lastName: String, completionHandler: @escaping AWSContinuationBlock)
+    func saveUserPreferredUsernameAndProfilePicDynamoDB(_ preferredUsername: String, profilePicUrl: String?, completionHandler: @escaping AWSContinuationBlock)
+    func saveUserProfessionDynamoDB(_ professionName: String, completionHandler: @escaping AWSContinuationBlock)
     
-    func saveUserDynamoDB(user: User?, completionHandler: AWSContinuationBlock)
+    func saveUserDynamoDB(_ user: User?, completionHandler: @escaping AWSContinuationBlock)
     
-    func scanUsersDynamoDB(completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void)
-    func scanUsersByFirstLastNameDynamoDB(searchFirstName: String, searchLastName: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void)
+    func scanUsersDynamoDB(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
+    func scanUsersByFirstLastNameDynamoDB(_ searchFirstName: String, searchLastName: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
     
     // MARK: UserRelationships
     
-    func getUserRelationshipDynamoDB(followingId: String, completionHandler: AWSContinuationBlock)
-    func saveUserRelationshipDynamoDB(followingId: String, follower: User?, completionHandler: AWSContinuationBlock)
-    func removeUserRelationshipDynamoDB(followingId: String, completionHandler: AWSContinuationBlock)
-    func queryUserFollowersDynamoDB(followingId: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void)
+    func getUserRelationshipDynamoDB(_ followingId: String, completionHandler: @escaping AWSContinuationBlock)
+    func saveUserRelationshipDynamoDB(_ followingId: String, follower: User?, completionHandler: @escaping AWSContinuationBlock)
+    func removeUserRelationshipDynamoDB(_ followingId: String, completionHandler: @escaping AWSContinuationBlock)
+    func queryUserFollowersDynamoDB(_ followingId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
     
     // MARK: Likes
     
-    func getLikeDynamoDB(postId: String, completionHandler: AWSContinuationBlock)
-    func saveLikeDynamoDB(postId: String, postUserId: String, liker: User?, completionHandler: AWSContinuationBlock)
-    func removeLikeDynamoDB(postId: String, postUserId: String, completionHandler: AWSContinuationBlock)
-    func queryPostLikersDynamoDB(postId: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void)
+    func getLikeDynamoDB(_ postId: String, completionHandler: @escaping AWSContinuationBlock)
+    func saveLikeDynamoDB(_ postId: String, postUserId: String, liker: User?, completionHandler: @escaping AWSContinuationBlock)
+    func removeLikeDynamoDB(_ postId: String, postUserId: String, completionHandler: @escaping AWSContinuationBlock)
+    func queryPostLikersDynamoDB(_ postId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
     
     // MARK: Posts
     
-    func queryUserPostsDateSortedDynamoDB(userId: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void)
-    func queryCategoryPostsDateSortedDynamoDB(categoryName: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void)
-    func savePostDynamoDB(imageUrl: String?, title: String?, description: String?, categoryName: String?, user: User?, completionHandler: AWSContinuationBlock)
-    
-    // MARK: FeaturedCategories
-    
-    func scanFeaturedCategoriesDynamoDB(completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void)
+    func queryUserPostsDateSortedDynamoDB(_ userId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
+    func queryCategoryPostsDateSortedDynamoDB(_ categoryName: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
+    func createPostDynamoDB(_ imageUrl: String?, caption: String?, categoryName: String?, user: User?, completionHandler: @escaping AWSContinuationBlock)
+    func updatePostDynamoDB(_ post: Post?, completionHandler: @escaping AWSContinuationBlock)
+    func removePostDynamoDB(_ postId: String, completionHandler: @escaping AWSContinuationBlock)
     
     // MARK: Categories
     
-    func scanCategoriesDynamoDB(completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void)
-    func scanCategoriesByCategoryNameDynamoDB(searchCategoryName: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void)
+    func scanCategoriesDynamoDB(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
+    func scanCategoriesByCategoryNameDynamoDB(_ searchCategoryName: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
     
     // MARK: Professions
     
-    func scanProfessionsDynamoDB(completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void)
-    func scanProfessionsByProfessionNameDynamoDB(searchProfessionName: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void)
+    func scanProfessionsDynamoDB(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
+    func scanProfessionsByProfessionNameDynamoDB(_ searchProfessionName: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
     
     // MARK: Activities
     
-    func queryUserActivitiesDateSortedDynamoDB(userId: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void)
+    func queryUserActivitiesDateSortedDynamoDB(_ userId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
     
     // MARK: UserCategories
     
-    func queryUserCategoriesNumberOfPostsSortedDynamoDB(userId: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void)
+    func queryUserCategoriesNumberOfPostsSortedDynamoDB(_ userId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
     
     // MARK: UserExperiences
     
-    func queryUserExperiencesDynamoDB(userId: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void)
-    func saveUserExperienceDynamoDB(experienceId: String?, position: String?, organization: String?, fromDate: NSNumber?, toDate: NSNumber?, experienceType: NSNumber?, completionHandler: AWSContinuationBlock)
-    func removeUserExperienceDynamoDB(experienceId: String, completionHandler: AWSContinuationBlock)
+    func queryUserExperiencesDynamoDB(_ userId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
+    func saveUserExperienceDynamoDB(_ experienceId: String?, position: String?, organization: String?, fromDate: NSNumber?, toDate: NSNumber?, experienceType: NSNumber?, completionHandler: @escaping AWSContinuationBlock)
+    func removeUserExperienceDynamoDB(_ experienceId: String, completionHandler: @escaping AWSContinuationBlock)
 }

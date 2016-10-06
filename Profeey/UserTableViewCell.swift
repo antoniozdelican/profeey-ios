@@ -21,22 +21,22 @@ class UserTableViewCell: UITableViewCell {
         self.profilePicImageView.clipsToBounds = true
     }
 
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
     
     func setFollowButton() {
-        self.followButton?.setTitle("FOLLOW", forState: UIControlState.Normal)
-        self.followButton?.setTitleColor(Colors.blue, forState: UIControlState.Normal)
-        self.followButton?.setImage(UIImage(named: "ic_add_blue"), forState: UIControlState.Normal)
-        self.followButton?.setBackgroundImage(UIImage(named: "btn_blue_small"), forState: UIControlState.Normal)
+        self.followButton?.setTitle("FOLLOW", for: UIControlState())
+        self.followButton?.setTitleColor(Colors.blue, for: UIControlState())
+        self.followButton?.setImage(UIImage(named: "ic_add_blue"), for: UIControlState())
+        self.followButton?.setBackgroundImage(UIImage(named: "btn_blue_small"), for: UIControlState())
     }
     
     func setFollowingButton() {
-        self.followButton?.setTitle("FOLLOWING", forState: UIControlState.Normal)
-        self.followButton?.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
-        self.followButton?.setImage(UIImage(named: "ic_check_white"), forState: UIControlState.Normal)
-        self.followButton?.setBackgroundImage(UIImage(named: "btn_blue_small_selected"), forState: UIControlState.Normal)
+        self.followButton?.setTitle("FOLLOWING", for: UIControlState())
+        self.followButton?.setTitleColor(UIColor.white, for: UIControlState())
+        self.followButton?.setImage(UIImage(named: "ic_check_white"), for: UIControlState())
+        self.followButton?.setBackgroundImage(UIImage(named: "btn_blue_small_selected"), for: UIControlState())
     }
 
 }

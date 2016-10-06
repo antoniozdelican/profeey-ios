@@ -18,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         self.configureUI()
         
         AWSClientManager.defaultClientManager().userPool?.delegate = self
@@ -29,27 +29,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
-    private func configureUI() {
+    fileprivate func configureUI() {
         // UINavigationBar
-        UINavigationBar.appearance().backgroundColor = Colors.greyLight
         UINavigationBar.appearance().barTintColor = Colors.greyLight
         // DON'T FCKING CHANGE translucent!! it messes up capture.
-        UINavigationBar.appearance().translucent = false
-        UINavigationBar.appearance().tintColor = Colors.blue
-        UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: Colors.blue]
+        UINavigationBar.appearance().isTranslucent = false
+        UINavigationBar.appearance().tintColor = Colors.black
+        UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: Colors.black]
         
         // UITabBar
-        //UITabBar.appearance().barTintColor = Colors.greyLight
-        UITabBar.appearance().barTintColor = UIColor.whiteColor()
-        UITabBar.appearance().translucent = false
-        UITabBar.appearance().tintColor = Colors.blue
+        UITabBar.appearance().barTintColor = Colors.greyLight
+        UITabBar.appearance().isTranslucent = false
+        UITabBar.appearance().tintColor = Colors.black
         
         // UITableView
-        //UITableView.appearance().backgroundColor = Colors.greyLight
         UITableView.appearance().tableFooterView = UIView()
         UITableView.appearance().separatorColor = Colors.grey
         // WARNING
-        //UITableView.appearance().separatorInset = UIEdgeInsetsZero
+        UITableView.appearance().separatorInset = UIEdgeInsets.zero
         
         // UITableViewCell
         let colorView = UIView()
@@ -63,7 +60,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UITextView.appearance().tintColor = Colors.black
         
         // UISearchBar
-        UISearchBar.appearance().searchBarStyle = UISearchBarStyle.Minimal
+        UISearchBar.appearance().searchBarStyle = UISearchBarStyle.minimal
     }
 }
 
@@ -80,7 +77,7 @@ extension AppDelegate: AWSCognitoIdentityInteractiveAuthenticationDelegate {
 //        }
         let storyboard = UIStoryboard(name: "Onboarding", bundle: nil)
         let rootViewController = storyboard.instantiateInitialViewController() as! OnboardingNavigationController
-        dispatch_async(dispatch_get_main_queue(), {
+        DispatchQueue.main.async(execute: {
             self.window?.rootViewController = rootViewController
         })
         return rootViewController

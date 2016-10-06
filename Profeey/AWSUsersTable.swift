@@ -40,20 +40,23 @@ class AWSUsersTable: NSObject, Table {
         super.init()
     }
     
-    func tableAttributeName(dataObjectAttributeName: String) -> String {
-        return AWSUser.JSONKeyPathsByPropertyKey()[dataObjectAttributeName] as! String
+    func tableAttributeName(_ dataObjectAttributeName: String) -> String {
+        return AWSUser.jsonKeyPathsByPropertyKey()[dataObjectAttributeName] as! String
     }
     
     // Scan all (upto 10) users in the Users table.
-    func scanUsers(completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
-        let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
+    func scanUsers(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+        let objectMapper = AWSDynamoDBObjectMapper.default()
         let scanExpression = AWSDynamoDBScanExpression()
         scanExpression.limit = 10
+        
         objectMapper.scan(AWSUser.self, expression: scanExpression, completionHandler: completionHandler)
+        
+        //objectMapper.scan(AWSUser.self, expression: scanExpression).continue(completionHandler)
     }
     
-    func scanUsersByFirstLastName(searchFirstName: String, searchLastName: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
-        let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
+    func scanUsersByFirstLastName(_ searchFirstName: String, searchLastName: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+        let objectMapper = AWSDynamoDBObjectMapper.default()
         let scanExpression = AWSDynamoDBScanExpression()
         scanExpression.filterExpression = "begins_with(#searchFirstName, :searchFirstName) OR begins_with(#searchLastName, :searchLastName)"
         scanExpression.expressionAttributeNames = [
@@ -69,23 +72,24 @@ class AWSUsersTable: NSObject, Table {
     }
     
     // Find a user with userId.
-    func getUser(userId: String, completionHandler: AWSContinuationBlock) {
-        let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
-        objectMapper.load(AWSUser.self, hashKey: userId, rangeKey: nil).continueWithBlock(completionHandler)
+
+    func getUser(_ userId: String, completionHandler: @escaping AWSContinuationBlock) {
+        let objectMapper = AWSDynamoDBObjectMapper.default()
+        objectMapper.load(AWSUser.self, hashKey: userId, rangeKey: nil).continue(completionHandler)
     }
     
-    func saveUser(user: AWSUser, completionHandler: AWSContinuationBlock) {
-        let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
-        objectMapper.save(user).continueWithBlock(completionHandler)
+    func saveUser(_ user: AWSUser?, completionHandler: @escaping AWSContinuationBlock) {
+        let objectMapper = AWSDynamoDBObjectMapper.default()
+        objectMapper.save(user!).continue(completionHandler)
     }
     
     // Skip null attributes (landing flow)
-    func saveUserSkipNull(user: AWSUser, completionHandler: AWSContinuationBlock) {
-        let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
+    func saveUserSkipNull(_ user: AWSUser?, completionHandler: @escaping AWSContinuationBlock) {
+        let objectMapper = AWSDynamoDBObjectMapper.default()
         
         let updateMapperConfig = AWSDynamoDBObjectMapperConfiguration()
-        updateMapperConfig.saveBehavior = AWSDynamoDBObjectMapperSaveBehavior.UpdateSkipNullAttributes
+        updateMapperConfig.saveBehavior = AWSDynamoDBObjectMapperSaveBehavior.updateSkipNullAttributes
         
-        objectMapper.save(user, configuration: updateMapperConfig).continueWithBlock(completionHandler)
+        objectMapper.save(user!, configuration: updateMapperConfig).continue(completionHandler)
     }
 }

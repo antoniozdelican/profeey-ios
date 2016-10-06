@@ -11,8 +11,8 @@ import AWSMobileHubHelper
 import AWSDynamoDB
 
 enum UsersType {
-    case Likers
-    case Followers
+    case likers
+    case followers
 }
 
 class UsersTableViewController: UITableViewController {
@@ -23,22 +23,22 @@ class UsersTableViewController: UITableViewController {
     // In case of followers.
     var userId: String?
     
-    private var users: [User] = []
-    private var isLoadingUsers: Bool = false
+    fileprivate var users: [User] = []
+    fileprivate var isLoadingUsers: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.Plain, target:nil, action:nil)
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.plain, target:nil, action:nil)
         
         if let usersType = self.usersType {
             switch usersType {
-            case .Likers:
+            case .likers:
                 self.navigationItem.title = "Likes"
                 if let postId = self.postId {
                     self.isLoadingUsers = true
                     self.queryPostLikers(postId)
                 }
-            case .Followers:
+            case .followers:
                 self.navigationItem.title = "Followers"
                 if let followingId = self.userId {
                     self.isLoadingUsers = true
@@ -54,33 +54,33 @@ class UsersTableViewController: UITableViewController {
     
     // MARK: Navigation
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if let destinationViewController = segue.destinationViewController as? ProfileTableViewController,
-            let indexPath = sender as? NSIndexPath {
-            destinationViewController.user = self.users[indexPath.row]
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let destinationViewController = segue.destination as? ProfileTableViewController,
+            let indexPath = sender as? IndexPath {
+            destinationViewController.user = self.users[(indexPath as NSIndexPath).row]
         }
     }
     
     // MARK: UITableViewDataSource
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if self.isLoadingUsers {
             return 1
         }
         return self.users.count
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if self.isLoadingUsers {
-            let cell = tableView.dequeueReusableCellWithIdentifier("cellLoading", forIndexPath: indexPath) as! LoadingTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellLoading", for: indexPath) as! LoadingTableViewCell
             return cell
         }
-        let cell = tableView.dequeueReusableCellWithIdentifier("cellUser", forIndexPath: indexPath) as! UserTableViewCell
-        let user = self.users[indexPath.row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cellUser", for: indexPath) as! UserTableViewCell
+        let user = self.users[(indexPath as NSIndexPath).row]
         cell.profilePicImageView.image = user.profilePic
         cell.fullNameLabel.text = user.fullName
         cell.professionLabel.text = user.professionName
@@ -89,30 +89,30 @@ class UsersTableViewController: UITableViewController {
     
     // MARK: UITableViewDelegate
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        let cell = tableView.cellForRowAtIndexPath(indexPath)
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        let cell = tableView.cellForRow(at: indexPath)
         if cell is UserTableViewCell {
-           self.performSegueWithIdentifier("segueToProfileVc", sender: indexPath)
+           self.performSegue(withIdentifier: "segueToProfileVc", sender: indexPath)
         }
     }
     
-    override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        cell.layoutMargins = UIEdgeInsetsZero
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.layoutMargins = UIEdgeInsets.zero
         cell.separatorInset = UIEdgeInsetsMake(0.0, 12.0, 0.0, 0.0)
         if self.isLoadingUsers {
             cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
         }
     }
     
-    override func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         if self.isLoadingUsers {
             return 120.0
         }
         return 65.0
     }
     
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if self.isLoadingUsers {
             return 120.0
         }
@@ -121,20 +121,20 @@ class UsersTableViewController: UITableViewController {
     
     // MARK: IBActions
     
-    @IBAction func refreshControlChanged(sender: AnyObject) {
+    @IBAction func refreshControlChanged(_ sender: AnyObject) {
         guard let usersType = self.usersType else {
             self.refreshControl?.endRefreshing()
             return
         }
         switch usersType {
-        case .Likers:
+        case .likers:
             guard let postId = self.postId else {
                 self.refreshControl?.endRefreshing()
                 return
             }
             self.users = []
             self.queryPostLikers(postId)
-        case .Followers:
+        case .followers:
             guard let followingId = self.userId else {
                 self.refreshControl?.endRefreshing()
                 return
@@ -146,12 +146,12 @@ class UsersTableViewController: UITableViewController {
     
     // MARK: AWS
     
-    private func queryPostLikers(postId: String) {
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+    fileprivate func queryPostLikers(_ postId: String) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
         PRFYDynamoDBManager.defaultDynamoDBManager().queryPostLikersDynamoDB(postId, completionHandler: {
-            (response: AWSDynamoDBPaginatedOutput?, error: NSError?) in
-            dispatch_async(dispatch_get_main_queue(), {
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 if let error = error {
                     print("queryPostLikers error: \(error)")
                     self.isLoadingUsers = false
@@ -170,7 +170,7 @@ class UsersTableViewController: UITableViewController {
                         self.refreshControl?.endRefreshing()
                         return
                     }
-                    for (index, awsLike) in awsLikes.enumerate() {
+                    for (index, awsLike) in awsLikes.enumerated() {
                         let user = User(userId: awsLike._userId, firstName: awsLike._firstName, lastName: awsLike._lastName, preferredUsername: awsLike._preferredUsername, professionName: awsLike._professionName, profilePicUrl: awsLike._profilePicUrl)
                         self.users.append(user)
                         self.isLoadingUsers = false
@@ -178,8 +178,8 @@ class UsersTableViewController: UITableViewController {
                         
                         // Get profilePic.
                         if let profilePicUrl = awsLike._profilePicUrl {
-                            let indexPath = NSIndexPath(forRow: index, inSection: 0)
-                            self.downloadImage(profilePicUrl, imageType: .UserProfilePic, indexPath: indexPath)
+                            let indexPath = IndexPath(row: index, section: 0)
+                            self.downloadImage(profilePicUrl, imageType: .userProfilePic, indexPath: indexPath)
                         }
                     }
                     self.refreshControl?.endRefreshing()
@@ -188,12 +188,12 @@ class UsersTableViewController: UITableViewController {
         })
     }
     
-    private func queryUserFollowers(followingId: String) {
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+    fileprivate func queryUserFollowers(_ followingId: String) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
         PRFYDynamoDBManager.defaultDynamoDBManager().queryUserFollowersDynamoDB(followingId, completionHandler: {
-            (response: AWSDynamoDBPaginatedOutput?, error: NSError?) in
-            dispatch_async(dispatch_get_main_queue(), {
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 if let error = error {
                     print("queryUserFollowers error: \(error)")
                     self.isLoadingUsers = false
@@ -212,7 +212,7 @@ class UsersTableViewController: UITableViewController {
                         self.refreshControl?.endRefreshing()
                         return
                     }
-                    for (index, awsUserRelationship) in awsUserRelationships.enumerate() {
+                    for (index, awsUserRelationship) in awsUserRelationships.enumerated() {
                         let user = User(userId: awsUserRelationship._userId, firstName: awsUserRelationship._firstName, lastName: awsUserRelationship._lastName, preferredUsername: awsUserRelationship._preferredUsername, professionName: awsUserRelationship._professionName, profilePicUrl: awsUserRelationship._profilePicUrl)
                         self.users.append(user)
                         self.isLoadingUsers = false
@@ -220,8 +220,8 @@ class UsersTableViewController: UITableViewController {
                         
                         // Get profilePic.
                         if let profilePicUrl = awsUserRelationship._profilePicUrl {
-                            let indexPath = NSIndexPath(forRow: index, inSection: 0)
-                            self.downloadImage(profilePicUrl, imageType: .UserProfilePic, indexPath: indexPath)
+                            let indexPath = IndexPath(row: index, section: 0)
+                            self.downloadImage(profilePicUrl, imageType: .userProfilePic, indexPath: indexPath)
                         }
                     }
                     self.refreshControl?.endRefreshing()
@@ -231,18 +231,18 @@ class UsersTableViewController: UITableViewController {
         
     }
     
-    private func downloadImage(imageKey: String, imageType: ImageType, indexPath: NSIndexPath) {
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-        let content = AWSUserFileManager.custom(key: "USEast1BucketManager").contentWithKey(imageKey)
+    fileprivate func downloadImage(_ imageKey: String, imageType: ImageType, indexPath: IndexPath) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        let content = AWSUserFileManager.custom(key: "USEast1BucketManager").content(withKey: imageKey)
         // TODO check if content.isImage()
-        if content.cached {
+        if content.isCached {
             print("Content cached:")
-            dispatch_async(dispatch_get_main_queue(), {
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
             })
             let image = UIImage(data: content.cachedData)
             switch imageType {
-            case .UserProfilePic:
+            case .userProfilePic:
                 self.users[indexPath.row].profilePic = image
                 self.tableView.reloadData()
             default:
@@ -250,17 +250,17 @@ class UsersTableViewController: UITableViewController {
             }
         } else {
             print("Download content:")
-            content.downloadWithDownloadType(
-                AWSContentDownloadType.IfNewerExists,
+            content.download(
+                with: AWSContentDownloadType.ifNewerExists,
                 pinOnCompletion: false,
                 progressBlock: {
-                    (content: AWSContent?, progress: NSProgress?) -> Void in
+                    (content: AWSContent?, progress: Progress?) -> Void in
                     // TODO
                 },
                 completionHandler: {
-                    (content: AWSContent?, data: NSData?, error: NSError?) in
-                    dispatch_async(dispatch_get_main_queue(), {
-                        UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                    (content: AWSContent?, data: Data?, error: Error?) in
+                    DispatchQueue.main.async(execute: {
+                        UIApplication.shared.isNetworkActivityIndicatorVisible = false
                         if let error = error {
                             print("downloadImage error: \(error)")
                         } else {
@@ -269,7 +269,7 @@ class UsersTableViewController: UITableViewController {
                             }
                             let image = UIImage(data: imageData)
                             switch imageType {
-                            case .UserProfilePic:
+                            case .userProfilePic:
                                 self.users[indexPath.row].profilePic = image
                                 self.tableView.reloadData()
                             default:

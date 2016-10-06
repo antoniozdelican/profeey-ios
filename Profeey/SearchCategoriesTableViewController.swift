@@ -9,16 +9,16 @@
 import UIKit
 
 protocol SelectCategoryDelegate {
-    func didSelectCategory(indexPath: NSIndexPath)
+    func didSelectCategory(_ indexPath: IndexPath)
 }
 
 class SearchCategoriesTableViewController: UITableViewController {
     
     var scrollViewDelegate: ScrollViewDelegate?
     var selectCategoryDelegate: SelectCategoryDelegate?
-    private var categories: [Category] = []
-    private var showRecentCategories: Bool = true
-    private var isSearchingCategories: Bool = false
+    fileprivate var categories: [Category] = []
+    fileprivate var showRecentCategories: Bool = true
+    fileprivate var isSearchingCategories: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,11 +30,11 @@ class SearchCategoriesTableViewController: UITableViewController {
 
     // MARK: UITableViewDataSource
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if self.isSearchingCategories {
             return 1
         }
@@ -44,18 +44,18 @@ class SearchCategoriesTableViewController: UITableViewController {
         return self.categories.count
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if self.isSearchingCategories {
-            let cell = tableView.dequeueReusableCellWithIdentifier("cellSearching", forIndexPath: indexPath) as! SearchingTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellSearching", for: indexPath) as! SearchingTableViewCell
             cell.activityIndicator.startAnimating()
             return cell
         }
         if !self.showRecentCategories && self.categories.count == 0 {
-            let cell = tableView.dequeueReusableCellWithIdentifier("cellNoResults", forIndexPath: indexPath) as! NoResultsTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellNoResults", for: indexPath) as! NoResultsTableViewCell
             return cell
         }
-        let category = self.categories[indexPath.row]
-        let cell = tableView.dequeueReusableCellWithIdentifier("cellSearchCategory", forIndexPath: indexPath) as! SearchCategoryTableViewCell
+        let category = self.categories[(indexPath as NSIndexPath).row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cellSearchCategory", for: indexPath) as! SearchCategoryTableViewCell
         cell.categoryNameLabel.text = category.categoryName
         cell.numberOfUsersPostsLabel.text = category.numberOfPostsString
         return cell
@@ -63,45 +63,49 @@ class SearchCategoriesTableViewController: UITableViewController {
     
     // MARK: UITableViewDelegate
     
-    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let cell = tableView.dequeueReusableCellWithIdentifier("cellHeader") as! HeaderTableViewCell
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0)
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cellHeader") as! HeaderTableViewCell
         cell.headerTitle.text = self.showRecentCategories ? "RECENT" : "BEST MATCHES"
-        cell.contentView.backgroundColor = UIColor.whiteColor()
+        cell.contentView.backgroundColor = UIColor.white
         return cell.contentView
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         self.selectCategoryDelegate?.didSelectCategory(indexPath)
     }
     
-    override func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         return 64.0
     }
     
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 64.0
     }
     
-    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 32.0
     }
     
     // MARK: UIScrollViewDelegate
     
-    override func scrollViewDidScroll(scrollView: UIScrollView) {
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         self.scrollViewDelegate?.didScroll()
     }
 }
 
 extension SearchCategoriesTableViewController: SearchCategoriesDelegate {
     
-    func searchingCategories(isSearchingCategories: Bool) {
+    func searchingCategories(_ isSearchingCategories: Bool) {
         self.isSearchingCategories = isSearchingCategories
         self.tableView.reloadData()
     }
     
-    func showCategories(categories: [Category], showRecentCategories: Bool) {
+    func showCategories(_ categories: [Category], showRecentCategories: Bool) {
         self.categories = categories
         self.showRecentCategories = showRecentCategories
         self.tableView.reloadData()

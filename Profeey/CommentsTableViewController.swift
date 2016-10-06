@@ -11,13 +11,13 @@ import UIKit
 class CommentsTableViewController: UITableViewController {
     
     var comments: [Comment]?
-    private var commentsArray: [Comment] = []
+    fileprivate var commentsArray: [Comment] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.estimatedRowHeight = 56.0
         self.tableView.rowHeight = UITableViewAutomaticDimension
-        self.tableView.contentOffset = CGPointMake(0.0, CGFloat.max)
+        self.tableView.contentOffset = CGPoint(x: 0.0, y: CGFloat.greatestFiniteMagnitude)
         
 //        let user1 = User(userId: nil, firstName: "Antonio", lastName: "Zdelican", preferredUsername: "antonio", profession: "Engineer", profilePicUrl: nil, location: nil, about: nil)
 //        let comment1 = Comment(user: user1, commentText: "Currently discovering iOS and energy management.")
@@ -40,17 +40,17 @@ class CommentsTableViewController: UITableViewController {
 
     // MARK: UITableViewDataSource
 
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.commentsArray.count
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("cellComment", forIndexPath: indexPath) as! CommentTableViewCell
-        let comment = self.commentsArray[indexPath.row]
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cellComment", for: indexPath) as! CommentTableViewCell
+        let comment = self.commentsArray[(indexPath as NSIndexPath).row]
         let user = comment.user
         cell.profilePicImageView.image = user?.profilePic
         cell.fullNameLabel.text = user?.fullName
@@ -62,24 +62,24 @@ class CommentsTableViewController: UITableViewController {
     
     // MARK: UITableViewDelegate
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
-    override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        cell.layoutMargins = UIEdgeInsetsZero
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.layoutMargins = UIEdgeInsets.zero
     }
 }
 
 extension CommentsTableViewController: CommentsViewControllerDelegate {
     
-    func commentPosted(comment: Comment) {
+    func commentPosted(_ comment: Comment) {
         self.commentsArray.append(comment)
-        let indexPath = NSIndexPath(forRow: self.commentsArray.count - 1, inSection: 0)
+        let indexPath = IndexPath(row: self.commentsArray.count - 1, section: 0)
         
         self.tableView.beginUpdates()
-        self.tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
+        self.tableView.insertRows(at: [indexPath], with: UITableViewRowAnimation.none)
         self.tableView.endUpdates()
-        self.tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition.Bottom, animated: false)
+        self.tableView.scrollToRow(at: indexPath, at: UITableViewScrollPosition.bottom, animated: false)
     }
 }

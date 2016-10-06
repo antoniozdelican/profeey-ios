@@ -13,12 +13,11 @@ class Post: NSObject {
     // Properties.
     var userId: String?
     var postId: String?
+    var caption: String?
     var categoryName: String?
     var creationDate: NSNumber?
-    var postDescription: String?
     var imageUrl: String?
     var numberOfLikes: NSNumber?
-    var title: String?
     
     // Generated.
     var user: User?
@@ -27,14 +26,14 @@ class Post: NSObject {
         guard let creationDate = self.creationDate else {
             return nil
         }
-        let currentDate = NSDate()
-        return currentDate.offsetFrom(NSDate(timeIntervalSince1970: NSTimeInterval(creationDate)))
+        let currentDate = Date()
+        return currentDate.offsetFrom(Date(timeIntervalSince1970: TimeInterval(creationDate)))
     }
     var numberOfLikesString: String? {
         guard let numberOfLikes = self.numberOfLikes else {
             return nil
         }
-        let numberOfLikesInt = numberOfLikes.integerValue
+        let numberOfLikesInt = numberOfLikes.intValue
         guard numberOfLikesInt > 0 else {
             return nil
         }
@@ -47,7 +46,7 @@ class Post: NSObject {
         guard let numberOfLikes = self.numberOfLikes else {
             return "0"
         }
-        let numberOfLikesInt = numberOfLikes.integerValue
+        let numberOfLikesInt = numberOfLikes.intValue
         return numberOfLikesInt.numberToString()
     }
     
@@ -60,18 +59,25 @@ class Post: NSObject {
         super.init()
     }
     
-    // Send only basic user object!
-    convenience init(userId: String?, postId: String?, categoryName: String?, creationDate: NSNumber?, postDescription: String?, imageUrl: String?, numberOfLikes: NSNumber?, title: String?, user: User?) {
+    convenience init(userId: String?, postId: String?, caption: String?, categoryName: String?, creationDate: NSNumber?, imageUrl: String?, numberOfLikes: NSNumber?, user: User?) {
         self.init()
         self.userId = userId
         self.postId = postId
+        self.caption = caption
         self.categoryName = categoryName
         self.creationDate = creationDate
-        self.postDescription = postDescription
         self.imageUrl = imageUrl
         self.numberOfLikes = numberOfLikes
-        self.title = title
         
         self.user = user
+    }
+    
+    // Partial post for EditPostVc
+    convenience init(userId: String?, postId: String?, caption: String?, categoryName: String?) {
+        self.init()
+        self.userId = userId
+        self.postId = postId
+        self.caption = caption
+        self.categoryName = categoryName
     }
 }

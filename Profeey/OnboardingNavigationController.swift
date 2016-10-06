@@ -13,10 +13,10 @@ class OnboardingNavigationController: UINavigationController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationBar.setBackgroundImage(UIImage(), forBarMetrics: .Default)
+        self.navigationBar.setBackgroundImage(UIImage(), for: .default)
         self.navigationBar.shadowImage = UIImage()
-        self.navigationBar.backgroundColor = UIColor.whiteColor()
-        self.navigationBar.barTintColor = UIColor.whiteColor()
+        self.navigationBar.backgroundColor = UIColor.white
+        self.navigationBar.barTintColor = UIColor.white
         self.navigationBar.tintColor = Colors.black
         self.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: Colors.black]
     }
@@ -28,11 +28,11 @@ class OnboardingNavigationController: UINavigationController {
 
 extension OnboardingNavigationController: AWSCognitoIdentityPasswordAuthentication {
     
-    func getPasswordAuthenticationDetails(authenticationInput: AWSCognitoIdentityPasswordAuthenticationInput, passwordAuthenticationCompletionSource: AWSTaskCompletionSource) {
+    func getDetails(_ authenticationInput: AWSCognitoIdentityPasswordAuthenticationInput, passwordAuthenticationCompletionSource: AWSTaskCompletionSource<AWSCognitoIdentityPasswordAuthenticationDetails>) {
         // Do nothing.
     }
     
-    func didCompletePasswordAuthenticationStepWithError(error: NSError?) {
+    func didCompleteStepWithError(_ error: Error?) {
         // Do nothing.
     }
 }

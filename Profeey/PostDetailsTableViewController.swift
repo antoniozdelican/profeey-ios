@@ -11,19 +11,19 @@ import AWSMobileHubHelper
 import AWSDynamoDB
 
 protocol LikeDelegate {
-    func togglePostLike(postIndexPath: NSIndexPath?, numberOfLikes: NSNumber?)
+    func togglePostLike(_ postIndexPath: IndexPath?, numberOfLikes: NSNumber?)
 }
 
 class PostDetailsTableViewController: UITableViewController {
     
     var post: Post?
-    var postIndexPath: NSIndexPath?
+    var postIndexPath: IndexPath?
     var likeDelegate: LikeDelegate?
-    private var currentUser: User?
+    fileprivate var currentUser: User?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.Plain, target:nil, action:nil)
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.plain, target:nil, action:nil)
         self.automaticallyAdjustsScrollViewInsets = false
         self.navigationItem.title = "Post"
         
@@ -32,7 +32,7 @@ class PostDetailsTableViewController: UITableViewController {
         
         // Check if liked by currentUser.
         if let postId = self.post?.postId {
-            let indexPath = NSIndexPath(forRow: 5, inSection: 0)
+            let indexPath = IndexPath(row: 5, section: 0)
             self.getLike(postId, indexPath: indexPath)
         }
     }
@@ -43,40 +43,40 @@ class PostDetailsTableViewController: UITableViewController {
     
     // MARK: Navigation
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if let destinationViewController = segue.destinationViewController as? ProfileTableViewController {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let destinationViewController = segue.destination as? ProfileTableViewController {
             destinationViewController.user = self.post?.user
         }
-        if let destinationViewController = segue.destinationViewController as? CategoryTableViewController {
+        if let destinationViewController = segue.destination as? CategoryTableViewController {
             destinationViewController.categoryName = self.post?.categoryName
         }
-        if let destinationViewController = segue.destinationViewController as? UsersTableViewController {
-            destinationViewController.usersType = UsersType.Likers
+        if let destinationViewController = segue.destination as? UsersTableViewController {
+            destinationViewController.usersType = UsersType.likers
             destinationViewController.postId = self.post?.postId
         }
     }
     
     // MARK: UITableViewDataSource
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 6
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        switch indexPath.row {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        switch (indexPath as NSIndexPath).row {
         case 0:
-            let cell = tableView.dequeueReusableCellWithIdentifier("cellPostUser", forIndexPath: indexPath) as! PostUserTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostUser", for: indexPath) as! PostUserTableViewCell
             let user = self.post?.user
             cell.profilePicImageView.image = user?.profilePic
             cell.fullNameLabel.text = user?.fullName
             cell.professionNameLabel.text = user?.professionName
             return cell
         case 1:
-            let cell = tableView.dequeueReusableCellWithIdentifier("cellPostImage", forIndexPath: indexPath) as! PostImageTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostImage", for: indexPath) as! PostImageTableViewCell
             cell.postImageView.image = self.post?.image
             if let image = self.post?.image {
                 let aspectRatio = image.size.width / image.size.height
@@ -84,24 +84,22 @@ class PostDetailsTableViewController: UITableViewController {
             }
             return cell
         case 2:
-            let cell = tableView.dequeueReusableCellWithIdentifier("cellPostInfo", forIndexPath: indexPath) as! PostInfoTableViewCell
-            cell.titleLabel.text = self.post?.title
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostInfo", for: indexPath) as! PostInfoTableViewCell
+            cell.titleLabel.text = self.post?.caption
             return cell
         case 3:
-            let cell = tableView.dequeueReusableCellWithIdentifier("cellPostCategory", forIndexPath: indexPath) as! PostCategoryTableViewCell
-            cell.categoryNameLabel.text = self.post?.categoryName
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostCategory", for: indexPath)
             return cell
         case 4:
-            let cell = tableView.dequeueReusableCellWithIdentifier("cellPostTime", forIndexPath: indexPath) as! PostTimeTableViewCell
-            cell.timeLabel.text = self.post?.creationDateString
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostTime", for: indexPath)
             return cell
         case 5:
-            let cell = tableView.dequeueReusableCellWithIdentifier("cellPostButtons", forIndexPath: indexPath) as! PostButtonsTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostButtons", for: indexPath) as! PostButtonsTableViewCell
             self.post!.isLikedByCurrentUser ? cell.setSelectedLikeButton() : cell.setUnselectedLikeButton()
-            cell.likeButton.addTarget(self, action: #selector(HomeTableViewController.likeButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-            cell.numberOfLikesButton.hidden = (self.post?.numberOfLikesString != nil) ? false : true
-            cell.numberOfLikesButton.setTitle(self.post?.numberOfLikesString, forState: UIControlState.Normal)
-            cell.numberOfLikesButton.addTarget(self, action: #selector(HomeTableViewController.numberOfLikesButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+//            cell.likeButton.addTarget(self, action: #selector(HomeTableViewController.likeButtonTapped(_:)), for: UIControlEvents.touchUpInside)
+            cell.numberOfLikesButton.isHidden = (self.post?.numberOfLikesString != nil) ? false : true
+            cell.numberOfLikesButton.setTitle(self.post?.numberOfLikesString, for: UIControlState())
+//            cell.numberOfLikesButton.addTarget(self, action: #selector(HomeTableViewController.numberOfLikesButtonTapped(_:)), for: UIControlEvents.touchUpInside)
             return cell
         default:
             return UITableViewCell()
@@ -110,29 +108,26 @@ class PostDetailsTableViewController: UITableViewController {
     
     // MARK: UITableViewDelegate
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        let cell = tableView.cellForRowAtIndexPath(indexPath)
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        let cell = tableView.cellForRow(at: indexPath)
         if cell is PostUserTableViewCell {
-            self.performSegueWithIdentifier("segueToProfileVc", sender: indexPath)
-        }
-        if cell is PostCategoryTableViewCell {
-            self.performSegueWithIdentifier("segueToCategoryVc", sender: indexPath)
+            self.performSegue(withIdentifier: "segueToProfileVc", sender: indexPath)
         }
         
     }
     
-    override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        cell.layoutMargins = UIEdgeInsetsZero
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.layoutMargins = UIEdgeInsets.zero
         cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
-        cell.selectionStyle = UITableViewCellSelectionStyle.None
-        if indexPath.row == 5 {
+        cell.selectionStyle = UITableViewCellSelectionStyle.none
+        if (indexPath as NSIndexPath).row == 5 {
             cell.separatorInset = UIEdgeInsetsMake(0.0, 12.0, 0.0, 12.0)
         }
     }
     
-    override func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        switch indexPath.row {
+    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        switch (indexPath as NSIndexPath).row {
         case 0:
             return 65.0
         case 1:
@@ -150,8 +145,8 @@ class PostDetailsTableViewController: UITableViewController {
         }
     }
     
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        switch indexPath.row {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        switch (indexPath as NSIndexPath).row {
         case 0:
             return 65.0
         case 1:
@@ -171,9 +166,9 @@ class PostDetailsTableViewController: UITableViewController {
     
     // MARK: Tappers
     
-    func likeButtonTapped(sender: UIButton) {
-        let point = sender.convertPoint(CGPointZero, toView: self.tableView)
-        guard let indexPath = self.tableView.indexPathForRowAtPoint(point) else {
+    func likeButtonTapped(_ sender: UIButton) {
+        let point = sender.convert(CGPoint.zero, to: self.tableView)
+        guard let indexPath = self.tableView.indexPathForRow(at: point) else {
             return
         }
         guard let post = self.post else {
@@ -186,34 +181,34 @@ class PostDetailsTableViewController: UITableViewController {
             return
         }
         let numberOfLikes = (post.numberOfLikes != nil) ? post.numberOfLikes! : 0
-        let numberOfLikesInteger = numberOfLikes.integerValue
+        let numberOfLikesInteger = numberOfLikes.intValue
         if post.isLikedByCurrentUser {
             post.isLikedByCurrentUser = false
-            post.numberOfLikes = NSNumber(integer: (numberOfLikesInteger - 1))
+            post.numberOfLikes = NSNumber(value: (numberOfLikesInteger - 1) as Int)
             self.removeLike(postId, postUserId: postUserId)
         } else {
             post.isLikedByCurrentUser = true
-            post.numberOfLikes = NSNumber(integer: (numberOfLikesInteger + 1))
+            post.numberOfLikes = NSNumber(value: (numberOfLikesInteger + 1) as Int)
             self.saveLike(postId, postUserId: postUserId)
         }
-        self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
+        self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
         
         //self.likeDelegate?.togglePostLike(self.postIndexPath, numberOfLikes: self.post?.numberOfLikes)
     }
     
-    func numberOfLikesButtonTapped(sender: UIButton) {
-        self.performSegueWithIdentifier("segueToUsersVc", sender: self)
+    func numberOfLikesButtonTapped(_ sender: UIButton) {
+        self.performSegue(withIdentifier: "segueToUsersVc", sender: self)
     }
     
     // MARK: AWS
     
     // Get currentUser data so we can perform actions (like, comment)
-    private func getCurrentUser() {
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+    fileprivate func getCurrentUser() {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
         PRFYDynamoDBManager.defaultDynamoDBManager().getCurrentUserDynamoDB({
             (task: AWSTask) in
-            dispatch_async(dispatch_get_main_queue(), {
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 if let error = task.error {
                     print("getCurrentUser error: \(error)")
                 } else {
@@ -229,18 +224,18 @@ class PostDetailsTableViewController: UITableViewController {
     }
     
     // Check if currentUser liked a post.
-    private func getLike(postId: String, indexPath: NSIndexPath) {
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+    fileprivate func getLike(_ postId: String, indexPath: IndexPath) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
         PRFYDynamoDBManager.defaultDynamoDBManager().getLikeDynamoDB(postId, completionHandler: {
             (task: AWSTask) in
-            dispatch_async(dispatch_get_main_queue(), {
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 if let error = task.error {
                     print("getLike error: \(error)")
                 } else {
                     if task.result != nil {
                         self.post?.isLikedByCurrentUser = true
-                        self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
+                        self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
                     }
                 }
             })
@@ -248,12 +243,12 @@ class PostDetailsTableViewController: UITableViewController {
         })
     }
     
-    private func saveLike(postId: String, postUserId: String) {
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+    fileprivate func saveLike(_ postId: String, postUserId: String) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
         PRFYDynamoDBManager.defaultDynamoDBManager().saveLikeDynamoDB(postId, postUserId: postUserId, liker: self.currentUser, completionHandler: {
             (task: AWSTask) in
-            dispatch_async(dispatch_get_main_queue(), {
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 if let error = task.error {
                     print("saveLike error: \(error)")
                 }
@@ -262,12 +257,12 @@ class PostDetailsTableViewController: UITableViewController {
         })
     }
     
-    private func removeLike(postId: String, postUserId: String) {
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+    fileprivate func removeLike(_ postId: String, postUserId: String) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
         PRFYDynamoDBManager.defaultDynamoDBManager().removeLikeDynamoDB(postId, postUserId: postUserId, completionHandler: {
             (task: AWSTask) in
-            dispatch_async(dispatch_get_main_queue(), {
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 if let error = task.error {
                     print("removeLike error: \(error)")
                 }

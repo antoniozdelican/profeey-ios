@@ -46,25 +46,25 @@ class AWSUserRelationshipsTable: NSObject, Table {
         super.init()
     }
     
-    func tableAttributeName(dataObjectAttributeName: String) -> String {
-        return AWSUserRelationship.JSONKeyPathsByPropertyKey()[dataObjectAttributeName] as! String
+    func tableAttributeName(_ dataObjectAttributeName: String) -> String {
+        return AWSUserRelationship.jsonKeyPathsByPropertyKey()[dataObjectAttributeName] as! String
     }
     
     // Find if user with userId is following user with followingId.
-    func getUserRelationship(userId: String, followingId: String, completionHandler: AWSContinuationBlock) {
-        let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
-        objectMapper.load(AWSUserRelationship.self, hashKey: userId, rangeKey: followingId).continueWithBlock(completionHandler)
+    func getUserRelationship(_ userId: String, followingId: String, completionHandler: @escaping AWSContinuationBlock) {
+        let objectMapper = AWSDynamoDBObjectMapper.default()
+        objectMapper.load(AWSUserRelationship.self, hashKey: userId, rangeKey: followingId).continue(completionHandler)
         
     }
     
-    func saveUserRelationship(userRelationship: AWSUserRelationship, completionHandler: AWSContinuationBlock) {
-        let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
-        objectMapper.save(userRelationship).continueWithBlock(completionHandler)
+    func saveUserRelationship(_ userRelationship: AWSUserRelationship?, completionHandler: @escaping AWSContinuationBlock) {
+        let objectMapper = AWSDynamoDBObjectMapper.default()
+        objectMapper.save(userRelationship!).continue(completionHandler)
     }
     
-    func removeUserRelationship(userRelationship: AWSUserRelationship, completionHandler: AWSContinuationBlock) {
-        let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
-        objectMapper.remove(userRelationship).continueWithBlock(completionHandler)
+    func removeUserRelationship(_ userRelationship: AWSUserRelationship?, completionHandler: @escaping AWSContinuationBlock) {
+        let objectMapper = AWSDynamoDBObjectMapper.default()
+        objectMapper.remove(userRelationship!).continue(completionHandler)
     }
 }
 
@@ -85,8 +85,8 @@ class AWSUserRelationshipsPrimaryIndex: NSObject, Index {
     // Mark: QueryWithPartitionKey
     
     // Find all following users.
-    func queryUserFollowing(userId: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
-        let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
+    func queryUserFollowing(_ userId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+        let objectMapper = AWSDynamoDBObjectMapper.default()
         let queryExpression = AWSDynamoDBQueryExpression()
         queryExpression.keyConditionExpression = "#userId = :userId"
         queryExpression.expressionAttributeNames = ["#userId": "userId",]
@@ -113,8 +113,8 @@ class AWSUserRelationshipsFollowersIndex: NSObject, Index {
     // MARK: QueryWithPartitionKey
     
     // Find all items with followingId.
-    func queryUserFollowers(followingId: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
-        let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
+    func queryUserFollowers(_ followingId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+        let objectMapper = AWSDynamoDBObjectMapper.default()
         let queryExpression = AWSDynamoDBQueryExpression()
         queryExpression.indexName = "FollowersIndex"
         queryExpression.keyConditionExpression = "#followingId = :followingId"

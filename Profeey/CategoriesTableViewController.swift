@@ -9,29 +9,31 @@
 import UIKit
 import AWSDynamoDB
 
+protocol CategoriesTableViewControllerDelegate {
+    
+    func didSelectCategory(categoryName: String)
+}
+
 class CategoriesTableViewController: UITableViewController {
     
     @IBOutlet weak var categoryTextField: UITextField!
+    @IBOutlet weak var addButton: UIBarButtonItem!
     
-    private var categories: [Category] = []
-    private var popularCategories: [Category] = []
-    var categoryName: String?
+    fileprivate var searchedCategories: [Category] = []
+    fileprivate var popularCategories: [Category] = []
+    fileprivate var showPopularCategories: Bool = true
+    
+    var categoriesTableViewControllerDelegate: CategoriesTableViewControllerDelegate?
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        if let categoryName = self.categoryName {
-            self.categoryTextField.text = categoryName
-            self.scanCategoriesByCategoryName(categoryName)
-        }
+        self.addButton.isEnabled = false
+        self.scanCategories()
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        self.categoryTextField.resignFirstResponder()
-    }
-    
-    override func prefersStatusBarHidden() -> Bool {
-        return true
+        self.view.endEditing(true)
     }
 
     override func didReceiveMemoryWarning() {
@@ -40,24 +42,21 @@ class CategoriesTableViewController: UITableViewController {
 
     // MARK: UITableViewDataSource
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let text = self.categoryTextField.text else {
-            return 0
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if self.showPopularCategories {
+            return self.popularCategories.count
+        } else {
+            return self.searchedCategories.count
         }
-        return text.isEmpty ? self.popularCategories.count : self.categories.count
     }
 
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        guard let text = self.categoryTextField.text else {
-            return UITableViewCell()
-        }
-        let searchText = text.trimm()
-        let cell = tableView.dequeueReusableCellWithIdentifier("cellCategory", forIndexPath: indexPath) as! CategoryTableViewCell
-        let category = searchText.isEmpty ? self.popularCategories[indexPath.row] : self.categories[indexPath.row]
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let category = self.showPopularCategories ? self.popularCategories[indexPath.row] : self.searchedCategories[indexPath.row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cellCategory", for: indexPath) as! CategoryTableViewCell
         cell.categoryNameLabel.text = category.categoryName
         cell.numberOfPostsLabel.text = category.numberOfPostsString
         return cell
@@ -65,103 +64,129 @@ class CategoriesTableViewController: UITableViewController {
     
     // MARK: UITableViewDelegate
     
-    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let text = self.categoryTextField.text else {
-            return nil
-        }
-        let searchText = text.trimm()
-        let cell = tableView.dequeueReusableCellWithIdentifier("cellHeader") as! HeaderTableViewCell
-        cell.headerTitle.text = searchText.isEmpty ? "POPULAR" : "BEST MATCHES"
-        cell.backgroundColor = UIColor.whiteColor()
-        return cell
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cellHeader") as! HeaderTableViewCell
+        cell.headerTitle.text = self.showPopularCategories ? "RECENT" : "BEST MATCHES"
+        cell.contentView.backgroundColor = Colors.greyLight
+        cell.contentView.alpha = 0.95
+        return cell.contentView
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        let cell = tableView.cellForRowAtIndexPath(indexPath)
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        let cell = tableView.cellForRow(at: indexPath)
         if cell is CategoryTableViewCell {
-            // Update category and unwind to EditPostVc
-            // WONT WORK IF POPULAR ARE USED!
-            self.categoryName = self.categories[indexPath.row].categoryName
-            self.performSegueWithIdentifier("segueUnwindToEditPostVc", sender: self)
+            let category = self.showPopularCategories ? self.popularCategories[indexPath.row] : self.searchedCategories[indexPath.row]
+            guard let categoryName = category.categoryName else {
+                return
+            }
+            self.categoriesTableViewControllerDelegate?.didSelectCategory(categoryName: categoryName)
+            self.dismiss(animated: true, completion: nil)
         }
     }
     
-    override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        cell.layoutMargins = UIEdgeInsetsZero
-        cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0)
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.layoutMargins = UIEdgeInsets.zero
+        cell.separatorInset = UIEdgeInsetsMake(0.0, 20.0, 0.0, 0.0)
     }
     
-    override func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 64.0
+    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 72.0
     }
     
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 64.0
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 72.0
     }
     
-    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 32.0
     }
     
     // MARK: UIScrollViewDelegate
     
-    override func scrollViewDidScroll(scrollView: UIScrollView) {
-        self.categoryTextField.resignFirstResponder()
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        self.view.endEditing(true)
     }
     
     // MARK: IBActions
     
-    @IBAction func doneButtonTapped(sender: AnyObject) {
-        // Update category and unwind to EditPostVc
-        self.categoryName = self.categoryTextField.text?.trimm()
-        self.performSegueWithIdentifier("segueUnwindToEditPostVc", sender: self)
-    }
-    
-    @IBAction func cancelButtonTapped(sender: AnyObject) {
-        self.dismissViewControllerAnimated(true, completion: nil)
-    }
-    
-    @IBAction func categoryTextFieldChanged(sender: AnyObject) {
+    @IBAction func addButtonTapped(_ sender: AnyObject) {
         guard let text = self.categoryTextField.text else {
             return
         }
-        let searchText = text.trimm()
-        if searchText.isEmpty {
-            // Show popularCategories.
+        let categoryName = text.trimm()
+        self.categoriesTableViewControllerDelegate?.didSelectCategory(categoryName: categoryName)
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    @IBAction func cancelButtonTapped(_ sender: AnyObject) {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    @IBAction func categoryTextFieldChanged(_ sender: AnyObject) {
+        guard let text = self.categoryTextField.text else {
+            return
+        }
+        let categoryName = text.trimm()
+        if categoryName.isEmpty {
+            self.showPopularCategories = true
             self.tableView.reloadData()
+            self.addButton.isEnabled = false
         } else {
-            // Do the search!
-            self.scanCategoriesByCategoryName(searchText)
+            self.showPopularCategories = false
+            self.searchedCategories = []
+            self.tableView.reloadData()
+            self.addButton.isEnabled = true
+            self.scanCategoriesByCategoryName(categoryName)
         }
     }
     
     // MARK: AWS
     
-    private func scanCategoriesByCategoryName(searchText: String) {
-        let searchCategoryName = searchText.lowercaseString
-        
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().scanCategoriesByCategoryNameDynamoDB(searchCategoryName, completionHandler: {
-            (response: AWSDynamoDBPaginatedOutput?, error: NSError?) in
-            dispatch_async(dispatch_get_main_queue(), {
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+    fileprivate func scanCategories() {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().scanCategoriesDynamoDB({
+            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 if let error = error {
-                    print("scanCategoriesByCategoryName error: \(error)")
+                    print("scanCategories error: \(error)")
                 } else {
-                    guard let awsCategories = response?.items as? [AWSCategory] else {
+                    guard let awsCategories = response?.items as? [AWSCategory], awsCategories.count > 0 else {
                         return
                     }
-                    var searchedCategories: [Category] = []
                     for awsCategory in awsCategories {
                         let category = Category(categoryName: awsCategory._categoryName, numberOfPosts: awsCategory._numberOfPosts)
-                        searchedCategories.append(category)
+                        self.popularCategories.append(category)
                     }
-                    self.categories = searchedCategories
                     self.tableView.reloadData()
                 }
             })
         })
+    }
+    
+    fileprivate func scanCategoriesByCategoryName(_ categoryName: String) {
+        let searchCategoryName = categoryName.lowercased()
         
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().scanCategoriesByCategoryNameDynamoDB(searchCategoryName, completionHandler: {
+            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                if let error = error {
+                    print("scanCategoriesByCategoryName error: \(error)")
+                } else {
+                    guard let awsCategories = response?.items as? [AWSCategory], awsCategories.count > 0 else {
+                        return
+                    }
+                    self.searchedCategories = []
+                    for awsCategory in awsCategories {
+                        let category = Category(categoryName: awsCategory._categoryName, numberOfPosts: awsCategory._numberOfPosts)
+                        self.searchedCategories.append(category)
+                    }
+                    self.tableView.reloadData()
+                }
+            })
+        })
     }
 }

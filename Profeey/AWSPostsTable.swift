@@ -47,13 +47,18 @@ class AWSPostsTable: NSObject, Table {
         super.init()
     }
     
-    func tableAttributeName(dataObjectAttributeName: String) -> String {
-        return AWSPost.JSONKeyPathsByPropertyKey()[dataObjectAttributeName] as! String
+    func tableAttributeName(_ dataObjectAttributeName: String) -> String {
+        return AWSPost.jsonKeyPathsByPropertyKey()[dataObjectAttributeName] as! String
     }
     
-    func savePost(post: AWSPost, completionHandler: AWSContinuationBlock) {
-        let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
-        objectMapper.save(post).continueWithBlock(completionHandler)
+    func savePost(_ post: AWSPost?, completionHandler: @escaping AWSContinuationBlock) {
+        let objectMapper = AWSDynamoDBObjectMapper.default()
+        objectMapper.save(post!).continue(completionHandler)
+    }
+    
+    func removePost(_ post: AWSPost?, completionHandler: @escaping AWSContinuationBlock) {
+        let objectMapper = AWSDynamoDBObjectMapper.default()
+        objectMapper.remove(post!).continue(completionHandler)
     }
 }
 
@@ -72,8 +77,8 @@ class AWSPostsPrimaryIndex: NSObject, Index {
     // Mark: QueryWithPartitionKey
     
     // Find all posts with userId.
-    func queryUserPosts(userId: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
-        let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
+    func queryUserPosts(_ userId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+        let objectMapper = AWSDynamoDBObjectMapper.default()
         let queryExpression = AWSDynamoDBQueryExpression()
         queryExpression.keyConditionExpression = "#userId = :userId"
         queryExpression.expressionAttributeNames = ["#userId": "userId",]
@@ -99,8 +104,8 @@ class AWSPostsDateSortedIndex: NSObject, Index {
     // MARK: QueryWithPartitionKeyAndSortKey
     
     // Find all posts with userId and creationDate <= currentDate.
-    func queryUserPostsDateSorted(userId: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
-        let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
+    func queryUserPostsDateSorted(_ userId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+        let objectMapper = AWSDynamoDBObjectMapper.default()
         let queryExpression = AWSDynamoDBQueryExpression()
         queryExpression.indexName = "DateSortedIndex"
         queryExpression.keyConditionExpression = "#userId = :userId AND #creationDate <= :creationDate"
@@ -109,7 +114,7 @@ class AWSPostsDateSortedIndex: NSObject, Index {
             "#creationDate": "creationDate",
         ]
         
-        let currentDateNumber = NSNumber(double: NSDate().timeIntervalSince1970)
+        let currentDateNumber = NSNumber(value: Date().timeIntervalSince1970 as Double)
         
         queryExpression.expressionAttributeValues = [
             ":userId": userId,
@@ -139,8 +144,8 @@ class AWSPostsCategoryNameIndex: NSObject, Index {
     // MARK: QueryWithPartitionKeyAndSortKey
     
     // Find all (upto 10) posts with categoryName and creationDate <= currentDate.
-    func queryCategoryPostsDateSorted(categoryName: String, completionHandler: (response: AWSDynamoDBPaginatedOutput?, error: NSError?) -> Void) {
-        let objectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
+    func queryCategoryPostsDateSorted(_ categoryName: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+        let objectMapper = AWSDynamoDBObjectMapper.default()
         let queryExpression = AWSDynamoDBQueryExpression()
         queryExpression.indexName = "CategoryNameIndex"
         queryExpression.keyConditionExpression = "#categoryName = :categoryName AND #creationDate <= :creationDate"
@@ -149,7 +154,7 @@ class AWSPostsCategoryNameIndex: NSObject, Index {
             "#creationDate": "creationDate",
         ]
         
-        let currentDateNumber = NSNumber(double: NSDate().timeIntervalSince1970)
+        let currentDateNumber = NSNumber(value: Date().timeIntervalSince1970 as Double)
         
         queryExpression.expressionAttributeValues = [
             ":categoryName": categoryName,
