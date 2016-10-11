@@ -156,10 +156,10 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         usersTable.scanUsers(completionHandler)
     }
     
-    func scanUsersByFirstLastNameDynamoDB(_ searchFirstName: String, searchLastName: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+    func scanUsersByNameDynamoDB(_ searchFirstName: String, searchLastName: String, searchPreferredUsername: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         print("scanUsersByFirstLastNameDynamoDB:")
         let usersTable = AWSUsersTable()
-        usersTable.scanUsersByFirstLastName(searchFirstName, searchLastName: searchLastName, completionHandler: completionHandler)
+        usersTable.scanUsersByName(searchFirstName, searchLastName: searchLastName, searchPreferredUsername: searchPreferredUsername, completionHandler: completionHandler)
     }
     
     // MARK: UserRelationships

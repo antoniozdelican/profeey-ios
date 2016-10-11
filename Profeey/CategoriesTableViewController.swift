@@ -24,6 +24,7 @@ class CategoriesTableViewController: UITableViewController {
     fileprivate var showPopularCategories: Bool = true
     
     var categoriesTableViewControllerDelegate: CategoriesTableViewControllerDelegate?
+    var isStatusBarHidden: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,6 +35,10 @@ class CategoriesTableViewController: UITableViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.view.endEditing(true)
+    }
+    
+    override var prefersStatusBarHidden: Bool {
+        return self.isStatusBarHidden
     }
 
     override func didReceiveMemoryWarning() {

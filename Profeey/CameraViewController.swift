@@ -1,48 +1,43 @@
 //
-//  CaptureViewController.swift
+//  CameraViewController.swift
 //  Profeey
 //
-//  Created by Antonio Zdelican on 29/07/16.
+//  Created by Antonio Zdelican on 07/10/16.
 //  Copyright © 2016 Profeey. All rights reserved.
 //
 
 import UIKit
 
-protocol CaptureDelegate {
+protocol CameraViewControllerDelegate {
     func galleryButtonTapped()
+    func didSelectPhoto(photo: UIImage)
+    
 }
 
-class CaptureViewController: UIViewController {
+class CameraViewController: UIViewController {
     
-    
-    @IBOutlet weak var flashButton: UIButton!
-    @IBOutlet weak var cameraSwitchButton: UIBarButtonItem!
-    @IBOutlet weak var captureButton: UIButton!
     @IBOutlet var cameraOverlayView: UIView!
     @IBOutlet weak var cameraWindowSubView: UIView!
     @IBOutlet weak var cameraWindowSubViewAspectRatioConstraint: NSLayoutConstraint!
+    @IBOutlet weak var captureButton: UIButton!
+    @IBOutlet weak var flashButton: UIButton!
+    @IBOutlet weak var cameraSwitchButton: UIButton!
     
-    fileprivate var capturedPhoto: UIImage?
-    var captureDelegate: CaptureDelegate?
+    var cameraViewControllerDelegate: CameraViewControllerDelegate?
     var isProfilePic: Bool = false
-    var profilePicUnwind: ProfilePicUnwind?
     
     fileprivate var imagePickerController: UIImagePickerController!
+    fileprivate var photo: UIImage?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         Bundle.main.loadNibNamed("CameraOverlayView", owner: self, options: nil)
         if self.isProfilePic {
             self.configureSquareAspectRatio()
         }
         self.configureCamera()
     }
-    
-    override var preferredInterfaceOrientationForPresentation : UIInterfaceOrientation {
-        return .portrait
-    }
-    
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
@@ -96,23 +91,14 @@ class CaptureViewController: UIViewController {
         
     }
     
-    // MARK: Navigation
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let navigationController = segue.destination as? UINavigationController,
-            let childViewController = navigationController.childViewControllers[0] as? PreviewViewController {
-            childViewController.capturedPhoto = self.capturedPhoto
-            self.capturedPhoto = nil
-            childViewController.isPhoto = true
-            childViewController.isProfilePic = self.isProfilePic
-            childViewController.profilePicUnwind = self.profilePicUnwind
-        }
-    }
-    
     // MARK: IBActions
     
     @IBAction func captureButtonTapped(_ sender: AnyObject) {
         self.imagePickerController.takePicture()
+    }
+    
+    @IBAction func galleryButtonTapped(_ sender: AnyObject) {
+        self.cameraViewControllerDelegate?.galleryButtonTapped()
     }
     
     @IBAction func flashButtonTapped(_ sender: AnyObject) {
@@ -121,7 +107,7 @@ class CaptureViewController: UIViewController {
         }
         if self.imagePickerController.cameraFlashMode == UIImagePickerControllerCameraFlashMode.on {
             self.imagePickerController.cameraFlashMode = UIImagePickerControllerCameraFlashMode.off
-            self.flashButton.setImage(UIImage(named: "ic_flash_black"), for: UIControlState())
+            self.flashButton.setImage(UIImage(named: "ic_flash_white"), for: UIControlState())
             
         } else if self.imagePickerController.cameraFlashMode == UIImagePickerControllerCameraFlashMode.off {
             self.imagePickerController.cameraFlashMode = UIImagePickerControllerCameraFlashMode.on
@@ -129,8 +115,7 @@ class CaptureViewController: UIViewController {
         }
     }
     
-    
-    @IBAction func switchCameraButtonTapped(_ sender: AnyObject) {
+    @IBAction func cameraSwitchButtonTapped(_ sender: AnyObject) {
         if self.imagePickerController.cameraDevice == UIImagePickerControllerCameraDevice.rear {
             self.imagePickerController.cameraDevice = UIImagePickerControllerCameraDevice.front
             UIView.animate(
@@ -152,35 +137,28 @@ class CaptureViewController: UIViewController {
         }
     }
     
-    @IBAction func galleryButtonTapped(_ sender: AnyObject) {
-        self.captureDelegate?.galleryButtonTapped()
-    }
     
-    
-    @IBAction func closeButtonTapped(_ sender: AnyObject) {
-        self.dismiss(animated: true, completion: nil)
-    }
 }
 
-extension CaptureViewController: UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+extension CameraViewController: UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        var capturedPhoto = UIImage()
+        var photo = UIImage()
         if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
             // Flip image if front camera.
             if (self.imagePickerController.cameraDevice == UIImagePickerControllerCameraDevice.front) && (image.cgImage != nil) {
-                capturedPhoto = UIImage(cgImage: image.cgImage!, scale: image.scale, orientation: .leftMirrored)
+                photo = UIImage(cgImage: image.cgImage!, scale: image.scale, orientation: .leftMirrored)
             } else {
-                capturedPhoto = image
+                photo = image
             }
         }
         // If it's profilePic, make it square!
         if self.isProfilePic {
-            self.capturedPhoto = capturedPhoto.crop(0.0, cropY: 0.0, cropWidth: capturedPhoto.size.width, cropHeight: capturedPhoto.size.width)
+            let profilePicPhoto = photo.crop(0.0, cropY: 0.0, cropWidth: photo.size.width, cropHeight: photo.size.width)
+            self.cameraViewControllerDelegate?.didSelectPhoto(photo: profilePicPhoto)
         } else {
-          self.capturedPhoto = capturedPhoto
+            self.cameraViewControllerDelegate?.didSelectPhoto(photo: photo)
         }
-        self.performSegue(withIdentifier: "segueToPreviewVc", sender: self)
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {

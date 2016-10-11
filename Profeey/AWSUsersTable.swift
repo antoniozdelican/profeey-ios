@@ -49,23 +49,22 @@ class AWSUsersTable: NSObject, Table {
         let objectMapper = AWSDynamoDBObjectMapper.default()
         let scanExpression = AWSDynamoDBScanExpression()
         scanExpression.limit = 10
-        
         objectMapper.scan(AWSUser.self, expression: scanExpression, completionHandler: completionHandler)
-        
-        //objectMapper.scan(AWSUser.self, expression: scanExpression).continue(completionHandler)
     }
     
-    func scanUsersByFirstLastName(_ searchFirstName: String, searchLastName: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+    func scanUsersByName(_ searchFirstName: String, searchLastName: String, searchPreferredUsername: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
         let scanExpression = AWSDynamoDBScanExpression()
-        scanExpression.filterExpression = "begins_with(#searchFirstName, :searchFirstName) OR begins_with(#searchLastName, :searchLastName)"
+        scanExpression.filterExpression = "begins_with(#searchFirstName, :searchFirstName) OR begins_with(#searchLastName, :searchLastName) OR begins_with(#searchPreferredUsername, :searchPreferredUsername)"
         scanExpression.expressionAttributeNames = [
             "#searchFirstName": "searchFirstName",
             "#searchLastName": "searchLastName",
+            "#searchPreferredUsername": "searchPreferredUsername",
         ]
         scanExpression.expressionAttributeValues = [
             ":searchFirstName": searchFirstName,
             ":searchLastName": searchLastName,
+            ":searchPreferredUsername": searchPreferredUsername,
         ]
         scanExpression.limit = 10
         objectMapper.scan(AWSUser.self, expression: scanExpression, completionHandler: completionHandler)

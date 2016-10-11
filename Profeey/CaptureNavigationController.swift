@@ -12,8 +12,9 @@ class CaptureNavigationController: UINavigationController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Override appearance.
-        self.navigationBar.tintColor = Colors.black
+        self.toolbar.tintColor = Colors.black
+        self.toolbar.barTintColor = Colors.greyLight
+        self.toolbar.isTranslucent = false
     }
 
     override func didReceiveMemoryWarning() {

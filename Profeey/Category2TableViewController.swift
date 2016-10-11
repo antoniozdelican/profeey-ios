@@ -67,8 +67,9 @@ class Category2TableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellSearchUser", for: indexPath) as! SearchUserTableViewCell
         cell.profilePicImageView.image = user.profilePic
         cell.fullNameLabel.text = user.fullName
-        cell.professionLabel.text = user.professionName
-        cell.locationNameLabel.text = user.locationName
+        cell.preferredUsernameLabel.text = user.fullUsername
+        cell.professionNameLabel.text = user.professionName
+//        cell.locationNameLabel.text = user.locationName
         return cell
     }
     

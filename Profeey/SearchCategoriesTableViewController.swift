@@ -64,13 +64,14 @@ class SearchCategoriesTableViewController: UITableViewController {
     // MARK: UITableViewDelegate
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0)
+        cell.separatorInset = UIEdgeInsetsMake(0.0, 20.0, 0.0, 0.0)
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellHeader") as! HeaderTableViewCell
-        cell.headerTitle.text = self.showRecentCategories ? "RECENT" : "BEST MATCHES"
-        cell.contentView.backgroundColor = UIColor.white
+        cell.headerTitle.text = self.showRecentCategories ? "POPULAR" : "BEST MATCHES"
+        cell.contentView.backgroundColor = Colors.greyLight
+        cell.contentView.alpha = 0.95
         return cell.contentView
     }
     
@@ -80,11 +81,11 @@ class SearchCategoriesTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 64.0
+        return 72.0
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 64.0
+        return 72.0
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {

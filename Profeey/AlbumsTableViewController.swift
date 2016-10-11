@@ -41,13 +41,6 @@ class AlbumsTableViewController: UITableViewController {
         self.fetchResults.append(fetchResult)
         self.titles.append(title)
         
-//        if let assetCollection = selfiesAssetCollections[0] as? PHAssetCollection {
-//            let fetchResult = PHAsset.fetchAssets(in: assetCollection, options: fetchOptions)
-//            let title = (assetCollection.localizedTitle != nil) ? assetCollection.localizedTitle! : ""
-//            self.fetchResults.append(fetchResult)
-//            self.titles.append(title)
-//        }
-        
         // Fetch screenshots album.
         let screenshotsAssetCollections = PHAssetCollection.fetchAssetCollections(with: PHAssetCollectionType.smartAlbum, subtype: PHAssetCollectionSubtype.smartAlbumScreenshots, options: nil)
         let screenshotsAssetCollection = screenshotsAssetCollections[0]
@@ -55,13 +48,6 @@ class AlbumsTableViewController: UITableViewController {
         let screenshotsTitle = (assetCollection.localizedTitle != nil) ? screenshotsAssetCollection.localizedTitle! : ""
         self.fetchResults.append(screenshotsFetchResult)
         self.titles.append(screenshotsTitle)
-        
-//        if let assetCollection = screenshotsAssetCollections[0] as? PHAssetCollection {
-//            let fetchResult = PHAsset.fetchAssets(in: assetCollection, options: fetchOptions)
-//            let title = (assetCollection.localizedTitle != nil) ? assetCollection.localizedTitle! : ""
-//            self.fetchResults.append(fetchResult)
-//            self.titles.append(title)
-//        }
         
         // Fetch other albums.
         let topLevelUserCollections = PHCollectionList.fetchTopLevelUserCollections(with: nil)
@@ -112,7 +98,8 @@ class AlbumsTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         self.albumsDelegate?.albumSelected(self.fetchResults[indexPath.row], title: self.titles[indexPath.row])
-        self.performSegue(withIdentifier: "unwindToGalleryCollectionVc", sender: self)
+        self.dismiss(animated: true, completion: nil)
+        //self.performSegue(withIdentifier: "unwindToGalleryCollectionVc", sender: self)
     }
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {

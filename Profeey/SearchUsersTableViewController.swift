@@ -59,7 +59,8 @@ class SearchUsersTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellSearchUser", for: indexPath) as! SearchUserTableViewCell
         cell.profilePicImageView.image = user.profilePic
         cell.fullNameLabel.text = user.fullName
-        cell.professionLabel.text = user.professionName
+        cell.preferredUsernameLabel.text = user.fullUsername
+        cell.professionNameLabel.text = user.professionName
         cell.locationNameLabel.text = user.locationName
         return cell
     }
@@ -67,13 +68,14 @@ class SearchUsersTableViewController: UITableViewController {
     // MARK: UITableViewDelegate
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0)
+        cell.separatorInset = UIEdgeInsetsMake(0.0, 20.0, 0.0, 0.0)
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellHeader") as! HeaderTableViewCell
-        cell.headerTitle.text = self.showRecentUsers ? "RECENT" : "BEST MATCHES"
-        cell.contentView.backgroundColor = UIColor.white
+        cell.headerTitle.text = self.showRecentUsers ? "POPULAR" : "BEST MATCHES"
+        cell.contentView.backgroundColor = Colors.greyLight
+        cell.contentView.alpha = 0.95
         return cell.contentView
     }
     
@@ -83,7 +85,7 @@ class SearchUsersTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 84.0
+        return 86.0
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

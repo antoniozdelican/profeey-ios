@@ -41,7 +41,7 @@ class PreviewViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.automaticallyAdjustsScrollViewInsets = false
-        self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.plain, target:nil, action:nil)
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         if self.isProfilePic {
             self.configureSquareAspectRatio()
         }
@@ -57,8 +57,8 @@ class PreviewViewController: UIViewController {
         }
     }
     
-    override var prefersStatusBarHidden : Bool {
-        return false
+    override var prefersStatusBarHidden: Bool {
+        return true
     }
     
     override func didReceiveMemoryWarning() {
@@ -115,8 +115,8 @@ class PreviewViewController: UIViewController {
     // MARK: Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let destinationViewController = segue.destination as? EditPost2TableViewController {
-            destinationViewController.finalImage = self.finalImage
+        if let destinationViewController = segue.destination as? AddInfoTableViewController {
+            destinationViewController.photo = self.finalImage
         }
     }
     
@@ -124,10 +124,6 @@ class PreviewViewController: UIViewController {
     
     @IBAction func nextButtonTapped(_ sender: AnyObject) {
         self.prepareFinalImage()
-    }
-    
-    @IBAction func backButtonTapped(_ sender: AnyObject) {
-        self.dismiss(animated: false, completion: nil)
     }
     
     // MARK: Helpers
@@ -232,7 +228,7 @@ class PreviewViewController: UIViewController {
         } else {
            self.finalImage = croppedImage
         }
-        self.performSegue(withIdentifier: "segueToEditVc", sender: self)
+        self.performSegue(withIdentifier: "segueToAddInfoVc", sender: self)
     }
 }
 

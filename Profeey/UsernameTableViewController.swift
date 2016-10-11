@@ -35,9 +35,10 @@ class UsernameTableViewController: UITableViewController {
     // MARK: Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let destinationViewController = segue.destination as? CaptureScrollViewController {
-            destinationViewController.isProfilePic = true
-            destinationViewController.profilePicUnwind = ProfilePicUnwind.usernameVc
+        if let navigationController = segue.destination as? UINavigationController,
+            let childViewController = navigationController.childViewControllers[0] as? CaptureScrollViewController {
+            childViewController.isProfilePic = true
+            childViewController.profilePicUnwind = ProfilePicUnwind.usernameVc
         }
     }
 

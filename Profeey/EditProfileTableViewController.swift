@@ -64,9 +64,10 @@ class EditProfileTableViewController: UITableViewController {
             let childViewController = destinationViewController.childViewControllers[0] as? ProfessionsTableViewController {
             childViewController.professionName = self.professionName
         }
-        if let destinationViewController = segue.destination as? CaptureScrollViewController {
-            destinationViewController.isProfilePic = true
-            destinationViewController.profilePicUnwind = ProfilePicUnwind.editProfileVc
+        if let navigationController = segue.destination as? UINavigationController,
+            let childViewController = navigationController.childViewControllers[0] as? CaptureScrollViewController {
+            childViewController.isProfilePic = true
+            childViewController.profilePicUnwind = ProfilePicUnwind.editProfileVc
         }
     }
     

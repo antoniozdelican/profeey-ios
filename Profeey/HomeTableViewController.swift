@@ -286,8 +286,10 @@ class HomeTableViewController: UITableViewController {
     }
     
     @IBAction func unwindToHomeTableViewController(_ segue: UIStoryboardSegue) {
-        if let sourceViewController = segue.source as? EditPost2TableViewController {
-            guard let imageData = sourceViewController.imageData else {
+        if let sourceViewController = segue.source as? AddInfoTableViewController {
+            guard let post = sourceViewController.post,
+                let image = post.image,
+                let imageData = UIImageJPEGRepresentation(image, 0.6) else {
                 return
             }
             self.isUploading = true
@@ -296,8 +298,7 @@ class HomeTableViewController: UITableViewController {
             dummyPost.user = self.user
             self.posts.insert(dummyPost, at: 0)
             self.tableView.reloadData()
-            
-            self.uploadImage(imageData, caption: sourceViewController.caption, categoryName: sourceViewController.categoryName)
+            self.uploadImage(imageData, caption: post.caption, categoryName: post.categoryName)
         }
     }
     

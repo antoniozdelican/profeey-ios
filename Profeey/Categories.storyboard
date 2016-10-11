@@ -163,11 +163,9 @@
                     <connections>
                         <outlet property="addButton" destination="cFo-L1-EyO" id="gPx-rP-WsJ"/>
                         <outlet property="categoryTextField" destination="f5o-8T-5yd" id="biC-BT-Byb"/>
-                        <segue destination="jsz-pP-SXl" kind="unwind" identifier="segueUnwindToEditPostVc" unwindAction="unwindToEditPost2TableViewController:" id="WTe-2J-LOw"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pSU-QS-YWZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <exit id="jsz-pP-SXl" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="3373" y="278"/>
         </scene>

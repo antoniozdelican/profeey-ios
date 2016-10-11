@@ -28,9 +28,7 @@ class SearchViewController: UIViewController {
     
     @IBOutlet weak var indicatorScrollView: UIScrollView!
     @IBOutlet weak var mainScrollView: UIScrollView!
-    @IBOutlet weak var peopleImageView: UIImageView!
     @IBOutlet weak var peopleLabel: UILabel!
-    @IBOutlet weak var categoriesImageView: UIImageView!
     @IBOutlet weak var categoriesLabel: UILabel!
     @IBOutlet weak var segmentedControlView: UIView!
     
@@ -129,16 +127,12 @@ class SearchViewController: UIViewController {
         switch segmentIndex {
         case 0:
             if self.peopleLabel.textColor != Colors.black {
-                self.peopleImageView.image = UIImage(named: "ic_people_black")
                 self.peopleLabel.textColor = Colors.black
-                self.categoriesImageView.image = UIImage(named: "ic_categories_grey")
                 self.categoriesLabel.textColor = Colors.greyDark
             }
         case 1:
             if self.categoriesLabel.textColor != Colors.black {
-                self.peopleImageView.image = UIImage(named: "ic_people_grey")
                 self.peopleLabel.textColor = Colors.greyDark
-                self.categoriesImageView.image = UIImage(named: "ic_categories_black")
                 self.categoriesLabel.textColor = Colors.black
             }
         default:
@@ -178,9 +172,10 @@ class SearchViewController: UIViewController {
     fileprivate func scanUsersByFirstLastName(_ searchText: String) {
         let searchFirstName = searchText.lowercased()
         let searchLastName = searchText.lowercased()
+        let searchPreferredUsername = searchText.lowercased()
         
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().scanUsersByFirstLastNameDynamoDB(searchFirstName, searchLastName: searchLastName, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().scanUsersByNameDynamoDB(searchFirstName, searchLastName: searchLastName, searchPreferredUsername: searchPreferredUsername, completionHandler: {
             (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
