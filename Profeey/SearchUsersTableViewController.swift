@@ -74,7 +74,7 @@ class SearchUsersTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellHeader") as! HeaderTableViewCell
         cell.headerTitle.text = self.showRecentUsers ? "POPULAR" : "BEST MATCHES"
-        cell.contentView.backgroundColor = Colors.greyLight
+        cell.contentView.backgroundColor = UIColor.white
         cell.contentView.alpha = 0.95
         return cell.contentView
     }
