@@ -18,6 +18,13 @@ protocol IncompleteSignUpDelegate {
 class AWSClientManager: NSObject, ClientManager {
     
     fileprivate static var sharedInstance: AWSClientManager!
+    static func defaultClientManager() -> AWSClientManager {
+        if sharedInstance == nil {
+            sharedInstance = AWSClientManager()
+            sharedInstance.configure()
+        }
+        return sharedInstance
+    }
     
     // Properties.
     var credentialsProvider: AWSCognitoCredentialsProvider?
@@ -26,14 +33,6 @@ class AWSClientManager: NSObject, ClientManager {
     
     // TEST properties.
     var incompleteSignUpDelegate: IncompleteSignUpDelegate?
-
-    static func defaultClientManager() -> AWSClientManager {
-        if sharedInstance == nil {
-            sharedInstance = AWSClientManager()
-            sharedInstance.configure()
-        }
-        return sharedInstance
-    }
     
     fileprivate func configure() {
         print("Configuring client...")
@@ -80,22 +79,72 @@ class AWSClientManager: NSObject, ClientManager {
         
     }
     
+    // MARK: UserPool
+    
+    func logIn(_ username: String, password: String, completionHandler: @escaping (AWSTask<AWSCognitoIdentityUserSession>) -> Any?) {
+        print("logIn:")
+        let user = AWSClientManager.defaultClientManager().userPool?.getUser()
+        user?.getSession(username, password: password, validationData: nil).continue(completionHandler)
+    }
+    
+    func signUp(_ username: String, password: String, email: String, firstName: String, lastName: String, completionHandler: @escaping (AWSTask<AWSCognitoIdentityUserPoolSignUpResponse>) -> Any?) {
+        print("signUp:")
+        var attributes: [AWSCognitoIdentityUserAttributeType] = []
+        let emailAttribute = AWSCognitoIdentityUserAttributeType()
+        emailAttribute?.name = "email"
+        emailAttribute?.value = email
+        attributes.append(emailAttribute!)
+        let firstNameAttribute = AWSCognitoIdentityUserAttributeType()
+        firstNameAttribute?.name = "given_name"
+        firstNameAttribute?.value = firstName
+        attributes.append(firstNameAttribute!)
+        let lastNameAttribute = AWSCognitoIdentityUserAttributeType()
+        lastNameAttribute?.name = "family_name"
+        lastNameAttribute?.value = lastName
+        attributes.append(lastNameAttribute!)
+        self.userPool?.signUp(username, password: password, userAttributes: attributes, validationData: nil).continue(completionHandler)
+    }
+    
     func signOut(_ completionHandler: @escaping AWSContinuationBlock) {
+        print("signOut:")
         // UserPool signOut.
-        PRFYUserPoolManager.defaultUserPoolManager().signOutUserPool(completionHandler)
+        self.userPool?.currentUser()?.signOut()
         // Credentials provider cleanUp.
         self.credentialsProvider?.clearKeychain()
         // User file manager cleanUp.
         self.userFileManager?.clearCache()
+        // Current user cleanUp.
+        PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB = nil
+        
+        AWSTask(result: nil).continue(completionHandler)
     }
     
     func getUserDetails(_ completionHandler: @escaping (AWSTask<AWSCognitoIdentityUserGetDetailsResponse>) -> Any?) {
-        // UserPool getUserDetails.
-        PRFYUserPoolManager.defaultUserPoolManager().getUserDetailsUserPool(completionHandler)
+        print("getUserDetails:")
+        self.userPool?.currentUser()?.getDetails().continue(completionHandler)
     }
     
-    func getUser(_ userId: String, completionHandler: @escaping AWSContinuationBlock) {
-        // DynamoDB getUser.
-        PRFYDynamoDBManager.defaultDynamoDBManager().getUserDynamoDB(userId, completionHandler: completionHandler)
+    func updatePreferredUsername(_ preferredUsername: String, completionHandler: @escaping (AWSTask<AWSCognitoIdentityUserUpdateAttributesResponse>) -> Any?) {
+        print("updatePreferredUsername:")
+        var attributes: [AWSCognitoIdentityUserAttributeType] = []
+        let preferredUsernameAttribute = AWSCognitoIdentityUserAttributeType()
+        preferredUsernameAttribute?.name = "preferred_username"
+        preferredUsernameAttribute?.value = preferredUsername
+        attributes.append(preferredUsernameAttribute!)
+        self.userPool?.currentUser()?.update(attributes).continue(completionHandler)
     }
+    
+//    func signOut(_ completionHandler: @escaping AWSContinuationBlock) {
+//        // UserPool signOut.
+//        PRFYUserPoolManager.defaultUserPoolManager().signOutUserPool(completionHandler)
+//        // Credentials provider cleanUp.
+//        self.credentialsProvider?.clearKeychain()
+//        // User file manager cleanUp.
+//        self.userFileManager?.clearCache()
+//    }
+    
+//    func getUserDetails(_ completionHandler: @escaping (AWSTask<AWSCognitoIdentityUserGetDetailsResponse>) -> Any?) {
+//        // UserPool getUserDetails.
+//        PRFYUserPoolManager.defaultUserPoolManager().getUserDetailsUserPool(completionHandler)
+//    }
 }

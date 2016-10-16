@@ -98,10 +98,12 @@ class EditPostViewController: UIViewController {
     
     fileprivate func updatePost() {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        FullScreenIndicator.show()
         PRFYDynamoDBManager.defaultDynamoDBManager().updatePostDynamoDB(self.post, completionHandler: {
             (task: AWSTask) in
             DispatchQueue.main.async(execute: {
                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                FullScreenIndicator.hide()
                 if let error = task.error {
                    print("updatePost error: \(error)")
                 } else {

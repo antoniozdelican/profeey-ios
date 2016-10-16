@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AWSMobileHubHelper
 
 class MainTabBarController: UITabBarController {
 
@@ -24,7 +25,7 @@ class MainTabBarController: UITabBarController {
     
     // MARK: Configuration
     
-    func configureView() {
+    fileprivate func configureView() {
         // Set images for tabBar items
         for navigationController in self.childViewControllers {
             let tabBarItem = navigationController.tabBarItem
@@ -64,22 +65,12 @@ class MainTabBarController: UITabBarController {
         }
     }
     
-    // Add backgroundView and color behind statusBar.
     fileprivate func configureStatusBar() {
+        // Add backgroundView and color behind statusBar.
         let statusBarFrame = UIApplication.shared.statusBarFrame
         let statusBarBackgroundView = UIView(frame: statusBarFrame)
         statusBarBackgroundView.backgroundColor = Colors.greyLight
         self.view.addSubview(statusBarBackgroundView)
-    }
-    
-    // MARK: Navigation
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        print(segue.destination)
-        if let navigationController = segue.destination as? UINavigationController,
-            let childViewController = navigationController.childViewControllers[0] as? ProfileTableViewController {
-            childViewController.isCurrentUser = true
-        }
     }
 }
 
@@ -92,14 +83,5 @@ extension MainTabBarController: UITabBarControllerDelegate {
             childViewController.isTabBarSwitch = true
         }
         return true
-        
-//        // If view controller is Dummy controller, don't show it and instead get CaptureScrollViewController
-//        if viewController is FakeCaptureNavigationController {
-//            let caputeViewController = UIStoryboard(name: "Capture", bundle: nil).instantiateViewControllerWithIdentifier("captureScrollViewController")
-//            self.presentViewController(caputeViewController, animated: true, completion: nil)
-//            return false
-//        } else {
-//            return true
-//        }
     }
 }

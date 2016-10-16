@@ -20,10 +20,12 @@ protocol ClientManager {
     var userPool: AWSCognitoIdentityUserPool? { get }
     var userFileManager: AWSUserFileManager? { get }
     
-    // MARK: User
+    // MARK: UserPool
     
+    func logIn(_ username: String, password: String, completionHandler: @escaping (AWSTask<AWSCognitoIdentityUserSession>) -> Any?)
+    func signUp(_ username: String, password: String, email: String, firstName: String, lastName: String, completionHandler: @escaping (AWSTask<AWSCognitoIdentityUserPoolSignUpResponse>) -> Any?)
     func signOut(_ completionHandler: @escaping AWSContinuationBlock)
     
     func getUserDetails(_ completionHandler: @escaping (AWSTask<AWSCognitoIdentityUserGetDetailsResponse>) -> Any?)
-    func getUser(_ userId: String, completionHandler: @escaping AWSContinuationBlock)
+    func updatePreferredUsername(_ preferredUsername: String, completionHandler: @escaping (AWSTask<AWSCognitoIdentityUserUpdateAttributesResponse>) -> Any?)
 }

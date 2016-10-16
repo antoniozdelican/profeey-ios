@@ -11,7 +11,7 @@ import UIKit
 class ProfileSegmentedControlTableViewCell: UITableViewCell {
 
     @IBOutlet weak var postsButton: UIButton!
-    @IBOutlet weak var aboutButton: UIButton!
+    @IBOutlet weak var experienceButton: UIButton!
     @IBOutlet weak var contactButton: UIButton!
     
     override func awakeFromNib() {
@@ -24,19 +24,19 @@ class ProfileSegmentedControlTableViewCell: UITableViewCell {
     
     func setPostsButtonActive() {
         self.postsButton.setTitleColor(Colors.black, for: UIControlState())
-        self.aboutButton.setTitleColor(Colors.greyDark, for: UIControlState())
+        self.experienceButton.setTitleColor(Colors.greyDark, for: UIControlState())
         self.contactButton.setTitleColor(Colors.greyDark, for: UIControlState())
     }
     
-    func setAboutButtonActive() {
+    func setExperienceButtonActive() {
         self.postsButton.setTitleColor(Colors.greyDark, for: UIControlState())
-        self.aboutButton.setTitleColor(Colors.black, for: UIControlState())
+        self.experienceButton.setTitleColor(Colors.black, for: UIControlState())
         self.contactButton.setTitleColor(Colors.greyDark, for: UIControlState())
     }
     
     func setContactButtonActive() {
         self.postsButton.setTitleColor(Colors.greyDark, for: UIControlState())
-        self.aboutButton.setTitleColor(Colors.greyDark, for: UIControlState())
+        self.experienceButton.setTitleColor(Colors.greyDark, for: UIControlState())
         self.contactButton.setTitleColor(Colors.black, for: UIControlState())
     }
 

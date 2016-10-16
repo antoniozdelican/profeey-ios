@@ -137,7 +137,7 @@ class SignUpTableViewController: UITableViewController {
             return
         }
         FullScreenIndicator.show()
-        self.signUpUserPool(username, password: password, email: email, firstName: firstName, lastName: lastName)
+        self.signUp(username, password: password, email: email, firstName: firstName, lastName: lastName)
     }
     
     fileprivate func redirectToWelcome() {
@@ -151,9 +151,9 @@ class SignUpTableViewController: UITableViewController {
     
     // MARK: AWS
     
-    fileprivate func signUpUserPool(_ username: String, password: String, email: String, firstName: String, lastName: String) {
+    fileprivate func signUp(_ username: String, password: String, email: String, firstName: String, lastName: String) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYUserPoolManager.defaultUserPoolManager().signUpUserPool(username, password: password, email: email, firstName: firstName, lastName: lastName, completionHandler: {
+        AWSClientManager.defaultClientManager().signUp(username, password: password, email: email, firstName: firstName, lastName: lastName, completionHandler: {
             (task: AWSTask) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
@@ -165,7 +165,7 @@ class SignUpTableViewController: UITableViewController {
                     alertController.addAction(okAction)
                     self.present(alertController, animated: true, completion: nil)
                 } else {
-                    self.logInUserPool(username, password: password, email: email, firstName: firstName, lastName: lastName)
+                    self.logIn(username, password: password, email: email, firstName: firstName, lastName: lastName)
                 }
             })
             return nil
@@ -173,9 +173,9 @@ class SignUpTableViewController: UITableViewController {
         
     }
     
-    fileprivate func logInUserPool(_ username: String, password: String, email: String, firstName: String, lastName: String) {
+    fileprivate func logIn(_ username: String, password: String, email: String, firstName: String, lastName: String) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYUserPoolManager.defaultUserPoolManager().logInUserPool(username, password: password, completionHandler: {
+        AWSClientManager.defaultClientManager().logIn(username, password: password, completionHandler: {
             (task: AWSTask) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false

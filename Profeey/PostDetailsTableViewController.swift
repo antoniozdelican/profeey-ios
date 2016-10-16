@@ -204,23 +204,23 @@ class PostDetailsTableViewController: UITableViewController {
     
     // Get currentUser data so we can perform actions (like, comment)
     fileprivate func getCurrentUser() {
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().getCurrentUserDynamoDB({
-            (task: AWSTask) in
-            DispatchQueue.main.async(execute: {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                if let error = task.error {
-                    print("getCurrentUser error: \(error)")
-                } else {
-                    guard let awsUser = task.result as? AWSUser else {
-                        return
-                    }
-                    let user = User(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl)
-                    self.currentUser = user
-                }
-            })
-            return nil
-        })
+//        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+//        PRFYDynamoDBManager.defaultDynamoDBManager().getCurrentUserDynamoDB({
+//            (task: AWSTask) in
+//            DispatchQueue.main.async(execute: {
+//                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+//                if let error = task.error {
+//                    print("getCurrentUser error: \(error)")
+//                } else {
+//                    guard let awsUser = task.result as? AWSUser else {
+//                        return
+//                    }
+//                    let user = User(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl)
+//                    self.currentUser = user
+//                }
+//            })
+//            return nil
+//        })
     }
     
     // Check if currentUser liked a post.
@@ -245,7 +245,7 @@ class PostDetailsTableViewController: UITableViewController {
     
     fileprivate func saveLike(_ postId: String, postUserId: String) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().saveLikeDynamoDB(postId, postUserId: postUserId, liker: self.currentUser, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().saveLikeDynamoDB(postId, postUserId: postUserId, completionHandler: {
             (task: AWSTask) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false

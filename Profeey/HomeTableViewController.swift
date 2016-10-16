@@ -18,7 +18,6 @@ enum ImageType {
 
 class HomeTableViewController: UITableViewController {
     
-    fileprivate var user: User?
     fileprivate var posts: [Post] = []
     // Before any post is loaded.
     fileprivate var isLoadingPosts: Bool = true
@@ -35,7 +34,6 @@ class HomeTableViewController: UITableViewController {
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         self.tableView.delaysContentTouches = false
         
-        // Get currentUser.
         if let currentUser = AWSClientManager.defaultClientManager().userPool?.currentUser(), currentUser.isSignedIn {
             self.getCurrentUser()
         }
@@ -208,7 +206,6 @@ class HomeTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.layoutMargins = UIEdgeInsets.zero
-        cell.selectionStyle = UITableViewCellSelectionStyle.none
         cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
         if cell is PostButtonsTableViewCell {
            cell.separatorInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0)
@@ -277,7 +274,7 @@ class HomeTableViewController: UITableViewController {
     // MARK: IBActions
     
     @IBAction func refreshControlChanged(_ sender: AnyObject) {
-        guard let userId = self.user?.userId else {
+        guard let userId = AWSClientManager.defaultClientManager().credentialsProvider?.identityId else {
             self.refreshControl?.endRefreshing()
             return
         }
@@ -295,7 +292,7 @@ class HomeTableViewController: UITableViewController {
             self.isUploading = true
             // Add dummy post for uploading.
             let dummyPost = Post()
-            dummyPost.user = self.user
+            dummyPost.user = PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB
             self.posts.insert(dummyPost, at: 0)
             self.tableView.reloadData()
             self.uploadImage(imageData, caption: post.caption, categoryName: post.categoryName)
@@ -305,6 +302,7 @@ class HomeTableViewController: UITableViewController {
     // MARK: AWS
     
     // Gets currentUser and credentialsProvider.idenityId
+    // Creates currentUserDynamoDB on singleton.
     fileprivate func getCurrentUser() {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         PRFYDynamoDBManager.defaultDynamoDBManager().getCurrentUserDynamoDB({
@@ -317,8 +315,10 @@ class HomeTableViewController: UITableViewController {
                     guard let awsUser = task.result as? AWSUser else {
                         return
                     }
-                    let user = User(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl)
-                    self.user = user
+                    print("getCurrentUser success!")
+                    let currentUser = CurrentUser(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationName: awsUser._locationName)
+                    // Store properties!
+                    PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB = currentUser
                     
                     if let profilePicUrl = awsUser._profilePicUrl {
                         self.downloadImage(profilePicUrl, imageType: .currentUserProfilePic, indexPath: nil)
@@ -395,7 +395,8 @@ class HomeTableViewController: UITableViewController {
             let image = UIImage(data: content.cachedData)
             switch imageType {
             case .currentUserProfilePic:
-                self.user?.profilePic = image
+                // Store profilePic.
+                PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB?.profilePic = image
             case .userProfilePic:
                 if let indexPath = indexPath {
                     self.posts[indexPath.section].user?.profilePic = image
@@ -427,7 +428,8 @@ class HomeTableViewController: UITableViewController {
                                 let image = UIImage(data: imageData)
                                 switch imageType {
                                 case .currentUserProfilePic:
-                                    self.user?.profilePic = image
+                                    // Store profilePic.
+                                    PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB?.profilePic = image
                                 case .userProfilePic:
                                     if let indexPath = indexPath {
                                         self.posts[indexPath.section].user?.profilePic = image
@@ -503,7 +505,7 @@ class HomeTableViewController: UITableViewController {
     
     fileprivate func createPost(_ imageData: Data, imageUrl: String?, caption: String?, categoryName: String?) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().createPostDynamoDB(imageUrl, caption: caption, categoryName: categoryName, user: self.user, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().createPostDynamoDB(imageUrl, caption: caption, categoryName: categoryName, completionHandler: {
             (task: AWSTask) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
@@ -515,7 +517,7 @@ class HomeTableViewController: UITableViewController {
                     self.tableView.reloadData()
                 } else {
                     if let awsPost = task.result as? AWSPost {
-                        let post = Post(userId: awsPost._userId, postId: awsPost._postId, caption: awsPost._caption, categoryName: awsPost._categoryName, creationDate: awsPost._creationDate, imageUrl: awsPost._imageUrl, numberOfLikes: awsPost._numberOfLikes, user: self.user)
+                        let post = Post(userId: awsPost._userId, postId: awsPost._postId, caption: awsPost._caption, categoryName: awsPost._categoryName, creationDate: awsPost._creationDate, imageUrl: awsPost._imageUrl, numberOfLikes: awsPost._numberOfLikes, user: PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB)
                         let image = UIImage(data: imageData)
                         post.image = image
                         
@@ -569,7 +571,7 @@ class HomeTableViewController: UITableViewController {
     // Save and remove like are done in background.
     fileprivate func saveLike(_ postId: String, postUserId: String) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().saveLikeDynamoDB(postId, postUserId: postUserId, liker: self.user, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().saveLikeDynamoDB(postId, postUserId: postUserId, completionHandler: {
             (task: AWSTask) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false

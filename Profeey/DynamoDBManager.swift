@@ -29,14 +29,14 @@ protocol DynamoDBManager {
     // MARK: UserRelationships
     
     func getUserRelationshipDynamoDB(_ followingId: String, completionHandler: @escaping AWSContinuationBlock)
-    func saveUserRelationshipDynamoDB(_ followingId: String, follower: User?, completionHandler: @escaping AWSContinuationBlock)
+    func saveUserRelationshipDynamoDB(_ followingId: String, completionHandler: @escaping AWSContinuationBlock)
     func removeUserRelationshipDynamoDB(_ followingId: String, completionHandler: @escaping AWSContinuationBlock)
     func queryUserFollowersDynamoDB(_ followingId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
     
     // MARK: Likes
     
     func getLikeDynamoDB(_ postId: String, completionHandler: @escaping AWSContinuationBlock)
-    func saveLikeDynamoDB(_ postId: String, postUserId: String, liker: User?, completionHandler: @escaping AWSContinuationBlock)
+    func saveLikeDynamoDB(_ postId: String, postUserId: String, completionHandler: @escaping AWSContinuationBlock)
     func removeLikeDynamoDB(_ postId: String, postUserId: String, completionHandler: @escaping AWSContinuationBlock)
     func queryPostLikersDynamoDB(_ postId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
     
@@ -44,7 +44,7 @@ protocol DynamoDBManager {
     
     func queryUserPostsDateSortedDynamoDB(_ userId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
     func queryCategoryPostsDateSortedDynamoDB(_ categoryName: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
-    func createPostDynamoDB(_ imageUrl: String?, caption: String?, categoryName: String?, user: User?, completionHandler: @escaping AWSContinuationBlock)
+    func createPostDynamoDB(_ imageUrl: String?, caption: String?, categoryName: String?, completionHandler: @escaping AWSContinuationBlock)
     func updatePostDynamoDB(_ post: Post?, completionHandler: @escaping AWSContinuationBlock)
     func removePostDynamoDB(_ postId: String, completionHandler: @escaping AWSContinuationBlock)
     

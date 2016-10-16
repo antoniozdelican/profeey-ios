@@ -141,14 +141,14 @@ class UsernameTableViewController: UITableViewController {
         }
         let preferredUsername = preferredUsernameText.trimm()
         FullScreenIndicator.show()
-        self.updatePreferredUsernameUserPool(preferredUsername)
+        self.updatePreferredUsername(preferredUsername)
     }
     
     // MARK: AWS
     
-    fileprivate func updatePreferredUsernameUserPool(_ preferredUsername: String) {
+    fileprivate func updatePreferredUsername(_ preferredUsername: String) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYUserPoolManager.defaultUserPoolManager().updatePreferredUsernameUserPool(preferredUsername, completionHandler: {
+        AWSClientManager.defaultClientManager().updatePreferredUsername(preferredUsername, completionHandler: {
             (task: AWSTask) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false

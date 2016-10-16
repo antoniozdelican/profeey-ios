@@ -21,6 +21,12 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         return sharedInstance
     }
     
+    // Properties
+    
+    // Stores some currentUser attributes from DynamoDB during the session.
+    // Need it just for saving likes, following and post in NoSQL tables.
+    var currentUserDynamoDB: CurrentUser?
+    
     // MARK: Users
     
     func getCurrentUserDynamoDB(_ completionHandler: @escaping AWSContinuationBlock) {
@@ -157,7 +163,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
     }
     
     func scanUsersByNameDynamoDB(_ searchFirstName: String, searchLastName: String, searchPreferredUsername: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
-        print("scanUsersByFirstLastNameDynamoDB:")
+        print("scanUsersByNameDynamoDB:")
         let usersTable = AWSUsersTable()
         usersTable.scanUsersByName(searchFirstName, searchLastName: searchLastName, searchPreferredUsername: searchPreferredUsername, completionHandler: completionHandler)
     }
@@ -173,8 +179,8 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
             } else if let identityId = task.result as? String {
                 
                 print("getUserRelationshipDynamoDB:")
-                let userRelationshipsTable = AWSUserRelationshipsTable()
-                userRelationshipsTable.getUserRelationship(identityId, followingId: followingId, completionHandler: completionHandler)
+                let awsUserRelationshipsTable = AWSUserRelationshipsTable()
+                awsUserRelationshipsTable.getUserRelationship(identityId, followingId: followingId, completionHandler: completionHandler)
                 return nil
             } else {
                 print("This should not happen with getIdentityId!")
@@ -183,7 +189,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         })
     }
     
-    func saveUserRelationshipDynamoDB(_ followingId: String, follower: User?, completionHandler: @escaping AWSContinuationBlock) {
+    func saveUserRelationshipDynamoDB(_ followingId: String, completionHandler: @escaping AWSContinuationBlock) {
         AWSClientManager.defaultClientManager().credentialsProvider?.getIdentityId().continue({
             (task: AWSTask) in
             if let error = task.error {
@@ -192,19 +198,25 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
             } else if let identityId = task.result as? String {
                 
                 print("saveUserRelationshipDynamoDB:")
-                let userRelationshipsTable = AWSUserRelationshipsTable()
-                let userRelationship = AWSUserRelationship()
-                userRelationship?._userId = identityId
-                userRelationship?._creationDate = NSNumber(value: Date().timeIntervalSince1970 as Double)
-                userRelationship?._followingId = followingId
+                let awsUserRelationshipsTable = AWSUserRelationshipsTable()
+                let awsUserRelationship = AWSUserRelationship()
+                awsUserRelationship?._userId = identityId
+                awsUserRelationship?._creationDate = NSNumber(value: Date().timeIntervalSince1970 as Double)
+                awsUserRelationship?._followingId = followingId
                 
-                userRelationship?._firstName = follower?.firstName
-                userRelationship?._lastName = follower?.lastName
-                userRelationship?._preferredUsername = follower?.preferredUsername
-                userRelationship?._professionName = follower?.professionName
-                userRelationship?._profilePicUrl = follower?.profilePicUrl
+                awsUserRelationship?._firstName = self.currentUserDynamoDB?.firstName
+                awsUserRelationship?._lastName = self.currentUserDynamoDB?.lastName
+                awsUserRelationship?._preferredUsername = self.currentUserDynamoDB?.preferredUsername
+                awsUserRelationship?._professionName = self.currentUserDynamoDB?.professionName
+                awsUserRelationship?._profilePicUrl = self.currentUserDynamoDB?.profilePicUrl
                 
-                userRelationshipsTable.saveUserRelationship(userRelationship, completionHandler: completionHandler)
+//                userRelationship?._firstName = follower?.firstName
+//                userRelationship?._lastName = follower?.lastName
+//                userRelationship?._preferredUsername = follower?.preferredUsername
+//                userRelationship?._professionName = follower?.professionName
+//                userRelationship?._profilePicUrl = follower?.profilePicUrl
+                
+                awsUserRelationshipsTable.saveUserRelationship(awsUserRelationship, completionHandler: completionHandler)
                 return nil
             } else {
                 print("This should not happen with getIdentityId!")
@@ -222,11 +234,11 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
             } else if let identityId = task.result as? String {
                 
                 print("removeUserRelationshipDynamoDB:")
-                let userRelationshipsTable = AWSUserRelationshipsTable()
-                let userRelationship = AWSUserRelationship()
-                userRelationship?._userId = identityId
-                userRelationship?._followingId = followingId
-                userRelationshipsTable.removeUserRelationship(userRelationship, completionHandler: completionHandler)
+                let awsUserRelationshipsTable = AWSUserRelationshipsTable()
+                let awsUserRelationship = AWSUserRelationship()
+                awsUserRelationship?._userId = identityId
+                awsUserRelationship?._followingId = followingId
+                awsUserRelationshipsTable.removeUserRelationship(awsUserRelationship, completionHandler: completionHandler)
                 return nil
             } else {
                 print("This should not happen with getIdentityId!")
@@ -252,8 +264,8 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
             } else if let identityId = task.result as? String {
                 
                 print("getLikeDynamoDB:")
-                let likesTable = AWSLikesTable()
-                likesTable.getLike(identityId, postId: postId, completionHandler: completionHandler)
+                let awsLikesTable = AWSLikesTable()
+                awsLikesTable.getLike(identityId, postId: postId, completionHandler: completionHandler)
                 return nil
             } else {
                 print("This should not happen with getIdentityId!")
@@ -262,7 +274,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         })
     }
     
-    func saveLikeDynamoDB(_ postId: String, postUserId: String, liker: User?, completionHandler: @escaping AWSContinuationBlock) {
+    func saveLikeDynamoDB(_ postId: String, postUserId: String, completionHandler: @escaping AWSContinuationBlock) {
         AWSClientManager.defaultClientManager().credentialsProvider?.getIdentityId().continue({
             (task: AWSTask) in
             if let error = task.error {
@@ -271,19 +283,25 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
             } else if let identityId = task.result as? String {
                 
                 print("saveLikeDynamoDB:")
-                let likesTable = AWSLikesTable()
-                let like = AWSLike()
-                like?._userId = identityId
-                like?._postId = postId
-                like?._postUserId = postUserId
-                like?._creationDate = NSNumber(value: Date().timeIntervalSince1970 as Double)
+                let awsLikesTable = AWSLikesTable()
+                let awsLike = AWSLike()
+                awsLike?._userId = identityId
+                awsLike?._postId = postId
+                awsLike?._postUserId = postUserId
+                awsLike?._creationDate = NSNumber(value: Date().timeIntervalSince1970 as Double)
                 
-                like?._firstName = liker?.firstName
-                like?._lastName = liker?.lastName
-                like?._preferredUsername = liker?.preferredUsername
-                like?._professionName = liker?.professionName
-                like?._profilePicUrl = liker?.profilePicUrl
-                likesTable.saveLike(like, completionHandler: completionHandler)
+                awsLike?._firstName = self.currentUserDynamoDB?.firstName
+                awsLike?._lastName = self.currentUserDynamoDB?.lastName
+                awsLike?._preferredUsername = self.currentUserDynamoDB?.preferredUsername
+                awsLike?._professionName = self.currentUserDynamoDB?.professionName
+                awsLike?._profilePicUrl = self.currentUserDynamoDB?.profilePicUrl
+                
+//                awsLike?._firstName = liker?.firstName
+//                awsLike?._lastName = liker?.lastName
+//                awsLike?._preferredUsername = liker?.preferredUsername
+//                awsLike?._professionName = liker?.professionName
+//                awsLike?._profilePicUrl = liker?.profilePicUrl
+                awsLikesTable.saveLike(awsLike, completionHandler: completionHandler)
                 return nil
             } else {
                 print("This should not happen with getIdentityId!")
@@ -301,12 +319,12 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
             } else if let identityId = task.result as? String {
                 
                 print("removeLikeDynamoDB:")
-                let likesTable = AWSLikesTable()
-                let like = AWSLike()
-                like?._userId = identityId
-                like?._postId = postId
-                like?._postUserId = postUserId
-                likesTable.removeLike(like, completionHandler: completionHandler)
+                let awsLikesTable = AWSLikesTable()
+                let awsLike = AWSLike()
+                awsLike?._userId = identityId
+                awsLike?._postId = postId
+                awsLike?._postUserId = postUserId
+                awsLikesTable.removeLike(awsLike, completionHandler: completionHandler)
                 return nil
             } else {
                 print("This should not happen with getIdentityId!")
@@ -336,7 +354,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         postsCategoryNameIndex.queryCategoryPostsDateSorted(categoryName, completionHandler: completionHandler)
     }
     
-    func createPostDynamoDB(_ imageUrl: String?, caption: String?, categoryName: String?, user: User?, completionHandler: @escaping AWSContinuationBlock) {
+    func createPostDynamoDB(_ imageUrl: String?, caption: String?, categoryName: String?, completionHandler: @escaping AWSContinuationBlock) {
         AWSClientManager.defaultClientManager().credentialsProvider?.getIdentityId().continue({
             (task: AWSTask) in
             if let error = task.error {
@@ -355,11 +373,11 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
                 awsPost?._imageUrl = imageUrl
                 awsPost?._numberOfLikes = 0
                 
-                awsPost?._firstName = user?.firstName
-                awsPost?._lastName = user?.lastName
-                awsPost?._preferredUsername = user?.preferredUsername
-                awsPost?._professionName = user?.professionName
-                awsPost?._profilePicUrl = user?.profilePicUrl
+                awsPost?._firstName = self.currentUserDynamoDB?.firstName
+                awsPost?._lastName = self.currentUserDynamoDB?.lastName
+                awsPost?._preferredUsername = self.currentUserDynamoDB?.preferredUsername
+                awsPost?._professionName = self.currentUserDynamoDB?.professionName
+                awsPost?._profilePicUrl = self.currentUserDynamoDB?.profilePicUrl
                 
                 awsPostsTable.savePost(awsPost, completionHandler: {
                     (task: AWSTask) in

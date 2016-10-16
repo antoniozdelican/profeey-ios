@@ -101,7 +101,7 @@ class LogInTableViewController: UITableViewController {
         let username = usernameText.trimm()
         let password = passwordText.trimm()
         FullScreenIndicator.show()
-        self.logInUserPool(username, password: password)
+        self.logIn(username, password: password)
     }
     
     fileprivate func redirectToMain() {
@@ -114,9 +114,9 @@ class LogInTableViewController: UITableViewController {
     
     // MARK: AWS
     
-    fileprivate func logInUserPool(_ username: String, password: String) {
+    fileprivate func logIn(_ username: String, password: String) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYUserPoolManager.defaultUserPoolManager().logInUserPool(username, password: password, completionHandler: {
+        AWSClientManager.defaultClientManager().logIn(username, password: password, completionHandler: {
             (task: AWSTask) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
