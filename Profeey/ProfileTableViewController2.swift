@@ -20,9 +20,6 @@ class ProfileTableViewController2: UITableViewController {
     fileprivate var currentUser: User?
     fileprivate var posts: [Post] = []
     fileprivate var topCategories: [Category] = []
-    fileprivate var userExperiences: [UserExperience] = []
-    fileprivate var workExperiences: [UserExperience] = []
-    fileprivate var educationExperiences: [UserExperience] = []
     fileprivate var isLoadingPosts: Bool = true
     fileprivate var isFollowing: Bool = false
     fileprivate var selectedSegment: Int = 0
@@ -65,9 +62,6 @@ class ProfileTableViewController2: UITableViewController {
             destinationViewController.postIndexPath = indexPath
             destinationViewController.likeDelegate = self
         }
-        if let destinationViewController = segue.destination as? ExperiencesTableViewController {
-            destinationViewController.userExperiences = self.userExperiences
-        }
     }
 
     // MARK: UITableViewDataSource
@@ -103,12 +97,14 @@ class ProfileTableViewController2: UITableViewController {
             guard self.selectedSegment == 1 else {
                 return 0
             }
-            return self.workExperiences.count
+//            return self.workExperiences.count
+            return 0
         case 4:
             guard self.selectedSegment == 1 else {
                 return 0
             }
-            return self.educationExperiences.count
+//            return self.educationExperiences.count
+            return 0
         case 5:
             guard self.selectedSegment == 2 else {
                 return 0
@@ -165,16 +161,16 @@ class ProfileTableViewController2: UITableViewController {
                 return cell
             case 2:
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellProfileSegmentedControl", for: indexPath) as! ProfileSegmentedControlTableViewCell
-                switch self.selectedSegment {
-                case 0:
-                    cell.setPostsButtonActive()
-                case 1:
-                    cell.setExperienceButtonActive()
-                case 2:
-                    cell.setContactButtonActive()
-                default:
-                    break
-                }
+//                switch self.selectedSegment {
+//                case 0:
+//                    //cell.setPostsButtonActive()
+//                case 1:
+//                    //cell.setExperienceButtonActive()
+//                case 2:
+//                    //cell.setContactButtonActive()
+//                default:
+//                    break
+//                }
                 cell.postsButton.addTarget(self, action: #selector(ProfileTableViewController2.postsSegmentButtonTapped(_:)), for: UIControlEvents.touchUpInside)
                 cell.experienceButton.addTarget(self, action: #selector(ProfileTableViewController2.experienceSegmentButtonTapped(_:)), for: UIControlEvents.touchUpInside)
                 cell.contactButton.addTarget(self, action: #selector(ProfileTableViewController2.contactSegmentButtonTapped(_:)), for: UIControlEvents.touchUpInside)
@@ -207,18 +203,18 @@ class ProfileTableViewController2: UITableViewController {
             cell.numberOfPostsLabel.text = topCategory.numberOfPostsString
             return cell
         case 3:
-            let workExperience = self.workExperiences[(indexPath as NSIndexPath).row]
+//            let workExperience = self.workExperiences[(indexPath as NSIndexPath).row]
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellExperience", for: indexPath) as! ExperienceTableViewCell
-            cell.positionLabel.text = workExperience.position
-            cell.organizationLabel.text = workExperience.organization
-            cell.timePeriodLabel.text = workExperience.timePeriod
+//            cell.titleLabel.text = workExperience.title
+//            cell.organizationLabel.text = workExperience.organization
+//            cell.timePeriodLabel.text = workExperience.timePeriod
             return cell
         case 4:
-            let educationExperience = self.educationExperiences[(indexPath as NSIndexPath).row]
+//            let educationExperience = self.educationExperiences[(indexPath as NSIndexPath).row]
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellExperience", for: indexPath) as! ExperienceTableViewCell
-            cell.positionLabel.text = educationExperience.position
-            cell.organizationLabel.text = educationExperience.organization
-            cell.timePeriodLabel.text = educationExperience.timePeriod
+//            cell.titleLabel.text = educationExperience.title
+//            cell.organizationLabel.text = educationExperience.organization
+//            cell.timePeriodLabel.text = educationExperience.timePeriod
             return cell
         case 5:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellWebsite", for: indexPath) as! WebsiteTableViewCell
@@ -837,38 +833,38 @@ class ProfileTableViewController2: UITableViewController {
     }
     
     fileprivate func queryUserExperiences(_ userId: String) {
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().queryUserExperiencesDynamoDB(userId, completionHandler: {
-            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
-            DispatchQueue.main.async(execute: {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                if let error = error {
-                    print("queryUserExperiences error: \(error)")
-                } else {
-                    guard let awsUserExperiences = response?.items as? [AWSUserExperience] else {
-                        return
-                    }
-                    guard awsUserExperiences.count > 0 else {
-                        return
-                    }
-                    // Reset userExperiences.
-                    self.userExperiences = []
-                    self.workExperiences = []
-                    self.educationExperiences = []
-                    for awsUserExperience in awsUserExperiences {
-                        let userExperience = UserExperience(userId: awsUserExperience._userId, experienceId: awsUserExperience._experienceId, position: awsUserExperience._position, organization: awsUserExperience._organization, fromDate: awsUserExperience._fromDate, toDate: awsUserExperience._toDate, experienceType: awsUserExperience._experienceType)
-                        self.userExperiences.append(userExperience)
-                    }
-                    self.workExperiences = self.userExperiences.filter({$0.experienceType == 0})
-                    self.educationExperiences = self.userExperiences.filter({$0.experienceType == 1})
-                    //let workIndexSet = NSIndexSet(index: 3)
-                    //let educationIndexSet = NSIndexSet(index: 4)
-                    //self.tableView.reloadSections(workIndexSet, withRowAnimation: UITableViewRowAnimation.None)
-                    //self.tableView.reloadSections(educationIndexSet, withRowAnimation: UITableViewRowAnimation.None)
-                    self.tableView.reloadData()
-                }
-            })
-        })
+//        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+//        PRFYDynamoDBManager.defaultDynamoDBManager().queryUserExperiencesDynamoDB(userId, completionHandler: {
+//            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
+//            DispatchQueue.main.async(execute: {
+//                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+//                if let error = error {
+//                    print("queryUserExperiences error: \(error)")
+//                } else {
+//                    guard let awsUserExperiences = response?.items as? [AWSUserExperience] else {
+//                        return
+//                    }
+//                    guard awsUserExperiences.count > 0 else {
+//                        return
+//                    }
+//                    // Reset userExperiences.
+//                    self.userExperiences = []
+//                    self.workExperiences = []
+//                    self.educationExperiences = []
+//                    for awsUserExperience in awsUserExperiences {
+////                        let userExperience = UserExperience(userId: awsUserExperience._userId, experienceId: awsUserExperience._experienceId, title: awsUserExperience._title, organization: awsUserExperience._organization, fromDate: awsUserExperience._fromDate, toDate: awsUserExperience._toDate)
+////                        self.userExperiences.append(userExperience)
+//                    }
+////                    self.workExperiences = self.userExperiences.filter({$0.experienceType == 0})
+////                    self.educationExperiences = self.userExperiences.filter({$0.experienceType == 1})
+//                    //let workIndexSet = NSIndexSet(index: 3)
+//                    //let educationIndexSet = NSIndexSet(index: 4)
+//                    //self.tableView.reloadSections(workIndexSet, withRowAnimation: UITableViewRowAnimation.None)
+//                    //self.tableView.reloadSections(educationIndexSet, withRowAnimation: UITableViewRowAnimation.None)
+//                    self.tableView.reloadData()
+//                }
+//            })
+//        })
     }
     
     fileprivate func signOut() {

@@ -496,69 +496,66 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         userCategoriesNumberOfPostsIndex.queryUserCategoriesNumberOfPostsSorted(userId, completionHandler: completionHandler)
     }
     
-    // MARK: UserExperiences
+    // MARK: WorkExperiences
     
-    func queryUserExperiencesDynamoDB(_ userId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
-        print("queryUserExperiencesDynamoDB:")
-        let userExperiencesPrimaryIndex = AWSUserExperiencesPrimaryIndex()
-        userExperiencesPrimaryIndex.queryUserExperiences(userId, completionHandler: completionHandler)
-    }
-    
-    func saveUserExperienceDynamoDB(_ experienceId: String?, position: String?, organization: String?, fromDate: NSNumber?, toDate: NSNumber?, experienceType: NSNumber?, completionHandler: @escaping AWSContinuationBlock) {
-        // Save new and update existing hence experienceId is optional.
-        AWSClientManager.defaultClientManager().credentialsProvider?.getIdentityId().continue({
+    func createWorkExperienceDynamoDB(_ title: String?, organization: String?, workDescription: String?, fromMonth: NSNumber?, fromYear: NSNumber?, toMonth: NSNumber?, toYear: NSNumber?, completionHandler: @escaping AWSContinuationBlock) {
+        guard let identityId = AWSClientManager.defaultClientManager().credentialsProvider?.identityId else {
+            print("createWorkExperienceDynamoDB no identityId!")
+            AWSTask().continue(completionHandler)
+            return
+        }
+        print("createWorkExperienceDynamoDB:")
+        let workExperienceId = NSUUID().uuidString.lowercased()
+        let creationDate = NSNumber(value: Date().timeIntervalSince1970 as Double)
+        let awsWorkExperiencesTable = AWSWorkExperiencesTable()
+        let awsWorkExperience = AWSWorkExperience(_userId: identityId, _workExperienceId: workExperienceId, _creationDate: creationDate, _title: title, _organization: organization, _workDescription: workDescription, _fromMonth: fromMonth, _fromYear: fromYear, _toMonth: toMonth, _toYear: toYear)
+        awsWorkExperiencesTable.saveWorkExperience(awsWorkExperience, completionHandler: {
             (task: AWSTask) in
             if let error = task.error {
-                print("getIdentityId error: \(error.localizedDescription)")
-                return AWSTask(error: error).continue(completionHandler)
-            } else if let identityId = task.result as? String {
-                
-                print("saveUserExperienceDynamoDB:")
-                let userExperiencesTable = AWSUserExperiencesTable()
-                let userExperience = AWSUserExperience()
-                userExperience?._userId = identityId
-                userExperience?._experienceId = experienceId != nil ? experienceId : NSUUID().uuidString.lowercased()
-                userExperience?._position = position
-                userExperience?._organization = organization
-                userExperience?._fromDate = fromDate
-                userExperience?._toDate = toDate
-                userExperience?._experienceType = experienceType
-                userExperiencesTable.saveUserExperience(userExperience, completionHandler: {
-                    (task: AWSTask) in
-                    if let error = task.error {
-                        AWSTask(error: error).continue(completionHandler)
-                    } else {
-                        AWSTask(result: userExperience).continue(completionHandler)
-                    }
-                    return nil
-                })
-                return nil
+                AWSTask(error: error).continue(completionHandler)
             } else {
-                print("This should not happen with getIdentityId!")
-                return AWSTask().continue(completionHandler)
+                AWSTask(result: awsWorkExperience).continue(completionHandler)
             }
+            return nil
         })
     }
     
-    func removeUserExperienceDynamoDB(_ experienceId: String, completionHandler: @escaping AWSContinuationBlock) {
-        AWSClientManager.defaultClientManager().credentialsProvider?.getIdentityId().continue({
+    func updateWorkExperienceDynamoDB(_ workExperienceId: String, title: String?, organization: String?, workDescription: String?, fromMonth: NSNumber?, fromYear: NSNumber?, toMonth: NSNumber?, toYear: NSNumber?, completionHandler: @escaping AWSContinuationBlock) {
+        guard let identityId = AWSClientManager.defaultClientManager().credentialsProvider?.identityId else {
+            print("updateWorkExperienceDynamoDB no identityId!")
+            AWSTask().continue(completionHandler)
+            return
+        }
+        print("updateWorkExperienceDynamoDB:")
+        let awsWorkExperiencesTable = AWSWorkExperiencesTable()
+        let awsWorkExperienceUpdate = AWSWorkExperienceUpdate(_userId: identityId, _workExperienceId: workExperienceId, _creationDate: nil, _title: title, _organization: organization, _workDescription: workDescription, _fromMonth: fromMonth, _fromYear: fromYear, _toMonth: toMonth, _toYear: toYear)
+        awsWorkExperiencesTable.saveWorkExperience(awsWorkExperienceUpdate, completionHandler: {
             (task: AWSTask) in
             if let error = task.error {
-                print("getIdentityId error: \(error.localizedDescription)")
-                return AWSTask(error: error).continue(completionHandler)
-            } else if let identityId = task.result as? String {
-                
-                print("removeUserExperienceDynamoDB:")
-                let userExperiencesTable = AWSUserExperiencesTable()
-                let userExperience = AWSUserExperience()
-                userExperience?._userId = identityId
-                userExperience?._experienceId = experienceId
-                userExperiencesTable.removeUserExperience(userExperience, completionHandler: completionHandler)
-                return nil
+                AWSTask(error: error).continue(completionHandler)
             } else {
-                print("This should not happen with getIdentityId!")
-                return AWSTask().continue(completionHandler)
+                AWSTask(result: awsWorkExperienceUpdate).continue(completionHandler)
             }
+            return nil
         })
+    }
+    
+    func removeWorkExperienceDynamoDB(_ workExperienceId: String, completionHandler: @escaping AWSContinuationBlock) {
+        guard let identityId = AWSClientManager.defaultClientManager().credentialsProvider?.identityId else {
+            print("removeWorkExperienceDynamoDB no identityId!")
+            AWSTask().continue(completionHandler)
+            return
+        }
+        print("removeWorkExperienceDynamoDB:")
+        let awsWorkExperiencesTable = AWSWorkExperiencesTable()
+        let awsWorkExperience = AWSWorkExperience(_userId: identityId, _workExperienceId: workExperienceId)
+        awsWorkExperiencesTable.removeWorkExperience(awsWorkExperience, completionHandler: completionHandler)
+
+    }
+    
+    func queryWorkExperiencesDynamoDB(_ userId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+        print("queryWorkExperiencesDynamoDB:")
+        let awsWorkExperiencesPrimaryIndex = AWSWorkExperiencesPrimaryIndex()
+        awsWorkExperiencesPrimaryIndex.queryWorkExperiences(userId, completionHandler: completionHandler)
     }
 }

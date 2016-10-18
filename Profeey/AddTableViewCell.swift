@@ -1,17 +1,17 @@
 //
-//  DeleteExperienceTableViewCell.swift
+//  AddTableViewCell.swift
 //  Profeey
 //
-//  Created by Antonio Zdelican on 21/09/16.
+//  Created by Antonio Zdelican on 18/10/16.
 //  Copyright © 2016 Profeey. All rights reserved.
 //
 
 import UIKit
 
-class DeleteExperienceTableViewCell: UITableViewCell {
-
-    @IBOutlet weak var deleteExperienceLabel: UILabel!
+class AddTableViewCell: UITableViewCell {
     
+    @IBOutlet weak var titleLabel: UILabel!
+
     override func awakeFromNib() {
         super.awakeFromNib()
     }

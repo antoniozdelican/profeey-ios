@@ -10,6 +10,12 @@ import UIKit
 import AWSDynamoDB
 import AWSMobileHubHelper
 
+enum ProfileSegment {
+    case posts
+    case experience
+    case contact
+}
+
 class ProfileTableViewController: UITableViewController {
     
     var user: User?
@@ -18,9 +24,13 @@ class ProfileTableViewController: UITableViewController {
     fileprivate var isFollowing: Bool = false
     fileprivate var indexPathMain = IndexPath(row: 0, section: 0)
     fileprivate var indexPathInfo = IndexPath(row: 1, section: 0)
+    fileprivate var selectedProfileSegment: ProfileSegment = ProfileSegment.posts
     
     fileprivate var isLoadingPosts: Bool = true
     fileprivate var posts: [Post] = []
+    
+    fileprivate var isLoadingExperiences: Bool = true
+    fileprivate var workExperiences: [WorkExperience] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -71,7 +81,7 @@ class ProfileTableViewController: UITableViewController {
     // MARK: UITableViewDataSource
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return 3
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -79,13 +89,21 @@ class ProfileTableViewController: UITableViewController {
         case 0:
             return 3
         case 1:
-            if self.isLoadingPosts {
-                return 1
+            guard self.selectedProfileSegment == ProfileSegment.posts else {
+                return 0
             }
-            if self.posts.count == 0 {
+            if self.isLoadingPosts || self.posts.count == 0 {
                 return 1
             }
             return self.posts.count
+        case 2:
+            guard self.selectedProfileSegment == ProfileSegment.experience else {
+                return 0
+            }
+            if self.isLoadingExperiences || self.workExperiences.count == 0 {
+                return 1
+            }
+            return self.workExperiences.count
         default:
             return 0
         }
@@ -123,6 +141,7 @@ class ProfileTableViewController: UITableViewController {
                 return cell
             case 2:
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellProfileSegmentedControl", for: indexPath) as! ProfileSegmentedControlTableViewCell
+                cell.profileSegmentedControlTableViewCellDelegate = self
                 return cell
             default:
                 return UITableViewCell()
@@ -130,6 +149,7 @@ class ProfileTableViewController: UITableViewController {
         case 1:
             if self.isLoadingPosts {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellLoading", for: indexPath) as! LoadingTableViewCell
+                cell.activityIndicator?.startAnimating()
                 return cell
             }
             if self.posts.count == 0 {
@@ -144,6 +164,23 @@ class ProfileTableViewController: UITableViewController {
             cell.categoryNameLabel.text = post.categoryName
             cell.timeLabel.text = post.creationDateString
             cell.numberOfLikesLabel.text = post.numberOfLikesSmallString
+            return cell
+        case 2:
+            if self.isLoadingExperiences {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellLoading", for: indexPath) as! LoadingTableViewCell
+                cell.activityIndicator?.startAnimating()
+                return cell
+            }
+            if self.workExperiences.count == 0 {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellEmpty", for: indexPath) as! EmptyTableViewCell
+                cell.emptyMessageLabel.text = "No experiences yet"
+                return cell
+            }
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellWorkExperience", for: indexPath) as! WorkExperienceTableViewCell
+//            let workExperience = self.workExperiences[indexPath.row]
+//            cell.titleLabel.text = workExperience.title
+//            cell.organizationLabel.text = workExperience.organization
+//            cell.timePeriodLabel.text = workExperience.timePeriod
             return cell
         default:
             return UITableViewCell()
@@ -166,7 +203,15 @@ class ProfileTableViewController: UITableViewController {
                 return 0.0
             }
         case 1:
-            return 108.0
+            if self.isLoadingPosts || self.posts.count == 0 {
+                return 120.0
+            }
+            return 112.0
+        case 2:
+            if self.isLoadingExperiences || self.workExperiences.count == 0 {
+                return 112.0
+            }
+            return 74.0
         default:
             return 0.0
         }
@@ -186,7 +231,15 @@ class ProfileTableViewController: UITableViewController {
                 return 0.0
             }
         case 1:
-            return 108.0
+            if self.isLoadingPosts || self.posts.count == 0 {
+                return 112.0
+            }
+            return 112.0
+        case 2:
+            if self.isLoadingExperiences || self.workExperiences.count == 0 {
+                return 112.0
+            }
+            return UITableViewAutomaticDimension
         default:
             return 0.0
         }
@@ -263,6 +316,7 @@ class ProfileTableViewController: UITableViewController {
                     }
                     if let userId = awsUser._userId {
                         self.queryUserPostsDateSorted(userId)
+                        self.queryWorkExperiences(userId)
                     }
                     // For now
                     self.refreshControl?.endRefreshing()
@@ -279,16 +333,17 @@ class ProfileTableViewController: UITableViewController {
             (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                self.isLoadingPosts = false
                 if let error = error {
                     print("queryUserPostsDateSorted error: \(error)")
-                    self.isLoadingPosts = false
-                    self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
-//                    self.refreshControl?.endRefreshing()
+                    if self.selectedProfileSegment == ProfileSegment.posts {
+                        self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
+                    }
                 } else {
                     guard let awsPosts = response?.items as? [AWSPost], awsPosts.count > 0 else {
-                        self.isLoadingPosts = false
-                        self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
-//                        self.refreshControl?.endRefreshing()
+                        if self.selectedProfileSegment == ProfileSegment.posts {
+                            self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
+                        }
                         return
                     }
                     // Reset posts.
@@ -296,17 +351,50 @@ class ProfileTableViewController: UITableViewController {
                     for (index, awsPost) in awsPosts.enumerated() {
                         let post = Post(userId: awsPost._userId, postId: awsPost._postId, caption: awsPost._caption, categoryName: awsPost._categoryName, creationDate: awsPost._creationDate, imageUrl: awsPost._imageUrl, numberOfLikes: awsPost._numberOfLikes, user: self.user)
                         self.posts.append(post)
-                        self.isLoadingPosts = false
-                        UIView.setAnimationsEnabled(false)
-                        self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
-                        UIView.setAnimationsEnabled(true)
+                        if self.selectedProfileSegment == ProfileSegment.posts {
+                            UIView.setAnimationsEnabled(false)
+                            self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
+                            UIView.setAnimationsEnabled(true)
+                        }
                         
                         if let imageUrl = awsPost._imageUrl {
-                            let indexPath = IndexPath(row: index, section: 1)
-                            self.downloadImage(imageUrl, imageType: .postPic, indexPath: indexPath)
+                            self.downloadImage(imageUrl, imageType: .postPic, indexPath: IndexPath(row: index, section: 1))
                         }
                     }
-//                    self.refreshControl?.endRefreshing()
+                }
+            })
+        })
+    }
+    
+    fileprivate func queryWorkExperiences(_ userId: String) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().queryWorkExperiencesDynamoDB(userId, completionHandler: {
+            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                self.isLoadingExperiences = false
+                if let error = error {
+                    print("queryWorkExperiences error: \(error)")
+                    if self.selectedProfileSegment == ProfileSegment.experience {
+                        self.tableView.reloadSections(IndexSet(integer: 2), with: UITableViewRowAnimation.none)
+                    }
+                } else {
+                    guard let awsWorkExperiences = response?.items as? [AWSWorkExperience], awsWorkExperiences.count > 0 else {
+                        if self.selectedProfileSegment == ProfileSegment.experience {
+                            self.tableView.reloadSections(IndexSet(integer: 2), with: UITableViewRowAnimation.none)
+                        }
+                        return
+                    }
+                    self.workExperiences = []
+                    for awsWorkExperience in awsWorkExperiences {
+                        let workExperience = WorkExperience(userId: awsWorkExperience._userId, workExperienceId: awsWorkExperience._workExperienceId, title: awsWorkExperience._title, organization: awsWorkExperience._organization, workDescription: awsWorkExperience._workDescription, fromMonth: awsWorkExperience._fromMonth, fromYear: awsWorkExperience._fromYear, toMonth: awsWorkExperience._toMonth, toYear: awsWorkExperience._toYear)
+                        self.workExperiences.append(workExperience)
+                        if self.selectedProfileSegment == ProfileSegment.experience {
+                            UIView.setAnimationsEnabled(false)
+                            self.tableView.reloadSections(IndexSet(integer: 2), with: UITableViewRowAnimation.none)
+                            UIView.setAnimationsEnabled(true)
+                        }
+                    }
                 }
             })
         })
@@ -328,7 +416,9 @@ class ProfileTableViewController: UITableViewController {
                 self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
             case .postPic:
                 self.posts[indexPath.row].image = image
-                self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
+                if self.selectedProfileSegment == ProfileSegment.posts {
+                    self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
+                }
             default:
                 return
             }
@@ -358,7 +448,9 @@ class ProfileTableViewController: UITableViewController {
                                 self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
                             case .postPic:
                                 self.posts[indexPath.row].image = image
-                                self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
+                                if self.selectedProfileSegment == ProfileSegment.posts {
+                                    self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
+                                }
                             default:
                                 return
                             }
@@ -495,9 +587,16 @@ extension ProfileTableViewController: ProfileMainTableViewCellDelegate {
                     user.numberOfFollowers = NSNumber(value: (numberOfFollowersInteger + 1) as Int)
                     self.followUser(followingId)
                 }
-                let indexPath = IndexPath(row: 0, section: 0)
-                self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
+                self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.none)
             }
         }
+    }
+}
+
+extension ProfileTableViewController: ProfileSegmentedControlTableViewCellDelegate {
+    
+    func segmentChanged(profileSegment: ProfileSegment) {
+        self.selectedProfileSegment = profileSegment
+        self.tableView.reloadData()
     }
 }

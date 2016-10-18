@@ -10,7 +10,7 @@ import UIKit
 
 class ExperienceTableViewCell: UITableViewCell {
 
-    @IBOutlet weak var positionLabel: UILabel!
+    @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var organizationLabel: UILabel!
     @IBOutlet weak var timePeriodLabel: UILabel!
     

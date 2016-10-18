@@ -1,8 +1,8 @@
 //
-//  AWSUserExperiencesTable.swift
+//  AWSWorkExperiencesTable.swift
 //  Profeey
 //
-//  Created by Antonio Zdelican on 21/09/16.
+//  Created by Antonio Zdelican on 17/10/16.
 //  Copyright © 2016 Profeey. All rights reserved.
 //
 
@@ -10,7 +10,7 @@ import Foundation
 import AWSDynamoDB
 import AWSMobileHubHelper
 
-class AWSUserExperiencesTable: NSObject, Table {
+class AWSWorkExperiencesTable: NSObject, Table {
     
     var tableName: String
     var partitionKeyName: String
@@ -24,18 +24,18 @@ class AWSUserExperiencesTable: NSObject, Table {
     }
     var tableDisplayName: String {
         
-        return "UserCategories"
+        return "WorkExperiences"
     }
     
     override init() {
         
-        model = AWSUserExperience()
+        model = AWSWorkExperience()
         
         tableName = model.classForCoder.dynamoDBTableName()
         partitionKeyName = model.classForCoder.hashKeyAttribute()
         partitionKeyType = "String"
         indexes = [
-            AWSUserExperiencesPrimaryIndex(),
+            AWSWorkExperiencesPrimaryIndex(),
         ]
         //sortKeyName = model.classForCoder.rangeKeyAttribute!()
         sortKeyType = "String"
@@ -43,21 +43,21 @@ class AWSUserExperiencesTable: NSObject, Table {
     }
     
     func tableAttributeName(_ dataObjectAttributeName: String) -> String {
-        return AWSUserExperience.jsonKeyPathsByPropertyKey()[dataObjectAttributeName] as! String
+        return AWSWorkExperience.jsonKeyPathsByPropertyKey()[dataObjectAttributeName] as! String
     }
     
-    func saveUserExperience(_ userExperience: AWSUserExperience?, completionHandler: @escaping AWSContinuationBlock) {
+    func saveWorkExperience(_ awsWorkExperience: AWSWorkExperience, completionHandler: @escaping AWSContinuationBlock) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
-        objectMapper.save(userExperience!).continue(completionHandler)
+        objectMapper.save(awsWorkExperience).continue(completionHandler)
     }
     
-    func removeUserExperience(_ userExperience: AWSUserExperience?, completionHandler: @escaping AWSContinuationBlock) {
+    func removeWorkExperience(_ awsWorkExperience: AWSWorkExperience, completionHandler: @escaping AWSContinuationBlock) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
-        objectMapper.remove(userExperience!).continue(completionHandler)
+        objectMapper.remove(awsWorkExperience).continue(completionHandler)
     }
 }
 
-class AWSUserExperiencesPrimaryIndex: NSObject, Index {
+class AWSWorkExperiencesPrimaryIndex: NSObject, Index {
     
     var indexName: String? {
         return nil
@@ -72,13 +72,13 @@ class AWSUserExperiencesPrimaryIndex: NSObject, Index {
     // Mark: QueryWithPartitionKey
     
     // Query all experiences from user.
-    func queryUserExperiences(_ userId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+    func queryWorkExperiences(_ userId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
         let queryExpression = AWSDynamoDBQueryExpression()
         queryExpression.keyConditionExpression = "#userId = :userId"
         queryExpression.expressionAttributeNames = ["#userId": "userId",]
         queryExpression.expressionAttributeValues = [":userId": userId,]
         
-        objectMapper.query(AWSUserExperience.self, expression: queryExpression, completionHandler: completionHandler)
+        objectMapper.query(AWSWorkExperience.self, expression: queryExpression, completionHandler: completionHandler)
     }
 }

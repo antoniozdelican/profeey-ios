@@ -34,9 +34,9 @@ class HomeTableViewController: UITableViewController {
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         self.tableView.delaysContentTouches = false
         
-        if let currentUser = AWSClientManager.defaultClientManager().userPool?.currentUser(), currentUser.isSignedIn {
-            self.getCurrentUser()
-        }
+//        if let currentUser = AWSClientManager.defaultClientManager().userPool?.currentUser(), currentUser.isSignedIn {
+//            self.getCurrentUser()
+//        }
     }
     
     override func viewWillAppear(_ animated: Bool) {

@@ -21,13 +21,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         self.configureUI()
         
-        print("Delegate")
-        
-        AWSClientManager.defaultClientManager().userPool?.delegate = self
-        AWSClientManager.defaultClientManager().getUserDetails({
-            (task: AWSTask) in
-            return nil
-        })
+//        AWSClientManager.defaultClientManager().userPool?.delegate = self
+//        AWSClientManager.defaultClientManager().getUserDetails({
+//            (task: AWSTask) in
+//            return nil
+//        })
         return true
     }
     
@@ -48,7 +46,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UITableView.appearance().tableFooterView = UIView()
         UITableView.appearance().separatorColor = Colors.grey
         // WARNING
-        UITableView.appearance().separatorInset = UIEdgeInsets.zero
+        //UITableView.appearance().separatorInset = UIEdgeInsets.zero
         
         // UITableViewCell
         let colorView = UIView()
