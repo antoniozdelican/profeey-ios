@@ -550,12 +550,73 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         let awsWorkExperiencesTable = AWSWorkExperiencesTable()
         let awsWorkExperience = AWSWorkExperience(_userId: identityId, _workExperienceId: workExperienceId)
         awsWorkExperiencesTable.removeWorkExperience(awsWorkExperience, completionHandler: completionHandler)
-
     }
     
     func queryWorkExperiencesDynamoDB(_ userId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         print("queryWorkExperiencesDynamoDB:")
         let awsWorkExperiencesPrimaryIndex = AWSWorkExperiencesPrimaryIndex()
         awsWorkExperiencesPrimaryIndex.queryWorkExperiences(userId, completionHandler: completionHandler)
+    }
+    
+    // MARK: WorkExperiences
+    
+    func createEducationDynamoDB(_ school: String?, fieldOfStudy: String?, educationDescription: String?, fromMonth: NSNumber?, fromYear: NSNumber?, toMonth: NSNumber?, toYear: NSNumber?, completionHandler: @escaping AWSContinuationBlock) {
+        guard let identityId = AWSClientManager.defaultClientManager().credentialsProvider?.identityId else {
+            print("creatEducationDynamoDB no identityId!")
+            AWSTask().continue(completionHandler)
+            return
+        }
+        print("creatEducationDynamoDB:")
+        let educationId = NSUUID().uuidString.lowercased()
+        let creationDate = NSNumber(value: Date().timeIntervalSince1970 as Double)
+        let awsEducationsTable = AWSEducationsTable()
+        let awsEducation = AWSEducation(_userId: identityId, _educationId: educationId, _creationDate: creationDate, _school: school, _fieldOfStudy: fieldOfStudy, _educationDescription: educationDescription, _fromMonth: fromMonth, _fromYear: fromYear, _toMonth: toMonth, _toYear: toYear)
+        awsEducationsTable.saveEducation(awsEducation, completionHandler: {
+            (task: AWSTask) in
+            if let error = task.error {
+                AWSTask(error: error).continue(completionHandler)
+            } else {
+                AWSTask(result: awsEducation).continue(completionHandler)
+            }
+            return nil
+        })
+    }
+    
+    func updateEducationDynamoDB(_ educationId: String, school: String?, fieldOfStudy: String?, educationDescription: String?, fromMonth: NSNumber?, fromYear: NSNumber?, toMonth: NSNumber?, toYear: NSNumber?, completionHandler: @escaping AWSContinuationBlock) {
+        guard let identityId = AWSClientManager.defaultClientManager().credentialsProvider?.identityId else {
+            print("updateEducationDynamoDB no identityId!")
+            AWSTask().continue(completionHandler)
+            return
+        }
+        print("updateEducationDynamoDB:")
+        let awsEducationsTable = AWSEducationsTable()
+        let awsEducationUpdate = AWSEducationUpdate(_userId: identityId, _educationId: educationId, _creationDate: nil, _school: school, _fieldOfStudy: fieldOfStudy, _educationDescription: educationDescription, _fromMonth: fromMonth, _fromYear: fromYear, _toMonth: toMonth, _toYear: toYear)
+        awsEducationsTable.saveEducation(awsEducationUpdate, completionHandler: {
+            (task: AWSTask) in
+            if let error = task.error {
+                AWSTask(error: error).continue(completionHandler)
+            } else {
+                AWSTask(result: awsEducationUpdate).continue(completionHandler)
+            }
+            return nil
+        })
+    }
+    
+    func removeEducationDynamoDB(_ educationId: String, completionHandler: @escaping AWSContinuationBlock) {
+        guard let identityId = AWSClientManager.defaultClientManager().credentialsProvider?.identityId else {
+            print("removeEducationDynamoDB no identityId!")
+            AWSTask().continue(completionHandler)
+            return
+        }
+        print("removeEducationDynamoDB:")
+        let awsEducationsTable = AWSEducationsTable()
+        let awsEducation = AWSEducation(_userId: identityId, _educationId: educationId)
+        awsEducationsTable.removeEducation(awsEducation, completionHandler: completionHandler)
+    }
+    
+    func queryEducationsDynamoDB(_ userId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+        print("queryEducationsDynamoDB:")
+        let awsEducationsPrimaryIndex = AWSEducationsPrimaryIndex()
+        awsEducationsPrimaryIndex.queryEducations(userId, completionHandler: completionHandler)
     }
 }

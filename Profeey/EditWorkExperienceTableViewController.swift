@@ -7,9 +7,10 @@
 //
 
 import UIKit
+import AWSMobileHubHelper
 
 protocol EditWorkExperienceTableViewControllerDelegate {
-    func didEditWorkExperience(_ worExperience: WorkExperience, isNewWorkExperience: Bool)
+    func didEditWorkExperience(_ worExperience: WorkExperience, isNewWorkExperience: Bool, indexPath: IndexPath?)
 }
 
 class EditWorkExperienceTableViewController: UITableViewController {
@@ -18,6 +19,7 @@ class EditWorkExperienceTableViewController: UITableViewController {
     
     var workExperience: WorkExperience?
     var isNewWorkExperience: Bool = true
+    var indexPath: IndexPath?
     var editWorkExperienceTableViewControllerDelegate: EditWorkExperienceTableViewControllerDelegate?
     
     fileprivate var fromDatePickerActive: Bool = false
@@ -221,17 +223,16 @@ class EditWorkExperienceTableViewController: UITableViewController {
     @IBAction func saveButtonTapped(_ sender: AnyObject) {
         self.view.endEditing(true)
         self.removeDatePickers()
-        
         if self.isCurrentlyDoing {
             // Remove values.
             self.workExperience?.toMonth = nil
             self.workExperience?.toYear = nil
         }
-        guard let workExperience = self.workExperience else {
-            return
+        if self.isNewWorkExperience {
+            self.createWorkExperience()
+        } else {
+            self.updateWorkExperience()
         }
-        self.editWorkExperienceTableViewControllerDelegate?.didEditWorkExperience(workExperience, isNewWorkExperience: self.isNewWorkExperience)
-        self.dismiss(animated: true, completion: nil)
     }
     
     @IBAction func cancelButtonTapped(_ sender: AnyObject) {
@@ -240,6 +241,68 @@ class EditWorkExperienceTableViewController: UITableViewController {
         self.dismiss(animated: true, completion: nil)
     }
     
+    // MARK: IBActions
+    
+    fileprivate func createWorkExperience() {
+        guard let workExperience = self.workExperience else {
+            return
+        }
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        FullScreenIndicator.show()
+        PRFYDynamoDBManager.defaultDynamoDBManager().createWorkExperienceDynamoDB(workExperience.title, organization: workExperience.organization, workDescription: workExperience.workDescription, fromMonth: workExperience.fromMonth, fromYear: workExperience.fromYear, toMonth: workExperience.toMonth, toYear: workExperience.toYear, completionHandler: {
+            (task: AWSTask) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                FullScreenIndicator.hide()
+                if let error = task.error {
+                    print("createWorkExperience error: \(error)")
+                    let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.localizedDescription, cancelButtonTitle: "Ok")
+                    self.present(alertController, animated: true, completion: nil)
+                } else {
+                    guard let awsWorkExperience = task.result as? AWSWorkExperience else {
+                        print("No awsWorkExperience")
+                        return
+                    }
+                    let workExperience = WorkExperience(userId: awsWorkExperience._userId, workExperienceId: awsWorkExperience._workExperienceId, title: awsWorkExperience._title, organization: awsWorkExperience._organization, workDescription: awsWorkExperience._workDescription, fromMonth: awsWorkExperience._fromMonth, fromYear: awsWorkExperience._fromYear, toMonth: awsWorkExperience._toMonth, toYear: awsWorkExperience._toYear)
+                    self.editWorkExperienceTableViewControllerDelegate?.didEditWorkExperience(workExperience, isNewWorkExperience: self.isNewWorkExperience, indexPath: self.indexPath)
+                    self.dismiss(animated: true, completion: nil)
+                }
+            })
+            return nil
+        })
+    }
+    
+    fileprivate func updateWorkExperience() {
+        guard let workExperience = self.workExperience else {
+            return
+        }
+        guard let workExperienceId = workExperience.workExperienceId else {
+            return
+        }
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        FullScreenIndicator.show()
+        PRFYDynamoDBManager.defaultDynamoDBManager().updateWorkExperienceDynamoDB(workExperienceId, title: workExperience.title, organization: workExperience.organization, workDescription: workExperience.workDescription, fromMonth: workExperience.fromMonth, fromYear: workExperience.fromYear, toMonth: workExperience.toMonth, toYear: workExperience.toYear, completionHandler: {
+            (task: AWSTask) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                FullScreenIndicator.hide()
+                if let error = task.error {
+                    print("updateWorkExperience error: \(error)")
+                    let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.localizedDescription, cancelButtonTitle: "Ok")
+                    self.present(alertController, animated: true, completion: nil)
+                } else {
+                    guard let awsWorkExperienceUpdate = task.result as? AWSWorkExperienceUpdate else {
+                        print("No awsWorkExperienceUpdate")
+                        return
+                    }
+                    let workExperience = WorkExperience(userId: awsWorkExperienceUpdate._userId, workExperienceId: awsWorkExperienceUpdate._workExperienceId, title: awsWorkExperienceUpdate._title, organization: awsWorkExperienceUpdate._organization, workDescription: awsWorkExperienceUpdate._workDescription, fromMonth: awsWorkExperienceUpdate._fromMonth, fromYear: awsWorkExperienceUpdate._fromYear, toMonth: awsWorkExperienceUpdate._toMonth, toYear: awsWorkExperienceUpdate._toYear)
+                    self.editWorkExperienceTableViewControllerDelegate?.didEditWorkExperience(workExperience, isNewWorkExperience: self.isNewWorkExperience, indexPath: self.indexPath)
+                    self.dismiss(animated: true, completion: nil)
+                }
+            })
+            return nil
+        })
+    }
 }
 
 extension EditWorkExperienceTableViewController: DatePickerTableViewCellDelegate {

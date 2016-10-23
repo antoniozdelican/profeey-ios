@@ -29,14 +29,28 @@ class ProfileTableViewController: UITableViewController {
     fileprivate var isLoadingPosts: Bool = true
     fileprivate var posts: [Post] = []
     
-    fileprivate var isLoadingExperiences: Bool = true
+    fileprivate var isLoadingWorkExperiences: Bool = true
     fileprivate var workExperiences: [WorkExperience] = []
+    fileprivate var isLoadingEducations: Bool = true
+    fileprivate var educations: [Education] = []
+    
+    fileprivate var isLoadingExperiences: Bool {
+        return self.isLoadingWorkExperiences || self.isLoadingEducations
+    }
+    fileprivate var isEmptyExperiences: Bool {
+        return (self.workExperiences.count == 0 && self.educations.count == 0)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         self.navigationItem.title = self.user?.preferredUsername
+        
+        // Register custom headers.
+        self.tableView.register(UINib(nibName: "ProfileTableSectionHeader", bundle: nil), forHeaderFooterViewReuseIdentifier: "profileTableSectionHeader")
+        
         self.configureUser()
+        self.isLoadingEducations = false
     }
 
     override func didReceiveMemoryWarning() {
@@ -76,12 +90,17 @@ class ProfileTableViewController: UITableViewController {
             destinationViewController.usersType = UsersType.followers
             destinationViewController.userId = self.user?.userId
         }
+        if let destinationViewController = segue.destination as? ExperiencesTableViewController {
+            destinationViewController.workExperiences = self.workExperiences
+            destinationViewController.educations = self.educations
+            destinationViewController.experiencesTableViewControllerDelegate = self
+        }
     }
 
     // MARK: UITableViewDataSource
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 3
+        return 5
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -97,13 +116,30 @@ class ProfileTableViewController: UITableViewController {
             }
             return self.posts.count
         case 2:
+            // Empty and loading experience.
             guard self.selectedProfileSegment == ProfileSegment.experience else {
                 return 0
             }
-            if self.isLoadingExperiences || self.workExperiences.count == 0 {
+            if self.isLoadingExperiences || self.isEmptyExperiences {
                 return 1
             }
+            return 0
+        case 3:
+            guard self.selectedProfileSegment == ProfileSegment.experience else {
+                return 0
+            }
+            if self.isLoadingExperiences {
+                return 0
+            }
             return self.workExperiences.count
+        case 4:
+            guard self.selectedProfileSegment == ProfileSegment.experience else {
+                return 0
+            }
+            if self.isLoadingExperiences {
+                return 0
+            }
+            return self.educations.count
         default:
             return 0
         }
@@ -171,23 +207,34 @@ class ProfileTableViewController: UITableViewController {
                 cell.activityIndicator?.startAnimating()
                 return cell
             }
-            if self.workExperiences.count == 0 {
+            if self.isEmptyExperiences {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellEmpty", for: indexPath) as! EmptyTableViewCell
                 cell.emptyMessageLabel.text = "No experiences yet"
+                cell.addButton?.isHidden = self.isCurrentUser ? false : true
+                cell.emptyTableViewCellDelegate = self
                 return cell
             }
+            return UITableViewCell()
+        case 3:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellWorkExperience", for: indexPath) as! WorkExperienceTableViewCell
-//            let workExperience = self.workExperiences[indexPath.row]
-//            cell.titleLabel.text = workExperience.title
-//            cell.organizationLabel.text = workExperience.organization
-//            cell.timePeriodLabel.text = workExperience.timePeriod
+            let workExperience = self.workExperiences[indexPath.row]
+            cell.titleLabel.text = workExperience.title
+            cell.organizationLabel.text = workExperience.organization
+            cell.timePeriodLabel.text = workExperience.timePeriod
+            cell.workDescriptionLabel.text = workExperience.workDescription
+            return cell
+        case 4:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellEducation", for: indexPath) as! EducationTableViewCell
+            let education = self.educations[indexPath.row]
+            cell.schoolLabel.text = education.school
+            cell.fieldOfStudyLabel.text = education.fieldOfStudy
+            cell.timePeriodLabel.text = education.timePeriod
+            cell.educationDescriptionLabel.text = education.educationDescription
             return cell
         default:
             return UITableViewCell()
         }
     }
-    
-    // MARK: UITableViewDelegate
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.section {
@@ -208,9 +255,13 @@ class ProfileTableViewController: UITableViewController {
             }
             return 112.0
         case 2:
-            if self.isLoadingExperiences || self.workExperiences.count == 0 {
+            if self.isLoadingExperiences || self.isEmptyExperiences {
                 return 112.0
             }
+            return 0.0
+        case 3:
+            return 74.0
+        case 4:
             return 74.0
         default:
             return 0.0
@@ -236,13 +287,121 @@ class ProfileTableViewController: UITableViewController {
             }
             return 112.0
         case 2:
-            if self.isLoadingExperiences || self.workExperiences.count == 0 {
+            if self.isLoadingExperiences || self.isEmptyExperiences {
                 return 112.0
             }
+            return 0.0
+        case 3:
+            return UITableViewAutomaticDimension
+        case 4:
             return UITableViewAutomaticDimension
         default:
             return 0.0
         }
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        switch section {
+        case 1:
+            guard self.selectedProfileSegment == ProfileSegment.posts else {
+                return nil
+            }
+            let header = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "profileTableSectionHeader") as? ProfileTableSectionHeader
+            header?.titleLabel?.text = nil
+            header?.editButton?.isHidden = true
+            return header
+        case 2:
+            guard self.selectedProfileSegment == ProfileSegment.experience else {
+                return nil
+            }
+            let header = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "profileTableSectionHeader") as? ProfileTableSectionHeader
+            header?.titleLabel?.text = nil
+            header?.editButton?.isHidden = true
+            return header
+        case 3:
+            guard self.selectedProfileSegment == ProfileSegment.experience else {
+                return nil
+            }
+            if self.isLoadingExperiences || self.workExperiences.count == 0 {
+                return nil
+            }
+            let header = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "profileTableSectionHeader") as? ProfileTableSectionHeader
+            header?.titleLabel?.text = "WORK EXPERIENCE"
+            header?.editButton?.isHidden = self.isCurrentUser ? false : true
+            header?.profileTableSectionHeaderDelegate = self
+            return header
+        case 4:
+            guard self.selectedProfileSegment == ProfileSegment.experience else {
+                return nil
+            }
+            if self.isLoadingExperiences || self.educations.count == 0 {
+                return nil
+            }
+            let header = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "profileTableSectionHeader") as? ProfileTableSectionHeader
+            header?.titleLabel?.text = "EDUCATION"
+            header?.editButton?.isHidden = self.isCurrentUser ? false : true
+            header?.profileTableSectionHeaderDelegate = self
+            return header
+        default:
+            return nil
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        switch section {
+        case 1:
+            guard self.selectedProfileSegment == ProfileSegment.posts else {
+                return CGFloat.leastNormalMagnitude
+            }
+            return 6.0
+        case 2:
+            guard self.selectedProfileSegment == ProfileSegment.experience else {
+                return CGFloat.leastNormalMagnitude
+            }
+            return 6.0
+        case 3:
+            guard self.selectedProfileSegment == ProfileSegment.experience else {
+                return CGFloat.leastNormalMagnitude
+            }
+            if self.isLoadingExperiences || self.workExperiences.count == 0 {
+                return CGFloat.leastNormalMagnitude
+            }
+            return 36.0
+        case 4:
+            guard self.selectedProfileSegment == ProfileSegment.experience else {
+                return CGFloat.leastNormalMagnitude
+            }
+            if self.isLoadingExperiences || self.educations.count == 0 {
+                return CGFloat.leastNormalMagnitude
+            }
+            return 36.0
+        default:
+            return CGFloat.leastNormalMagnitude
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        switch section {
+        case 3:
+            guard self.selectedProfileSegment == ProfileSegment.experience else {
+                return CGFloat.leastNormalMagnitude
+            }
+            if self.isLoadingExperiences || self.workExperiences.count == 0 {
+                return CGFloat.leastNormalMagnitude
+            }
+            return 16.0
+        case 4:
+            guard self.selectedProfileSegment == ProfileSegment.experience else {
+                return CGFloat.leastNormalMagnitude
+            }
+            if self.isLoadingExperiences || self.educations.count == 0 {
+                return CGFloat.leastNormalMagnitude
+            }
+            return 16.0
+        default:
+            return CGFloat.leastNormalMagnitude
+        }
+
     }
     
     // MARK: IBActions
@@ -317,6 +476,7 @@ class ProfileTableViewController: UITableViewController {
                     if let userId = awsUser._userId {
                         self.queryUserPostsDateSorted(userId)
                         self.queryWorkExperiences(userId)
+                        self.queryEducations(userId)
                     }
                     // For now
                     self.refreshControl?.endRefreshing()
@@ -372,16 +532,16 @@ class ProfileTableViewController: UITableViewController {
             (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                self.isLoadingExperiences = false
+                self.isLoadingWorkExperiences = false
                 if let error = error {
                     print("queryWorkExperiences error: \(error)")
                     if self.selectedProfileSegment == ProfileSegment.experience {
-                        self.tableView.reloadSections(IndexSet(integer: 2), with: UITableViewRowAnimation.none)
+                        self.tableView.reloadSections(IndexSet([2, 3, 4]), with: UITableViewRowAnimation.none)
                     }
                 } else {
                     guard let awsWorkExperiences = response?.items as? [AWSWorkExperience], awsWorkExperiences.count > 0 else {
                         if self.selectedProfileSegment == ProfileSegment.experience {
-                            self.tableView.reloadSections(IndexSet(integer: 2), with: UITableViewRowAnimation.none)
+                            self.tableView.reloadSections(IndexSet([2, 3, 4]), with: UITableViewRowAnimation.none)
                         }
                         return
                     }
@@ -391,7 +551,41 @@ class ProfileTableViewController: UITableViewController {
                         self.workExperiences.append(workExperience)
                         if self.selectedProfileSegment == ProfileSegment.experience {
                             UIView.setAnimationsEnabled(false)
-                            self.tableView.reloadSections(IndexSet(integer: 2), with: UITableViewRowAnimation.none)
+                            self.tableView.reloadSections(IndexSet([2, 3, 4]), with: UITableViewRowAnimation.none)
+                            UIView.setAnimationsEnabled(true)
+                        }
+                    }
+                }
+            })
+        })
+    }
+    
+    fileprivate func queryEducations(_ userId: String) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().queryEducationsDynamoDB(userId, completionHandler: {
+            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                self.isLoadingEducations = false
+                if let error = error {
+                    print("queryEducations error: \(error)")
+                    if self.selectedProfileSegment == ProfileSegment.experience {
+                        self.tableView.reloadSections(IndexSet([2, 3, 4]), with: UITableViewRowAnimation.none)
+                    }
+                } else {
+                    guard let awsEducations = response?.items as? [AWSEducation], awsEducations.count > 0 else {
+                        if self.selectedProfileSegment == ProfileSegment.experience {
+                            self.tableView.reloadSections(IndexSet([2, 3, 4]), with: UITableViewRowAnimation.none)
+                        }
+                        return
+                    }
+                    self.educations = []
+                    for awsEducation in awsEducations {
+                        let education = Education(userId: awsEducation._userId, educationId: awsEducation._educationId, school: awsEducation._school, fieldOfStudy: awsEducation._fieldOfStudy, educationDescription: awsEducation._educationDescription, fromMonth: awsEducation._fromMonth, fromYear: awsEducation._fromYear, toMonth: awsEducation._toMonth, toYear: awsEducation._toYear)
+                        self.educations.append(education)
+                        if self.selectedProfileSegment == ProfileSegment.experience {
+                            UIView.setAnimationsEnabled(false)
+                            self.tableView.reloadSections(IndexSet([2, 3, 4]), with: UITableViewRowAnimation.none)
                             UIView.setAnimationsEnabled(true)
                         }
                     }
@@ -598,5 +792,36 @@ extension ProfileTableViewController: ProfileSegmentedControlTableViewCellDelega
     func segmentChanged(profileSegment: ProfileSegment) {
         self.selectedProfileSegment = profileSegment
         self.tableView.reloadData()
+    }
+}
+
+extension ProfileTableViewController: ProfileTableSectionHeaderDelegate {
+    
+    func editButtonTapped() {
+        self.performSegue(withIdentifier: "segueToExperiencesVc", sender: self)
+    }
+}
+
+extension ProfileTableViewController: EmptyTableViewCellDelegate {
+    
+    func addButtonTapped() {
+        self.performSegue(withIdentifier: "segueToExperiencesVc", sender: self)
+    }
+}
+
+extension ProfileTableViewController: ExperiencesTableViewControllerDelegate {
+    
+    func workExperiencesUpdated(_ workExperiences: [WorkExperience]) {
+        self.workExperiences = workExperiences
+        if self.selectedProfileSegment == ProfileSegment.experience {
+            self.tableView.reloadSections(IndexSet([2, 3, 4]), with: UITableViewRowAnimation.none)
+        }
+    }
+    
+    func educationsUpdated(_ educations: [Education]) {
+        self.educations = educations
+        if self.selectedProfileSegment == ProfileSegment.experience {
+            self.tableView.reloadSections(IndexSet([2, 3, 4]), with: UITableViewRowAnimation.none)
+        }
     }
 }

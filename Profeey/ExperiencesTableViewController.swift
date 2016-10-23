@@ -7,16 +7,23 @@
 //
 
 import UIKit
+import AWSMobileHubHelper
 
 enum ExperienceType {
     case workExperience
     case education
 }
 
+protocol ExperiencesTableViewControllerDelegate {
+    func workExperiencesUpdated(_ workExperiences: [WorkExperience])
+    func educationsUpdated(_ educations: [Education])
+}
+
 class ExperiencesTableViewController: UITableViewController {
     
     var workExperiences: [WorkExperience] = []
     var educations: [Education] = []
+    var experiencesTableViewControllerDelegate: ExperiencesTableViewControllerDelegate?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,20 +31,6 @@ class ExperiencesTableViewController: UITableViewController {
         
         // Register custom header.
         self.tableView.register(UINib(nibName: "ExperiencesTableSectionHeader", bundle: nil), forHeaderFooterViewReuseIdentifier: "experiencesTableSectionHeader")
-        
-        // MOCK
-        let workExperience = WorkExperience(userId: nil, workExperienceId: nil, title: "Engineer", organization: "Organization, Inc.", workDescription: "Lorem ipsum dolor sit amet, at mei detracto similique assueverit. In eos sumo inermis, ipsum partiendo no sit.", fromMonth: 4, fromYear: 2014, toMonth: 6, toYear: 2016)
-        let workExperience2 = WorkExperience(userId: nil, workExperienceId: nil, title: "Engineer", organization: "Organization, Inc.", workDescription: "Some description", fromMonth: 5, fromYear: 1999, toMonth: nil, toYear: nil)
-        let workExperience3 = WorkExperience(userId: nil, workExperienceId: nil, title: "Maestro", organization: "Organization, Inc.", workDescription: "Some description", fromMonth: 10, fromYear: 1995, toMonth: 3, toYear: 2000)
-        let workExperience4 = WorkExperience(userId: nil, workExperienceId: nil, title: "Director", organization: "Organization, Inc.", workDescription: "Some description", fromMonth: 10, fromYear: 1995, toMonth: 4, toYear: 2000)
-        self.workExperiences.append(workExperience)
-        self.workExperiences.append(workExperience2)
-        self.workExperiences.append(workExperience3)
-        self.workExperiences.append(workExperience4)
-        
-        let education = Education(userId: nil, educationId: nil, school: "Stanford University", fieldOfStudy: "Computer Science", educationDescription: nil, fromMonth: 9, fromYear: 2012, toMonth: 7, toYear: 2014)
-        self.educations.append(education)
-        
         
         self.sortWorkExperiencesByToDate()
         self.sortEducationsByToDate()
@@ -55,6 +48,7 @@ class ExperiencesTableViewController: UITableViewController {
             if let indexPath = sender as? IndexPath {
                 childViewController.workExperience = self.workExperiences[indexPath.row]
                 childViewController.isNewWorkExperience = false
+                childViewController.indexPath = indexPath
             } else {
                 childViewController.isNewWorkExperience = true
             }
@@ -65,6 +59,7 @@ class ExperiencesTableViewController: UITableViewController {
             if let indexPath = sender as? IndexPath {
                 childViewController.education = self.educations[indexPath.row]
                 childViewController.isNewEducation = false
+                childViewController.indexPath = indexPath
             } else {
                 childViewController.isNewEducation = true
             }
@@ -203,6 +198,41 @@ class ExperiencesTableViewController: UITableViewController {
         return 52.0
     }
     
+    // MARK: IBActions
+    
+    // In background
+    fileprivate func removeWorkExperience(_ workExperienceId: String) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().removeWorkExperienceDynamoDB(workExperienceId, completionHandler: {
+            (task: AWSTask) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                if let error = task.error {
+                    print("removeWorkExperience error: \(error)")
+                } else {
+                    print("removeWorkExperience success!")
+                }
+            })
+            return nil
+        })
+    }
+    
+    fileprivate func removeEducation(_ educationId: String) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().removeEducationDynamoDB(educationId, completionHandler: {
+            (task: AWSTask) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                if let error = task.error {
+                    print("removeEducation error: \(error)")
+                } else {
+                    print("removeEducation success!")
+                }
+            })
+            return nil
+        })
+    }
+    
     // MARK: Helpers
     
     fileprivate func expandButtonTapped(_ indexPath: IndexPath, experienceType: ExperienceType) {
@@ -217,13 +247,26 @@ class ExperiencesTableViewController: UITableViewController {
             let deleteConfirmAction = UIAlertAction(title: "Delete", style: UIAlertActionStyle.default, handler: {
                 (alert: UIAlertAction) in
                 if experienceType == ExperienceType.workExperience {
+                    guard let workExperienceId = self.workExperiences[indexPath.row].workExperienceId else {
+                        return
+                    }
+                    self.removeWorkExperience(workExperienceId)
                     self.workExperiences.remove(at: indexPath.row)
+                    self.tableView.beginUpdates()
+                    self.tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.fade)
+                    self.tableView.endUpdates()
+                    self.experiencesTableViewControllerDelegate?.workExperiencesUpdated(self.workExperiences)
                 } else {
+                    guard let educationId = self.educations[indexPath.row].educationId else {
+                        return
+                    }
+                    self.removeEducation(educationId)
                     self.educations.remove(at: indexPath.row)
+                    self.tableView.beginUpdates()
+                    self.tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.fade)
+                    self.tableView.endUpdates()
+                    self.experiencesTableViewControllerDelegate?.educationsUpdated(self.educations)
                 }
-                self.tableView.beginUpdates()
-                self.tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.fade)
-                self.tableView.endUpdates()
             })
             alertController.addAction(deleteConfirmAction)
             self.present(alertController, animated: true, completion: nil)
@@ -288,32 +331,34 @@ extension ExperiencesTableViewController: EducationTableViewCellDelegate {
 
 extension ExperiencesTableViewController: EditWorkExperienceTableViewControllerDelegate {
     
-    func didEditWorkExperience(_ workExperience: WorkExperience, isNewWorkExperience: Bool) {
+    func didEditWorkExperience(_ workExperience: WorkExperience, isNewWorkExperience: Bool, indexPath: IndexPath?) {
         if isNewWorkExperience {
             self.workExperiences.append(workExperience)
         } else {
-            guard let index = self.workExperiences.index(of: workExperience) else {
+            guard let indexPath = indexPath else {
                 return
             }
-            self.workExperiences[index] = workExperience
+            self.workExperiences[indexPath.row] = workExperience
         }
         self.sortWorkExperiencesByToDate()
         self.tableView.reloadSections(IndexSet(integer: 0), with: UITableViewRowAnimation.automatic)
+        self.experiencesTableViewControllerDelegate?.workExperiencesUpdated(self.workExperiences)
     }
 }
 
 extension ExperiencesTableViewController: EditEducationTableViewControllerDelegate {
     
-    func didEditEducation(_ education: Education, isNewEducation: Bool) {
+    func didEditEducation(_ education: Education, isNewEducation: Bool, indexPath: IndexPath?) {
         if isNewEducation {
             self.educations.append(education)
         } else {
-            guard let index = self.educations.index(of: education) else {
+            guard let indexPath = indexPath else {
                 return
             }
-            self.educations[index] = education
+            self.educations[indexPath.row] = education
         }
         self.sortEducationsByToDate()
         self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.automatic)
+        self.experiencesTableViewControllerDelegate?.educationsUpdated(self.educations)
     }
 }

@@ -7,9 +7,10 @@
 //
 
 import UIKit
+import AWSMobileHubHelper
 
 protocol EditEducationTableViewControllerDelegate {
-    func didEditEducation(_ education: Education, isNewEducation: Bool)
+    func didEditEducation(_ education: Education, isNewEducation: Bool, indexPath: IndexPath?)
 }
 
 class EditEducationTableViewController: UITableViewController {
@@ -18,6 +19,7 @@ class EditEducationTableViewController: UITableViewController {
     
     var education: Education?
     var isNewEducation: Bool = true
+    var indexPath: IndexPath?
     var editEducationTableViewControllerDelegate: EditEducationTableViewControllerDelegate?
     
     fileprivate var fromDatePickerActive: Bool = false
@@ -227,17 +229,80 @@ class EditEducationTableViewController: UITableViewController {
             self.education?.toMonth = nil
             self.education?.toYear = nil
         }
-        guard let education = self.education else {
-            return
+        if self.isNewEducation {
+            self.createEducation()
+        } else {
+            self.updateEducation()
         }
-        self.editEducationTableViewControllerDelegate?.didEditEducation(education, isNewEducation: self.isNewEducation)
-        self.dismiss(animated: true, completion: nil)
     }
     
     @IBAction func cancelButtonTapped(_ sender: AnyObject) {
         self.view.endEditing(true)
         self.removeDatePickers()
         self.dismiss(animated: true, completion: nil)
+    }
+    
+    // MARK: IBActions
+    
+    fileprivate func createEducation() {
+        guard let education = self.education else {
+            return
+        }
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        FullScreenIndicator.show()
+        PRFYDynamoDBManager.defaultDynamoDBManager().createEducationDynamoDB(education.school, fieldOfStudy: education.fieldOfStudy, educationDescription: education.educationDescription, fromMonth: education.fromMonth, fromYear: education.fromYear, toMonth: education.toMonth, toYear: education.toYear, completionHandler: {
+            (task: AWSTask) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                FullScreenIndicator.hide()
+                if let error = task.error {
+                    print("createEducation error: \(error)")
+                    let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.localizedDescription, cancelButtonTitle: "Ok")
+                    self.present(alertController, animated: true, completion: nil)
+                } else {
+                    guard let awsEducation = task.result as? AWSEducation else {
+                        print("No awsEducation")
+                        return
+                    }
+                    let education = Education(userId: awsEducation._userId, educationId: awsEducation._educationId, school: awsEducation._school, fieldOfStudy: awsEducation._fieldOfStudy, educationDescription: awsEducation._educationDescription, fromMonth: awsEducation._fromMonth, fromYear: awsEducation._fromYear, toMonth: awsEducation._toMonth, toYear: awsEducation._toYear)
+                    self.editEducationTableViewControllerDelegate?.didEditEducation(education, isNewEducation: self.isNewEducation, indexPath: self.indexPath)
+                    self.dismiss(animated: true, completion: nil)
+                }
+            })
+            return nil
+        })
+    }
+    
+    fileprivate func updateEducation() {
+        guard let education = self.education else {
+            return
+        }
+        guard let educationId = education.educationId else {
+            return
+        }
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        FullScreenIndicator.show()
+        PRFYDynamoDBManager.defaultDynamoDBManager().updateEducationDynamoDB(educationId, school: education.school, fieldOfStudy: education.fieldOfStudy, educationDescription: education.educationDescription, fromMonth: education.fromMonth, fromYear: education.fromYear, toMonth: education.toMonth, toYear: education.toYear, completionHandler: {
+            (task: AWSTask) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                FullScreenIndicator.hide()
+                if let error = task.error {
+                    print("updateEducation error: \(error)")
+                    let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.localizedDescription, cancelButtonTitle: "Ok")
+                    self.present(alertController, animated: true, completion: nil)
+                } else {
+                    guard let awsEducationUpdate = task.result as? AWSEducationUpdate else {
+                        print("No awsEducationUpdate")
+                        return
+                    }
+                    let education = Education(userId: awsEducationUpdate._userId, educationId: awsEducationUpdate._educationId, school: awsEducationUpdate._school, fieldOfStudy: awsEducationUpdate._fieldOfStudy, educationDescription: awsEducationUpdate._educationDescription, fromMonth: awsEducationUpdate._fromMonth, fromYear: awsEducationUpdate._fromYear, toMonth: awsEducationUpdate._toMonth, toYear: awsEducationUpdate._toYear)
+                    self.editEducationTableViewControllerDelegate?.didEditEducation(education, isNewEducation: self.isNewEducation, indexPath: self.indexPath)
+                    self.dismiss(animated: true, completion: nil)
+                }
+            })
+            return nil
+        })
     }
 }
 
