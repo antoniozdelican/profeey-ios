@@ -9,7 +9,7 @@
 import UIKit
 
 protocol EditWorkExperienceTableViewControllerDelegate {
-    func didEditWorkExperience(_ worExperience: WorkExperience)
+    func didEditWorkExperience(_ worExperience: WorkExperience, isNewWorkExperience: Bool)
 }
 
 class EditWorkExperienceTableViewController: UITableViewController {
@@ -230,7 +230,7 @@ class EditWorkExperienceTableViewController: UITableViewController {
         guard let workExperience = self.workExperience else {
             return
         }
-        self.editWorkExperienceTableViewControllerDelegate?.didEditWorkExperience(workExperience)
+        self.editWorkExperienceTableViewControllerDelegate?.didEditWorkExperience(workExperience, isNewWorkExperience: self.isNewWorkExperience)
         self.dismiss(animated: true, completion: nil)
     }
     

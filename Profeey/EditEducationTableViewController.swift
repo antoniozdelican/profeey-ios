@@ -9,7 +9,7 @@
 import UIKit
 
 protocol EditEducationTableViewControllerDelegate {
-    func didEditEducation(_ education: Education)
+    func didEditEducation(_ education: Education, isNewEducation: Bool)
 }
 
 class EditEducationTableViewController: UITableViewController {
@@ -230,7 +230,7 @@ class EditEducationTableViewController: UITableViewController {
         guard let education = self.education else {
             return
         }
-        self.editEducationTableViewControllerDelegate?.didEditEducation(education)
+        self.editEducationTableViewControllerDelegate?.didEditEducation(education, isNewEducation: self.isNewEducation)
         self.dismiss(animated: true, completion: nil)
     }
     

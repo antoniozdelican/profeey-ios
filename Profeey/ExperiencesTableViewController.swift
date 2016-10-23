@@ -27,12 +27,20 @@ class ExperiencesTableViewController: UITableViewController {
         
         // MOCK
         let workExperience = WorkExperience(userId: nil, workExperienceId: nil, title: "Engineer", organization: "Organization, Inc.", workDescription: "Lorem ipsum dolor sit amet, at mei detracto similique assueverit. In eos sumo inermis, ipsum partiendo no sit.", fromMonth: 4, fromYear: 2014, toMonth: 6, toYear: 2016)
-        self.workExperiences.append(workExperience)
         let workExperience2 = WorkExperience(userId: nil, workExperienceId: nil, title: "Engineer", organization: "Organization, Inc.", workDescription: "Some description", fromMonth: 5, fromYear: 1999, toMonth: nil, toYear: nil)
+        let workExperience3 = WorkExperience(userId: nil, workExperienceId: nil, title: "Maestro", organization: "Organization, Inc.", workDescription: "Some description", fromMonth: 10, fromYear: 1995, toMonth: 3, toYear: 2000)
+        let workExperience4 = WorkExperience(userId: nil, workExperienceId: nil, title: "Director", organization: "Organization, Inc.", workDescription: "Some description", fromMonth: 10, fromYear: 1995, toMonth: 4, toYear: 2000)
+        self.workExperiences.append(workExperience)
         self.workExperiences.append(workExperience2)
+        self.workExperiences.append(workExperience3)
+        self.workExperiences.append(workExperience4)
         
         let education = Education(userId: nil, educationId: nil, school: "Stanford University", fieldOfStudy: "Computer Science", educationDescription: nil, fromMonth: 9, fromYear: 2012, toMonth: 7, toYear: 2014)
         self.educations.append(education)
+        
+        
+        self.sortWorkExperiencesByToDate()
+        self.sortEducationsByToDate()
     }
 
     override func didReceiveMemoryWarning() {
@@ -236,6 +244,26 @@ class ExperiencesTableViewController: UITableViewController {
         alertController.addAction(cancelAction)
         self.present(alertController, animated: true, completion: nil)
     }
+    
+    fileprivate func sortWorkExperiencesByToDate() {
+        let currentWorkExperiences = self.workExperiences.filter( { $0.toMonthInt == nil && $0.toYearInt == nil } )
+        let otherWorkExperiences = self.workExperiences.filter( { $0.toMonthInt != nil && $0.toYearInt != nil } )
+        let sortedOtherWorkExperiences = otherWorkExperiences.sorted(by: {
+            (workExperience1, workExperience2) in
+            return workExperience1.toYearInt! == workExperience2.toYearInt! ? (workExperience1.toMonthInt! > workExperience2.toMonthInt!) : (workExperience1.toYearInt! > workExperience2.toYearInt!)
+        })
+        self.workExperiences = currentWorkExperiences + sortedOtherWorkExperiences
+    }
+    
+    fileprivate func sortEducationsByToDate() {
+        let currentEducations = self.educations.filter( { $0.toMonthInt == nil && $0.toYearInt == nil } )
+        let otherEducations = self.educations.filter( { $0.toMonthInt != nil && $0.toYearInt != nil } )
+        let sortedOtherEducations = otherEducations.sorted(by: {
+            (education1, education2) in
+            return education1.toYearInt! == education2.toYearInt! ? (education1.toMonthInt! > education2.toMonthInt!) : (education1.toYearInt! > education2.toYearInt!)
+        })
+        self.educations = currentEducations + sortedOtherEducations
+    }
 }
 
 extension ExperiencesTableViewController: WorkExperienceTableViewCellDelegate {
@@ -260,22 +288,32 @@ extension ExperiencesTableViewController: EducationTableViewCellDelegate {
 
 extension ExperiencesTableViewController: EditWorkExperienceTableViewControllerDelegate {
     
-    func didEditWorkExperience(_ workExperience: WorkExperience) {
-        self.workExperiences.insert(workExperience, at: 0)
-        let indexPath = IndexPath(row: 0, section: 0)
-        self.tableView.beginUpdates()
-        self.tableView.insertRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
-        self.tableView.endUpdates()
+    func didEditWorkExperience(_ workExperience: WorkExperience, isNewWorkExperience: Bool) {
+        if isNewWorkExperience {
+            self.workExperiences.append(workExperience)
+        } else {
+            guard let index = self.workExperiences.index(of: workExperience) else {
+                return
+            }
+            self.workExperiences[index] = workExperience
+        }
+        self.sortWorkExperiencesByToDate()
+        self.tableView.reloadSections(IndexSet(integer: 0), with: UITableViewRowAnimation.automatic)
     }
 }
 
 extension ExperiencesTableViewController: EditEducationTableViewControllerDelegate {
     
-    func didEditEducation(_ education: Education) {
-        self.educations.insert(education, at: 0)
-        let indexPath = IndexPath(row: 0, section: 1)
-        self.tableView.beginUpdates()
-        self.tableView.insertRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
-        self.tableView.endUpdates()
+    func didEditEducation(_ education: Education, isNewEducation: Bool) {
+        if isNewEducation {
+            self.educations.append(education)
+        } else {
+            guard let index = self.educations.index(of: education) else {
+                return
+            }
+            self.educations[index] = education
+        }
+        self.sortEducationsByToDate()
+        self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.automatic)
     }
 }
