@@ -86,6 +86,8 @@
 		A9AA36351D945DE200E5EAFA /* OnboardingNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AA36341D945DE200E5EAFA /* OnboardingNavigationController.swift */; };
 		A9AA36371D9463E100E5EAFA /* SignUpTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AA36361D9463E100E5EAFA /* SignUpTableViewController.swift */; };
 		A9AA36391D947C4E00E5EAFA /* LogInTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AA36381D947C4E00E5EAFA /* LogInTableViewController.swift */; };
+		A9AC8FBE1DBDFDCB00C9BCE0 /* PostDetails.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9AC8FBD1DBDFDCB00C9BCE0 /* PostDetails.storyboard */; };
+		A9AC8FC01DBDFF5200C9BCE0 /* PostDetailsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AC8FBF1DBDFF5200C9BCE0 /* PostDetailsTableViewController.swift */; };
 		A9ACA7411DB506A50004B8DE /* AWSWorkExperience.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9ACA7401DB506A50004B8DE /* AWSWorkExperience.swift */; };
 		A9ACA7451DB508540004B8DE /* AWSWorkExperiencesTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9ACA7441DB508540004B8DE /* AWSWorkExperiencesTable.swift */; };
 		A9ACA7471DB508BB0004B8DE /* AWSWorkExperienceUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9ACA7461DB508BB0004B8DE /* AWSWorkExperienceUpdate.swift */; };
@@ -104,8 +106,6 @@
 		A9B6A89B1D7F2E5D001EE407 /* AWSCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B6A89A1D7F2E5D001EE407 /* AWSCategory.swift */; };
 		A9B6A89D1D7F2ED4001EE407 /* AWSCategoriesTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B6A89C1D7F2ED4001EE407 /* AWSCategoriesTable.swift */; };
 		A9B6A89F1D7F8063001EE407 /* PostUserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B6A89E1D7F8063001EE407 /* PostUserTableViewCell.swift */; };
-		A9B70C9F1D871CD400B9882A /* PostDetailsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B70C9E1D871CD400B9882A /* PostDetailsTableViewController.swift */; };
-		A9B70CA11D871CFA00B9882A /* PostDetails.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9B70CA01D871CFA00B9882A /* PostDetails.storyboard */; };
 		A9B750011D8782C200DDC8C8 /* AWSActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B750001D8782C200DDC8C8 /* AWSActivity.swift */; };
 		A9B750051D8783BE00DDC8C8 /* AWSActivitiesTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B750041D8783BE00DDC8C8 /* AWSActivitiesTable.swift */; };
 		A9B7A2441D65A562009DA340 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B7A2431D65A562009DA340 /* Category.swift */; };
@@ -311,6 +311,8 @@
 		A9AA36341D945DE200E5EAFA /* OnboardingNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingNavigationController.swift; sourceTree = "<group>"; };
 		A9AA36361D9463E100E5EAFA /* SignUpTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpTableViewController.swift; sourceTree = "<group>"; };
 		A9AA36381D947C4E00E5EAFA /* LogInTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogInTableViewController.swift; sourceTree = "<group>"; };
+		A9AC8FBD1DBDFDCB00C9BCE0 /* PostDetails.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = PostDetails.storyboard; sourceTree = "<group>"; };
+		A9AC8FBF1DBDFF5200C9BCE0 /* PostDetailsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostDetailsTableViewController.swift; sourceTree = "<group>"; };
 		A9ACA7401DB506A50004B8DE /* AWSWorkExperience.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSWorkExperience.swift; sourceTree = "<group>"; };
 		A9ACA7441DB508540004B8DE /* AWSWorkExperiencesTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSWorkExperiencesTable.swift; sourceTree = "<group>"; };
 		A9ACA7461DB508BB0004B8DE /* AWSWorkExperienceUpdate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSWorkExperienceUpdate.swift; sourceTree = "<group>"; };
@@ -329,8 +331,6 @@
 		A9B6A89A1D7F2E5D001EE407 /* AWSCategory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSCategory.swift; sourceTree = "<group>"; };
 		A9B6A89C1D7F2ED4001EE407 /* AWSCategoriesTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSCategoriesTable.swift; sourceTree = "<group>"; };
 		A9B6A89E1D7F8063001EE407 /* PostUserTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostUserTableViewCell.swift; sourceTree = "<group>"; };
-		A9B70C9E1D871CD400B9882A /* PostDetailsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostDetailsTableViewController.swift; sourceTree = "<group>"; };
-		A9B70CA01D871CFA00B9882A /* PostDetails.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = PostDetails.storyboard; sourceTree = "<group>"; };
 		A9B750001D8782C200DDC8C8 /* AWSActivity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSActivity.swift; sourceTree = "<group>"; };
 		A9B750041D8783BE00DDC8C8 /* AWSActivitiesTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSActivitiesTable.swift; sourceTree = "<group>"; };
 		A9B7A2431D65A562009DA340 /* Category.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
@@ -819,8 +819,8 @@
 		A9B70C9D1D871CBA00B9882A /* Post Details */ = {
 			isa = PBXGroup;
 			children = (
-				A9B70CA01D871CFA00B9882A /* PostDetails.storyboard */,
-				A9B70C9E1D871CD400B9882A /* PostDetailsTableViewController.swift */,
+				A9AC8FBD1DBDFDCB00C9BCE0 /* PostDetails.storyboard */,
+				A9AC8FBF1DBDFF5200C9BCE0 /* PostDetailsTableViewController.swift */,
 			);
 			name = "Post Details";
 			sourceTree = "<group>";
@@ -1135,7 +1135,6 @@
 				A9E53B6B1D10666800CD1D6C /* Search.storyboard in Resources */,
 				A9E53B6D1D10667100CD1D6C /* Capture.storyboard in Resources */,
 				A9E53B711D10668400CD1D6C /* Profile.storyboard in Resources */,
-				A9B70CA11D871CFA00B9882A /* PostDetails.storyboard in Resources */,
 				A9A1D7F01DBCFE83002AF221 /* ProfileTableSectionHeader.xib in Resources */,
 				A9AFFB0A1D8AFE2A00219627 /* Locations.storyboard in Resources */,
 				A9E53B6F1D10667B00CD1D6C /* Notifications.storyboard in Resources */,
@@ -1147,6 +1146,7 @@
 				A9C18AE21D9A985F00628845 /* LocationsNew.storyboard in Resources */,
 				A9ACF1891D927E1E00A99B7F /* Experiences.storyboard in Resources */,
 				A9E53B691D10665100CD1D6C /* Home.storyboard in Resources */,
+				A9AC8FBE1DBDFDCB00C9BCE0 /* PostDetails.storyboard in Resources */,
 				A9CBBC601DB6610E009C8EC7 /* ExperiencesTableSectionHeader.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1194,7 +1194,6 @@
 				A90A09581D43E5A7006AC49D /* WelcomeNavigationController.swift in Sources */,
 				A9543CB11DA3C51B002BF372 /* EditPostDescriptionTableViewCell.swift in Sources */,
 				A9D21B451D5B662100B5847D /* PRFYUserPoolManager.swift in Sources */,
-				A9B70C9F1D871CD400B9882A /* PostDetailsTableViewController.swift in Sources */,
 				A9C808151D916C1B0018109C /* EditProfilePicTableViewCell.swift in Sources */,
 				A9B7A24A1D65D8C0009DA340 /* HomeTableViewController.swift in Sources */,
 				A9AA36371D9463E100E5EAFA /* SignUpTableViewController.swift in Sources */,
@@ -1224,6 +1223,7 @@
 				A91A103C1DA836050042B4CA /* AddInfoImageTableViewCell.swift in Sources */,
 				A9D185D91D71927E0073E65F /* AWSLike.swift in Sources */,
 				A9B6A89D1D7F2ED4001EE407 /* AWSCategoriesTable.swift in Sources */,
+				A9AC8FC01DBDFF5200C9BCE0 /* PostDetailsTableViewController.swift in Sources */,
 				A9B934B01D1BD9BB00ACC2B8 /* OnboardingViewController.swift in Sources */,
 				A9D5F9DE1D9FD6B600A5C99F /* EmailTableViewCell.swift in Sources */,
 				A9E450801D5A09F100D14553 /* Comment.swift in Sources */,

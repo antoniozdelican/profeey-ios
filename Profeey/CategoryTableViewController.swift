@@ -114,9 +114,6 @@ class CategoryTableViewController: UITableViewController {
         if cell is PostUserTableViewCell {
             self.performSegue(withIdentifier: "segueToProfileVc", sender: indexPath)
         }
-//        if cell is PostCategoryTableViewCell {
-//            self.performSegueWithIdentifier("segueToCategoryVc", sender: indexPath)
-//        }
         
     }
     

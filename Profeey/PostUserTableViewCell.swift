@@ -9,7 +9,7 @@
 import UIKit
 
 protocol PostUserTableViewCellDelegate {
-    func expandButtonTapped(indexPath: IndexPath?)
+    func expandButtonTapped(_ button: UIButton)
 }
 
 class PostUserTableViewCell: UITableViewCell {
@@ -20,7 +20,6 @@ class PostUserTableViewCell: UITableViewCell {
     @IBOutlet weak var professionNameLabel: UILabel!
     @IBOutlet weak var expandButton: UIButton!
     
-    var indexPath: IndexPath?
     var postUserTableViewCellDelegate: PostUserTableViewCellDelegate?
     
     override func awakeFromNib() {
@@ -34,7 +33,10 @@ class PostUserTableViewCell: UITableViewCell {
     }
     
     @IBAction func expandButtonTapped(_ sender: AnyObject) {
-        self.postUserTableViewCellDelegate?.expandButtonTapped(indexPath: self.indexPath)
+        guard let button = sender as? UIButton else {
+            return
+        }
+        self.postUserTableViewCellDelegate?.expandButtonTapped(button)
     }
 
 }

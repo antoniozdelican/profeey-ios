@@ -36,6 +36,16 @@ class EditEducationTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.configureEducation()
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+    }
+    
+    // MARK: Configuration
+    
+    fileprivate func configureEducation() {
         if self.isNewEducation {
             self.education = Education()
             self.education?.fromMonth = NSNumber(value: currentMonth)
@@ -51,12 +61,7 @@ class EditEducationTableViewController: UITableViewController {
                 self.education?.toMonth = NSNumber(value: currentMonth)
                 self.education?.toYear = NSNumber(value: currentYear)
             }
-            // TODO
         }
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
     }
     
     // MARK: UITableViewDataSource

@@ -9,8 +9,8 @@
 import UIKit
 
 protocol PostButtonsTableViewCellDelegate {
-    func likeButtonTapped(indexPath: IndexPath?)
-    func numberOfLikesButtonTapped(indexPath: IndexPath?)
+    func likeButtonTapped(_ button: UIButton)
+    func numberOfLikesButtonTapped(_ button: UIButton)
 }
 
 class PostButtonsTableViewCell: UITableViewCell {
@@ -18,7 +18,6 @@ class PostButtonsTableViewCell: UITableViewCell {
     @IBOutlet weak var likeButton: UIButton!
     @IBOutlet weak var numberOfLikesButton: UIButton!
     
-    var indexPath: IndexPath?
     var postButtonsTableViewCellDelegate: PostButtonsTableViewCellDelegate?
 
     override func awakeFromNib() {
@@ -53,11 +52,17 @@ class PostButtonsTableViewCell: UITableViewCell {
     }
     
     @IBAction func likeButtonTapped(_ sender: AnyObject) {
-        self.postButtonsTableViewCellDelegate?.likeButtonTapped(indexPath: self.indexPath)
+        guard let button = sender as? UIButton else {
+            return
+        }
+        self.postButtonsTableViewCellDelegate?.likeButtonTapped(button)
     }
     
     @IBAction func numberOfLikesButtonTapped(_ sender: AnyObject) {
-        self.postButtonsTableViewCellDelegate?.numberOfLikesButtonTapped(indexPath: self.indexPath)
+        guard let button = sender as? UIButton else {
+            return
+        }
+        self.postButtonsTableViewCellDelegate?.numberOfLikesButtonTapped(button)
     }
     
 

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="xAh-FD-QMW">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="xAh-FD-QMW">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--Users-->
@@ -10,38 +11,37 @@
             <objects>
                 <tableViewController id="xAh-FD-QMW" customClass="UsersTableViewController" customModule="Profeey" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="69" sectionHeaderHeight="28" sectionFooterHeight="28" id="gWw-sT-w5O">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellUser" rowHeight="65" id="pCQ-KZ-VXv" customClass="UserTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="92" width="600" height="65"/>
+                                <rect key="frame" x="0.0" y="92" width="375" height="65"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="pCQ-KZ-VXv" id="z22-km-IIT">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="64.5"/>
+                                    <frame key="frameInset" width="375" height="64"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="0ja-as-E0f">
-                                            <rect key="frame" x="12" y="12" width="40" height="40"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="40" id="hSk-EM-2SO"/>
                                                 <constraint firstAttribute="height" constant="40" id="y6L-Mi-eCs"/>
                                             </constraints>
                                         </imageView>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Full name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jBc-MJ-rJt">
-                                            <rect key="frame" x="60" y="14" width="420" height="17"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Full name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jBc-MJ-rJt">
+                                            <frame key="frameInset" minX="60" minY="14" width="420" height="17"/>
                                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
-                                            <color key="textColor" red="0.2901960784" green="0.2901960784" blue="0.2901960784" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="textColor" red="0.2901960784" green="0.2901960784" blue="0.2901960784" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Profession" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jfA-dm-4Fz">
-                                            <rect key="frame" x="60" y="33" width="420" height="17"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Profession" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jfA-dm-4Fz">
+                                            <frame key="frameInset" minX="60" minY="33" width="420" height="17"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                            <color key="textColor" red="0.63921568630000003" green="0.63921568630000003" blue="0.63921568630000003" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="textColor" red="0.63921568630000003" green="0.63921568630000003" blue="0.63921568630000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UXI-2a-rAd">
-                                            <rect key="frame" x="488" y="14" width="100" height="35"/>
+                                        <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UXI-2a-rAd">
+                                            <frame key="frameInset" minX="488" minY="14" width="100" height="35"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="35" id="NjC-Og-eDh"/>
                                                 <constraint firstAttribute="width" constant="100" id="aFW-Bi-5XE"/>
@@ -50,7 +50,7 @@
                                             <inset key="titleEdgeInsets" minX="4" minY="0.0" maxX="0.0" maxY="0.0"/>
                                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="4" maxY="0.0"/>
                                             <state key="normal" title="FOLLOW" image="ic_add_blue" backgroundImage="btn_blue_small">
-                                                <color key="titleColor" red="0.2901960784" green="0.56470588239999997" blue="0.8862745098" alpha="1" colorSpace="calibratedRGB"/>
+                                                <color key="titleColor" red="0.2901960784" green="0.56470588239999997" blue="0.8862745098" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             </state>
                                         </button>
                                     </subviews>
@@ -81,14 +81,14 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellLoading" rowHeight="120" id="SJh-1n-A1D" customClass="LoadingTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="157" width="600" height="120"/>
+                                <rect key="frame" x="0.0" y="157" width="375" height="120"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="SJh-1n-A1D" id="YjQ-Fr-xnT">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="119.5"/>
+                                    <frame key="frameInset" width="375" height="119"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="HhN-3p-pib">
-                                            <rect key="frame" x="290" y="50" width="20" height="20"/>
+                                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="HhN-3p-pib">
+                                            <frame key="frameInset" minX="290" minY="50" width="20" height="20"/>
                                         </activityIndicatorView>
                                     </subviews>
                                     <constraints>

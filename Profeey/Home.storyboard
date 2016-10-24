@@ -24,16 +24,17 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9V4-dh-Eyy" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-262" y="446"/>
+            <point key="canvasLocation" x="73" y="447"/>
         </scene>
         <!--Home-->
         <scene sceneID="arT-UO-kgp">
             <objects>
                 <tableViewController id="Qkr-xF-wW1" customClass="HomeTableViewController" customModule="Profeey" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" allowsSelection="NO" rowHeight="40" sectionHeaderHeight="12" sectionFooterHeight="12" id="ROs-J8-SPI">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="40" sectionHeaderHeight="12" sectionFooterHeight="12" id="ROs-J8-SPI">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="1200"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.98039215686274506" green="0.98039215686274506" blue="0.98039215686274506" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellPostUser" rowHeight="64" id="Zre-gG-70s" customClass="PostUserTableViewCell" customModule="Profeey" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="120" width="375" height="64"/>
@@ -351,8 +352,6 @@
                     </refreshControl>
                     <connections>
                         <segue destination="L9S-XV-FEq" kind="show" identifier="segueToProfileVc" id="bcN-4v-a2q"/>
-                        <segue destination="xPn-xr-6bw" kind="show" identifier="segueToCategoryVc" id="wzX-RA-dIC"/>
-                        <segue destination="qWo-LC-FDY" kind="show" identifier="segueToPostDetailsVc" id="EYo-lM-ero"/>
                         <segue destination="P1G-ba-iDt" kind="show" identifier="segueToUsersVc" id="N0X-PW-F6Q"/>
                         <segue destination="fcG-wo-A8j" kind="presentation" identifier="segueToEditPostVc" animates="NO" id="Lgi-4f-QXa"/>
                     </connections>
@@ -367,7 +366,7 @@
                 <viewControllerPlaceholder storyboardName="Capture" id="U4Q-D6-ll2" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mkS-lK-jXg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1546" y="-69"/>
+            <point key="canvasLocation" x="1481" y="229"/>
         </scene>
         <!--Profile-->
         <scene sceneID="UhR-m2-d1c">
@@ -375,7 +374,7 @@
                 <viewControllerPlaceholder storyboardName="Profile" id="L9S-XV-FEq" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SNz-SW-Ept" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1546" y="1"/>
+            <point key="canvasLocation" x="1486" y="294"/>
         </scene>
         <!--EditPost-->
         <scene sceneID="d2n-nA-cH3">
@@ -383,23 +382,7 @@
                 <viewControllerPlaceholder storyboardName="EditPost" id="fcG-wo-A8j" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="G4V-OO-iGb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1546" y="66"/>
-        </scene>
-        <!--PostDetails-->
-        <scene sceneID="gsj-ZA-4Ia">
-            <objects>
-                <viewControllerPlaceholder storyboardName="PostDetails" id="qWo-LC-FDY" sceneMemberID="viewController"/>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="f3c-1r-9vG" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1949" y="846"/>
-        </scene>
-        <!--Category-->
-        <scene sceneID="Hgw-Ni-ZlF">
-            <objects>
-                <viewControllerPlaceholder storyboardName="Category" id="xPn-xr-6bw" sceneMemberID="viewController"/>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="jm7-84-Cy1" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1544" y="181"/>
+            <point key="canvasLocation" x="1487" y="394"/>
         </scene>
         <!--Users-->
         <scene sceneID="rUB-IK-IiU">
@@ -407,7 +390,7 @@
                 <viewControllerPlaceholder storyboardName="Users" id="P1G-ba-iDt" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LpQ-V5-HTZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2118" y="427"/>
+            <point key="canvasLocation" x="1486" y="547"/>
         </scene>
     </scenes>
     <resources>

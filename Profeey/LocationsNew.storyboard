@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="UGg-o3-z9o">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="UGg-o3-z9o">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--Root View Controller-->
@@ -10,33 +11,32 @@
             <objects>
                 <tableViewController id="43i-JQ-6uo" customClass="LocationsNewTableViewController" customModule="Profeey" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="0uZ-YW-tIp">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <inset key="separatorInset" minX="16" minY="0.0" maxX="0.0" maxY="0.0"/>
                         <searchBar key="tableHeaderView" contentMode="redraw" placeholder="Search a location" id="kv6-hN-Nd1">
-                            <rect key="frame" x="0.0" y="64" width="600" height="44"/>
+                            <rect key="frame" x="0.0" y="64" width="375" height="44"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                            <color key="barTintColor" red="0.90980392160000001" green="0.90980392160000001" blue="0.90980392160000001" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="barTintColor" red="0.90980392160000001" green="0.90980392160000001" blue="0.90980392160000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <textInputTraits key="textInputTraits"/>
                         </searchBar>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellHeader" rowHeight="32" id="PA6-kj-6Nk" customClass="HeaderTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="136" width="600" height="32"/>
+                                <rect key="frame" x="0.0" y="136" width="375" height="32"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="PA6-kj-6Nk" id="4PT-35-56E">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="31.5"/>
+                                    <frame key="frameInset" width="375" height="31"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="HEADER TITLE" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9L1-JU-wik">
-                                            <rect key="frame" x="16" y="8" width="84" height="15"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                            <color key="textColor" red="0.63921568630000003" green="0.63921568630000003" blue="0.63921568630000003" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="textColor" red="0.63921568630000003" green="0.63921568630000003" blue="0.63921568630000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="c1v-go-blH" userLabel="Separator View">
-                                            <rect key="frame" x="0.0" y="30.5" width="600" height="0.5"/>
-                                            <color key="backgroundColor" red="0.90980392160000001" green="0.90980392160000001" blue="0.90980392160000001" alpha="1" colorSpace="calibratedRGB"/>
+                                        <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="c1v-go-blH" userLabel="Separator View">
+                                            <frame key="frameInset" minY="30.5" width="600" height="0.5"/>
+                                            <color key="backgroundColor" red="0.90980392160000001" green="0.90980392160000001" blue="0.90980392160000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="1" id="tR1-DX-cwI">
                                                     <userDefinedRuntimeAttributes>
@@ -61,25 +61,23 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellLocation" rowHeight="64" id="MfF-aq-zu6" customClass="LocationTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="168" width="600" height="64"/>
+                                <rect key="frame" x="0.0" y="168" width="375" height="64"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="MfF-aq-zu6" id="VlB-pL-KiU">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="63.5"/>
+                                    <frame key="frameInset" width="375" height="63"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="JDj-DB-dMJ">
-                                            <rect key="frame" x="16" y="12" width="568" height="40"/>
+                                        <stackView opaque="NO" contentMode="scaleToFill" misplaced="YES" axis="vertical" distribution="fillProportionally" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="JDj-DB-dMJ">
+                                            <frame key="frameInset" minX="16" minY="12" width="343" height="39"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="r70-fE-524">
-                                                    <rect key="frame" x="0.0" y="0.0" width="568" height="20.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                                    <color key="textColor" red="0.2901960784" green="0.2901960784" blue="0.2901960784" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <color key="textColor" red="0.2901960784" green="0.2901960784" blue="0.2901960784" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7zE-nu-m2R">
-                                                    <rect key="frame" x="0.0" y="22.5" width="568" height="17.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <color key="textColor" red="0.63921568630000003" green="0.63921568630000003" blue="0.63921568630000003" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <color key="textColor" red="0.63921568630000003" green="0.63921568630000003" blue="0.63921568630000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>

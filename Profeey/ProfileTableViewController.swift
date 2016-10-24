@@ -33,7 +33,6 @@ class ProfileTableViewController: UITableViewController {
     fileprivate var workExperiences: [WorkExperience] = []
     fileprivate var isLoadingEducations: Bool = true
     fileprivate var educations: [Education] = []
-    
     fileprivate var isLoadingExperiences: Bool {
         return self.isLoadingWorkExperiences || self.isLoadingEducations
     }
@@ -45,6 +44,8 @@ class ProfileTableViewController: UITableViewController {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         self.navigationItem.title = self.user?.preferredUsername
+        // Adjust header.
+        self.tableView.contentInset = UIEdgeInsetsMake(-1.0, 0.0, 0.0, 0.0)
         
         // Register custom headers.
         self.tableView.register(UINib(nibName: "ProfileTableSectionHeader", bundle: nil), forHeaderFooterViewReuseIdentifier: "profileTableSectionHeader")
@@ -94,6 +95,12 @@ class ProfileTableViewController: UITableViewController {
             destinationViewController.workExperiences = self.workExperiences
             destinationViewController.educations = self.educations
             destinationViewController.experiencesTableViewControllerDelegate = self
+        }
+        if let destinationViewController = segue.destination as? PostDetailsTableViewController,
+            let indexPath = sender as? IndexPath {
+            destinationViewController.post = self.posts[indexPath.row]
+            destinationViewController.postIndexPath = indexPath
+            destinationViewController.postDetailsTableViewControllerDelegate = self
         }
     }
 
@@ -166,7 +173,7 @@ class ProfileTableViewController: UITableViewController {
                     }
                 }
                 cell.profileMainTableViewCellDelegate = self
-                cell.recommendButton.isHidden = true
+                cell.recommendButton.isHidden = false
                 return cell
             case 1:
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellProfileInfo", for: indexPath) as! ProfileInfoTableViewCell
@@ -234,6 +241,20 @@ class ProfileTableViewController: UITableViewController {
         default:
             return UITableViewCell()
         }
+    }
+    
+    // MARK: UITableViewDelegate
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        let cell = tableView.cellForRow(at: indexPath)
+        if cell is PostSmallTableViewCell {
+            self.performSegue(withIdentifier: "segueToPostDetailsVc", sender: indexPath)
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.selectionStyle = UITableViewCellSelectionStyle.none
     }
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -349,34 +370,37 @@ class ProfileTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         switch section {
+        case 0:
+            return 1.0
         case 1:
             guard self.selectedProfileSegment == ProfileSegment.posts else {
-                return CGFloat.leastNormalMagnitude
+                return 0.0
             }
             return 6.0
         case 2:
             guard self.selectedProfileSegment == ProfileSegment.experience else {
-                return CGFloat.leastNormalMagnitude
+                return 0.0
             }
             return 6.0
         case 3:
             guard self.selectedProfileSegment == ProfileSegment.experience else {
-                return CGFloat.leastNormalMagnitude
+                return 0.0
             }
             if self.isLoadingExperiences || self.workExperiences.count == 0 {
-                return CGFloat.leastNormalMagnitude
+                return 0.0
+                //return CGFloat.leastNormalMagnitude
             }
             return 36.0
         case 4:
             guard self.selectedProfileSegment == ProfileSegment.experience else {
-                return CGFloat.leastNormalMagnitude
+                return 0.0
             }
             if self.isLoadingExperiences || self.educations.count == 0 {
-                return CGFloat.leastNormalMagnitude
+                return 0.0
             }
             return 36.0
         default:
-            return CGFloat.leastNormalMagnitude
+            return 0.0
         }
     }
     
@@ -384,22 +408,22 @@ class ProfileTableViewController: UITableViewController {
         switch section {
         case 3:
             guard self.selectedProfileSegment == ProfileSegment.experience else {
-                return CGFloat.leastNormalMagnitude
+                return 0.0
             }
             if self.isLoadingExperiences || self.workExperiences.count == 0 {
-                return CGFloat.leastNormalMagnitude
+                return 0.0
             }
             return 16.0
         case 4:
             guard self.selectedProfileSegment == ProfileSegment.experience else {
-                return CGFloat.leastNormalMagnitude
+                return 0.0
             }
             if self.isLoadingExperiences || self.educations.count == 0 {
-                return CGFloat.leastNormalMagnitude
+                return 0.0
             }
             return 16.0
         default:
-            return CGFloat.leastNormalMagnitude
+            return 0.0
         }
 
     }
@@ -430,7 +454,21 @@ class ProfileTableViewController: UITableViewController {
             self.tableView.reloadRows(at: [self.indexPathMain, self.indexPathInfo], with: UITableViewRowAnimation.none)
             // Remove image in background.
             if let profilePicUrlToRemove = sourceViewController.profilePicUrlToRemove {
-                self.removeImage(profilePicUrlToRemove)
+                self.removeImage(profilePicUrlToRemove, postId: nil)
+            }
+        }
+        if let sourceViewController = segue.source as? PostDetailsTableViewController,
+            let post = sourceViewController.post,
+            let postIndexPath = sourceViewController.postIndexPath {
+            self.posts.remove(at: postIndexPath.row)
+            if self.posts.count == 0 {
+                self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
+            } else {
+                self.tableView.deleteRows(at: [postIndexPath], with: UITableViewRowAnimation.fade)
+            }
+            if let imageKey = post.imageUrl, let postId = post.postId {
+                // In background
+                self.removeImage(imageKey, postId: postId)
             }
         }
     }
@@ -654,8 +692,8 @@ class ProfileTableViewController: UITableViewController {
         }
     }
     
-    // In background when user deletes/changes profilePic.
-    fileprivate func removeImage(_ imageKey: String) {
+    // In background when user deletes/changes profilePic or deletes post.
+    fileprivate func removeImage(_ imageKey: String, postId: String?) {
         let content = AWSUserFileManager.custom(key: "USEast1BucketManager").content(withKey: imageKey)
         print("removeImageS3:")
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
@@ -668,8 +706,26 @@ class ProfileTableViewController: UITableViewController {
                 } else {
                     print("removeImageS3 success")
                     content?.removeLocal()
+                    if let postId = postId {
+                        // If it's post.
+                        self.removePost(postId)
+                    }
                 }
             })
+        })
+    }
+    
+    fileprivate func removePost(_ postId: String) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().removePostDynamoDB(postId, completionHandler: {
+            (task: AWSTask) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                if let error = task.error {
+                    print("removePost error: \(error)")
+                }
+            })
+            return nil
         })
     }
     
@@ -823,5 +879,13 @@ extension ProfileTableViewController: ExperiencesTableViewControllerDelegate {
         if self.selectedProfileSegment == ProfileSegment.experience {
             self.tableView.reloadSections(IndexSet([2, 3, 4]), with: UITableViewRowAnimation.none)
         }
+    }
+}
+
+extension ProfileTableViewController: PostDetailsTableViewControllerDelegate {
+    
+    func updatedPost(_ post: Post, postIndexPath: IndexPath) {
+        self.posts[postIndexPath.row] = post
+        self.tableView.reloadRows(at: [postIndexPath], with: UITableViewRowAnimation.none)
     }
 }

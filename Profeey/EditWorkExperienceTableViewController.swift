@@ -36,6 +36,16 @@ class EditWorkExperienceTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.configureWorkExperience()
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+    }
+    
+    // MARK: Configuration
+    
+    fileprivate func configureWorkExperience() {
         if self.isNewWorkExperience {
             self.workExperience = WorkExperience()
             self.workExperience?.fromMonth = NSNumber(value: currentMonth)
@@ -51,12 +61,7 @@ class EditWorkExperienceTableViewController: UITableViewController {
                 self.workExperience?.toMonth = NSNumber(value: currentMonth)
                 self.workExperience?.toYear = NSNumber(value: currentYear)
             }
-            // TODO
         }
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
     }
 
     // MARK: UITableViewDataSource

@@ -9,8 +9,9 @@
 import UIKit
 import AWSMobileHubHelper
 
-protocol EditPostViewControllerDelegate {
-    func updatedPost(post: Post, indexPath: IndexPath)
+@objc protocol EditPostViewControllerDelegate {
+    @objc optional func updatedPost(_ post: Post, withIndexPath postIndexPath: IndexPath)
+    @objc optional func updatedPost(_ post: Post)
 }
 
 class EditPostViewController: UIViewController {
@@ -18,7 +19,7 @@ class EditPostViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     
     var post: Post?
-    var indexPath: IndexPath?
+    var postIndexPath: IndexPath?
     var editPostViewControllerDelegate: EditPostViewControllerDelegate?
     fileprivate var bottomIndexPath: IndexPath = IndexPath(row: 2, section: 0)
     
@@ -87,6 +88,7 @@ class EditPostViewController: UIViewController {
     // MARK: IBActions
     
     @IBAction func doneButtonTapped(_ sender: AnyObject) {
+        self.view.endEditing(true)
         self.updatePost()
     }
     
@@ -97,20 +99,35 @@ class EditPostViewController: UIViewController {
     // MARK: AWS
     
     fileprivate func updatePost() {
+        guard let post = self.post else {
+            return
+        }
+        guard let postId = post.postId else {
+            return
+        }
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         FullScreenIndicator.show()
-        PRFYDynamoDBManager.defaultDynamoDBManager().updatePostDynamoDB(self.post, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().updatePostDynamoDB(postId, caption: post.caption, categoryName: post.categoryName, completionHandler: {
             (task: AWSTask) in
             DispatchQueue.main.async(execute: {
-               UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 FullScreenIndicator.hide()
                 if let error = task.error {
-                   print("updatePost error: \(error)")
+                    print("updatePost error: \(error)")
+                    let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.localizedDescription, cancelButtonTitle: "Ok")
+                    self.present(alertController, animated: true, completion: nil)
                 } else {
-                    guard let post = self.post, let indexPath = self.indexPath else {
+                    // Setting only local post for simplicity.
+                    guard let post = self.post else {
                         return
                     }
-                    self.editPostViewControllerDelegate?.updatedPost(post: post, indexPath: indexPath)
+                    if let postIndexPath = self.postIndexPath {
+                        // HomeVc
+                        self.editPostViewControllerDelegate?.updatedPost?(post, withIndexPath: postIndexPath)
+                    } else {
+                        // PostDetailsVc
+                        self.editPostViewControllerDelegate?.updatedPost?(post)
+                    }
                     self.dismiss(animated: false, completion: nil)
                 }
             })

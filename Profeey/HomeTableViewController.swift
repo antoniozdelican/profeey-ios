@@ -33,10 +33,12 @@ class HomeTableViewController: UITableViewController {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         self.tableView.delaysContentTouches = false
+        // Adjust header.
+        self.tableView.contentInset = UIEdgeInsetsMake(-1.0, 0.0, 0.0, 0.0)
         
-//        if let currentUser = AWSClientManager.defaultClientManager().userPool?.currentUser(), currentUser.isSignedIn {
-//            self.getCurrentUser()
-//        }
+        if let currentUser = AWSClientManager.defaultClientManager().userPool?.currentUser(), currentUser.isSignedIn {
+            self.getCurrentUser()
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -75,10 +77,6 @@ class HomeTableViewController: UITableViewController {
             let indexPath = sender as? IndexPath {
             destinationViewController.user = self.posts[indexPath.section].user
         }
-        if let destinationViewController = segue.destination as? CategoryTableViewController,
-            let indexPath = sender as? IndexPath {
-            destinationViewController.categoryName = self.posts[indexPath.section].categoryName
-        }
         if let destinationViewController = segue.destination as? UsersTableViewController,
             let indexPath = sender as? IndexPath {
             destinationViewController.usersType = UsersType.likers
@@ -86,12 +84,12 @@ class HomeTableViewController: UITableViewController {
         }
         if let navigationController = segue.destination as? UINavigationController,
             let childViewController =  navigationController.childViewControllers[0] as? EditPostViewController,
-            let indexPath = sender as? IndexPath {
+            let button = sender as? UIButton,
+            let indexPath = self.tableView.indexPathForView(view: button) {
             childViewController.post = self.posts[indexPath.section]
-            childViewController.indexPath = indexPath
+            childViewController.postIndexPath = indexPath
             childViewController.editPostViewControllerDelegate = self
         }
-        
     }
 
     // MARK: UITableViewDataSource
@@ -116,7 +114,8 @@ class HomeTableViewController: UITableViewController {
         if section == 0 && self.isUploading {
             return 2
         }
-        return 6
+        return 5
+        //return 6
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -159,7 +158,6 @@ class HomeTableViewController: UITableViewController {
             cell.fullNameLabel.text = user?.fullName
             cell.preferredUsernameLabel.text = user?.fullUsername
             cell.professionNameLabel.text = user?.professionName
-            cell.indexPath = indexPath
             cell.postUserTableViewCellDelegate = self
             return cell
         case 1:
@@ -181,7 +179,6 @@ class HomeTableViewController: UITableViewController {
         case 4:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostButtons", for: indexPath) as! PostButtonsTableViewCell
             post.isLikedByCurrentUser ? cell.setSelectedLikeButton() : cell.setUnselectedLikeButton()
-            cell.indexPath = indexPath
             cell.postButtonsTableViewCellDelegate = self
             cell.numberOfLikesButton.isHidden = (post.numberOfLikesString != nil) ? false : true
             cell.numberOfLikesButton.setTitle(post.numberOfLikesString, for: UIControlState())
@@ -199,17 +196,12 @@ class HomeTableViewController: UITableViewController {
         if cell is PostUserTableViewCell {
            self.performSegue(withIdentifier: "segueToProfileVc", sender: indexPath)
         }
-        if cell is PostCategoryCreationDateTableViewCell {
-            self.performSegue(withIdentifier: "segueToCategoryVc", sender: indexPath)
-        }
     }
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.layoutMargins = UIEdgeInsets.zero
         cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
-        if cell is PostButtonsTableViewCell {
-           cell.separatorInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0)
-        }
+        cell.selectionStyle = UITableViewCellSelectionStyle.none
     }
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -266,7 +258,7 @@ class HomeTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if section == 0 {
-            return CGFloat.leastNormalMagnitude
+            return 1.0
         }
         return 12.0
     }
@@ -373,7 +365,7 @@ class HomeTableViewController: UITableViewController {
                             self.downloadImage(imageUrl, imageType: .postPic, indexPath: indexPath)
                         }
                         if let postId = awsActivity._postId {
-                            let indexPath = IndexPath(row: 5, section: index)
+                            let indexPath = IndexPath(row: 4, section: index)
                             self.getLike(postId, indexPath: indexPath)
                         }
                     }
@@ -600,8 +592,8 @@ class HomeTableViewController: UITableViewController {
 
 extension HomeTableViewController: PostUserTableViewCellDelegate {
     
-    func expandButtonTapped(indexPath: IndexPath?) {
-        guard let indexPath = indexPath else {
+    func expandButtonTapped(_ button: UIButton) {
+        guard let indexPath = self.tableView.indexPathForView(view: button) else {
             return
         }
         let post = self.posts[indexPath.section]
@@ -634,7 +626,7 @@ extension HomeTableViewController: PostUserTableViewCellDelegate {
             // EDIT
             let editAction = UIAlertAction(title: "Edit", style: UIAlertActionStyle.default, handler: {
                 (alert: UIAlertAction) in
-                self.performSegue(withIdentifier: "segueToEditPostVc", sender: indexPath)
+                self.performSegue(withIdentifier: "segueToEditPostVc", sender: button)
             })
             alertController.addAction(editAction)
         } else {
@@ -651,8 +643,8 @@ extension HomeTableViewController: PostUserTableViewCellDelegate {
 
 extension HomeTableViewController: PostButtonsTableViewCellDelegate {
     
-    func likeButtonTapped(indexPath: IndexPath?) {
-        guard let indexPath = indexPath else {
+    func likeButtonTapped(_ button: UIButton) {
+        guard let indexPath = self.tableView.indexPathForView(view: button) else {
             return
         }
         let post = self.posts[indexPath.section]
@@ -673,8 +665,8 @@ extension HomeTableViewController: PostButtonsTableViewCellDelegate {
         self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
     }
     
-    func numberOfLikesButtonTapped(indexPath: IndexPath?) {
-        guard let indexPath = indexPath else {
+    func numberOfLikesButtonTapped(_ button: UIButton) {
+        guard let indexPath = self.tableView.indexPathForView(view: button) else {
             return
         }
         self.performSegue(withIdentifier: "segueToUsersVc", sender: indexPath)
@@ -683,9 +675,9 @@ extension HomeTableViewController: PostButtonsTableViewCellDelegate {
 
 extension HomeTableViewController: EditPostViewControllerDelegate {
     
-    func updatedPost(post: Post, indexPath: IndexPath) {
-        self.posts[indexPath.section].caption = post.caption
-        self.posts[indexPath.section].categoryName = post.categoryName
-        self.tableView.reloadSections(IndexSet(integer: indexPath.section), with: UITableViewRowAnimation.none)
+    func updatedPost(_ post: Post, withIndexPath postIndexPath: IndexPath) {
+        self.posts[postIndexPath.section].caption = post.caption
+        self.posts[postIndexPath.section].categoryName = post.categoryName
+        self.tableView.reloadSections(IndexSet(integer: postIndexPath.section), with: UITableViewRowAnimation.none)
     }
 }

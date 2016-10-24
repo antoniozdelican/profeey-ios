@@ -397,36 +397,27 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         })
     }
     
-    func updatePostDynamoDB(_ post: Post?, completionHandler: @escaping AWSContinuationBlock) {
-        AWSClientManager.defaultClientManager().credentialsProvider?.getIdentityId().continue({
+    func updatePostDynamoDB(_ postId: String, caption: String?, categoryName: String?, completionHandler: @escaping AWSContinuationBlock) {
+        guard let identityId = AWSClientManager.defaultClientManager().credentialsProvider?.identityId else {
+            print("updatePostDynamoDB no identityId!")
+            AWSTask().continue(completionHandler)
+            return
+        }
+        print("updatePostDynamoDB:")
+        let awsPostsTable = AWSPostsTable()
+        let awsPostUpdate = AWSPostUpdate()
+        awsPostUpdate?._userId = identityId
+        awsPostUpdate?._postId = postId
+        awsPostUpdate?._caption = caption
+        awsPostUpdate?._categoryName = categoryName
+        awsPostsTable.savePost(awsPostUpdate, completionHandler: {
             (task: AWSTask) in
             if let error = task.error {
-                print("getIdentityId error: \(error.localizedDescription)")
-                return AWSTask(error: error).continue(completionHandler)
-            } else if let identityId = task.result as? String {
-                
-                print("updatePostDynamoDB:")
-                let awsPostsTable = AWSPostsTable()
-                let awsPostUpdate = AWSPostUpdate()
-                awsPostUpdate?._userId = identityId
-                awsPostUpdate?._postId = post?.postId
-                awsPostUpdate?._caption = post?.caption
-                awsPostUpdate?._categoryName = post?.categoryName
-                awsPostsTable.savePost(awsPostUpdate, completionHandler: {
-                    (task: AWSTask) in
-                    if let error = task.error {
-                        AWSTask(error: error).continue(completionHandler)
-                    } else {
-                        // Return initialized post to caller.
-                        AWSTask(result: awsPostUpdate).continue(completionHandler)
-                    }
-                    return nil
-                })
-                return nil
+                AWSTask(error: error).continue(completionHandler)
             } else {
-                print("This should not happen with getIdentityId!")
-                return AWSTask().continue(completionHandler)
+                AWSTask(result: awsPostUpdate).continue(completionHandler)
             }
+            return nil
         })
     }
     

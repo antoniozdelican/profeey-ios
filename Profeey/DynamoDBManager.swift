@@ -45,7 +45,7 @@ protocol DynamoDBManager {
     func queryUserPostsDateSortedDynamoDB(_ userId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
     func queryCategoryPostsDateSortedDynamoDB(_ categoryName: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
     func createPostDynamoDB(_ imageUrl: String?, caption: String?, categoryName: String?, completionHandler: @escaping AWSContinuationBlock)
-    func updatePostDynamoDB(_ post: Post?, completionHandler: @escaping AWSContinuationBlock)
+    func updatePostDynamoDB(_ postId: String, caption: String?, categoryName: String?, completionHandler: @escaping AWSContinuationBlock)
     func removePostDynamoDB(_ postId: String, completionHandler: @escaping AWSContinuationBlock)
     
     // MARK: Categories

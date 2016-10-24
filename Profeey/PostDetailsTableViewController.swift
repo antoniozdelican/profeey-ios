@@ -2,41 +2,37 @@
 //  PostDetailsTableViewController.swift
 //  Profeey
 //
-//  Created by Antonio Zdelican on 12/09/16.
+//  Created by Antonio Zdelican on 24/10/16.
 //  Copyright © 2016 Profeey. All rights reserved.
 //
 
 import UIKit
 import AWSMobileHubHelper
-import AWSDynamoDB
 
-protocol LikeDelegate {
-    func togglePostLike(_ postIndexPath: IndexPath?, numberOfLikes: NSNumber?)
+protocol PostDetailsTableViewControllerDelegate {
+    func updatedPost(_ post: Post, postIndexPath: IndexPath)
 }
 
 class PostDetailsTableViewController: UITableViewController {
     
     var post: Post?
     var postIndexPath: IndexPath?
-    var likeDelegate: LikeDelegate?
-    fileprivate var currentUser: User?
-    
+    var postDetailsTableViewControllerDelegate: PostDetailsTableViewControllerDelegate?
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.plain, target:nil, action:nil)
-        self.automaticallyAdjustsScrollViewInsets = false
-        self.navigationItem.title = "Post"
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         
-        // Get current user.
-        self.getCurrentUser()
+        // To adjust header.
+        self.tableView.contentInset = UIEdgeInsetsMake(-1.0, 0.0, 0.0, 0.0)
         
-        // Check if liked by currentUser.
+        // Check if currentUser liked this post.
         if let postId = self.post?.postId {
-            let indexPath = IndexPath(row: 5, section: 0)
+            let indexPath = IndexPath(row: 4, section: 0)
             self.getLike(postId, indexPath: indexPath)
         }
     }
-    
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
@@ -47,59 +43,63 @@ class PostDetailsTableViewController: UITableViewController {
         if let destinationViewController = segue.destination as? ProfileTableViewController {
             destinationViewController.user = self.post?.user
         }
-        if let destinationViewController = segue.destination as? CategoryTableViewController {
-            destinationViewController.categoryName = self.post?.categoryName
-        }
         if let destinationViewController = segue.destination as? UsersTableViewController {
             destinationViewController.usersType = UsersType.likers
             destinationViewController.postId = self.post?.postId
         }
+        if let navigationController = segue.destination as? UINavigationController,
+            let childViewController =  navigationController.childViewControllers[0] as? EditPostViewController {
+            childViewController.post = self.post
+            childViewController.editPostViewControllerDelegate = self
+        }
     }
-    
+
     // MARK: UITableViewDataSource
-    
+
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
-    
+
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 6
+        return 5
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        switch (indexPath as NSIndexPath).row {
+        guard let post = self.post else {
+            return UITableViewCell()
+        }
+        let user = post.user
+        switch indexPath.row {
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostUser", for: indexPath) as! PostUserTableViewCell
-            let user = self.post?.user
             cell.profilePicImageView.image = user?.profilePic
             cell.fullNameLabel.text = user?.fullName
+            cell.preferredUsernameLabel.text = user?.fullUsername
             cell.professionNameLabel.text = user?.professionName
+            cell.postUserTableViewCellDelegate = self
             return cell
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostImage", for: indexPath) as! PostImageTableViewCell
-            cell.postImageView.image = self.post?.image
-            if let image = self.post?.image {
+            cell.postImageView.image = post.image
+            if let image = post.image {
                 let aspectRatio = image.size.width / image.size.height
-                cell.postImageViewHeightConstraint.constant = tableView.bounds.width / aspectRatio
+                cell.postImageViewHeightConstraint.constant = ceil(tableView.bounds.width / aspectRatio)
             }
             return cell
         case 2:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostInfo", for: indexPath) as! PostInfoTableViewCell
-            cell.titleLabel.text = self.post?.caption
+            cell.titleLabel.text = post.caption
             return cell
         case 3:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostCategory", for: indexPath)
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostCategoryCreationDate", for: indexPath) as! PostCategoryCreationDateTableViewCell
+            cell.categoryNameCreationDateLabel.text = [post.categoryName, post.creationDateString].flatMap({$0}).joined(separator: " · ")
             return cell
         case 4:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostTime", for: indexPath)
-            return cell
-        case 5:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostButtons", for: indexPath) as! PostButtonsTableViewCell
-            self.post!.isLikedByCurrentUser ? cell.setSelectedLikeButton() : cell.setUnselectedLikeButton()
-//            cell.likeButton.addTarget(self, action: #selector(HomeTableViewController.likeButtonTapped(_:)), for: UIControlEvents.touchUpInside)
-            cell.numberOfLikesButton.isHidden = (self.post?.numberOfLikesString != nil) ? false : true
-            cell.numberOfLikesButton.setTitle(self.post?.numberOfLikesString, for: UIControlState())
-//            cell.numberOfLikesButton.addTarget(self, action: #selector(HomeTableViewController.numberOfLikesButtonTapped(_:)), for: UIControlEvents.touchUpInside)
+            post.isLikedByCurrentUser ? cell.setSelectedLikeButton() : cell.setUnselectedLikeButton()
+            cell.postButtonsTableViewCellDelegate = self
+            cell.numberOfLikesButton.isHidden = (post.numberOfLikesString != nil) ? false : true
+            cell.numberOfLikesButton.setTitle(post.numberOfLikesString, for: UIControlState())
             return cell
         default:
             return UITableViewCell()
@@ -114,41 +114,35 @@ class PostDetailsTableViewController: UITableViewController {
         if cell is PostUserTableViewCell {
             self.performSegue(withIdentifier: "segueToProfileVc", sender: indexPath)
         }
-        
     }
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.layoutMargins = UIEdgeInsets.zero
         cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
         cell.selectionStyle = UITableViewCellSelectionStyle.none
-        if (indexPath as NSIndexPath).row == 5 {
-            cell.separatorInset = UIEdgeInsetsMake(0.0, 12.0, 0.0, 12.0)
-        }
     }
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        switch (indexPath as NSIndexPath).row {
+        switch indexPath.row {
         case 0:
-            return 65.0
+            return 64.0
         case 1:
-            return 300.0
+            return 400.0
         case 2:
-            return 30.0
+            return 36.0
         case 3:
-            return 21.0
+            return 26.0
         case 4:
-            return 21.0
-        case 5:
-            return 49.0
+            return 52.0
         default:
-            return 0.0
+            return 0
         }
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        switch (indexPath as NSIndexPath).row {
+        switch indexPath.row {
         case 0:
-            return 65.0
+            return 64.0
         case 1:
             return UITableViewAutomaticDimension
         case 2:
@@ -156,72 +150,17 @@ class PostDetailsTableViewController: UITableViewController {
         case 3:
             return UITableViewAutomaticDimension
         case 4:
-            return 21.0
-        case 5:
-            return 49.0
+            return 52.0
         default:
-            return 0.0
+            return 0
         }
     }
     
-    // MARK: Tappers
-    
-    func likeButtonTapped(_ sender: UIButton) {
-        let point = sender.convert(CGPoint.zero, to: self.tableView)
-        guard let indexPath = self.tableView.indexPathForRow(at: point) else {
-            return
-        }
-        guard let post = self.post else {
-            return
-        }
-        guard let postId = post.postId else {
-            return
-        }
-        guard let postUserId = post.userId else {
-            return
-        }
-        let numberOfLikes = (post.numberOfLikes != nil) ? post.numberOfLikes! : 0
-        let numberOfLikesInteger = numberOfLikes.intValue
-        if post.isLikedByCurrentUser {
-            post.isLikedByCurrentUser = false
-            post.numberOfLikes = NSNumber(value: (numberOfLikesInteger - 1) as Int)
-            self.removeLike(postId, postUserId: postUserId)
-        } else {
-            post.isLikedByCurrentUser = true
-            post.numberOfLikes = NSNumber(value: (numberOfLikesInteger + 1) as Int)
-            self.saveLike(postId, postUserId: postUserId)
-        }
-        self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
-        
-        //self.likeDelegate?.togglePostLike(self.postIndexPath, numberOfLikes: self.post?.numberOfLikes)
-    }
-    
-    func numberOfLikesButtonTapped(_ sender: UIButton) {
-        self.performSegue(withIdentifier: "segueToUsersVc", sender: self)
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 1.0
     }
     
     // MARK: AWS
-    
-    // Get currentUser data so we can perform actions (like, comment)
-    fileprivate func getCurrentUser() {
-//        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-//        PRFYDynamoDBManager.defaultDynamoDBManager().getCurrentUserDynamoDB({
-//            (task: AWSTask) in
-//            DispatchQueue.main.async(execute: {
-//                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-//                if let error = task.error {
-//                    print("getCurrentUser error: \(error)")
-//                } else {
-//                    guard let awsUser = task.result as? AWSUser else {
-//                        return
-//                    }
-//                    let user = User(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl)
-//                    self.currentUser = user
-//                }
-//            })
-//            return nil
-//        })
-    }
     
     // Check if currentUser liked a post.
     fileprivate func getLike(_ postId: String, indexPath: IndexPath) {
@@ -243,6 +182,7 @@ class PostDetailsTableViewController: UITableViewController {
         })
     }
     
+    // Save and remove like are done in background.
     fileprivate func saveLike(_ postId: String, postUserId: String) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         PRFYDynamoDBManager.defaultDynamoDBManager().saveLikeDynamoDB(postId, postUserId: postUserId, completionHandler: {
@@ -269,5 +209,100 @@ class PostDetailsTableViewController: UITableViewController {
             })
             return nil
         })
+    }
+}
+
+extension PostDetailsTableViewController: PostUserTableViewCellDelegate {
+    
+    func expandButtonTapped(_ button: UIButton) {
+        guard let post = self.post else {
+            return
+        }
+        guard let postUserId = post.userId else {
+            return
+        }
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
+        if postUserId == AWSClientManager.defaultClientManager().credentialsProvider?.identityId {
+            // DELETE
+            let deleteAction = UIAlertAction(title: "Delete", style: UIAlertActionStyle.destructive, handler: {
+                (alert: UIAlertAction) in
+                let alertController = UIAlertController(title: "Delete Post?", message: nil, preferredStyle: UIAlertControllerStyle.alert)
+                let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil)
+                alertController.addAction(cancelAction)
+                let deleteConfirmAction = UIAlertAction(title: "Delete", style: UIAlertActionStyle.default, handler: {
+                    (alert: UIAlertAction) in
+                    
+                    // Go back and delete post.
+                    self.performSegue(withIdentifier: "segueUnwindToProfileVc", sender: self)
+                })
+                alertController.addAction(deleteConfirmAction)
+                self.present(alertController, animated: true, completion: nil)
+            })
+            alertController.addAction(deleteAction)
+            // EDIT
+            let editAction = UIAlertAction(title: "Edit", style: UIAlertActionStyle.default, handler: {
+                (alert: UIAlertAction) in
+                self.performSegue(withIdentifier: "segueToEditPostVc", sender: button)
+            })
+            alertController.addAction(editAction)
+        } else {
+            // REPORT
+            let reportAction = UIAlertAction(title: "Report", style: UIAlertActionStyle.destructive, handler: nil)
+            alertController.addAction(reportAction)
+        }
+        // CANCEL
+        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil)
+        alertController.addAction(cancelAction)
+        self.present(alertController, animated: true, completion: nil)
+    }
+}
+
+extension PostDetailsTableViewController: PostButtonsTableViewCellDelegate {
+    
+    func likeButtonTapped(_ button: UIButton) {
+        guard let indexPath = self.tableView.indexPathForView(view: button) else {
+            return
+        }
+        guard let post = self.post else {
+            return
+        }
+        guard let postId = post.postId, let postUserId = post.userId else {
+            return
+        }
+        let numberOfLikes = (post.numberOfLikes != nil) ? post.numberOfLikes! : 0
+        let numberOfLikesInteger = numberOfLikes.intValue
+        if post.isLikedByCurrentUser {
+            post.isLikedByCurrentUser = false
+            post.numberOfLikes = NSNumber(value: (numberOfLikesInteger - 1) as Int)
+            self.removeLike(postId, postUserId: postUserId)
+        } else {
+            post.isLikedByCurrentUser = true
+            post.numberOfLikes = NSNumber(value: (numberOfLikesInteger + 1) as Int)
+            self.saveLike(postId, postUserId: postUserId)
+        }
+        self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
+        // For ProfileVc
+        if let postIndexPath = self.postIndexPath {
+            self.postDetailsTableViewControllerDelegate?.updatedPost(post, postIndexPath: postIndexPath)
+        }
+    }
+    
+    func numberOfLikesButtonTapped(_ button: UIButton) {
+        guard let indexPath = self.tableView.indexPathForView(view: button) else {
+            return
+        }
+        self.performSegue(withIdentifier: "segueToUsersVc", sender: indexPath)
+    }
+}
+
+extension PostDetailsTableViewController: EditPostViewControllerDelegate {
+    
+    func updatedPost(_ post: Post) {
+        self.post = post
+        self.tableView.reloadSections(IndexSet(integer: 0), with: UITableViewRowAnimation.none)
+        // For ProfileVc
+        if let postIndexPath = self.postIndexPath {
+            self.postDetailsTableViewControllerDelegate?.updatedPost(post, postIndexPath: postIndexPath)
+        }
     }
 }
