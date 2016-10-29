@@ -20,12 +20,22 @@
 		A90A09581D43E5A7006AC49D /* WelcomeNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A90A09571D43E5A7006AC49D /* WelcomeNavigationController.swift */; };
 		A913FC701D51F6AF000D10A6 /* DynamoDBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A913FC6F1D51F6AF000D10A6 /* DynamoDBManager.swift */; };
 		A913FC721D51FAD6000D10A6 /* PRFYDynamoDBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A913FC711D51FAD6000D10A6 /* PRFYDynamoDBManager.swift */; };
+		A915F86E1DC0D49C0031C45F /* LocationsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A915F86D1DC0D49C0031C45F /* LocationsTableViewController.swift */; };
+		A915F8711DC0D5A60031C45F /* AWSLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A915F8701DC0D5A60031C45F /* AWSLocation.swift */; };
+		A915F8731DC0D6580031C45F /* AWSLocationsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A915F8721DC0D6580031C45F /* AWSLocationsTable.swift */; };
+		A915F8751DC0D9CB0031C45F /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = A915F8741DC0D9CB0031C45F /* Location.swift */; };
+		A91828451DC0E49800EC9E63 /* LocationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91828441DC0E49800EC9E63 /* LocationTableViewCell.swift */; };
+		A91828471DC0E59100EC9E63 /* Locations.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A91828461DC0E59100EC9E63 /* Locations.storyboard */; };
+		A91828491DC1120700EC9E63 /* AddProfessionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91828481DC1120700EC9E63 /* AddProfessionTableViewCell.swift */; };
+		A918284B1DC1233400EC9E63 /* SearchLocationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A918284A1DC1233400EC9E63 /* SearchLocationTableViewCell.swift */; };
+		A918284D1DC124D900EC9E63 /* AddCategoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A918284C1DC124D900EC9E63 /* AddCategoryTableViewCell.swift */; };
 		A9193A311D6F132200E38F56 /* AWSUserRelationship.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9193A301D6F132200E38F56 /* AWSUserRelationship.swift */; };
 		A9193A331D6F137500E38F56 /* AWSUserRelationshipsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9193A321D6F137500E38F56 /* AWSUserRelationshipsTable.swift */; };
 		A91A10351DA7F59F0042B4CA /* GalleryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91A10341DA7F59F0042B4CA /* GalleryViewController.swift */; };
 		A91A103A1DA833E40042B4CA /* AddInfoTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91A10391DA833E40042B4CA /* AddInfoTableViewController.swift */; };
 		A91A103C1DA836050042B4CA /* AddInfoImageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91A103B1DA836050042B4CA /* AddInfoImageTableViewCell.swift */; };
 		A91A35241D1C26E6006F22B2 /* FullScreenIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91A35231D1C26E6006F22B2 /* FullScreenIndicator.swift */; };
+		A92F93ED1DC3940A00065CD1 /* EditProfileTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A92F93EC1DC3940A00065CD1 /* EditProfileTableViewController.swift */; };
 		A930BC7C1D0DD43F004D49F7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A930BC7B1D0DD43F004D49F7 /* AppDelegate.swift */; };
 		A930BC811D0DD43F004D49F7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A930BC7F1D0DD43F004D49F7 /* Main.storyboard */; };
 		A930BC831D0DD43F004D49F7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A930BC821D0DD43F004D49F7 /* Assets.xcassets */; };
@@ -45,6 +55,8 @@
 		A95C31B91D3E35AA0003377F /* AWSClientManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95C31B81D3E35AA0003377F /* AWSClientManager.swift */; };
 		A95D0A6A1D7B149000C1ACF6 /* ProfileMainTableViewCell2.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95D0A691D7B149000C1ACF6 /* ProfileMainTableViewCell2.swift */; };
 		A95E40D01D35410500FD61F9 /* CaptureNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95E40CF1D35410500FD61F9 /* CaptureNavigationController.swift */; };
+		A95E93AF1DBF6D0000A1FF6E /* Profession.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A95E93AE1DBF6D0000A1FF6E /* Profession.storyboard */; };
+		A95E93B11DBF8D4500A1FF6E /* AddLocationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95E93B01DBF8D4500A1FF6E /* AddLocationTableViewCell.swift */; };
 		A95EB85B1D8FBE870039E51D /* DateTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95EB85A1D8FBE870039E51D /* DateTableViewCell.swift */; };
 		A95EB85D1D8FBEAB0039E51D /* DatePickerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95EB85C1D8FBEAB0039E51D /* DatePickerTableViewCell.swift */; };
 		A961875F1D3FA67B0028DEA7 /* ClientManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A961875E1D3FA67B0028DEA7 /* ClientManager.swift */; };
@@ -54,7 +66,6 @@
 		A975529C1D4F4D0300F773FF /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A975529B1D4F4D0300F773FF /* PreviewViewController.swift */; };
 		A97A9AEB1D85C03B00507517 /* HeaderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A97A9AEA1D85C03B00507517 /* HeaderTableViewCell.swift */; };
 		A97A9AED1D85D0ED00507517 /* ProfessionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A97A9AEC1D85D0ED00507517 /* ProfessionsTableViewController.swift */; };
-		A97EDECB1D9A5922002E63F7 /* Category2TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A97EDECA1D9A5922002E63F7 /* Category2TableViewController.swift */; };
 		A98A38241D8C076C00C9CA75 /* AWSUserCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98A38231D8C076C00C9CA75 /* AWSUserCategory.swift */; };
 		A98A38261D8C07DA00C9CA75 /* AWSUserCategoriesTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98A38251D8C07DA00C9CA75 /* AWSUserCategoriesTable.swift */; };
 		A98B42E11D43C95A0089A769 /* ProfessionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98B42E01D43C95A0089A769 /* ProfessionTableViewCell.swift */; };
@@ -67,6 +78,11 @@
 		A990ECB81D6A5F6A00C3C9CE /* Comments.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A990ECB71D6A5F6A00C3C9CE /* Comments.storyboard */; };
 		A99734E41DA12F2D007FCE11 /* PostCategoryCreationDateTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99734E31DA12F2D007FCE11 /* PostCategoryCreationDateTableViewCell.swift */; };
 		A99984DF1DB6B65B00842E51 /* AddTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99984DE1DB6B65B00842E51 /* AddTableViewCell.swift */; };
+		A999CD3F1DBE6F9F00E7ADB1 /* SearchProfessionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A999CD3E1DBE6F9F00E7ADB1 /* SearchProfessionsTableViewController.swift */; };
+		A999CD411DBE6FB000E7ADB1 /* SearchProfessionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A999CD401DBE6FB000E7ADB1 /* SearchProfessionTableViewCell.swift */; };
+		A999CD431DBE828800E7ADB1 /* SearchTableSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A999CD421DBE828800E7ADB1 /* SearchTableSectionHeader.swift */; };
+		A999CD451DBE829F00E7ADB1 /* SearchTableSectionHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = A999CD441DBE829F00E7ADB1 /* SearchTableSectionHeader.xib */; };
+		A999CD481DBE93D400E7ADB1 /* ProfessionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A999CD471DBE93D400E7ADB1 /* ProfessionTableViewController.swift */; };
 		A99ADA1F1D0F189E0050E329 /* Welcome.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A99ADA1E1D0F189E0050E329 /* Welcome.storyboard */; };
 		A99ADD261DB361BE00A34C8D /* CurrentUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99ADD251DB361BE00A34C8D /* CurrentUser.swift */; };
 		A99B9E2B1DB53CB40047360D /* AWSEducation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99B9E2A1DB53CB40047360D /* AWSEducation.swift */; };
@@ -95,7 +111,7 @@
 		A9ACF1891D927E1E00A99B7F /* Experiences.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9ACF1881D927E1E00A99B7F /* Experiences.storyboard */; };
 		A9AFFB061D8AD9DE00219627 /* SearchUserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AFFB051D8AD9DE00219627 /* SearchUserTableViewCell.swift */; };
 		A9AFFB081D8AFE0C00219627 /* Professions.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9AFFB071D8AFE0C00219627 /* Professions.storyboard */; };
-		A9AFFB0A1D8AFE2A00219627 /* Locations.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9AFFB091D8AFE2A00219627 /* Locations.storyboard */; };
+		A9AFFB0A1D8AFE2A00219627 /* LocationsOld.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9AFFB091D8AFE2A00219627 /* LocationsOld.storyboard */; };
 		A9AFFB0D1D8AFEB800219627 /* Categories.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9AFFB0C1D8AFEB800219627 /* Categories.storyboard */; };
 		A9AFFB0F1D8AFF1800219627 /* CategoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AFFB0E1D8AFF1800219627 /* CategoryTableViewCell.swift */; };
 		A9AFFB111D8B00DF00219627 /* CategoriesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AFFB101D8B00DF00219627 /* CategoriesTableViewController.swift */; };
@@ -111,21 +127,13 @@
 		A9B7A2441D65A562009DA340 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B7A2431D65A562009DA340 /* Category.swift */; };
 		A9B7A24A1D65D8C0009DA340 /* HomeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B7A2491D65D8C0009DA340 /* HomeTableViewController.swift */; };
 		A9B934B01D1BD9BB00ACC2B8 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B934AF1D1BD9BB00ACC2B8 /* OnboardingViewController.swift */; };
-		A9BF16471D64DDAC00060A9E /* SearchCategoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9BF16461D64DDAC00060A9E /* SearchCategoryTableViewCell.swift */; };
 		A9BF16491D6514C900060A9E /* NoResultsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9BF16481D6514C900060A9E /* NoResultsTableViewCell.swift */; };
 		A9BF164B1D6519D100060A9E /* SearchingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9BF164A1D6519D100060A9E /* SearchingTableViewCell.swift */; };
 		A9C0ED3A1D3C21C30036F791 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C0ED391D3C21C30036F791 /* Post.swift */; };
-		A9C18ADF1D9A934C00628845 /* AddLocationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C18ADE1D9A934C00628845 /* AddLocationTableViewCell.swift */; };
-		A9C18AE21D9A985F00628845 /* LocationsNew.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9C18AE11D9A985F00628845 /* LocationsNew.storyboard */; };
-		A9C18AE41D9A989E00628845 /* LocationsNewTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C18AE31D9A989E00628845 /* LocationsNewTableViewController.swift */; };
-		A9C22CF81D7E0B90002A1D6E /* AWSFeaturedCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C22CF71D7E0B90002A1D6E /* AWSFeaturedCategory.swift */; };
-		A9C22CFA1D7E0C78002A1D6E /* AWSFeaturedCategoriesTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C22CF91D7E0C78002A1D6E /* AWSFeaturedCategoriesTable.swift */; };
-		A9C22CFC1D7E0F4D002A1D6E /* FeaturedCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C22CFB1D7E0F4D002A1D6E /* FeaturedCategory.swift */; };
 		A9C45CFF1D8C8D8500A14BB8 /* TopCategoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C45CFE1D8C8D8500A14BB8 /* TopCategoryTableViewCell.swift */; };
 		A9C4D2701D991FCC000E1F35 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C4D26F1D991FCC000E1F35 /* SearchViewController.swift */; };
 		A9C4D2731D992A67000E1F35 /* SearchUsersTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C4D2721D992A67000E1F35 /* SearchUsersTableViewController.swift */; };
 		A9C6CB7F1D2929AA00863816 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C6CB7E1D2929AA00863816 /* Extensions.swift */; };
-		A9C808131D915CB20018109C /* EditProfileTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C808121D915CB20018109C /* EditProfileTableViewController.swift */; };
 		A9C808151D916C1B0018109C /* EditProfilePicTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C808141D916C1B0018109C /* EditProfilePicTableViewCell.swift */; };
 		A9C808181D916C4A0018109C /* EditFirstNameTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C808171D916C4A0018109C /* EditFirstNameTableViewCell.swift */; };
 		A9C8081A1D916C590018109C /* EditLastNameTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C808191D916C590018109C /* EditLastNameTableViewCell.swift */; };
@@ -178,8 +186,7 @@
 		A9D5F9E01D9FD6C000A5C99F /* PhoneTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D5F9DF1D9FD6C000A5C99F /* PhoneTableViewCell.swift */; };
 		A9D716A91D57486100300135 /* PostSmallTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D716A81D57486100300135 /* PostSmallTableViewCell.swift */; };
 		A9D97BF81D95718C00D6F22E /* WelcomeProfessionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D97BF71D95718C00D6F22E /* WelcomeProfessionsTableViewController.swift */; };
-		A9DC4E361D994B8900AF4AB8 /* SearchCategoriesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9DC4E351D994B8900AF4AB8 /* SearchCategoriesTableViewController.swift */; };
-		A9E050F41D83065D00DD992D /* LocationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E050F31D83065D00DD992D /* LocationTableViewCell.swift */; };
+		A9E050F41D83065D00DD992D /* LocationOldTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E050F31D83065D00DD992D /* LocationOldTableViewCell.swift */; };
 		A9E3DD3F1D86A33C00DED8C8 /* AWSProfession.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E3DD3E1D86A33C00DED8C8 /* AWSProfession.swift */; };
 		A9E3DD411D86A37600DED8C8 /* AWSProfessionsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E3DD401D86A37600DED8C8 /* AWSProfessionsTable.swift */; };
 		A9E3DD431D86A42400DED8C8 /* Profession.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E3DD421D86A42400DED8C8 /* Profession.swift */; };
@@ -187,7 +194,7 @@
 		A9E4507C1D59E6D300D14553 /* CommentsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E4507B1D59E6D300D14553 /* CommentsTableViewController.swift */; };
 		A9E4507E1D59E6E400D14553 /* CommentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E4507D1D59E6E400D14553 /* CommentsViewController.swift */; };
 		A9E450801D5A09F100D14553 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E4507F1D5A09F100D14553 /* Comment.swift */; };
-		A9E4EC541D81F1B700929ED1 /* LocationsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E4EC531D81F1B700929ED1 /* LocationsTableViewController.swift */; };
+		A9E4EC541D81F1B700929ED1 /* LocationsOldTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E4EC531D81F1B700929ED1 /* LocationsOldTableViewController.swift */; };
 		A9E53B691D10665100CD1D6C /* Home.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9E53B681D10665100CD1D6C /* Home.storyboard */; };
 		A9E53B6B1D10666800CD1D6C /* Search.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9E53B6A1D10666800CD1D6C /* Search.storyboard */; };
 		A9E53B6D1D10667100CD1D6C /* Capture.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9E53B6C1D10667100CD1D6C /* Capture.storyboard */; };
@@ -200,8 +207,6 @@
 		A9F49D571D379D01002EB68B /* AWSPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F49D561D379D01002EB68B /* AWSPost.swift */; };
 		A9F49D5A1D379D70002EB68B /* AWSPostsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F49D591D379D70002EB68B /* AWSPostsTable.swift */; };
 		A9FAB36D1D8A114900E871CD /* AWSUserUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9FAB36C1D8A114900E871CD /* AWSUserUpdate.swift */; };
-		A9FF2EF11D6AEE9E0022AB0C /* Category.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9FF2EF01D6AEE9E0022AB0C /* Category.storyboard */; };
-		A9FF2EF31D6AF9280022AB0C /* CategoryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9FF2EF21D6AF9280022AB0C /* CategoryTableViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -243,12 +248,22 @@
 		A90A09571D43E5A7006AC49D /* WelcomeNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeNavigationController.swift; sourceTree = "<group>"; };
 		A913FC6F1D51F6AF000D10A6 /* DynamoDBManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DynamoDBManager.swift; sourceTree = "<group>"; };
 		A913FC711D51FAD6000D10A6 /* PRFYDynamoDBManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PRFYDynamoDBManager.swift; sourceTree = "<group>"; };
+		A915F86D1DC0D49C0031C45F /* LocationsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationsTableViewController.swift; sourceTree = "<group>"; };
+		A915F8701DC0D5A60031C45F /* AWSLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSLocation.swift; sourceTree = "<group>"; };
+		A915F8721DC0D6580031C45F /* AWSLocationsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSLocationsTable.swift; sourceTree = "<group>"; };
+		A915F8741DC0D9CB0031C45F /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
+		A91828441DC0E49800EC9E63 /* LocationTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationTableViewCell.swift; sourceTree = "<group>"; };
+		A91828461DC0E59100EC9E63 /* Locations.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Locations.storyboard; sourceTree = "<group>"; };
+		A91828481DC1120700EC9E63 /* AddProfessionTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddProfessionTableViewCell.swift; sourceTree = "<group>"; };
+		A918284A1DC1233400EC9E63 /* SearchLocationTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchLocationTableViewCell.swift; sourceTree = "<group>"; };
+		A918284C1DC124D900EC9E63 /* AddCategoryTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddCategoryTableViewCell.swift; sourceTree = "<group>"; };
 		A9193A301D6F132200E38F56 /* AWSUserRelationship.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSUserRelationship.swift; sourceTree = "<group>"; };
 		A9193A321D6F137500E38F56 /* AWSUserRelationshipsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSUserRelationshipsTable.swift; sourceTree = "<group>"; };
 		A91A10341DA7F59F0042B4CA /* GalleryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GalleryViewController.swift; sourceTree = "<group>"; };
 		A91A10391DA833E40042B4CA /* AddInfoTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddInfoTableViewController.swift; sourceTree = "<group>"; };
 		A91A103B1DA836050042B4CA /* AddInfoImageTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddInfoImageTableViewCell.swift; sourceTree = "<group>"; };
 		A91A35231D1C26E6006F22B2 /* FullScreenIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FullScreenIndicator.swift; sourceTree = "<group>"; };
+		A92F93EC1DC3940A00065CD1 /* EditProfileTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditProfileTableViewController.swift; sourceTree = "<group>"; };
 		A930BC781D0DD43E004D49F7 /* Profeey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Profeey.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A930BC7B1D0DD43F004D49F7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A930BC801D0DD43F004D49F7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -270,6 +285,8 @@
 		A95C31B81D3E35AA0003377F /* AWSClientManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSClientManager.swift; sourceTree = "<group>"; };
 		A95D0A691D7B149000C1ACF6 /* ProfileMainTableViewCell2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileMainTableViewCell2.swift; sourceTree = "<group>"; };
 		A95E40CF1D35410500FD61F9 /* CaptureNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CaptureNavigationController.swift; sourceTree = "<group>"; };
+		A95E93AE1DBF6D0000A1FF6E /* Profession.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Profession.storyboard; sourceTree = "<group>"; };
+		A95E93B01DBF8D4500A1FF6E /* AddLocationTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddLocationTableViewCell.swift; sourceTree = "<group>"; };
 		A95EB85A1D8FBE870039E51D /* DateTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateTableViewCell.swift; sourceTree = "<group>"; };
 		A95EB85C1D8FBEAB0039E51D /* DatePickerTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatePickerTableViewCell.swift; sourceTree = "<group>"; };
 		A961875E1D3FA67B0028DEA7 /* ClientManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClientManager.swift; sourceTree = "<group>"; };
@@ -279,7 +296,6 @@
 		A975529B1D4F4D0300F773FF /* PreviewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreviewViewController.swift; sourceTree = "<group>"; };
 		A97A9AEA1D85C03B00507517 /* HeaderTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeaderTableViewCell.swift; sourceTree = "<group>"; };
 		A97A9AEC1D85D0ED00507517 /* ProfessionsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfessionsTableViewController.swift; sourceTree = "<group>"; };
-		A97EDECA1D9A5922002E63F7 /* Category2TableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Category2TableViewController.swift; sourceTree = "<group>"; };
 		A98A38231D8C076C00C9CA75 /* AWSUserCategory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSUserCategory.swift; sourceTree = "<group>"; };
 		A98A38251D8C07DA00C9CA75 /* AWSUserCategoriesTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSUserCategoriesTable.swift; sourceTree = "<group>"; };
 		A98B42E01D43C95A0089A769 /* ProfessionTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfessionTableViewCell.swift; sourceTree = "<group>"; };
@@ -292,6 +308,11 @@
 		A990ECB71D6A5F6A00C3C9CE /* Comments.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Comments.storyboard; sourceTree = "<group>"; };
 		A99734E31DA12F2D007FCE11 /* PostCategoryCreationDateTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostCategoryCreationDateTableViewCell.swift; sourceTree = "<group>"; };
 		A99984DE1DB6B65B00842E51 /* AddTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddTableViewCell.swift; sourceTree = "<group>"; };
+		A999CD3E1DBE6F9F00E7ADB1 /* SearchProfessionsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchProfessionsTableViewController.swift; sourceTree = "<group>"; };
+		A999CD401DBE6FB000E7ADB1 /* SearchProfessionTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchProfessionTableViewCell.swift; sourceTree = "<group>"; };
+		A999CD421DBE828800E7ADB1 /* SearchTableSectionHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchTableSectionHeader.swift; sourceTree = "<group>"; };
+		A999CD441DBE829F00E7ADB1 /* SearchTableSectionHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SearchTableSectionHeader.xib; sourceTree = "<group>"; };
+		A999CD471DBE93D400E7ADB1 /* ProfessionTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfessionTableViewController.swift; sourceTree = "<group>"; };
 		A99ADA1E1D0F189E0050E329 /* Welcome.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Welcome.storyboard; sourceTree = "<group>"; };
 		A99ADD251DB361BE00A34C8D /* CurrentUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrentUser.swift; sourceTree = "<group>"; };
 		A99B9E2A1DB53CB40047360D /* AWSEducation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSEducation.swift; sourceTree = "<group>"; };
@@ -320,7 +341,7 @@
 		A9ACF1881D927E1E00A99B7F /* Experiences.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Experiences.storyboard; sourceTree = "<group>"; };
 		A9AFFB051D8AD9DE00219627 /* SearchUserTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchUserTableViewCell.swift; sourceTree = "<group>"; };
 		A9AFFB071D8AFE0C00219627 /* Professions.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Professions.storyboard; sourceTree = "<group>"; };
-		A9AFFB091D8AFE2A00219627 /* Locations.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Locations.storyboard; sourceTree = "<group>"; };
+		A9AFFB091D8AFE2A00219627 /* LocationsOld.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LocationsOld.storyboard; sourceTree = "<group>"; };
 		A9AFFB0C1D8AFEB800219627 /* Categories.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Categories.storyboard; sourceTree = "<group>"; };
 		A9AFFB0E1D8AFF1800219627 /* CategoryTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryTableViewCell.swift; sourceTree = "<group>"; };
 		A9AFFB101D8B00DF00219627 /* CategoriesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoriesTableViewController.swift; sourceTree = "<group>"; };
@@ -336,21 +357,13 @@
 		A9B7A2431D65A562009DA340 /* Category.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		A9B7A2491D65D8C0009DA340 /* HomeTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeTableViewController.swift; sourceTree = "<group>"; };
 		A9B934AF1D1BD9BB00ACC2B8 /* OnboardingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
-		A9BF16461D64DDAC00060A9E /* SearchCategoryTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchCategoryTableViewCell.swift; sourceTree = "<group>"; };
 		A9BF16481D6514C900060A9E /* NoResultsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoResultsTableViewCell.swift; sourceTree = "<group>"; };
 		A9BF164A1D6519D100060A9E /* SearchingTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchingTableViewCell.swift; sourceTree = "<group>"; };
 		A9C0ED391D3C21C30036F791 /* Post.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
-		A9C18ADE1D9A934C00628845 /* AddLocationTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddLocationTableViewCell.swift; sourceTree = "<group>"; };
-		A9C18AE11D9A985F00628845 /* LocationsNew.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LocationsNew.storyboard; sourceTree = "<group>"; };
-		A9C18AE31D9A989E00628845 /* LocationsNewTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationsNewTableViewController.swift; sourceTree = "<group>"; };
-		A9C22CF71D7E0B90002A1D6E /* AWSFeaturedCategory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSFeaturedCategory.swift; sourceTree = "<group>"; };
-		A9C22CF91D7E0C78002A1D6E /* AWSFeaturedCategoriesTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSFeaturedCategoriesTable.swift; sourceTree = "<group>"; };
-		A9C22CFB1D7E0F4D002A1D6E /* FeaturedCategory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeaturedCategory.swift; sourceTree = "<group>"; };
 		A9C45CFE1D8C8D8500A14BB8 /* TopCategoryTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopCategoryTableViewCell.swift; sourceTree = "<group>"; };
 		A9C4D26F1D991FCC000E1F35 /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		A9C4D2721D992A67000E1F35 /* SearchUsersTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchUsersTableViewController.swift; sourceTree = "<group>"; };
 		A9C6CB7E1D2929AA00863816 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
-		A9C808121D915CB20018109C /* EditProfileTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditProfileTableViewController.swift; sourceTree = "<group>"; };
 		A9C808141D916C1B0018109C /* EditProfilePicTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditProfilePicTableViewCell.swift; sourceTree = "<group>"; };
 		A9C808171D916C4A0018109C /* EditFirstNameTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditFirstNameTableViewCell.swift; sourceTree = "<group>"; };
 		A9C808191D916C590018109C /* EditLastNameTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditLastNameTableViewCell.swift; sourceTree = "<group>"; };
@@ -389,8 +402,7 @@
 		A9D5F9DF1D9FD6C000A5C99F /* PhoneTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhoneTableViewCell.swift; sourceTree = "<group>"; };
 		A9D716A81D57486100300135 /* PostSmallTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostSmallTableViewCell.swift; sourceTree = "<group>"; };
 		A9D97BF71D95718C00D6F22E /* WelcomeProfessionsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeProfessionsTableViewController.swift; sourceTree = "<group>"; };
-		A9DC4E351D994B8900AF4AB8 /* SearchCategoriesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchCategoriesTableViewController.swift; sourceTree = "<group>"; };
-		A9E050F31D83065D00DD992D /* LocationTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationTableViewCell.swift; sourceTree = "<group>"; };
+		A9E050F31D83065D00DD992D /* LocationOldTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationOldTableViewCell.swift; sourceTree = "<group>"; };
 		A9E3DD3E1D86A33C00DED8C8 /* AWSProfession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSProfession.swift; sourceTree = "<group>"; };
 		A9E3DD401D86A37600DED8C8 /* AWSProfessionsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSProfessionsTable.swift; sourceTree = "<group>"; };
 		A9E3DD421D86A42400DED8C8 /* Profession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Profession.swift; sourceTree = "<group>"; };
@@ -398,7 +410,7 @@
 		A9E4507B1D59E6D300D14553 /* CommentsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentsTableViewController.swift; sourceTree = "<group>"; };
 		A9E4507D1D59E6E400D14553 /* CommentsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentsViewController.swift; sourceTree = "<group>"; };
 		A9E4507F1D5A09F100D14553 /* Comment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
-		A9E4EC531D81F1B700929ED1 /* LocationsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationsTableViewController.swift; sourceTree = "<group>"; };
+		A9E4EC531D81F1B700929ED1 /* LocationsOldTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationsOldTableViewController.swift; sourceTree = "<group>"; };
 		A9E53B681D10665100CD1D6C /* Home.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Home.storyboard; sourceTree = "<group>"; };
 		A9E53B6A1D10666800CD1D6C /* Search.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Search.storyboard; sourceTree = "<group>"; };
 		A9E53B6C1D10667100CD1D6C /* Capture.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Capture.storyboard; sourceTree = "<group>"; };
@@ -411,8 +423,6 @@
 		A9F49D561D379D01002EB68B /* AWSPost.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSPost.swift; sourceTree = "<group>"; };
 		A9F49D591D379D70002EB68B /* AWSPostsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSPostsTable.swift; sourceTree = "<group>"; };
 		A9FAB36C1D8A114900E871CD /* AWSUserUpdate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSUserUpdate.swift; sourceTree = "<group>"; };
-		A9FF2EF01D6AEE9E0022AB0C /* Category.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Category.storyboard; sourceTree = "<group>"; };
-		A9FF2EF21D6AF9280022AB0C /* CategoryTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryTableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -470,6 +480,26 @@
 				A903EB5A1D16A3C800B33025 /* ProfeeySimpleCamera.swift */,
 			);
 			name = Camera;
+			sourceTree = "<group>";
+		};
+		A915F86C1DC0D3600031C45F /* Locations */ = {
+			isa = PBXGroup;
+			children = (
+				A91828461DC0E59100EC9E63 /* Locations.storyboard */,
+				A915F86D1DC0D49C0031C45F /* LocationsTableViewController.swift */,
+				A91828441DC0E49800EC9E63 /* LocationTableViewCell.swift */,
+				A918284A1DC1233400EC9E63 /* SearchLocationTableViewCell.swift */,
+			);
+			name = Locations;
+			sourceTree = "<group>";
+		};
+		A915F86F1DC0D57C0031C45F /* AWSLocations */ = {
+			isa = PBXGroup;
+			children = (
+				A915F8701DC0D5A60031C45F /* AWSLocation.swift */,
+				A915F8721DC0D6580031C45F /* AWSLocationsTable.swift */,
+			);
+			name = AWSLocations;
 			sourceTree = "<group>";
 		};
 		A9193A2F1D6F130700E38F56 /* AWSUserRelationships */ = {
@@ -603,7 +633,7 @@
 			isa = PBXGroup;
 			children = (
 				A9A503A61D2FF8450030A472 /* EditProfile.storyboard */,
-				A9C808121D915CB20018109C /* EditProfileTableViewController.swift */,
+				A92F93EC1DC3940A00065CD1 /* EditProfileTableViewController.swift */,
 				A9C808141D916C1B0018109C /* EditProfilePicTableViewCell.swift */,
 				A9C808171D916C4A0018109C /* EditFirstNameTableViewCell.swift */,
 				A9C808191D916C590018109C /* EditLastNameTableViewCell.swift */,
@@ -669,14 +699,14 @@
 			name = Comments;
 			sourceTree = "<group>";
 		};
-		A998B8851D86EEE200D7424A /* Locations */ = {
+		A998B8851D86EEE200D7424A /* Locations Old */ = {
 			isa = PBXGroup;
 			children = (
-				A9AFFB091D8AFE2A00219627 /* Locations.storyboard */,
-				A9E4EC531D81F1B700929ED1 /* LocationsTableViewController.swift */,
-				A9E050F31D83065D00DD992D /* LocationTableViewCell.swift */,
+				A9AFFB091D8AFE2A00219627 /* LocationsOld.storyboard */,
+				A9E4EC531D81F1B700929ED1 /* LocationsOldTableViewController.swift */,
+				A9E050F31D83065D00DD992D /* LocationOldTableViewCell.swift */,
 			);
-			name = Locations;
+			name = "Locations Old";
 			sourceTree = "<group>";
 		};
 		A998B8861D86EEF900D7424A /* Professions */ = {
@@ -685,8 +715,28 @@
 				A9AFFB071D8AFE0C00219627 /* Professions.storyboard */,
 				A97A9AEC1D85D0ED00507517 /* ProfessionsTableViewController.swift */,
 				A98B42E01D43C95A0089A769 /* ProfessionTableViewCell.swift */,
+				A91828481DC1120700EC9E63 /* AddProfessionTableViewCell.swift */,
 			);
 			name = Professions;
+			sourceTree = "<group>";
+		};
+		A999CD3D1DBE6F8900E7ADB1 /* Search Professions */ = {
+			isa = PBXGroup;
+			children = (
+				A999CD3E1DBE6F9F00E7ADB1 /* SearchProfessionsTableViewController.swift */,
+				A999CD401DBE6FB000E7ADB1 /* SearchProfessionTableViewCell.swift */,
+			);
+			name = "Search Professions";
+			sourceTree = "<group>";
+		};
+		A999CD461DBE939700E7ADB1 /* Profession */ = {
+			isa = PBXGroup;
+			children = (
+				A95E93AE1DBF6D0000A1FF6E /* Profession.storyboard */,
+				A999CD471DBE93D400E7ADB1 /* ProfessionTableViewController.swift */,
+				A95E93B01DBF8D4500A1FF6E /* AddLocationTableViewCell.swift */,
+			);
+			name = Profession;
 			sourceTree = "<group>";
 		};
 		A99ADA1D1D0F188A0050E329 /* Welcome */ = {
@@ -728,13 +778,13 @@
 				A9A503981D2FA9180030A472 /* LocalService.swift */,
 				A94797A61D2E3451007CBF08 /* User.swift */,
 				A99ADD251DB361BE00A34C8D /* CurrentUser.swift */,
-				A9B7A2431D65A562009DA340 /* Category.swift */,
 				A9C0ED391D3C21C30036F791 /* Post.swift */,
 				A9E4507F1D5A09F100D14553 /* Comment.swift */,
-				A9C22CFB1D7E0F4D002A1D6E /* FeaturedCategory.swift */,
+				A9B7A2431D65A562009DA340 /* Category.swift */,
 				A9E3DD421D86A42400DED8C8 /* Profession.swift */,
 				A9ACA7481DB50AF40004B8DE /* WorkExperience.swift */,
 				A99B9E301DB53E370047360D /* Education.swift */,
+				A915F8741DC0D9CB0031C45F /* Location.swift */,
 			);
 			name = Local;
 			sourceTree = "<group>";
@@ -747,6 +797,7 @@
 				A9D3340B1D801693005565C2 /* PostInfoTableViewCell.swift */,
 				A99734E31DA12F2D007FCE11 /* PostCategoryCreationDateTableViewCell.swift */,
 				A9D334111D801B70005565C2 /* PostButtonsTableViewCell.swift */,
+				A96C9AB41D7DADC3007E0B9D /* UploadingTableViewCell.swift */,
 			);
 			name = "Post Cells";
 			sourceTree = "<group>";
@@ -788,6 +839,7 @@
 				A9AFFB0C1D8AFEB800219627 /* Categories.storyboard */,
 				A9AFFB101D8B00DF00219627 /* CategoriesTableViewController.swift */,
 				A9AFFB0E1D8AFF1800219627 /* CategoryTableViewCell.swift */,
+				A918284C1DC124D900EC9E63 /* AddCategoryTableViewCell.swift */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -834,24 +886,6 @@
 			name = AWSActivities;
 			sourceTree = "<group>";
 		};
-		A9C18AE01D9A984C00628845 /* Locations New */ = {
-			isa = PBXGroup;
-			children = (
-				A9C18AE11D9A985F00628845 /* LocationsNew.storyboard */,
-				A9C18AE31D9A989E00628845 /* LocationsNewTableViewController.swift */,
-			);
-			name = "Locations New";
-			sourceTree = "<group>";
-		};
-		A9C22CF61D7E0B75002A1D6E /* AWSFeaturedCategories */ = {
-			isa = PBXGroup;
-			children = (
-				A9C22CF71D7E0B90002A1D6E /* AWSFeaturedCategory.swift */,
-				A9C22CF91D7E0C78002A1D6E /* AWSFeaturedCategoriesTable.swift */,
-			);
-			name = AWSFeaturedCategories;
-			sourceTree = "<group>";
-		};
 		A9C6CB7D1D29296B00863816 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -891,22 +925,13 @@
 			name = "Contact Cells";
 			sourceTree = "<group>";
 		};
-		A9DC4E371D994E9400AF4AB8 /* Users */ = {
+		A9DC4E371D994E9400AF4AB8 /* Search Users */ = {
 			isa = PBXGroup;
 			children = (
 				A9C4D2721D992A67000E1F35 /* SearchUsersTableViewController.swift */,
 				A9AFFB051D8AD9DE00219627 /* SearchUserTableViewCell.swift */,
 			);
-			name = Users;
-			sourceTree = "<group>";
-		};
-		A9DC4E381D994EA000AF4AB8 /* Categories */ = {
-			isa = PBXGroup;
-			children = (
-				A9DC4E351D994B8900AF4AB8 /* SearchCategoriesTableViewController.swift */,
-				A9BF16461D64DDAC00060A9E /* SearchCategoryTableViewCell.swift */,
-			);
-			name = Categories;
+			name = "Search Users";
 			sourceTree = "<group>";
 		};
 		A9E3DD3D1D86A31B00DED8C8 /* AWSProfessions */ = {
@@ -933,14 +958,13 @@
 				A99B9E321DB53FCB0047360D /* Edit Education */,
 				A9B70C9D1D871CBA00B9882A /* Post Details */,
 				A9543CA91DA3A1CC002BF372 /* Edit Post */,
-				A9A95B271D58752E0009CEE7 /* Post Cells */,
 				A990ECB61D6A5F4F00C3C9CE /* Comments */,
 				A990ECB11D6A575400C3C9CE /* Users */,
-				A9FF2EED1D6AEE340022AB0C /* Category */,
-				A9C18AE01D9A984C00628845 /* Locations New */,
-				A998B8851D86EEE200D7424A /* Locations */,
+				A915F86C1DC0D3600031C45F /* Locations */,
+				A998B8851D86EEE200D7424A /* Locations Old */,
 				A998B8861D86EEF900D7424A /* Professions */,
 				A9AFFB0B1D8AFE8B00219627 /* Categories */,
+				A9A95B271D58752E0009CEE7 /* Post Cells */,
 				A97EDECC1D9A596F002E63F7 /* Shared Cells */,
 			);
 			name = Main;
@@ -951,7 +975,6 @@
 			children = (
 				A9E53B681D10665100CD1D6C /* Home.storyboard */,
 				A9B7A2491D65D8C0009DA340 /* HomeTableViewController.swift */,
-				A96C9AB41D7DADC3007E0B9D /* UploadingTableViewCell.swift */,
 			);
 			name = Home;
 			sourceTree = "<group>";
@@ -960,9 +983,12 @@
 			isa = PBXGroup;
 			children = (
 				A9E53B6A1D10666800CD1D6C /* Search.storyboard */,
+				A999CD441DBE829F00E7ADB1 /* SearchTableSectionHeader.xib */,
 				A9C4D26F1D991FCC000E1F35 /* SearchViewController.swift */,
-				A9DC4E371D994E9400AF4AB8 /* Users */,
-				A9DC4E381D994EA000AF4AB8 /* Categories */,
+				A999CD421DBE828800E7ADB1 /* SearchTableSectionHeader.swift */,
+				A9DC4E371D994E9400AF4AB8 /* Search Users */,
+				A999CD3D1DBE6F8900E7ADB1 /* Search Professions */,
+				A999CD461DBE939700E7ADB1 /* Profession */,
 			);
 			name = Search;
 			sourceTree = "<group>";
@@ -1008,9 +1034,8 @@
 			isa = PBXGroup;
 			children = (
 				A9B74FFF1D8782B300DDC8C8 /* AWSActivities */,
-				A9EDB7971D72CFF900499FBB /* AWSCategories */,
-				A9C22CF61D7E0B75002A1D6E /* AWSFeaturedCategories */,
 				A9D185D51D7192230073E65F /* AWSLikes */,
+				A9EDB7971D72CFF900499FBB /* AWSCategories */,
 				A9E3DD3D1D86A31B00DED8C8 /* AWSProfessions */,
 				A9F49D581D379D58002EB68B /* AWSPosts */,
 				A9604F831D33726700F23B33 /* AWSUsers */,
@@ -1018,6 +1043,7 @@
 				A98A38221D8C070A00C9CA75 /* AWSUserCategories */,
 				A9ACA73F1DB506910004B8DE /* AWSWorkExperiences */,
 				A99B9E291DB53C8D0047360D /* AWSEducations */,
+				A915F86F1DC0D57C0031C45F /* AWSLocations */,
 				A94797AD1D2E3C6B007CBF08 /* AWSConstants.swift */,
 				A95C31B81D3E35AA0003377F /* AWSClientManager.swift */,
 				A961875E1D3FA67B0028DEA7 /* ClientManager.swift */,
@@ -1047,17 +1073,6 @@
 				A9F49D591D379D70002EB68B /* AWSPostsTable.swift */,
 			);
 			name = AWSPosts;
-			sourceTree = "<group>";
-		};
-		A9FF2EED1D6AEE340022AB0C /* Category */ = {
-			isa = PBXGroup;
-			children = (
-				A9FF2EF01D6AEE9E0022AB0C /* Category.storyboard */,
-				A97EDECA1D9A5922002E63F7 /* Category2TableViewController.swift */,
-				A9C18ADE1D9A934C00628845 /* AddLocationTableViewCell.swift */,
-				A9FF2EF21D6AF9280022AB0C /* CategoryTableViewController.swift */,
-			);
-			name = Category;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1126,27 +1141,28 @@
 				A945973E1DA7E463006A4C9B /* AlbumButton.xib in Resources */,
 				A930BC831D0DD43F004D49F7 /* Assets.xcassets in Resources */,
 				A930BC811D0DD43F004D49F7 /* Main.storyboard in Resources */,
-				A9FF2EF11D6AEE9E0022AB0C /* Category.storyboard in Resources */,
 				A9AFFB0D1D8AFEB800219627 /* Categories.storyboard in Resources */,
 				A9543CAB1DA3A1ED002BF372 /* EditPost.storyboard in Resources */,
 				A9A503A71D2FF8450030A472 /* EditProfile.storyboard in Resources */,
+				A95E93AF1DBF6D0000A1FF6E /* Profession.storyboard in Resources */,
 				A96622001D0EBBC200298CE7 /* Onboarding.storyboard in Resources */,
 				A9AFFB081D8AFE0C00219627 /* Professions.storyboard in Resources */,
+				A91828471DC0E59100EC9E63 /* Locations.storyboard in Resources */,
 				A9E53B6B1D10666800CD1D6C /* Search.storyboard in Resources */,
 				A9E53B6D1D10667100CD1D6C /* Capture.storyboard in Resources */,
 				A9E53B711D10668400CD1D6C /* Profile.storyboard in Resources */,
 				A9A1D7F01DBCFE83002AF221 /* ProfileTableSectionHeader.xib in Resources */,
-				A9AFFB0A1D8AFE2A00219627 /* Locations.storyboard in Resources */,
+				A9AFFB0A1D8AFE2A00219627 /* LocationsOld.storyboard in Resources */,
 				A9E53B6F1D10667B00CD1D6C /* Notifications.storyboard in Resources */,
 				A99B9E341DB53FE20047360D /* EditEducation.storyboard in Resources */,
 				A990ECB31D6A576E00C3C9CE /* Users.storyboard in Resources */,
 				A990ECB81D6A5F6A00C3C9CE /* Comments.storyboard in Resources */,
 				A99ADA1F1D0F189E0050E329 /* Welcome.storyboard in Resources */,
 				A9CBBC471DB634C0009C8EC7 /* EditWorkExperience.storyboard in Resources */,
-				A9C18AE21D9A985F00628845 /* LocationsNew.storyboard in Resources */,
 				A9ACF1891D927E1E00A99B7F /* Experiences.storyboard in Resources */,
 				A9E53B691D10665100CD1D6C /* Home.storyboard in Resources */,
 				A9AC8FBE1DBDFDCB00C9BCE0 /* PostDetails.storyboard in Resources */,
+				A999CD451DBE829F00E7ADB1 /* SearchTableSectionHeader.xib in Resources */,
 				A9CBBC601DB6610E009C8EC7 /* ExperiencesTableSectionHeader.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1175,15 +1191,16 @@
 				A9CBBC621DB66134009C8EC7 /* ExperiencesTableSectionHeader.swift in Sources */,
 				A9CBBC581DB64A2B009C8EC7 /* EditEducationFieldOfStudyTableViewCell.swift in Sources */,
 				A9CBBC451DB634A8009C8EC7 /* EditWorkExperienceTableViewController.swift in Sources */,
-				A9FF2EF31D6AF9280022AB0C /* CategoryTableViewController.swift in Sources */,
 				A99B9E2F1DB53DFC0047360D /* AWSEducationUpdate.swift in Sources */,
 				A97A9AEB1D85C03B00507517 /* HeaderTableViewCell.swift in Sources */,
 				A9CBBC5C1DB651BD009C8EC7 /* ExperiencesTableViewController.swift in Sources */,
+				A915F8711DC0D5A60031C45F /* AWSLocation.swift in Sources */,
 				A9D716A91D57486100300135 /* PostSmallTableViewCell.swift in Sources */,
+				A999CD481DBE93D400E7ADB1 /* ProfessionTableViewController.swift in Sources */,
 				A9D5F9DC1D9FD6AC00A5C99F /* WebsiteTableViewCell.swift in Sources */,
 				A990ECB01D6A572500C3C9CE /* UsersTableViewController.swift in Sources */,
-				A9C18AE41D9A989E00628845 /* LocationsNewTableViewController.swift in Sources */,
 				A9B68DA31D8999BB006AC4EA /* NotificationsTableViewController.swift in Sources */,
+				A915F8751DC0D9CB0031C45F /* Location.swift in Sources */,
 				A9EAD3401D1E8E0C00994292 /* NoSQLModelHelpers.swift in Sources */,
 				A9543CAF1DA3C4DB002BF372 /* EditPostImageTableViewCell.swift in Sources */,
 				A9A5039F1D2FE0810030A472 /* AWSUser.swift in Sources */,
@@ -1191,13 +1208,16 @@
 				A990ECB51D6A582100C3C9CE /* UserTableViewCell.swift in Sources */,
 				A9B750011D8782C200DDC8C8 /* AWSActivity.swift in Sources */,
 				A9BF164B1D6519D100060A9E /* SearchingTableViewCell.swift in Sources */,
+				A95E93B11DBF8D4500A1FF6E /* AddLocationTableViewCell.swift in Sources */,
 				A90A09581D43E5A7006AC49D /* WelcomeNavigationController.swift in Sources */,
+				A92F93ED1DC3940A00065CD1 /* EditProfileTableViewController.swift in Sources */,
 				A9543CB11DA3C51B002BF372 /* EditPostDescriptionTableViewCell.swift in Sources */,
 				A9D21B451D5B662100B5847D /* PRFYUserPoolManager.swift in Sources */,
 				A9C808151D916C1B0018109C /* EditProfilePicTableViewCell.swift in Sources */,
 				A9B7A24A1D65D8C0009DA340 /* HomeTableViewController.swift in Sources */,
 				A9AA36371D9463E100E5EAFA /* SignUpTableViewController.swift in Sources */,
 				A9F49D5A1D379D70002EB68B /* AWSPostsTable.swift in Sources */,
+				A91828491DC1120700EC9E63 /* AddProfessionTableViewCell.swift in Sources */,
 				A9E4507C1D59E6D300D14553 /* CommentsTableViewController.swift in Sources */,
 				A99ADD261DB361BE00A34C8D /* CurrentUser.swift in Sources */,
 				A9ACA7451DB508540004B8DE /* AWSWorkExperiencesTable.swift in Sources */,
@@ -1209,45 +1229,45 @@
 				A9ACA7491DB50AF40004B8DE /* WorkExperience.swift in Sources */,
 				A9A503A11D2FE0A90030A472 /* AWSUsersTable.swift in Sources */,
 				A9C808201D916C7D0018109C /* EditProfessionTableViewCell.swift in Sources */,
-				A9C808131D915CB20018109C /* EditProfileTableViewController.swift in Sources */,
-				A9C22CFC1D7E0F4D002A1D6E /* FeaturedCategory.swift in Sources */,
 				A913FC701D51F6AF000D10A6 /* DynamoDBManager.swift in Sources */,
 				A9CBBC641DB66856009C8EC7 /* EducationTableViewCell.swift in Sources */,
+				A91828451DC0E49800EC9E63 /* LocationTableViewCell.swift in Sources */,
 				A98A38241D8C076C00C9CA75 /* AWSUserCategory.swift in Sources */,
 				A95C31B91D3E35AA0003377F /* AWSClientManager.swift in Sources */,
 				A9D21B471D5B664F00B5847D /* UserPoolManager.swift in Sources */,
 				A9AA36391D947C4E00E5EAFA /* LogInTableViewController.swift in Sources */,
 				A9B68DA11D897A24006AC4EA /* EmptyTableViewCell.swift in Sources */,
 				A9E3DD411D86A37600DED8C8 /* AWSProfessionsTable.swift in Sources */,
+				A999CD411DBE6FB000E7ADB1 /* SearchProfessionTableViewCell.swift in Sources */,
 				A9CBBC541DB63FF6009C8EC7 /* EditWorkDescriptionTableViewCell.swift in Sources */,
 				A91A103C1DA836050042B4CA /* AddInfoImageTableViewCell.swift in Sources */,
 				A9D185D91D71927E0073E65F /* AWSLike.swift in Sources */,
 				A9B6A89D1D7F2ED4001EE407 /* AWSCategoriesTable.swift in Sources */,
+				A915F86E1DC0D49C0031C45F /* LocationsTableViewController.swift in Sources */,
 				A9AC8FC01DBDFF5200C9BCE0 /* PostDetailsTableViewController.swift in Sources */,
 				A9B934B01D1BD9BB00ACC2B8 /* OnboardingViewController.swift in Sources */,
 				A9D5F9DE1D9FD6B600A5C99F /* EmailTableViewCell.swift in Sources */,
 				A9E450801D5A09F100D14553 /* Comment.swift in Sources */,
+				A918284D1DC124D900EC9E63 /* AddCategoryTableViewCell.swift in Sources */,
 				A9C4D2731D992A67000E1F35 /* SearchUsersTableViewController.swift in Sources */,
-				A9C18ADF1D9A934C00628845 /* AddLocationTableViewCell.swift in Sources */,
 				A90146E21DB2424B0092ED21 /* ProfileTableViewController.swift in Sources */,
 				A9543CB31DA3C531002BF372 /* EditPostCategoryTableViewCell.swift in Sources */,
 				A9D5F9E01D9FD6C000A5C99F /* PhoneTableViewCell.swift in Sources */,
 				A98A38261D8C07DA00C9CA75 /* AWSUserCategoriesTable.swift in Sources */,
-				A9C22CF81D7E0B90002A1D6E /* AWSFeaturedCategory.swift in Sources */,
 				A9193A331D6F137500E38F56 /* AWSUserRelationshipsTable.swift in Sources */,
 				A90146E61DB27C580092ED21 /* ProfileInfoTableViewCell.swift in Sources */,
 				A903EB591D16A39700B33025 /* UIImage+FixOrientation.m in Sources */,
 				A9D97BF81D95718C00D6F22E /* WelcomeProfessionsTableViewController.swift in Sources */,
 				A9CBBC521DB63FEA009C8EC7 /* EditWorkOrganizationTableViewCell.swift in Sources */,
 				A975529C1D4F4D0300F773FF /* PreviewViewController.swift in Sources */,
-				A9BF16471D64DDAC00060A9E /* SearchCategoryTableViewCell.swift in Sources */,
 				A9ACA7471DB508BB0004B8DE /* AWSWorkExperienceUpdate.swift in Sources */,
 				A961875F1D3FA67B0028DEA7 /* ClientManager.swift in Sources */,
 				A9E4507A1D59E6C500D14553 /* CommentTableViewCell.swift in Sources */,
 				A9BF16491D6514C900060A9E /* NoResultsTableViewCell.swift in Sources */,
+				A915F8731DC0D6580031C45F /* AWSLocationsTable.swift in Sources */,
 				A96622051D0EC49700298CE7 /* Colors.swift in Sources */,
 				A9D334121D801B70005565C2 /* PostButtonsTableViewCell.swift in Sources */,
-				A9E050F41D83065D00DD992D /* LocationTableViewCell.swift in Sources */,
+				A9E050F41D83065D00DD992D /* LocationOldTableViewCell.swift in Sources */,
 				A94797A71D2E3451007CBF08 /* User.swift in Sources */,
 				A90146E41DB2662E0092ED21 /* ProfileMainTableViewCell.swift in Sources */,
 				A9A1D7EE1DBCFE58002AF221 /* ProfileTableSectionHeader.swift in Sources */,
@@ -1257,7 +1277,6 @@
 				A913FC721D51FAD6000D10A6 /* PRFYDynamoDBManager.swift in Sources */,
 				A99B9E2B1DB53CB40047360D /* AWSEducation.swift in Sources */,
 				A9E3DD431D86A42400DED8C8 /* Profession.swift in Sources */,
-				A9C22CFA1D7E0C78002A1D6E /* AWSFeaturedCategoriesTable.swift in Sources */,
 				A9A503991D2FA9180030A472 /* LocalService.swift in Sources */,
 				A9CBBC661DB669EA009C8EC7 /* EditEducationDescriptionTableViewCell.swift in Sources */,
 				A9EAEC071DA6A38600DA6A4D /* AWSPostUpdate.swift in Sources */,
@@ -1266,7 +1285,8 @@
 				A9C0ED3A1D3C21C30036F791 /* Post.swift in Sources */,
 				A9AFFB0F1D8AFF1800219627 /* CategoryTableViewCell.swift in Sources */,
 				A9AA36351D945DE200E5EAFA /* OnboardingNavigationController.swift in Sources */,
-				A97EDECB1D9A5922002E63F7 /* Category2TableViewController.swift in Sources */,
+				A999CD3F1DBE6F9F00E7ADB1 /* SearchProfessionsTableViewController.swift in Sources */,
+				A918284B1DC1233400EC9E63 /* SearchLocationTableViewCell.swift in Sources */,
 				A99B9E311DB53E370047360D /* Education.swift in Sources */,
 				A9B6A89F1D7F8063001EE407 /* PostUserTableViewCell.swift in Sources */,
 				A903EB571D16A39700B33025 /* LLSimpleCamera.m in Sources */,
@@ -1280,7 +1300,6 @@
 				A91A103A1DA833E40042B4CA /* AddInfoTableViewController.swift in Sources */,
 				A9E4507E1D59E6E400D14553 /* CommentsViewController.swift in Sources */,
 				A95E40D01D35410500FD61F9 /* CaptureNavigationController.swift in Sources */,
-				A9DC4E361D994B8900AF4AB8 /* SearchCategoriesTableViewController.swift in Sources */,
 				A99030FB1D46632500336D26 /* AlbumsTableViewController.swift in Sources */,
 				A9C8081C1D916C660018109C /* EditAboutTableViewCell.swift in Sources */,
 				A91A10351DA7F59F0042B4CA /* GalleryViewController.swift in Sources */,
@@ -1291,8 +1310,9 @@
 				A9C8081E1D916C720018109C /* EditLocationTableViewCell.swift in Sources */,
 				A930BC7C1D0DD43F004D49F7 /* AppDelegate.swift in Sources */,
 				A99B9E381DB54A130047360D /* CurrentlyDoingTableViewCell.swift in Sources */,
+				A999CD431DBE828800E7ADB1 /* SearchTableSectionHeader.swift in Sources */,
 				A99B9E2D1DB53D8C0047360D /* AWSEducationsTable.swift in Sources */,
-				A9E4EC541D81F1B700929ED1 /* LocationsTableViewController.swift in Sources */,
+				A9E4EC541D81F1B700929ED1 /* LocationsOldTableViewController.swift in Sources */,
 				A9ACA7411DB506A50004B8DE /* AWSWorkExperience.swift in Sources */,
 				A901CFE91DA78FA900C44B26 /* CameraViewController.swift in Sources */,
 				A97A9AED1D85D0ED00507517 /* ProfessionsTableViewController.swift in Sources */,

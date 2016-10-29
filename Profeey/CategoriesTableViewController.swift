@@ -10,25 +10,24 @@ import UIKit
 import AWSDynamoDB
 
 protocol CategoriesTableViewControllerDelegate {
-    
-    func didSelectCategory(categoryName: String)
+    func didSelectCategory(_ categoryName: String?)
 }
 
 class CategoriesTableViewController: UITableViewController {
     
-    @IBOutlet weak var categoryTextField: UITextField!
-    @IBOutlet weak var addButton: UIBarButtonItem!
-    
-    fileprivate var searchedCategories: [Category] = []
-    fileprivate var popularCategories: [Category] = []
-    fileprivate var showPopularCategories: Bool = true
-    
-    var categoriesTableViewControllerDelegate: CategoriesTableViewControllerDelegate?
+    var categoryName: String?
     var isStatusBarHidden: Bool = false
+    var categoriesTableViewControllerDelegate: CategoriesTableViewControllerDelegate?
+    fileprivate var categories: [Category] = []
+    fileprivate var allCategories: [Category] = []
+    fileprivate var searchedCategories: [Category] = []
+    fileprivate var isSearching: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.addButton.isEnabled = false
+        self.tableView.contentInset = UIEdgeInsetsMake(-1.0, 0.0, 0.0, 0.0)
+        
+        self.isSearching = true
         self.scanCategories()
     }
     
@@ -48,102 +47,114 @@ class CategoriesTableViewController: UITableViewController {
     // MARK: UITableViewDataSource
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return 2
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if self.showPopularCategories {
-            return self.popularCategories.count
-        } else {
-            return self.searchedCategories.count
+        switch section {
+        case 0:
+            return 1
+        case 1:
+            if self.isSearching {
+                return 1
+            }
+            if self.categories.count == 0 {
+                return 1
+            }
+            return self.categories.count
+        default:
+            return 0
         }
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let category = self.showPopularCategories ? self.popularCategories[indexPath.row] : self.searchedCategories[indexPath.row]
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cellCategory", for: indexPath) as! CategoryTableViewCell
-        cell.categoryNameLabel.text = category.categoryName
-        cell.numberOfPostsLabel.text = category.numberOfPostsString
-        return cell
+        switch indexPath.section {
+        case 0:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellAddCategory", for: indexPath) as! AddCategoryTableViewCell
+            if self.categoryName != nil {
+                cell.addCategoryTextField.text = self.categoryName
+            }
+            cell.addCategoryTableViewCellDelegate = self
+            return cell
+        case 1:
+            if self.isSearching {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellSearching", for: indexPath) as! SearchingTableViewCell
+                cell.activityIndicator.startAnimating()
+                return cell
+            }
+            if self.categories.count == 0 {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellNoResults", for: indexPath) as! NoResultsTableViewCell
+                return cell
+            }
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellCategory", for: indexPath) as! CategoryTableViewCell
+            let category = self.categories[indexPath.row]
+            cell.categoryNameLabel.text = category.categoryName
+            cell.numberOfPostsLabel.text = category.numberOfPostsString
+            return cell
+        default:
+            return UITableViewCell()
+        }
     }
     
     // MARK: UITableViewDelegate
-    
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cellHeader") as! HeaderTableViewCell
-        cell.headerTitle.text = self.showPopularCategories ? "RECENT" : "BEST MATCHES"
-        cell.contentView.backgroundColor = Colors.greyLight
-        cell.contentView.alpha = 0.95
-        return cell.contentView
-    }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let cell = tableView.cellForRow(at: indexPath)
         if cell is CategoryTableViewCell {
-            let category = self.showPopularCategories ? self.popularCategories[indexPath.row] : self.searchedCategories[indexPath.row]
-            guard let categoryName = category.categoryName else {
-                return
-            }
-            self.categoriesTableViewControllerDelegate?.didSelectCategory(categoryName: categoryName)
+            self.categoriesTableViewControllerDelegate?.didSelectCategory(self.categories[indexPath.row].categoryName)
             self.dismiss(animated: true, completion: nil)
         }
     }
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.layoutMargins = UIEdgeInsets.zero
-        cell.separatorInset = UIEdgeInsetsMake(0.0, 20.0, 0.0, 0.0)
     }
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 72.0
+        switch indexPath.section {
+        case 0:
+            return 52.0
+        case 1:
+            return 64.0
+        default:
+            return 0.0
+        }
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 72.0
+        switch indexPath.section {
+        case 0:
+            return 52.0
+        case 1:
+            return 64.0
+        default:
+            return 0.0
+        }
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 32.0
+        if section == 0 {
+            return 1.0
+        }
+        return 12.0
     }
     
     // MARK: UIScrollViewDelegate
     
-    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         self.view.endEditing(true)
     }
     
     // MARK: IBActions
     
     @IBAction func addButtonTapped(_ sender: AnyObject) {
-        guard let text = self.categoryTextField.text else {
-            return
-        }
-        let categoryName = text.trimm()
-        self.categoriesTableViewControllerDelegate?.didSelectCategory(categoryName: categoryName)
+        self.categoriesTableViewControllerDelegate?.didSelectCategory(self.categoryName)
         self.dismiss(animated: true, completion: nil)
     }
     
     @IBAction func cancelButtonTapped(_ sender: AnyObject) {
         self.dismiss(animated: true, completion: nil)
-    }
-    
-    @IBAction func categoryTextFieldChanged(_ sender: AnyObject) {
-        guard let text = self.categoryTextField.text else {
-            return
-        }
-        let categoryName = text.trimm()
-        if categoryName.isEmpty {
-            self.showPopularCategories = true
-            self.tableView.reloadData()
-            self.addButton.isEnabled = false
-        } else {
-            self.showPopularCategories = false
-            self.searchedCategories = []
-            self.tableView.reloadData()
-            self.addButton.isEnabled = true
-            self.scanCategoriesByCategoryName(categoryName)
-        }
     }
     
     // MARK: AWS
@@ -154,44 +165,59 @@ class CategoriesTableViewController: UITableViewController {
             (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                self.isSearching = false
                 if let error = error {
                     print("scanCategories error: \(error)")
+                    self.reloadCategoriesSection()
                 } else {
-                    guard let awsCategories = response?.items as? [AWSCategory], awsCategories.count > 0 else {
+                    guard let awsCategories = response?.items as? [AWSCategory] else {
+                        self.reloadCategoriesSection()
                         return
                     }
                     for awsCategory in awsCategories {
-                        let category = Category(categoryName: awsCategory._categoryName, numberOfPosts: awsCategory._numberOfPosts)
-                        self.popularCategories.append(category)
+                        let category = Category(categoryName: awsCategory._categoryName, searchCategoryName: awsCategory._searchCategoryName, numberOfPosts: awsCategory._numberOfPosts)
+                        self.allCategories.append(category)
                     }
-                    self.tableView.reloadData()
+                    self.categories = self.allCategories
+                    self.reloadCategoriesSection()
                 }
             })
         })
     }
     
-    fileprivate func scanCategoriesByCategoryName(_ categoryName: String) {
-        let searchCategoryName = categoryName.lowercased()
-        
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().scanCategoriesByCategoryNameDynamoDB(searchCategoryName, completionHandler: {
-            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
-            DispatchQueue.main.async(execute: {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                if let error = error {
-                    print("scanCategoriesByCategoryName error: \(error)")
-                } else {
-                    guard let awsCategories = response?.items as? [AWSCategory], awsCategories.count > 0 else {
-                        return
-                    }
-                    self.searchedCategories = []
-                    for awsCategory in awsCategories {
-                        let category = Category(categoryName: awsCategory._categoryName, numberOfPosts: awsCategory._numberOfPosts)
-                        self.searchedCategories.append(category)
-                    }
-                    self.tableView.reloadData()
-                }
-            })
+    // MARK: Helper
+    
+    fileprivate func filterCategories(_ searchText: String) {
+        self.searchedCategories = self.allCategories.filter({
+            (category: Category) in
+            if let searchCategoryName = category.searchCategoryName, searchCategoryName.hasPrefix(searchText.lowercased()) {
+                return true
+            } else {
+                return false
+            }
         })
+        self.categories = self.searchedCategories
+        self.reloadCategoriesSection()
+    }
+    
+    fileprivate func reloadCategoriesSection () {
+        UIView.performWithoutAnimation {
+            self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
+        }
+    }
+}
+
+extension CategoriesTableViewController: AddCategoryTableViewCellDelegate {
+    
+    func addCategoryTextFieldChanged(_ text: String) {
+        let categoryName = text.trimm()
+        if categoryName.isEmpty {
+            self.categories = self.allCategories
+            self.reloadCategoriesSection()
+            self.categoryName = nil
+        } else {
+            self.filterCategories(categoryName)
+            self.categoryName = categoryName
+        }
     }
 }

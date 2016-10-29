@@ -26,103 +26,58 @@
         <scene sceneID="52n-ja-bBp">
             <objects>
                 <tableViewController id="bSU-Zt-F7f" customClass="CategoriesTableViewController" customModule="Profeey" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="Dj7-eh-NVJ">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="Dj7-eh-NVJ">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <view key="tableHeaderView" contentMode="scaleToFill" id="F2O-QH-zZe">
-                            <rect key="frame" x="0.0" y="64" width="375" height="59"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <subviews>
-                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Add Skill" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="f5o-8T-5yd">
-                                    <constraints>
-                                        <constraint firstAttribute="height" constant="42" id="eAu-x3-Ga3"/>
-                                    </constraints>
-                                    <color key="textColor" red="0.2901960784" green="0.2901960784" blue="0.2901960784" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                    <textInputTraits key="textInputTraits" autocorrectionType="no"/>
-                                    <connections>
-                                        <action selector="categoryTextFieldChanged:" destination="bSU-Zt-F7f" eventType="editingChanged" id="gdK-JN-kmS"/>
-                                    </connections>
-                                </textField>
-                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="r5S-1v-jQh" userLabel="Separator View">
-                                    <color key="backgroundColor" red="0.90980392160000001" green="0.90980392160000001" blue="0.90980392160000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    <constraints>
-                                        <constraint firstAttribute="height" constant="1" id="KZo-IK-f4I">
-                                            <userDefinedRuntimeAttributes>
-                                                <userDefinedRuntimeAttribute type="number" keyPath="constant">
-                                                    <real key="value" value="0.5"/>
-                                                </userDefinedRuntimeAttribute>
-                                            </userDefinedRuntimeAttributes>
-                                        </constraint>
-                                    </constraints>
-                                </view>
-                            </subviews>
-                            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            <constraints>
-                                <constraint firstItem="f5o-8T-5yd" firstAttribute="top" secondItem="F2O-QH-zZe" secondAttribute="top" constant="8" id="3Rf-3i-N9t"/>
-                                <constraint firstAttribute="trailing" secondItem="f5o-8T-5yd" secondAttribute="trailing" constant="16" id="KLq-iE-6Nw"/>
-                                <constraint firstItem="r5S-1v-jQh" firstAttribute="top" secondItem="f5o-8T-5yd" secondAttribute="bottom" constant="8" id="S8H-Ka-HgI"/>
-                                <constraint firstAttribute="trailing" secondItem="r5S-1v-jQh" secondAttribute="trailing" id="XDW-bx-uKg"/>
-                                <constraint firstItem="f5o-8T-5yd" firstAttribute="leading" secondItem="F2O-QH-zZe" secondAttribute="leading" constant="20" id="XQ2-4c-zdZ"/>
-                                <constraint firstAttribute="bottom" secondItem="r5S-1v-jQh" secondAttribute="bottom" id="fFq-OH-Zup"/>
-                                <constraint firstItem="r5S-1v-jQh" firstAttribute="leading" secondItem="F2O-QH-zZe" secondAttribute="leading" id="pCn-f1-ZF0"/>
-                            </constraints>
-                        </view>
+                        <color key="backgroundColor" red="0.98039215690000003" green="0.98039215690000003" blue="0.98039215690000003" alpha="1" colorSpace="calibratedRGB"/>
+                        <inset key="separatorInset" minX="16" minY="0.0" maxX="0.0" maxY="0.0"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellHeader" rowHeight="32" id="P2s-cS-rBW" customClass="HeaderTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="151" width="375" height="32"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellAddCategory" rowHeight="52" id="XV4-UR-qfN" customClass="AddCategoryTableViewCell" customModule="Profeey" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="120" width="375" height="52"/>
                                 <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="P2s-cS-rBW" id="c1r-gH-E1I">
-                                    <frame key="frameInset" width="375" height="31"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="XV4-UR-qfN" id="Unl-1Y-tDB">
+                                    <frame key="frameInset" width="375" height="51"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="HEADER TITLE" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zpc-Zz-AtA">
-                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                            <color key="textColor" red="0.63921568630000003" green="0.63921568630000003" blue="0.63921568630000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Jq-tQ-EUb" userLabel="Separator View">
-                                            <color key="backgroundColor" red="0.90980392160000001" green="0.90980392160000001" blue="0.90980392160000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Add a skill..." textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="2lt-mM-qgk">
                                             <constraints>
-                                                <constraint firstAttribute="height" constant="1" id="sdf-Li-F6c">
-                                                    <userDefinedRuntimeAttributes>
-                                                        <userDefinedRuntimeAttribute type="number" keyPath="constant">
-                                                            <real key="value" value="0.5"/>
-                                                        </userDefinedRuntimeAttribute>
-                                                    </userDefinedRuntimeAttributes>
-                                                </constraint>
+                                                <constraint firstAttribute="height" constant="36" id="8LU-uO-kIl"/>
                                             </constraints>
-                                        </view>
+                                            <color key="textColor" red="0.2901960784" green="0.2901960784" blue="0.2901960784" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                            <textInputTraits key="textInputTraits"/>
+                                            <connections>
+                                                <action selector="addCategoryTextFieldChanged:" destination="XV4-UR-qfN" eventType="editingChanged" id="huT-oX-FEK"/>
+                                            </connections>
+                                        </textField>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstAttribute="trailing" secondItem="9Jq-tQ-EUb" secondAttribute="trailing" id="1jd-jq-z8q"/>
-                                        <constraint firstItem="9Jq-tQ-EUb" firstAttribute="leading" secondItem="c1r-gH-E1I" secondAttribute="leading" id="Bel-Q5-WdI"/>
-                                        <constraint firstItem="Zpc-Zz-AtA" firstAttribute="top" secondItem="c1r-gH-E1I" secondAttribute="top" constant="8" id="GhH-fa-I6Z"/>
-                                        <constraint firstAttribute="bottom" secondItem="9Jq-tQ-EUb" secondAttribute="bottom" id="bAl-V9-BnY"/>
-                                        <constraint firstItem="Zpc-Zz-AtA" firstAttribute="leading" secondItem="c1r-gH-E1I" secondAttribute="leading" constant="20" id="eQY-bc-lQM"/>
+                                        <constraint firstItem="2lt-mM-qgk" firstAttribute="centerY" secondItem="Unl-1Y-tDB" secondAttribute="centerY" id="Ig5-l1-RkW"/>
+                                        <constraint firstItem="2lt-mM-qgk" firstAttribute="leading" secondItem="Unl-1Y-tDB" secondAttribute="leading" constant="16" id="MVu-Qu-j47"/>
+                                        <constraint firstAttribute="trailing" secondItem="2lt-mM-qgk" secondAttribute="trailing" constant="16" id="vGo-Lc-4mB"/>
                                     </constraints>
                                 </tableViewCellContentView>
-                                <color key="backgroundColor" red="0.98039215690000003" green="0.98039215690000003" blue="0.98039215690000003" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <connections>
-                                    <outlet property="headerTitle" destination="Zpc-Zz-AtA" id="9FN-dn-Was"/>
+                                    <outlet property="addCategoryTextField" destination="2lt-mM-qgk" id="g6E-E3-0Ee"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellCategory" rowHeight="72" id="Klp-XK-yAo" customClass="CategoryTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="183" width="375" height="72"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellCategory" rowHeight="64" id="VIX-uT-hob" customClass="CategoryTableViewCell" customModule="Profeey" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="172" width="375" height="64"/>
                                 <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Klp-XK-yAo" id="nzg-Ne-diX">
-                                    <frame key="frameInset" width="375" height="71"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="VIX-uT-hob" id="iL9-Dr-lYd">
+                                    <frame key="frameInset" width="375" height="63"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="KUh-Gu-38y">
+                                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="mbo-x1-ePm">
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Category Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hvp-Qa-nd1">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Category Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qoK-6p-F6A">
                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                     <color key="textColor" red="0.2901960784" green="0.2901960784" blue="0.2901960784" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0 posts" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QKd-P7-HeQ">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0 posts" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="93X-hp-hmy">
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <color key="textColor" red="0.63921568630000003" green="0.63921568630000003" blue="0.63921568630000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -131,16 +86,62 @@
                                         </stackView>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstAttribute="bottom" secondItem="KUh-Gu-38y" secondAttribute="bottom" constant="16.5" id="0jE-mc-qcg"/>
-                                        <constraint firstItem="KUh-Gu-38y" firstAttribute="top" secondItem="nzg-Ne-diX" secondAttribute="top" constant="16" id="7Zc-4y-zbG"/>
-                                        <constraint firstItem="KUh-Gu-38y" firstAttribute="leading" secondItem="nzg-Ne-diX" secondAttribute="leading" constant="20" id="EFY-fO-K1f"/>
-                                        <constraint firstAttribute="trailing" secondItem="KUh-Gu-38y" secondAttribute="trailing" constant="20" id="if9-lf-V4G"/>
+                                        <constraint firstItem="mbo-x1-ePm" firstAttribute="centerY" secondItem="iL9-Dr-lYd" secondAttribute="centerY" id="2cW-X1-Upy"/>
+                                        <constraint firstAttribute="trailing" secondItem="mbo-x1-ePm" secondAttribute="trailing" constant="16" id="7Jt-2f-y8V"/>
+                                        <constraint firstItem="mbo-x1-ePm" firstAttribute="leading" secondItem="iL9-Dr-lYd" secondAttribute="leading" constant="16" id="9Fr-qD-3eF"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <outlet property="categoryNameLabel" destination="qoK-6p-F6A" id="mKx-8k-4Db"/>
+                                    <outlet property="numberOfPostsLabel" destination="93X-hp-hmy" id="FyQ-om-B6y"/>
+                                </connections>
+                            </tableViewCell>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellSearching" rowHeight="64" id="Krb-fh-ftM" customClass="SearchingTableViewCell" customModule="Profeey" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="236" width="375" height="64"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Krb-fh-ftM" id="VAb-9U-oBo">
+                                    <frame key="frameInset" width="375" height="63"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="u6J-EL-T8r"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Searching..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RHS-19-eYx">
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <color key="textColor" red="0.63921568630000003" green="0.63921568630000003" blue="0.63921568630000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="u6J-EL-T8r" firstAttribute="leading" secondItem="VAb-9U-oBo" secondAttribute="leading" constant="26" id="33z-y3-SIf"/>
+                                        <constraint firstItem="RHS-19-eYx" firstAttribute="leading" secondItem="u6J-EL-T8r" secondAttribute="trailing" constant="16" id="f2a-BR-Tjb"/>
+                                        <constraint firstItem="u6J-EL-T8r" firstAttribute="centerY" secondItem="VAb-9U-oBo" secondAttribute="centerY" id="fmb-re-PRk"/>
+                                        <constraint firstAttribute="trailing" secondItem="RHS-19-eYx" secondAttribute="trailing" constant="16" id="vTJ-UI-WLc"/>
+                                        <constraint firstItem="RHS-19-eYx" firstAttribute="centerY" secondItem="VAb-9U-oBo" secondAttribute="centerY" id="x3a-ri-8cO"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="categoryNameLabel" destination="hvp-Qa-nd1" id="dWt-UJ-Xx2"/>
-                                    <outlet property="numberOfPostsLabel" destination="QKd-P7-HeQ" id="yJ9-ME-Whq"/>
+                                    <outlet property="activityIndicator" destination="u6J-EL-T8r" id="J9g-G3-wYc"/>
                                 </connections>
+                            </tableViewCell>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellNoResults" rowHeight="64" id="jOX-2n-2h5" customClass="NoResultsTableViewCell" customModule="Profeey" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="300" width="375" height="64"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="jOX-2n-2h5" id="CBl-zc-mAt">
+                                    <frame key="frameInset" width="375" height="63"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No results found" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QZU-To-gZ8">
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <color key="textColor" red="0.63921568630000003" green="0.63921568630000003" blue="0.63921568630000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="QZU-To-gZ8" firstAttribute="centerY" secondItem="CBl-zc-mAt" secondAttribute="centerY" id="6j6-B0-ZKL"/>
+                                        <constraint firstItem="QZU-To-gZ8" firstAttribute="leading" secondItem="CBl-zc-mAt" secondAttribute="leading" constant="16" id="6uU-ae-poY"/>
+                                        <constraint firstAttribute="trailing" secondItem="QZU-To-gZ8" secondAttribute="trailing" constant="16" id="rzw-YG-oZ2"/>
+                                    </constraints>
+                                </tableViewCellContentView>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -160,10 +161,6 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
-                    <connections>
-                        <outlet property="addButton" destination="cFo-L1-EyO" id="gPx-rP-WsJ"/>
-                        <outlet property="categoryTextField" destination="f5o-8T-5yd" id="biC-BT-Byb"/>
-                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pSU-QS-YWZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

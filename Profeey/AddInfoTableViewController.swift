@@ -83,7 +83,6 @@ class AddInfoTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.layoutMargins = UIEdgeInsets.zero
-        cell.selectionStyle = UITableViewCellSelectionStyle.none
         if indexPath.row == 0 {
             cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
         }
@@ -93,9 +92,7 @@ class AddInfoTableViewController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
         let cell = tableView.cellForRow(at: indexPath)
         if cell is EditPostCategoryTableViewCell {
-            if self.post?.categoryName == nil {
-                self.performSegue(withIdentifier: "segueToCategoriesVc", sender: self)
-            }
+            self.performSegue(withIdentifier: "segueToCategoriesVc", sender: self)
         }
     }
     
@@ -165,7 +162,7 @@ extension AddInfoTableViewController: EditPostCategoryTableViewCellDelegate {
 
 extension AddInfoTableViewController: CategoriesTableViewControllerDelegate {
     
-    func didSelectCategory(categoryName: String) {
+    func didSelectCategory(_ categoryName: String?) {
         self.post?.categoryName = categoryName
         self.tableView.reloadRows(at: [self.bottomIndexPath], with: UITableViewRowAnimation.none)
     }

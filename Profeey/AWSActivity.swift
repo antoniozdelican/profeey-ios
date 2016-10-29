@@ -19,6 +19,7 @@ class AWSActivity: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     var _creationDate: NSNumber?
     var _imageUrl: String?
     var _numberOfLikes: NSNumber?
+    var _numberOfComments: NSNumber?
     
     var _firstName: String?
     var _lastName: String?
@@ -51,6 +52,7 @@ class AWSActivity: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
             "_creationDate" : "creationDate",
             "_imageUrl" : "imageUrl",
             "_numberOfLikes" : "numberOfLikes",
+            "_numberOfComments" : "numberOfComments",
             "_firstName" : "firstName",
             "_lastName" : "lastName",
             "_preferredUsername" : "preferredUsername",

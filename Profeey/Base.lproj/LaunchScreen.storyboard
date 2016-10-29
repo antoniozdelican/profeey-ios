@@ -17,12 +17,39 @@
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="0.2901960784" green="0.56470588239999997" blue="0.8862745098" alpha="1" colorSpace="calibratedRGB"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gBa-5h-f3D">
+                                <color key="backgroundColor" red="0.98039215690000003" green="0.98039215690000003" blue="0.98039215690000003" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="20" id="TkD-8w-vYL"/>
+                                </constraints>
+                            </view>
+                            <navigationBar contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bFV-B3-YRX">
+                                <color key="barTintColor" red="0.98039215690000003" green="0.98039215690000003" blue="0.98039215690000003" alpha="1" colorSpace="calibratedRGB"/>
+                            </navigationBar>
+                            <tabBar contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bGE-Tv-8Yf">
+                                <color key="backgroundColor" red="0.98039215690000003" green="0.98039215690000003" blue="0.98039215690000003" alpha="1" colorSpace="calibratedRGB"/>
+                                <items/>
+                                <color key="barTintColor" red="0.98039215690000003" green="0.98039215690000003" blue="0.98039215690000003" alpha="1" colorSpace="calibratedRGB"/>
+                            </tabBar>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="bGE-Tv-8Yf" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="6jt-fE-lAv"/>
+                            <constraint firstItem="gBa-5h-f3D" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="9c2-rQ-4NR"/>
+                            <constraint firstItem="gBa-5h-f3D" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="B0M-cR-CMw"/>
+                            <constraint firstItem="bFV-B3-YRX" firstAttribute="top" secondItem="Llm-lL-Icb" secondAttribute="bottom" id="EMv-CO-YTO"/>
+                            <constraint firstItem="bFV-B3-YRX" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="TIM-tk-Ifl"/>
+                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="bGE-Tv-8Yf" secondAttribute="bottom" id="VL6-T3-hyL"/>
+                            <constraint firstAttribute="trailing" secondItem="bGE-Tv-8Yf" secondAttribute="trailing" id="X8P-PQ-jbN"/>
+                            <constraint firstAttribute="trailing" secondItem="bFV-B3-YRX" secondAttribute="trailing" id="bTv-dv-P9G"/>
+                            <constraint firstAttribute="trailing" secondItem="gBa-5h-f3D" secondAttribute="trailing" id="wAf-GC-YAh"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="53" y="375"/>
+            <point key="canvasLocation" x="52" y="374.66266866566718"/>
         </scene>
     </scenes>
 </document>

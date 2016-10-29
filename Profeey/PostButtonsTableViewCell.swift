@@ -11,12 +11,14 @@ import UIKit
 protocol PostButtonsTableViewCellDelegate {
     func likeButtonTapped(_ button: UIButton)
     func numberOfLikesButtonTapped(_ button: UIButton)
+    func numberOfCommentsButtonTapped(_ button: UIButton)
 }
 
 class PostButtonsTableViewCell: UITableViewCell {
     
     @IBOutlet weak var likeButton: UIButton!
     @IBOutlet weak var numberOfLikesButton: UIButton!
+    @IBOutlet weak var numberOfCommentsButton: UIButton!
     
     var postButtonsTableViewCellDelegate: PostButtonsTableViewCellDelegate?
 
@@ -41,6 +43,7 @@ class PostButtonsTableViewCell: UITableViewCell {
             [UIFontDescriptorFeatureSettingsAttribute: features]
         )
         self.numberOfLikesButton.titleLabel?.font = UIFont(descriptor: fontDescriptor, size: UIFont.systemFont(ofSize: 14.0, weight: UIFontWeightRegular).pointSize)
+        self.numberOfCommentsButton.titleLabel?.font = UIFont(descriptor: fontDescriptor, size: UIFont.systemFont(ofSize: 14.0, weight: UIFontWeightRegular).pointSize)
     }
     
     func setSelectedLikeButton() {
@@ -65,5 +68,11 @@ class PostButtonsTableViewCell: UITableViewCell {
         self.postButtonsTableViewCellDelegate?.numberOfLikesButtonTapped(button)
     }
     
+    @IBAction func numberOfCommentsButtonTapped(_ sender: AnyObject) {
+        guard let button = sender as? UIButton else {
+            return
+        }
+        self.postButtonsTableViewCellDelegate?.numberOfCommentsButtonTapped(button)
+    }
 
 }

@@ -1,16 +1,17 @@
 //
-//  LocationTableViewCell.swift
+//  LocationOldTableViewCell.swift
 //  Profeey
 //
-//  Created by Antonio Zdelican on 26/10/16.
+//  Created by Antonio Zdelican on 09/09/16.
 //  Copyright © 2016 Profeey. All rights reserved.
 //
 
 import UIKit
 
-class LocationTableViewCell: UITableViewCell {
+class LocationOldTableViewCell: UITableViewCell {
     
-    @IBOutlet weak var locationNameLabel: UILabel!
+    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var subtitleLabel: UILabel!
 
     override func awakeFromNib() {
         super.awakeFromNib()

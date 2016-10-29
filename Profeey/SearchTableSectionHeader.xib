@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11201" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="SearchTableSectionHeader" customModule="Profeey" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="32"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hjW-oI-Vtz">
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="HEADER TITLE" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="enw-mZ-bcO">
+                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                            <color key="textColor" red="0.63921568630000003" green="0.63921568630000003" blue="0.63921568630000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uUx-aJ-gfj" userLabel="Separator View">
+                            <color key="backgroundColor" red="0.90980392160000001" green="0.90980392160000001" blue="0.90980392160000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="1" id="hLb-fc-bRJ">
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="number" keyPath="constant">
+                                            <real key="value" value="0.5"/>
+                                        </userDefinedRuntimeAttribute>
+                                    </userDefinedRuntimeAttributes>
+                                </constraint>
+                            </constraints>
+                        </view>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstItem="enw-mZ-bcO" firstAttribute="leading" secondItem="hjW-oI-Vtz" secondAttribute="leading" constant="20" id="C1u-Il-hc9"/>
+                        <constraint firstAttribute="trailing" secondItem="uUx-aJ-gfj" secondAttribute="trailing" id="Sn8-tk-RYq"/>
+                        <constraint firstItem="enw-mZ-bcO" firstAttribute="centerY" secondItem="hjW-oI-Vtz" secondAttribute="centerY" id="YOv-qQ-2xj"/>
+                        <constraint firstAttribute="bottom" secondItem="uUx-aJ-gfj" secondAttribute="bottom" id="auq-Gn-1GQ"/>
+                        <constraint firstItem="uUx-aJ-gfj" firstAttribute="leading" secondItem="hjW-oI-Vtz" secondAttribute="leading" id="udH-ht-V7U"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <constraints>
+                <constraint firstItem="hjW-oI-Vtz" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="Akf-mf-Vws"/>
+                <constraint firstAttribute="bottom" secondItem="hjW-oI-Vtz" secondAttribute="bottom" id="BvX-5w-ejH"/>
+                <constraint firstAttribute="trailing" secondItem="hjW-oI-Vtz" secondAttribute="trailing" id="OHK-7p-tma"/>
+                <constraint firstItem="hjW-oI-Vtz" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="ST1-e6-moG"/>
+            </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="titleLabel" destination="enw-mZ-bcO" id="cP4-Bg-mb7"/>
+            </connections>
+            <point key="canvasLocation" x="55.5" y="54"/>
+        </view>
+    </objects>
+</document>

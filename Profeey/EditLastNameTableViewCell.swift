@@ -8,9 +8,15 @@
 
 import UIKit
 
+protocol EditLastNameTableViewCellDelegate {
+    func lastNameTextFieldChanged(_ text: String)
+}
+
 class EditLastNameTableViewCell: UITableViewCell {
     
     @IBOutlet weak var lastNameTextField: UITextField!
+    
+    var editLastNameTableViewCellDelegate: EditLastNameTableViewCellDelegate?
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -19,5 +25,13 @@ class EditLastNameTableViewCell: UITableViewCell {
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
-
+    
+    // MARK: IBActions
+    
+    @IBAction func lastNameTextFieldChanged(_ sender: AnyObject) {
+        guard let text = self.lastNameTextField.text else {
+            return
+        }
+        self.editLastNameTableViewCellDelegate?.lastNameTextFieldChanged(text)
+    }
 }

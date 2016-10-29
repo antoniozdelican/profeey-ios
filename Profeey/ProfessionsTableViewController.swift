@@ -9,25 +9,30 @@
 import UIKit
 import AWSDynamoDB
 
-class ProfessionsTableViewController: UITableViewController {
+protocol ProfessionsTableViewControllerDelegate {
+    func didSelectProfession(_ professionName: String?)
+}
 
-    @IBOutlet weak var professionTextField: UITextField!
+class ProfessionsTableViewController: UITableViewController {
     
-    fileprivate var professions: [Profession] = []
-    fileprivate var popularProfessions: [Profession] = []
     var professionName: String?
+    var professionsTableViewControllerDelegate: ProfessionsTableViewControllerDelegate?
+    fileprivate var professions: [Profession] = []
+    fileprivate var allProfessions: [Profession] = []
+    fileprivate var searchedProfessions: [Profession] = []
+    fileprivate var isSearching: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        if let professionName = self.professionName {
-            self.professionTextField.text = professionName
-            self.scanProfessionsByProfessionName(professionName)
-        }
+        self.tableView.contentInset = UIEdgeInsetsMake(-1.0, 0.0, 0.0, 0.0)
+        
+        self.isSearching = true
+        self.scanProfessions()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        self.professionTextField.resignFirstResponder()
+        self.view.endEditing(true)
     }
 
     override func didReceiveMemoryWarning() {
@@ -37,126 +42,180 @@ class ProfessionsTableViewController: UITableViewController {
     // MARK: UITableViewDataSource
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return 2
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let text = self.professionTextField.text else {
+        switch section {
+        case 0:
+            return 1
+        case 1:
+            if self.isSearching {
+                return 1
+            }
+            if self.professions.count == 0 {
+                return 1
+            }
+            return self.professions.count
+        default:
             return 0
         }
-        return text.isEmpty ? self.popularProfessions.count : self.professions.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let text = self.professionTextField.text else {
+        switch indexPath.section {
+        case 0:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellAddProfession", for: indexPath) as! AddProfessionTableViewCell
+            if self.professionName != nil {
+                cell.addProfessionTextField.text = self.professionName
+            }
+            cell.addProfessionTableViewCellDelegate = self
+            return cell
+        case 1:
+            if self.isSearching {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellSearching", for: indexPath) as! SearchingTableViewCell
+                cell.activityIndicator.startAnimating()
+                return cell
+            }
+            if self.professions.count == 0 {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellNoResults", for: indexPath) as! NoResultsTableViewCell
+                return cell
+            }
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellProfession", for: indexPath) as! ProfessionTableViewCell
+            let profession = self.professions[indexPath.row]
+            cell.professionNameLabel.text = profession.professionName
+            cell.numberOfUsersLabel.text = profession.numberOfUsersString
+            return cell
+        default:
             return UITableViewCell()
         }
-        let searchText = text.trimm()
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cellProfession", for: indexPath) as! ProfessionTableViewCell
-        let profession = searchText.isEmpty ? self.popularProfessions[(indexPath as NSIndexPath).row] : self.professions[(indexPath as NSIndexPath).row]
-        cell.professionNameLabel.text = profession.professionName
-        cell.numberOfUsersLabel.text = profession.numberOfUsersString
-        return cell
     }
     
     // MARK: UITableViewDelegate
-    
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let text = self.professionTextField.text else {
-            return nil
-        }
-        let searchText = text.trimm()
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cellHeader") as! HeaderTableViewCell
-        cell.headerTitle.text = searchText.isEmpty ? "POPULAR" : "BEST MATCHES"
-        cell.backgroundColor = UIColor.white
-        return cell
-    }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let cell = tableView.cellForRow(at: indexPath)
         if cell is ProfessionTableViewCell {
-            // Update profession and unwind to EditProfileVc
-            self.professionName = self.professions[(indexPath as NSIndexPath).row].professionName
-            self.performSegue(withIdentifier: "segueUnwindToEditProfileVc", sender: self)
+            self.professionsTableViewControllerDelegate?.didSelectProfession(self.professions[indexPath.row].professionName)
+            self.dismiss(animated: true, completion: nil)
         }
     }
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.layoutMargins = UIEdgeInsets.zero
-        cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0)
     }
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 64.0
+        switch indexPath.section {
+        case 0:
+            return 52.0
+        case 1:
+            return 64.0
+        default:
+            return 0.0
+        }
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 64.0
+        switch indexPath.section {
+        case 0:
+            return 52.0
+        case 1:
+            return 64.0
+        default:
+            return 0.0
+        }
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 32.0
+        if section == 0 {
+            return 1.0
+        }
+        return 12.0
     }
     
     // MARK: UIScrollViewDelegate
     
-    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        self.professionTextField.resignFirstResponder()
+    override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        self.view.endEditing(true)
     }
     
     // MARK: IBActions
     
     @IBAction func doneButtonTapped(_ sender: AnyObject) {
-        // Update profession and unwind to EditProfileVc
-        self.professionName = self.professionTextField.text?.trimm()
-        self.performSegue(withIdentifier: "segueUnwindToEditProfileVc", sender: self)
+        self.professionsTableViewControllerDelegate?.didSelectProfession(self.professionName)
+        self.dismiss(animated: true, completion: nil)
     }
     
     @IBAction func cancelButtonTapped(_ sender: AnyObject) {
         self.dismiss(animated: true, completion: nil)
     }
     
-    @IBAction func professionTextFieldChanged(_ sender: AnyObject) {
-        guard let text = self.professionTextField.text else {
-            return
-        }
-        let searchText = text.trimm()
-        if searchText.isEmpty {
-            // Show popularProfessions.
-            self.tableView.reloadData()
-        } else {
-            // Do the search!
-            self.scanProfessionsByProfessionName(searchText)
-        }
-    }
-    
     // MARK: AWS
     
-    fileprivate func scanProfessionsByProfessionName(_ searchText: String) {
-        let searchProfessionName = searchText.lowercased()
-        
+    fileprivate func scanProfessions() {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().scanProfessionsByProfessionNameDynamoDB(searchProfessionName, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().scanProfessionsDynamoDB({
             (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                self.isSearching = false
                 if let error = error {
-                    print("scanProfessionsByProfessionName error: \(error)")
+                    print("scanProfessions error: \(error)")
+                    self.reloadProfessionsSection()
                 } else {
                     guard let awsProfessions = response?.items as? [AWSProfession] else {
+                        self.reloadProfessionsSection()
                         return
                     }
-                    var searchedProfessions: [Profession] = []
                     for awsProfession in awsProfessions {
-                        let profession = Profession(professionName: awsProfession._professionName, numberOfUsers: awsProfession._numberOfUsers)
-                        searchedProfessions.append(profession)
+                        let profession = Profession(professionName: awsProfession._professionName, searchProfessionName: awsProfession._searchProfessionName, numberOfUsers: awsProfession._numberOfUsers)
+                        self.allProfessions.append(profession)
                     }
-                    self.professions = searchedProfessions
-                    self.tableView.reloadData()
+                    self.professions = self.allProfessions
+                    self.reloadProfessionsSection()
                 }
             })
         })
-        
+    }
+    
+    // MARK: Helper
+    
+    fileprivate func filterProfessions(_ searchText: String) {
+        self.searchedProfessions = self.allProfessions.filter({
+            (profession: Profession) in
+            if let searchProfessionName = profession.searchProfessionName, searchProfessionName.hasPrefix(searchText.lowercased()) {
+                return true
+            } else {
+                return false
+            }
+        })
+        self.professions = self.searchedProfessions
+        self.isSearching = false
+        self.reloadProfessionsSection()
+    }
+    
+    fileprivate func reloadProfessionsSection () {
+        UIView.performWithoutAnimation {
+            self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
+        }
+    }
+}
+
+extension ProfessionsTableViewController: AddProfessionTableViewCellDelegate {
+    
+    func addProfessionTextFieldChanged(_ text: String) {
+        let professionName = text.trimm()
+        if professionName.isEmpty {
+//            self.isSearching = false
+            self.professions = self.allProfessions
+            self.reloadProfessionsSection()
+            self.professionName = nil
+        } else {
+//            self.isSearching = true
+            self.filterProfessions(professionName)
+            self.professionName = professionName
+        }
     }
 }

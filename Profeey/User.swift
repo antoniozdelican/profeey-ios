@@ -52,6 +52,25 @@ class User: NSObject {
         return numberOfFollowers.intValue
     }
     
+    var searchFirstName: String? {
+        guard let firstName = self.firstName else {
+            return nil
+        }
+        return firstName.lowercased()
+    }
+    var searchLastName: String? {
+        guard let lastName = self.lastName else {
+            return nil
+        }
+        return lastName.lowercased()
+    }
+    var searchPreferredUsername: String? {
+        guard let preferredUsername = self.preferredUsername else {
+            return nil
+        }
+        return preferredUsername.lowercased()
+    }
+    
     override init() {
         super.init()
     }

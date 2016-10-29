@@ -293,6 +293,13 @@ extension PostDetailsTableViewController: PostButtonsTableViewCellDelegate {
         }
         self.performSegue(withIdentifier: "segueToUsersVc", sender: indexPath)
     }
+    
+    func numberOfCommentsButtonTapped(_ button: UIButton) {
+        guard let indexPath = self.tableView.indexPathForView(view: button) else {
+            return
+        }
+        //self.performSegue(withIdentifier: "segueToUsersVc", sender: indexPath)
+    }
 }
 
 extension PostDetailsTableViewController: EditPostViewControllerDelegate {

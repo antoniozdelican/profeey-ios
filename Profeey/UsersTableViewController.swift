@@ -56,8 +56,9 @@ class UsersTableViewController: UITableViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destinationViewController = segue.destination as? ProfileTableViewController,
-            let indexPath = sender as? IndexPath {
-            destinationViewController.user = self.users[(indexPath as NSIndexPath).row]
+            let cell = sender as? UserTableViewCell,
+            let indexPath = self.tableView.indexPath(for: cell) {
+            destinationViewController.user = self.users[indexPath.row]
         }
     }
     
@@ -80,10 +81,11 @@ class UsersTableViewController: UITableViewController {
             return cell
         }
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellUser", for: indexPath) as! UserTableViewCell
-        let user = self.users[(indexPath as NSIndexPath).row]
+        let user = self.users[indexPath.row]
         cell.profilePicImageView.image = user.profilePic
         cell.fullNameLabel.text = user.fullName
-        cell.professionLabel.text = user.professionName
+        cell.preferredUsernameLabel.text = user.fullUsername
+        cell.professionNameLabel.text = user.professionName
         return cell
     }
     
@@ -93,15 +95,15 @@ class UsersTableViewController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
         let cell = tableView.cellForRow(at: indexPath)
         if cell is UserTableViewCell {
-           self.performSegue(withIdentifier: "segueToProfileVc", sender: indexPath)
+           self.performSegue(withIdentifier: "segueToProfileVc", sender: cell)
         }
     }
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.layoutMargins = UIEdgeInsets.zero
-        cell.separatorInset = UIEdgeInsetsMake(0.0, 12.0, 0.0, 0.0)
-        if self.isLoadingUsers {
+        if cell is LoadingTableViewCell {
             cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
+            cell.selectionStyle = UITableViewCellSelectionStyle.none
         }
     }
     
@@ -109,14 +111,14 @@ class UsersTableViewController: UITableViewController {
         if self.isLoadingUsers {
             return 120.0
         }
-        return 65.0
+        return 68.0
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if self.isLoadingUsers {
             return 120.0
         }
-        return 65.0
+        return UITableViewAutomaticDimension
     }
     
     // MARK: IBActions
@@ -158,13 +160,7 @@ class UsersTableViewController: UITableViewController {
                     self.tableView.reloadData()
                     self.refreshControl?.endRefreshing()
                 } else {
-                    guard let awsLikes = response?.items as? [AWSLike] else {
-                        self.isLoadingUsers = false
-                        self.tableView.reloadData()
-                        self.refreshControl?.endRefreshing()
-                        return
-                    }
-                    guard awsLikes.count > 0 else {
+                    guard let awsLikes = response?.items as? [AWSLike], awsLikes.count > 0 else {
                         self.isLoadingUsers = false
                         self.tableView.reloadData()
                         self.refreshControl?.endRefreshing()
@@ -200,13 +196,7 @@ class UsersTableViewController: UITableViewController {
                     self.tableView.reloadData()
                     self.refreshControl?.endRefreshing()
                 } else {
-                    guard let awsUserRelationships = response?.items as? [AWSUserRelationship] else {
-                        self.isLoadingUsers = false
-                        self.tableView.reloadData()
-                        self.refreshControl?.endRefreshing()
-                        return
-                    }
-                    guard awsUserRelationships.count > 0 else {
+                    guard let awsUserRelationships = response?.items as? [AWSUserRelationship], awsUserRelationships.count > 0 else {
                         self.isLoadingUsers = false
                         self.tableView.reloadData()
                         self.refreshControl?.endRefreshing()
@@ -244,7 +234,7 @@ class UsersTableViewController: UITableViewController {
             switch imageType {
             case .userProfilePic:
                 self.users[indexPath.row].profilePic = image
-                self.tableView.reloadData()
+                self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
             default:
                 return
             }
@@ -271,7 +261,7 @@ class UsersTableViewController: UITableViewController {
                             switch imageType {
                             case .userProfilePic:
                                 self.users[indexPath.row].profilePic = image
-                                self.tableView.reloadData()
+                                self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
                             default:
                                 return
                             }

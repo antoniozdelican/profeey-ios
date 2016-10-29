@@ -9,20 +9,23 @@
 import UIKit
 import AWSMobileHubHelper
 
-protocol SelectUserDelegate {
+protocol SearchUsersTableViewControllerDelegate {
     func didSelectUser(_ indexPath: IndexPath)
 }
 
 class SearchUsersTableViewController: UITableViewController {
     
-    var scrollViewDelegate: ScrollViewDelegate?
-    var selectUserDelegate: SelectUserDelegate?
+    var searchScrollDelegate: SearchScrollDelegate?
+    var searchUsersTableViewControllerDelegate: SearchUsersTableViewControllerDelegate?
     fileprivate var users: [User] = []
-    fileprivate var showRecentUsers: Bool = true
+    fileprivate var showAllUsers: Bool = true
     fileprivate var isSearchingUsers: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Register custom header.
+        self.tableView.register(UINib(nibName: "SearchTableSectionHeader", bundle: nil), forHeaderFooterViewReuseIdentifier: "searchTableSectionHeader")
     }
 
     override func didReceiveMemoryWarning() {
@@ -39,7 +42,7 @@ class SearchUsersTableViewController: UITableViewController {
         if self.isSearchingUsers {
             return 1
         }
-        if !self.showRecentUsers && self.users.count == 0 {
+        if self.users.count == 0 {
             return 1
         }
         return self.users.count
@@ -51,12 +54,12 @@ class SearchUsersTableViewController: UITableViewController {
             cell.activityIndicator.startAnimating()
             return cell
         }
-        if !self.showRecentUsers && self.users.count == 0 {
+        if self.users.count == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellNoResults", for: indexPath) as! NoResultsTableViewCell
             return cell
         }
-        let user = self.users[(indexPath as NSIndexPath).row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellSearchUser", for: indexPath) as! SearchUserTableViewCell
+        let user = self.users[indexPath.row]
         cell.profilePicImageView.image = user.profilePic
         cell.fullNameLabel.text = user.fullName
         cell.preferredUsernameLabel.text = user.fullUsername
@@ -68,28 +71,29 @@ class SearchUsersTableViewController: UITableViewController {
     // MARK: UITableViewDelegate
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        cell.separatorInset = UIEdgeInsetsMake(0.0, 20.0, 0.0, 0.0)
-    }
-    
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cellHeader") as! HeaderTableViewCell
-        cell.headerTitle.text = self.showRecentUsers ? "POPULAR" : "BEST MATCHES"
-        cell.contentView.backgroundColor = UIColor.white
-        cell.contentView.alpha = 0.95
-        return cell.contentView
+        cell.layoutMargins = UIEdgeInsets.zero
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        self.selectUserDelegate?.didSelectUser(indexPath)
+        let cell = tableView.cellForRow(at: indexPath)
+        if cell is SearchUserTableViewCell {
+            self.searchUsersTableViewControllerDelegate?.didSelectUser(indexPath)
+        }
     }
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 86.0
+        return 72.0
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableViewAutomaticDimension
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let header = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "searchTableSectionHeader") as? SearchTableSectionHeader
+        header?.titleLabel.text = self.showAllUsers ? "POPULAR" : "BEST MATCHES"
+        return header
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -98,8 +102,8 @@ class SearchUsersTableViewController: UITableViewController {
     
     // MARK: UIScrollViewDelegate
     
-    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        self.scrollViewDelegate?.didScroll()
+    override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        self.searchScrollDelegate?.scrollViewWillBeginDragging()
     }
     
     // MARK: AWS
@@ -157,14 +161,14 @@ class SearchUsersTableViewController: UITableViewController {
 
 extension SearchUsersTableViewController: SearchUsersDelegate {
     
-    func searchingUsers(_ isSearchingUsers: Bool) {
-        self.isSearchingUsers = isSearchingUsers
+    func isSearchingUsers(_ isSearching: Bool) {
+        self.isSearchingUsers = isSearching
         self.tableView.reloadData()
     }
     
-    func showUsers(_ users: [User], showRecentUsers: Bool) {
+    func showUsers(_ users: [User], showAllUsers: Bool) {
         self.users = users
-        self.showRecentUsers = showRecentUsers
+        self.showAllUsers = showAllUsers
         self.tableView.reloadData()
         
         for (index, user) in users.enumerated() {

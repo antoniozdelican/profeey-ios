@@ -14,6 +14,7 @@ class AWSCategory: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     var _categoryName: String?
     var _numberOfPosts: NSNumber?
     var _searchCategoryName: String?
+    var _creationDate: NSNumber?
     
     class func dynamoDBTableName() -> String {
         
@@ -30,6 +31,11 @@ class AWSCategory: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
             "_categoryName" : "categoryName",
             "_numberOfPosts" : "numberOfPosts",
             "_searchCategoryName" : "searchCategoryName",
+            "_creationDate" : "creationDate",
         ]
+    }
+    
+    class func ignoreAttributes() -> [String] {
+        return ["creationDate"]
     }
 }

@@ -38,9 +38,9 @@
                                             <outletCollection property="gestureRecognizers" destination="a0V-Bt-aRv" appends="YES" id="Fc7-Gn-bU9"/>
                                         </connections>
                                     </view>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XsV-Jj-A2J" userLabel="Skills Segment View">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XsV-Jj-A2J" userLabel="Professions Segment View">
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SKILLS" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dI2-Yb-BkP">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PROFESSIONS" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dI2-Yb-BkP">
                                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="12"/>
                                                 <color key="textColor" red="0.63921568630000003" green="0.63921568630000003" blue="0.63921568630000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -147,13 +147,13 @@
                     </view>
                     <navigationItem key="navigationItem" id="9og-jA-9fU"/>
                     <connections>
-                        <outlet property="categoriesLabel" destination="dI2-Yb-BkP" id="6uK-DN-gaW"/>
                         <outlet property="indicatorScrollView" destination="aSs-kS-Kxa" id="HdX-9K-7YZ"/>
                         <outlet property="mainScrollView" destination="S7D-D7-vPQ" id="cxK-xX-6uJ"/>
                         <outlet property="peopleLabel" destination="gh6-BA-nOj" id="gFb-8f-njS"/>
+                        <outlet property="professionsLabel" destination="dI2-Yb-BkP" id="o9u-bq-MQD"/>
                         <outlet property="segmentedControlView" destination="Nxb-p6-Mr7" id="xsJ-zn-PIe"/>
                         <segue destination="slj-Ya-RBv" kind="show" identifier="segueToProfileVc" id="Vib-xh-EYa"/>
-                        <segue destination="fw7-WA-1jp" kind="show" identifier="segueToCategoryVc" id="WQ1-OZ-3cu"/>
+                        <segue destination="Fr2-LM-qfg" kind="show" identifier="segueToProfessionVc" id="K9L-qw-dsI"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IMO-ut-TpA" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -164,7 +164,7 @@
                 </tapGestureRecognizer>
                 <tapGestureRecognizer id="tX2-5W-Wes">
                     <connections>
-                        <action selector="categoriesSegmentTapped:" destination="I1T-Vq-nsp" id="IEM-BG-Dcl"/>
+                        <action selector="professionsSegmentTapped:" destination="I1T-Vq-nsp" id="cDy-te-xxg"/>
                     </connections>
                 </tapGestureRecognizer>
             </objects>
@@ -176,7 +176,7 @@
                 <viewControllerPlaceholder storyboardName="Profile" id="slj-Ya-RBv" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sBm-xE-lAI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2053" y="-1315"/>
+            <point key="canvasLocation" x="1579" y="-1303"/>
         </scene>
         <!--Search Users Table View Controller-->
         <scene sceneID="ns6-5x-6RB">
@@ -186,47 +186,10 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="514"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <inset key="separatorInset" minX="20" minY="0.0" maxX="0.0" maxY="0.0"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellHeader" rowHeight="32" id="Fej-oc-3dp" customClass="HeaderTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="28" width="375" height="32"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Fej-oc-3dp" id="wbg-9A-C1a">
-                                    <frame key="frameInset" width="375" height="31"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="HEADER TITLE" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bXU-vX-aEM">
-                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                            <color key="textColor" red="0.63921568630000003" green="0.63921568630000003" blue="0.63921568630000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="N6d-uo-Xtq" userLabel="Separator View">
-                                            <color key="backgroundColor" red="0.90980392160000001" green="0.90980392160000001" blue="0.90980392160000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <constraints>
-                                                <constraint firstAttribute="height" constant="1" id="bXG-Xq-qvW">
-                                                    <userDefinedRuntimeAttributes>
-                                                        <userDefinedRuntimeAttribute type="number" keyPath="constant">
-                                                            <real key="value" value="0.5"/>
-                                                        </userDefinedRuntimeAttribute>
-                                                    </userDefinedRuntimeAttributes>
-                                                </constraint>
-                                            </constraints>
-                                        </view>
-                                    </subviews>
-                                    <constraints>
-                                        <constraint firstAttribute="trailing" secondItem="N6d-uo-Xtq" secondAttribute="trailing" id="Xsi-Wm-vj9"/>
-                                        <constraint firstAttribute="bottom" secondItem="N6d-uo-Xtq" secondAttribute="bottom" id="iEh-RR-h0D"/>
-                                        <constraint firstItem="bXU-vX-aEM" firstAttribute="top" secondItem="wbg-9A-C1a" secondAttribute="top" constant="8" id="jx5-xq-QZi"/>
-                                        <constraint firstItem="N6d-uo-Xtq" firstAttribute="leading" secondItem="wbg-9A-C1a" secondAttribute="leading" id="ncl-yY-OCr"/>
-                                        <constraint firstItem="bXU-vX-aEM" firstAttribute="leading" secondItem="wbg-9A-C1a" secondAttribute="leading" constant="20" id="xqq-Hr-9bY"/>
-                                    </constraints>
-                                </tableViewCellContentView>
-                                <color key="backgroundColor" red="0.98039215690000003" green="0.98039215690000003" blue="0.98039215690000003" alpha="1" colorSpace="calibratedRGB"/>
-                                <connections>
-                                    <outlet property="headerTitle" destination="bXU-vX-aEM" id="XsL-qI-IqW"/>
-                                </connections>
-                            </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellSearchUser" rowHeight="86" id="mZW-HL-NWK" customClass="SearchUserTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="60" width="375" height="86"/>
+                                <rect key="frame" x="0.0" y="28" width="375" height="86"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="mZW-HL-NWK" id="uOT-Hd-FP9">
                                     <frame key="frameInset" width="375" height="85"/>
@@ -255,14 +218,12 @@
                                                         </label>
                                                     </subviews>
                                                 </stackView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Profession Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0Qs-9p-wDm">
-                                                    <frame key="frameInset" minY="18" width="283" height="18"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Profession Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0Qs-9p-wDm">
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <color key="textColor" red="0.63921568630000003" green="0.63921568630000003" blue="0.63921568630000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Location Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lbj-fZ-8rT">
-                                                    <frame key="frameInset" minY="37" width="283" height="17"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Location Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lbj-fZ-8rT">
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <color key="textColor" red="0.63921568630000003" green="0.63921568630000003" blue="0.63921568630000003" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -275,8 +236,8 @@
                                         <constraint firstItem="w0u-sS-kjU" firstAttribute="leading" secondItem="DGq-b8-Ukn" secondAttribute="trailing" constant="12" id="DXO-lu-CXf"/>
                                         <constraint firstItem="w0u-sS-kjU" firstAttribute="top" secondItem="uOT-Hd-FP9" secondAttribute="top" constant="16" id="JOt-tv-bq9"/>
                                         <constraint firstItem="DGq-b8-Ukn" firstAttribute="leading" secondItem="uOT-Hd-FP9" secondAttribute="leading" constant="20" id="Jnq-Jh-MLz"/>
+                                        <constraint firstAttribute="bottom" secondItem="w0u-sS-kjU" secondAttribute="bottom" constant="16.5" id="UdF-U2-9Ub"/>
                                         <constraint firstAttribute="trailing" secondItem="w0u-sS-kjU" secondAttribute="trailing" constant="20" id="mme-HX-wC5"/>
-                                        <constraint firstAttribute="bottom" secondItem="w0u-sS-kjU" secondAttribute="bottom" constant="16" id="pHA-8j-Ktu"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
@@ -288,7 +249,7 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellSearching" rowHeight="64" id="Qcw-fm-Z2f" customClass="SearchingTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="146" width="375" height="64"/>
+                                <rect key="frame" x="0.0" y="114" width="375" height="64"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Qcw-fm-Z2f" id="1MC-kD-nUk">
                                     <frame key="frameInset" width="375" height="63"/>
@@ -325,7 +286,7 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellNoResults" rowHeight="64" id="WH3-Zm-IFv" customClass="NoResultsTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="210" width="375" height="64"/>
+                                <rect key="frame" x="0.0" y="178" width="375" height="64"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="WH3-Zm-IFv" id="DSE-aL-wcg">
                                     <frame key="frameInset" width="375" height="63"/>
@@ -362,55 +323,18 @@
             </objects>
             <point key="canvasLocation" x="333.60000000000002" y="-353.52323838080963"/>
         </scene>
-        <!--Search Categories Table View Controller-->
+        <!--Search Professions Table View Controller-->
         <scene sceneID="shI-at-iYo">
             <objects>
-                <tableViewController id="YMu-Tg-axq" customClass="SearchCategoriesTableViewController" customModule="Profeey" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="YMu-Tg-axq" customClass="SearchProfessionsTableViewController" customModule="Profeey" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="xJp-X1-5Wp">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="514"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <inset key="separatorInset" minX="20" minY="0.0" maxX="0.0" maxY="0.0"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellHeader" rowHeight="32" id="rkR-zJ-iy9" customClass="HeaderTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="28" width="375" height="32"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="rkR-zJ-iy9" id="Lbm-jx-tmD">
-                                    <frame key="frameInset" width="375" height="31"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="HEADER TITLE" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bMz-dn-Rfo">
-                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                            <color key="textColor" red="0.63921568630000003" green="0.63921568630000003" blue="0.63921568630000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rCq-WK-hq6" userLabel="Separator View">
-                                            <color key="backgroundColor" red="0.90980392160000001" green="0.90980392160000001" blue="0.90980392160000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <constraints>
-                                                <constraint firstAttribute="height" constant="1" id="aMS-1b-tdf">
-                                                    <userDefinedRuntimeAttributes>
-                                                        <userDefinedRuntimeAttribute type="number" keyPath="constant">
-                                                            <real key="value" value="0.5"/>
-                                                        </userDefinedRuntimeAttribute>
-                                                    </userDefinedRuntimeAttributes>
-                                                </constraint>
-                                            </constraints>
-                                        </view>
-                                    </subviews>
-                                    <constraints>
-                                        <constraint firstItem="rCq-WK-hq6" firstAttribute="leading" secondItem="Lbm-jx-tmD" secondAttribute="leading" id="Cu4-W4-hNA"/>
-                                        <constraint firstAttribute="trailing" secondItem="rCq-WK-hq6" secondAttribute="trailing" id="GRV-sA-x3T"/>
-                                        <constraint firstItem="bMz-dn-Rfo" firstAttribute="top" secondItem="Lbm-jx-tmD" secondAttribute="top" constant="8" id="oGe-GJ-3rh"/>
-                                        <constraint firstItem="bMz-dn-Rfo" firstAttribute="leading" secondItem="Lbm-jx-tmD" secondAttribute="leading" constant="20" id="pva-Ib-l5f"/>
-                                        <constraint firstAttribute="bottom" secondItem="rCq-WK-hq6" secondAttribute="bottom" id="wPS-lq-Nf1"/>
-                                    </constraints>
-                                </tableViewCellContentView>
-                                <color key="backgroundColor" red="0.98039215690000003" green="0.98039215690000003" blue="0.98039215690000003" alpha="1" colorSpace="calibratedRGB"/>
-                                <connections>
-                                    <outlet property="headerTitle" destination="bMz-dn-Rfo" id="K2s-iz-T1W"/>
-                                </connections>
-                            </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellSearchCategory" rowHeight="72" id="qqg-LP-XI4" customClass="SearchCategoryTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="60" width="375" height="72"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellSearchProfession" rowHeight="72" id="qqg-LP-XI4" customClass="SearchProfessionTableViewCell" customModule="Profeey" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="28" width="375" height="72"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="qqg-LP-XI4" id="A2n-vR-Iew">
                                     <frame key="frameInset" width="375" height="71"/>
@@ -418,12 +342,12 @@
                                     <subviews>
                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="rXL-A2-mOe">
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Category Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e6G-jh-8yY">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Profession Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e6G-jh-8yY">
                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                     <color key="textColor" red="0.2901960784" green="0.2901960784" blue="0.2901960784" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0 posts" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qI7-jn-V2I">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0 profeeys" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qI7-jn-V2I">
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <color key="textColor" red="0.63921568630000003" green="0.63921568630000003" blue="0.63921568630000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -433,18 +357,18 @@
                                     </subviews>
                                     <constraints>
                                         <constraint firstAttribute="bottom" secondItem="rXL-A2-mOe" secondAttribute="bottom" constant="16.5" id="55E-2t-6Bj"/>
-                                        <constraint firstItem="rXL-A2-mOe" firstAttribute="leading" secondItem="A2n-vR-Iew" secondAttribute="leading" constant="20" id="7Uj-zB-tyc"/>
-                                        <constraint firstAttribute="trailing" secondItem="rXL-A2-mOe" secondAttribute="trailing" constant="20" id="AiG-vw-MxN"/>
+                                        <constraint firstItem="rXL-A2-mOe" firstAttribute="leading" secondItem="A2n-vR-Iew" secondAttribute="leading" constant="20" id="B9U-Vw-hH8"/>
                                         <constraint firstItem="rXL-A2-mOe" firstAttribute="top" secondItem="A2n-vR-Iew" secondAttribute="top" constant="16" id="Nye-it-06o"/>
+                                        <constraint firstAttribute="trailing" secondItem="rXL-A2-mOe" secondAttribute="trailing" constant="20" id="gda-GB-hhi"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="categoryNameLabel" destination="e6G-jh-8yY" id="gHG-AE-k7W"/>
-                                    <outlet property="numberOfUsersPostsLabel" destination="qI7-jn-V2I" id="0qr-QS-rft"/>
+                                    <outlet property="numberOfUsersLabel" destination="qI7-jn-V2I" id="9RK-lY-UmL"/>
+                                    <outlet property="professionNameLabel" destination="e6G-jh-8yY" id="zuj-WT-JIB"/>
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellSearching" rowHeight="64" id="qAb-KQ-yV2" customClass="SearchingTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="132" width="375" height="64"/>
+                                <rect key="frame" x="0.0" y="100" width="375" height="64"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="qAb-KQ-yV2" id="F2o-j2-elf">
                                     <frame key="frameInset" width="375" height="63"/>
@@ -481,7 +405,7 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellNoResults" rowHeight="64" id="ofg-M8-nxh" customClass="NoResultsTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="196" width="375" height="64"/>
+                                <rect key="frame" x="0.0" y="164" width="375" height="64"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ofg-M8-nxh" id="viQ-nz-N3B">
                                     <frame key="frameInset" width="375" height="63"/>
@@ -516,15 +440,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="icd-4K-aX4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1256" y="-352.5"/>
-        </scene>
-        <!--Category-->
-        <scene sceneID="L63-hS-IMp">
-            <objects>
-                <viewControllerPlaceholder storyboardName="Category" id="fw7-WA-1jp" sceneMemberID="viewController"/>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="68C-cv-LxD" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2066" y="-1022"/>
+            <point key="canvasLocation" x="1418" y="-354"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="RoH-nw-PjZ">
@@ -544,7 +460,15 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LLb-es-Oi2" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-428" y="-1095"/>
+            <point key="canvasLocation" x="-238" y="-1095"/>
+        </scene>
+        <!--Profession-->
+        <scene sceneID="pJQ-8a-qet">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Profession" id="Fr2-LM-qfg" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1CG-3P-K6C" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1802" y="-1096"/>
         </scene>
     </scenes>
     <resources>

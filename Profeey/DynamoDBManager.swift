@@ -25,6 +25,8 @@ protocol DynamoDBManager {
     
     func scanUsersDynamoDB(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
     func scanUsersByNameDynamoDB(_ searchFirstName: String, searchLastName: String, searchPreferredUsername: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
+    func scanUsersByProfessionNameDynamoDB(_ searchProfessionName: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
+    func scanUsersByProfessionAndLocationNameDynamoDB(_ searchProfessionName: String, locationName: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
     
     // MARK: UserRelationships
     
@@ -51,12 +53,17 @@ protocol DynamoDBManager {
     // MARK: Categories
     
     func scanCategoriesDynamoDB(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
-    func scanCategoriesByCategoryNameDynamoDB(_ searchCategoryName: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
+//    func scanCategoriesByCategoryNameDynamoDB(_ searchCategoryName: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
     
     // MARK: Professions
     
     func scanProfessionsDynamoDB(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
-    func scanProfessionsByProfessionNameDynamoDB(_ searchProfessionName: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
+//    func scanProfessionsByProfessionNameDynamoDB(_ searchProfessionName: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
+    
+    // MARK: Locations
+    
+    func scanLocationsDynamoDB(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
+//    func scanLocationsByCountryOrCityNameDynamoDB(_ searchCountryName: String, searchCityName: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
     
     // MARK: Activities
     

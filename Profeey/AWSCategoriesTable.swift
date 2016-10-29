@@ -45,11 +45,10 @@ class AWSCategoriesTable: NSObject, Table {
         return AWSCategory.jsonKeyPathsByPropertyKey()[dataObjectAttributeName] as! String
     }
     
-    // Scan all (upto 10) categories in the Categories table.
     func scanCategories(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
         let scanExpression = AWSDynamoDBScanExpression()
-        scanExpression.limit = 10
+//        scanExpression.limit = 10
         objectMapper.scan(AWSCategory.self, expression: scanExpression, completionHandler: completionHandler)
     }
     
@@ -63,7 +62,7 @@ class AWSCategoriesTable: NSObject, Table {
         scanExpression.expressionAttributeValues = [
             ":searchCategoryName": searchCategoryName,
         ]
-        scanExpression.limit = 10
+//        scanExpression.limit = 10
         objectMapper.scan(AWSCategory.self, expression: scanExpression, completionHandler: completionHandler)
     }
 }

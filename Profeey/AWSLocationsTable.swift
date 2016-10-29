@@ -1,8 +1,8 @@
 //
-//  AWSProfessionsTable.swift
+//  AWSLocationsTable.swift
 //  Profeey
 //
-//  Created by Antonio Zdelican on 12/09/16.
+//  Created by Antonio Zdelican on 26/10/16.
 //  Copyright © 2016 Profeey. All rights reserved.
 //
 
@@ -10,7 +10,7 @@ import Foundation
 import AWSDynamoDB
 import AWSMobileHubHelper
 
-class AWSProfessionsTable: NSObject, Table {
+class AWSLocationsTable: NSObject, Table {
     
     var tableName: String
     var partitionKeyName: String
@@ -24,12 +24,12 @@ class AWSProfessionsTable: NSObject, Table {
     }
     var tableDisplayName: String {
         
-        return "Professions"
+        return "Locations"
     }
     
     override init() {
         
-        model = AWSProfession()
+        model = AWSLocation()
         
         tableName = model.classForCoder.dynamoDBTableName()
         partitionKeyName = model.classForCoder.hashKeyAttribute()
@@ -42,27 +42,29 @@ class AWSProfessionsTable: NSObject, Table {
     }
     
     func tableAttributeName(_ dataObjectAttributeName: String) -> String {
-        return AWSProfession.jsonKeyPathsByPropertyKey()[dataObjectAttributeName] as! String
+        return AWSLocation.jsonKeyPathsByPropertyKey()[dataObjectAttributeName] as! String
     }
     
-    func scanProfessions(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+    func scanLocations(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
         let scanExpression = AWSDynamoDBScanExpression()
 //        scanExpression.limit = 10
-        objectMapper.scan(AWSProfession.self, expression: scanExpression, completionHandler: completionHandler)
+        objectMapper.scan(AWSLocation.self, expression: scanExpression, completionHandler: completionHandler)
     }
     
-    func scanProfessionsByProfessionName(_ searchProfessionName: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+    func scanLocationsByCountryOrCityName(_ searchCountryName: String, searchCityName: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
         let scanExpression = AWSDynamoDBScanExpression()
-        scanExpression.filterExpression = "begins_with(#searchProfessionName, :searchProfessionName)"
+        scanExpression.filterExpression = "begins_with(#searchCountryName, :searchCountryName) OR begins_with(#searchCityName, :searchCityName)"
         scanExpression.expressionAttributeNames = [
-            "#searchProfessionName": "searchProfessionName",
+            "#searchCountryName": "searchCountryName",
+            "#searchCountryName": "searchCountryName",
         ]
         scanExpression.expressionAttributeValues = [
-            ":searchProfessionName": searchProfessionName,
+            ":searchCountryName": searchCountryName,
+            ":searchCityName": searchCityName,
         ]
-//        scanExpression.limit = 10
-        objectMapper.scan(AWSProfession.self, expression: scanExpression, completionHandler: completionHandler)
+        //        scanExpression.limit = 10
+        objectMapper.scan(AWSLocation.self, expression: scanExpression, completionHandler: completionHandler)
     }
 }

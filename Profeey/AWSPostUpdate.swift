@@ -13,6 +13,6 @@ import Foundation
 class AWSPostUpdate: AWSPost {
     
     class func ignoreAttributes() -> [String] {
-        return ["creationDate", "imageUrl", "numberOfLikes", "firstName", "lastName","preferredUsername", "professionName", "profilePicUrl"]
+        return ["creationDate", "imageUrl", "numberOfLikes", "numberOfComments", "firstName", "lastName","preferredUsername", "professionName", "profilePicUrl"]
     }
 }

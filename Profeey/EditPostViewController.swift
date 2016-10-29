@@ -183,16 +183,13 @@ extension EditPostViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.layoutMargins = UIEdgeInsets.zero
-        cell.selectionStyle = UITableViewCellSelectionStyle.none
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let cell = tableView.cellForRow(at: indexPath)
         if cell is EditPostCategoryTableViewCell {
-            if self.post?.categoryName == nil {
-                self.performSegue(withIdentifier: "segueToCategoriesVc", sender: self)
-            }
+            self.performSegue(withIdentifier: "segueToCategoriesVc", sender: self)
         }
     }
     
@@ -250,7 +247,7 @@ extension EditPostViewController: EditPostCategoryTableViewCellDelegate {
 
 extension EditPostViewController: CategoriesTableViewControllerDelegate {
     
-    func didSelectCategory(categoryName: String) {
+    func didSelectCategory(_ categoryName: String?) {
         self.post?.categoryName = categoryName
         self.tableView.reloadRows(at: [self.bottomIndexPath], with: UITableViewRowAnimation.none)
     }

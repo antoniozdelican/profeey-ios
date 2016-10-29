@@ -37,7 +37,7 @@
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="WeU-Kd-wxF">
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellEditPostImage" rowHeight="501" id="UTf-4x-40a" customClass="EditPostImageTableViewCell" customModule="Profeey" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellEditPostImage" rowHeight="501" id="UTf-4x-40a" customClass="EditPostImageTableViewCell" customModule="Profeey" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="92" width="375" height="501"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="UTf-4x-40a" id="iGO-X2-nUF">
@@ -63,7 +63,7 @@
                                             <outlet property="postImageViewHeightConstraint" destination="0eN-dy-s9O" id="M1q-7X-E0u"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellEditPostDescription" rowHeight="53" id="ySL-Fj-tHQ" customClass="EditPostDescriptionTableViewCell" customModule="Profeey" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellEditPostDescription" rowHeight="53" id="ySL-Fj-tHQ" customClass="EditPostDescriptionTableViewCell" customModule="Profeey" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="593" width="375" height="53"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ySL-Fj-tHQ" id="Ofw-in-Yxy">

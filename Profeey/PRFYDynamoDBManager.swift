@@ -119,6 +119,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
                 let awsUser = AWSUser()
                 awsUser?._userId = identityId
                 awsUser?._professionName = professionName
+                awsUser?._searchProfessionName = professionName.lowercased()
                 awsUsersTable.saveUserSkipNull(awsUser, completionHandler: completionHandler)
                 return nil
             } else {
@@ -148,6 +149,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
                 awsUserUpdate?._locationName = user?.locationName
                 awsUserUpdate?._searchFirstName = user?.firstName?.lowercased()
                 awsUserUpdate?._searchLastName = user?.lastName?.lowercased()
+                awsUserUpdate?._searchProfessionName = user?.professionName?.lowercased()
                 usersTable.saveUser(awsUserUpdate, completionHandler: completionHandler)
                 return nil
             } else {
@@ -158,14 +160,26 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
     }
     
     func scanUsersDynamoDB(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
-        let usersTable = AWSUsersTable()
-        usersTable.scanUsers(completionHandler)
+        let awsUsersTable = AWSUsersTable()
+        awsUsersTable.scanUsers(completionHandler)
     }
     
     func scanUsersByNameDynamoDB(_ searchFirstName: String, searchLastName: String, searchPreferredUsername: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         print("scanUsersByNameDynamoDB:")
-        let usersTable = AWSUsersTable()
-        usersTable.scanUsersByName(searchFirstName, searchLastName: searchLastName, searchPreferredUsername: searchPreferredUsername, completionHandler: completionHandler)
+        let awsUsersTable = AWSUsersTable()
+        awsUsersTable.scanUsersByName(searchFirstName, searchLastName: searchLastName, searchPreferredUsername: searchPreferredUsername, completionHandler: completionHandler)
+    }
+    
+    func scanUsersByProfessionNameDynamoDB(_ searchProfessionName: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+        print("scanUsersByProfessionNameDynamoDB:")
+        let awsUsersTable = AWSUsersTable()
+        awsUsersTable.scanUsersByProfessionName(searchProfessionName, completionHandler: completionHandler)
+    }
+    
+    func scanUsersByProfessionAndLocationNameDynamoDB(_ searchProfessionName: String, locationName: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+        print("scanUsersByProfessionAndLocationNameDynamoDB:")
+        let awsUsersTable = AWSUsersTable()
+        awsUsersTable.scanUsersByProfessionAndLocationName(searchProfessionName, locationName: locationName, completionHandler: completionHandler)
     }
     
     // MARK: UserRelationships
@@ -295,12 +309,6 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
                 awsLike?._preferredUsername = self.currentUserDynamoDB?.preferredUsername
                 awsLike?._professionName = self.currentUserDynamoDB?.professionName
                 awsLike?._profilePicUrl = self.currentUserDynamoDB?.profilePicUrl
-                
-//                awsLike?._firstName = liker?.firstName
-//                awsLike?._lastName = liker?.lastName
-//                awsLike?._preferredUsername = liker?.preferredUsername
-//                awsLike?._professionName = liker?.professionName
-//                awsLike?._profilePicUrl = liker?.profilePicUrl
                 awsLikesTable.saveLike(awsLike, completionHandler: completionHandler)
                 return nil
             } else {
@@ -447,29 +455,43 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
     
     func scanCategoriesDynamoDB(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         print("scanCategoriesDynamoDB:")
-        let categoriesTable = AWSCategoriesTable()
-        categoriesTable.scanCategories(completionHandler)
+        let awsCategoriesTable = AWSCategoriesTable()
+        awsCategoriesTable.scanCategories(completionHandler)
     }
     
-    func scanCategoriesByCategoryNameDynamoDB(_ searchCategoryName: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
-        print("scanCategoriesByCategoryNameDynamoDB:")
-        let categoriesTable = AWSCategoriesTable()
-        categoriesTable.scanCategoriesByCategoryName(searchCategoryName, completionHandler: completionHandler)
-    }
+//    func scanCategoriesByCategoryNameDynamoDB(_ searchCategoryName: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+//        print("scanCategoriesByCategoryNameDynamoDB:")
+//        let awsCategoriesTable = AWSCategoriesTable()
+//        awsCategoriesTable.scanCategoriesByCategoryName(searchCategoryName, completionHandler: completionHandler)
+//    }
     
     // MARK: Professions
     
     func scanProfessionsDynamoDB(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
-        print("scanProfessions:")
-        let professionsTable = AWSProfessionsTable()
-        professionsTable.scanProfessions(completionHandler)
+        print("scanProfessionsDynamoDB:")
+        let awsProfessionsTable = AWSProfessionsTable()
+        awsProfessionsTable.scanProfessions(completionHandler)
     }
     
-    func scanProfessionsByProfessionNameDynamoDB(_ searchProfessionName: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
-        print("scanProfessionsByProfessionNameDynamoDB:")
-        let professionsTable = AWSProfessionsTable()
-        professionsTable.scanProfessionsByProfessionName(searchProfessionName, completionHandler: completionHandler)
+//    func scanProfessionsByProfessionNameDynamoDB(_ searchProfessionName: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+//        print("scanProfessionsByProfessionNameDynamoDB:")
+//        let awsProfessionsTable = AWSProfessionsTable()
+//        awsProfessionsTable.scanProfessionsByProfessionName(searchProfessionName, completionHandler: completionHandler)
+//    }
+    
+    // MARK: Locations
+    
+    func scanLocationsDynamoDB(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+        print("scanLocationsDynamoDB:")
+        let awsLocationsTable = AWSLocationsTable()
+        awsLocationsTable.scanLocations(completionHandler)
     }
+    
+//    func scanLocationsByCountryOrCityNameDynamoDB(_ searchCountryName: String, searchCityName: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+//        print("scanLocationsByCountryOrCityNameDynamoDB:")
+//        let awsLocationsTable = AWSLocationsTable()
+//        awsLocationsTable.scanLocationsByCountryOrCityName(searchCountryName, searchCityName: searchCityName, completionHandler: completionHandler)
+//    }
     
     // MARK: Activities
     

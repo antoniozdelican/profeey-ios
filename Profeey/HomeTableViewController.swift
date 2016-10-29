@@ -20,7 +20,8 @@ class HomeTableViewController: UITableViewController {
     
     fileprivate var posts: [Post] = []
     // Before any post is loaded.
-    fileprivate var isLoadingPosts: Bool = true
+    fileprivate var isLoadingPosts: Bool = false
+    fileprivate var activityIndicatorView: UIActivityIndicatorView?
     // When uploading new post.
     fileprivate var isUploading: Bool = false
     fileprivate var newPostProgress: Progress?
@@ -33,10 +34,13 @@ class HomeTableViewController: UITableViewController {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         self.tableView.delaysContentTouches = false
-        // Adjust header.
         self.tableView.contentInset = UIEdgeInsetsMake(-1.0, 0.0, 0.0, 0.0)
+        self.activityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
+        self.tableView.backgroundView = self.activityIndicatorView
         
         if let currentUser = AWSClientManager.defaultClientManager().userPool?.currentUser(), currentUser.isSignedIn {
+            self.isLoadingPosts = true
+            self.activityIndicatorView?.startAnimating()
             self.getCurrentUser()
         }
     }
@@ -96,38 +100,35 @@ class HomeTableViewController: UITableViewController {
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         if self.isLoadingPosts {
-            return 1
+            return 0
         }
-        if self.posts.count == 0 {
-            return 1
-        }
+//        if self.posts.count == 0 {
+//            return 1
+//        }
+//        return self.posts.count
         return self.posts.count
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if self.isLoadingPosts {
-            return 1
-        }
-        if self.posts.count == 0 {
-            return 1
-        }
-        if section == 0 && self.isUploading {
-            return 2
+            return 0
         }
         return 5
-        //return 6
+//        if self.posts.count == 0 {
+//            return 1
+//        }
+//        if section == 0 && self.isUploading {
+//            return 2
+//        }
+//        return 5
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if self.isLoadingPosts {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cellLoading", for: indexPath) as! LoadingTableViewCell
-            return cell
-        }
-        if self.posts.count == 0 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cellEmpty", for: indexPath) as! EmptyTableViewCell
-            cell.emptyMessageLabel.text = "You are not following anyone. \n Connect with people and discover their skills."
-            return cell
-        }
+//        if self.posts.count == 0 {
+//            let cell = tableView.dequeueReusableCell(withIdentifier: "cellEmpty", for: indexPath) as! EmptyTableViewCell
+//            cell.emptyMessageLabel.text = "You are not following anyone. \n Connect with people and discover their skills."
+//            return cell
+//        }
         if indexPath.section == 0 && self.isUploading {
             // Dummy post user.
             let user = self.posts[indexPath.section].user
@@ -182,6 +183,8 @@ class HomeTableViewController: UITableViewController {
             cell.postButtonsTableViewCellDelegate = self
             cell.numberOfLikesButton.isHidden = (post.numberOfLikesString != nil) ? false : true
             cell.numberOfLikesButton.setTitle(post.numberOfLikesString, for: UIControlState())
+            cell.numberOfCommentsButton.isHidden = (post.numberOfCommentsString != nil) ? false : true
+            cell.numberOfCommentsButton.setTitle(post.numberOfCommentsString, for: UIControlState())
             return cell
         default:
             return UITableViewCell()
@@ -201,16 +204,12 @@ class HomeTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.layoutMargins = UIEdgeInsets.zero
         cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
-        cell.selectionStyle = UITableViewCellSelectionStyle.none
     }
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        if self.isLoadingPosts {
-            return 120.0
-        }
-        if self.posts.count == 0 {
-            return 120.0
-        }
+//        if self.posts.count == 0 {
+//            return 120.0
+//        }
         switch indexPath.row {
         case 0:
             return 64.0
@@ -231,12 +230,9 @@ class HomeTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if self.isLoadingPosts {
-            return 120.0
-        }
-        if self.posts.count == 0 {
-            return 120.0
-        }
+//        if self.posts.count == 0 {
+//            return 120.0
+//        }
         switch indexPath.row {
         case 0:
             return 64.0
@@ -291,6 +287,14 @@ class HomeTableViewController: UITableViewController {
         }
     }
     
+    // MARK: Helpers
+    
+    fileprivate func reloadRow(_ indexPath: IndexPath) {
+        UIView.performWithoutAnimation {
+            self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
+        }
+    }
+    
     // MARK: AWS
     
     // Gets currentUser and credentialsProvider.idenityId
@@ -307,7 +311,6 @@ class HomeTableViewController: UITableViewController {
                     guard let awsUser = task.result as? AWSUser else {
                         return
                     }
-                    print("getCurrentUser success!")
                     let currentUser = CurrentUser(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationName: awsUser._locationName)
                     // Store properties!
                     PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB = currentUser
@@ -331,45 +334,38 @@ class HomeTableViewController: UITableViewController {
             (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                self.isLoadingPosts = false
+                self.activityIndicatorView?.stopAnimating()
+                self.refreshControl?.endRefreshing()
                 if let error = error {
                     print("queryUserActivitiesDateSorted error: \(error)")
-                    self.isLoadingPosts = false
                     self.tableView.reloadData()
-                    self.refreshControl?.endRefreshing()
                 } else {
-                    guard let awsActivities = response?.items as? [AWSActivity] else {
-                        self.isLoadingPosts = false
+                    guard let awsActivities = response?.items as? [AWSActivity], awsActivities.count > 0 else {
                         self.tableView.reloadData()
-                        self.refreshControl?.endRefreshing()
                         return
                     }
-                    guard awsActivities.count > 0 else {
-                        self.isLoadingPosts = false
-                        self.tableView.reloadData()
-                        self.refreshControl?.endRefreshing()
-                        return
-                    }
-                    for (index, awsActivity) in awsActivities.enumerated() {
+                    for awsActivity in awsActivities {
                         let user = User(userId: awsActivity._postUserId, firstName: awsActivity._firstName, lastName: awsActivity._lastName, preferredUsername: awsActivity._preferredUsername, professionName: awsActivity._professionName, profilePicUrl: awsActivity._profilePicUrl)
-                        let post = Post(userId: awsActivity._postUserId, postId: awsActivity._postId, caption: awsActivity._caption, categoryName: awsActivity._categoryName, creationDate: awsActivity._creationDate, imageUrl: awsActivity._imageUrl, numberOfLikes: awsActivity._numberOfLikes, user: user)
+                        let post = Post(userId: awsActivity._postUserId, postId: awsActivity._postId, caption: awsActivity._caption, categoryName: awsActivity._categoryName, creationDate: awsActivity._creationDate, imageUrl: awsActivity._imageUrl, numberOfLikes: awsActivity._numberOfLikes, numberOfComments: awsActivity._numberOfComments, user: user)
                         self.posts.append(post)
-                        self.isLoadingPosts = false
-                        self.tableView.reloadData()
-                        
-                        if let profilePicUrl = awsActivity._profilePicUrl {
+                    }
+                    self.tableView.reloadData()
+                    
+                    for (index, post) in self.posts.enumerated() {
+                        if let profilePicUrl = post.user?.profilePicUrl {
                             let indexPath = IndexPath(row: 0, section: index)
                             self.downloadImage(profilePicUrl, imageType: .userProfilePic, indexPath: indexPath)
                         }
-                        if let imageUrl = awsActivity._imageUrl {
+                        if let imageUrl = post.imageUrl {
                             let indexPath = IndexPath(row: 1, section: index)
                             self.downloadImage(imageUrl, imageType: .postPic, indexPath: indexPath)
                         }
-                        if let postId = awsActivity._postId {
+                        if let postId = post.postId {
                             let indexPath = IndexPath(row: 4, section: index)
                             self.getLike(postId, indexPath: indexPath)
                         }
                     }
-                    self.refreshControl?.endRefreshing()
                 }
             })
         })
@@ -392,12 +388,12 @@ class HomeTableViewController: UITableViewController {
             case .userProfilePic:
                 if let indexPath = indexPath {
                     self.posts[indexPath.section].user?.profilePic = image
-                    self.tableView.reloadData()
+                    self.reloadRow(indexPath)
                 }
             case .postPic:
                 if let indexPath = indexPath {
                     self.posts[indexPath.section].image = image
-                    self.tableView.reloadData()
+                    self.reloadRow(indexPath)
                 }
             }
         } else {
@@ -425,12 +421,12 @@ class HomeTableViewController: UITableViewController {
                                 case .userProfilePic:
                                     if let indexPath = indexPath {
                                         self.posts[indexPath.section].user?.profilePic = image
-                                        self.tableView.reloadData()
+                                        self.reloadRow(indexPath)
                                     }
                                 case .postPic:
                                     if let indexPath = indexPath {
                                         self.posts[indexPath.section].image = image
-                                        self.tableView.reloadData()
+                                        self.reloadRow(indexPath)
                                     }
                                 }
                             }
@@ -509,7 +505,7 @@ class HomeTableViewController: UITableViewController {
                     self.tableView.reloadData()
                 } else {
                     if let awsPost = task.result as? AWSPost {
-                        let post = Post(userId: awsPost._userId, postId: awsPost._postId, caption: awsPost._caption, categoryName: awsPost._categoryName, creationDate: awsPost._creationDate, imageUrl: awsPost._imageUrl, numberOfLikes: awsPost._numberOfLikes, user: PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB)
+                        let post = Post(userId: awsPost._userId, postId: awsPost._postId, caption: awsPost._caption, categoryName: awsPost._categoryName, creationDate: awsPost._creationDate, imageUrl: awsPost._imageUrl, numberOfLikes: awsPost._numberOfLikes, numberOfComments: awsPost._numberOfComments, user: PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB)
                         let image = UIImage(data: imageData)
                         post.image = image
                         
@@ -670,6 +666,13 @@ extension HomeTableViewController: PostButtonsTableViewCellDelegate {
             return
         }
         self.performSegue(withIdentifier: "segueToUsersVc", sender: indexPath)
+    }
+    
+    func numberOfCommentsButtonTapped(_ button: UIButton) {
+        guard let indexPath = self.tableView.indexPathForView(view: button) else {
+            return
+        }
+        //self.performSegue(withIdentifier: "segueToUsersVc", sender: indexPath)
     }
 }
 

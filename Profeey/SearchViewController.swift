@@ -11,17 +11,17 @@ import AWSMobileHubHelper
 import AWSDynamoDB
 
 protocol SearchUsersDelegate {
-    func showUsers(_ users: [User], showRecentUsers: Bool)
-    func searchingUsers(_ isSearchingUsers: Bool)
+    func showUsers(_ users: [User], showAllUsers: Bool)
+    func isSearchingUsers(_ isSearching: Bool)
 }
 
-protocol SearchCategoriesDelegate {
-    func showCategories(_ categories: [Category], showRecentCategories: Bool)
-    func searchingCategories(_ isSearchingCategories: Bool)
+protocol SearchProfessionsDelegate {
+    func showProfessions(_ professions: [Profession], showAllProfessions: Bool)
+    func isSearchingProfessions(_ isSearching: Bool)
 }
 
-protocol ScrollViewDelegate {
-    func didScroll()
+protocol SearchScrollDelegate {
+    func scrollViewWillBeginDragging()
 }
 
 class SearchViewController: UIViewController {
@@ -29,20 +29,20 @@ class SearchViewController: UIViewController {
     @IBOutlet weak var indicatorScrollView: UIScrollView!
     @IBOutlet weak var mainScrollView: UIScrollView!
     @IBOutlet weak var peopleLabel: UILabel!
-    @IBOutlet weak var categoriesLabel: UILabel!
+    @IBOutlet weak var professionsLabel: UILabel!
     @IBOutlet weak var segmentedControlView: UIView!
     
     fileprivate var searchController: UISearchController?
     fileprivate var searchUsersDelegate: SearchUsersDelegate?
-    fileprivate var searchCategoriesDelegate: SearchCategoriesDelegate?
+    fileprivate var searchProfessionsDelegate: SearchProfessionsDelegate?
     
-    fileprivate var recentUsers: [User] = []
+    fileprivate var users: [User] = []
+    fileprivate var allUsers: [User] = []
     fileprivate var searchedUsers: [User] = []
-    fileprivate var showRecentUsers: Bool = true
     
-    fileprivate var recentCategories: [Category] = []
-    fileprivate var searchedCategories: [Category] = []
-    fileprivate var showRecentCategories: Bool = true
+    fileprivate var professions: [Profession] = []
+    fileprivate var allProfessions: [Profession] = []
+    fileprivate var searchedProfessions: [Profession] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,8 +51,10 @@ class SearchViewController: UIViewController {
         self.mainScrollView.delegate = self
         self.adjustSegment(0)
         
+        self.searchUsersDelegate?.isSearchingUsers(true)
         self.scanUsers()
-        self.scanCategories()
+        self.searchProfessionsDelegate?.isSearchingProfessions(true)
+        self.scanProfessions()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -62,7 +64,7 @@ class SearchViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        self.searchController?.searchBar.resignFirstResponder()
+        self.view.endEditing(true)
     }
 
     override func didReceiveMemoryWarning() {
@@ -76,9 +78,7 @@ class SearchViewController: UIViewController {
         self.searchController?.hidesNavigationBarDuringPresentation = false
         self.searchController?.dimsBackgroundDuringPresentation = false
         self.searchController?.searchBar.delegate = self
-        
         self.definesPresentationContext = true
-        //self.definesPresentationContext = false
         self.navigationItem.titleView = self.searchController?.searchBar
     }
     
@@ -87,25 +87,21 @@ class SearchViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destinationViewController = segue.destination as? SearchUsersTableViewController {
             self.searchUsersDelegate = destinationViewController
-            destinationViewController.scrollViewDelegate = self
-            destinationViewController.selectUserDelegate = self
+            destinationViewController.searchScrollDelegate = self
+            destinationViewController.searchUsersTableViewControllerDelegate = self
         }
-        if let destinationViewController = segue.destination as? SearchCategoriesTableViewController {
-            self.searchCategoriesDelegate = destinationViewController
-            destinationViewController.scrollViewDelegate = self
-            destinationViewController.selectCategoryDelegate = self
+        if let destinationViewController = segue.destination as? SearchProfessionsTableViewController {
+            self.searchProfessionsDelegate = destinationViewController
+            destinationViewController.searchScrollDelegate = self
+            destinationViewController.searchProfessionsTableViewControllerDelegate = self
         }
         if let destinationViewController = segue.destination as? ProfileTableViewController,
             let indexPath = sender as? IndexPath {
-            destinationViewController.user = self.showRecentUsers ? self.recentUsers[(indexPath as NSIndexPath).row] : self.searchedUsers[(indexPath as NSIndexPath).row]
+            destinationViewController.user = self.users[indexPath.row]
         }
-        if let destinationViewController = segue.destination as? CategoryTableViewController,
+        if let destinationViewController = segue.destination as? ProfessionTableViewController,
             let indexPath = sender as? IndexPath {
-            destinationViewController.categoryName = self.showRecentCategories ? self.recentCategories[(indexPath as NSIndexPath).row].categoryName : self.searchedCategories[(indexPath as NSIndexPath).row].categoryName
-        }
-        if let destinationViewController = segue.destination as? Category2TableViewController,
-            let indexPath = sender as? IndexPath {
-            destinationViewController.category = self.showRecentCategories ? self.recentCategories[(indexPath as NSIndexPath).row] : self.searchedCategories[(indexPath as NSIndexPath).row]
+            destinationViewController.profession = self.professions[indexPath.row]
         }
     }
     
@@ -116,28 +112,9 @@ class SearchViewController: UIViewController {
         self.mainScrollView.scrollRectToVisible(rect, animated: true)
     }
     
-    @IBAction func categoriesSegmentTapped(_ sender: AnyObject) {
+    @IBAction func professionsSegmentTapped(_ sender: AnyObject) {
         let rect = CGRect(x: self.view.bounds.width, y: 0.0, width: self.mainScrollView.bounds.width, height: self.mainScrollView.bounds.height)
         self.mainScrollView.scrollRectToVisible(rect, animated: true)
-    }
-    
-    // MARK: Helper
-    
-    fileprivate func adjustSegment(_ segmentIndex: Int) {
-        switch segmentIndex {
-        case 0:
-            if self.peopleLabel.textColor != Colors.black {
-                self.peopleLabel.textColor = Colors.black
-                self.categoriesLabel.textColor = Colors.greyDark
-            }
-        case 1:
-            if self.categoriesLabel.textColor != Colors.black {
-                self.peopleLabel.textColor = Colors.greyDark
-                self.categoriesLabel.textColor = Colors.black
-            }
-        default:
-            return
-        }
     }
     
     // MARK: AWS
@@ -148,137 +125,108 @@ class SearchViewController: UIViewController {
             (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                self.searchUsersDelegate?.isSearchingUsers(false)
                 if let error = error {
                     print("scanUsers error: \(error)")
+                    self.searchUsersDelegate?.showUsers(self.users, showAllUsers: true)
                 } else {
                     guard let awsUsers = response?.items as? [AWSUser] else {
-                        return
-                    }
-                    guard awsUsers.count > 0 else {
+                        self.searchUsersDelegate?.showUsers(self.users, showAllUsers: true)
                         return
                     }
                     for awsUser in awsUsers {
                         let user = User(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationName: awsUser._locationName)
-                        self.recentUsers.append(user)
+                        self.allUsers.append(user)
                     }
-                    if self.showRecentUsers {
-                        self.searchUsersDelegate?.showUsers(self.recentUsers, showRecentUsers: true)
+                    
+                    // If there is text already in text field, do the filter.
+                    if let searchText = self.searchController?.searchBar.text, !searchText.isEmpty {
+                        self.filterUsers(searchText)
+                    } else {
+                        self.users = self.allUsers
+                        self.searchUsersDelegate?.showUsers(self.users, showAllUsers: true)
                     }
                 }
             })
         })
     }
     
-    fileprivate func scanUsersByFirstLastName(_ searchText: String) {
-        let searchFirstName = searchText.lowercased()
-        let searchLastName = searchText.lowercased()
-        let searchPreferredUsername = searchText.lowercased()
+    fileprivate func scanProfessions() {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().scanProfessionsDynamoDB({
+            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                self.searchProfessionsDelegate?.isSearchingProfessions(false)
+                if let error = error {
+                    print("scanProfessions error: \(error)")
+                    self.searchProfessionsDelegate?.showProfessions(self.professions, showAllProfessions: true)
+                } else {
+                    guard let awsProfessions = response?.items as? [AWSProfession] else {
+                        self.searchProfessionsDelegate?.showProfessions(self.professions, showAllProfessions: true)
+                        return
+                    }
+                    for awsProfession in awsProfessions {
+                        let profession = Profession(professionName: awsProfession._professionName, searchProfessionName: awsProfession._searchProfessionName, numberOfUsers: awsProfession._numberOfUsers)
+                        self.allProfessions.append(profession)
+                    }
+                    
+                    // If there is text already in text field, do the filter.
+                    if let searchText = self.searchController?.searchBar.text, !searchText.isEmpty {
+                        self.filterProfessions(searchText)
+                    } else {
+                        self.professions = self.allProfessions
+                        self.searchProfessionsDelegate?.showProfessions(self.professions, showAllProfessions: true)
+                    }
+                }
+            })
+        })
+    }
+    
+    // MARK: Helpers
+    
+    fileprivate func adjustSegment(_ segmentIndex: Int) {
+        switch segmentIndex {
+        case 0:
+            if self.peopleLabel.textColor != Colors.black {
+                self.peopleLabel.textColor = Colors.black
+                self.professionsLabel.textColor = Colors.greyDark
+            }
+        case 1:
+            if self.professionsLabel.textColor != Colors.black {
+                self.peopleLabel.textColor = Colors.greyDark
+                self.professionsLabel.textColor = Colors.black
+            }
+        default:
+            return
+        }
+    }
+    
+    fileprivate func filterUsers(_ searchText: String) {
+        let searchName = searchText.lowercased()
+        self.searchedUsers = self.allUsers.filter({
+            (user: User) in
+            if let searchFirstName = user.searchFirstName, searchFirstName.hasPrefix(searchName) {
+                return true
+            } else if let searchLastName = user.searchLastName, searchLastName.hasPrefix(searchName) {
+                return true
+            } else if let searchPreferredUsername = user.searchPreferredUsername, searchPreferredUsername.hasPrefix(searchName) {
+                return true
+            } else {
+                return false
+            }
+        })
+        self.users = self.searchedUsers
+        self.searchUsersDelegate?.showUsers(self.users, showAllUsers: false)
+    }
+    
+    fileprivate func filterProfessions(_ searchText: String) {
+        let searchProfessionName = searchText.lowercased()
+        let searchableProfessions = self.allProfessions.filter( { $0.searchProfessionName != nil } )
         
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().scanUsersByNameDynamoDB(searchFirstName, searchLastName: searchLastName, searchPreferredUsername: searchPreferredUsername, completionHandler: {
-            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
-            DispatchQueue.main.async(execute: {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                if let error = error {
-                    print("scanUsers error: \(error)")
-                    self.searchedUsers = []
-                    if !self.showRecentUsers {
-                        self.searchUsersDelegate?.searchingUsers(false)
-                        self.searchUsersDelegate?.showUsers(self.searchedUsers, showRecentUsers: false)
-                    }
-                } else {
-                    guard let awsUsers = response?.items as? [AWSUser] else {
-                        self.searchedUsers = []
-                        if !self.showRecentUsers {
-                            self.searchUsersDelegate?.searchingUsers(false)
-                            self.searchUsersDelegate?.showUsers(self.searchedUsers, showRecentUsers: false)
-                        }
-                        return
-                    }
-                    guard awsUsers.count > 0 else {
-                        self.searchedUsers = []
-                        if !self.showRecentUsers {
-                            self.searchUsersDelegate?.searchingUsers(false)
-                            self.searchUsersDelegate?.showUsers(self.searchedUsers, showRecentUsers: false)
-                        }
-                        return
-                    }
-                    // Clear searched
-                    self.searchedUsers = []
-                    for awsUser in awsUsers {
-                        let user = User(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationName: awsUser._locationName)
-                        self.searchedUsers.append(user)
-                    }
-                    if !self.showRecentUsers {
-                        self.searchUsersDelegate?.searchingUsers(false)
-                        self.searchUsersDelegate?.showUsers(self.searchedUsers, showRecentUsers: false)
-                    }
-                }
-            })
-        })
-    }
-    
-    fileprivate func scanCategories() {
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().scanCategoriesDynamoDB({
-            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
-            DispatchQueue.main.async(execute: {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                if let error = error {
-                    print("scanCategories error: \(error)")
-                } else {
-                    guard let awsCategories = response?.items as? [AWSCategory] , awsCategories.count > 0 else {
-                        return
-                    }
-                    for awsCategory in awsCategories {
-                        let category = Category(categoryName: awsCategory._categoryName, numberOfPosts: awsCategory._numberOfPosts)
-                        self.recentCategories.append(category)
-                    }
-                    if self.showRecentCategories {
-                        self.searchCategoriesDelegate?.showCategories(self.recentCategories, showRecentCategories: true)
-                    }
-                }
-            })
-        })
-    }
-    
-    fileprivate func scanCategoriesByCategoryName(_ searchText: String) {
-        let searchCategoryName = searchText.lowercased()
-        
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().scanCategoriesByCategoryNameDynamoDB(searchCategoryName, completionHandler: {
-            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
-            DispatchQueue.main.async(execute: {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                if let error = error {
-                    print("scanCategoriesByCategoryName error: \(error)")
-                    self.searchedCategories = []
-                    if !self.showRecentCategories {
-                        self.searchCategoriesDelegate?.searchingCategories(false)
-                        self.searchCategoriesDelegate?.showCategories(self.searchedCategories, showRecentCategories: false)
-                    }
-                } else {
-                    guard let awsCategories = response?.items as? [AWSCategory] , awsCategories.count > 0 else {
-                        self.searchedCategories = []
-                        if !self.showRecentCategories {
-                            self.searchCategoriesDelegate?.searchingCategories(false)
-                            self.searchCategoriesDelegate?.showCategories(self.searchedCategories, showRecentCategories: false)
-                        }
-                        return
-                    }
-                    // Clear searched
-                    self.searchedCategories = []
-                    for awsCategory in awsCategories {
-                        let category = Category(categoryName: awsCategory._categoryName, numberOfPosts: awsCategory._numberOfPosts)
-                        self.searchedCategories.append(category)
-                    }
-                    if !self.showRecentCategories {
-                        self.searchCategoriesDelegate?.searchingCategories(false)
-                        self.searchCategoriesDelegate?.showCategories(self.searchedCategories, showRecentCategories: false)
-                    }
-                }
-            })
-        })
+        self.searchedProfessions = searchableProfessions.filter( { $0.searchProfessionName!.hasPrefix(searchProfessionName) } )
+        self.professions = self.searchedProfessions
+        self.searchProfessionsDelegate?.showProfessions(self.professions, showAllProfessions: false)
     }
 }
 
@@ -297,61 +245,45 @@ extension SearchViewController: UIScrollViewDelegate {
 extension SearchViewController: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        let searchText = searchText.trimm()
-        if searchText.isEmpty {
-            // Users.
-            self.showRecentUsers = true
-            self.searchUsersDelegate?.searchingUsers(false)
-            self.searchUsersDelegate?.showUsers(self.recentUsers, showRecentUsers: self.showRecentUsers)
+        
+        if searchText.trimm().isEmpty {
+            self.users = self.allUsers
+            self.searchUsersDelegate?.showUsers(self.users, showAllUsers: true)
             
-            // Categories.
-            self.showRecentCategories = true
-            self.searchCategoriesDelegate?.searchingCategories(false)
-            self.searchCategoriesDelegate?.showCategories(self.recentCategories, showRecentCategories: self.showRecentCategories)
-            
+            self.professions = self.allProfessions
+            self.searchProfessionsDelegate?.showProfessions(self.professions, showAllProfessions: true)
         } else {
-            // Users.
-            self.showRecentUsers = false
-            self.searchUsersDelegate?.searchingUsers(true)
-            self.scanUsersByFirstLastName(searchText)
-            
-            // Categories.
-            self.showRecentCategories = false
-            self.searchCategoriesDelegate?.searchingCategories(true)
-            self.scanCategoriesByCategoryName(searchText)
+            self.filterUsers(searchText.trimm())
+            self.filterProfessions(searchText.trimm())
         }
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        // Users.
-        self.showRecentUsers = true
-        self.searchUsersDelegate?.searchingUsers(false)
-        self.searchUsersDelegate?.showUsers(self.recentUsers, showRecentUsers: self.showRecentUsers)
+        self.users = self.allUsers
+        self.searchUsersDelegate?.showUsers(self.users, showAllUsers: true)
         
-        // Categories.
-        self.showRecentCategories = true
-        self.searchCategoriesDelegate?.searchingCategories(false)
-        self.searchCategoriesDelegate?.showCategories(self.recentCategories, showRecentCategories: self.showRecentCategories)
+        self.professions = self.allProfessions
+        self.searchProfessionsDelegate?.showProfessions(self.professions, showAllProfessions: true)
     }
 }
 
-extension SearchViewController: ScrollViewDelegate {
+extension SearchViewController: SearchScrollDelegate {
     
-    func didScroll() {
+    func scrollViewWillBeginDragging() {
         self.searchController?.searchBar.resignFirstResponder()
     }
 }
 
-extension SearchViewController: SelectUserDelegate {
+extension SearchViewController: SearchUsersTableViewControllerDelegate {
     
     func didSelectUser(_ indexPath: IndexPath) {
         self.performSegue(withIdentifier: "segueToProfileVc", sender: indexPath)
     }
 }
 
-extension SearchViewController: SelectCategoryDelegate {
+extension SearchViewController: SearchProfessionsTableViewControllerDelegate {
     
-    func didSelectCategory(_ indexPath: IndexPath) {
-        self.performSegue(withIdentifier: "segueToCategoryVc", sender: indexPath)
+    func didSelectProfession(_ indexPath: IndexPath) {
+        self.performSegue(withIdentifier: "segueToProfessionVc", sender: indexPath)
     }
 }

@@ -13,6 +13,7 @@ class Category: NSObject {
     // Properties.
     var categoryName: String?
     var numberOfPosts: NSNumber?
+    var searchCategoryName: String?
     
     // Generated.
     var numberOfPostsString: String? {
@@ -32,5 +33,12 @@ class Category: NSObject {
         self.init()
         self.categoryName = categoryName
         self.numberOfPosts = numberOfPosts
+    }
+    
+    convenience init(categoryName: String?, searchCategoryName: String?, numberOfPosts: NSNumber?) {
+        self.init()
+        self.categoryName = categoryName
+        self.numberOfPosts = numberOfPosts
+        self.searchCategoryName = searchCategoryName
     }
 }

@@ -24,7 +24,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9V4-dh-Eyy" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="73" y="447"/>
+            <point key="canvasLocation" x="-58" y="446"/>
         </scene>
         <!--Home-->
         <scene sceneID="arT-UO-kgp">
@@ -37,7 +37,7 @@
                         <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellPostUser" rowHeight="64" id="Zre-gG-70s" customClass="PostUserTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="120" width="375" height="64"/>
+                                <rect key="frame" x="0.0" y="119.5" width="375" height="64"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Zre-gG-70s" id="KSG-Y3-KlG">
                                     <frame key="frameInset" width="375" height="63"/>
@@ -103,8 +103,8 @@
                                     <outlet property="profilePicImageView" destination="PoI-WC-PJx" id="sjj-FU-hzR"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellPostImage" rowHeight="400" id="hfP-Sb-VdR" customClass="PostImageTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="184" width="375" height="400"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellPostImage" rowHeight="400" id="hfP-Sb-VdR" customClass="PostImageTableViewCell" customModule="Profeey" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="183.5" width="375" height="400"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hfP-Sb-VdR" id="Tfq-vu-CEW">
                                     <frame key="frameInset" width="375" height="399"/>
@@ -139,8 +139,8 @@
                                     <outlet property="postImageViewHeightConstraint" destination="h9d-0c-nci" id="kpx-cf-Tg0"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellPostInfo" rowHeight="32" id="3Ba-nR-k2B" customClass="PostInfoTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="584" width="375" height="32"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellPostInfo" rowHeight="32" id="3Ba-nR-k2B" customClass="PostInfoTableViewCell" customModule="Profeey" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="583.5" width="375" height="32"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="3Ba-nR-k2B" id="bIn-45-dBY">
                                     <frame key="frameInset" width="375" height="31"/>
@@ -163,8 +163,8 @@
                                     <outlet property="titleLabel" destination="SjZ-6Q-Cvw" id="86g-ve-jUm"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellPostCategoryCreationDate" rowHeight="26" id="Jfc-eF-Dar" customClass="PostCategoryCreationDateTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="616" width="375" height="26"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellPostCategoryCreationDate" rowHeight="26" id="Jfc-eF-Dar" customClass="PostCategoryCreationDateTableViewCell" customModule="Profeey" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="615.5" width="375" height="26"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Jfc-eF-Dar" id="jcH-MR-Sg4">
                                     <frame key="frameInset" width="375" height="25"/>
@@ -193,8 +193,8 @@
                                     <outlet property="categoryNameCreationDateLabel" destination="IeD-Ra-cPM" id="bTY-Av-tk8"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellPostButtons" rowHeight="52" id="p0U-dG-J82" customClass="PostButtonsTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="642" width="375" height="52"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellPostButtons" rowHeight="52" id="p0U-dG-J82" customClass="PostButtonsTableViewCell" customModule="Profeey" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="641.5" width="375" height="52"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="p0U-dG-J82" id="eul-OE-1Af">
                                     <frame key="frameInset" width="375" height="51"/>
@@ -222,35 +222,36 @@
                                                 <action selector="numberOfLikesButtonTapped:" destination="p0U-dG-J82" eventType="touchUpInside" id="aaz-vN-0yB"/>
                                             </connections>
                                         </button>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tmp-iR-ulA">
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="48" id="AhV-th-h2j"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
+                                            <state key="normal" title="0 comments">
+                                                <color key="titleColor" red="0.63921568630000003" green="0.63921568630000003" blue="0.63921568630000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="numberOfCommentsButtonTapped:" destination="p0U-dG-J82" eventType="touchUpInside" id="9US-XB-DAK"/>
+                                            </connections>
+                                        </button>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="brl-cn-Xx9" firstAttribute="top" secondItem="eul-OE-1Af" secondAttribute="top" id="2nM-mR-VpO"/>
-                                        <constraint firstAttribute="trailing" secondItem="dKo-Tu-qLF" secondAttribute="trailing" id="CGm-GZ-n4I"/>
-                                        <constraint firstAttribute="trailing" secondItem="brl-cn-Xx9" secondAttribute="trailing" constant="12" id="J8M-DQ-DeJ"/>
-                                        <constraint firstItem="brl-cn-Xx9" firstAttribute="top" secondItem="eul-OE-1Af" secondAttribute="top" id="RCQ-hb-5zk"/>
-                                        <constraint firstItem="brl-cn-Xx9" firstAttribute="leading" secondItem="eul-OE-1Af" secondAttribute="leading" constant="12" id="dJe-XS-ZYH"/>
-                                        <constraint firstItem="dKo-Tu-qLF" firstAttribute="leading" secondItem="eul-OE-1Af" secondAttribute="leading" id="dbn-zo-FQA"/>
+                                        <constraint firstItem="Tmp-iR-ulA" firstAttribute="leading" secondItem="brl-cn-Xx9" secondAttribute="trailing" constant="8" id="JhB-fd-e8D"/>
+                                        <constraint firstItem="brl-cn-Xx9" firstAttribute="centerY" secondItem="eul-OE-1Af" secondAttribute="centerY" id="Vce-dj-eQp"/>
+                                        <constraint firstItem="Tmp-iR-ulA" firstAttribute="centerY" secondItem="eul-OE-1Af" secondAttribute="centerY" id="fmX-KR-lOr"/>
                                         <constraint firstItem="dKo-Tu-qLF" firstAttribute="leading" secondItem="eul-OE-1Af" secondAttribute="leading" id="jHK-hV-N9L"/>
-                                        <constraint firstAttribute="trailing" secondItem="brl-cn-Xx9" secondAttribute="trailing" constant="12" id="uN7-NE-snx"/>
-                                        <constraint firstItem="dKo-Tu-qLF" firstAttribute="top" secondItem="eul-OE-1Af" secondAttribute="top" id="viV-2P-xh2"/>
+                                        <constraint firstAttribute="trailing" secondItem="Tmp-iR-ulA" secondAttribute="trailing" constant="12" id="m4M-u4-NmF"/>
+                                        <constraint firstItem="dKo-Tu-qLF" firstAttribute="centerY" secondItem="eul-OE-1Af" secondAttribute="centerY" id="nyo-93-b6O"/>
                                     </constraints>
-                                    <variation key="default">
-                                        <mask key="constraints">
-                                            <exclude reference="2nM-mR-VpO"/>
-                                            <exclude reference="J8M-DQ-DeJ"/>
-                                            <exclude reference="dJe-XS-ZYH"/>
-                                            <exclude reference="CGm-GZ-n4I"/>
-                                            <exclude reference="dbn-zo-FQA"/>
-                                        </mask>
-                                    </variation>
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="likeButton" destination="dKo-Tu-qLF" id="Oug-yA-xsb"/>
+                                    <outlet property="numberOfCommentsButton" destination="Tmp-iR-ulA" id="7IX-Op-9MG"/>
                                     <outlet property="numberOfLikesButton" destination="brl-cn-Xx9" id="UL2-CM-Xeh"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellUploading" rowHeight="40" id="a5x-57-e3X" customClass="UploadingTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="694" width="375" height="40"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellUploading" rowHeight="40" id="a5x-57-e3X" customClass="UploadingTableViewCell" customModule="Profeey" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="693.5" width="375" height="40"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="a5x-57-e3X" id="xEe-fD-9RY">
                                     <frame key="frameInset" width="375" height="39"/>
@@ -277,30 +278,8 @@
                                     <outlet property="progressView" destination="Mz5-tn-FAe" id="pSD-sA-txt"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellLoading" rowHeight="120" id="nW8-Ut-LIl" customClass="LoadingTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="734" width="375" height="120"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="nW8-Ut-LIl" id="M4z-bD-zxe">
-                                    <frame key="frameInset" width="375" height="119"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="0TN-Q7-tzC"/>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading..." lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PxM-NW-twg">
-                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                            <color key="textColor" red="0.2901960784" green="0.2901960784" blue="0.2901960784" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                    </subviews>
-                                    <constraints>
-                                        <constraint firstItem="PxM-NW-twg" firstAttribute="centerY" secondItem="M4z-bD-zxe" secondAttribute="centerY" id="9aF-PP-hAj"/>
-                                        <constraint firstItem="0TN-Q7-tzC" firstAttribute="centerY" secondItem="M4z-bD-zxe" secondAttribute="centerY" id="Fhn-lo-oUE"/>
-                                        <constraint firstItem="PxM-NW-twg" firstAttribute="centerX" secondItem="M4z-bD-zxe" secondAttribute="centerX" id="WY6-Tf-dL0"/>
-                                        <constraint firstItem="PxM-NW-twg" firstAttribute="leading" secondItem="0TN-Q7-tzC" secondAttribute="trailing" constant="8" id="wO9-HC-x9d"/>
-                                    </constraints>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellEmpty" rowHeight="120" id="cHp-1g-hmK" customClass="EmptyTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="854" width="375" height="120"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellEmpty" rowHeight="120" id="cHp-1g-hmK" customClass="EmptyTableViewCell" customModule="Profeey" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="733.5" width="375" height="120"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="cHp-1g-hmK" id="P4j-TQ-wro">
                                     <frame key="frameInset" width="375" height="119"/>
@@ -343,7 +322,7 @@
                     </navigationItem>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="375" height="1200"/>
-                    <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="pv7-Wk-vhh">
+                    <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" misplaced="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="pv7-Wk-vhh">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <connections>

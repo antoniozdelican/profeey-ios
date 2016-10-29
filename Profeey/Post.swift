@@ -18,6 +18,7 @@ class Post: NSObject {
     var creationDate: NSNumber?
     var imageUrl: String?
     var numberOfLikes: NSNumber?
+    var numberOfComments: NSNumber?
     
     // Generated.
     var user: User?
@@ -49,9 +50,26 @@ class Post: NSObject {
         let numberOfLikesInt = numberOfLikes.intValue
         return numberOfLikesInt.numberToString()
     }
-    
-    
-    var numberOfComments: Int = 0
+    var numberOfCommentsString: String? {
+        guard let numberOfComments = self.numberOfComments else {
+            return nil
+        }
+        let numberOfCommentsInt = numberOfComments.intValue
+        guard numberOfCommentsInt > 0 else {
+            return nil
+        }
+        guard numberOfCommentsInt > 1 else {
+            return "\(numberOfCommentsInt) comment"
+        }
+        return "\(numberOfCommentsInt) comments"
+    }
+    var numberOfCommentsSmallString: String? {
+        guard let numberOfComments = self.numberOfComments else {
+            return "0"
+        }
+        let numberOfCommentsInt = numberOfComments.intValue
+        return numberOfCommentsInt.numberToString()
+    }
     
     var isLikedByCurrentUser: Bool = false
 
@@ -59,7 +77,7 @@ class Post: NSObject {
         super.init()
     }
     
-    convenience init(userId: String?, postId: String?, caption: String?, categoryName: String?, creationDate: NSNumber?, imageUrl: String?, numberOfLikes: NSNumber?, user: User?) {
+    convenience init(userId: String?, postId: String?, caption: String?, categoryName: String?, creationDate: NSNumber?, imageUrl: String?, numberOfLikes: NSNumber?, numberOfComments: NSNumber?, user: User?) {
         self.init()
         self.userId = userId
         self.postId = postId
@@ -68,6 +86,7 @@ class Post: NSObject {
         self.creationDate = creationDate
         self.imageUrl = imageUrl
         self.numberOfLikes = numberOfLikes
+        self.numberOfComments = numberOfComments
         
         self.user = user
     }

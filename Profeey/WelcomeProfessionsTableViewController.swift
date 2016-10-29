@@ -131,7 +131,7 @@ class WelcomeProfessionsTableViewController: UITableViewController {
             // Clear searched.
             self.searchedProfessions = []
             self.tableView.reloadData()
-            self.scanProfessionsByProfessionName(searchText)
+            //self.scanProfessionsByProfessionName(searchText)
         }
     }
     
@@ -165,37 +165,6 @@ class WelcomeProfessionsTableViewController: UITableViewController {
                     for awsProfession in awsProfessions {
                         let profession = Profession(professionName: awsProfession._professionName, numberOfUsers: awsProfession._numberOfUsers)
                         self.recentProfessions.append(profession)
-                    }
-                    self.tableView.reloadData()
-                }
-            })
-        })
-    }
-    
-    fileprivate func scanProfessionsByProfessionName(_ professionName: String) {
-        let searchProfessionName = professionName.lowercased()
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().scanProfessionsByProfessionNameDynamoDB(searchProfessionName, completionHandler: {
-            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
-            DispatchQueue.main.async(execute: {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                if let error = error {
-                    print("scanProfessionsByProfessionName error: \(error)")
-                } else {
-                    guard let awsProfessions = response?.items as? [AWSProfession] else {
-                        return
-                    }
-                    guard awsProfessions.count > 0 else {
-                        // Clear searched.
-                        self.searchedProfessions = []
-                        self.tableView.reloadData()
-                        return
-                    }
-                    // Clear searched.
-                    self.searchedProfessions = []
-                    for awsProfession in awsProfessions {
-                        let profession = Profession(professionName: awsProfession._professionName, numberOfUsers: awsProfession._numberOfUsers)
-                        self.searchedProfessions.append(profession)
                     }
                     self.tableView.reloadData()
                 }

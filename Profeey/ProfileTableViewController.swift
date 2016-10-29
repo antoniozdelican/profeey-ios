@@ -85,7 +85,8 @@ class ProfileTableViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destinationViewController = segue.destination as? UINavigationController,
             let childViewController = destinationViewController.childViewControllers[0] as? EditProfileTableViewController {
-            childViewController.user = self.user
+            childViewController.originalUser = self.user
+            childViewController.editProfileTableViewControllerDelegate = self
         }
         if let destinationViewController = segue.destination as? UsersTableViewController {
             destinationViewController.usersType = UsersType.followers
@@ -443,20 +444,20 @@ class ProfileTableViewController: UITableViewController {
     }
     
     @IBAction func unwindToProfileTableViewController(_ segue: UIStoryboardSegue) {
-        if let sourceViewController = segue.source as? EditProfileTableViewController {
-            self.user?.profilePic = sourceViewController.profilePic
-            self.user?.profilePicUrl = sourceViewController.profilePicUrl
-            self.user?.firstName = sourceViewController.firstName
-            self.user?.lastName = sourceViewController.lastName
-            self.user?.professionName = sourceViewController.professionName
-            self.user?.about = sourceViewController.about
-            self.user?.locationName = sourceViewController.locationName
-            self.tableView.reloadRows(at: [self.indexPathMain, self.indexPathInfo], with: UITableViewRowAnimation.none)
-            // Remove image in background.
-            if let profilePicUrlToRemove = sourceViewController.profilePicUrlToRemove {
-                self.removeImage(profilePicUrlToRemove, postId: nil)
-            }
-        }
+//        if let sourceViewController = segue.source as? EditProfileTableViewController {
+//            self.user?.profilePic = sourceViewController.user?.profilePic
+//            self.user?.profilePicUrl = sourceViewController.user?.profilePicUrl
+//            self.user?.firstName = sourceViewController.user?.firstName
+//            self.user?.lastName = sourceViewController.user?.lastName
+//            self.user?.professionName = sourceViewController.user?.professionName
+//            self.user?.about = sourceViewController.user?.about
+//            self.user?.locationName = sourceViewController.user?.locationName
+//            self.tableView.reloadRows(at: [self.indexPathMain, self.indexPathInfo], with: UITableViewRowAnimation.none)
+//            // Remove image in background.
+//            if let profilePicUrlToRemove = sourceViewController.profilePicUrlToRemove {
+//                self.removeImage(profilePicUrlToRemove, postId: nil)
+//            }
+//        }
         if let sourceViewController = segue.source as? PostDetailsTableViewController,
             let post = sourceViewController.post,
             let postIndexPath = sourceViewController.postIndexPath {
@@ -547,7 +548,7 @@ class ProfileTableViewController: UITableViewController {
                     // Reset posts.
                     self.posts = []
                     for (index, awsPost) in awsPosts.enumerated() {
-                        let post = Post(userId: awsPost._userId, postId: awsPost._postId, caption: awsPost._caption, categoryName: awsPost._categoryName, creationDate: awsPost._creationDate, imageUrl: awsPost._imageUrl, numberOfLikes: awsPost._numberOfLikes, user: self.user)
+                        let post = Post(userId: awsPost._userId, postId: awsPost._postId, caption: awsPost._caption, categoryName: awsPost._categoryName, creationDate: awsPost._creationDate, imageUrl: awsPost._imageUrl, numberOfLikes: awsPost._numberOfLikes, numberOfComments: awsPost._numberOfComments, user: self.user)
                         self.posts.append(post)
                         if self.selectedProfileSegment == ProfileSegment.posts {
                             UIView.setAnimationsEnabled(false)
@@ -887,5 +888,23 @@ extension ProfileTableViewController: PostDetailsTableViewControllerDelegate {
     func updatedPost(_ post: Post, postIndexPath: IndexPath) {
         self.posts[postIndexPath.row] = post
         self.tableView.reloadRows(at: [postIndexPath], with: UITableViewRowAnimation.none)
+    }
+}
+
+extension ProfileTableViewController: EditProfileTableViewControllerDelegate {
+    
+    func userUpdated(_ user: User?, profilePicUrlToRemove: String?) {
+        self.user?.profilePic = user?.profilePic
+        self.user?.profilePicUrl = user?.profilePicUrl
+        self.user?.firstName = user?.firstName
+        self.user?.lastName = user?.lastName
+        self.user?.professionName = user?.professionName
+        self.user?.about = user?.about
+        self.user?.locationName = user?.locationName
+        self.tableView.reloadRows(at: [self.indexPathMain, self.indexPathInfo], with: UITableViewRowAnimation.none)
+        // Remove image in background.
+        if let profilePicUrlToRemove = profilePicUrlToRemove {
+            self.removeImage(profilePicUrlToRemove, postId: nil)
+        }
     }
 }
