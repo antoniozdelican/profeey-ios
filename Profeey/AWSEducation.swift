@@ -36,6 +36,7 @@ class AWSEducation: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
         self._toYear = _toYear
     }
     
+    // To remove education.
     convenience init(_userId: String?, _educationId: String?) {
         self.init()
         self._userId = _userId

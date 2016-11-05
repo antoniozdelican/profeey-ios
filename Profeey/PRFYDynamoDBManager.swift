@@ -270,81 +270,106 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
     // MARK: Likes
     
     func getLikeDynamoDB(_ postId: String, completionHandler: @escaping AWSContinuationBlock) {
-        AWSClientManager.defaultClientManager().credentialsProvider?.getIdentityId().continue({
+        guard let identityId = AWSClientManager.defaultClientManager().credentialsProvider?.identityId else {
+            print("getLikeDynamoDB no identityId!")
+            AWSTask().continue(completionHandler)
+            return
+        }
+        print("getLikeDynamoDB:")
+        let awsLikesTable = AWSLikesTable()
+        awsLikesTable.getLike(identityId, postId: postId, completionHandler: completionHandler)
+    }
+    
+    func createLikeDynamoDB(_ postId: String, postUserId: String, completionHandler: @escaping AWSContinuationBlock) {
+        guard let identityId = AWSClientManager.defaultClientManager().credentialsProvider?.identityId else {
+            print("createLikeDynamoDB no identityId!")
+            AWSTask().continue(completionHandler)
+            return
+        }
+        print("createLikeDynamoDB:")
+        let creationDate = NSNumber(value: Date().timeIntervalSince1970 as Double)
+        let awsLikesTable = AWSLikesTable()
+        let awsLike = AWSLike(_userId: identityId, _postId: postId, _creationDate: creationDate, _postUserId: postUserId, _firstName: self.currentUserDynamoDB?.firstName, _lastName: self.currentUserDynamoDB?.lastName, _preferredUsername: self.currentUserDynamoDB?.preferredUsername, _professionName: self.currentUserDynamoDB?.professionName, _profilePicUrl: self.currentUserDynamoDB?.profilePicUrl)
+        awsLikesTable.createLike(awsLike, completionHandler: completionHandler)
+    }
+    
+    func removeLikeDynamoDB(_ postId: String, completionHandler: @escaping AWSContinuationBlock) {
+        guard let identityId = AWSClientManager.defaultClientManager().credentialsProvider?.identityId else {
+            print("removeLikeDynamoDB no identityId!")
+            AWSTask().continue(completionHandler)
+            return
+        }
+        print("removeLikeDynamoDB:")
+        let awsLikesTable = AWSLikesTable()
+        let awsLike = AWSLike(_userId: identityId, _postId: postId)
+        awsLikesTable.removeLike(awsLike, completionHandler: completionHandler)
+    }
+    
+    func queryPostLikesDynamoDB(_ postId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+        print("queryPostLikesDynamoDB:")
+        let awsLikesPostIndex = AWSLikesPostIndex()
+        awsLikesPostIndex.queryPostLikes(postId, completionHandler: completionHandler)
+    }
+    
+    // MARK: Comments
+    
+    func createCommentDynamoDB(_ postId: String, commentText: String, completionHandler: @escaping AWSContinuationBlock) {
+        guard let identityId = AWSClientManager.defaultClientManager().credentialsProvider?.identityId else {
+            print("createCommentDynamoDB no identityId!")
+            AWSTask().continue(completionHandler)
+            return
+        }
+        print("createCommentDynamoDB:")
+        let commentId = NSUUID().uuidString.lowercased()
+        let creationDate = NSNumber(value: Date().timeIntervalSince1970 as Double)
+        let awsCommentsTable = AWSCommentsTable()
+        let awsComment = AWSComment(_userId: identityId, _commentId: commentId, _creationDate: creationDate, _postId: postId, _commentText: commentText, _firstName: self.currentUserDynamoDB?.firstName, _lastName: self.currentUserDynamoDB?.lastName, _preferredUsername: self.currentUserDynamoDB?.preferredUsername, _professionName: self.currentUserDynamoDB?.professionName, _profilePicUrl: self.currentUserDynamoDB?.profilePicUrl)
+        awsCommentsTable.createComment(awsComment, completionHandler: {
             (task: AWSTask) in
             if let error = task.error {
-                print("getIdentityId error: \(error.localizedDescription)")
-                return AWSTask(error: error).continue(completionHandler)
-            } else if let identityId = task.result as? String {
-                
-                print("getLikeDynamoDB:")
-                let awsLikesTable = AWSLikesTable()
-                awsLikesTable.getLike(identityId, postId: postId, completionHandler: completionHandler)
-                return nil
+                AWSTask(error: error).continue(completionHandler)
             } else {
-                print("This should not happen with getIdentityId!")
-                return AWSTask().continue(completionHandler)
+                AWSTask(result: awsComment).continue(completionHandler)
             }
+            return nil
         })
     }
     
-    func saveLikeDynamoDB(_ postId: String, postUserId: String, completionHandler: @escaping AWSContinuationBlock) {
-        AWSClientManager.defaultClientManager().credentialsProvider?.getIdentityId().continue({
+    func updateCommentDynamoDB(_ commentId: String, postId: String, commentText: String, completionHandler: @escaping AWSContinuationBlock) {
+        guard let identityId = AWSClientManager.defaultClientManager().credentialsProvider?.identityId else {
+            print("updateCommentDynamoDB no identityId!")
+            AWSTask().continue(completionHandler)
+            return
+        }
+        print("updateCommentDynamoDB:")
+        let awsCommentsTable = AWSCommentsTable()
+        let awsCommentUpdate = AWSCommentUpdate(_userId: identityId, _commentId: commentId, _postId: postId, _commentText: commentText)
+        awsCommentsTable.updateComment(awsCommentUpdate, completionHandler: {
             (task: AWSTask) in
             if let error = task.error {
-                print("getIdentityId error: \(error.localizedDescription)")
-                return AWSTask(error: error).continue(completionHandler)
-            } else if let identityId = task.result as? String {
-                
-                print("saveLikeDynamoDB:")
-                let awsLikesTable = AWSLikesTable()
-                let awsLike = AWSLike()
-                awsLike?._userId = identityId
-                awsLike?._postId = postId
-                awsLike?._postUserId = postUserId
-                awsLike?._creationDate = NSNumber(value: Date().timeIntervalSince1970 as Double)
-                
-                awsLike?._firstName = self.currentUserDynamoDB?.firstName
-                awsLike?._lastName = self.currentUserDynamoDB?.lastName
-                awsLike?._preferredUsername = self.currentUserDynamoDB?.preferredUsername
-                awsLike?._professionName = self.currentUserDynamoDB?.professionName
-                awsLike?._profilePicUrl = self.currentUserDynamoDB?.profilePicUrl
-                awsLikesTable.saveLike(awsLike, completionHandler: completionHandler)
-                return nil
+                AWSTask(error: error).continue(completionHandler)
             } else {
-                print("This should not happen with getIdentityId!")
-                return AWSTask().continue(completionHandler)
+                AWSTask(result: awsCommentUpdate).continue(completionHandler)
             }
+            return nil
         })
     }
     
-    func removeLikeDynamoDB(_ postId: String, postUserId: String, completionHandler: @escaping AWSContinuationBlock) {
-        AWSClientManager.defaultClientManager().credentialsProvider?.getIdentityId().continue({
-            (task: AWSTask) in
-            if let error = task.error {
-                print("getIdentityId error: \(error.localizedDescription)")
-                return AWSTask(error: error).continue(completionHandler)
-            } else if let identityId = task.result as? String {
-                
-                print("removeLikeDynamoDB:")
-                let awsLikesTable = AWSLikesTable()
-                let awsLike = AWSLike()
-                awsLike?._userId = identityId
-                awsLike?._postId = postId
-                awsLike?._postUserId = postUserId
-                awsLikesTable.removeLike(awsLike, completionHandler: completionHandler)
-                return nil
-            } else {
-                print("This should not happen with getIdentityId!")
-                return AWSTask().continue(completionHandler)
-            }
-        })
+    func removeCommentDynamoDB(_ commentId: String, completionHandler: @escaping AWSContinuationBlock) {
+        guard let identityId = AWSClientManager.defaultClientManager().credentialsProvider?.identityId else {
+            print("removeCommentDynamoDB no identityId!")
+            AWSTask().continue(completionHandler)
+            return
+        }
+        let awsCommentsTable = AWSCommentsTable()
+        let awsComment = AWSComment(_userId: identityId, _commentId: commentId)
+        awsCommentsTable.removeComment(awsComment, completionHandler: completionHandler)
     }
     
-    func queryPostLikersDynamoDB(_ postId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
-        print("queryPostLikersDynamoDB:")
-        let likesPostIndex = AWSLikesPostIndex()
-        likesPostIndex.queryPostLikers(postId, completionHandler: completionHandler)
+    func queryPostCommentsDateSortedDynamoDB(_ postId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+        print("queryPostCommentsDateSortedDynamoDB:")
+        let awsCommentsPostIndex = AWSCommentsPostIndex()
+        awsCommentsPostIndex.queryPostCommentsDateSorted(postId, completionHandler: completionHandler)
     }
     
     

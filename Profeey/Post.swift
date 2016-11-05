@@ -87,7 +87,6 @@ class Post: NSObject {
         self.imageUrl = imageUrl
         self.numberOfLikes = numberOfLikes
         self.numberOfComments = numberOfComments
-        
         self.user = user
     }
     

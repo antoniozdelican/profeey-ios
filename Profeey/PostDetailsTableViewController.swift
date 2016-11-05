@@ -47,6 +47,11 @@ class PostDetailsTableViewController: UITableViewController {
             destinationViewController.usersType = UsersType.likers
             destinationViewController.postId = self.post?.postId
         }
+        if let destinationViewController = segue.destination as? CommentsViewController,
+            let button = sender as? UIButton,
+            let _ = self.tableView.indexPathForView(view: button) {
+            destinationViewController.post = self.post
+        }
         if let navigationController = segue.destination as? UINavigationController,
             let childViewController =  navigationController.childViewControllers[0] as? EditPostViewController {
             childViewController.post = self.post
@@ -182,10 +187,10 @@ class PostDetailsTableViewController: UITableViewController {
         })
     }
     
-    // Save and remove like are done in background.
-    fileprivate func saveLike(_ postId: String, postUserId: String) {
+    // Create and remove like are done in background.
+    fileprivate func createLike(_ postId: String, postUserId: String) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().saveLikeDynamoDB(postId, postUserId: postUserId, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().createLikeDynamoDB(postId, postUserId: postUserId, completionHandler: {
             (task: AWSTask) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
@@ -197,9 +202,9 @@ class PostDetailsTableViewController: UITableViewController {
         })
     }
     
-    fileprivate func removeLike(_ postId: String, postUserId: String) {
+    fileprivate func removeLike(_ postId: String) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().removeLikeDynamoDB(postId, postUserId: postUserId, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().removeLikeDynamoDB(postId, completionHandler: {
             (task: AWSTask) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
@@ -274,17 +279,21 @@ extension PostDetailsTableViewController: PostButtonsTableViewCellDelegate {
         if post.isLikedByCurrentUser {
             post.isLikedByCurrentUser = false
             post.numberOfLikes = NSNumber(value: (numberOfLikesInteger - 1) as Int)
-            self.removeLike(postId, postUserId: postUserId)
+            self.removeLike(postId)
         } else {
             post.isLikedByCurrentUser = true
             post.numberOfLikes = NSNumber(value: (numberOfLikesInteger + 1) as Int)
-            self.saveLike(postId, postUserId: postUserId)
+            self.createLike(postId, postUserId: postUserId)
         }
         self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
         // For ProfileVc
         if let postIndexPath = self.postIndexPath {
             self.postDetailsTableViewControllerDelegate?.updatedPost(post, postIndexPath: postIndexPath)
         }
+    }
+    
+    func commentButtonTapped(_ button: UIButton) {
+        self.performSegue(withIdentifier: "segueToCommentsVc", sender: button)
     }
     
     func numberOfLikesButtonTapped(_ button: UIButton) {
@@ -295,10 +304,7 @@ extension PostDetailsTableViewController: PostButtonsTableViewCellDelegate {
     }
     
     func numberOfCommentsButtonTapped(_ button: UIButton) {
-        guard let indexPath = self.tableView.indexPathForView(view: button) else {
-            return
-        }
-        //self.performSegue(withIdentifier: "segueToUsersVc", sender: indexPath)
+        self.performSegue(withIdentifier: "segueToCommentsVc", sender: button)
     }
 }
 

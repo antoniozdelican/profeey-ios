@@ -36,7 +36,7 @@ class UsersTableViewController: UITableViewController {
                 self.navigationItem.title = "Likes"
                 if let postId = self.postId {
                     self.isLoadingUsers = true
-                    self.queryPostLikers(postId)
+                    self.queryPostLikes(postId)
                 }
             case .followers:
                 self.navigationItem.title = "Followers"
@@ -135,7 +135,7 @@ class UsersTableViewController: UITableViewController {
                 return
             }
             self.users = []
-            self.queryPostLikers(postId)
+            self.queryPostLikes(postId)
         case .followers:
             guard let followingId = self.userId else {
                 self.refreshControl?.endRefreshing()
@@ -148,14 +148,14 @@ class UsersTableViewController: UITableViewController {
     
     // MARK: AWS
     
-    fileprivate func queryPostLikers(_ postId: String) {
+    fileprivate func queryPostLikes(_ postId: String) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().queryPostLikersDynamoDB(postId, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().queryPostLikesDynamoDB(postId, completionHandler: {
             (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 if let error = error {
-                    print("queryPostLikers error: \(error)")
+                    print("queryPostLikes error: \(error)")
                     self.isLoadingUsers = false
                     self.tableView.reloadData()
                     self.refreshControl?.endRefreshing()

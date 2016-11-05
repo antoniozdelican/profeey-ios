@@ -10,6 +10,7 @@ import UIKit
 
 protocol PostButtonsTableViewCellDelegate {
     func likeButtonTapped(_ button: UIButton)
+    func commentButtonTapped(_ button: UIButton)
     func numberOfLikesButtonTapped(_ button: UIButton)
     func numberOfCommentsButtonTapped(_ button: UIButton)
 }
@@ -59,6 +60,13 @@ class PostButtonsTableViewCell: UITableViewCell {
             return
         }
         self.postButtonsTableViewCellDelegate?.likeButtonTapped(button)
+    }
+    
+    @IBAction func commentButtonTapped(_ sender: AnyObject) {
+        guard let button = sender as? UIButton else {
+            return
+        }
+        self.postButtonsTableViewCellDelegate?.commentButtonTapped(button)
     }
     
     @IBAction func numberOfLikesButtonTapped(_ sender: AnyObject) {

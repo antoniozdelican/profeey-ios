@@ -7,9 +7,14 @@
 //
 
 import UIKit
+import AWSMobileHubHelper
+import AWSDynamoDB
 
 protocol CommentsViewControllerDelegate {
     func commentPosted(_ comment: Comment)
+    func commentRemoved(_ indexPath: IndexPath)
+    func showComments(_ comments: [Comment])
+    func isLoadingComments(_ isLoading: Bool)
 }
 
 class CommentsViewController: UIViewController {
@@ -20,26 +25,29 @@ class CommentsViewController: UIViewController {
     @IBOutlet weak var commentBarBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var commentBarHeightConstraint: NSLayoutConstraint!
     
-    fileprivate var commentBarBottomConstraintConstant: CGFloat = 0.0
+    var post: Post?
+    var isCommentButton: Bool = false
+    fileprivate var comments: [Comment] = []
+    fileprivate var commentsViewControllerDelegate: CommentsViewControllerDelegate?
+    
+    fileprivate var COMMENT_BAR_BOTTOM_CONSTRAINT_CONSTANT: CGFloat = 0.0
+    fileprivate var COMMENT_BAR_HEIGHT: CGFloat = 49.0
+    fileprivate var TAB_BAR_HEIGHT: CGFloat = 49.0
     // Top + Bottom padding between textView and comment bar view.
     fileprivate let COMMENT_BAR_TOP_BOTTOM_PADDING: CGFloat = 13.0
-    
-    var commentsViewControllerDelegate: CommentsViewControllerDelegate?
-    var isCommentButton: Bool = false
-    
-    // TEST
-    var currentUser: User?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.plain, target:nil, action:nil)
-        self.commentTextView.delegate = self
-        self.commentBarBottomConstraintConstant = self.commentBarBottomConstraint.constant
+        self.configureConstants()
         self.registerForKeyboardNotifications()
+        self.commentTextView.delegate = self
         self.sendButton.isEnabled = false
         
-        // TEST
-//        self.currentUser = User(firstName: "Antonio", lastName: "Zdelican", preferredUsername: "toni", profilePicData: UIImageJPEGRepresentation(UIImage(named: "pic_antonio")!, 0.6), profession: "Computer Engineer", about: "Pursuing my Master's Degree in CS. Love to code and design. Currently discovering iOS and energy management.", location: "Lisbon, Portugal", website: "antoniozdelican.com", posts: nil)
+        if let postId = self.post?.postId {
+            self.commentsViewControllerDelegate?.isLoadingComments(true)
+            self.queryPostCommentsDateSorted(postId)
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -51,17 +59,28 @@ class CommentsViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        self.commentTextView.resignFirstResponder()
+        self.view.endEditing(true)
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
     
+    // MARK: Configuration
+    
+    fileprivate func configureConstants() {
+        self.COMMENT_BAR_BOTTOM_CONSTRAINT_CONSTANT = self.commentBarBottomConstraint.constant
+        self.COMMENT_BAR_HEIGHT = self.commentBarHeightConstraint.constant
+        if let height = self.tabBarController?.tabBar.frame.height {
+            self.TAB_BAR_HEIGHT = height
+        }
+    }
+    
     // MARK: Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destinationViewController = segue.destination as? CommentsTableViewController {
+            destinationViewController.commentsTableViewControllerDelegate = self
             self.commentsViewControllerDelegate = destinationViewController
         }
     }
@@ -69,10 +88,9 @@ class CommentsViewController: UIViewController {
     // MARK: IBActions
     
     @IBAction func sendButtonTapped(_ sender: AnyObject) {
-        let comment = Comment(user: self.currentUser, commentText: self.commentTextView.text)
-        self.commentsViewControllerDelegate?.commentPosted(comment)
-        self.commentTextView.text = ""
+        self.view.endEditing(true)
         self.sendButton.isEnabled = false
+        self.createComment(self.commentTextView.text)
     }
     
     // MARK: Keyboard notifications
@@ -92,9 +110,9 @@ class CommentsViewController: UIViewController {
     
     func keyboardWillBeShown(_ notification: Notification) {
         let userInfo: NSDictionary = (notification as NSNotification).userInfo! as NSDictionary
-        let keyboardSize = (userInfo.object(forKey: UIKeyboardFrameBeginUserInfoKey)! as AnyObject).cgRectValue.size
+        let keyboardSize = (userInfo.object(forKey: UIKeyboardFrameEndUserInfoKey)! as AnyObject).cgRectValue.size
         let duration = userInfo.object(forKey: UIKeyboardAnimationDurationUserInfoKey) as! Double
-        self.commentBarBottomConstraint.constant = keyboardSize.height
+        self.commentBarBottomConstraint.constant = keyboardSize.height - self.TAB_BAR_HEIGHT
         UIView.animate(withDuration: duration, animations: {
             self.view.layoutIfNeeded()
         })
@@ -103,10 +121,127 @@ class CommentsViewController: UIViewController {
     func keyboardWillBeHidden(_ notification: Notification) {
         let userInfo: NSDictionary = (notification as NSNotification).userInfo! as NSDictionary
         let duration = userInfo.object(forKey: UIKeyboardAnimationDurationUserInfoKey) as! Double
-        self.commentBarBottomConstraint.constant = commentBarBottomConstraintConstant
+        self.commentBarBottomConstraint.constant = COMMENT_BAR_BOTTOM_CONSTRAINT_CONSTANT
         UIView.animate(withDuration: duration, animations: {
             self.view.layoutIfNeeded()
         })
+    }
+    
+    // MARK: AWS
+    
+    fileprivate func queryPostCommentsDateSorted(_ postId: String) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().queryPostCommentsDateSortedDynamoDB(postId, completionHandler: {
+            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                self.commentsViewControllerDelegate?.isLoadingComments(false)
+                if let error = error {
+                    print("queryPostCommentsDateSorted error: \(error)")
+                    self.commentsViewControllerDelegate?.showComments(self.comments)
+                } else {
+                    guard let awsComments = response?.items as? [AWSComment] else {
+                        self.commentsViewControllerDelegate?.showComments(self.comments)
+                        return
+                    }
+                    for awsComment in awsComments {
+                        let user = User(userId: awsComment._userId, firstName: awsComment._firstName, lastName: awsComment._lastName, preferredUsername: awsComment._preferredUsername, professionName: awsComment._professionName, profilePicUrl: awsComment._profilePicUrl)
+                        let comment = Comment(userId: awsComment._userId, commentId: awsComment._commentId, commentText: awsComment._commentText, creationDate: awsComment._creationDate, user: user)
+                        self.comments.append(comment)
+                    }
+                    self.commentsViewControllerDelegate?.showComments(self.comments)
+                }
+            })
+        })
+    }
+    
+    fileprivate func createComment(_ commentText: String) {
+        guard let postId = self.post?.postId else {
+            return
+        }
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().createCommentDynamoDB(postId, commentText: commentText, completionHandler: {
+            (task: AWSTask) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                if let error = task.error {
+                    print("createComment error: \(error)")
+                    self.sendButton.isEnabled = true
+                    let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.localizedDescription, cancelButtonTitle: "Ok")
+                    self.present(alertController, animated: true, completion: nil)
+                } else {
+                    guard let awsComment = task.result as? AWSComment else {
+                        return
+                    }
+                    let comment = Comment(userId: awsComment._userId, commentId: awsComment._commentId, commentText: awsComment._commentText, creationDate: awsComment._creationDate, user: PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB)
+                    self.comments.append(comment)
+                    self.commentsViewControllerDelegate?.commentPosted(comment)
+                    self.resetCommentBox()
+                }
+            })
+            return nil
+        })
+    }
+    
+    // In background
+    fileprivate func removeComment(_ commentId: String) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().removeCommentDynamoDB(commentId, completionHandler: {
+            (task: AWSTask) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                if let error = task.error {
+                    print("removeComment error: \(error)")
+                }
+            })
+            return nil
+        })
+    }
+    
+    // MARK: Helpers
+    
+    fileprivate func resetCommentBox() {
+        self.commentTextView.text = ""
+        self.commentFakePlaceholderLabel.isHidden = false
+        self.sendButton.isEnabled = false
+        self.commentBarHeightConstraint.constant = self.COMMENT_BAR_HEIGHT
+    }
+    
+    // MARK: Helpers
+    
+    fileprivate func rowTapped(_ indexPath: IndexPath) {
+        guard let userId = self.comments[indexPath.row].userId,
+            let commentId = self.comments[indexPath.row].commentId else {
+            return
+        }
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
+        if userId == AWSClientManager.defaultClientManager().credentialsProvider?.identityId {
+            // DELETE
+            let deleteAction = UIAlertAction(title: "Delete", style: UIAlertActionStyle.destructive, handler: {
+                (alert: UIAlertAction) in
+                let alertController = UIAlertController(title: "Delete Comment?", message: nil, preferredStyle: UIAlertControllerStyle.alert)
+                let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil)
+                alertController.addAction(cancelAction)
+                let deleteConfirmAction = UIAlertAction(title: "Delete", style: UIAlertActionStyle.default, handler: {
+                    (alert: UIAlertAction) in
+                    // In background
+                    self.comments.remove(at: indexPath.row)
+                    self.commentsViewControllerDelegate?.commentRemoved(indexPath)
+                    self.removeComment(commentId)
+                })
+                alertController.addAction(deleteConfirmAction)
+                self.present(alertController, animated: true, completion: nil)
+            })
+            alertController.addAction(deleteAction)
+        } else {
+            // REPORT
+            let reportAction = UIAlertAction(title: "Report", style: UIAlertActionStyle.destructive, handler: nil)
+            alertController.addAction(reportAction)
+        }
+        // CANCEL
+        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil)
+        alertController.addAction(cancelAction)
+        self.present(alertController, animated: true, completion: nil)
     }
 }
 
@@ -129,5 +264,16 @@ extension CommentsViewController: UITextViewDelegate {
         if newHeight != self.commentBarHeightConstraint.constant {
             self.commentBarHeightConstraint.constant = newHeight
         }
+    }
+}
+
+extension CommentsViewController: CommentsTableViewControllerDelegate {
+    
+    func scrollViewWillBeginDragging() {
+        self.view.endEditing(true)
+    }
+    
+    func didSelectRow(_ indexPath: IndexPath) {
+        self.rowTapped(indexPath)
     }
 }

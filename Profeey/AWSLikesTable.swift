@@ -36,9 +36,6 @@ class AWSLikesTable: NSObject, Table {
         partitionKeyName = model.classForCoder.hashKeyAttribute()
         partitionKeyType = "String"
         indexes = [
-            
-            AWSLikesPrimaryIndex(),
-            
             AWSLikesPostIndex(),
         ]
         sortKeyType = "String"
@@ -56,26 +53,14 @@ class AWSLikesTable: NSObject, Table {
         
     }
     
-    func saveLike(_ like: AWSLike?, completionHandler: @escaping AWSContinuationBlock) {
+    func createLike(_ awsLike: AWSLike, completionHandler: @escaping AWSContinuationBlock) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
-        objectMapper.save(like!).continue(completionHandler)
+        objectMapper.save(awsLike).continue(completionHandler)
     }
     
-    func removeLike(_ like: AWSLike?, completionHandler: @escaping AWSContinuationBlock) {
+    func removeLike(_ awsLike: AWSLike, completionHandler: @escaping AWSContinuationBlock) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
-        objectMapper.remove(like!).continue(completionHandler)
-    }
-}
-
-class AWSLikesPrimaryIndex: NSObject, Index {
-    
-    var indexName: String? {
-        return nil
-    }
-    
-    func supportedOperations() -> [String] {
-        return [
-        ]
+        objectMapper.remove(awsLike).continue(completionHandler)
     }
 }
 
@@ -96,7 +81,7 @@ class AWSLikesPostIndex: NSObject, Index {
     // MARK: QueryWithPartitionKey
     
     // Query all likes with postId.
-    func queryPostLikers(_ postId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+    func queryPostLikes(_ postId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
         let queryExpression = AWSDynamoDBQueryExpression()
         queryExpression.indexName = "PostIndex"

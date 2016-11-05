@@ -108,8 +108,8 @@
                                     </constraints>
                                     <variation key="default">
                                         <mask key="constraints">
-                                            <exclude reference="elw-zE-bX3"/>
                                             <exclude reference="Faj-yx-Lt5"/>
+                                            <exclude reference="elw-zE-bX3"/>
                                             <exclude reference="xhU-s9-rxK"/>
                                         </mask>
                                     </variation>
@@ -173,60 +173,77 @@
                                     <outlet property="categoryNameCreationDateLabel" destination="13C-B1-slx" id="0VJ-20-eTo"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellPostButtons" rowHeight="52" id="LrJ-xU-R9b" customClass="PostButtonsTableViewCell" customModule="Profeey" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellPostButtons" rowHeight="52" id="XwH-Og-4zn" customClass="PostButtonsTableViewCell" customModule="Profeey" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="642" width="375" height="52"/>
                                 <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="LrJ-xU-R9b" id="eST-dq-H0k">
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="XwH-Og-4zn" id="XMe-Id-mzz">
                                     <frame key="frameInset" width="375" height="51"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RMa-v6-fZ3">
-                                            <constraints>
-                                                <constraint firstAttribute="height" constant="48" id="XLT-DJ-sOx"/>
-                                                <constraint firstAttribute="width" constant="48" id="ovE-dN-H3Z"/>
-                                            </constraints>
-                                            <state key="normal" image="ic_heart_grey"/>
-                                            <connections>
-                                                <action selector="likeButtonTapped:" destination="LrJ-xU-R9b" eventType="touchUpInside" id="22C-Gr-9Ew"/>
-                                            </connections>
-                                        </button>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="K3M-t4-ehl">
-                                            <constraints>
-                                                <constraint firstAttribute="height" constant="48" id="Dic-GG-EHH"/>
-                                            </constraints>
-                                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
-                                            <state key="normal" title="0 likes">
-                                                <color key="titleColor" red="0.63921568630000003" green="0.63921568630000003" blue="0.63921568630000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            </state>
-                                            <connections>
-                                                <action selector="numberOfLikesButtonTapped:" destination="LrJ-xU-R9b" eventType="touchUpInside" id="U4B-b1-U6p"/>
-                                            </connections>
-                                        </button>
+                                        <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="2ud-y2-zUR">
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Y4-GH-3oW">
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="48" id="4PE-vO-xSI"/>
+                                                        <constraint firstAttribute="width" constant="48" id="YcR-yZ-XQh"/>
+                                                    </constraints>
+                                                    <state key="normal" image="ic_heart_grey"/>
+                                                    <connections>
+                                                        <action selector="likeButtonTapped:" destination="XwH-Og-4zn" eventType="touchUpInside" id="Cgl-XZ-i9N"/>
+                                                    </connections>
+                                                </button>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0y5-mG-FCq">
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="48" id="Opp-tN-rqX"/>
+                                                        <constraint firstAttribute="height" constant="48" id="w8W-tz-BOq"/>
+                                                    </constraints>
+                                                    <state key="normal" image="ic_comment_grey_big"/>
+                                                    <connections>
+                                                        <action selector="commentButtonTapped:" destination="XwH-Og-4zn" eventType="touchUpInside" id="I1y-aT-oj9"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                        </stackView>
+                                        <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="Tp3-uy-cjo">
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="375-ck-bSh">
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="48" id="XGq-HH-uXz"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
+                                                    <state key="normal" title="0 likes">
+                                                        <color key="titleColor" red="0.63921568630000003" green="0.63921568630000003" blue="0.63921568630000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="numberOfLikesButtonTapped:" destination="XwH-Og-4zn" eventType="touchUpInside" id="hay-vw-E4E"/>
+                                                    </connections>
+                                                </button>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UxE-ho-MKY">
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="48" id="H3F-Ub-qWB"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
+                                                    <state key="normal" title="0 comments">
+                                                        <color key="titleColor" red="0.63921568630000003" green="0.63921568630000003" blue="0.63921568630000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="numberOfCommentsButtonTapped:" destination="XwH-Og-4zn" eventType="touchUpInside" id="7W3-3p-Nqk"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                        </stackView>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="K3M-t4-ehl" firstAttribute="top" secondItem="eST-dq-H0k" secondAttribute="top" id="NOk-L3-wtr"/>
-                                        <constraint firstAttribute="trailing" secondItem="K3M-t4-ehl" secondAttribute="trailing" constant="12" id="O8a-BD-LH3"/>
-                                        <constraint firstItem="RMa-v6-fZ3" firstAttribute="top" secondItem="eST-dq-H0k" secondAttribute="top" id="ZO3-SK-PfZ"/>
-                                        <constraint firstAttribute="trailing" secondItem="K3M-t4-ehl" secondAttribute="trailing" constant="12" id="a5V-tE-so7"/>
-                                        <constraint firstAttribute="trailing" secondItem="RMa-v6-fZ3" secondAttribute="trailing" id="bAa-lB-8Gh"/>
-                                        <constraint firstItem="K3M-t4-ehl" firstAttribute="top" secondItem="eST-dq-H0k" secondAttribute="top" id="ecY-gW-tKO"/>
-                                        <constraint firstItem="RMa-v6-fZ3" firstAttribute="leading" secondItem="eST-dq-H0k" secondAttribute="leading" id="lcI-R6-KnC"/>
-                                        <constraint firstItem="RMa-v6-fZ3" firstAttribute="leading" secondItem="eST-dq-H0k" secondAttribute="leading" id="nOW-fj-dlW"/>
-                                        <constraint firstItem="K3M-t4-ehl" firstAttribute="leading" secondItem="eST-dq-H0k" secondAttribute="leading" constant="12" id="psf-yb-8q4"/>
+                                        <constraint firstAttribute="trailing" secondItem="Tp3-uy-cjo" secondAttribute="trailing" constant="12" id="mcN-UH-Vrq"/>
+                                        <constraint firstItem="Tp3-uy-cjo" firstAttribute="centerY" secondItem="XMe-Id-mzz" secondAttribute="centerY" id="oep-nX-0DC"/>
+                                        <constraint firstItem="2ud-y2-zUR" firstAttribute="leading" secondItem="XMe-Id-mzz" secondAttribute="leading" id="tc1-8M-nvH"/>
+                                        <constraint firstItem="2ud-y2-zUR" firstAttribute="centerY" secondItem="XMe-Id-mzz" secondAttribute="centerY" id="yt8-Dz-gAT"/>
                                     </constraints>
-                                    <variation key="default">
-                                        <mask key="constraints">
-                                            <exclude reference="NOk-L3-wtr"/>
-                                            <exclude reference="a5V-tE-so7"/>
-                                            <exclude reference="psf-yb-8q4"/>
-                                            <exclude reference="bAa-lB-8Gh"/>
-                                            <exclude reference="nOW-fj-dlW"/>
-                                        </mask>
-                                    </variation>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="likeButton" destination="RMa-v6-fZ3" id="P7J-cg-EPL"/>
-                                    <outlet property="numberOfLikesButton" destination="K3M-t4-ehl" id="Ave-nA-3Ws"/>
+                                    <outlet property="likeButton" destination="5Y4-GH-3oW" id="25x-uU-nlO"/>
+                                    <outlet property="numberOfCommentsButton" destination="UxE-ho-MKY" id="n4j-uV-9aJ"/>
+                                    <outlet property="numberOfLikesButton" destination="375-ck-bSh" id="rNJ-tr-Jw9"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -244,6 +261,7 @@
                         <segue destination="oGE-nJ-13N" kind="show" identifier="segueToUsersVc" id="bU8-z9-fKW"/>
                         <segue destination="NgP-cX-hfM" kind="presentation" identifier="segueToEditPostVc" animates="NO" id="KNx-DV-NyQ"/>
                         <segue destination="30G-vb-9WZ" kind="unwind" identifier="segueUnwindToProfileVc" unwindAction="unwindToProfileTableViewController:" id="qou-YD-HY0"/>
+                        <segue destination="wRz-GW-LR8" kind="show" identifier="segueToCommentsVc" id="aBL-Aj-IPd"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9Yd-9d-00p" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -275,8 +293,17 @@
             </objects>
             <point key="canvasLocation" x="2006" y="449"/>
         </scene>
+        <!--Comments-->
+        <scene sceneID="0dQ-YE-J8Z">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Comments" id="wRz-GW-LR8" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gFD-91-4IV" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1981" y="587"/>
+        </scene>
     </scenes>
     <resources>
+        <image name="ic_comment_grey_big" width="25" height="25"/>
         <image name="ic_expand_grey" width="24" height="24"/>
         <image name="ic_heart_grey" width="24" height="24"/>
     </resources>

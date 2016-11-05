@@ -36,6 +36,7 @@ class AWSWorkExperience: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
         self._toYear = _toYear
     }
     
+    // To remove WorkExperience.
     convenience init(_userId: String?, _workExperienceId: String?) {
         self.init()
         self._userId = _userId
