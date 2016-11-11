@@ -22,21 +22,18 @@ struct Colors {
     // #DC4141
     static let red = UIColor(red: 220.0/255.0, green: 65.0/255.0, blue: 65.0/255.0, alpha: 1.0)
     
-    // #a3a3a3
-    static let greyDark = UIColor(red: 163.0/255.0, green: 163.0/255.0, blue: 163.0/255.0, alpha: 1.0)
+    // #7E7E7E
+    static let greyDark = UIColor(red: 126.0/255.0, green: 126.0/255.0, blue: 126.0/255.0, alpha: 1.0)
     
-    // #e8e8e8
+    // #E8E8E8
     static let grey = UIColor(red: 232.0/255.0, green: 232.0/255.0, blue: 232.0/255.0, alpha: 1.0)
     
-    // #fafafa
+    // #FAFAFA
     static let greyLight = UIColor(red: 250.0/255.0, green: 250.0/255.0, blue: 250.0/255.0, alpha: 1.0)
     
     // #C7C7CD
     static let disabled = UIColor(red: 199.0/255.0, green: 199.0/255.0, blue: 205.0/255.0, alpha: 1.0)
     
-    // #4a4a4a
-    static let black = UIColor(red: 74.0/255.0, green: 74.0/255.0, blue: 74.0/255.0, alpha: 1.0)
-    
     // #323232
-    static let blackDark = UIColor(red: 74.0/255.0, green: 74.0/255.0, blue: 74.0/255.0, alpha: 1.0)
+    static let black = UIColor(red: 50.0/255.0, green: 50.0/255.0, blue: 50.0/255.0, alpha: 1.0)
 }

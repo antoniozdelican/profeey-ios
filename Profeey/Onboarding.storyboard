@@ -6,70 +6,6 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Onboarding View Controller-->
-        <scene sceneID="Z93-OA-Pef">
-            <objects>
-                <viewController id="Ycx-N6-xsY" customClass="OnboardingViewController" customModule="Profeey" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="aDN-Lg-Cd1"/>
-                        <viewControllerLayoutGuide type="bottom" id="gFr-ws-Ipi"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="gi2-jJ-kxm">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Profeey" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fmZ-ng-JhW">
-                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="36"/>
-                                <color key="textColor" red="0.2901960784" green="0.2901960784" blue="0.2901960784" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Show your work" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wna-9o-A4L">
-                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                <color key="textColor" red="0.2901960784" green="0.2901960784" blue="0.2901960784" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HaG-cs-ple">
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="255" id="G2q-hx-XrM"/>
-                                    <constraint firstAttribute="height" constant="45" id="uiw-Ap-Lak"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="18"/>
-                                <state key="normal" title="Sign up" backgroundImage="btn_white">
-                                    <color key="titleColor" red="0.2901960784" green="0.2901960784" blue="0.2901960784" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </state>
-                                <connections>
-                                    <segue destination="kpF-e3-6VE" kind="presentation" id="rKF-CW-MT4"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aQV-Vl-wN7">
-                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="18"/>
-                                <state key="normal" title="Log in">
-                                    <color key="titleColor" red="0.2901960784" green="0.2901960784" blue="0.2901960784" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </state>
-                                <connections>
-                                    <segue destination="Qmx-zC-zjk" kind="presentation" id="Uxp-mM-jqh"/>
-                                </connections>
-                            </button>
-                        </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstItem="aQV-Vl-wN7" firstAttribute="height" secondItem="HaG-cs-ple" secondAttribute="height" id="1qZ-kN-UdN"/>
-                            <constraint firstItem="aQV-Vl-wN7" firstAttribute="centerX" secondItem="gi2-jJ-kxm" secondAttribute="centerX" id="5BL-A3-Zai"/>
-                            <constraint firstItem="HaG-cs-ple" firstAttribute="centerX" secondItem="gi2-jJ-kxm" secondAttribute="centerX" id="9ss-AL-dGA"/>
-                            <constraint firstItem="aQV-Vl-wN7" firstAttribute="top" secondItem="HaG-cs-ple" secondAttribute="bottom" constant="20" id="G2r-Dq-VRL"/>
-                            <constraint firstItem="gFr-ws-Ipi" firstAttribute="top" secondItem="aQV-Vl-wN7" secondAttribute="bottom" constant="20" id="RJ0-tG-oTD"/>
-                            <constraint firstItem="wna-9o-A4L" firstAttribute="centerX" secondItem="gi2-jJ-kxm" secondAttribute="centerX" id="ZwS-Fq-1k6"/>
-                            <constraint firstItem="fmZ-ng-JhW" firstAttribute="top" secondItem="aDN-Lg-Cd1" secondAttribute="bottom" constant="100" id="dLH-ld-ni8"/>
-                            <constraint firstItem="fmZ-ng-JhW" firstAttribute="centerX" secondItem="gi2-jJ-kxm" secondAttribute="centerX" id="oq5-7t-vwf"/>
-                            <constraint firstItem="wna-9o-A4L" firstAttribute="top" secondItem="fmZ-ng-JhW" secondAttribute="bottom" constant="20" id="rRE-LX-eBW"/>
-                            <constraint firstItem="aQV-Vl-wN7" firstAttribute="width" secondItem="HaG-cs-ple" secondAttribute="width" id="skS-Tj-F4d"/>
-                        </constraints>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="QI8-7g-65p" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="186" y="269"/>
-        </scene>
         <!--Onboarding Navigation Controller-->
         <scene sceneID="R2v-WB-79x">
             <objects>
@@ -534,25 +470,8 @@
             </objects>
             <point key="canvasLocation" x="1700" y="-216"/>
         </scene>
-        <!--SignUp-->
-        <scene sceneID="nBq-2a-ABp">
-            <objects>
-                <viewControllerPlaceholder storyboardName="SignUp" id="kpF-e3-6VE" sceneMemberID="viewController"/>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="HPr-ZA-TiN" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="785" y="104"/>
-        </scene>
-        <!--LogIn-->
-        <scene sceneID="R9c-sU-qEz">
-            <objects>
-                <viewControllerPlaceholder storyboardName="LogIn" id="Qmx-zC-zjk" sceneMemberID="viewController"/>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="1yB-Sw-Gww" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="785" y="301"/>
-        </scene>
     </scenes>
     <resources>
         <image name="btn_black" width="248" height="44"/>
-        <image name="btn_white" width="255" height="45"/>
     </resources>
 </document>

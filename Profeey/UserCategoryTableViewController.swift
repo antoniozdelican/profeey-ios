@@ -72,7 +72,6 @@ class UserCategoryTableViewController: UITableViewController {
         if self.posts.count == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellEmpty", for: indexPath) as! EmptyTableViewCell
             cell.emptyMessageLabel.text = "No posts yet."
-            cell.addButton?.isHidden = true
             return cell
         }
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostSmall", for: indexPath) as! PostSmallTableViewCell
@@ -227,5 +226,7 @@ extension UserCategoryTableViewController: PostDetailsTableViewControllerDelegat
     func updatedPost(_ post: Post, postIndexPath: IndexPath) {
         self.posts[postIndexPath.row] = post
         self.tableView.reloadRows(at: [postIndexPath], with: UITableViewRowAnimation.none)
+        // Notify ProfileVc
+        self.userCategoryTableViewControllerDelegate?.updatedPost(post)
     }
 }

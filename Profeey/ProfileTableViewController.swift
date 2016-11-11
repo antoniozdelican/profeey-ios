@@ -200,9 +200,15 @@ class ProfileTableViewController: UITableViewController {
                 return cell
             }
             if self.posts.count == 0 {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "cellEmpty", for: indexPath) as! EmptyTableViewCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellProfileEmpty", for: indexPath) as! ProfileEmptyTableViewCell
                 cell.emptyMessageLabel.text = "No posts yet."
-                cell.addButton?.isHidden = true
+                UIView.performWithoutAnimation {
+                    cell.addButton.setTitle("Add Post", for: UIControlState.normal)
+                    cell.addButton.layoutIfNeeded()
+                }
+                cell.addButton.isHidden = self.isCurrentUser ? false : true
+                cell.addButtonType = AddButtonType.post
+                cell.profileEmptyTableViewCellDelegate = self
                 return cell
             }
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostSmall", for: indexPath) as! PostSmallTableViewCell
@@ -220,11 +226,15 @@ class ProfileTableViewController: UITableViewController {
                 return cell
             }
             if self.isEmptyExperiences {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "cellEmpty", for: indexPath) as! EmptyTableViewCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellProfileEmpty", for: indexPath) as! ProfileEmptyTableViewCell
                 cell.emptyMessageLabel.text = "No experiences yet."
-                cell.addButton?.setTitle("Add Experience", for: UIControlState.normal)
-                cell.addButton?.isHidden = self.isCurrentUser ? false : true
-                cell.emptyTableViewCellDelegate = self
+                UIView.performWithoutAnimation {
+                    cell.addButton.setTitle("Add Experience", for: UIControlState.normal)
+                    cell.addButton.layoutIfNeeded()
+                }
+                cell.addButton.isHidden = self.isCurrentUser ? false : true
+                cell.addButtonType = AddButtonType.experience
+                cell.profileEmptyTableViewCellDelegate = self
                 return cell
             }
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellWorkExperience", for: indexPath) as! WorkExperienceTableViewCell
@@ -249,11 +259,15 @@ class ProfileTableViewController: UITableViewController {
                 return cell
             }
             if self.userCategories.count == 0 {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "cellEmpty", for: indexPath) as! EmptyTableViewCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellProfileEmpty", for: indexPath) as! ProfileEmptyTableViewCell
                 cell.emptyMessageLabel.text = "No post with skills yet."
-                cell.addButton?.setTitle("Add Post", for: UIControlState.normal)
-                cell.addButton?.isHidden = self.isCurrentUser ? false : true
-                //cell.emptyTableViewCellDelegate = self
+                UIView.performWithoutAnimation {
+                    cell.addButton.setTitle("Add Post", for: UIControlState.normal)
+                    cell.addButton.layoutIfNeeded()
+                }
+                cell.addButton.isHidden = self.isCurrentUser ? false : true
+                cell.addButtonType = AddButtonType.post
+                cell.profileEmptyTableViewCellDelegate = self
                 return cell
             }
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellUserCategory", for: indexPath) as! UserCategoryTableViewCell
@@ -890,10 +904,15 @@ extension ProfileTableViewController: ProfileTableSectionHeaderDelegate {
     }
 }
 
-extension ProfileTableViewController: EmptyTableViewCellDelegate {
+extension ProfileTableViewController: ProfileEmptyTableViewCellDelegate {
     
-    func addButtonTapped() {
-        self.performSegue(withIdentifier: "segueToExperiencesVc", sender: self)
+    func addButtonTapped(_ addButtonType: AddButtonType) {
+        switch addButtonType {
+        case .post:
+            self.performSegue(withIdentifier: "segueToCaptureVc", sender: self)
+        case .experience:
+            self.performSegue(withIdentifier: "segueToExperiencesVc", sender: self)
+        }
     }
 }
 

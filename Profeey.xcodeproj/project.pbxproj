@@ -190,6 +190,9 @@
 		A9D49EE01DD5C834000F90A8 /* UserCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D49EDF1DD5C834000F90A8 /* UserCategory.swift */; };
 		A9D49EE31DD5D920000F90A8 /* UserCategory.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9D49EE21DD5D920000F90A8 /* UserCategory.storyboard */; };
 		A9D49EE51DD5DB1A000F90A8 /* UserCategoryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D49EE41DD5DB1A000F90A8 /* UserCategoryTableViewController.swift */; };
+		A9D49EE71DD5F58B000F90A8 /* ProfileEmptyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D49EE61DD5F58B000F90A8 /* ProfileEmptyTableViewCell.swift */; };
+		A9D49EEB1DD602D6000F90A8 /* AddRecommendation.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9D49EEA1DD602D6000F90A8 /* AddRecommendation.storyboard */; };
+		A9D49EED1DD602E5000F90A8 /* Recommendations.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9D49EEC1DD602E5000F90A8 /* Recommendations.storyboard */; };
 		A9D716A91D57486100300135 /* PostSmallTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D716A81D57486100300135 /* PostSmallTableViewCell.swift */; };
 		A9D97BF81D95718C00D6F22E /* WelcomeProfessionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D97BF71D95718C00D6F22E /* WelcomeProfessionsTableViewController.swift */; };
 		A9E050F41D83065D00DD992D /* LocationOldTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E050F31D83065D00DD992D /* LocationOldTableViewCell.swift */; };
@@ -412,6 +415,9 @@
 		A9D49EDF1DD5C834000F90A8 /* UserCategory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserCategory.swift; sourceTree = "<group>"; };
 		A9D49EE21DD5D920000F90A8 /* UserCategory.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = UserCategory.storyboard; sourceTree = "<group>"; };
 		A9D49EE41DD5DB1A000F90A8 /* UserCategoryTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserCategoryTableViewController.swift; sourceTree = "<group>"; };
+		A9D49EE61DD5F58B000F90A8 /* ProfileEmptyTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileEmptyTableViewCell.swift; sourceTree = "<group>"; };
+		A9D49EEA1DD602D6000F90A8 /* AddRecommendation.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = AddRecommendation.storyboard; sourceTree = "<group>"; };
+		A9D49EEC1DD602E5000F90A8 /* Recommendations.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Recommendations.storyboard; sourceTree = "<group>"; };
 		A9D716A81D57486100300135 /* PostSmallTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostSmallTableViewCell.swift; sourceTree = "<group>"; };
 		A9D97BF71D95718C00D6F22E /* WelcomeProfessionsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeProfessionsTableViewController.swift; sourceTree = "<group>"; };
 		A9E050F31D83065D00DD992D /* LocationOldTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationOldTableViewCell.swift; sourceTree = "<group>"; };
@@ -933,6 +939,22 @@
 			name = "User Category";
 			sourceTree = "<group>";
 		};
+		A9D49EE81DD60029000F90A8 /* Recommendations */ = {
+			isa = PBXGroup;
+			children = (
+				A9D49EEC1DD602E5000F90A8 /* Recommendations.storyboard */,
+			);
+			name = Recommendations;
+			sourceTree = "<group>";
+		};
+		A9D49EE91DD600EB000F90A8 /* Add Recommendation */ = {
+			isa = PBXGroup;
+			children = (
+				A9D49EEA1DD602D6000F90A8 /* AddRecommendation.storyboard */,
+			);
+			name = "Add Recommendation";
+			sourceTree = "<group>";
+		};
 		A9DC4E371D994E9400AF4AB8 /* Search Users */ = {
 			isa = PBXGroup;
 			children = (
@@ -961,6 +983,8 @@
 				A9E53B651D1065FB00CD1D6C /* Notifications */,
 				A9E53B661D10660200CD1D6C /* Profile */,
 				A967FFCB1D25213F00AE4E24 /* Edit Profile */,
+				A9D49EE81DD60029000F90A8 /* Recommendations */,
+				A9D49EE91DD600EB000F90A8 /* Add Recommendation */,
 				A9ACF1871D927DF400A99B7F /* Experiences */,
 				A9CBBC431DB6348C009C8EC7 /* Edit Work Experience */,
 				A99B9E321DB53FCB0047360D /* Edit Education */,
@@ -1026,6 +1050,7 @@
 				A9B318E01D73769000FF8E2E /* ProfileSegmentedControlTableViewCell.swift */,
 				A9D716A81D57486100300135 /* PostSmallTableViewCell.swift */,
 				A9D49EDD1DD5C583000F90A8 /* UserCategoryTableViewCell.swift */,
+				A9D49EE61DD5F58B000F90A8 /* ProfileEmptyTableViewCell.swift */,
 			);
 			name = Profile;
 			sourceTree = "<group>";
@@ -1163,6 +1188,7 @@
 				A9E53B711D10668400CD1D6C /* Profile.storyboard in Resources */,
 				A9A1D7F01DBCFE83002AF221 /* ProfileTableSectionHeader.xib in Resources */,
 				A9AFFB0A1D8AFE2A00219627 /* LocationsOld.storyboard in Resources */,
+				A9D49EEB1DD602D6000F90A8 /* AddRecommendation.storyboard in Resources */,
 				A944BAAA1DD10323000BE754 /* HomeEmptyFeedView.xib in Resources */,
 				A9A57B2A1DD1CB92004F0177 /* DiscoverPeople.storyboard in Resources */,
 				A9E53B6F1D10667B00CD1D6C /* Notifications.storyboard in Resources */,
@@ -1176,6 +1202,7 @@
 				A9E53B691D10665100CD1D6C /* Home.storyboard in Resources */,
 				A9AC8FBE1DBDFDCB00C9BCE0 /* PostDetails.storyboard in Resources */,
 				A999CD451DBE829F00E7ADB1 /* SearchTableSectionHeader.xib in Resources */,
+				A9D49EED1DD602E5000F90A8 /* Recommendations.storyboard in Resources */,
 				A9CBBC601DB6610E009C8EC7 /* ExperiencesTableSectionHeader.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1308,6 +1335,7 @@
 				A9C8081A1D916C590018109C /* EditLastNameTableViewCell.swift in Sources */,
 				A99B9E361DB548F50047360D /* EditEducationTableViewController.swift in Sources */,
 				A9D334081D800D8D005565C2 /* PostImageTableViewCell.swift in Sources */,
+				A9D49EE71DD5F58B000F90A8 /* ProfileEmptyTableViewCell.swift in Sources */,
 				A9FAB36D1D8A114900E871CD /* AWSUserUpdate.swift in Sources */,
 				A99030F91D464FEE00336D26 /* GalleryCollectionViewCell.swift in Sources */,
 				A91A103A1DA833E40042B4CA /* AddInfoTableViewController.swift in Sources */,
