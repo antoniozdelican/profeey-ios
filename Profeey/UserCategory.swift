@@ -1,19 +1,19 @@
 //
-//  Category.swift
+//  UserCategory.swift
 //  Profeey
 //
-//  Created by Antonio Zdelican on 18/08/16.
+//  Created by Antonio Zdelican on 11/11/16.
 //  Copyright © 2016 Profeey. All rights reserved.
 //
 
 import Foundation
 
-class Category: NSObject {
+class UserCategory: NSObject {
     
     // Properties.
+    var userId: String?
     var categoryName: String?
     var numberOfPosts: NSNumber?
-    var searchCategoryName: String?
     
     // Generated.
     var numberOfPostsString: String? {
@@ -31,16 +31,10 @@ class Category: NSObject {
         super.init()
     }
     
-    convenience init(categoryName: String?, numberOfPosts: NSNumber?) {
+    convenience init(userId: String?, categoryName: String?, numberOfPosts: NSNumber?) {
         self.init()
+        self.userId = userId
         self.categoryName = categoryName
         self.numberOfPosts = numberOfPosts
-    }
-    
-    convenience init(categoryName: String?, searchCategoryName: String?, numberOfPosts: NSNumber?) {
-        self.init()
-        self.categoryName = categoryName
-        self.numberOfPosts = numberOfPosts
-        self.searchCategoryName = searchCategoryName
     }
 }

@@ -36,9 +36,7 @@ class AWSUserCategoriesTable: NSObject, Table {
         partitionKeyType = "String"
         indexes = [
             
-            AWSUserCategoriesPrimaryIndex(),
-            
-            AWSUserCategoriesNumberOfPostsIndex(),
+            AWSUserCategoriesNumberOfPostsSortedIndex(),
             
         ]
         //sortKeyName = model.classForCoder.rangeKeyAttribute!()
@@ -51,24 +49,12 @@ class AWSUserCategoriesTable: NSObject, Table {
     }
 }
 
-class AWSUserCategoriesPrimaryIndex: NSObject, Index {
-    
-    var indexName: String? {
-        return nil
-    }
-    
-    func supportedOperations() -> [String] {
-        return [
-        ]
-    }
-}
-
 // Query all user categories order by numberOfPosts.
-class AWSUserCategoriesNumberOfPostsIndex: NSObject, Index {
+class AWSUserCategoriesNumberOfPostsSortedIndex: NSObject, Index {
     
     var indexName: String? {
         
-        return "NumberOfPostsIndex"
+        return "NumberOfPostsSortedIndex"
     }
     
     func supportedOperations() -> [String] {
@@ -83,7 +69,7 @@ class AWSUserCategoriesNumberOfPostsIndex: NSObject, Index {
     func queryUserCategoriesNumberOfPostsSorted(_ userId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
         let queryExpression = AWSDynamoDBQueryExpression()
-        queryExpression.indexName = "NumberOfPostsIndex"
+        queryExpression.indexName = "NumberOfPostsSortedIndex"
         queryExpression.keyConditionExpression = "#userId = :userId AND #numberOfPosts > :numberOfPosts"
         queryExpression.expressionAttributeNames = [
             "#userId": "userId",
@@ -96,12 +82,7 @@ class AWSUserCategoriesNumberOfPostsIndex: NSObject, Index {
             ":userId": userId,
             ":numberOfPosts": numberOfPosts,
         ]
-        
-        // Set desc ordering.
         queryExpression.scanIndexForward = false
-        
-        queryExpression.limit = 10
-        
         objectMapper.query(AWSUserCategory.self, expression: queryExpression, completionHandler: completionHandler)
     }
 }

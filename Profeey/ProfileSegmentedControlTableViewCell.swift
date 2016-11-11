@@ -16,10 +16,10 @@ class ProfileSegmentedControlTableViewCell: UITableViewCell {
 
     @IBOutlet weak var postsButton: UIButton!
     @IBOutlet weak var experienceButton: UIButton!
-    @IBOutlet weak var contactButton: UIButton!
+    @IBOutlet weak var skillsButton: UIButton!
     @IBOutlet weak var postsButtonBorderView: UIView!
     @IBOutlet weak var experienceButtonBorderView: UIView!
-    @IBOutlet weak var contactButtonBorderView: UIView!
+    @IBOutlet weak var skillsButtonBorderView: UIView!
     
     var profileSegmentedControlTableViewCellDelegate: ProfileSegmentedControlTableViewCellDelegate?
     
@@ -36,28 +36,28 @@ class ProfileSegmentedControlTableViewCell: UITableViewCell {
     fileprivate func setPostsButtonActive() {
         self.postsButton.setTitleColor(Colors.black, for: UIControlState())
         self.experienceButton.setTitleColor(Colors.greyDark, for: UIControlState())
-        self.contactButton.setTitleColor(Colors.greyDark, for: UIControlState())
+        self.skillsButton.setTitleColor(Colors.greyDark, for: UIControlState())
         self.postsButtonBorderView.isHidden = false
         self.experienceButtonBorderView.isHidden = true
-        self.contactButtonBorderView.isHidden = true
+        self.skillsButtonBorderView.isHidden = true
     }
     
     fileprivate func setExperienceButtonActive() {
         self.postsButton.setTitleColor(Colors.greyDark, for: UIControlState())
         self.experienceButton.setTitleColor(Colors.black, for: UIControlState())
-        self.contactButton.setTitleColor(Colors.greyDark, for: UIControlState())
+        self.skillsButton.setTitleColor(Colors.greyDark, for: UIControlState())
         self.postsButtonBorderView.isHidden = true
         self.experienceButtonBorderView.isHidden = false
-        self.contactButtonBorderView.isHidden = true
+        self.skillsButtonBorderView.isHidden = true
     }
     
-    fileprivate func setContactButtonActive() {
+    fileprivate func setSkillsButtonActive() {
         self.postsButton.setTitleColor(Colors.greyDark, for: UIControlState())
         self.experienceButton.setTitleColor(Colors.greyDark, for: UIControlState())
-        self.contactButton.setTitleColor(Colors.black, for: UIControlState())
+        self.skillsButton.setTitleColor(Colors.black, for: UIControlState())
         self.postsButtonBorderView.isHidden = true
         self.experienceButtonBorderView.isHidden = true
-        self.contactButtonBorderView.isHidden = false
+        self.skillsButtonBorderView.isHidden = false
     }
     
     // MARK: IBActions
@@ -72,9 +72,9 @@ class ProfileSegmentedControlTableViewCell: UITableViewCell {
         self.profileSegmentedControlTableViewCellDelegate?.segmentChanged(profileSegment: ProfileSegment.experience)
     }
     
-    @IBAction func contactButtonTapped(_ sender: AnyObject) {
-        self.setContactButtonActive()
-        self.profileSegmentedControlTableViewCellDelegate?.segmentChanged(profileSegment: ProfileSegment.contact)
+    @IBAction func skillsButtonTapped(_ sender: AnyObject) {
+        self.setSkillsButtonActive()
+        self.profileSegmentedControlTableViewCellDelegate?.segmentChanged(profileSegment: ProfileSegment.skills)
     }
     
 

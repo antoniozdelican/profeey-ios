@@ -17,12 +17,14 @@ class Profession: NSObject {
     
     // Generated.
     var numberOfUsersString: String? {
-        if let numberOfUsers = self.numberOfUsers {
-            let numberOfUsersInt = numberOfUsers.intValue
-            return numberOfUsersInt == 1 ? "\(numberOfUsersInt) profeey" : "\(numberOfUsersInt) profeeys"
-        } else {
+        guard let numberOfUsers = self.numberOfUsers else {
             return nil
         }
+        let numberOfUsersInt = numberOfUsers.intValue
+        guard numberOfUsersInt > 0 else {
+            return nil
+        }
+        return numberOfUsersInt == 1 ? "\(numberOfUsersInt) profeey" : "\(numberOfUsersInt) profeeys"
     }
     
     override init() {

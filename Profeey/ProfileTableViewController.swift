@@ -13,7 +13,7 @@ import AWSMobileHubHelper
 enum ProfileSegment {
     case posts
     case experience
-    case contact
+    case skills
 }
 
 class ProfileTableViewController: UITableViewController {
@@ -39,6 +39,9 @@ class ProfileTableViewController: UITableViewController {
     fileprivate var isEmptyExperiences: Bool {
         return (self.workExperiences.count == 0 && self.educations.count == 0)
     }
+    
+    fileprivate var isLoadingUserCategories: Bool = true
+    fileprivate var userCategories: [UserCategory] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -100,6 +103,13 @@ class ProfileTableViewController: UITableViewController {
             destinationViewController.postIndexPath = indexPath
             destinationViewController.postDetailsTableViewControllerDelegate = self
         }
+        if let destinationViewController = segue.destination as? UserCategoryTableViewController,
+            let cell = sender as? UserCategoryTableViewCell,
+            let indexPath = self.tableView.indexPath(for: cell) {
+            destinationViewController.user = self.user
+            destinationViewController.userCategory = self.userCategories[indexPath.row]
+            destinationViewController.userCategoryTableViewControllerDelegate = self
+        }
     }
 
     // MARK: UITableViewDataSource
@@ -134,8 +144,13 @@ class ProfileTableViewController: UITableViewController {
             }
             return self.educations.count
         case 4:
-            //TODO Skills
-            return 0
+            guard self.selectedProfileSegment == ProfileSegment.skills else {
+                return 0
+            }
+            if self.isLoadingUserCategories || self.userCategories.count == 0 {
+                return 1
+            }
+            return self.userCategories.count
         default:
             return 0
         }
@@ -207,7 +222,7 @@ class ProfileTableViewController: UITableViewController {
             if self.isEmptyExperiences {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellEmpty", for: indexPath) as! EmptyTableViewCell
                 cell.emptyMessageLabel.text = "No experiences yet."
-                cell.addButton?.setTitle("Add Experiences", for: UIControlState.normal)
+                cell.addButton?.setTitle("Add Experience", for: UIControlState.normal)
                 cell.addButton?.isHidden = self.isCurrentUser ? false : true
                 cell.emptyTableViewCellDelegate = self
                 return cell
@@ -227,6 +242,25 @@ class ProfileTableViewController: UITableViewController {
             cell.timePeriodLabel.text = education.timePeriod
             cell.educationDescriptionLabel.text = education.educationDescription
             return cell
+        case 4:
+            if self.isLoadingUserCategories {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellLoading", for: indexPath) as! LoadingTableViewCell
+                cell.activityIndicator?.startAnimating()
+                return cell
+            }
+            if self.userCategories.count == 0 {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellEmpty", for: indexPath) as! EmptyTableViewCell
+                cell.emptyMessageLabel.text = "No post with skills yet."
+                cell.addButton?.setTitle("Add Post", for: UIControlState.normal)
+                cell.addButton?.isHidden = self.isCurrentUser ? false : true
+                //cell.emptyTableViewCellDelegate = self
+                return cell
+            }
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellUserCategory", for: indexPath) as! UserCategoryTableViewCell
+            let userCategory = self.userCategories[indexPath.row]
+            cell.categoryNameLabel.text = userCategory.categoryName
+            cell.numberOfPostsLabel.text = userCategory.numberOfPostsString
+            return cell
         default:
             return UITableViewCell()
         }
@@ -239,6 +273,9 @@ class ProfileTableViewController: UITableViewController {
         let cell = tableView.cellForRow(at: indexPath)
         if cell is PostSmallTableViewCell {
             self.performSegue(withIdentifier: "segueToPostDetailsVc", sender: indexPath)
+        }
+        if cell is UserCategoryTableViewCell {
+            self.performSegue(withIdentifier: "segueToUserCategoryVc", sender: cell)
         }
     }
     
@@ -271,6 +308,8 @@ class ProfileTableViewController: UITableViewController {
             return 74.0
         case 3:
             return 74.0
+        case 4:
+            return 42.0
         default:
             return 0.0
         }
@@ -301,6 +340,11 @@ class ProfileTableViewController: UITableViewController {
             return UITableViewAutomaticDimension
         case 3:
             return UITableViewAutomaticDimension
+        case 4:
+            if self.isLoadingUserCategories || self.userCategories.count == 0 {
+                return 112.0
+            }
+            return 42.0
         default:
             return 0.0
         }
@@ -369,33 +413,15 @@ class ProfileTableViewController: UITableViewController {
                 return 0.0
             }
             return 48.0
+        case 4:
+            guard self.selectedProfileSegment == ProfileSegment.skills else {
+                return 0.0
+            }
+            return 6.0
         default:
             return 0.0
         }
     }
-//
-//    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-//        switch section {
-//        case 3:
-//            guard self.selectedProfileSegment == ProfileSegment.experience else {
-//                return 0.0
-//            }
-//            if self.isLoadingExperiences || self.workExperiences.count == 0 {
-//                return 0.0
-//            }
-//            return 16.0
-//        case 4:
-//            guard self.selectedProfileSegment == ProfileSegment.experience else {
-//                return 0.0
-//            }
-//            if self.isLoadingExperiences || self.educations.count == 0 {
-//                return 0.0
-//            }
-//            return 16.0
-//        default:
-//            return 0.0
-//        }
-//    }
     
     // MARK: IBActions
     
@@ -470,6 +496,7 @@ class ProfileTableViewController: UITableViewController {
                         self.queryUserPostsDateSorted(userId)
                         self.queryWorkExperiences(userId)
                         self.queryEducations(userId)
+                        self.queryUserCategoriesNumberOfPostsSorted(userId)
                     }
                     // For now
                     self.refreshControl?.endRefreshing()
@@ -490,12 +517,16 @@ class ProfileTableViewController: UITableViewController {
                 if let error = error {
                     print("queryUserPostsDateSorted error: \(error)")
                     if self.selectedProfileSegment == ProfileSegment.posts {
-                        self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
+                        UIView.performWithoutAnimation {
+                            self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
+                        }
                     }
                 } else {
                     guard let awsPosts = response?.items as? [AWSPost], awsPosts.count > 0 else {
                         if self.selectedProfileSegment == ProfileSegment.posts {
-                            self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
+                            UIView.performWithoutAnimation {
+                                self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
+                            }
                         }
                         return
                     }
@@ -505,9 +536,9 @@ class ProfileTableViewController: UITableViewController {
                         let post = Post(userId: awsPost._userId, postId: awsPost._postId, caption: awsPost._caption, categoryName: awsPost._categoryName, creationDate: awsPost._creationDate, imageUrl: awsPost._imageUrl, numberOfLikes: awsPost._numberOfLikes, numberOfComments: awsPost._numberOfComments, user: self.user)
                         self.posts.append(post)
                         if self.selectedProfileSegment == ProfileSegment.posts {
-                            UIView.setAnimationsEnabled(false)
-                            self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
-                            UIView.setAnimationsEnabled(true)
+                            UIView.performWithoutAnimation {
+                                self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
+                            }
                         }
                         
                         if let imageUrl = awsPost._imageUrl {
@@ -546,13 +577,10 @@ class ProfileTableViewController: UITableViewController {
                     for awsWorkExperience in awsWorkExperiences {
                         let workExperience = WorkExperience(userId: awsWorkExperience._userId, workExperienceId: awsWorkExperience._workExperienceId, title: awsWorkExperience._title, organization: awsWorkExperience._organization, workDescription: awsWorkExperience._workDescription, fromMonth: awsWorkExperience._fromMonth, fromYear: awsWorkExperience._fromYear, toMonth: awsWorkExperience._toMonth, toYear: awsWorkExperience._toYear)
                         self.workExperiences.append(workExperience)
-                        if self.selectedProfileSegment == ProfileSegment.experience {
-//                            UIView.setAnimationsEnabled(false)
-//                            self.tableView.reloadSections(IndexSet([2, 3]), with: UITableViewRowAnimation.none)
-//                            UIView.setAnimationsEnabled(true)
-                            UIView.performWithoutAnimation {
-                                self.tableView.reloadSections(IndexSet([2, 3]), with: UITableViewRowAnimation.none)
-                            }
+                    }
+                    if self.selectedProfileSegment == ProfileSegment.experience {
+                        UIView.performWithoutAnimation {
+                            self.tableView.reloadSections(IndexSet([2, 3]), with: UITableViewRowAnimation.none)
                         }
                     }
                 }
@@ -587,10 +615,48 @@ class ProfileTableViewController: UITableViewController {
                     for awsEducation in awsEducations {
                         let education = Education(userId: awsEducation._userId, educationId: awsEducation._educationId, school: awsEducation._school, fieldOfStudy: awsEducation._fieldOfStudy, educationDescription: awsEducation._educationDescription, fromMonth: awsEducation._fromMonth, fromYear: awsEducation._fromYear, toMonth: awsEducation._toMonth, toYear: awsEducation._toYear)
                         self.educations.append(education)
-                        if self.selectedProfileSegment == ProfileSegment.experience {
+                    }
+                    if self.selectedProfileSegment == ProfileSegment.experience {
+                        UIView.performWithoutAnimation {
+                            self.tableView.reloadSections(IndexSet([2, 3]), with: UITableViewRowAnimation.none)
+                        }
+                    }
+                }
+            })
+        })
+    }
+    
+    fileprivate func queryUserCategoriesNumberOfPostsSorted(_ userId: String) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().queryUserCategoriesNumberOfPostsSortedDynamoDB(userId, completionHandler: {
+            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                self.isLoadingUserCategories = false
+                if let error = error {
+                    print("queryUserCategoriesNumberOfPostsSorted error: \(error)")
+                    if self.selectedProfileSegment == ProfileSegment.skills {
+                        UIView.performWithoutAnimation {
+                            self.tableView.reloadSections(IndexSet([4]), with: UITableViewRowAnimation.none)
+                        }
+                    }
+                } else {
+                    guard let awsUserCategories = response?.items as? [AWSUserCategory], awsUserCategories.count > 0 else {
+                        if self.selectedProfileSegment == ProfileSegment.skills {
                             UIView.performWithoutAnimation {
-                                self.tableView.reloadSections(IndexSet([2, 3]), with: UITableViewRowAnimation.none)
+                                self.tableView.reloadSections(IndexSet([4]), with: UITableViewRowAnimation.none)
                             }
+                        }
+                        return
+                    }
+                    self.userCategories = []
+                    for awsUserCategory in awsUserCategories {
+                        let userCategory = UserCategory(userId: awsUserCategory._userId, categoryName: awsUserCategory._categoryName, numberOfPosts: awsUserCategory._numberOfPosts)
+                        self.userCategories.append(userCategory)
+                    }
+                    if self.selectedProfileSegment == ProfileSegment.skills {
+                        UIView.performWithoutAnimation {
+                            self.tableView.reloadSections(IndexSet([4]), with: UITableViewRowAnimation.none)
                         }
                     }
                 }
@@ -857,6 +923,19 @@ extension ProfileTableViewController: PostDetailsTableViewControllerDelegate {
     func updatedPost(_ post: Post, postIndexPath: IndexPath) {
         self.posts[postIndexPath.row] = post
         self.tableView.reloadRows(at: [postIndexPath], with: UITableViewRowAnimation.none)
+    }
+}
+
+extension ProfileTableViewController: UserCategoryTableViewControllerDelegate {
+    
+    func updatedPost(_ post: Post) {
+        guard let postId = post.postId, let updatedPost = self.posts.first(where: { $0.postId == postId }), let postIndex = self.posts.index(of: updatedPost) else {
+            return
+        }
+        self.posts[postIndex] = post
+        if self.selectedProfileSegment == ProfileSegment.posts {
+            self.tableView.reloadRows(at: [IndexPath(row: postIndex, section: 1)], with: UITableViewRowAnimation.none)
+        }
     }
 }
 

@@ -322,14 +322,14 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
     
     func queryUserPostsDateSortedDynamoDB(_ userId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         print("queryUserPostsDateSortedDynamoDB:")
-        let postsDateSortedIndex = AWSPostsDateSortedIndex()
-        postsDateSortedIndex.queryUserPostsDateSorted(userId, completionHandler: completionHandler)
+        let awsPostsDateSortedIndex = AWSPostsDateSortedIndex()
+        awsPostsDateSortedIndex.queryUserPostsDateSorted(userId, completionHandler: completionHandler)
     }
     
-    func queryCategoryPostsDateSortedDynamoDB(_ categoryName: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
-        print("queryCategoryPostsDateSortedDynamoDB:")
-        let postsCategoryNameIndex = AWSPostsCategoryNameIndex()
-        postsCategoryNameIndex.queryCategoryPostsDateSorted(categoryName, completionHandler: completionHandler)
+    func queryUserPostsDateSortedWithCategoryNameDynamoDB(_ userId: String, categoryName: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+        print("queryUserPostsDateSortedWithCategoryNameDynamoDB:")
+        let awsPostsDateSortedIndex = AWSPostsDateSortedIndex()
+        awsPostsDateSortedIndex.queryUserPostsDateSortedWithCategoryName(userId, categoryName: categoryName, completionHandler: completionHandler)
     }
     
     func createPostDynamoDB(_ imageUrl: String?, caption: String?, categoryName: String?, completionHandler: @escaping AWSContinuationBlock) {
@@ -467,16 +467,16 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
     
     func queryUserActivitiesDateSortedDynamoDB(_ userId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         print("queryUserActivitiesDateSortedDynamoDB:")
-        let activitiesDateSortedIndex = AWSActivitiesDateSortedIndex()
-        activitiesDateSortedIndex.queryUserActivitiesDateSorted(userId, completionHandler: completionHandler)
+        let awsActivitiesDateSortedIndex = AWSActivitiesDateSortedIndex()
+        awsActivitiesDateSortedIndex.queryUserActivitiesDateSorted(userId, completionHandler: completionHandler)
     }
     
     // MARK: UserCategories
     
     func queryUserCategoriesNumberOfPostsSortedDynamoDB(_ userId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         print("queryUserCategoriesNumberOfPostsSortedDynamoDB:")
-        let userCategoriesNumberOfPostsIndex = AWSUserCategoriesNumberOfPostsIndex()
-        userCategoriesNumberOfPostsIndex.queryUserCategoriesNumberOfPostsSorted(userId, completionHandler: completionHandler)
+        let awsUserCategoriesNumberOfPostsSortedIndex = AWSUserCategoriesNumberOfPostsSortedIndex()
+        awsUserCategoriesNumberOfPostsSortedIndex.queryUserCategoriesNumberOfPostsSorted(userId, completionHandler: completionHandler)
     }
     
     // MARK: WorkExperiences

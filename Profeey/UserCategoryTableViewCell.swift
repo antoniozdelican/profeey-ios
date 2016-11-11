@@ -1,16 +1,17 @@
 //
-//  EmailTableViewCell.swift
+//  UserCategoryTableViewCell.swift
 //  Profeey
 //
-//  Created by Antonio Zdelican on 01/10/16.
+//  Created by Antonio Zdelican on 11/11/16.
 //  Copyright © 2016 Profeey. All rights reserved.
 //
 
 import UIKit
 
-class EmailTableViewCell: UITableViewCell {
+class UserCategoryTableViewCell: UITableViewCell {
 
-    @IBOutlet weak var emailLabel: UILabel!
+    @IBOutlet weak var categoryNameLabel: UILabel!
+    @IBOutlet weak var numberOfPostsLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
