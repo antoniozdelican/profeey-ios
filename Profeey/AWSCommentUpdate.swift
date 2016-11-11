@@ -11,6 +11,6 @@ import Foundation
 class AWSCommentUpdate: AWSComment {
     
     class func ignoreAttributes() -> [String] {
-        return ["creationDate", "firstName", "lastName","preferredUsername", "professionName", "profilePicUrl"]
+        return ["postId", "postUserId", "creationDate", "firstName", "lastName","preferredUsername", "professionName", "profilePicUrl"]
     }
 }

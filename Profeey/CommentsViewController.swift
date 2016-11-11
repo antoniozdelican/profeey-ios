@@ -156,11 +156,11 @@ class CommentsViewController: UIViewController {
     }
     
     fileprivate func createComment(_ commentText: String) {
-        guard let postId = self.post?.postId else {
+        guard let postId = self.post?.postId, let postUserId = self.post?.userId else {
             return
         }
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().createCommentDynamoDB(postId, commentText: commentText, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().createCommentDynamoDB(postId, postUserId: postUserId, commentText: commentText, completionHandler: {
             (task: AWSTask) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false

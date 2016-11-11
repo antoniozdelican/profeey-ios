@@ -195,7 +195,7 @@ class ExperiencesTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 52.0
+        return 48.0
     }
     
     // MARK: IBActions

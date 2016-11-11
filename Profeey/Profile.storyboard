@@ -10,13 +10,13 @@
         <scene sceneID="n8g-ln-hsN">
             <objects>
                 <tableViewController id="snn-LH-lYg" customClass="ProfileTableViewController" customModule="Profeey" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="none" rowHeight="133" sectionHeaderHeight="1" sectionFooterHeight="1" id="EYN-0F-Ung">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="133" sectionHeaderHeight="28" sectionFooterHeight="28" id="EYN-0F-Ung">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellProfileMain" rowHeight="92" id="SE7-jf-WKl" customClass="ProfileMainTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="120" width="375" height="92"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellProfileMain" rowHeight="92" id="SE7-jf-WKl" customClass="ProfileMainTableViewCell" customModule="Profeey" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="92" width="375" height="92"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="SE7-jf-WKl" id="Ngx-Nb-RJT">
                                     <frame key="frameInset" width="375" height="92"/>
@@ -114,8 +114,8 @@
                                     <outlet property="recommendButton" destination="C6H-Ma-A3h" id="dp1-4F-H3d"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellProfileInfo" rowHeight="113" id="3RL-vw-8YT" customClass="ProfileInfoTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="212" width="375" height="113"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellProfileInfo" rowHeight="113" id="3RL-vw-8YT" customClass="ProfileInfoTableViewCell" customModule="Profeey" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="184" width="375" height="113"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="3RL-vw-8YT" id="36E-9I-Jlo">
                                     <frame key="frameInset" width="375" height="113"/>
@@ -160,8 +160,8 @@
                                     <outlet property="professionNameLabel" destination="VXx-CT-nJq" id="1nb-mN-cS2"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellProfileSegmentedControl" rowHeight="46" id="mn0-31-00O" customClass="ProfileSegmentedControlTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="325" width="375" height="46"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellProfileSegmentedControl" rowHeight="46" id="mn0-31-00O" customClass="ProfileSegmentedControlTableViewCell" customModule="Profeey" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="297" width="375" height="46"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="mn0-31-00O" id="xt8-7C-rHo">
                                     <frame key="frameInset" width="375" height="46"/>
@@ -282,8 +282,8 @@
                                     <outlet property="postsButtonBorderView" destination="vYp-sU-iiT" id="Hd4-wU-5VE"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellLoading" rowHeight="112" id="nKQ-vW-c0I" customClass="LoadingTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="371" width="375" height="112"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellLoading" rowHeight="112" id="nKQ-vW-c0I" customClass="LoadingTableViewCell" customModule="Profeey" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="343" width="375" height="112"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="nKQ-vW-c0I" id="Zhy-uC-Lgh">
                                     <frame key="frameInset" width="375" height="112"/>
@@ -300,21 +300,21 @@
                                     <outlet property="activityIndicator" destination="USG-VE-cTI" id="Kia-B6-NB7"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellEmpty" rowHeight="112" id="XOz-ce-GIx" customClass="EmptyTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="483" width="375" height="112"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellEmpty" rowHeight="112" id="XOz-ce-GIx" customClass="EmptyTableViewCell" customModule="Profeey" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="455" width="375" height="112"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="XOz-ce-GIx" id="nAd-We-qJd">
                                     <frame key="frameInset" width="375" height="112"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Empty message." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h29-La-rpG">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Empty message." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h29-La-rpG">
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <color key="textColor" red="0.2901960784" green="0.2901960784" blue="0.2901960784" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lPS-g7-LNC">
                                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                            <state key="normal" title="ADD FIRST" backgroundImage="btn_grey">
+                                            <state key="normal" title="Add Button" backgroundImage="btn_grey">
                                                 <color key="titleColor" red="0.63921568630000003" green="0.63921568630000003" blue="0.63921568630000003" alpha="1" colorSpace="calibratedRGB"/>
                                             </state>
                                             <connections>
@@ -325,9 +325,9 @@
                                     <constraints>
                                         <constraint firstItem="lPS-g7-LNC" firstAttribute="centerX" secondItem="nAd-We-qJd" secondAttribute="centerX" id="EFR-47-w3D"/>
                                         <constraint firstItem="h29-La-rpG" firstAttribute="leading" secondItem="nAd-We-qJd" secondAttribute="leading" constant="16" id="LqB-Hl-3C0"/>
+                                        <constraint firstItem="lPS-g7-LNC" firstAttribute="top" secondItem="h29-La-rpG" secondAttribute="bottom" constant="15" id="SI3-t8-aFY"/>
                                         <constraint firstItem="h29-La-rpG" firstAttribute="centerX" secondItem="nAd-We-qJd" secondAttribute="centerX" id="dGc-rW-Ifg"/>
                                         <constraint firstAttribute="trailing" secondItem="h29-La-rpG" secondAttribute="trailing" constant="16" id="mCg-xi-oTL"/>
-                                        <constraint firstItem="lPS-g7-LNC" firstAttribute="top" secondItem="h29-La-rpG" secondAttribute="bottom" constant="15" id="pwe-oB-Dw2"/>
                                         <constraint firstItem="h29-La-rpG" firstAttribute="centerY" secondItem="nAd-We-qJd" secondAttribute="centerY" id="zvq-AT-2EL"/>
                                     </constraints>
                                     <variation key="default">
@@ -341,8 +341,8 @@
                                     <outlet property="emptyMessageLabel" destination="h29-La-rpG" id="Pmc-Nf-j1Y"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellPostSmall" rowHeight="112" id="lbp-3Q-qvf" customClass="PostSmallTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="595" width="375" height="112"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellPostSmall" rowHeight="112" id="lbp-3Q-qvf" customClass="PostSmallTableViewCell" customModule="Profeey" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="567" width="375" height="112"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="lbp-3Q-qvf" id="hEv-IB-M1D">
                                     <frame key="frameInset" width="375" height="112"/>
@@ -417,8 +417,8 @@
                                     <outlet property="titleLabel" destination="DHQ-R0-JIc" id="OTY-1U-mNy"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellWorkExperience" rowHeight="108" id="Pi3-Qj-WlN" customClass="WorkExperienceTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="707" width="375" height="108"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellWorkExperience" rowHeight="108" id="Pi3-Qj-WlN" customClass="WorkExperienceTableViewCell" customModule="Profeey" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="679" width="375" height="108"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Pi3-Qj-WlN" id="puB-NM-qLU">
                                     <frame key="frameInset" width="375" height="108"/>
@@ -479,8 +479,8 @@
                                     <outlet property="workExperienceImageView" destination="8Ul-fj-xg6" id="sWz-iv-wTm"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellEducation" rowHeight="108" id="FIs-BE-8n8" customClass="EducationTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="815" width="375" height="108"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellEducation" rowHeight="108" id="FIs-BE-8n8" customClass="EducationTableViewCell" customModule="Profeey" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="787" width="375" height="108"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="FIs-BE-8n8" id="oWb-vg-tW6">
                                     <frame key="frameInset" width="375" height="108"/>

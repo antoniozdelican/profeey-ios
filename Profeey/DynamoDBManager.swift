@@ -28,12 +28,13 @@ protocol DynamoDBManager {
     func scanUsersByProfessionNameDynamoDB(_ searchProfessionName: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
     func scanUsersByProfessionAndLocationNameDynamoDB(_ searchProfessionName: String, locationName: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
     
-    // MARK: UserRelationships
+    // MARK: Relationships
     
-    func getUserRelationshipDynamoDB(_ followingId: String, completionHandler: @escaping AWSContinuationBlock)
-    func saveUserRelationshipDynamoDB(_ followingId: String, completionHandler: @escaping AWSContinuationBlock)
-    func removeUserRelationshipDynamoDB(_ followingId: String, completionHandler: @escaping AWSContinuationBlock)
-    func queryUserFollowersDynamoDB(_ followingId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
+    func getRelationshipDynamoDB(_ followingId: String, completionHandler: @escaping AWSContinuationBlock)
+    func createRelationshipDynamoDB(_ followingId: String, completionHandler: @escaping AWSContinuationBlock)
+    func removeRelationshipDynamoDB(_ followingId: String, completionHandler: @escaping AWSContinuationBlock)
+    func queryFollowersDynamoDB(_ followingId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
+    func queryFollowingDynamoDB(_ userId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
     
     // MARK: Likes
     
@@ -44,8 +45,8 @@ protocol DynamoDBManager {
     
     // MARK: Comments
     
-    func createCommentDynamoDB(_ postId: String, commentText: String, completionHandler: @escaping AWSContinuationBlock)
-    func updateCommentDynamoDB(_ commentId: String, postId: String, commentText: String, completionHandler: @escaping AWSContinuationBlock)
+    func createCommentDynamoDB(_ postId: String, postUserId: String, commentText: String, completionHandler: @escaping AWSContinuationBlock)
+//    func updateCommentDynamoDB(_ commentId: String, postId: String, commentText: String, completionHandler: @escaping AWSContinuationBlock)
     func removeCommentDynamoDB(_ commentId: String, completionHandler: @escaping AWSContinuationBlock)
     func queryPostCommentsDateSortedDynamoDB(_ postId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
     

@@ -12,8 +12,9 @@ import AWSDynamoDB
 class AWSActivity: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     
     var _userId: String?
-    var _postId: String?
-    var _postUserId: String?
+    var _activityId: String?
+//    var _postId: String?
+//    var _postUserId: String?
     var _caption: String?
     var _categoryName: String?
     var _creationDate: NSNumber?
@@ -27,6 +28,21 @@ class AWSActivity: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     var _professionName: String?
     var _profilePicUrl: String?
     
+    // Generated.
+    // activityId is stored in form of {postUserId}+activity+{postId}
+    var _postUserId: String? {
+        guard let _activityId = self._activityId else {
+            return nil
+        }
+        return _activityId.components(separatedBy: "+activity+").first
+    }
+    var _postId: String? {
+        guard let _activityId = self._activityId else {
+            return nil
+        }
+        return _activityId.components(separatedBy: "+activity+").last
+    }
+    
     class func dynamoDBTableName() -> String {
         
         return "profeey-mobilehub-294297648-Activities"
@@ -39,14 +55,13 @@ class AWSActivity: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     
     class func rangeKeyAttribute() -> String {
         
-        return "_postId"
+        return "_activityId"
     }
     
     override class func jsonKeyPathsByPropertyKey() -> [AnyHashable: Any] {
         return [
             "_userId" : "userId",
-            "_postId" : "postId",
-            "_postUserId" : "postUserId",
+            "_activityId" : "activityId",
             "_caption" : "caption",
             "_categoryName" : "categoryName",
             "_creationDate" : "creationDate",

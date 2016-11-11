@@ -42,7 +42,7 @@ class UsersTableViewController: UITableViewController {
                 self.navigationItem.title = "Followers"
                 if let followingId = self.userId {
                     self.isLoadingUsers = true
-                    self.queryUserFollowers(followingId)
+                    self.queryFollowers(followingId)
                 }
             }
         }
@@ -142,7 +142,7 @@ class UsersTableViewController: UITableViewController {
                 return
             }
             self.users = []
-            self.queryUserFollowers(followingId)
+            self.queryFollowers(followingId)
         }
     }
     
@@ -184,32 +184,32 @@ class UsersTableViewController: UITableViewController {
         })
     }
     
-    fileprivate func queryUserFollowers(_ followingId: String) {
+    fileprivate func queryFollowers(_ followingId: String) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().queryUserFollowersDynamoDB(followingId, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().queryFollowersDynamoDB(followingId, completionHandler: {
             (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 if let error = error {
-                    print("queryUserFollowers error: \(error)")
+                    print("queryFollowers error: \(error)")
                     self.isLoadingUsers = false
                     self.tableView.reloadData()
                     self.refreshControl?.endRefreshing()
                 } else {
-                    guard let awsUserRelationships = response?.items as? [AWSUserRelationship], awsUserRelationships.count > 0 else {
+                    guard let awsRelationships = response?.items as? [AWSRelationship], awsRelationships.count > 0 else {
                         self.isLoadingUsers = false
                         self.tableView.reloadData()
                         self.refreshControl?.endRefreshing()
                         return
                     }
-                    for (index, awsUserRelationship) in awsUserRelationships.enumerated() {
-                        let user = User(userId: awsUserRelationship._userId, firstName: awsUserRelationship._firstName, lastName: awsUserRelationship._lastName, preferredUsername: awsUserRelationship._preferredUsername, professionName: awsUserRelationship._professionName, profilePicUrl: awsUserRelationship._profilePicUrl)
+                    for (index, awsRelationship) in awsRelationships.enumerated() {
+                        let user = User(userId: awsRelationship._userId, firstName: awsRelationship._firstName, lastName: awsRelationship._lastName, preferredUsername: awsRelationship._preferredUsername, professionName: awsRelationship._professionName, profilePicUrl: awsRelationship._profilePicUrl)
                         self.users.append(user)
                         self.isLoadingUsers = false
                         self.tableView.reloadData()
                         
                         // Get profilePic.
-                        if let profilePicUrl = awsUserRelationship._profilePicUrl {
+                        if let profilePicUrl = awsRelationship._profilePicUrl {
                             let indexPath = IndexPath(row: index, section: 0)
                             self.downloadImage(profilePicUrl, imageType: .userProfilePic, indexPath: indexPath)
                         }

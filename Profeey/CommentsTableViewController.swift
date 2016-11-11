@@ -31,10 +31,6 @@ class CommentsTableViewController: UITableViewController {
     // MARK: Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if let destinationViewController = segue.destination as? ProfileTableViewController,
-//            let indexPath = sender as? IndexPath {
-//            destinationViewController.user = self.comments[indexPath.row].user
-//        }
         if let destinationViewController = segue.destination as? ProfileTableViewController,
             let cell = sender as? CommentTableViewCell,
             let indexPath = self.tableView.indexPath(for: cell) {

@@ -38,7 +38,7 @@ class AWSActivitiesTable: NSObject, Table {
         partitionKeyType = "String"
         indexes = [
             
-            AWSActivitiesPrimaryIndex(),
+//            AWSActivitiesPrimaryIndex(),
             
             AWSActivitiesDateSortedIndex(),
             
@@ -53,31 +53,31 @@ class AWSActivitiesTable: NSObject, Table {
     }
 }
 
-class AWSActivitiesPrimaryIndex: NSObject, Index {
-    
-    var indexName: String? {
-        return nil
-    }
-    
-    func supportedOperations() -> [String] {
-        return [
-            QueryWithPartitionKey,
-        ]
-    }
-    
-    // Mark: QueryWithPartitionKey
-    
-    // Query all activities with userId.
-    func queryUserActivities(_ userId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
-        let objectMapper = AWSDynamoDBObjectMapper.default()
-        let queryExpression = AWSDynamoDBQueryExpression()
-        queryExpression.keyConditionExpression = "#userId = :userId"
-        queryExpression.expressionAttributeNames = ["#userId": "userId",]
-        queryExpression.expressionAttributeValues = [":userId": userId,]
-    
-        objectMapper.query(AWSActivity.self, expression: queryExpression, completionHandler: completionHandler)
-    }
-}
+//class AWSActivitiesPrimaryIndex: NSObject, Index {
+//    
+//    var indexName: String? {
+//        return nil
+//    }
+//    
+//    func supportedOperations() -> [String] {
+//        return [
+//            QueryWithPartitionKey,
+//        ]
+//    }
+//    
+//    // Mark: QueryWithPartitionKey
+//    
+//    // Query all activities with userId.
+//    func queryUserActivities(_ userId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+//        let objectMapper = AWSDynamoDBObjectMapper.default()
+//        let queryExpression = AWSDynamoDBQueryExpression()
+//        queryExpression.keyConditionExpression = "#userId = :userId"
+//        queryExpression.expressionAttributeNames = ["#userId": "userId",]
+//        queryExpression.expressionAttributeValues = [":userId": userId,]
+//    
+//        objectMapper.query(AWSActivity.self, expression: queryExpression, completionHandler: completionHandler)
+//    }
+//}
 
 class AWSActivitiesDateSortedIndex: NSObject, Index {
     

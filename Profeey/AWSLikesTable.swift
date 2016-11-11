@@ -43,7 +43,7 @@ class AWSLikesTable: NSObject, Table {
     }
     
     func tableAttributeName(_ dataObjectAttributeName: String) -> String {
-        return AWSUserRelationship.jsonKeyPathsByPropertyKey()[dataObjectAttributeName] as! String
+        return AWSLike.jsonKeyPathsByPropertyKey()[dataObjectAttributeName] as! String
     }
     
     // Get Like with userId (likerId) and postId.

@@ -182,89 +182,54 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         awsUsersTable.scanUsersByProfessionAndLocationName(searchProfessionName, locationName: locationName, completionHandler: completionHandler)
     }
     
-    // MARK: UserRelationships
+    // MARK: Relationships
     
-    func getUserRelationshipDynamoDB(_ followingId: String, completionHandler: @escaping AWSContinuationBlock) {
-        AWSClientManager.defaultClientManager().credentialsProvider?.getIdentityId().continue({
-            (task: AWSTask) in
-            if let error = task.error {
-                print("getIdentityId error: \(error.localizedDescription)")
-                return AWSTask(error: error).continue(completionHandler)
-            } else if let identityId = task.result as? String {
-                
-                print("getUserRelationshipDynamoDB:")
-                let awsUserRelationshipsTable = AWSUserRelationshipsTable()
-                awsUserRelationshipsTable.getUserRelationship(identityId, followingId: followingId, completionHandler: completionHandler)
-                return nil
-            } else {
-                print("This should not happen with getIdentityId!")
-                return AWSTask().continue(completionHandler)
-            }
-        })
+    func getRelationshipDynamoDB(_ followingId: String, completionHandler: @escaping AWSContinuationBlock) {
+        guard let identityId = AWSClientManager.defaultClientManager().credentialsProvider?.identityId else {
+            print("getRelationshipDynamoDB no identityId!")
+            AWSTask().continue(completionHandler)
+            return
+        }
+        print("getRelationshipDynamoDB:")
+        let awsRelationshipsTable = AWSRelationshipsTable()
+        awsRelationshipsTable.getRelationship(identityId, followingId: followingId, completionHandler: completionHandler)
     }
     
-    func saveUserRelationshipDynamoDB(_ followingId: String, completionHandler: @escaping AWSContinuationBlock) {
-        AWSClientManager.defaultClientManager().credentialsProvider?.getIdentityId().continue({
-            (task: AWSTask) in
-            if let error = task.error {
-                print("getIdentityId error: \(error.localizedDescription)")
-                return AWSTask(error: error).continue(completionHandler)
-            } else if let identityId = task.result as? String {
-                
-                print("saveUserRelationshipDynamoDB:")
-                let awsUserRelationshipsTable = AWSUserRelationshipsTable()
-                let awsUserRelationship = AWSUserRelationship()
-                awsUserRelationship?._userId = identityId
-                awsUserRelationship?._creationDate = NSNumber(value: Date().timeIntervalSince1970 as Double)
-                awsUserRelationship?._followingId = followingId
-                
-                awsUserRelationship?._firstName = self.currentUserDynamoDB?.firstName
-                awsUserRelationship?._lastName = self.currentUserDynamoDB?.lastName
-                awsUserRelationship?._preferredUsername = self.currentUserDynamoDB?.preferredUsername
-                awsUserRelationship?._professionName = self.currentUserDynamoDB?.professionName
-                awsUserRelationship?._profilePicUrl = self.currentUserDynamoDB?.profilePicUrl
-                
-//                userRelationship?._firstName = follower?.firstName
-//                userRelationship?._lastName = follower?.lastName
-//                userRelationship?._preferredUsername = follower?.preferredUsername
-//                userRelationship?._professionName = follower?.professionName
-//                userRelationship?._profilePicUrl = follower?.profilePicUrl
-                
-                awsUserRelationshipsTable.saveUserRelationship(awsUserRelationship, completionHandler: completionHandler)
-                return nil
-            } else {
-                print("This should not happen with getIdentityId!")
-                return AWSTask().continue(completionHandler)
-            }
-        })
+    func createRelationshipDynamoDB(_ followingId: String, completionHandler: @escaping AWSContinuationBlock) {
+        guard let identityId = AWSClientManager.defaultClientManager().credentialsProvider?.identityId else {
+            print("createRelationshipDynamoDB no identityId!")
+            AWSTask().continue(completionHandler)
+            return
+        }
+        print("createRelationshipDynamoDB:")
+        let creationDate = NSNumber(value: Date().timeIntervalSince1970 as Double)
+        let awsRelationshipsTable = AWSRelationshipsTable()
+        let awsRelationship = AWSRelationship(_userId: identityId, _followingId: followingId, _creationDate: creationDate, _firstName: self.currentUserDynamoDB?.firstName, _lastName: self.currentUserDynamoDB?.lastName, _preferredUsername: self.currentUserDynamoDB?.preferredUsername, _professionName: self.currentUserDynamoDB?.professionName, _profilePicUrl: self.currentUserDynamoDB?.profilePicUrl)
+        awsRelationshipsTable.createRelationship(awsRelationship, completionHandler: completionHandler)
     }
     
-    func removeUserRelationshipDynamoDB(_ followingId: String, completionHandler: @escaping AWSContinuationBlock) {
-        AWSClientManager.defaultClientManager().credentialsProvider?.getIdentityId().continue({
-            (task: AWSTask) in
-            if let error = task.error {
-                print("getIdentityId error: \(error.localizedDescription)")
-                return AWSTask(error: error).continue(completionHandler)
-            } else if let identityId = task.result as? String {
-                
-                print("removeUserRelationshipDynamoDB:")
-                let awsUserRelationshipsTable = AWSUserRelationshipsTable()
-                let awsUserRelationship = AWSUserRelationship()
-                awsUserRelationship?._userId = identityId
-                awsUserRelationship?._followingId = followingId
-                awsUserRelationshipsTable.removeUserRelationship(awsUserRelationship, completionHandler: completionHandler)
-                return nil
-            } else {
-                print("This should not happen with getIdentityId!")
-                return AWSTask().continue(completionHandler)
-            }
-        })
+    func removeRelationshipDynamoDB(_ followingId: String, completionHandler: @escaping AWSContinuationBlock) {
+        guard let identityId = AWSClientManager.defaultClientManager().credentialsProvider?.identityId else {
+            print("removeRelationshipDynamoDB no identityId!")
+            AWSTask().continue(completionHandler)
+            return
+        }
+        print("removeRelationshipDynamoDB:")
+        let awsRelationshipsTable = AWSRelationshipsTable()
+        let awsRelationship = AWSRelationship(_userId: identityId, _followingId: followingId)
+        awsRelationshipsTable.removeRelationship(awsRelationship, completionHandler: completionHandler)
     }
     
-    func queryUserFollowersDynamoDB(_ followingId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
-        print("queryUserFollowersDynamoDB:")
-        let userRelationshipsFollowersIndex = AWSUserRelationshipsFollowersIndex()
-        userRelationshipsFollowersIndex.queryUserFollowers(followingId, completionHandler: completionHandler)
+    func queryFollowersDynamoDB(_ followingId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+        print("queryFollowersDynamoDB:")
+        let awsRelationshipsFollowersIndex = AWSRelationshipsFollowersIndex()
+        awsRelationshipsFollowersIndex.queryFollowers(followingId, completionHandler: completionHandler)
+    }
+    
+    func queryFollowingDynamoDB(_ userId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+        print("queryFollowingDynamoDB:")
+        let awsRelationshipsPrimaryIndex = AWSRelationshipsPrimaryIndex()
+        awsRelationshipsPrimaryIndex.queryFollowing(userId, completionHandler: completionHandler)
     }
     
     // MARK: Likes
@@ -313,7 +278,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
     
     // MARK: Comments
     
-    func createCommentDynamoDB(_ postId: String, commentText: String, completionHandler: @escaping AWSContinuationBlock) {
+    func createCommentDynamoDB(_ postId: String, postUserId: String, commentText: String, completionHandler: @escaping AWSContinuationBlock) {
         guard let identityId = AWSClientManager.defaultClientManager().credentialsProvider?.identityId else {
             print("createCommentDynamoDB no identityId!")
             AWSTask().continue(completionHandler)
@@ -323,33 +288,13 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         let commentId = NSUUID().uuidString.lowercased()
         let creationDate = NSNumber(value: Date().timeIntervalSince1970 as Double)
         let awsCommentsTable = AWSCommentsTable()
-        let awsComment = AWSComment(_userId: identityId, _commentId: commentId, _creationDate: creationDate, _postId: postId, _commentText: commentText, _firstName: self.currentUserDynamoDB?.firstName, _lastName: self.currentUserDynamoDB?.lastName, _preferredUsername: self.currentUserDynamoDB?.preferredUsername, _professionName: self.currentUserDynamoDB?.professionName, _profilePicUrl: self.currentUserDynamoDB?.profilePicUrl)
+        let awsComment = AWSComment(_userId: identityId, _commentId: commentId, _creationDate: creationDate, _postId: postId, _postUserId: postUserId, _commentText: commentText, _firstName: self.currentUserDynamoDB?.firstName, _lastName: self.currentUserDynamoDB?.lastName, _preferredUsername: self.currentUserDynamoDB?.preferredUsername, _professionName: self.currentUserDynamoDB?.professionName, _profilePicUrl: self.currentUserDynamoDB?.profilePicUrl)
         awsCommentsTable.createComment(awsComment, completionHandler: {
             (task: AWSTask) in
             if let error = task.error {
                 AWSTask(error: error).continue(completionHandler)
             } else {
                 AWSTask(result: awsComment).continue(completionHandler)
-            }
-            return nil
-        })
-    }
-    
-    func updateCommentDynamoDB(_ commentId: String, postId: String, commentText: String, completionHandler: @escaping AWSContinuationBlock) {
-        guard let identityId = AWSClientManager.defaultClientManager().credentialsProvider?.identityId else {
-            print("updateCommentDynamoDB no identityId!")
-            AWSTask().continue(completionHandler)
-            return
-        }
-        print("updateCommentDynamoDB:")
-        let awsCommentsTable = AWSCommentsTable()
-        let awsCommentUpdate = AWSCommentUpdate(_userId: identityId, _commentId: commentId, _postId: postId, _commentText: commentText)
-        awsCommentsTable.updateComment(awsCommentUpdate, completionHandler: {
-            (task: AWSTask) in
-            if let error = task.error {
-                AWSTask(error: error).continue(completionHandler)
-            } else {
-                AWSTask(result: awsCommentUpdate).continue(completionHandler)
             }
             return nil
         })

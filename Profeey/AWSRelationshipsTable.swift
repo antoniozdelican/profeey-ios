@@ -1,8 +1,8 @@
 //
-//  AWSUserRelationshipsTable.swift
+//  AWSRelationshipsTable.swift
 //  Profeey
 //
-//  Created by Antonio Zdelican on 25/08/16.
+//  Created by Antonio Zdelican on 06/11/16.
 //  Copyright © 2016 Profeey. All rights reserved.
 //
 
@@ -10,7 +10,7 @@ import Foundation
 import AWSDynamoDB
 import AWSMobileHubHelper
 
-class AWSUserRelationshipsTable: NSObject, Table {
+class AWSRelationshipsTable: NSObject, Table {
     
     var tableName: String
     var partitionKeyName: String
@@ -24,21 +24,21 @@ class AWSUserRelationshipsTable: NSObject, Table {
     }
     var tableDisplayName: String {
         
-        return "UserRelationships"
+        return "Relationships"
     }
     
     override init() {
         
-        model = AWSPost()
+        model = AWSRelationship()
         
         tableName = model.classForCoder.dynamoDBTableName()
         partitionKeyName = model.classForCoder.hashKeyAttribute()
         partitionKeyType = "String"
         indexes = [
             
-            AWSUserRelationshipsPrimaryIndex(),
+            AWSRelationshipsPrimaryIndex(),
             
-            AWSUserRelationshipsFollowersIndex(),
+            AWSRelationshipsFollowersIndex(),
             
         ]
         //sortKeyName = model.classForCoder.rangeKeyAttribute!()
@@ -47,29 +47,29 @@ class AWSUserRelationshipsTable: NSObject, Table {
     }
     
     func tableAttributeName(_ dataObjectAttributeName: String) -> String {
-        return AWSUserRelationship.jsonKeyPathsByPropertyKey()[dataObjectAttributeName] as! String
+        return AWSRelationship.jsonKeyPathsByPropertyKey()[dataObjectAttributeName] as! String
     }
     
     // Find if user with userId is following user with followingId.
-    func getUserRelationship(_ userId: String, followingId: String, completionHandler: @escaping AWSContinuationBlock) {
+    func getRelationship(_ userId: String, followingId: String, completionHandler: @escaping AWSContinuationBlock) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
-        objectMapper.load(AWSUserRelationship.self, hashKey: userId, rangeKey: followingId).continue(completionHandler)
+        objectMapper.load(AWSRelationship.self, hashKey: userId, rangeKey: followingId).continue(completionHandler)
         
     }
     
-    func saveUserRelationship(_ userRelationship: AWSUserRelationship?, completionHandler: @escaping AWSContinuationBlock) {
+    func createRelationship(_ awsRelationship: AWSRelationship, completionHandler: @escaping AWSContinuationBlock) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
-        objectMapper.save(userRelationship!).continue(completionHandler)
+        objectMapper.save(awsRelationship).continue(completionHandler)
     }
     
-    func removeUserRelationship(_ userRelationship: AWSUserRelationship?, completionHandler: @escaping AWSContinuationBlock) {
+    func removeRelationship(_ awsRelationship: AWSRelationship, completionHandler: @escaping AWSContinuationBlock) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
-        objectMapper.remove(userRelationship!).continue(completionHandler)
+        objectMapper.remove(awsRelationship).continue(completionHandler)
     }
 }
 
-// Query followed users by the user.
-class AWSUserRelationshipsPrimaryIndex: NSObject, Index {
+// Query following users from the user.
+class AWSRelationshipsPrimaryIndex: NSObject, Index {
     
     var indexName: String? {
         return nil
@@ -78,26 +78,25 @@ class AWSUserRelationshipsPrimaryIndex: NSObject, Index {
     func supportedOperations() -> [String] {
         return [
             QueryWithPartitionKey,
-            QueryWithPartitionKeyAndSortKey,
         ]
     }
     
     // Mark: QueryWithPartitionKey
     
     // Find all following users.
-    func queryUserFollowing(_ userId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+    func queryFollowing(_ userId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
         let queryExpression = AWSDynamoDBQueryExpression()
         queryExpression.keyConditionExpression = "#userId = :userId"
         queryExpression.expressionAttributeNames = ["#userId": "userId",]
         queryExpression.expressionAttributeValues = [":userId": userId,]
         
-        objectMapper.query(AWSUserRelationship.self, expression: queryExpression, completionHandler: completionHandler)
+        objectMapper.query(AWSRelationship.self, expression: queryExpression, completionHandler: completionHandler)
     }
 }
 
 // Query followers of the user.
-class AWSUserRelationshipsFollowersIndex: NSObject, Index {
+class AWSRelationshipsFollowersIndex: NSObject, Index {
     
     var indexName: String? {
         
@@ -113,7 +112,7 @@ class AWSUserRelationshipsFollowersIndex: NSObject, Index {
     // MARK: QueryWithPartitionKey
     
     // Find all items with followingId.
-    func queryUserFollowers(_ followingId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+    func queryFollowers(_ followingId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
         let queryExpression = AWSDynamoDBQueryExpression()
         queryExpression.indexName = "FollowersIndex"
@@ -121,6 +120,6 @@ class AWSUserRelationshipsFollowersIndex: NSObject, Index {
         queryExpression.expressionAttributeNames = ["#followingId": "followingId",]
         queryExpression.expressionAttributeValues = [":followingId": followingId,]
         
-        objectMapper.query(AWSUserRelationship.self, expression: queryExpression, completionHandler: completionHandler)
-    }    
+        objectMapper.query(AWSRelationship.self, expression: queryExpression, completionHandler: completionHandler)
+    }
 }

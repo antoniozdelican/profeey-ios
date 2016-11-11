@@ -105,6 +105,8 @@ class PostDetailsTableViewController: UITableViewController {
             cell.postButtonsTableViewCellDelegate = self
             cell.numberOfLikesButton.isHidden = (post.numberOfLikesString != nil) ? false : true
             cell.numberOfLikesButton.setTitle(post.numberOfLikesString, for: UIControlState())
+            cell.numberOfCommentsButton.isHidden = (post.numberOfCommentsString != nil) ? false : true
+            cell.numberOfCommentsButton.setTitle(post.numberOfCommentsString, for: UIControlState())
             return cell
         default:
             return UITableViewCell()

@@ -148,7 +148,7 @@
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Caption" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SjZ-6Q-Cvw">
                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                            <color key="textColor" red="0.2901960784" green="0.2901960784" blue="0.2901960784" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="textColor" red="0.29019607843137252" green="0.29019607843137252" blue="0.29019607843137252" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
@@ -294,35 +294,6 @@
                                     <outlet property="progressView" destination="Mz5-tn-FAe" id="pSD-sA-txt"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellEmpty" rowHeight="120" id="cHp-1g-hmK" customClass="EmptyTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="733.5" width="375" height="120"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="cHp-1g-hmK" id="P4j-TQ-wro">
-                                    <frame key="frameInset" width="375" height="119"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Empty message." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MmY-P6-FqZ">
-                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                            <color key="textColor" red="0.2901960784" green="0.2901960784" blue="0.2901960784" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                    </subviews>
-                                    <constraints>
-                                        <constraint firstItem="MmY-P6-FqZ" firstAttribute="centerY" secondItem="P4j-TQ-wro" secondAttribute="centerY" id="8xb-3P-0bv"/>
-                                        <constraint firstItem="MmY-P6-FqZ" firstAttribute="leading" secondItem="P4j-TQ-wro" secondAttribute="leading" constant="16" id="Vva-QM-oja"/>
-                                        <constraint firstItem="MmY-P6-FqZ" firstAttribute="centerX" secondItem="P4j-TQ-wro" secondAttribute="centerX" id="cLy-DN-t6V"/>
-                                        <constraint firstAttribute="trailing" secondItem="MmY-P6-FqZ" secondAttribute="trailing" constant="16" id="uuj-B2-91F"/>
-                                    </constraints>
-                                    <variation key="default">
-                                        <mask key="constraints">
-                                            <exclude reference="cLy-DN-t6V"/>
-                                        </mask>
-                                    </variation>
-                                </tableViewCellContentView>
-                                <connections>
-                                    <outlet property="emptyMessageLabel" destination="MmY-P6-FqZ" id="zXo-QX-sVo"/>
-                                </connections>
-                            </tableViewCell>
                         </prototypes>
                         <connections>
                             <outlet property="dataSource" destination="Qkr-xF-wW1" id="wC5-QK-lPU"/>
@@ -350,6 +321,7 @@
                         <segue destination="P1G-ba-iDt" kind="show" identifier="segueToUsersVc" id="N0X-PW-F6Q"/>
                         <segue destination="fcG-wo-A8j" kind="presentation" identifier="segueToEditPostVc" animates="NO" id="Lgi-4f-QXa"/>
                         <segue destination="OtY-w6-n9d" kind="show" identifier="segueToCommentsVc" id="gfO-go-YFo"/>
+                        <segue destination="zuL-f0-Fd6" kind="show" identifier="segueToDiscoverPeopleVc" id="eWr-pq-F5O"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5s8-oY-yAi" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -387,6 +359,14 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LpQ-V5-HTZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1486" y="547"/>
+        </scene>
+        <!--DiscoverPeople-->
+        <scene sceneID="oYF-CV-WYY">
+            <objects>
+                <viewControllerPlaceholder storyboardName="DiscoverPeople" id="zuL-f0-Fd6" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="26Q-oq-Gy1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1474" y="800"/>
         </scene>
         <!--Comments-->
         <scene sceneID="nml-SK-GJ3">

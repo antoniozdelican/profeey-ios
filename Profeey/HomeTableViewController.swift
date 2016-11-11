@@ -18,6 +18,8 @@ enum ImageType {
 
 class HomeTableViewController: UITableViewController {
     
+    @IBOutlet var homeEmptyFeedView: HomeEmptyFeedView!
+    
     fileprivate var posts: [Post] = []
     // Before any post is loaded.
     fileprivate var isLoadingPosts: Bool = false
@@ -35,8 +37,12 @@ class HomeTableViewController: UITableViewController {
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         self.tableView.delaysContentTouches = false
         self.tableView.contentInset = UIEdgeInsetsMake(-1.0, 0.0, 0.0, 0.0)
+        
+        // Set background views
         self.activityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
         self.tableView.backgroundView = self.activityIndicatorView
+        Bundle.main.loadNibNamed("HomeEmptyFeedView", owner: self, options: nil)
+        self.homeEmptyFeedView.homeEmptyFeedViewDelegate = self
         
         if let currentUser = AWSClientManager.defaultClientManager().userPool?.currentUser(), currentUser.isSignedIn {
             self.isLoadingPosts = true
@@ -107,10 +113,6 @@ class HomeTableViewController: UITableViewController {
         if self.isLoadingPosts {
             return 0
         }
-//        if self.posts.count == 0 {
-//            return 1
-//        }
-//        return self.posts.count
         return self.posts.count
     }
 
@@ -118,22 +120,13 @@ class HomeTableViewController: UITableViewController {
         if self.isLoadingPosts {
             return 0
         }
+        if section == 0 && self.isUploading {
+            return 2
+        }
         return 5
-//        if self.posts.count == 0 {
-//            return 1
-//        }
-//        if section == 0 && self.isUploading {
-//            return 2
-//        }
-//        return 5
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        if self.posts.count == 0 {
-//            let cell = tableView.dequeueReusableCell(withIdentifier: "cellEmpty", for: indexPath) as! EmptyTableViewCell
-//            cell.emptyMessageLabel.text = "You are not following anyone. \n Connect with people and discover their skills."
-//            return cell
-//        }
         if indexPath.section == 0 && self.isUploading {
             // Dummy post user.
             let user = self.posts[indexPath.section].user
@@ -212,9 +205,6 @@ class HomeTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-//        if self.posts.count == 0 {
-//            return 120.0
-//        }
         switch indexPath.row {
         case 0:
             return 64.0
@@ -235,9 +225,6 @@ class HomeTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//        if self.posts.count == 0 {
-//            return 120.0
-//        }
         switch indexPath.row {
         case 0:
             return 64.0
@@ -287,6 +274,9 @@ class HomeTableViewController: UITableViewController {
             let dummyPost = Post()
             dummyPost.user = PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB
             self.posts.insert(dummyPost, at: 0)
+            if let _ = self.tableView.backgroundView as? HomeEmptyFeedView {
+                self.tableView.backgroundView = nil
+            }
             self.tableView.reloadData()
             self.uploadImage(imageData, caption: post.caption, categoryName: post.categoryName)
         }
@@ -332,7 +322,7 @@ class HomeTableViewController: UITableViewController {
         })
     }
     
-    // Query the FEED!!!
+    // Query the feed.
     fileprivate func queryUserActivitiesDateSorted(_ userId: String) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         PRFYDynamoDBManager.defaultDynamoDBManager().queryUserActivitiesDateSortedDynamoDB(userId, completionHandler: {
@@ -347,6 +337,8 @@ class HomeTableViewController: UITableViewController {
                     self.tableView.reloadData()
                 } else {
                     guard let awsActivities = response?.items as? [AWSActivity], awsActivities.count > 0 else {
+                        // Set the homeEmptyFeedView.
+                        self.tableView.backgroundView = self.homeEmptyFeedView
                         self.tableView.reloadData()
                         return
                     }
@@ -502,11 +494,15 @@ class HomeTableViewController: UITableViewController {
             (task: AWSTask) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                self.isUploading = false
                 if let error = task.error {
                     print("savePost error: \(error)")
-                    self.isUploading = false
                     // Remove dummy post.
                     self.posts.remove(at: 0)
+                    // Add HomeEmptyFeedView if there's no followed posts.
+                    if self.posts.count == 0 {
+                        self.tableView.backgroundView = self.homeEmptyFeedView
+                    }
                     self.tableView.reloadData()
                 } else {
                     if let awsPost = task.result as? AWSPost {
@@ -514,7 +510,6 @@ class HomeTableViewController: UITableViewController {
                         let image = UIImage(data: imageData)
                         post.image = image
                         
-                        self.isUploading = false
                         // Remove dummy post.
                         self.posts.remove(at: 0)
                         // Add new post.
@@ -615,6 +610,8 @@ extension HomeTableViewController: PostUserTableViewCellDelegate {
                     self.removeImage(imageKey, postId: postId)
                     self.posts.remove(at: indexPath.section)
                     if self.posts.count == 0 {
+                        // Add HomeEmptyFeedView if there's no followed posts.
+                        self.tableView.backgroundView = self.homeEmptyFeedView
                         self.tableView.reloadData()
                     } else {
                         self.tableView.deleteSections(IndexSet(integer: indexPath.section), with: UITableViewRowAnimation.top)
@@ -688,5 +685,12 @@ extension HomeTableViewController: EditPostViewControllerDelegate {
         self.posts[postIndexPath.section].caption = post.caption
         self.posts[postIndexPath.section].categoryName = post.categoryName
         self.tableView.reloadSections(IndexSet(integer: postIndexPath.section), with: UITableViewRowAnimation.none)
+    }
+}
+
+extension HomeTableViewController: HomeEmptyFeedViewDelegate {
+    
+    func discoverButtonTapped() {
+        self.performSegue(withIdentifier: "segueToDiscoverPeopleVc", sender: self)
     }
 }

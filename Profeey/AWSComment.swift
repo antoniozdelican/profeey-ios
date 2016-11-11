@@ -17,6 +17,8 @@ class AWSComment: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     var _postId: String?
     var _creationDate: NSNumber?
     var _commentText: String?
+    // Need to update Post numberOfComments upon Comment create/delete
+    var _postUserId: String?
     
     // Commenter data.
     var _firstName: String?
@@ -25,12 +27,13 @@ class AWSComment: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     var _professionName: String?
     var _profilePicUrl: String?
     
-    convenience init(_userId: String?, _commentId: String?, _creationDate: NSNumber?, _postId: String?, _commentText: String?, _firstName: String?, _lastName: String?, _preferredUsername: String?, _professionName: String?, _profilePicUrl: String?) {
+    convenience init(_userId: String?, _commentId: String?, _creationDate: NSNumber?, _postId: String?, _postUserId: String?, _commentText: String?, _firstName: String?, _lastName: String?, _preferredUsername: String?, _professionName: String?, _profilePicUrl: String?) {
         self.init()
         self._userId = _userId
         self._commentId = _commentId
         self._creationDate = _creationDate
         self._postId = _postId
+        self._postUserId = _postUserId
         self._commentText = _commentText
         self._firstName = _firstName
         self._lastName = _lastName
@@ -40,11 +43,10 @@ class AWSComment: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     }
     
     // AWSCommentUpdate
-    convenience init(_userId: String?, _commentId: String?, _postId: String?, _commentText: String?) {
+    convenience init(_userId: String?, _commentId: String?, _commentText: String?) {
         self.init()
         self._userId = _userId
         self._commentId = _commentId
-        self._postId = _postId
         self._commentText = _commentText
     }
     
@@ -75,6 +77,7 @@ class AWSComment: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
             "_userId" : "userId",
             "_commentId" : "commentId",
             "_postId" : "postId",
+            "_postUserId" : "postUserId",
             "_creationDate" : "creationDate",
             "_commentText" : "commentText",
             "_firstName" : "firstName",
