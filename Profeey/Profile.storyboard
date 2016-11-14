@@ -73,8 +73,8 @@
                                             </connections>
                                         </button>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AYK-7h-af6">
-                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                            <state key="normal" title="LOADING" backgroundImage="btn_disabled">
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <state key="normal" title="Loading" backgroundImage="btn_disabled">
                                                 <color key="titleColor" red="0.78039215689999997" green="0.78039215689999997" blue="0.80392156859999997" alpha="1" colorSpace="calibratedRGB"/>
                                             </state>
                                             <connections>
@@ -82,10 +82,13 @@
                                             </connections>
                                         </button>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C6H-Ma-A3h">
-                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                            <state key="normal" title="RECOMMEND" backgroundImage="btn_green">
-                                                <color key="titleColor" red="0.2666666667" green="0.68627450980000004" blue="0.41176470590000003" alpha="1" colorSpace="calibratedRGB"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <state key="normal" title="Loading" backgroundImage="btn_disabled">
+                                                <color key="titleColor" red="0.78039215689999997" green="0.78039215689999997" blue="0.80392156859999997" alpha="1" colorSpace="calibratedRGB"/>
                                             </state>
+                                            <connections>
+                                                <action selector="recommendButtonTapped:" destination="SE7-jf-WKl" eventType="touchUpInside" id="OB8-dl-msh"/>
+                                            </connections>
                                         </button>
                                     </subviews>
                                     <constraints>
@@ -583,7 +586,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Username" id="0bA-Nu-UhF">
-                        <barButtonItem key="rightBarButtonItem" style="plain" id="rMt-hz-4kb">
+                        <barButtonItem key="rightBarButtonItem" id="rMt-hz-4kb">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="kex-Kl-6Se">
                                 <rect key="frame" x="276" y="7" width="83" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -609,6 +612,7 @@
                         <segue destination="PJf-uH-Uhs" kind="show" identifier="segueToPostDetailsVc" id="gLq-A9-d4l"/>
                         <segue destination="fRr-CF-EQJ" kind="show" identifier="segueToUserCategoryVc" id="kpB-5t-Lgj"/>
                         <segue destination="tuV-Nb-HFU" kind="presentation" identifier="segueToCaptureVc" id="AGW-4w-jGo"/>
+                        <segue destination="flz-rV-RHI" kind="presentation" identifier="segueToAddRecommendationVc" id="vVB-qa-79w"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BV0-Xz-hgy" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -663,10 +667,17 @@
             </objects>
             <point key="canvasLocation" x="1268" y="-1439"/>
         </scene>
+        <!--AddRecommendation-->
+        <scene sceneID="nJZ-5b-CCY">
+            <objects>
+                <viewControllerPlaceholder storyboardName="AddRecommendation" id="flz-rV-RHI" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ADs-WC-obb" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1302" y="-1368"/>
+        </scene>
     </scenes>
     <resources>
         <image name="btn_disabled" width="120" height="32"/>
-        <image name="btn_green" width="120" height="32"/>
         <image name="btn_grey" width="120" height="32"/>
         <image name="ic_camera_black" width="22" height="22"/>
         <image name="ic_heart_white" width="20" height="20"/>

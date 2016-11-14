@@ -1,32 +1,34 @@
 //
-//  AWSRelationship.swift
+//  AWSRecommendation.swift
 //  Profeey
 //
-//  Created by Antonio Zdelican on 06/11/16.
+//  Created by Antonio Zdelican on 14/11/16.
 //  Copyright © 2016 Profeey. All rights reserved.
 //
 
 import Foundation
 import AWSDynamoDB
 
-class AWSRelationship: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
+class AWSRecommendation: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     
     var _userId: String?
-    var _followingId: String?
+    var _recommendingId: String?
     var _creationDate: NSNumber?
+    var _recommendationText: String?
     
-    // Follower data.
+    // Recommender data.
     var _firstName: String?
     var _lastName: String?
     var _preferredUsername: String?
     var _professionName: String?
     var _profilePicUrl: String?
     
-    convenience init(_userId: String?, _followingId: String?, _creationDate: NSNumber?, _firstName: String?, _lastName: String?, _preferredUsername: String?, _professionName: String?, _profilePicUrl: String?) {
+    convenience init(_userId: String?, _recommendingId: String?, _creationDate: NSNumber?, _recommendationText: String?, _firstName: String?, _lastName: String?, _preferredUsername: String?, _professionName: String?, _profilePicUrl: String?) {
         self.init()
         self._userId = _userId
-        self._followingId = _followingId
+        self._recommendingId = _recommendingId
         self._creationDate = _creationDate
+        self._recommendationText = _recommendationText
         self._firstName = _firstName
         self._lastName = _lastName
         self._preferredUsername = _preferredUsername
@@ -34,16 +36,16 @@ class AWSRelationship: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
         self._profilePicUrl = _profilePicUrl
     }
     
-    // To remove Like.
-    convenience init(_userId: String?, _followingId: String?) {
+    // To remove Recommendation.
+    convenience init(_userId: String?, _recommendingId: String?) {
         self.init()
         self._userId = _userId
-        self._followingId = _followingId
+        self._recommendingId = _recommendingId
     }
     
     class func dynamoDBTableName() -> String {
         
-        return "profeey-mobilehub-294297648-Relationships"
+        return "profeey-mobilehub-294297648-Recommendations"
     }
     
     class func hashKeyAttribute() -> String {
@@ -53,14 +55,15 @@ class AWSRelationship: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     
     class func rangeKeyAttribute() -> String {
         
-        return "_followingId"
+        return "_recommendingId"
     }
     
     override class func jsonKeyPathsByPropertyKey() -> [AnyHashable: Any] {
         return [
             "_userId" : "userId",
+            "_recommendingId" : "recommendingId",
             "_creationDate" : "creationDate",
-            "_followingId" : "followingId",
+            "_recommendationText" : "recommendationText",
             "_firstName" : "firstName",
             "_lastName" : "lastName",
             "_preferredUsername" : "preferredUsername",

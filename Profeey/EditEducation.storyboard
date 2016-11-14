@@ -205,7 +205,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Education" id="gGb-qk-pP8">
-                        <barButtonItem key="leftBarButtonItem" style="plain" systemItem="cancel" id="39F-8n-xKN">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="39F-8n-xKN">
                             <connections>
                                 <action selector="cancelButtonTapped:" destination="sTK-EU-LBK" id="cQH-NS-rRY"/>
                             </connections>

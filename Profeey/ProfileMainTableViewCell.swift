@@ -13,6 +13,7 @@ protocol ProfileMainTableViewCellDelegate {
     func numberOfFollowersButtonTapped()
     func numberOfRecommendationsButtonTapped()
     func followButtonTapped()
+    func recommendButtonTapped()
 }
 
 class ProfileMainTableViewCell: UITableViewCell {
@@ -36,20 +37,32 @@ class ProfileMainTableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
     }
     
+    func setRecommendButton() {
+        self.recommendButton.setTitle("Recommend", for: UIControlState())
+        self.recommendButton.setTitleColor(Colors.green, for: UIControlState())
+        self.recommendButton.setBackgroundImage(UIImage(named: "btn_green"), for: UIControlState())
+    }
+    
+    func setRecommendingButton() {
+        self.followButton.setTitle("Recommending", for: UIControlState())
+        self.followButton.setTitleColor(Colors.green, for: UIControlState())
+        self.followButton.setBackgroundImage(UIImage(named: "btn_green"), for: UIControlState())
+    }
+    
     func setEditButton() {
-        self.followButton.setTitle("EDIT PROFILE", for: UIControlState())
+        self.followButton.setTitle("Edit Profile", for: UIControlState())
         self.followButton.setTitleColor(Colors.greyDark, for: UIControlState())
         self.followButton.setBackgroundImage(UIImage(named: "btn_grey"), for: UIControlState())
     }
     
     func setFollowButton() {
-        self.followButton.setTitle("FOLLOW", for: UIControlState())
+        self.followButton.setTitle("Follow", for: UIControlState())
         self.followButton.setTitleColor(Colors.blue, for: UIControlState())
         self.followButton.setBackgroundImage(UIImage(named: "btn_blue"), for: UIControlState())
     }
     
     func setFollowingButton() {
-        self.followButton.setTitle("FOLLOWING", for: UIControlState())
+        self.followButton.setTitle("Following", for: UIControlState())
         self.followButton.setTitleColor(UIColor.white, for: UIControlState())
         self.followButton.setBackgroundImage(UIImage(named: "btn_blue_selected"), for: UIControlState())
     }
@@ -68,6 +81,9 @@ class ProfileMainTableViewCell: UITableViewCell {
         self.profileMainTableViewCellDelegate?.numberOfRecommendationsButtonTapped()
     }
     
+    @IBAction func recommendButtonTapped(_ sender: AnyObject) {
+        self.profileMainTableViewCellDelegate?.recommendButtonTapped()
+    }
     
     
     @IBAction func followButtonTapped(_ sender: AnyObject) {

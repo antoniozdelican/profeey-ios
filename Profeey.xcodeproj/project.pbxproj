@@ -127,6 +127,9 @@
 		A9B6A89B1D7F2E5D001EE407 /* AWSCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B6A89A1D7F2E5D001EE407 /* AWSCategory.swift */; };
 		A9B6A89D1D7F2ED4001EE407 /* AWSCategoriesTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B6A89C1D7F2ED4001EE407 /* AWSCategoriesTable.swift */; };
 		A9B6A89F1D7F8063001EE407 /* PostUserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B6A89E1D7F8063001EE407 /* PostUserTableViewCell.swift */; };
+		A9B6F0B11DD9EF180031FA2F /* AddRecommendationTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B6F0B01DD9EF180031FA2F /* AddRecommendationTableViewController.swift */; };
+		A9B6F0B41DDA22D80031FA2F /* AWSRecommendation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B6F0B31DDA22D80031FA2F /* AWSRecommendation.swift */; };
+		A9B6F0B61DDA23B40031FA2F /* AWSRecommendationsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B6F0B51DDA23B40031FA2F /* AWSRecommendationsTable.swift */; };
 		A9B750011D8782C200DDC8C8 /* AWSActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B750001D8782C200DDC8C8 /* AWSActivity.swift */; };
 		A9B750051D8783BE00DDC8C8 /* AWSActivitiesTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B750041D8783BE00DDC8C8 /* AWSActivitiesTable.swift */; };
 		A9B7A2441D65A562009DA340 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B7A2431D65A562009DA340 /* Category.swift */; };
@@ -180,8 +183,6 @@
 		A9D21B411D5B5F6900B5847D /* AWSMobileAnalytics.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A9D21B2D1D5B5F5A00B5847D /* AWSMobileAnalytics.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A9D21B421D5B5F6900B5847D /* AWSS3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9D21B2E1D5B5F5A00B5847D /* AWSS3.framework */; };
 		A9D21B431D5B5F6900B5847D /* AWSS3.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A9D21B2E1D5B5F5A00B5847D /* AWSS3.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		A9D21B451D5B662100B5847D /* PRFYUserPoolManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D21B441D5B662100B5847D /* PRFYUserPoolManager.swift */; };
-		A9D21B471D5B664F00B5847D /* UserPoolManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D21B461D5B664F00B5847D /* UserPoolManager.swift */; };
 		A9D334081D800D8D005565C2 /* PostImageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D334071D800D8D005565C2 /* PostImageTableViewCell.swift */; };
 		A9D3340C1D801693005565C2 /* PostInfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D3340B1D801693005565C2 /* PostInfoTableViewCell.swift */; };
 		A9D334121D801B70005565C2 /* PostButtonsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D334111D801B70005565C2 /* PostButtonsTableViewCell.swift */; };
@@ -366,6 +367,9 @@
 		A9B6A89A1D7F2E5D001EE407 /* AWSCategory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSCategory.swift; sourceTree = "<group>"; };
 		A9B6A89C1D7F2ED4001EE407 /* AWSCategoriesTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSCategoriesTable.swift; sourceTree = "<group>"; };
 		A9B6A89E1D7F8063001EE407 /* PostUserTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostUserTableViewCell.swift; sourceTree = "<group>"; };
+		A9B6F0B01DD9EF180031FA2F /* AddRecommendationTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddRecommendationTableViewController.swift; sourceTree = "<group>"; };
+		A9B6F0B31DDA22D80031FA2F /* AWSRecommendation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSRecommendation.swift; sourceTree = "<group>"; };
+		A9B6F0B51DDA23B40031FA2F /* AWSRecommendationsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSRecommendationsTable.swift; sourceTree = "<group>"; };
 		A9B750001D8782C200DDC8C8 /* AWSActivity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSActivity.swift; sourceTree = "<group>"; };
 		A9B750041D8783BE00DDC8C8 /* AWSActivitiesTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSActivitiesTable.swift; sourceTree = "<group>"; };
 		A9B7A2431D65A562009DA340 /* Category.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
@@ -405,8 +409,6 @@
 		A9D21B2C1D5B5F5A00B5847D /* AWSLambda.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSLambda.framework; path = Profeey/AWSLambda.framework; sourceTree = "<group>"; };
 		A9D21B2D1D5B5F5A00B5847D /* AWSMobileAnalytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSMobileAnalytics.framework; path = Profeey/AWSMobileAnalytics.framework; sourceTree = "<group>"; };
 		A9D21B2E1D5B5F5A00B5847D /* AWSS3.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSS3.framework; path = Profeey/AWSS3.framework; sourceTree = "<group>"; };
-		A9D21B441D5B662100B5847D /* PRFYUserPoolManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PRFYUserPoolManager.swift; sourceTree = "<group>"; };
-		A9D21B461D5B664F00B5847D /* UserPoolManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserPoolManager.swift; sourceTree = "<group>"; };
 		A9D334071D800D8D005565C2 /* PostImageTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostImageTableViewCell.swift; sourceTree = "<group>"; };
 		A9D3340B1D801693005565C2 /* PostInfoTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostInfoTableViewCell.swift; sourceTree = "<group>"; };
 		A9D334111D801B70005565C2 /* PostButtonsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostButtonsTableViewCell.swift; sourceTree = "<group>"; };
@@ -883,6 +885,15 @@
 			name = Categories;
 			sourceTree = "<group>";
 		};
+		A9B6F0B21DDA22BB0031FA2F /* AWSRecommendations */ = {
+			isa = PBXGroup;
+			children = (
+				A9B6F0B31DDA22D80031FA2F /* AWSRecommendation.swift */,
+				A9B6F0B51DDA23B40031FA2F /* AWSRecommendationsTable.swift */,
+			);
+			name = AWSRecommendations;
+			sourceTree = "<group>";
+		};
 		A9B70C9D1D871CBA00B9882A /* Post Details */ = {
 			isa = PBXGroup;
 			children = (
@@ -951,6 +962,7 @@
 			isa = PBXGroup;
 			children = (
 				A9D49EEA1DD602D6000F90A8 /* AddRecommendation.storyboard */,
+				A9B6F0B01DD9EF180031FA2F /* AddRecommendationTableViewController.swift */,
 			);
 			name = "Add Recommendation";
 			sourceTree = "<group>";
@@ -1072,6 +1084,7 @@
 				A9B74FFF1D8782B300DDC8C8 /* AWSActivities */,
 				A9D185D51D7192230073E65F /* AWSLikes */,
 				A91A7B021DC4FA7C00F7D6A7 /* AWSComments */,
+				A9B6F0B21DDA22BB0031FA2F /* AWSRecommendations */,
 				A9193A2F1D6F130700E38F56 /* AWSRelationships */,
 				A98A38221D8C070A00C9CA75 /* AWSUserCategories */,
 				A9EDB7971D72CFF900499FBB /* AWSCategories */,
@@ -1082,8 +1095,6 @@
 				A94797AD1D2E3C6B007CBF08 /* AWSConstants.swift */,
 				A95C31B81D3E35AA0003377F /* AWSClientManager.swift */,
 				A961875E1D3FA67B0028DEA7 /* ClientManager.swift */,
-				A9D21B441D5B662100B5847D /* PRFYUserPoolManager.swift */,
-				A9D21B461D5B664F00B5847D /* UserPoolManager.swift */,
 				A913FC711D51FAD6000D10A6 /* PRFYDynamoDBManager.swift */,
 				A913FC6F1D51F6AF000D10A6 /* DynamoDBManager.swift */,
 				A9EAD33F1D1E8E0C00994292 /* NoSQLModelHelpers.swift */,
@@ -1250,7 +1261,6 @@
 				A90A09581D43E5A7006AC49D /* WelcomeNavigationController.swift in Sources */,
 				A92F93ED1DC3940A00065CD1 /* EditProfileTableViewController.swift in Sources */,
 				A9543CB11DA3C51B002BF372 /* EditPostDescriptionTableViewCell.swift in Sources */,
-				A9D21B451D5B662100B5847D /* PRFYUserPoolManager.swift in Sources */,
 				A9C808151D916C1B0018109C /* EditProfilePicTableViewCell.swift in Sources */,
 				A9B7A24A1D65D8C0009DA340 /* HomeTableViewController.swift in Sources */,
 				A9AA36371D9463E100E5EAFA /* SignUpTableViewController.swift in Sources */,
@@ -1274,7 +1284,6 @@
 				A91828451DC0E49800EC9E63 /* LocationTableViewCell.swift in Sources */,
 				A98A38241D8C076C00C9CA75 /* AWSUserCategory.swift in Sources */,
 				A95C31B91D3E35AA0003377F /* AWSClientManager.swift in Sources */,
-				A9D21B471D5B664F00B5847D /* UserPoolManager.swift in Sources */,
 				A9AA36391D947C4E00E5EAFA /* LogInTableViewController.swift in Sources */,
 				A9D49EE51DD5DB1A000F90A8 /* UserCategoryTableViewController.swift in Sources */,
 				A9B68DA11D897A24006AC4EA /* EmptyTableViewCell.swift in Sources */,
@@ -1285,6 +1294,7 @@
 				A9D185D91D71927E0073E65F /* AWSLike.swift in Sources */,
 				A9D450631DCA247B000967E2 /* AWSCommentsTable.swift in Sources */,
 				A9B6A89D1D7F2ED4001EE407 /* AWSCategoriesTable.swift in Sources */,
+				A9B6F0B61DDA23B40031FA2F /* AWSRecommendationsTable.swift in Sources */,
 				A915F86E1DC0D49C0031C45F /* LocationsTableViewController.swift in Sources */,
 				A9AC8FC01DBDFF5200C9BCE0 /* PostDetailsTableViewController.swift in Sources */,
 				A9B934B01D1BD9BB00ACC2B8 /* OnboardingViewController.swift in Sources */,
@@ -1305,6 +1315,7 @@
 				A9E4507A1D59E6C500D14553 /* CommentTableViewCell.swift in Sources */,
 				A9BF16491D6514C900060A9E /* NoResultsTableViewCell.swift in Sources */,
 				A915F8731DC0D6580031C45F /* AWSLocationsTable.swift in Sources */,
+				A9B6F0B11DD9EF180031FA2F /* AddRecommendationTableViewController.swift in Sources */,
 				A96622051D0EC49700298CE7 /* Colors.swift in Sources */,
 				A9D334121D801B70005565C2 /* PostButtonsTableViewCell.swift in Sources */,
 				A9E050F41D83065D00DD992D /* LocationOldTableViewCell.swift in Sources */,
@@ -1345,6 +1356,7 @@
 				A9C8081C1D916C660018109C /* EditAboutTableViewCell.swift in Sources */,
 				A91A10351DA7F59F0042B4CA /* GalleryViewController.swift in Sources */,
 				A91A7B041DC4FA9300F7D6A7 /* AWSComment.swift in Sources */,
+				A9B6F0B41DDA22D80031FA2F /* AWSRecommendation.swift in Sources */,
 				A9AFFB061D8AD9DE00219627 /* SearchUserTableViewCell.swift in Sources */,
 				A9B185951DCF25CF00E1981D /* AWSRelationshipsTable.swift in Sources */,
 				A9F49D571D379D01002EB68B /* AWSPost.swift in Sources */,

@@ -133,18 +133,4 @@ class AWSClientManager: NSObject, ClientManager {
         attributes.append(preferredUsernameAttribute!)
         self.userPool?.currentUser()?.update(attributes).continue(completionHandler)
     }
-    
-//    func signOut(_ completionHandler: @escaping AWSContinuationBlock) {
-//        // UserPool signOut.
-//        PRFYUserPoolManager.defaultUserPoolManager().signOutUserPool(completionHandler)
-//        // Credentials provider cleanUp.
-//        self.credentialsProvider?.clearKeychain()
-//        // User file manager cleanUp.
-//        self.userFileManager?.clearCache()
-//    }
-    
-//    func getUserDetails(_ completionHandler: @escaping (AWSTask<AWSCognitoIdentityUserGetDetailsResponse>) -> Any?) {
-//        // UserPool getUserDetails.
-//        PRFYUserPoolManager.defaultUserPoolManager().getUserDetailsUserPool(completionHandler)
-//    }
 }

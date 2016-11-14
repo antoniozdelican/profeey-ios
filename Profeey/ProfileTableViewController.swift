@@ -20,10 +20,13 @@ class ProfileTableViewController: UITableViewController {
     
     var user: User?
     var isCurrentUser: Bool = false
+    
+    fileprivate var hasRecommendationLoaded = false
+    fileprivate var isRecommending: Bool = false
+    
     fileprivate var hasRelationshipLoaded = false
     fileprivate var isFollowing: Bool = false
-    fileprivate var indexPathMain = IndexPath(row: 0, section: 0)
-    fileprivate var indexPathInfo = IndexPath(row: 1, section: 0)
+    
     fileprivate var selectedProfileSegment: ProfileSegment = ProfileSegment.posts
     
     fileprivate var isLoadingPosts: Bool = true
@@ -110,6 +113,10 @@ class ProfileTableViewController: UITableViewController {
             destinationViewController.userCategory = self.userCategories[indexPath.row]
             destinationViewController.userCategoryTableViewControllerDelegate = self
         }
+        if let destinationViewController = segue.destination as? UINavigationController,
+            let childViewController = destinationViewController.childViewControllers[0] as? AddRecommendationTableViewController {
+            childViewController.user = self.user
+        }
     }
 
     // MARK: UITableViewDataSource
@@ -165,19 +172,30 @@ class ProfileTableViewController: UITableViewController {
                 cell.profilePicImageView.image = self.user?.profilePic
                 cell.numberOfPostsButton.setTitle(self.user?.numberOfPostsInt.numberToString(), for: UIControlState.normal)
                 cell.numberOfFollowersButton.setTitle(self.user?.numberOfFollowersInt.numberToString(), for: UIControlState.normal)
-                if self.hasRelationshipLoaded {
-                    if self.isCurrentUser {
-                        cell.setEditButton()
-                    } else {
-                        if self.isFollowing {
-                            cell.setFollowingButton()
-                        } else {
-                            cell.setFollowButton()
-                        }
+//                if self.hasRelationshipLoaded {
+//                    if self.isCurrentUser {
+//                        cell.setEditButton()
+//                    } else {
+//                        if self.isFollowing {
+//                            cell.setFollowingButton()
+//                        } else {
+//                            cell.setFollowButton()
+//                        }
+//                    }
+//                }
+                if self.isCurrentUser {
+                    cell.recommendButton.isHidden = true
+                    cell.setEditButton()
+                } else {
+                    cell.recommendButton.isHidden = false
+                    if self.hasRecommendationLoaded {
+                        self.isRecommending ? cell.setRecommendingButton() : cell.setRecommendButton()
+                    }
+                    if self.hasRelationshipLoaded {
+                        self.isFollowing ? cell.setFollowingButton() : cell.setFollowButton()
                     }
                 }
                 cell.profileMainTableViewCellDelegate = self
-                cell.recommendButton.isHidden = false
                 return cell
             case 1:
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellProfileInfo", for: indexPath) as! ProfileInfoTableViewCell
@@ -494,19 +512,27 @@ class ProfileTableViewController: UITableViewController {
                     }
                     let user = User(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, about: awsUser._about, locationName: awsUser._locationName, numberOfFollowers: awsUser._numberOfFollowers, numberOfPosts: awsUser._numberOfPosts, topCategories: awsUser._topCategories)
                     self.user = user
-                    if let userId = awsUser._userId {
-                        if self.isCurrentUser {
-                            self.hasRelationshipLoaded = true
-                        } else {
-                            self.getRelationship(userId, indexPath: self.indexPathMain)
-                        }
-                    }
-                    self.tableView.reloadRows(at: [self.indexPathMain, self.indexPathInfo], with: UITableViewRowAnimation.none)
+//                    if let userId = awsUser._userId {
+//                        if self.isCurrentUser {
+//                            self.hasRelationshipLoaded = true
+//                            self.hasRecommendationLoaded = true
+//                        } else {
+//                            self.getRelationship(userId)
+//                            self.getRecommendation(userId)
+//                            
+//                        }
+//                    }
+                    
+                    self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0), IndexPath(row: 1, section: 0)], with: UITableViewRowAnimation.none)
                     self.navigationItem.title = self.user?.preferredUsername
                     if let profilePicUrl = awsUser._profilePicUrl {
-                        self.downloadImage(profilePicUrl, imageType: .userProfilePic, indexPath: self.indexPathMain)
+                        self.downloadImage(profilePicUrl, imageType: .userProfilePic, indexPath: IndexPath(row: 0, section: 0))
                     }
                     if let userId = awsUser._userId {
+                        if !self.isCurrentUser {
+                            self.getRelationship(userId)
+                            self.getRecommendation(userId)
+                        }
                         self.queryUserPostsDateSorted(userId)
                         self.queryWorkExperiences(userId)
                         self.queryEducations(userId)
@@ -514,7 +540,6 @@ class ProfileTableViewController: UITableViewController {
                     }
                     // For now
                     self.refreshControl?.endRefreshing()
-                    
                 }
             })
             return nil
@@ -554,7 +579,6 @@ class ProfileTableViewController: UITableViewController {
                                 self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
                             }
                         }
-                        
                         if let imageUrl = awsPost._imageUrl {
                             self.downloadImage(imageUrl, imageType: .postPic, indexPath: IndexPath(row: index, section: 1))
                         }
@@ -775,7 +799,7 @@ class ProfileTableViewController: UITableViewController {
         })
     }
     
-    fileprivate func getRelationship(_ followingId: String, indexPath: IndexPath) {
+    fileprivate func getRelationship(_ followingId: String) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         PRFYDynamoDBManager.defaultDynamoDBManager().getRelationshipDynamoDB(followingId, completionHandler: {
             (task: AWSTask) in
@@ -786,7 +810,7 @@ class ProfileTableViewController: UITableViewController {
                 } else {
                     self.isFollowing = (task.result != nil)
                     self.hasRelationshipLoaded = true
-                    self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
+                    self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.none)
                 }
             })
             return nil
@@ -816,6 +840,26 @@ class ProfileTableViewController: UITableViewController {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 if let error = task.error {
                     print("unfollowUser error: \(error)")
+                }
+            })
+            return nil
+        })
+    }
+    
+    fileprivate func getRecommendation(_ recommendingId: String) {
+        print("HERE getRecommendation")
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().getRecommendationDynamoDB(recommendingId, completionHandler: {
+            (task: AWSTask) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                if let error = task.error {
+                    print("getRecommendation error: \(error)")
+                } else {
+                    print("DONE")
+                    self.isRecommending = (task.result != nil)
+                    self.hasRecommendationLoaded = true
+                    self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.none)
                 }
             })
             return nil
@@ -884,6 +928,16 @@ extension ProfileTableViewController: ProfileMainTableViewCellDelegate {
                     self.followUser(followingId)
                 }
                 self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.none)
+            }
+        }
+    }
+    
+    func recommendButtonTapped() {
+        if !self.isCurrentUser, self.hasRecommendationLoaded {
+            if self.isRecommending {
+                // TODO
+            } else {
+                self.performSegue(withIdentifier: "segueToAddRecommendationVc", sender: self)
             }
         }
     }
@@ -968,7 +1022,7 @@ extension ProfileTableViewController: EditProfileTableViewControllerDelegate {
         self.user?.professionName = user?.professionName
         self.user?.about = user?.about
         self.user?.locationName = user?.locationName
-        self.tableView.reloadRows(at: [self.indexPathMain, self.indexPathInfo], with: UITableViewRowAnimation.none)
+        self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0), IndexPath(row: 1, section: 0)], with: UITableViewRowAnimation.none)
         // Remove image in background.
         if let profilePicUrlToRemove = profilePicUrlToRemove {
             self.removeImage(profilePicUrlToRemove, postId: nil)

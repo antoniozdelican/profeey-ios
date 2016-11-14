@@ -15,7 +15,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="0dO-XV-woE" kind="relationship" relationship="rootViewController" id="p9A-J1-cnt"/>
+                        <segue destination="PiB-yQ-Ple" kind="relationship" relationship="rootViewController" id="j7Z-xi-fli"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7vH-JD-eVh" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -23,49 +23,104 @@
             <point key="canvasLocation" x="-745" y="5"/>
         </scene>
         <!--Add Recommendation-->
-        <scene sceneID="m4c-3Q-QLX">
+        <scene sceneID="8cA-T2-Ljo">
             <objects>
-                <viewController id="0dO-XV-woE" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="NNT-D3-btS"/>
-                        <viewControllerLayoutGuide type="bottom" id="jjb-Zj-fKh"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="moh-hU-h9C">
+                <tableViewController id="PiB-yQ-Ple" customClass="AddRecommendationTableViewController" customModule="Profeey" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="52" sectionHeaderHeight="28" sectionFooterHeight="28" id="tar-k0-vmL">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="lzM-Yy-VyD">
-                                <color key="backgroundColor" red="0.90980392160000001" green="0.90980392160000001" blue="0.90980392160000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="40" id="Cej-yZ-0rz"/>
-                                    <constraint firstAttribute="height" constant="40" id="FPg-LG-nz7"/>
-                                </constraints>
-                            </imageView>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Test" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Qtb-GL-xck">
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <color key="textColor" red="0.1960784314" green="0.1960784314" blue="0.1960784314" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
-                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="lzM-Yy-VyD" firstAttribute="leading" secondItem="moh-hU-h9C" secondAttribute="leading" constant="16" id="4bw-SA-p8d"/>
-                            <constraint firstAttribute="trailing" secondItem="Qtb-GL-xck" secondAttribute="trailing" constant="12" id="HWC-lY-Ig9"/>
-                            <constraint firstItem="Qtb-GL-xck" firstAttribute="top" secondItem="lzM-Yy-VyD" secondAttribute="bottom" constant="12" id="WVy-VK-NAA"/>
-                            <constraint firstItem="jjb-Zj-fKh" firstAttribute="top" secondItem="Qtb-GL-xck" secondAttribute="bottom" constant="16" id="e5x-gE-9kI"/>
-                            <constraint firstItem="lzM-Yy-VyD" firstAttribute="top" secondItem="NNT-D3-btS" secondAttribute="bottom" constant="16" id="nUj-jv-8l4"/>
-                            <constraint firstItem="Qtb-GL-xck" firstAttribute="leading" secondItem="moh-hU-h9C" secondAttribute="leading" constant="12" id="sUi-l6-cxc"/>
-                        </constraints>
-                    </view>
-                    <navigationItem key="navigationItem" title="Add Recommendation" id="ka2-ck-LK1">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="Kyv-Xy-sJc"/>
-                        <barButtonItem key="rightBarButtonItem" title="Post" id="riX-DI-jC3"/>
+                        <gestureRecognizers/>
+                        <inset key="separatorInset" minX="16" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        <sections>
+                            <tableViewSection id="db7-NM-wam">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="72" id="3ro-gE-6fC">
+                                        <rect key="frame" x="0.0" y="64" width="375" height="72"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="3ro-gE-6fC" id="yX7-Ux-lXP">
+                                            <frame key="frameInset" width="375" height="72"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Cdb-TR-iwt">
+                                                    <color key="backgroundColor" red="0.90980392160000001" green="0.90980392160000001" blue="0.90980392160000001" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="40" id="dmE-cm-oqd"/>
+                                                        <constraint firstAttribute="width" constant="40" id="vC0-7P-QyM"/>
+                                                    </constraints>
+                                                </imageView>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="Cdb-TR-iwt" firstAttribute="leading" secondItem="yX7-Ux-lXP" secondAttribute="leading" constant="16" id="70j-EX-8Ac"/>
+                                                <constraint firstItem="Cdb-TR-iwt" firstAttribute="top" secondItem="yX7-Ux-lXP" secondAttribute="top" constant="16" id="uNZ-fs-i0x"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="48" id="Rho-Dc-3vE">
+                                        <rect key="frame" x="0.0" y="136" width="375" height="48"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Rho-Dc-3vE" id="iMc-W8-Oeb">
+                                            <frame key="frameInset" width="375" height="48"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Write a recommendation..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pcq-3A-F9W">
+                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                    <color key="textColor" red="0.78039215689999997" green="0.78039215689999997" blue="0.80392156859999997" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="3s8-zE-iPG">
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                    <color key="textColor" red="0.1960784314" green="0.1960784314" blue="0.1960784314" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                                </textView>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="pcq-3A-F9W" firstAttribute="leading" secondItem="iMc-W8-Oeb" secondAttribute="leading" constant="17" id="1ik-M4-BWh"/>
+                                                <constraint firstAttribute="bottom" secondItem="3s8-zE-iPG" secondAttribute="bottom" constant="12.5" id="eFp-lj-4Sg"/>
+                                                <constraint firstItem="3s8-zE-iPG" firstAttribute="leading" secondItem="iMc-W8-Oeb" secondAttribute="leading" constant="12" id="gmV-cR-OF1"/>
+                                                <constraint firstAttribute="trailing" secondItem="3s8-zE-iPG" secondAttribute="trailing" constant="12" id="lnd-Iv-xXQ"/>
+                                                <constraint firstItem="pcq-3A-F9W" firstAttribute="top" secondItem="iMc-W8-Oeb" secondAttribute="top" constant="8" id="r9n-FA-42w"/>
+                                                <constraint firstItem="3s8-zE-iPG" firstAttribute="top" secondItem="iMc-W8-Oeb" secondAttribute="top" id="xgJ-8K-J4J"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                        </sections>
+                        <connections>
+                            <outlet property="dataSource" destination="PiB-yQ-Ple" id="qN5-gK-hHj"/>
+                            <outlet property="delegate" destination="PiB-yQ-Ple" id="rsO-Rj-lsN"/>
+                            <outletCollection property="gestureRecognizers" destination="bIL-jI-myi" appends="YES" id="Thf-vy-LBY"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Add Recommendation" id="7v6-NU-7nJ">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="Njb-HK-XoU">
+                            <connections>
+                                <action selector="cancelButtonTapped:" destination="PiB-yQ-Ple" id="UwF-EE-tWc"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Post" id="hOg-aZ-oho">
+                            <connections>
+                                <action selector="postButtonTapped:" destination="PiB-yQ-Ple" id="EWm-Zq-MII"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="cGe-1u-gky" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                    <connections>
+                        <outlet property="postButton" destination="hOg-aZ-oho" id="yLN-E9-4KS"/>
+                        <outlet property="profilePicImageView" destination="Cdb-TR-iwt" id="vrn-e8-fsi"/>
+                        <outlet property="recommendationFakePlaceholderLabel" destination="pcq-3A-F9W" id="X5x-1W-nUv"/>
+                        <outlet property="recommendationTextView" destination="3s8-zE-iPG" id="1dK-4U-XOA"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="B6g-2v-tqK" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="bIL-jI-myi">
+                    <connections>
+                        <action selector="tableViewTapped:" destination="PiB-yQ-Ple" id="t1M-o0-j3g"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="108" y="4.9475262368815596"/>
+            <point key="canvasLocation" x="144.80000000000001" y="4.9475262368815596"/>
         </scene>
     </scenes>
 </document>
