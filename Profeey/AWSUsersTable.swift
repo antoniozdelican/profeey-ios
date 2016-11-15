@@ -44,29 +44,10 @@ class AWSUsersTable: NSObject, Table {
         return AWSUser.jsonKeyPathsByPropertyKey()[dataObjectAttributeName] as! String
     }
     
-    // Scan all (upto 10) users in the Users table.
     func scanUsers(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
         let scanExpression = AWSDynamoDBScanExpression()
-        scanExpression.limit = 10
-        objectMapper.scan(AWSUser.self, expression: scanExpression, completionHandler: completionHandler)
-    }
-    
-    func scanUsersByName(_ searchFirstName: String, searchLastName: String, searchPreferredUsername: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
-        let objectMapper = AWSDynamoDBObjectMapper.default()
-        let scanExpression = AWSDynamoDBScanExpression()
-        scanExpression.filterExpression = "begins_with(#searchFirstName, :searchFirstName) OR begins_with(#searchLastName, :searchLastName) OR begins_with(#searchPreferredUsername, :searchPreferredUsername)"
-        scanExpression.expressionAttributeNames = [
-            "#searchFirstName": "searchFirstName",
-            "#searchLastName": "searchLastName",
-            "#searchPreferredUsername": "searchPreferredUsername",
-        ]
-        scanExpression.expressionAttributeValues = [
-            ":searchFirstName": searchFirstName,
-            ":searchLastName": searchLastName,
-            ":searchPreferredUsername": searchPreferredUsername,
-        ]
-        scanExpression.limit = 10
+//        scanExpression.limit = 10
         objectMapper.scan(AWSUser.self, expression: scanExpression, completionHandler: completionHandler)
     }
     
@@ -80,27 +61,8 @@ class AWSUsersTable: NSObject, Table {
         scanExpression.expressionAttributeValues = [
             ":searchProfessionName": searchProfessionName,
         ]
-        scanExpression.limit = 10
         objectMapper.scan(AWSUser.self, expression: scanExpression, completionHandler: completionHandler)
     }
-    
-    func scanUsersByProfessionAndLocationName(_ searchProfessionName: String, locationName: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
-        let objectMapper = AWSDynamoDBObjectMapper.default()
-        let scanExpression = AWSDynamoDBScanExpression()
-        scanExpression.filterExpression = "begins_with(#searchProfessionName, :searchProfessionName) AND begins_with(#locationName, :locationName)"
-        scanExpression.expressionAttributeNames = [
-            "#searchProfessionName": "searchProfessionName",
-            "#locationName": "locationName",
-        ]
-        scanExpression.expressionAttributeValues = [
-            ":searchProfessionName": searchProfessionName,
-            ":locationName": locationName,
-        ]
-        scanExpression.limit = 10
-        objectMapper.scan(AWSUser.self, expression: scanExpression, completionHandler: completionHandler)
-    }
-    
-    // Find a user with userId.
 
     func getUser(_ userId: String, completionHandler: @escaping AWSContinuationBlock) {
         let objectMapper = AWSDynamoDBObjectMapper.default()

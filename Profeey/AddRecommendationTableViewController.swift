@@ -7,6 +7,11 @@
 //
 
 import UIKit
+import AWSMobileHubHelper
+
+protocol AddRecommendationTableViewControllerDelegate {
+    func recommendationAdded()
+}
 
 class AddRecommendationTableViewController: UITableViewController {
 
@@ -16,11 +21,13 @@ class AddRecommendationTableViewController: UITableViewController {
     @IBOutlet weak var recommendationFakePlaceholderLabel: UILabel!
     
     var user: User?
+    var addRecommendationTableViewControllerDelegate: AddRecommendationTableViewControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.profilePicImageView.layer.cornerRadius = 4.0
         self.profilePicImageView.clipsToBounds = true
+        self.profilePicImageView.image = PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB?.profilePic
         self.postButton.isEnabled = false
         self.recommendationTextView.delegate = self
     }
@@ -67,7 +74,34 @@ class AddRecommendationTableViewController: UITableViewController {
     }
     
     @IBAction func postButtonTapped(_ sender: AnyObject) {
-        // TODO
+        self.view.endEditing(true)
+        self.createRecommendation(self.recommendationTextView.text)
+    }
+    
+    // MARK: AWS
+    
+    fileprivate func createRecommendation(_ recommendationText: String) {
+        guard let recommendingId = self.user?.userId else {
+            return
+        }
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        FullScreenIndicator.show()
+        PRFYDynamoDBManager.defaultDynamoDBManager().createRecommendationDynamoDB(recommendingId, recommendationText: recommendationText, completionHandler: {
+            (task: AWSTask) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                FullScreenIndicator.hide()
+                if let error = task.error {
+                    print("createRecommendation error: \(error)")
+                    let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.localizedDescription, cancelButtonTitle: "Ok")
+                    self.present(alertController, animated: true, completion: nil)
+                } else {
+                    self.addRecommendationTableViewControllerDelegate?.recommendationAdded()
+                    self.dismiss(animated: true, completion: nil)
+                }
+            })
+            return nil
+        })
     }
 }
 

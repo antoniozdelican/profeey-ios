@@ -1,27 +1,30 @@
 //
-//  CommentsTableViewController.swift
+//  RecommendationsTableViewController.swift
 //  Profeey
 //
-//  Created by Antonio Zdelican on 09/08/16.
+//  Created by Antonio Zdelican on 15/11/16.
 //  Copyright © 2016 Profeey. All rights reserved.
 //
 
 import UIKit
 import AWSMobileHubHelper
+import AWSDynamoDB
 
-protocol CommentsTableViewControllerDelegate {
-    func scrollViewWillBeginDragging()
-    func didSelectRow(_ indexPath: IndexPath)
-}
-
-class CommentsTableViewController: UITableViewController {
+class RecommendationsTableViewController: UITableViewController {
     
-    var commentsTableViewControllerDelegate: CommentsTableViewControllerDelegate?
-    fileprivate var comments: [Comment] = []
-    fileprivate var isLoadingComments: Bool = false
+    var user: User?
+    
+    fileprivate var recommendations: [Recommendation] = []
+    fileprivate var isLoadingRecommendations: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        
+        if let recommendingId = self.user?.userId {
+            self.isLoadingRecommendations = true
+            self.queryRecommendationsDateSorted(recommendingId)
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -32,11 +35,12 @@ class CommentsTableViewController: UITableViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destinationViewController = segue.destination as? ProfileTableViewController,
-            let cell = sender as? CommentTableViewCell,
+            let cell = sender as? RecommendationTableViewCell,
             let indexPath = self.tableView.indexPath(for: cell) {
-            destinationViewController.user = self.comments[indexPath.row].user
+            destinationViewController.user = self.recommendations[indexPath.row].user
         }
     }
+    
 
     // MARK: UITableViewDataSource
 
@@ -45,36 +49,35 @@ class CommentsTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if self.isLoadingComments {
+        if self.isLoadingRecommendations {
             return 1
         }
-        if self.comments.count == 0 {
+        if self.recommendations.count == 0 {
             return 1
         }
-        return self.comments.count
+        return self.recommendations.count
     }
-    
+
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if self.isLoadingComments {
+        if self.isLoadingRecommendations {
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellLoading", for: indexPath) as! LoadingTableViewCell
             cell.activityIndicator?.startAnimating()
             return cell
         }
-        if self.comments.count == 0 {
+        if self.recommendations.count == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellEmpty", for: indexPath) as! EmptyTableViewCell
-            cell.emptyMessageLabel.text = "No comments yet"
+            cell.emptyMessageLabel.text = "No recommendations yet"
             return cell
         }
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cellComment", for: indexPath) as! CommentTableViewCell
-        let comment = self.comments[indexPath.row]
-        let user = comment.user
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cellRecommendation", for: indexPath) as! RecommendationTableViewCell
+        let recommendation = self.recommendations[indexPath.row]
+        let user = recommendation.user
         cell.profilePicImageView.image = user?.profilePic
         cell.fullNameLabel.text = user?.fullName
         cell.preferredUsernameLabel.text = user?.fullUsername
         cell.professionNameLabel.text = user?.professionName
-        cell.commentLabel.text = comment.commentText
-        cell.timeLabel.text = comment.creationDateString
-        cell.commentTableViewCellDelegate = self
+        cell.recommendationTextLabel.text = recommendation.recommendationText
+        cell.timeLabel.text = recommendation.creationDateString
         return cell
     }
     
@@ -82,7 +85,7 @@ class CommentsTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.layoutMargins = UIEdgeInsets.zero
-        if !(cell is CommentTableViewCell) {
+        if !(cell is RecommendationTableViewCell) {
             cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
         }
     }
@@ -90,32 +93,58 @@ class CommentsTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let cell = tableView.cellForRow(at: indexPath)
-        if cell is CommentTableViewCell {
-            self.commentsTableViewControllerDelegate?.didSelectRow(indexPath)
+        if cell is RecommendationTableViewCell {
+            self.performSegue(withIdentifier: "segueToProfileVc", sender: cell)
         }
     }
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        if self.isLoadingComments || self.comments.count == 0 {
+        if self.isLoadingRecommendations || self.recommendations.count == 0 {
             return 112
         }
         return 104.0
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if self.isLoadingComments || self.comments.count == 0 {
+        if self.isLoadingRecommendations || self.recommendations.count == 0 {
             return 112
         }
         return UITableViewAutomaticDimension
     }
     
-    // MARK: UIScrollViewDelegate
-    
-    override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        self.commentsTableViewControllerDelegate?.scrollViewWillBeginDragging()
-    }
-    
     // MARK: AWS
+    
+    fileprivate func queryRecommendationsDateSorted(_ recommendingId: String) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().queryRecommendationsDateSortedDynamoDB(recommendingId, completionHandler: {
+            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                self.isLoadingRecommendations = false
+                if let error = error {
+                    print("queryRecommendationsDateSorted error: \(error)")
+                    self.tableView.reloadData()
+                } else {
+                    guard let awsRecommendations = response?.items as? [AWSRecommendation] else {
+                        self.tableView.reloadData()
+                        return
+                    }
+                    for awsRecommendation in awsRecommendations {
+                        let user = User(userId: awsRecommendation._userId, firstName: awsRecommendation._firstName, lastName: awsRecommendation._lastName, preferredUsername: awsRecommendation._preferredUsername, professionName: awsRecommendation._professionName, profilePicUrl: awsRecommendation._profilePicUrl)
+                        let recommendation = Recommendation(userId: awsRecommendation._userId, recommendingId: awsRecommendation._recommendingId, recommendationText: awsRecommendation._recommendationText, creationDate: awsRecommendation._creationDate, user: user)
+                        self.recommendations.append(recommendation)
+                    }
+                    self.tableView.reloadData()
+                    for (index, recommendation) in self.recommendations.enumerated() {
+                        if let profilePicUrl = recommendation.user?.profilePicUrl {
+                            let indexPath = IndexPath(row: index, section: 0)
+                            self.downloadImage(profilePicUrl, imageType: .userProfilePic, indexPath: indexPath)
+                        }
+                    }
+                }
+            })
+        })
+    }
     
     fileprivate func downloadImage(_ imageKey: String, imageType: ImageType, indexPath: IndexPath) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
@@ -129,10 +158,8 @@ class CommentsTableViewController: UITableViewController {
             let image = UIImage(data: content.cachedData)
             switch imageType {
             case .userProfilePic:
-                self.comments[indexPath.row].user?.profilePic = image
-                UIView.performWithoutAnimation {
-                    self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
-                }
+                self.recommendations[indexPath.row].user?.profilePic = image
+                self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
             default:
                 return
             }
@@ -158,10 +185,8 @@ class CommentsTableViewController: UITableViewController {
                             let image = UIImage(data: imageData)
                             switch imageType {
                             case .userProfilePic:
-                                self.comments[indexPath.row].user?.profilePic = image
-                                UIView.performWithoutAnimation {
-                                    self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
-                                }
+                                self.recommendations[indexPath.row].user?.profilePic = image
+                                self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
                             default:
                                 return
                             }
@@ -169,48 +194,5 @@ class CommentsTableViewController: UITableViewController {
                     })
             })
         }
-    }
-}
-
-extension CommentsTableViewController: CommentsViewControllerDelegate {
-    
-    func isLoadingComments(_ isLoading: Bool) {
-        self.isLoadingComments = isLoading
-        self.tableView.reloadData()
-    }
-    
-    func showComments(_ comments: [Comment]) {
-        self.comments = comments
-        self.tableView.reloadData()
-        
-        for (index, comment) in comments.enumerated() {
-            if let profilePicUrl = comment.user?.profilePicUrl {
-                let indexPath = IndexPath(row: index, section: 0)
-                self.downloadImage(profilePicUrl, imageType: ImageType.userProfilePic, indexPath: indexPath)
-            }
-        }
-    }
-    
-    func commentPosted(_ comment: Comment) {
-        self.comments.append(comment)
-        let indexPath = IndexPath(row: self.comments.count - 1, section: 0)
-        self.tableView.reloadData()
-        self.tableView.scrollToRow(at: indexPath, at: UITableViewScrollPosition.bottom, animated: false)
-    }
-    
-    func commentRemoved(_ indexPath: IndexPath) {
-        self.comments.remove(at: indexPath.row)
-        if self.comments.count == 0 {
-            self.tableView.reloadData()
-        } else {
-            self.tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.fade)
-        }
-    }
-}
-
-extension CommentsTableViewController: CommentTableViewCellDelegate {
-    
-    func userTapped(_ cell: CommentTableViewCell) {
-        self.performSegue(withIdentifier: "segueToProfileVc", sender: cell)
     }
 }

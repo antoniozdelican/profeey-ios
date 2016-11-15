@@ -71,8 +71,6 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
                 awsUser?._email = email
                 awsUser?._firstName = firstName
                 awsUser?._lastName = lastName
-                awsUser?._searchFirstName = firstName.lowercased()
-                awsUser?._searchLastName = lastName.lowercased()
                 awsUsersTable.saveUserSkipNull(awsUser, completionHandler: completionHandler)
                 return nil
             } else {
@@ -95,7 +93,6 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
                 let awsUser = AWSUser()
                 awsUser?._userId = identityId
                 awsUser?._preferredUsername = preferredUsername
-                awsUser?._searchPreferredUsername = preferredUsername.lowercased()
                 awsUser?._profilePicUrl = profilePicUrl
                 awsUsersTable.saveUserSkipNull(awsUser, completionHandler: completionHandler)
                 return nil
@@ -147,8 +144,6 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
                 awsUserUpdate?._profilePicUrl = user?.profilePicUrl
                 awsUserUpdate?._about = user?.about
                 awsUserUpdate?._locationName = user?.locationName
-                awsUserUpdate?._searchFirstName = user?.firstName?.lowercased()
-                awsUserUpdate?._searchLastName = user?.lastName?.lowercased()
                 awsUserUpdate?._searchProfessionName = user?.professionName?.lowercased()
                 usersTable.saveUser(awsUserUpdate, completionHandler: completionHandler)
                 return nil
@@ -164,22 +159,10 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         awsUsersTable.scanUsers(completionHandler)
     }
     
-    func scanUsersByNameDynamoDB(_ searchFirstName: String, searchLastName: String, searchPreferredUsername: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
-        print("scanUsersByNameDynamoDB:")
-        let awsUsersTable = AWSUsersTable()
-        awsUsersTable.scanUsersByName(searchFirstName, searchLastName: searchLastName, searchPreferredUsername: searchPreferredUsername, completionHandler: completionHandler)
-    }
-    
     func scanUsersByProfessionNameDynamoDB(_ searchProfessionName: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         print("scanUsersByProfessionNameDynamoDB:")
         let awsUsersTable = AWSUsersTable()
         awsUsersTable.scanUsersByProfessionName(searchProfessionName, completionHandler: completionHandler)
-    }
-    
-    func scanUsersByProfessionAndLocationNameDynamoDB(_ searchProfessionName: String, locationName: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
-        print("scanUsersByProfessionAndLocationNameDynamoDB:")
-        let awsUsersTable = AWSUsersTable()
-        awsUsersTable.scanUsersByProfessionAndLocationName(searchProfessionName, locationName: locationName, completionHandler: completionHandler)
     }
     
     // MARK: Relationships

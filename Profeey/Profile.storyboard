@@ -613,6 +613,7 @@
                         <segue destination="fRr-CF-EQJ" kind="show" identifier="segueToUserCategoryVc" id="kpB-5t-Lgj"/>
                         <segue destination="tuV-Nb-HFU" kind="presentation" identifier="segueToCaptureVc" id="AGW-4w-jGo"/>
                         <segue destination="flz-rV-RHI" kind="presentation" identifier="segueToAddRecommendationVc" id="vVB-qa-79w"/>
+                        <segue destination="IFj-K1-eqv" kind="show" identifier="segueToRecommendationsVc" id="yWe-f6-vZ2"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BV0-Xz-hgy" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -674,6 +675,14 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ADs-WC-obb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1302" y="-1368"/>
+        </scene>
+        <!--Recommendations-->
+        <scene sceneID="WbL-vc-EUu">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Recommendations" id="IFj-K1-eqv" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="uFE-SH-Hhe" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1270" y="-1286"/>
         </scene>
     </scenes>
     <resources>

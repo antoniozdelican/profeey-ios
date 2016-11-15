@@ -44,9 +44,9 @@ class ProfileMainTableViewCell: UITableViewCell {
     }
     
     func setRecommendingButton() {
-        self.followButton.setTitle("Recommending", for: UIControlState())
-        self.followButton.setTitleColor(Colors.green, for: UIControlState())
-        self.followButton.setBackgroundImage(UIImage(named: "btn_green"), for: UIControlState())
+        self.recommendButton.setTitle("Recommending", for: UIControlState())
+        self.recommendButton.setTitleColor(Colors.green, for: UIControlState())
+        self.recommendButton.setBackgroundImage(UIImage(named: "btn_green"), for: UIControlState())
     }
     
     func setEditButton() {

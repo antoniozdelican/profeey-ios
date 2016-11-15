@@ -23,7 +23,7 @@ class User: NSObject {
     var locationName: String?
     var numberOfFollowers: NSNumber?
     var numberOfPosts: NSNumber?
-    var topCategories: [String: String]?
+    var numberOfRecommendations: NSNumber?
     
     // For SignUp flow.
     var email: String?
@@ -50,6 +50,12 @@ class User: NSObject {
             return 0
         }
         return numberOfFollowers.intValue
+    }
+    var numberOfRecommendationsInt: Int {
+        guard let numberOfRecommendations = self.numberOfRecommendations else {
+            return 0
+        }
+        return numberOfRecommendations.intValue
     }
     
     var searchFirstName: String? {
@@ -107,13 +113,12 @@ class User: NSObject {
         self.lastName = lastName
         self.professionName = professionName
         self.profilePicUrl = profilePicUrl
-        
         self.about = about
         self.locationName = locationName
     }
     
     // Full user for ProfileVc.
-    convenience init(userId: String?, firstName: String?, lastName: String?, preferredUsername: String?, professionName: String?, profilePicUrl: String?, about: String?, locationName: String?, numberOfFollowers: NSNumber?, numberOfPosts: NSNumber?, topCategories: [String: String]?) {
+    convenience init(userId: String?, firstName: String?, lastName: String?, preferredUsername: String?, professionName: String?, profilePicUrl: String?, about: String?, locationName: String?, numberOfFollowers: NSNumber?, numberOfPosts: NSNumber?, numberOfRecommendations: NSNumber?) {
         self.init()
         self.userId = userId
         self.firstName = firstName
@@ -121,11 +126,10 @@ class User: NSObject {
         self.preferredUsername = preferredUsername
         self.professionName = professionName
         self.profilePicUrl = profilePicUrl
-        
         self.about = about
         self.locationName = locationName
         self.numberOfFollowers = numberOfFollowers
         self.numberOfPosts = numberOfPosts
-        self.topCategories = topCategories
+        self.numberOfRecommendations = numberOfRecommendations
     }
 }
