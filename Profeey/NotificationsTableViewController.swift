@@ -32,7 +32,7 @@ class NotificationsTableViewController: UITableViewController {
         if self.isLoadingNotifications {
             return 1
         }
-        if !self.isLoadingNotifications && self.notifications.count == 0 {
+        if self.notifications.count == 0 {
             return 1
         }
         return 0
@@ -43,7 +43,7 @@ class NotificationsTableViewController: UITableViewController {
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellLoading", for: indexPath) as! LoadingTableViewCell
             return cell
         }
-        if !self.isLoadingNotifications && self.notifications.count == 0 {
+        if self.notifications.count == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellEmpty", for: indexPath) as! EmptyTableViewCell
             cell.emptyMessageLabel.text = "You don't have any recent notifications."
             return cell
@@ -59,26 +59,25 @@ class NotificationsTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.layoutMargins = UIEdgeInsets.zero
-        cell.selectionStyle = UITableViewCellSelectionStyle.none
         cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
     }
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         if self.isLoadingNotifications {
-            return 120.0
+            return 112.0
         }
-        if !self.isLoadingNotifications && self.notifications.count == 0 {
-            return 120.0
+        if self.notifications.count == 0 {
+            return 112.0
         }
         return 0
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if self.isLoadingNotifications {
-            return 120.0
+            return 112.0
         }
-        if !self.isLoadingNotifications && self.notifications.count == 0 {
-            return 120.0
+        if self.notifications.count == 0 {
+            return 112.0
         }
         return 0
     }

@@ -134,7 +134,6 @@ class DiscoverPeopleTableViewController: UITableViewController {
                         }
                     }
                     self.tableView.reloadData()
-                    
                     for (index, user) in self.users.enumerated() {
                         if let profilePicUrl = user.profilePicUrl {
                             let indexPath = IndexPath(row: index, section: 0)

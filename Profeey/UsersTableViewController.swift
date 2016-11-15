@@ -83,8 +83,7 @@ class UsersTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellUser", for: indexPath) as! UserTableViewCell
         let user = self.users[indexPath.row]
         cell.profilePicImageView.image = user.profilePic
-        cell.fullNameLabel.text = user.fullName
-        cell.preferredUsernameLabel.text = user.fullUsername
+        cell.preferredUsernameLabel.text = user.preferredUsername
         cell.professionNameLabel.text = user.professionName
         return cell
     }
@@ -101,24 +100,23 @@ class UsersTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.layoutMargins = UIEdgeInsets.zero
-        if cell is LoadingTableViewCell {
+        if !(cell is UserTableViewCell) {
             cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
-            cell.selectionStyle = UITableViewCellSelectionStyle.none
         }
     }
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         if self.isLoadingUsers {
-            return 120.0
+            return 112.0
         }
         return 68.0
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if self.isLoadingUsers {
-            return 120.0
+            return 112.0
         }
-        return UITableViewAutomaticDimension
+        return 68.0
     }
     
     // MARK: IBActions
@@ -154,31 +152,27 @@ class UsersTableViewController: UITableViewController {
             (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                self.isLoadingUsers = false
+                self.refreshControl?.endRefreshing()
                 if let error = error {
                     print("queryPostLikes error: \(error)")
-                    self.isLoadingUsers = false
                     self.tableView.reloadData()
-                    self.refreshControl?.endRefreshing()
                 } else {
-                    guard let awsLikes = response?.items as? [AWSLike], awsLikes.count > 0 else {
-                        self.isLoadingUsers = false
+                    guard let awsLikes = response?.items as? [AWSLike] else {
                         self.tableView.reloadData()
-                        self.refreshControl?.endRefreshing()
                         return
                     }
-                    for (index, awsLike) in awsLikes.enumerated() {
+                    for awsLike in awsLikes {
                         let user = User(userId: awsLike._userId, firstName: awsLike._firstName, lastName: awsLike._lastName, preferredUsername: awsLike._preferredUsername, professionName: awsLike._professionName, profilePicUrl: awsLike._profilePicUrl)
                         self.users.append(user)
-                        self.isLoadingUsers = false
-                        self.tableView.reloadData()
-                        
-                        // Get profilePic.
-                        if let profilePicUrl = awsLike._profilePicUrl {
+                    }
+                    self.tableView.reloadData()
+                    for (index, user) in self.users.enumerated() {
+                        if let profilePicUrl = user.profilePicUrl {
                             let indexPath = IndexPath(row: index, section: 0)
                             self.downloadImage(profilePicUrl, imageType: .userProfilePic, indexPath: indexPath)
                         }
                     }
-                    self.refreshControl?.endRefreshing()
                 }
             })
         })
@@ -190,31 +184,27 @@ class UsersTableViewController: UITableViewController {
             (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                self.isLoadingUsers = false
+                self.refreshControl?.endRefreshing()
                 if let error = error {
                     print("queryFollowers error: \(error)")
-                    self.isLoadingUsers = false
                     self.tableView.reloadData()
-                    self.refreshControl?.endRefreshing()
                 } else {
-                    guard let awsRelationships = response?.items as? [AWSRelationship], awsRelationships.count > 0 else {
-                        self.isLoadingUsers = false
+                    guard let awsRelationships = response?.items as? [AWSRelationship] else {
                         self.tableView.reloadData()
-                        self.refreshControl?.endRefreshing()
                         return
                     }
-                    for (index, awsRelationship) in awsRelationships.enumerated() {
+                    for awsRelationship in awsRelationships {
                         let user = User(userId: awsRelationship._userId, firstName: awsRelationship._firstName, lastName: awsRelationship._lastName, preferredUsername: awsRelationship._preferredUsername, professionName: awsRelationship._professionName, profilePicUrl: awsRelationship._profilePicUrl)
                         self.users.append(user)
-                        self.isLoadingUsers = false
-                        self.tableView.reloadData()
-                        
-                        // Get profilePic.
-                        if let profilePicUrl = awsRelationship._profilePicUrl {
+                    }
+                    self.tableView.reloadData()
+                    for (index, user) in self.users.enumerated() {
+                        if let profilePicUrl = user.profilePicUrl {
                             let indexPath = IndexPath(row: index, section: 0)
                             self.downloadImage(profilePicUrl, imageType: .userProfilePic, indexPath: indexPath)
                         }
                     }
-                    self.refreshControl?.endRefreshing()
                 }
             })
         })

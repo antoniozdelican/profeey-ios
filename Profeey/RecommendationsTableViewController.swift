@@ -73,8 +73,7 @@ class RecommendationsTableViewController: UITableViewController {
         let recommendation = self.recommendations[indexPath.row]
         let user = recommendation.user
         cell.profilePicImageView.image = user?.profilePic
-        cell.fullNameLabel.text = user?.fullName
-        cell.preferredUsernameLabel.text = user?.fullUsername
+        cell.preferredUsernameLabel.text = user?.preferredUsername
         cell.professionNameLabel.text = user?.professionName
         cell.recommendationTextLabel.text = recommendation.recommendationText
         cell.timeLabel.text = recommendation.creationDateString

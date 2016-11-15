@@ -17,6 +17,12 @@ protocol CommentsViewControllerDelegate {
     func isLoadingComments(_ isLoading: Bool)
 }
 
+// Used to notify parentVc on changing numberOfComments.
+protocol CommentsViewControllerNotificationDelegate {
+    func commentCreated(_ postId: String)
+    func commentRemoved(_ postId: String)
+}
+
 class CommentsViewController: UIViewController {
 
     @IBOutlet weak var commentTextView: UITextView!
@@ -27,6 +33,7 @@ class CommentsViewController: UIViewController {
     
     var post: Post?
     var isCommentButton: Bool = false
+    var commentsViewControllerNotificationDelegate: CommentsViewControllerNotificationDelegate?
     fileprivate var comments: [Comment] = []
     fileprivate var commentsViewControllerDelegate: CommentsViewControllerDelegate?
     
@@ -176,6 +183,7 @@ class CommentsViewController: UIViewController {
                     let comment = Comment(userId: awsComment._userId, commentId: awsComment._commentId, commentText: awsComment._commentText, creationDate: awsComment._creationDate, user: PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB)
                     self.comments.append(comment)
                     self.commentsViewControllerDelegate?.commentPosted(comment)
+                    self.commentsViewControllerNotificationDelegate?.commentCreated(postId)
                     self.resetCommentBox()
                 }
             })
@@ -211,7 +219,8 @@ class CommentsViewController: UIViewController {
     
     fileprivate func rowTapped(_ indexPath: IndexPath) {
         guard let userId = self.comments[indexPath.row].userId,
-            let commentId = self.comments[indexPath.row].commentId else {
+            let commentId = self.comments[indexPath.row].commentId,
+            let postId = self.post?.postId else {
             return
         }
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
@@ -227,6 +236,7 @@ class CommentsViewController: UIViewController {
                     // In background
                     self.comments.remove(at: indexPath.row)
                     self.commentsViewControllerDelegate?.commentRemoved(indexPath)
+                    self.commentsViewControllerNotificationDelegate?.commentRemoved(postId)
                     self.removeComment(commentId)
                 })
                 alertController.addAction(deleteConfirmAction)

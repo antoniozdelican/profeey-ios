@@ -96,6 +96,7 @@ class HomeTableViewController: UITableViewController {
             let button = sender as? UIButton,
             let indexPath = self.tableView.indexPathForView(view: button) {
             destinationViewController.post = self.posts[indexPath.section]
+            destinationViewController.commentsViewControllerNotificationDelegate = self
         }
         if let navigationController = segue.destination as? UINavigationController,
             let childViewController =  navigationController.childViewControllers[0] as? EditPostViewController,
@@ -134,8 +135,7 @@ class HomeTableViewController: UITableViewController {
             case 0:
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostUser", for: indexPath) as! PostUserTableViewCell
                 cell.profilePicImageView.image = user?.profilePic
-                cell.fullNameLabel.text = user?.fullName
-                cell.preferredUsernameLabel.text = user?.fullUsername
+                cell.preferredUsernameLabel.text = user?.preferredUsername
                 cell.professionNameLabel.text = user?.professionName
                 return cell
             case 1:
@@ -154,14 +154,14 @@ class HomeTableViewController: UITableViewController {
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostUser", for: indexPath) as! PostUserTableViewCell
             cell.profilePicImageView.image = user?.profilePic
-            cell.fullNameLabel.text = user?.fullName
-            cell.preferredUsernameLabel.text = user?.fullUsername
+            cell.preferredUsernameLabel.text = user?.preferredUsername
             cell.professionNameLabel.text = user?.professionName
             cell.postUserTableViewCellDelegate = self
             return cell
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostImage", for: indexPath) as! PostImageTableViewCell
             cell.postImageView.image = post.image
+            // TODO change image size to fetch from DB
             if let image = post.image {
                 let aspectRatio = image.size.width / image.size.height
                 cell.postImageViewHeightConstraint.constant = ceil(tableView.bounds.width / aspectRatio)
@@ -692,5 +692,37 @@ extension HomeTableViewController: HomeEmptyFeedViewDelegate {
     
     func discoverButtonTapped() {
         self.performSegue(withIdentifier: "segueToDiscoverPeopleVc", sender: self)
+    }
+}
+
+extension HomeTableViewController: CommentsViewControllerNotificationDelegate {
+    
+    func commentCreated(_ postId: String) {
+        guard let updatedPost = self.posts.first(where: { $0.postId == postId }), let postIndex = self.posts.index(of: updatedPost) else {
+            return
+        }
+        if let numberOfComments = self.posts[postIndex].numberOfComments {
+            self.posts[postIndex].numberOfComments = NSNumber(value: numberOfComments.intValue + 1)
+        } else {
+            self.posts[postIndex].numberOfComments = NSNumber(value: 1)
+        }
+        UIView.performWithoutAnimation {
+            self.tableView.reloadSections(IndexSet(integer: postIndex), with: UITableViewRowAnimation.none)
+        }
+        
+    }
+    
+    func commentRemoved(_ postId: String) {
+        guard let updatedPost = self.posts.first(where: { $0.postId == postId }), let postIndex = self.posts.index(of: updatedPost) else {
+            return
+        }
+        if let numberOfComments = self.posts[postIndex].numberOfComments, numberOfComments.intValue > 0 {
+            self.posts[postIndex].numberOfComments = NSNumber(value: numberOfComments.intValue - 1)
+        } else {
+            self.posts[postIndex].numberOfComments = NSNumber(value: 0)
+        }
+        UIView.performWithoutAnimation {
+            self.tableView.reloadSections(IndexSet(integer: postIndex), with: UITableViewRowAnimation.none)
+        }
     }
 }

@@ -272,7 +272,7 @@ class ProfileTableViewController: UITableViewController {
             }
             if self.userCategories.count == 0 {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellProfileEmpty", for: indexPath) as! ProfileEmptyTableViewCell
-                cell.emptyMessageLabel.text = "No post with skills yet."
+                cell.emptyMessageLabel.text = "No posts with skills yet."
                 UIView.performWithoutAnimation {
                     cell.addButton.setTitle("Add Post", for: UIControlState.normal)
                     cell.addButton.layoutIfNeeded()

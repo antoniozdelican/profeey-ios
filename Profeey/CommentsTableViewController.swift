@@ -69,7 +69,6 @@ class CommentsTableViewController: UITableViewController {
         let comment = self.comments[indexPath.row]
         let user = comment.user
         cell.profilePicImageView.image = user?.profilePic
-        cell.fullNameLabel.text = user?.fullName
         cell.preferredUsernameLabel.text = user?.fullUsername
         cell.professionNameLabel.text = user?.professionName
         cell.commentLabel.text = comment.commentText
@@ -97,14 +96,14 @@ class CommentsTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         if self.isLoadingComments || self.comments.count == 0 {
-            return 112
+            return 112.0
         }
         return 104.0
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if self.isLoadingComments || self.comments.count == 0 {
-            return 112
+            return 112.0
         }
         return UITableViewAutomaticDimension
     }

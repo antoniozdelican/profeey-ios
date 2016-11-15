@@ -15,7 +15,6 @@ protocol PostUserTableViewCellDelegate {
 class PostUserTableViewCell: UITableViewCell {
     
     @IBOutlet weak var profilePicImageView: UIImageView!
-    @IBOutlet weak var fullNameLabel: UILabel!
     @IBOutlet weak var preferredUsernameLabel: UILabel!
     @IBOutlet weak var professionNameLabel: UILabel!
     @IBOutlet weak var expandButton: UIButton!
@@ -24,7 +23,7 @@ class PostUserTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        self.profilePicImageView.layer.cornerRadius = 20.0
+        self.profilePicImageView.layer.cornerRadius = 4.0
         self.profilePicImageView.clipsToBounds = true
     }
 

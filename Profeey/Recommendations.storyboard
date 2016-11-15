@@ -35,13 +35,8 @@
                                             <subviews>
                                                 <stackView opaque="NO" contentMode="scaleToFill" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="URw-7N-aVk">
                                                     <subviews>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="Full Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wmZ-RT-3Ui">
-                                                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
-                                                            <color key="textColor" red="0.1960784314" green="0.1960784314" blue="0.1960784314" alpha="1" colorSpace="calibratedRGB"/>
-                                                            <nil key="highlightedColor"/>
-                                                        </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Preferred Username" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LJC-O3-job">
-                                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
                                                             <color key="textColor" red="0.1960784314" green="0.1960784314" blue="0.1960784314" alpha="1" colorSpace="calibratedRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
@@ -80,7 +75,6 @@
                                 </tableViewCellContentView>
                                 <gestureRecognizers/>
                                 <connections>
-                                    <outlet property="fullNameLabel" destination="wmZ-RT-3Ui" id="C6N-Go-pzg"/>
                                     <outlet property="preferredUsernameLabel" destination="LJC-O3-job" id="wIr-gL-dgt"/>
                                     <outlet property="professionNameLabel" destination="FUB-52-kZy" id="AiL-Pt-hUc"/>
                                     <outlet property="profilePicImageView" destination="4yk-zU-wlY" id="2wy-3S-j8T"/>
@@ -103,11 +97,11 @@
                                     </constraints>
                                 </tableViewCellContentView>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellEmpty" rowHeight="120" id="Kjp-V1-0tv" customClass="EmptyTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="297" width="375" height="120"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellEmpty" rowHeight="112" id="Kjp-V1-0tv" customClass="EmptyTableViewCell" customModule="Profeey" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="297" width="375" height="112"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Kjp-V1-0tv" id="93A-QE-Iek">
-                                    <frame key="frameInset" width="375" height="119"/>
+                                    <frame key="frameInset" width="375" height="111"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Empty message." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UEQ-wj-mna">
@@ -117,9 +111,9 @@
                                         </label>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstAttribute="trailing" secondItem="UEQ-wj-mna" secondAttribute="trailing" constant="16" id="bhO-ZF-fcF"/>
+                                        <constraint firstAttribute="trailing" secondItem="UEQ-wj-mna" secondAttribute="trailing" constant="12" id="bhO-ZF-fcF"/>
                                         <constraint firstItem="UEQ-wj-mna" firstAttribute="centerY" secondItem="93A-QE-Iek" secondAttribute="centerY" id="dP2-Js-XKj"/>
-                                        <constraint firstItem="UEQ-wj-mna" firstAttribute="leading" secondItem="93A-QE-Iek" secondAttribute="leading" constant="16" id="tdY-2W-BGu"/>
+                                        <constraint firstItem="UEQ-wj-mna" firstAttribute="leading" secondItem="93A-QE-Iek" secondAttribute="leading" constant="12" id="tdY-2W-BGu"/>
                                         <constraint firstItem="UEQ-wj-mna" firstAttribute="centerX" secondItem="93A-QE-Iek" secondAttribute="centerX" id="zGX-ZR-kYl"/>
                                     </constraints>
                                     <variation key="default">

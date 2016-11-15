@@ -78,8 +78,7 @@ class PostDetailsTableViewController: UITableViewController {
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostUser", for: indexPath) as! PostUserTableViewCell
             cell.profilePicImageView.image = user?.profilePic
-            cell.fullNameLabel.text = user?.fullName
-            cell.preferredUsernameLabel.text = user?.fullUsername
+            cell.preferredUsernameLabel.text = user?.preferredUsername
             cell.professionNameLabel.text = user?.professionName
             cell.postUserTableViewCellDelegate = self
             return cell
@@ -126,7 +125,6 @@ class PostDetailsTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.layoutMargins = UIEdgeInsets.zero
         cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
-        cell.selectionStyle = UITableViewCellSelectionStyle.none
     }
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {

@@ -123,10 +123,6 @@ class ExperiencesTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.layoutMargins = UIEdgeInsets.zero
-        cell.selectionStyle = UITableViewCellSelectionStyle.none
-        if cell is AddTableViewCell {
-           cell.selectionStyle = UITableViewCellSelectionStyle.default
-        }
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

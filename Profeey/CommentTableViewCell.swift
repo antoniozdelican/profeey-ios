@@ -10,13 +10,13 @@ import UIKit
 
 protocol CommentTableViewCellDelegate {
     // A bit different sending entire cell.
+    // TODO check if risky since cells are beeing reused.
     func userTapped(_ cell: CommentTableViewCell)
 }
 
 class CommentTableViewCell: UITableViewCell {
 
     @IBOutlet weak var profilePicImageView: UIImageView!
-    @IBOutlet weak var fullNameLabel: UILabel!
     @IBOutlet weak var preferredUsernameLabel: UILabel!
     @IBOutlet weak var professionNameLabel: UILabel!
     @IBOutlet weak var commentLabel: UILabel!

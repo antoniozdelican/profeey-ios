@@ -11,7 +11,6 @@ import UIKit
 class RecommendationTableViewCell: UITableViewCell {
     
     @IBOutlet weak var profilePicImageView: UIImageView!
-    @IBOutlet weak var fullNameLabel: UILabel!
     @IBOutlet weak var preferredUsernameLabel: UILabel!
     @IBOutlet weak var professionNameLabel: UILabel!
     @IBOutlet weak var recommendationTextLabel: UILabel!
