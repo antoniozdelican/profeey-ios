@@ -18,6 +18,9 @@ class AWSActivity: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     var _caption: String?
     var _categoryName: String?
     var _creationDate: NSNumber?
+    // Used to get fast aspect ratio.
+    var _imageWidth: NSNumber?
+    var _imageHeight: NSNumber?
     var _imageUrl: String?
     var _numberOfLikes: NSNumber?
     var _numberOfComments: NSNumber?
@@ -66,6 +69,8 @@ class AWSActivity: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
             "_categoryName" : "categoryName",
             "_creationDate" : "creationDate",
             "_imageUrl" : "imageUrl",
+            "_imageWidth" : "imageWidth",
+            "_imageHeight" : "imageHeight",
             "_numberOfLikes" : "numberOfLikes",
             "_numberOfComments" : "numberOfComments",
             "_firstName" : "firstName",

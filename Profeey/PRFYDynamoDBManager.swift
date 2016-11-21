@@ -359,47 +359,67 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         awsPostsDateSortedIndex.queryUserPostsDateSortedWithCategoryName(userId, categoryName: categoryName, completionHandler: completionHandler)
     }
     
-    func createPostDynamoDB(_ imageUrl: String?, caption: String?, categoryName: String?, completionHandler: @escaping AWSContinuationBlock) {
-        AWSClientManager.defaultClientManager().credentialsProvider?.getIdentityId().continue({
+    func createPostDynamoDB(_ imageUrl: String?, imageWidth: NSNumber?, imageHeight: NSNumber?, caption: String?, categoryName: String?, completionHandler: @escaping AWSContinuationBlock) {
+        guard let identityId = AWSClientManager.defaultClientManager().credentialsProvider?.identityId else {
+            print("createPostDynamoDB no identityId!")
+            AWSTask().continue(completionHandler)
+            return
+        }
+        print("createPostDynamoDB:")
+        let postId = NSUUID().uuidString.lowercased()
+        let creationDate = NSNumber(value: Date().timeIntervalSince1970 as Double)
+        let awsPostsTable = AWSPostsTable()
+        let awsPost = AWSPost(_userId: identityId, _postId: postId, _creationDate: creationDate, _caption: caption, _categoryName: categoryName, _imageUrl: imageUrl, _imageWidth: imageWidth, _imageHeight: imageHeight, _firstName: self.currentUserDynamoDB?.firstName, _lastName: self.currentUserDynamoDB?.lastName, _preferredUsername: self.currentUserDynamoDB?.preferredUsername, _professionName: self.currentUserDynamoDB?.professionName, _profilePicUrl: self.currentUserDynamoDB?.profilePicUrl)
+        awsPostsTable.savePost(awsPost, completionHandler: {
             (task: AWSTask) in
             if let error = task.error {
-                print("getIdentityId error: \(error.localizedDescription)")
-                return AWSTask(error: error).continue(completionHandler)
-            } else if let identityId = task.result as? String {
-                
-                print("savePostDynamoDB:")
-                let awsPostsTable = AWSPostsTable()
-                let awsPost = AWSPost()
-                awsPost?._userId = identityId
-                awsPost?._postId = NSUUID().uuidString.lowercased()
-                awsPost?._caption = caption
-                awsPost?._categoryName = categoryName
-                awsPost?._creationDate = NSNumber(value: Date().timeIntervalSince1970 as Double)
-                awsPost?._imageUrl = imageUrl
-                awsPost?._numberOfLikes = 0
-                
-                awsPost?._firstName = self.currentUserDynamoDB?.firstName
-                awsPost?._lastName = self.currentUserDynamoDB?.lastName
-                awsPost?._preferredUsername = self.currentUserDynamoDB?.preferredUsername
-                awsPost?._professionName = self.currentUserDynamoDB?.professionName
-                awsPost?._profilePicUrl = self.currentUserDynamoDB?.profilePicUrl
-                
-                awsPostsTable.savePost(awsPost, completionHandler: {
-                    (task: AWSTask) in
-                    if let error = task.error {
-                        AWSTask(error: error).continue(completionHandler)
-                    } else {
-                        // Return initialized post to caller.
-                        AWSTask(result: awsPost).continue(completionHandler)
-                    }
-                    return nil
-                })
-                return nil
+                AWSTask(error: error).continue(completionHandler)
             } else {
-                print("This should not happen with getIdentityId!")
-                return AWSTask().continue(completionHandler)
+                // Return initialized post to caller.
+                AWSTask(result: awsPost).continue(completionHandler)
             }
+            return nil
         })
+//        AWSClientManager.defaultClientManager().credentialsProvider?.getIdentityId().continue({
+//            (task: AWSTask) in
+//            if let error = task.error {
+//                print("getIdentityId error: \(error.localizedDescription)")
+//                return AWSTask(error: error).continue(completionHandler)
+//            } else if let identityId = task.result as? String {
+//                
+//                print("savePostDynamoDB:")
+//                let awsPostsTable = AWSPostsTable()
+//                let awsPost = AWSPost()
+//                awsPost?._userId = identityId
+//                awsPost?._postId = NSUUID().uuidString.lowercased()
+//                awsPost?._caption = caption
+//                awsPost?._categoryName = categoryName
+//                awsPost?._creationDate = NSNumber(value: Date().timeIntervalSince1970 as Double)
+//                awsPost?._imageUrl = imageUrl
+//                awsPost?._numberOfLikes = 0
+//                
+//                awsPost?._firstName = self.currentUserDynamoDB?.firstName
+//                awsPost?._lastName = self.currentUserDynamoDB?.lastName
+//                awsPost?._preferredUsername = self.currentUserDynamoDB?.preferredUsername
+//                awsPost?._professionName = self.currentUserDynamoDB?.professionName
+//                awsPost?._profilePicUrl = self.currentUserDynamoDB?.profilePicUrl
+//                
+//                awsPostsTable.savePost(awsPost, completionHandler: {
+//                    (task: AWSTask) in
+//                    if let error = task.error {
+//                        AWSTask(error: error).continue(completionHandler)
+//                    } else {
+//                        // Return initialized post to caller.
+//                        AWSTask(result: awsPost).continue(completionHandler)
+//                    }
+//                    return nil
+//                })
+//                return nil
+//            } else {
+//                print("This should not happen with getIdentityId!")
+//                return AWSTask().continue(completionHandler)
+//            }
+//        })
     }
     
     func updatePostDynamoDB(_ postId: String, caption: String?, categoryName: String?, completionHandler: @escaping AWSContinuationBlock) {
@@ -410,11 +430,13 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         }
         print("updatePostDynamoDB:")
         let awsPostsTable = AWSPostsTable()
-        let awsPostUpdate = AWSPostUpdate()
-        awsPostUpdate?._userId = identityId
-        awsPostUpdate?._postId = postId
-        awsPostUpdate?._caption = caption
-        awsPostUpdate?._categoryName = categoryName
+        let awsPostUpdate = AWSPostUpdate(_userId: identityId, _postId: postId, _caption: caption, _categoryName: categoryName)
+        
+        
+//        awsPostUpdate?._userId = identityId
+//        awsPostUpdate?._postId = postId
+//        awsPostUpdate?._caption = caption
+//        awsPostUpdate?._categoryName = categoryName
         awsPostsTable.savePost(awsPostUpdate, completionHandler: {
             (task: AWSTask) in
             if let error = task.error {
@@ -427,25 +449,15 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
     }
     
     func removePostDynamoDB(_ postId: String, completionHandler: @escaping AWSContinuationBlock) {
-        AWSClientManager.defaultClientManager().credentialsProvider?.getIdentityId().continue({
-            (task: AWSTask) in
-            if let error = task.error {
-                print("getIdentityId error: \(error.localizedDescription)")
-                return AWSTask(error: error).continue(completionHandler)
-            } else if let identityId = task.result as? String {
-                
-                print("removePostDynamoDB:")
-                let awsPostsTable = AWSPostsTable()
-                let awsPost = AWSPost()
-                awsPost?._userId = identityId
-                awsPost?._postId = postId
-                awsPostsTable.removePost(awsPost, completionHandler: completionHandler)
-                return nil
-            } else {
-                print("This should not happen with getIdentityId!")
-                return AWSTask().continue(completionHandler)
-            }
-        })
+        guard let identityId = AWSClientManager.defaultClientManager().credentialsProvider?.identityId else {
+            print("removePostDynamoDB no identityId!")
+            AWSTask().continue(completionHandler)
+            return
+        }
+        print("removePostDynamoDB:")
+        let awsPostsTable = AWSPostsTable()
+        let awsPost = AWSPost(_userId: identityId, _postId: postId)
+        awsPostsTable.removePost(awsPost, completionHandler: completionHandler)
     }
     
     // MARK: Categories

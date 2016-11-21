@@ -30,28 +30,29 @@ class MainTabBarController: UITabBarController {
         for navigationController in self.childViewControllers {
             let tabBarItem = navigationController.tabBarItem
             if tabBarItem?.tag == 0 {
-                guard let image = UIImage(named: "ic_home"), let selectedImage = UIImage(named: "ic_home_selected") else {
+                guard let image = UIImage(named: "ic_home"), let selectedImage = UIImage(named: "ic_home_active") else {
                     return
                 }
                 tabBarItem?.image = image.withRenderingMode(UIImageRenderingMode.alwaysOriginal)
-                tabBarItem?.selectedImage = selectedImage
+                // Because of different selected color.
+                tabBarItem?.selectedImage = selectedImage.withRenderingMode(UIImageRenderingMode.alwaysOriginal)
             }
             if tabBarItem?.tag == 1 {
-                guard let image = UIImage(named: "ic_search"), let selectedImage = UIImage(named: "ic_search_selected") else {
+                guard let image = UIImage(named: "ic_search"), let selectedImage = UIImage(named: "ic_search_active") else {
                     return
                 }
                 tabBarItem?.image = image.withRenderingMode(UIImageRenderingMode.alwaysOriginal)
                 tabBarItem?.selectedImage = selectedImage
             }
             if tabBarItem?.tag == 2 {
-                guard let image = UIImage(named: "ic_notifications"), let selectedImage = UIImage(named: "ic_notifications_selected") else {
+                guard let image = UIImage(named: "ic_notifications"), let selectedImage = UIImage(named: "ic_notifications_active") else {
                     return
                 }
                 tabBarItem?.image = image.withRenderingMode(UIImageRenderingMode.alwaysOriginal)
                 tabBarItem?.selectedImage = selectedImage
             }
             if tabBarItem?.tag == 3 {
-                guard let image = UIImage(named: "ic_profile"), let selectedImage = UIImage(named: "ic_profile_selected") else {
+                guard let image = UIImage(named: "ic_profile"), let selectedImage = UIImage(named: "ic_profile_active") else {
                     return
                 }
                 tabBarItem?.image = image.withRenderingMode(UIImageRenderingMode.alwaysOriginal)

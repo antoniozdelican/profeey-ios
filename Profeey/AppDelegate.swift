@@ -6,6 +6,10 @@
 //  Copyright © 2016 Profeey. All rights reserved.
 //
 
+import Foundation
+import CoreFoundation
+
+
 import UIKit
 import AWSCognito
 import AWSCore
@@ -21,11 +25,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         self.configureUI()
         
-//        AWSClientManager.defaultClientManager().userPool?.delegate = self
-//        AWSClientManager.defaultClientManager().getUserDetails({
-//            (task: AWSTask) in
-//            return nil
-//        })
+        AWSClientManager.defaultClientManager().userPool?.delegate = self
+        AWSClientManager.defaultClientManager().getUserDetails({
+            (task: AWSTask) in
+            return nil
+        })
         return true
     }
     
@@ -40,7 +44,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // UITabBar
         UITabBar.appearance().barTintColor = Colors.greyLight
         UITabBar.appearance().isTranslucent = false
-        UITabBar.appearance().tintColor = Colors.black
+//        UITabBar.appearance().tintColor = Colors.black
+        UITabBar.appearance().tintColor = Colors.greyDark
         
         // UITableView
         UITableView.appearance().tableFooterView = UIView()

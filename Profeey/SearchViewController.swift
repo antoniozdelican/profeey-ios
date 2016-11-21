@@ -183,6 +183,34 @@ class SearchViewController: UIViewController {
         })
     }
     
+    // TEST
+    
+    fileprivate func searchProfessionsTest(_ searchText: String) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        PRFYCloudSearchProxyClient.defaultClient().rootGet(q: searchText).continue({
+            (task: AWSTask) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                self.searchProfessionsDelegate?.isSearchingProfessions(false)
+                if let error = task.error {
+                    print(error)
+                } else {
+                    guard let result = task.result as? PRFYCloudSearchProfessionsResult, let professions = result.professions else {
+                        print("No result!")
+                        return
+                    }
+                    self.professions = []
+                    for resultProfession in professions {
+                        let profession = Profession(professionName: resultProfession.professionName, numberOfUsers: resultProfession.numberOfUsers)
+                        self.professions.append(profession)
+                    }
+                    self.searchProfessionsDelegate?.showProfessions(self.professions, showAllProfessions: false)
+                }
+            })
+            return nil
+        })
+    }
+    
     // MARK: Helpers
     
     fileprivate func adjustSegment(_ segmentIndex: Int) {
@@ -255,6 +283,10 @@ extension SearchViewController: UISearchBarDelegate {
         } else {
             self.filterUsers(searchText.trimm())
             self.filterProfessions(searchText.trimm())
+            
+            // TODO
+//            self.searchProfessionsDelegate?.isSearchingProfessions(true)
+//            self.searchProfessionsTest(searchText.trimm())
         }
     }
     

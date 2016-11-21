@@ -51,14 +51,14 @@ class AWSPostsTable: NSObject, Table {
         return AWSPost.jsonKeyPathsByPropertyKey()[dataObjectAttributeName] as! String
     }
     
-    func savePost(_ post: AWSPost?, completionHandler: @escaping AWSContinuationBlock) {
+    func savePost(_ awsPost: AWSPost, completionHandler: @escaping AWSContinuationBlock) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
-        objectMapper.save(post!).continue(completionHandler)
+        objectMapper.save(awsPost).continue(completionHandler)
     }
     
-    func removePost(_ post: AWSPost?, completionHandler: @escaping AWSContinuationBlock) {
+    func removePost(_ awsPost: AWSPost, completionHandler: @escaping AWSContinuationBlock) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
-        objectMapper.remove(post!).continue(completionHandler)
+        objectMapper.remove(awsPost).continue(completionHandler)
     }
 }
 

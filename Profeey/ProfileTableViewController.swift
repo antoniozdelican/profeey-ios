@@ -18,6 +18,8 @@ enum ProfileSegment {
 
 class ProfileTableViewController: UITableViewController {
     
+    @IBOutlet weak var settingsButton: UIBarButtonItem!
+    
     var user: User?
     var isCurrentUser: Bool = false
     
@@ -55,6 +57,9 @@ class ProfileTableViewController: UITableViewController {
         self.tableView.register(UINib(nibName: "ProfileTableSectionHeader", bundle: nil), forHeaderFooterViewReuseIdentifier: "profileTableSectionHeader")
         
         self.configureUser()
+        if !self.isCurrentUser {
+            self.navigationItem.rightBarButtonItem = nil
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -452,15 +457,7 @@ class ProfileTableViewController: UITableViewController {
     // MARK: IBActions
     
     @IBAction func settingsButtonTapped(_ sender: AnyObject) {
-        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
-        let signOutAction = UIAlertAction(title: "Sign out", style: UIAlertActionStyle.default, handler: {
-            (alert: UIAlertAction) in
-            self.signOut()
-        })
-        alertController.addAction(signOutAction)
-        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil)
-        alertController.addAction(cancelAction)
-        self.present(alertController, animated: true, completion: nil)
+        self.performSegue(withIdentifier: "segueToSettingsVc", sender: self)
     }
     
     @IBAction func unwindToProfileTableViewController(_ segue: UIStoryboardSegue) {
@@ -556,7 +553,7 @@ class ProfileTableViewController: UITableViewController {
                     // Reset posts.
                     self.posts = []
                     for (index, awsPost) in awsPosts.enumerated() {
-                        let post = Post(userId: awsPost._userId, postId: awsPost._postId, caption: awsPost._caption, categoryName: awsPost._categoryName, creationDate: awsPost._creationDate, imageUrl: awsPost._imageUrl, numberOfLikes: awsPost._numberOfLikes, numberOfComments: awsPost._numberOfComments, user: self.user)
+                        let post = Post(userId: awsPost._userId, postId: awsPost._postId, creationDate: awsPost._creationDate, caption: awsPost._caption, categoryName: awsPost._categoryName, imageUrl: awsPost._imageUrl, imageWidth: awsPost._imageWidth, imageHeight: awsPost._imageHeight, numberOfLikes: awsPost._numberOfLikes, numberOfComments: awsPost._numberOfComments, user: self.user)
                         self.posts.append(post)
                         if self.selectedProfileSegment == ProfileSegment.posts {
                             UIView.performWithoutAnimation {
@@ -868,35 +865,35 @@ class ProfileTableViewController: UITableViewController {
         })
     }
     
-    fileprivate func signOut() {
-        AWSClientManager.defaultClientManager().signOut({
-            (task: AWSTask) in
-            DispatchQueue.main.async(execute: {
-                if let error = task.error {
-                    print("signOut error: \(error)")
-                } else {
-                    self.redirectToOnboarding()
-                }
-            })
-            return nil
-        })
-    }
-    
-    // MARK: Helpers
-    
-    fileprivate func redirectToOnboarding() {
-        guard let window = UIApplication.shared.keyWindow,
-            let initialViewController = UIStoryboard(name: "Onboarding", bundle: nil).instantiateInitialViewController() else {
-                return
-        }
-        window.rootViewController = initialViewController
-    }
+//    fileprivate func signOut() {
+//        AWSClientManager.defaultClientManager().signOut({
+//            (task: AWSTask) in
+//            DispatchQueue.main.async(execute: {
+//                if let error = task.error {
+//                    print("signOut error: \(error)")
+//                } else {
+//                    self.redirectToOnboarding()
+//                }
+//            })
+//            return nil
+//        })
+//    }
+//    
+//    // MARK: Helpers
+//    
+//    fileprivate func redirectToOnboarding() {
+//        guard let window = UIApplication.shared.keyWindow,
+//            let initialViewController = UIStoryboard(name: "Onboarding", bundle: nil).instantiateInitialViewController() else {
+//                return
+//        }
+//        window.rootViewController = initialViewController
+//    }
 }
 
 extension ProfileTableViewController: ProfileMainTableViewCellDelegate {
     
     func numberOfPostsButtonTapped() {
-        if self.posts.count > 0 {
+        if self.posts.count > 0 && self.selectedProfileSegment == ProfileSegment.posts {
             let indexPath = IndexPath(row: 0, section: 1)
             self.tableView.scrollToRow(at: indexPath, at: UITableViewScrollPosition.top, animated: true)
         }

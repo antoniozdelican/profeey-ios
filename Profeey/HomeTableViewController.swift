@@ -162,8 +162,12 @@ class HomeTableViewController: UITableViewController {
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostImage", for: indexPath) as! PostImageTableViewCell
             cell.postImageView.image = post.image
             // TODO change image size to fetch from DB
-            if let image = post.image {
-                let aspectRatio = image.size.width / image.size.height
+//            if let image = post.image {
+//                let aspectRatio = image.size.width / image.size.height
+//                cell.postImageViewHeightConstraint.constant = ceil(tableView.bounds.width / aspectRatio)
+//            }
+            if let imageWidth = post.imageWidth?.floatValue, let imageHeight = post.imageHeight?.floatValue {
+                let aspectRatio = CGFloat(imageWidth / imageHeight)
                 cell.postImageViewHeightConstraint.constant = ceil(tableView.bounds.width / aspectRatio)
             }
             return cell
@@ -258,7 +262,6 @@ class HomeTableViewController: UITableViewController {
             self.refreshControl?.endRefreshing()
             return
         }
-        self.posts = []
         self.queryUserActivitiesDateSorted(userId)
     }
     
@@ -278,7 +281,7 @@ class HomeTableViewController: UITableViewController {
                 self.tableView.backgroundView = nil
             }
             self.tableView.reloadData()
-            self.uploadImage(imageData, caption: post.caption, categoryName: post.categoryName)
+            self.uploadImage(imageData, imageWidth: NSNumber(value: Float(image.size.width)), imageHeight: NSNumber(value: Float(image.size.height)), caption: post.caption, categoryName: post.categoryName)
         }
     }
     
@@ -342,9 +345,10 @@ class HomeTableViewController: UITableViewController {
                         self.tableView.reloadData()
                         return
                     }
+                    self.posts = []
                     for awsActivity in awsActivities {
                         let user = User(userId: awsActivity._postUserId, firstName: awsActivity._firstName, lastName: awsActivity._lastName, preferredUsername: awsActivity._preferredUsername, professionName: awsActivity._professionName, profilePicUrl: awsActivity._profilePicUrl)
-                        let post = Post(userId: awsActivity._postUserId, postId: awsActivity._postId, caption: awsActivity._caption, categoryName: awsActivity._categoryName, creationDate: awsActivity._creationDate, imageUrl: awsActivity._imageUrl, numberOfLikes: awsActivity._numberOfLikes, numberOfComments: awsActivity._numberOfComments, user: user)
+                        let post = Post(userId: awsActivity._postUserId, postId: awsActivity._postId, creationDate: awsActivity._creationDate, caption: awsActivity._caption, categoryName: awsActivity._categoryName, imageUrl: awsActivity._imageUrl, imageWidth: awsActivity._imageWidth, imageHeight: awsActivity._imageHeight, numberOfLikes: awsActivity._numberOfLikes, numberOfComments: awsActivity._numberOfComments, user: user)
                         self.posts.append(post)
                     }
                     self.tableView.reloadData()
@@ -433,7 +437,7 @@ class HomeTableViewController: UITableViewController {
         }
     }
     
-    fileprivate func uploadImage(_ imageData: Data, caption: String?, categoryName: String?) {
+    fileprivate func uploadImage(_ imageData: Data, imageWidth: NSNumber, imageHeight: NSNumber, caption: String?, categoryName: String?) {
         let uniqueImageName = NSUUID().uuidString.lowercased().replacingOccurrences(of: "-", with: "")
         let imageKey = "public/\(uniqueImageName).jpg"
         let localContent = AWSUserFileManager.custom(key: "USEast1BucketManager").localContent(with: imageData, key: imageKey)
@@ -463,7 +467,7 @@ class HomeTableViewController: UITableViewController {
                         self.present(alertController, animated: true, completion: nil)
                     } else {
                         // Save post in DynamoDB.
-                        self.createPost(imageData, imageUrl: imageKey, caption: caption, categoryName: categoryName)
+                        self.createPost(imageData, imageUrl: imageKey, imageWidth: imageWidth, imageHeight: imageHeight, caption: caption, categoryName: categoryName)
                     }
                 })
         })
@@ -488,9 +492,9 @@ class HomeTableViewController: UITableViewController {
         })
     }
     
-    fileprivate func createPost(_ imageData: Data, imageUrl: String?, caption: String?, categoryName: String?) {
+    fileprivate func createPost(_ imageData: Data, imageUrl: String, imageWidth: NSNumber, imageHeight: NSNumber, caption: String?, categoryName: String?) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().createPostDynamoDB(imageUrl, caption: caption, categoryName: categoryName, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().createPostDynamoDB(imageUrl, imageWidth: imageWidth, imageHeight: imageHeight, caption: caption, categoryName: categoryName, completionHandler: {
             (task: AWSTask) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
@@ -506,7 +510,7 @@ class HomeTableViewController: UITableViewController {
                     self.tableView.reloadData()
                 } else {
                     if let awsPost = task.result as? AWSPost {
-                        let post = Post(userId: awsPost._userId, postId: awsPost._postId, caption: awsPost._caption, categoryName: awsPost._categoryName, creationDate: awsPost._creationDate, imageUrl: awsPost._imageUrl, numberOfLikes: awsPost._numberOfLikes, numberOfComments: awsPost._numberOfComments, user: PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB)
+                        let post = Post(userId: awsPost._userId, postId: awsPost._postId, creationDate: awsPost._creationDate, caption: awsPost._caption, categoryName: awsPost._categoryName, imageUrl: awsPost._imageUrl, imageWidth: awsPost._imageWidth, imageHeight: awsPost._imageHeight, numberOfLikes: awsPost._numberOfLikes, numberOfComments: awsPost._numberOfComments, user: PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB)
                         let image = UIImage(data: imageData)
                         post.image = image
                         

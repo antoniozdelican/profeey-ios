@@ -13,10 +13,12 @@ class Post: NSObject {
     // Properties.
     var userId: String?
     var postId: String?
+    var creationDate: NSNumber?
     var caption: String?
     var categoryName: String?
-    var creationDate: NSNumber?
     var imageUrl: String?
+    var imageWidth: NSNumber?
+    var imageHeight: NSNumber?
     var numberOfLikes: NSNumber?
     var numberOfComments: NSNumber?
     
@@ -77,14 +79,16 @@ class Post: NSObject {
         super.init()
     }
     
-    convenience init(userId: String?, postId: String?, caption: String?, categoryName: String?, creationDate: NSNumber?, imageUrl: String?, numberOfLikes: NSNumber?, numberOfComments: NSNumber?, user: User?) {
+    convenience init(userId: String?, postId: String?, creationDate: NSNumber?, caption: String?, categoryName: String?, imageUrl: String?, imageWidth: NSNumber?, imageHeight: NSNumber?, numberOfLikes: NSNumber?, numberOfComments: NSNumber?, user: User?) {
         self.init()
         self.userId = userId
         self.postId = postId
+        self.creationDate = creationDate
         self.caption = caption
         self.categoryName = categoryName
-        self.creationDate = creationDate
         self.imageUrl = imageUrl
+        self.imageWidth = imageWidth
+        self.imageHeight = imageHeight
         self.numberOfLikes = numberOfLikes
         self.numberOfComments = numberOfComments
         self.user = user

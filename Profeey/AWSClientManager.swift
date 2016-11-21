@@ -76,7 +76,6 @@ class AWSClientManager: NSObject, ClientManager {
             with: userFileManagerConfiguration,
             forKey: "USEast1BucketManager")
         self.userFileManager = AWSUserFileManager.custom(key: "USEast1BucketManager")
-        
     }
     
     // MARK: UserPool

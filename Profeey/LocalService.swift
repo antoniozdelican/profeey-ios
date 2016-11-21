@@ -54,10 +54,10 @@ class LocalService: NSObject {
         UserDefaults.standard.synchronize()
     }
     
-    fileprivate class func getArrayFromSet(_ set: Set<String>) -> NSArray {
-        let array = NSArray(array: set.map({ String($0) }))
-        return array
-    }
+//    fileprivate class func getArrayFromSet(_ set: Set<String>) -> NSArray {
+//        let array = NSArray(array: set.map({ String($0) }))
+//        return array
+//    }
     
     // MARK: About
     

@@ -5,3 +5,6 @@
 #import "LLSimpleCamera.h"
 #import "LLSimpleCamera+Helper.h"
 #import "UIImage+FixOrientation.h"
+
+#import "CommonCrypto/CommonCrypto.h"
+#import "AWSApiGatewayBridge.h"
