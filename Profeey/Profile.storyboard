@@ -639,15 +639,10 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Username" id="0bA-Nu-UhF">
-                        <barButtonItem key="rightBarButtonItem" id="rMt-hz-4kb">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="kex-Kl-6Se">
-                                <rect key="frame" x="276" y="7" width="83" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Settings"/>
-                                <connections>
-                                    <action selector="settingsButtonTapped:" destination="snn-LH-lYg" eventType="touchUpInside" id="vk0-Ov-6m3"/>
-                                </connections>
-                            </button>
+                        <barButtonItem key="rightBarButtonItem" image="ic_settings" id="aOx-nU-WBU">
+                            <connections>
+                                <action selector="settingsButtonTapped:" destination="snn-LH-lYg" id="NKh-a4-axM"/>
+                            </connections>
                         </barButtonItem>
                     </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
@@ -659,7 +654,7 @@
                         </connections>
                     </refreshControl>
                     <connections>
-                        <outlet property="settingsButton" destination="rMt-hz-4kb" id="4cS-cO-xFh"/>
+                        <outlet property="settingsButton" destination="aOx-nU-WBU" id="0cv-Zt-l9B"/>
                         <segue destination="riP-oj-LLI" kind="presentation" identifier="segueToEditProfileVc" id="WTS-6i-LAu"/>
                         <segue destination="Chq-Oe-cUt" kind="show" identifier="segueToUsersVc" id="h6M-ye-y83"/>
                         <segue destination="XYQ-tl-NIV" kind="show" identifier="segueToExperiencesVc" id="dhw-SZ-Iqm"/>
@@ -755,5 +750,6 @@
         <image name="ic_heart_white" width="20" height="20"/>
         <image name="ic_people_black" width="24" height="22"/>
         <image name="ic_recommendation_black" width="18" height="22"/>
+        <image name="ic_settings" width="22" height="22"/>
     </resources>
 </document>
