@@ -69,7 +69,7 @@ class CommentsTableViewController: UITableViewController {
         let comment = self.comments[indexPath.row]
         let user = comment.user
         cell.profilePicImageView.image = user?.profilePic
-        cell.preferredUsernameLabel.text = user?.fullUsername
+        cell.preferredUsernameLabel.text = user?.preferredUsername
         cell.professionNameLabel.text = user?.professionName
         cell.commentLabel.text = comment.commentText
         cell.timeLabel.text = comment.creationDateString

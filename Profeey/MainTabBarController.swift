@@ -13,7 +13,7 @@ class MainTabBarController: UITabBarController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = Colors.greyLight
+        self.view.backgroundColor = Colors.whiteDark
         self.delegate = self
         self.configureView()
         self.configureStatusBar()
@@ -70,7 +70,7 @@ class MainTabBarController: UITabBarController {
         // Add backgroundView and color behind statusBar.
         let statusBarFrame = UIApplication.shared.statusBarFrame
         let statusBarBackgroundView = UIView(frame: statusBarFrame)
-        statusBarBackgroundView.backgroundColor = Colors.greyLight
+        statusBarBackgroundView.backgroundColor = Colors.whiteDark
         self.view.addSubview(statusBarBackgroundView)
     }
 }

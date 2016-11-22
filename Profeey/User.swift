@@ -33,12 +33,12 @@ class User: NSObject {
     var fullName: String? {
         return [self.firstName, self.lastName].flatMap{$0}.joined(separator: " ")
     }
-    var fullUsername: String? {
-        guard let preferredUsername = self.preferredUsername else {
-            return nil
-        }
-        return "@\(preferredUsername)"
-    }
+//    var fullUsername: String? {
+//        guard let preferredUsername = self.preferredUsername else {
+//            return nil
+//        }
+//        return "@\(preferredUsername)"
+//    }
     var numberOfPostsInt: Int {
         guard let numberOfPostsInt = self.numberOfPosts else {
             return 0

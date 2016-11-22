@@ -35,27 +35,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     fileprivate func configureUI() {
         // UINavigationBar
-        UINavigationBar.appearance().barTintColor = Colors.greyLight
+        UINavigationBar.appearance().barTintColor = Colors.whiteDark
         // DON'T FCKING CHANGE translucent!! it messes up capture.
         UINavigationBar.appearance().isTranslucent = false
         UINavigationBar.appearance().tintColor = Colors.black
         UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: Colors.black]
         
         // UITabBar
-        UITabBar.appearance().barTintColor = Colors.greyLight
+        UITabBar.appearance().barTintColor = Colors.whiteDark
         UITabBar.appearance().isTranslucent = false
-//        UITabBar.appearance().tintColor = Colors.black
-        UITabBar.appearance().tintColor = Colors.greyDark
+        UITabBar.appearance().tintColor = Colors.grey
         
         // UITableView
         UITableView.appearance().tableFooterView = UIView()
-        UITableView.appearance().separatorColor = Colors.grey
+        UITableView.appearance().separatorColor = Colors.greyLight
         // WARNING
         //UITableView.appearance().separatorInset = UIEdgeInsets.zero
         
         // UITableViewCell
         let colorView = UIView()
-        colorView.backgroundColor = Colors.greyLight
+        colorView.backgroundColor = Colors.whiteDark
         UITableViewCell.appearance().selectedBackgroundView = colorView
         
         // UITextField

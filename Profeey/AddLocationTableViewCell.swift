@@ -30,7 +30,7 @@ class AddLocationTableViewCell: UITableViewCell {
     
     func setIncativeLocation() {
         self.locationImageView.image = UIImage(named: "ic_location_disabled")
-        self.locationNameLabel.textColor = Colors.greyDark
+        self.locationNameLabel.textColor = Colors.grey
         self.clearButton.isHidden = true
     }
     

@@ -34,88 +34,104 @@
                                                 <constraint firstAttribute="height" constant="80" id="kaY-Cb-P60"/>
                                             </constraints>
                                         </imageView>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fLu-Th-f4c">
-                                            <rect key="frame" x="282" y="12" width="81" height="32"/>
+                                        <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="WR4-Tj-7O3">
+                                            <rect key="frame" x="104" y="9" width="259" height="32"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="bottom" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7Ao-xU-Mn8">
+                                                    <rect key="frame" x="0.0" y="0.0" width="81" height="32"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="32" id="OzB-Ur-gjf"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                                                    <inset key="titleEdgeInsets" minX="4" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="4" maxY="0.0"/>
+                                                    <state key="normal" title="0" image="ic_camera_posts">
+                                                        <color key="titleColor" red="0.1960784314" green="0.1960784314" blue="0.1960784314" alpha="1" colorSpace="calibratedRGB"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="numberOfPostsButtonTapped:" destination="SE7-jf-WKl" eventType="touchUpInside" id="g6j-SH-Dws"/>
+                                                    </connections>
+                                                </button>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="bottom" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="K0u-59-fNZ">
+                                                    <rect key="frame" x="89" y="0.0" width="81.5" height="32"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="32" id="5Xf-3t-qnP"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                                                    <inset key="titleEdgeInsets" minX="4" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="4" maxY="0.0"/>
+                                                    <state key="normal" title="0" image="ic_followers_following">
+                                                        <color key="titleColor" red="0.1960784314" green="0.1960784314" blue="0.1960784314" alpha="1" colorSpace="calibratedRGB"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="numberOfFollowersButtonTapped:" destination="SE7-jf-WKl" eventType="touchUpInside" id="Xrn-8n-EGu"/>
+                                                    </connections>
+                                                </button>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="bottom" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fLu-Th-f4c">
+                                                    <rect key="frame" x="178.5" y="0.0" width="80.5" height="32"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="32" id="cbF-i0-XXI"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                                                    <inset key="titleEdgeInsets" minX="4" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="4" maxY="0.0"/>
+                                                    <state key="normal" title="0" image="ic_recommendations">
+                                                        <color key="titleColor" red="0.1960784314" green="0.1960784314" blue="0.1960784314" alpha="1" colorSpace="calibratedRGB"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="numberOfRecommendationsButtonTapped:" destination="SE7-jf-WKl" eventType="touchUpInside" id="21A-Mr-1zQ"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="height" constant="32" id="cbF-i0-XXI"/>
+                                                <constraint firstItem="K0u-59-fNZ" firstAttribute="width" secondItem="fLu-Th-f4c" secondAttribute="width" id="NsE-4X-gsY"/>
+                                                <constraint firstItem="7Ao-xU-Mn8" firstAttribute="width" secondItem="K0u-59-fNZ" secondAttribute="width" id="SIN-h4-dS0"/>
                                             </constraints>
-                                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
-                                            <inset key="titleEdgeInsets" minX="4" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="4" maxY="0.0"/>
-                                            <state key="normal" title="0" image="ic_recommendation_black">
-                                                <color key="titleColor" red="0.1960784314" green="0.1960784314" blue="0.1960784314" alpha="1" colorSpace="calibratedRGB"/>
-                                            </state>
-                                            <connections>
-                                                <action selector="numberOfRecommendationsButtonTapped:" destination="SE7-jf-WKl" eventType="touchUpInside" id="21A-Mr-1zQ"/>
-                                            </connections>
-                                        </button>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="K0u-59-fNZ">
-                                            <rect key="frame" x="193" y="12" width="81" height="32"/>
+                                        </stackView>
+                                        <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="m6K-dp-vJr">
+                                            <rect key="frame" x="106" y="51" width="257" height="32"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C6H-Ma-A3h">
+                                                    <rect key="frame" x="0.0" y="0.0" width="126" height="32"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="32" id="MnR-23-jEE"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <state key="normal" title="Loading">
+                                                        <color key="titleColor" red="0.78039215689999997" green="0.78039215689999997" blue="0.80392156859999997" alpha="1" colorSpace="calibratedRGB"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="recommendButtonTapped:" destination="SE7-jf-WKl" eventType="touchUpInside" id="OB8-dl-msh"/>
+                                                    </connections>
+                                                </button>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AYK-7h-af6">
+                                                    <rect key="frame" x="131" y="0.0" width="126" height="32"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="32" id="iDd-rl-lYr"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <state key="normal" title="Loading">
+                                                        <color key="titleColor" red="0.78039215689999997" green="0.78039215689999997" blue="0.80392156859999997" alpha="1" colorSpace="calibratedRGB"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="followButtonTapped:" destination="SE7-jf-WKl" eventType="touchUpInside" id="D45-Dl-Too"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="height" constant="32" id="5Xf-3t-qnP"/>
+                                                <constraint firstItem="C6H-Ma-A3h" firstAttribute="width" secondItem="AYK-7h-af6" secondAttribute="width" id="zMH-Mk-whf"/>
                                             </constraints>
-                                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
-                                            <inset key="titleEdgeInsets" minX="4" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="4" maxY="0.0"/>
-                                            <state key="normal" title="0" image="ic_people_black">
-                                                <color key="titleColor" red="0.1960784314" green="0.1960784314" blue="0.1960784314" alpha="1" colorSpace="calibratedRGB"/>
-                                            </state>
-                                            <connections>
-                                                <action selector="numberOfFollowersButtonTapped:" destination="SE7-jf-WKl" eventType="touchUpInside" id="Xrn-8n-EGu"/>
-                                            </connections>
-                                        </button>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7Ao-xU-Mn8">
-                                            <rect key="frame" x="104" y="12" width="81" height="32"/>
-                                            <constraints>
-                                                <constraint firstAttribute="height" constant="32" id="OzB-Ur-gjf"/>
-                                            </constraints>
-                                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
-                                            <inset key="titleEdgeInsets" minX="4" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="4" maxY="0.0"/>
-                                            <state key="normal" title="0" image="ic_camera_black">
-                                                <color key="titleColor" red="0.1960784314" green="0.1960784314" blue="0.1960784314" alpha="1" colorSpace="calibratedRGB"/>
-                                            </state>
-                                            <connections>
-                                                <action selector="numberOfPostsButtonTapped:" destination="SE7-jf-WKl" eventType="touchUpInside" id="g6j-SH-Dws"/>
-                                            </connections>
-                                        </button>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AYK-7h-af6">
-                                            <rect key="frame" x="243" y="56" width="120" height="32"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                            <state key="normal" title="Loading" backgroundImage="btn_disabled">
-                                                <color key="titleColor" red="0.78039215689999997" green="0.78039215689999997" blue="0.80392156859999997" alpha="1" colorSpace="calibratedRGB"/>
-                                            </state>
-                                            <connections>
-                                                <action selector="followButtonTapped:" destination="SE7-jf-WKl" eventType="touchUpInside" id="D45-Dl-Too"/>
-                                            </connections>
-                                        </button>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C6H-Ma-A3h">
-                                            <rect key="frame" x="115" y="56" width="120" height="32"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                            <state key="normal" title="Loading" backgroundImage="btn_disabled">
-                                                <color key="titleColor" red="0.78039215689999997" green="0.78039215689999997" blue="0.80392156859999997" alpha="1" colorSpace="calibratedRGB"/>
-                                            </state>
-                                            <connections>
-                                                <action selector="recommendButtonTapped:" destination="SE7-jf-WKl" eventType="touchUpInside" id="OB8-dl-msh"/>
-                                            </connections>
-                                        </button>
+                                        </stackView>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="K0u-59-fNZ" firstAttribute="width" secondItem="fLu-Th-f4c" secondAttribute="width" id="3Pc-6d-E04"/>
-                                        <constraint firstItem="AYK-7h-af6" firstAttribute="leading" secondItem="C6H-Ma-A3h" secondAttribute="trailing" constant="8" id="6td-ZZ-FEP"/>
-                                        <constraint firstAttribute="trailing" secondItem="fLu-Th-f4c" secondAttribute="trailing" constant="12" id="83t-Jg-D3f"/>
+                                        <constraint firstAttribute="trailing" secondItem="WR4-Tj-7O3" secondAttribute="trailing" constant="12" id="6Im-Mf-wwP"/>
+                                        <constraint firstItem="WR4-Tj-7O3" firstAttribute="top" secondItem="Ngx-Nb-RJT" secondAttribute="top" constant="9" id="7vO-3K-tQU"/>
                                         <constraint firstItem="8cc-ot-rE5" firstAttribute="top" secondItem="Ngx-Nb-RJT" secondAttribute="top" constant="12" id="Bmn-XL-dH9"/>
                                         <constraint firstItem="8cc-ot-rE5" firstAttribute="leading" secondItem="Ngx-Nb-RJT" secondAttribute="leading" constant="12" id="CIo-lO-pcP"/>
-                                        <constraint firstItem="AYK-7h-af6" firstAttribute="top" secondItem="K0u-59-fNZ" secondAttribute="bottom" constant="12" id="CuJ-yn-mez"/>
-                                        <constraint firstAttribute="trailing" secondItem="AYK-7h-af6" secondAttribute="trailing" constant="12" id="N5i-gg-gxc"/>
-                                        <constraint firstItem="7Ao-xU-Mn8" firstAttribute="leading" secondItem="8cc-ot-rE5" secondAttribute="trailing" constant="12" id="TQQ-Ld-Hhp"/>
-                                        <constraint firstItem="K0u-59-fNZ" firstAttribute="leading" secondItem="7Ao-xU-Mn8" secondAttribute="trailing" constant="8" id="dT5-UE-GLJ"/>
-                                        <constraint firstItem="fLu-Th-f4c" firstAttribute="leading" secondItem="K0u-59-fNZ" secondAttribute="trailing" constant="8" id="dyh-TL-C3E"/>
-                                        <constraint firstItem="7Ao-xU-Mn8" firstAttribute="top" secondItem="Ngx-Nb-RJT" secondAttribute="top" constant="12" id="oTw-Sr-MAz"/>
-                                        <constraint firstItem="fLu-Th-f4c" firstAttribute="top" secondItem="Ngx-Nb-RJT" secondAttribute="top" constant="12" id="teJ-lY-h2y"/>
-                                        <constraint firstItem="C6H-Ma-A3h" firstAttribute="top" secondItem="7Ao-xU-Mn8" secondAttribute="bottom" constant="12" id="wIb-mf-peM"/>
-                                        <constraint firstItem="K0u-59-fNZ" firstAttribute="top" secondItem="Ngx-Nb-RJT" secondAttribute="top" constant="12" id="wYx-r7-9Rh"/>
-                                        <constraint firstItem="7Ao-xU-Mn8" firstAttribute="width" secondItem="K0u-59-fNZ" secondAttribute="width" id="zfL-n3-yaD"/>
+                                        <constraint firstItem="WR4-Tj-7O3" firstAttribute="leading" secondItem="8cc-ot-rE5" secondAttribute="trailing" constant="12" id="PVG-vq-JhS"/>
+                                        <constraint firstItem="m6K-dp-vJr" firstAttribute="top" secondItem="WR4-Tj-7O3" secondAttribute="bottom" constant="10" id="WjL-TQ-PAo"/>
+                                        <constraint firstItem="m6K-dp-vJr" firstAttribute="leading" secondItem="8cc-ot-rE5" secondAttribute="trailing" constant="14" id="lKy-No-lWa"/>
+                                        <constraint firstAttribute="trailing" secondItem="m6K-dp-vJr" secondAttribute="trailing" constant="12" id="wud-gx-bRp"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
@@ -225,7 +241,7 @@
                                             </connections>
                                         </button>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Uan-f2-SAh">
-                                            <rect key="frame" x="125" y="1" width="125" height="44"/>
+                                            <rect key="frame" x="125" y="1" width="125.5" height="44"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="44" id="R0N-OV-YS3"/>
                                             </constraints>
@@ -238,7 +254,7 @@
                                             </connections>
                                         </button>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wop-5y-bkV">
-                                            <rect key="frame" x="250" y="1" width="125" height="44"/>
+                                            <rect key="frame" x="250.5" y="1" width="124.5" height="44"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="44" id="T3H-bz-jyl"/>
                                             </constraints>
@@ -271,14 +287,14 @@
                                             </constraints>
                                         </view>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="e9b-Q2-XJt">
-                                            <rect key="frame" x="125" y="45" width="125" height="1"/>
+                                            <rect key="frame" x="125" y="45" width="125.5" height="1"/>
                                             <color key="backgroundColor" red="0.1960784314" green="0.1960784314" blue="0.1960784314" alpha="1" colorSpace="calibratedRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="1" id="jzx-AW-s8T"/>
                                             </constraints>
                                         </view>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="437-mZ-rQb">
-                                            <rect key="frame" x="250" y="45" width="125" height="1"/>
+                                            <rect key="frame" x="250.5" y="45" width="124.5" height="1"/>
                                             <color key="backgroundColor" red="0.1960784314" green="0.1960784314" blue="0.1960784314" alpha="1" colorSpace="calibratedRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="1" id="g9J-0W-k8t"/>
@@ -356,9 +372,9 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lPS-g7-LNC">
-                                            <rect key="frame" x="127.5" y="79.5" width="120" height="32"/>
+                                            <rect key="frame" x="124.5" y="79.5" width="126" height="32"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                            <state key="normal" title="Add Button" backgroundImage="btn_grey">
+                                            <state key="normal" title="Add Button" backgroundImage="btn_edit_profile">
                                                 <color key="titleColor" red="0.4941176471" green="0.4941176471" blue="0.4941176471" alpha="1" colorSpace="calibratedRGB"/>
                                             </state>
                                             <connections>
@@ -758,13 +774,12 @@
         </scene>
     </scenes>
     <resources>
-        <image name="btn_disabled" width="120" height="32"/>
-        <image name="btn_grey" width="120" height="32"/>
-        <image name="ic_camera_black" width="22" height="22"/>
+        <image name="btn_edit_profile" width="126" height="32"/>
+        <image name="ic_camera_posts" width="26" height="20"/>
+        <image name="ic_followers_following" width="29" height="20"/>
         <image name="ic_heart_white" width="20" height="20"/>
         <image name="ic_location_grey" width="11" height="17"/>
-        <image name="ic_people_black" width="24" height="22"/>
-        <image name="ic_recommendation_black" width="18" height="22"/>
+        <image name="ic_recommendations" width="20" height="20"/>
         <image name="ic_settings" width="22" height="22"/>
     </resources>
 </document>

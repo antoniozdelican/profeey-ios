@@ -182,6 +182,7 @@ class ProfileTableViewController: UITableViewController {
                 cell.numberOfPostsButton.setTitle(self.user?.numberOfPostsInt.numberToString(), for: UIControlState.normal)
                 cell.numberOfFollowersButton.setTitle(self.user?.numberOfFollowersInt.numberToString(), for: UIControlState.normal)
                 cell.numberOfRecommendationsButton.setTitle(self.user?.numberOfRecommendationsInt.numberToString(), for: UIControlState.normal)
+                
                 if self.isCurrentUser {
                     cell.recommendButton.isHidden = true
                     cell.setEditButton()

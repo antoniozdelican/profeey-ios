@@ -35,7 +35,7 @@ class EditPostCategoryTableViewCell: UITableViewCell {
     
     func categoryRemoved() {
         self.categoryImageView.image = UIImage(named: "ic_category_grey")
-        self.categoryLabel.textColor = Colors.greyDark
+        self.categoryLabel.textColor = Colors.grey
         self.categoryLabel.text = "Add Skill"
         self.removeButton.isHidden = true
         

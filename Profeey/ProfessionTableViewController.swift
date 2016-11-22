@@ -100,9 +100,10 @@ class ProfessionTableViewController: UITableViewController {
             let user = self.users[indexPath.row]
             cell.profilePicImageView.image = user.profilePic
             cell.fullNameLabel.text = user.fullName
-            cell.preferredUsernameLabel.text = user.fullUsername
+            cell.preferredUsernameLabel.text = user.preferredUsername
             cell.professionNameLabel.text = user.professionName
             cell.locationNameLabel.text = user.locationName
+            cell.locationStackView.isHidden = user.locationName != nil ? false : true
             return cell
         default:
             return UITableViewCell()
@@ -113,6 +114,9 @@ class ProfessionTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.layoutMargins = UIEdgeInsets.zero
+        if cell is NoResultsTableViewCell {
+            cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0)
+        }
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -131,7 +135,13 @@ class ProfessionTableViewController: UITableViewController {
         case 0:
             return 52.0
         case 1:
-            return 86.0
+            if self.isSearchingUsers {
+                return 64.0
+            }
+            if self.users.count == 0 {
+                return 64.0
+            }
+            return 104.0
         default:
             return 0.0
         }
@@ -142,6 +152,12 @@ class ProfessionTableViewController: UITableViewController {
         case 0:
             return 52.0
         case 1:
+            if self.isSearchingUsers {
+                return 64.0
+            }
+            if self.users.count == 0 {
+                return 64.0
+            }
             return UITableViewAutomaticDimension
         default:
             return 0.0

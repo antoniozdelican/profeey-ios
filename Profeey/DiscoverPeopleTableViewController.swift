@@ -78,7 +78,7 @@ class DiscoverPeopleTableViewController: UITableViewController {
         let user = self.users[indexPath.row]
         cell.profilePicImageView.image = user.profilePic
         cell.fullNameLabel.text = user.fullName
-        cell.preferredUsernameLabel.text = user.fullUsername
+        cell.preferredUsernameLabel.text = user.preferredUsername
         cell.professionNameLabel.text = user.professionName
         cell.locationNameLabel.text = user.locationName
         cell.discoverUserTableViewCellDelegate = self

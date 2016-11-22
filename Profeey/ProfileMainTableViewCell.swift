@@ -31,6 +31,14 @@ class ProfileMainTableViewCell: UITableViewCell {
         super.awakeFromNib()
         self.profilePicImageView.layer.cornerRadius = 4.0
         self.profilePicImageView.clipsToBounds = true
+        
+        // Loading buttons
+        self.recommendButton.layer.cornerRadius = 4.0
+        self.recommendButton.layer.borderWidth = 1.0
+        self.recommendButton.layer.borderColor = Colors.disabled.cgColor
+        self.followButton.layer.cornerRadius = 4.0
+        self.followButton.layer.borderWidth = 1.0
+        self.followButton.layer.borderColor = Colors.disabled.cgColor
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -39,32 +47,39 @@ class ProfileMainTableViewCell: UITableViewCell {
     
     func setRecommendButton() {
         self.recommendButton.setTitle("Recommend", for: UIControlState())
-        self.recommendButton.setTitleColor(Colors.green, for: UIControlState())
-        self.recommendButton.setBackgroundImage(UIImage(named: "btn_green"), for: UIControlState())
+        self.recommendButton.setTitleColor(Colors.turquoise, for: UIControlState())
+        self.recommendButton.layer.borderColor = Colors.turquoise.cgColor
+        self.recommendButton.backgroundColor = UIColor.clear
+//        self.recommendButton.setBackgroundImage(UIImage(named: "btn_recommend"), for: UIControlState())
     }
     
     func setRecommendingButton() {
         self.recommendButton.setTitle("Recommending", for: UIControlState())
-        self.recommendButton.setTitleColor(Colors.green, for: UIControlState())
-        self.recommendButton.setBackgroundImage(UIImage(named: "btn_green"), for: UIControlState())
+        self.recommendButton.setTitleColor(UIColor.white, for: UIControlState())
+        self.recommendButton.layer.borderColor = Colors.turquoise.cgColor
+        self.recommendButton.backgroundColor = Colors.turquoise
+//        self.recommendButton.setBackgroundImage(UIImage(named: "btn_recommending"), for: UIControlState())
     }
     
     func setEditButton() {
         self.followButton.setTitle("Edit Profile", for: UIControlState())
-        self.followButton.setTitleColor(Colors.greyDark, for: UIControlState())
-        self.followButton.setBackgroundImage(UIImage(named: "btn_grey"), for: UIControlState())
+        self.followButton.setTitleColor(Colors.grey, for: UIControlState())
+        self.followButton.layer.borderColor = Colors.grey.cgColor
+        self.followButton.backgroundColor = UIColor.clear
     }
     
     func setFollowButton() {
         self.followButton.setTitle("Follow", for: UIControlState())
         self.followButton.setTitleColor(Colors.blue, for: UIControlState())
-        self.followButton.setBackgroundImage(UIImage(named: "btn_blue"), for: UIControlState())
+        self.followButton.layer.borderColor = Colors.blue.cgColor
+        self.followButton.backgroundColor = UIColor.clear
     }
     
     func setFollowingButton() {
         self.followButton.setTitle("Following", for: UIControlState())
         self.followButton.setTitleColor(UIColor.white, for: UIControlState())
-        self.followButton.setBackgroundImage(UIImage(named: "btn_blue_selected"), for: UIControlState())
+        self.followButton.layer.borderColor = Colors.blue.cgColor
+        self.followButton.backgroundColor = Colors.blue
     }
     
     // MARK: IBActions

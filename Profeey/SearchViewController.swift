@@ -218,11 +218,11 @@ class SearchViewController: UIViewController {
         case 0:
             if self.peopleLabel.textColor != Colors.black {
                 self.peopleLabel.textColor = Colors.black
-                self.professionsLabel.textColor = Colors.greyDark
+                self.professionsLabel.textColor = Colors.grey
             }
         case 1:
             if self.professionsLabel.textColor != Colors.black {
-                self.peopleLabel.textColor = Colors.greyDark
+                self.peopleLabel.textColor = Colors.grey
                 self.professionsLabel.textColor = Colors.black
             }
         default:

@@ -68,6 +68,9 @@ class SearchProfessionsTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.layoutMargins = UIEdgeInsets.zero
+        if cell is NoResultsTableViewCell {
+            cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0)
+        }
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -79,10 +82,22 @@ class SearchProfessionsTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        if self.isSearchingProfessions {
+            return 64.0
+        }
+        if self.professions.count == 0 {
+            return 64.0
+        }
         return 72.0
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if self.isSearchingProfessions {
+            return 64.0
+        }
+        if self.professions.count == 0 {
+            return 64.0
+        }
         return 72.0
     }
     
