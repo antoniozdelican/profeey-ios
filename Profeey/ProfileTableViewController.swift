@@ -201,6 +201,7 @@ class ProfileTableViewController: UITableViewController {
                 cell.fullNameLabel.text = self.user?.fullName
                 cell.professionNameLabel.text = self.user?.professionName
                 cell.locationNameLabel.text = self.user?.locationName
+                cell.locationStackView.isHidden = self.user?.locationName != nil ? false : true
                 cell.aboutLabel.text = self.user?.about
                 return cell
             case 2:
@@ -864,30 +865,6 @@ class ProfileTableViewController: UITableViewController {
             return nil
         })
     }
-    
-//    fileprivate func signOut() {
-//        AWSClientManager.defaultClientManager().signOut({
-//            (task: AWSTask) in
-//            DispatchQueue.main.async(execute: {
-//                if let error = task.error {
-//                    print("signOut error: \(error)")
-//                } else {
-//                    self.redirectToOnboarding()
-//                }
-//            })
-//            return nil
-//        })
-//    }
-//    
-//    // MARK: Helpers
-//    
-//    fileprivate func redirectToOnboarding() {
-//        guard let window = UIApplication.shared.keyWindow,
-//            let initialViewController = UIStoryboard(name: "Onboarding", bundle: nil).instantiateInitialViewController() else {
-//                return
-//        }
-//        window.rootViewController = initialViewController
-//    }
 }
 
 extension ProfileTableViewController: ProfileMainTableViewCellDelegate {

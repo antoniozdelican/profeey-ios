@@ -13,6 +13,7 @@ class ProfileInfoTableViewCell: UITableViewCell {
     @IBOutlet weak var fullNameLabel: UILabel!
     @IBOutlet weak var professionNameLabel: UILabel!
     @IBOutlet weak var locationNameLabel: UILabel!
+    @IBOutlet weak var locationStackView: UIStackView!
     @IBOutlet weak var aboutLabel: UILabel!
     
     override func awakeFromNib() {

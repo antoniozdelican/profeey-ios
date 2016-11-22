@@ -149,12 +149,24 @@
                                                     <color key="textColor" red="0.4941176471" green="0.4941176471" blue="0.4941176471" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Location Name" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5Ro-oH-JcV">
+                                                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="H5i-Ve-8wx">
                                                     <rect key="frame" x="0.0" y="47" width="351" height="17"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <color key="textColor" red="0.4941176471" green="0.4941176471" blue="0.4941176471" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
+                                                    <subviews>
+                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_location_grey" translatesAutoresizingMaskIntoConstraints="NO" id="GiQ-Mr-uJO">
+                                                            <rect key="frame" x="0.0" y="0.0" width="11" height="17"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" constant="11" id="5A6-xy-N0l"/>
+                                                                <constraint firstAttribute="height" constant="17" id="C6X-iw-sX3"/>
+                                                            </constraints>
+                                                        </imageView>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Location Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5Ro-oH-JcV">
+                                                            <rect key="frame" x="16" y="0.0" width="335" height="17"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                            <color key="textColor" red="0.4941176471" green="0.4941176471" blue="0.4941176471" alpha="1" colorSpace="calibratedRGB"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                    </subviews>
+                                                </stackView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Bio" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="49j-b1-mf2">
                                                     <rect key="frame" x="0.0" y="68" width="351" height="17"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -175,6 +187,7 @@
                                     <outlet property="aboutLabel" destination="49j-b1-mf2" id="BgT-1p-rEL"/>
                                     <outlet property="fullNameLabel" destination="72m-9Q-520" id="QRS-1s-8zo"/>
                                     <outlet property="locationNameLabel" destination="5Ro-oH-JcV" id="Ptq-Py-y6A"/>
+                                    <outlet property="locationStackView" destination="H5i-Ve-8wx" id="bOf-wD-VBl"/>
                                     <outlet property="professionNameLabel" destination="VXx-CT-nJq" id="1nb-mN-cS2"/>
                                 </connections>
                             </tableViewCell>
@@ -299,6 +312,7 @@
                                         <constraint firstItem="Uan-f2-SAh" firstAttribute="top" secondItem="wGt-jg-Y88" secondAttribute="bottom" id="qvQ-eG-71Q"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <color key="backgroundColor" red="0.98039215686274506" green="0.98039215686274506" blue="0.98039215686274506" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>
                                     <outlet property="experienceButton" destination="Uan-f2-SAh" id="Xh8-ZL-x3T"/>
                                     <outlet property="experienceButtonBorderView" destination="e9b-Q2-XJt" id="m9T-sB-ihK"/>
@@ -748,6 +762,7 @@
         <image name="btn_grey" width="120" height="32"/>
         <image name="ic_camera_black" width="22" height="22"/>
         <image name="ic_heart_white" width="20" height="20"/>
+        <image name="ic_location_grey" width="11" height="17"/>
         <image name="ic_people_black" width="24" height="22"/>
         <image name="ic_recommendation_black" width="18" height="22"/>
         <image name="ic_settings" width="22" height="22"/>
