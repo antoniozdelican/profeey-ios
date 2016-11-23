@@ -253,6 +253,31 @@ extension Date {
         return "Now"
     }
     
+    func offsetFromShort(_ date: Date) -> String {
+        if yearsFrom(date)   > 0 {
+            return "\(yearsFrom(date))y"
+        }
+        if monthsFrom(date)  > 0 {
+            return "\(monthsFrom(date))m"
+        }
+        if weeksFrom(date)   > 0 {
+            return "\(weeksFrom(date))w"
+        }
+        if daysFrom(date)    > 0 {
+            return "\(daysFrom(date))d"
+        }
+        if hoursFrom(date)   > 0 {
+            return "\(hoursFrom(date))h"
+        }
+        if minutesFrom(date) > 0 {
+            return "\(minutesFrom(date))m"
+        }
+        if secondsFrom(date) > 0 {
+            return "\(secondsFrom(date))s"
+        }
+        return "Now"
+    }
+    
     // Used for CommonCrypto and AWSClousSearchManager
     struct Formatter {
         static let iso8601: DateFormatter = {

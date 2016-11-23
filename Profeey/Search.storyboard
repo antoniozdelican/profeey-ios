@@ -240,7 +240,7 @@
                                                 <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="lAF-5P-vaN">
                                                     <rect key="frame" x="0.0" y="54" width="291" height="17"/>
                                                     <subviews>
-                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="252" verticalHuggingPriority="251" image="ic_location_grey" translatesAutoresizingMaskIntoConstraints="NO" id="sag-Jo-mE5">
+                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="252" verticalHuggingPriority="251" image="ic_location" translatesAutoresizingMaskIntoConstraints="NO" id="sag-Jo-mE5">
                                                             <rect key="frame" x="0.0" y="0.0" width="11" height="17"/>
                                                         </imageView>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Location Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lbj-fZ-8rT">
@@ -481,7 +481,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="ic_location_grey" width="11" height="17"/>
+        <image name="ic_location" width="11" height="17"/>
         <image name="ic_search" width="25" height="25"/>
     </resources>
 </document>

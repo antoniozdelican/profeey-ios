@@ -20,6 +20,7 @@ class EditWorkTitleTableViewCell: UITableViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
+        self.titleTextField.autocapitalizationType = UITextAutocapitalizationType.words
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

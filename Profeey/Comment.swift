@@ -23,7 +23,7 @@ class Comment: NSObject {
             return nil
         }
         let currentDate = Date()
-        return currentDate.offsetFrom(Date(timeIntervalSince1970: TimeInterval(creationDate)))
+        return currentDate.offsetFromShort(Date(timeIntervalSince1970: TimeInterval(creationDate)))
     }
     
     override init() {

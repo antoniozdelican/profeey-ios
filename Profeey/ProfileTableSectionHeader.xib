@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11201" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11542" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -13,32 +16,51 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BBO-Fx-6mB">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="48"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TITLE" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qtq-vh-AiP">
+                            <rect key="frame" x="12" y="17" width="32.5" height="14.5"/>
                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
                             <color key="textColor" red="0.4941176471" green="0.4941176471" blue="0.4941176471" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6mD-1R-dv3">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6mD-1R-dv3">
+                            <rect key="frame" x="331" y="0.0" width="44" height="48"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="44" id="LfW-oD-pTM"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                            <state key="normal" title="Edit">
+                            <state key="normal" image="ic_arrow_down">
                                 <color key="titleColor" red="0.4941176471" green="0.4941176471" blue="0.4941176471" alpha="1" colorSpace="calibratedRGB"/>
                             </state>
                             <connections>
                                 <action selector="editButtonTapped:" destination="iN0-l3-epB" eventType="touchUpInside" id="krk-VT-JDF"/>
                             </connections>
                         </button>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dGT-ie-CDK" userLabel="Separator View">
+                            <rect key="frame" x="0.0" y="47.5" width="375" height="0.5"/>
+                            <color key="backgroundColor" red="0.90980392160000001" green="0.90980392160000001" blue="0.90980392160000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="1" id="0Bl-Hb-0kp">
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="number" keyPath="constant">
+                                            <real key="value" value="0.5"/>
+                                        </userDefinedRuntimeAttribute>
+                                    </userDefinedRuntimeAttributes>
+                                </constraint>
+                            </constraints>
+                        </view>
                     </subviews>
                     <color key="backgroundColor" red="0.98039215690000003" green="0.98039215690000003" blue="0.98039215690000003" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstItem="Qtq-vh-AiP" firstAttribute="leading" secondItem="BBO-Fx-6mB" secondAttribute="leading" constant="12" id="0Oh-a1-WXN"/>
+                        <constraint firstAttribute="bottom" secondItem="dGT-ie-CDK" secondAttribute="bottom" id="ARv-fP-Sc0"/>
                         <constraint firstAttribute="trailing" secondItem="6mD-1R-dv3" secondAttribute="trailing" id="DcF-xW-MOo"/>
+                        <constraint firstItem="dGT-ie-CDK" firstAttribute="leading" secondItem="BBO-Fx-6mB" secondAttribute="leading" id="Nje-xg-6k7"/>
                         <constraint firstItem="6mD-1R-dv3" firstAttribute="height" secondItem="BBO-Fx-6mB" secondAttribute="height" id="RwP-y2-MWd"/>
                         <constraint firstItem="6mD-1R-dv3" firstAttribute="centerY" secondItem="BBO-Fx-6mB" secondAttribute="centerY" id="Zpm-dU-S0h"/>
                         <constraint firstItem="Qtq-vh-AiP" firstAttribute="centerY" secondItem="BBO-Fx-6mB" secondAttribute="centerY" id="ccL-IJ-d8i"/>
+                        <constraint firstAttribute="trailing" secondItem="dGT-ie-CDK" secondAttribute="trailing" id="yKw-zG-XoX"/>
                     </constraints>
                 </view>
             </subviews>
@@ -56,4 +78,7 @@
             </connections>
         </view>
     </objects>
+    <resources>
+        <image name="ic_arrow_down" width="14" height="14"/>
+    </resources>
 </document>

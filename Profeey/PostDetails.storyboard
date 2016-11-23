@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="1eR-mU-kH2">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="1eR-mU-kH2">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -17,13 +20,14 @@
                         <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellPostUser" rowHeight="64" id="m7K-9d-d5a" customClass="PostUserTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="120" width="375" height="64"/>
+                                <rect key="frame" x="0.0" y="56" width="375" height="64"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="m7K-9d-d5a" id="1GA-aT-Xx8">
-                                    <frame key="frameInset" width="375" height="63"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="63"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Xpi-ZP-aFl">
+                                            <rect key="frame" x="12" y="12" width="40" height="40"/>
                                             <color key="backgroundColor" red="0.90980392160000001" green="0.90980392160000001" blue="0.90980392160000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="40" id="nhn-or-bmj"/>
@@ -31,13 +35,16 @@
                                             </constraints>
                                         </imageView>
                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="Qmf-wo-dHb">
+                                            <rect key="frame" x="64" y="14" width="267" height="35"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Preferred Username" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ycc-hF-Aza">
+                                                    <rect key="frame" x="0.0" y="0.0" width="267" height="17"/>
                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
                                                     <color key="textColor" red="0.1960784314" green="0.1960784314" blue="0.1960784314" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Profession Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RVd-qe-Y1e">
+                                                    <rect key="frame" x="0.0" y="18" width="267" height="17"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <color key="textColor" red="0.4941176471" green="0.4941176471" blue="0.4941176471" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -45,11 +52,12 @@
                                             </subviews>
                                         </stackView>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="j7G-QN-8IS">
+                                            <rect key="frame" x="339" y="0.0" width="36" height="62"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="62" id="hWu-bK-bsa"/>
                                                 <constraint firstAttribute="width" constant="36" id="hgz-we-Jdh"/>
                                             </constraints>
-                                            <state key="normal" image="ic_expand_grey"/>
+                                            <state key="normal" image="ic_arrow_down"/>
                                             <connections>
                                                 <action selector="expandButtonTapped:" destination="m7K-9d-d5a" eventType="touchUpInside" id="Eda-EL-Yq7"/>
                                             </connections>
@@ -73,13 +81,14 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellPostImage" rowHeight="400" id="y1e-tU-JqW" customClass="PostImageTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="184" width="375" height="400"/>
+                                <rect key="frame" x="0.0" y="120" width="375" height="400"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="y1e-tU-JqW" id="lsm-bG-cEw">
-                                    <frame key="frameInset" width="375" height="399"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="399"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="0xz-xH-Qs1">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="399.5"/>
                                             <color key="backgroundColor" red="0.90980392160000001" green="0.90980392160000001" blue="0.90980392160000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" priority="750" constant="400" id="tv3-sA-ghy"/>
@@ -109,13 +118,14 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellPostInfo" rowHeight="32" id="ocT-Vv-CbR" customClass="PostInfoTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="584" width="375" height="32"/>
+                                <rect key="frame" x="0.0" y="520" width="375" height="32"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ocT-Vv-CbR" id="sYv-ji-mAB">
-                                    <frame key="frameInset" width="375" height="31"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="31"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Caption" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YCe-IQ-VAV">
+                                            <rect key="frame" x="12" y="8" width="351" height="19.5"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                             <color key="textColor" red="0.1960784314" green="0.1960784314" blue="0.1960784314" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
@@ -133,13 +143,14 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellPostCategoryCreationDate" rowHeight="26" id="pcb-J2-CT8" customClass="PostCategoryCreationDateTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="616" width="375" height="26"/>
+                                <rect key="frame" x="0.0" y="552" width="375" height="26"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="pcb-J2-CT8" id="xUz-8Y-dg4">
-                                    <frame key="frameInset" width="375" height="25"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="25"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Category Name · Creation Date" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="13C-B1-slx">
+                                            <rect key="frame" x="12" y="4" width="351" height="17.5"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <color key="textColor" red="0.4941176471" green="0.4941176471" blue="0.4941176471" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
@@ -163,30 +174,33 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellPostButtons" rowHeight="52" id="XwH-Og-4zn" customClass="PostButtonsTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="642" width="375" height="52"/>
+                                <rect key="frame" x="0.0" y="578" width="375" height="52"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="XwH-Og-4zn" id="XMe-Id-mzz">
-                                    <frame key="frameInset" width="375" height="51"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="51"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="2ud-y2-zUR">
+                                            <rect key="frame" x="0.0" y="2" width="104" height="48"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Y4-GH-3oW">
+                                                    <rect key="frame" x="0.0" y="0.0" width="48" height="48"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="48" id="4PE-vO-xSI"/>
                                                         <constraint firstAttribute="width" constant="48" id="YcR-yZ-XQh"/>
                                                     </constraints>
-                                                    <state key="normal" image="ic_heart_grey"/>
+                                                    <state key="normal" image="ic_like"/>
                                                     <connections>
                                                         <action selector="likeButtonTapped:" destination="XwH-Og-4zn" eventType="touchUpInside" id="Cgl-XZ-i9N"/>
                                                     </connections>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0y5-mG-FCq">
+                                                    <rect key="frame" x="56" y="0.0" width="48" height="48"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="48" id="Opp-tN-rqX"/>
                                                         <constraint firstAttribute="height" constant="48" id="w8W-tz-BOq"/>
                                                     </constraints>
-                                                    <state key="normal" image="ic_comment_grey_big"/>
+                                                    <state key="normal" image="ic_comment"/>
                                                     <connections>
                                                         <action selector="commentButtonTapped:" destination="XwH-Og-4zn" eventType="touchUpInside" id="I1y-aT-oj9"/>
                                                     </connections>
@@ -194,25 +208,32 @@
                                             </subviews>
                                         </stackView>
                                         <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="Tp3-uy-cjo">
+                                            <rect key="frame" x="295" y="2" width="68" height="48"/>
                                             <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="375-ck-bSh">
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="375-ck-bSh">
+                                                    <rect key="frame" x="0.0" y="0.0" width="30" height="48"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="48" id="XGq-HH-uXz"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
-                                                    <state key="normal" title="0 likes">
+                                                    <inset key="contentEdgeInsets" minX="4" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                    <inset key="imageEdgeInsets" minX="-4" minY="0.0" maxX="4" maxY="0.0"/>
+                                                    <state key="normal" title="0" image="ic_likes">
                                                         <color key="titleColor" red="0.4941176471" green="0.4941176471" blue="0.4941176471" alpha="1" colorSpace="calibratedRGB"/>
                                                     </state>
                                                     <connections>
                                                         <action selector="numberOfLikesButtonTapped:" destination="XwH-Og-4zn" eventType="touchUpInside" id="hay-vw-E4E"/>
                                                     </connections>
                                                 </button>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UxE-ho-MKY">
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UxE-ho-MKY">
+                                                    <rect key="frame" x="38" y="0.0" width="30" height="48"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="48" id="H3F-Ub-qWB"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
-                                                    <state key="normal" title="0 comments">
+                                                    <inset key="contentEdgeInsets" minX="4" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                    <inset key="imageEdgeInsets" minX="-4" minY="0.0" maxX="4" maxY="0.0"/>
+                                                    <state key="normal" title="0" image="ic_comments">
                                                         <color key="titleColor" red="0.4941176471" green="0.4941176471" blue="0.4941176471" alpha="1" colorSpace="calibratedRGB"/>
                                                     </state>
                                                     <connections>
@@ -292,8 +313,10 @@
         </scene>
     </scenes>
     <resources>
-        <image name="ic_comment_grey_big" width="25" height="25"/>
-        <image name="ic_expand_grey" width="24" height="24"/>
-        <image name="ic_heart_grey" width="24" height="24"/>
+        <image name="ic_arrow_down" width="14" height="14"/>
+        <image name="ic_comment" width="25" height="24"/>
+        <image name="ic_comments" width="17" height="17"/>
+        <image name="ic_like" width="25" height="24"/>
+        <image name="ic_likes" width="17" height="17"/>
     </resources>
 </document>

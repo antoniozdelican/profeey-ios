@@ -77,7 +77,7 @@
                                                 <constraint firstAttribute="height" constant="63" id="ohZ-J0-39v"/>
                                                 <constraint firstAttribute="width" constant="36" id="pyS-6F-RfV"/>
                                             </constraints>
-                                            <state key="normal" image="ic_expand_grey"/>
+                                            <state key="normal" image="ic_arrow_down"/>
                                             <connections>
                                                 <action selector="expandButtonTapped:" destination="Zre-gG-70s" eventType="touchUpInside" id="Gne-KI-onb"/>
                                             </connections>
@@ -209,7 +209,7 @@
                                                         <constraint firstAttribute="height" constant="48" id="UVN-uZ-6aL"/>
                                                         <constraint firstAttribute="width" constant="48" id="ebO-sd-n93"/>
                                                     </constraints>
-                                                    <state key="normal" image="ic_heart_grey"/>
+                                                    <state key="normal" image="ic_like"/>
                                                     <connections>
                                                         <action selector="likeButtonTapped:" destination="p0U-dG-J82" eventType="touchUpInside" id="ZfL-Dc-5GH"/>
                                                     </connections>
@@ -220,36 +220,40 @@
                                                         <constraint firstAttribute="height" constant="48" id="P9o-X6-sbb"/>
                                                         <constraint firstAttribute="width" constant="48" id="woR-QU-cmv"/>
                                                     </constraints>
-                                                    <state key="normal" image="ic_comment_grey_big"/>
+                                                    <state key="normal" image="ic_comment"/>
                                                     <connections>
                                                         <action selector="commentButtonTapped:" destination="p0U-dG-J82" eventType="touchUpInside" id="b6h-WD-xg0"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
                                         </stackView>
-                                        <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="qF2-kD-Nxo">
-                                            <rect key="frame" x="229" y="2" width="134" height="48"/>
+                                        <stackView opaque="NO" contentMode="scaleToFill" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="qF2-kD-Nxo">
+                                            <rect key="frame" x="270" y="2" width="93" height="48"/>
                                             <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="brl-cn-Xx9">
-                                                    <rect key="frame" x="0.0" y="0.0" width="43" height="48"/>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="brl-cn-Xx9">
+                                                    <rect key="frame" x="0.0" y="0.0" width="28" height="48"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="48" id="tjE-Ym-cf4"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
-                                                    <state key="normal" title="0 likes">
+                                                    <inset key="contentEdgeInsets" minX="4" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                    <inset key="imageEdgeInsets" minX="-4" minY="0.0" maxX="4" maxY="0.0"/>
+                                                    <state key="normal" title="1" image="ic_likes">
                                                         <color key="titleColor" red="0.4941176471" green="0.4941176471" blue="0.4941176471" alpha="1" colorSpace="calibratedRGB"/>
                                                     </state>
                                                     <connections>
                                                         <action selector="numberOfLikesButtonTapped:" destination="p0U-dG-J82" eventType="touchUpInside" id="aaz-vN-0yB"/>
                                                     </connections>
                                                 </button>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tmp-iR-ulA">
-                                                    <rect key="frame" x="51" y="0.0" width="83" height="48"/>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tmp-iR-ulA">
+                                                    <rect key="frame" x="40" y="0.0" width="53" height="48"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="48" id="AhV-th-h2j"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
-                                                    <state key="normal" title="0 comments">
+                                                    <inset key="contentEdgeInsets" minX="4" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                    <inset key="imageEdgeInsets" minX="-4" minY="0.0" maxX="4" maxY="0.0"/>
+                                                    <state key="normal" title="123k" image="ic_comments">
                                                         <color key="titleColor" red="0.4941176471" green="0.4941176471" blue="0.4941176471" alpha="1" colorSpace="calibratedRGB"/>
                                                     </state>
                                                     <connections>
@@ -383,10 +387,12 @@
         </scene>
     </scenes>
     <resources>
+        <image name="ic_arrow_down" width="14" height="14"/>
         <image name="ic_capture" width="22" height="22"/>
-        <image name="ic_comment_grey_big" width="25" height="25"/>
-        <image name="ic_expand_grey" width="24" height="24"/>
-        <image name="ic_heart_grey" width="24" height="24"/>
-        <image name="ic_home" width="27" height="25"/>
+        <image name="ic_comment" width="25" height="24"/>
+        <image name="ic_comments" width="17" height="17"/>
+        <image name="ic_home" width="25" height="25"/>
+        <image name="ic_like" width="25" height="24"/>
+        <image name="ic_likes" width="17" height="17"/>
     </resources>
 </document>

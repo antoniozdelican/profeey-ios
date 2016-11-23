@@ -19,6 +19,9 @@ class WorkExperienceTableViewCell: UITableViewCell {
     @IBOutlet weak var organizationLabel: UILabel!
     @IBOutlet weak var timePeriodLabel: UILabel!
     @IBOutlet weak var workDescriptionLabel: UILabel!
+    // Used in ProfileVc for custom separator.
+    @IBOutlet weak var separatorViewLeftConstraint: NSLayoutConstraint?
+    
     
     var workExperienceTableViewCellDelegate: WorkExperienceTableViewCellDelegate?
     

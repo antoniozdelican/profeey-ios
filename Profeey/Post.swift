@@ -40,16 +40,6 @@ class Post: NSObject {
         guard numberOfLikesInt > 0 else {
             return nil
         }
-        guard numberOfLikesInt > 1 else {
-            return "\(numberOfLikesInt) like"
-        }
-        return "\(numberOfLikesInt) likes"
-    }
-    var numberOfLikesSmallString: String? {
-        guard let numberOfLikes = self.numberOfLikes else {
-            return "0"
-        }
-        let numberOfLikesInt = numberOfLikes.intValue
         return numberOfLikesInt.numberToString()
     }
     var numberOfCommentsString: String? {
@@ -60,18 +50,50 @@ class Post: NSObject {
         guard numberOfCommentsInt > 0 else {
             return nil
         }
-        guard numberOfCommentsInt > 1 else {
-            return "\(numberOfCommentsInt) comment"
-        }
-        return "\(numberOfCommentsInt) comments"
-    }
-    var numberOfCommentsSmallString: String? {
-        guard let numberOfComments = self.numberOfComments else {
-            return "0"
-        }
-        let numberOfCommentsInt = numberOfComments.intValue
         return numberOfCommentsInt.numberToString()
     }
+    
+    
+//    var numberOfLikesString: String? {
+//        guard let numberOfLikes = self.numberOfLikes else {
+//            return nil
+//        }
+//        let numberOfLikesInt = numberOfLikes.intValue
+//        guard numberOfLikesInt > 0 else {
+//            return nil
+//        }
+//        guard numberOfLikesInt > 1 else {
+//            return "\(numberOfLikesInt) like"
+//        }
+//        return "\(numberOfLikesInt) likes"
+//    }
+    var numberOfLikesSmallString: String? {
+        guard let numberOfLikes = self.numberOfLikes else {
+            return "0"
+        }
+        let numberOfLikesInt = numberOfLikes.intValue
+        return numberOfLikesInt.numberToString()
+    }
+//    var numberOfCommentsString: String? {
+//        guard let numberOfComments = self.numberOfComments else {
+//            return nil
+//        }
+//        let numberOfCommentsInt = numberOfComments.intValue
+//        guard numberOfCommentsInt > 0 else {
+//            return nil
+//        }
+//        guard numberOfCommentsInt > 1 else {
+//            return "\(numberOfCommentsInt) comment"
+//        }
+//        return "\(numberOfCommentsInt) comments"
+//    }
+//    var numberOfCommentsSmallString: String? {
+//        guard let numberOfComments = self.numberOfComments else {
+//            return "0"
+//        }
+//        let numberOfCommentsInt = numberOfComments.intValue
+//        return numberOfCommentsInt.numberToString()
+//    }
     
     var isLikedByCurrentUser: Bool = false
 

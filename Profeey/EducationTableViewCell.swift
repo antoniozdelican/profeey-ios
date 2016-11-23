@@ -19,6 +19,9 @@ class EducationTableViewCell: UITableViewCell {
     @IBOutlet weak var fieldOfStudyLabel: UILabel!
     @IBOutlet weak var timePeriodLabel: UILabel!
     @IBOutlet weak var educationDescriptionLabel: UILabel!
+    // Used in ProfileVc for custom separator.
+    @IBOutlet weak var separatorViewLeftConstraint: NSLayoutConstraint?
+    
     
     var educationTableViewCellDelegate: EducationTableViewCellDelegate?
 

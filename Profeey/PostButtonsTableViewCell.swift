@@ -40,19 +40,19 @@ class PostButtonsTableViewCell: UITableViewCell {
                 UIFontFeatureSelectorIdentifierKey: kMonospacedNumbersSelector
             ]
         ]
-        let fontDescriptor = UIFont.systemFont(ofSize: 14.0, weight: UIFontWeightRegular).fontDescriptor.addingAttributes(
+        let fontDescriptor = UIFont.systemFont(ofSize: 14.0, weight: UIFontWeightMedium).fontDescriptor.addingAttributes(
             [UIFontDescriptorFeatureSettingsAttribute: features]
         )
-        self.numberOfLikesButton.titleLabel?.font = UIFont(descriptor: fontDescriptor, size: UIFont.systemFont(ofSize: 14.0, weight: UIFontWeightRegular).pointSize)
-        self.numberOfCommentsButton.titleLabel?.font = UIFont(descriptor: fontDescriptor, size: UIFont.systemFont(ofSize: 14.0, weight: UIFontWeightRegular).pointSize)
+        self.numberOfLikesButton.titleLabel?.font = UIFont(descriptor: fontDescriptor, size: UIFont.systemFont(ofSize: 14.0, weight: UIFontWeightMedium).pointSize)
+        self.numberOfCommentsButton.titleLabel?.font = UIFont(descriptor: fontDescriptor, size: UIFont.systemFont(ofSize: 14.0, weight: UIFontWeightMedium).pointSize)
     }
     
     func setSelectedLikeButton() {
-        self.likeButton.setImage(UIImage(named: "ic_heart_red"), for: UIControlState())
+        self.likeButton.setImage(UIImage(named: "ic_like_active"), for: UIControlState())
     }
     
     func setUnselectedLikeButton() {
-        self.likeButton.setImage(UIImage(named: "ic_heart_grey"), for: UIControlState())
+        self.likeButton.setImage(UIImage(named: "ic_like"), for: UIControlState())
     }
     
     @IBAction func likeButtonTapped(_ sender: AnyObject) {

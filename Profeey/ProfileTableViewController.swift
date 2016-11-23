@@ -57,9 +57,14 @@ class ProfileTableViewController: UITableViewController {
         self.tableView.register(UINib(nibName: "ProfileTableSectionHeader", bundle: nil), forHeaderFooterViewReuseIdentifier: "profileTableSectionHeader")
         
         self.configureUser()
-        if !self.isCurrentUser {
-            self.navigationItem.rightBarButtonItem = nil
+        if self.isCurrentUser {
+            self.settingsButton.image = UIImage(named: "ic_settings")
+        } else {
+            self.settingsButton.image = UIImage(named: "ic_mail")
         }
+//        if !self.isCurrentUser {
+//            self.navigationItem.rightBarButtonItem = nil
+//        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -262,6 +267,8 @@ class ProfileTableViewController: UITableViewController {
             cell.organizationLabel.text = workExperience.organization
             cell.timePeriodLabel.text = workExperience.timePeriod
             cell.workDescriptionLabel.text = workExperience.workDescription
+            cell.workDescriptionLabel.isHidden = workExperience.workDescription != nil ? false : true
+            cell.separatorViewLeftConstraint?.constant = (indexPath.row == self.workExperiences.count - 1) ? 0.0 : 12.0
             return cell
         case 3:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellEducation", for: indexPath) as! EducationTableViewCell
@@ -270,6 +277,8 @@ class ProfileTableViewController: UITableViewController {
             cell.fieldOfStudyLabel.text = education.fieldOfStudy
             cell.timePeriodLabel.text = education.timePeriod
             cell.educationDescriptionLabel.text = education.educationDescription
+            cell.educationDescriptionLabel.isHidden = education.educationDescription != nil ? false : true
+            cell.separatorViewLeftConstraint?.constant = (indexPath.row == self.educations.count - 1) ? 0.0 : 12.0
             return cell
         case 4:
             if self.isLoadingUserCategories {
@@ -377,7 +386,7 @@ class ProfileTableViewController: UITableViewController {
             if self.isLoadingUserCategories || self.userCategories.count == 0 {
                 return 112.0
             }
-            return 42.0
+            return 50.0
         default:
             return 0.0
         }
@@ -450,7 +459,10 @@ class ProfileTableViewController: UITableViewController {
             guard self.selectedProfileSegment == ProfileSegment.skills else {
                 return 0.0
             }
-            return 6.0
+            if self.isLoadingUserCategories || self.userCategories.count == 0 {
+                return 6.0
+            }
+            return 0.0
         default:
             return 0.0
         }
@@ -459,7 +471,11 @@ class ProfileTableViewController: UITableViewController {
     // MARK: IBActions
     
     @IBAction func settingsButtonTapped(_ sender: AnyObject) {
-        self.performSegue(withIdentifier: "segueToSettingsVc", sender: self)
+        if self.isCurrentUser {
+            self.performSegue(withIdentifier: "segueToSettingsVc", sender: self)
+        } else {
+            // TODO
+        }
     }
     
     @IBAction func unwindToProfileTableViewController(_ segue: UIStoryboardSegue) {
