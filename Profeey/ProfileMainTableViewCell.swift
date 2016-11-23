@@ -50,7 +50,6 @@ class ProfileMainTableViewCell: UITableViewCell {
         self.recommendButton.setTitleColor(Colors.turquoise, for: UIControlState())
         self.recommendButton.layer.borderColor = Colors.turquoise.cgColor
         self.recommendButton.backgroundColor = UIColor.clear
-//        self.recommendButton.setBackgroundImage(UIImage(named: "btn_recommend"), for: UIControlState())
     }
     
     func setRecommendingButton() {
@@ -58,7 +57,6 @@ class ProfileMainTableViewCell: UITableViewCell {
         self.recommendButton.setTitleColor(UIColor.white, for: UIControlState())
         self.recommendButton.layer.borderColor = Colors.turquoise.cgColor
         self.recommendButton.backgroundColor = Colors.turquoise
-//        self.recommendButton.setBackgroundImage(UIImage(named: "btn_recommending"), for: UIControlState())
     }
     
     func setEditButton() {

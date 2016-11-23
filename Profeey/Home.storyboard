@@ -312,7 +312,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Home" id="odO-LM-84T">
-                        <barButtonItem key="rightBarButtonItem" image="ic_capture" id="oNK-KG-Bms">
+                        <barButtonItem key="rightBarButtonItem" image="ic_add_post_camera" id="oNK-KG-Bms">
                             <connections>
                                 <segue destination="U4Q-D6-ll2" kind="presentation" id="LGo-E0-M1t"/>
                             </connections>
@@ -387,8 +387,8 @@
         </scene>
     </scenes>
     <resources>
+        <image name="ic_add_post_camera" width="30" height="22"/>
         <image name="ic_arrow_down" width="14" height="14"/>
-        <image name="ic_capture" width="22" height="22"/>
         <image name="ic_comment" width="25" height="24"/>
         <image name="ic_comments" width="17" height="17"/>
         <image name="ic_home" width="25" height="25"/>
