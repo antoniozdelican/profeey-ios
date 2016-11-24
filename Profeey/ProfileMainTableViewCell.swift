@@ -33,12 +33,8 @@ class ProfileMainTableViewCell: UITableViewCell {
         self.profilePicImageView.clipsToBounds = true
         
         // Loading buttons
-        self.recommendButton.layer.cornerRadius = 4.0
-        self.recommendButton.layer.borderWidth = 1.0
-        self.recommendButton.layer.borderColor = Colors.disabled.cgColor
-        self.followButton.layer.cornerRadius = 4.0
-        self.followButton.layer.borderWidth = 1.0
-        self.followButton.layer.borderColor = Colors.disabled.cgColor
+        self.recommendButton.setBackgroundImage(UIImage(named: "btn_disabled_resizable"), for: UIControlState.normal)
+        self.followButton.setBackgroundImage(UIImage(named: "btn_disabled_resizable"), for: UIControlState.normal)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -46,38 +42,48 @@ class ProfileMainTableViewCell: UITableViewCell {
     }
     
     func setRecommendButton() {
-        self.recommendButton.setTitle("Recommend", for: UIControlState())
-        self.recommendButton.setTitleColor(Colors.turquoise, for: UIControlState())
-        self.recommendButton.layer.borderColor = Colors.turquoise.cgColor
-        self.recommendButton.backgroundColor = UIColor.clear
+        UIView.performWithoutAnimation {
+            self.recommendButton.setTitle("Recommend", for: UIControlState())
+            self.recommendButton.setTitleColor(Colors.turquoise, for: UIControlState())
+            self.recommendButton.setBackgroundImage(UIImage(named: "btn_recommend_resizable"), for: UIControlState.normal)
+            self.followButton.layoutIfNeeded()
+        }
     }
     
     func setRecommendingButton() {
-        self.recommendButton.setTitle("Recommending", for: UIControlState())
-        self.recommendButton.setTitleColor(UIColor.white, for: UIControlState())
-        self.recommendButton.layer.borderColor = Colors.turquoise.cgColor
-        self.recommendButton.backgroundColor = Colors.turquoise
+        UIView.performWithoutAnimation {
+            self.recommendButton.setTitle("Recommending", for: UIControlState())
+            self.recommendButton.setTitleColor(UIColor.white, for: UIControlState())
+            self.recommendButton.setBackgroundImage(UIImage(named: "btn_recommending_resizable"), for: UIControlState.normal)
+            self.followButton.layoutIfNeeded()
+        }
     }
     
     func setEditButton() {
-        self.followButton.setTitle("Edit Profile", for: UIControlState())
-        self.followButton.setTitleColor(Colors.grey, for: UIControlState())
-        self.followButton.layer.borderColor = Colors.grey.cgColor
-        self.followButton.backgroundColor = UIColor.clear
+        UIView.performWithoutAnimation {
+            self.followButton.setTitle("Edit Profile", for: UIControlState())
+            self.followButton.setTitleColor(Colors.grey, for: UIControlState())
+            self.followButton.setBackgroundImage(UIImage(named: "btn_edit_profile_resizable"), for: UIControlState.normal)
+            self.followButton.layoutIfNeeded()
+        }
     }
     
     func setFollowButton() {
-        self.followButton.setTitle("Follow", for: UIControlState())
-        self.followButton.setTitleColor(Colors.blue, for: UIControlState())
-        self.followButton.layer.borderColor = Colors.blue.cgColor
-        self.followButton.backgroundColor = UIColor.clear
+        UIView.performWithoutAnimation {
+            self.followButton.setTitle("Follow", for: UIControlState())
+            self.followButton.setTitleColor(Colors.blue, for: UIControlState())
+            self.followButton.setBackgroundImage(UIImage(named: "btn_follow_resizable"), for: UIControlState.normal)
+            self.followButton.layoutIfNeeded()
+        }
     }
     
     func setFollowingButton() {
-        self.followButton.setTitle("Following", for: UIControlState())
-        self.followButton.setTitleColor(UIColor.white, for: UIControlState())
-        self.followButton.layer.borderColor = Colors.blue.cgColor
-        self.followButton.backgroundColor = Colors.blue
+        UIView.performWithoutAnimation {
+            self.followButton.setTitle("Following", for: UIControlState())
+            self.followButton.setTitleColor(UIColor.white, for: UIControlState())
+            self.followButton.setBackgroundImage(UIImage(named: "btn_following_resizable"), for: UIControlState.normal)
+            self.followButton.layoutIfNeeded()
+        }
     }
     
     // MARK: IBActions

@@ -23,7 +23,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="64"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="GV5-yf-NMA" id="Wb9-a9-v8T">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="63"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="63.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="6AX-hr-SRP">
@@ -54,13 +54,16 @@
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rLM-GZ-GZ1">
                                             <rect key="frame" x="283" y="16" width="80" height="32"/>
                                             <constraints>
-                                                <constraint firstAttribute="width" constant="80" id="FIR-Wq-56X"/>
-                                                <constraint firstAttribute="height" constant="32" id="Trd-MS-SoL"/>
+                                                <constraint firstAttribute="height" constant="32" id="ThQ-Y7-IbD"/>
+                                                <constraint firstAttribute="width" constant="80" id="zqj-CA-FdH"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                            <state key="normal" title="Loading">
+                                            <state key="normal" title="Loading" backgroundImage="btn_disabled_small">
                                                 <color key="titleColor" red="0.78039215689999997" green="0.78039215689999997" blue="0.80392156859999997" alpha="1" colorSpace="calibratedRGB"/>
                                             </state>
+                                            <connections>
+                                                <action selector="followButtonTapped:" destination="GV5-yf-NMA" eventType="touchUpInside" id="og7-V8-tIY"/>
+                                            </connections>
                                         </button>
                                     </subviews>
                                     <constraints>
@@ -69,7 +72,7 @@
                                         <constraint firstAttribute="trailing" secondItem="rLM-GZ-GZ1" secondAttribute="trailing" constant="12" id="5gT-cx-RFA"/>
                                         <constraint firstItem="rLM-GZ-GZ1" firstAttribute="centerY" secondItem="Wb9-a9-v8T" secondAttribute="centerY" id="XA8-pk-1pB"/>
                                         <constraint firstItem="6AX-hr-SRP" firstAttribute="leading" secondItem="Wb9-a9-v8T" secondAttribute="leading" constant="12" id="bW5-lA-z84"/>
-                                        <constraint firstItem="rLM-GZ-GZ1" firstAttribute="leading" secondItem="U7X-Pz-YyV" secondAttribute="trailing" constant="12" id="wiK-NI-zap"/>
+                                        <constraint firstItem="rLM-GZ-GZ1" firstAttribute="leading" secondItem="U7X-Pz-YyV" secondAttribute="trailing" constant="12" id="rAF-yz-rkC"/>
                                         <constraint firstItem="U7X-Pz-YyV" firstAttribute="leading" secondItem="6AX-hr-SRP" secondAttribute="trailing" constant="12" id="zdj-PJ-uiO"/>
                                     </constraints>
                                 </tableViewCellContentView>
@@ -84,7 +87,7 @@
                                 <rect key="frame" x="0.0" y="92" width="375" height="112"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="SJh-1n-A1D" id="YjQ-Fr-xnT">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="111"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="111.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="HhN-3p-pib">
@@ -129,4 +132,7 @@
             <point key="canvasLocation" x="1523" y="-127"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="btn_disabled_small" width="80" height="32"/>
+    </resources>
 </document>

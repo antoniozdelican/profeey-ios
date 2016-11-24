@@ -19,6 +19,7 @@ class DiscoverUserTableViewCell: UITableViewCell {
     @IBOutlet weak var preferredUsernameLabel: UILabel!
     @IBOutlet weak var professionNameLabel: UILabel!
     @IBOutlet weak var locationNameLabel: UILabel!
+    @IBOutlet weak var locationStackView: UIStackView!
     @IBOutlet weak var followButton: UIButton!
     
     var discoverUserTableViewCellDelegate: DiscoverUserTableViewCellDelegate?
@@ -34,13 +35,21 @@ class DiscoverUserTableViewCell: UITableViewCell {
     }
     
     func setFollowButton() {
-        self.followButton.setTitle("FOLLOW", for: UIControlState())
-        self.followButton.setTitleColor(Colors.blue, for: UIControlState())
+        UIView.performWithoutAnimation {
+            self.followButton.setTitle("Follow", for: UIControlState())
+            self.followButton.setTitleColor(Colors.blue, for: UIControlState())
+            self.followButton.setBackgroundImage(UIImage(named: "btn_follow_small"), for: UIControlState.normal)
+            self.followButton.layoutIfNeeded()
+        }
     }
     
     func setFollowingButton() {
-        self.followButton.setTitle("FOLLOWING", for: UIControlState())
-        self.followButton.setTitleColor(Colors.blue, for: UIControlState())
+        UIView.performWithoutAnimation {
+            self.followButton.setTitle("Following", for: UIControlState())
+            self.followButton.setTitleColor(UIColor.white, for: UIControlState())
+            self.followButton.setBackgroundImage(UIImage(named: "btn_following_small"), for: UIControlState.normal)
+            self.followButton.layoutIfNeeded()
+        }
     }
     
     // MARK: IBActions

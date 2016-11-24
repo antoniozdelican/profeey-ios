@@ -26,6 +26,9 @@ class UsersTableViewController: UITableViewController {
     fileprivate var users: [User] = []
     fileprivate var isLoadingUsers: Bool = false
     
+    fileprivate var isLoadingFollowingIds: Bool = false
+    fileprivate var followingIds: [String] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
@@ -44,6 +47,11 @@ class UsersTableViewController: UITableViewController {
                     self.isLoadingUsers = true
                     self.queryFollowers(followingId)
                 }
+            }
+            if let currentUserId = AWSClientManager.defaultClientManager().credentialsProvider?.identityId {
+                // Get followings.
+                self.isLoadingFollowingIds = true
+                self.queryFollowing(currentUserId)
             }
         }
     }
@@ -85,6 +93,11 @@ class UsersTableViewController: UITableViewController {
         cell.profilePicImageView.image = user.profilePic
         cell.preferredUsernameLabel.text = user.preferredUsername
         cell.professionNameLabel.text = user.professionName
+        if !self.isLoadingFollowingIds, let userId = user.userId {
+            self.followingIds.contains(userId) ? cell.setFollowingButton() : cell.setFollowButton()
+        }
+        cell.userTableViewCellDelegate = self
+        cell.followButton.isHidden = (user.userId == AWSClientManager.defaultClientManager().credentialsProvider?.identityId) ? true : false
         return cell
     }
     
@@ -211,6 +224,63 @@ class UsersTableViewController: UITableViewController {
         
     }
     
+    fileprivate func queryFollowing(_ userId: String) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().queryFollowingDynamoDB(userId, completionHandler: {
+            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                self.isLoadingFollowingIds = false
+                if let error = error {
+                    print("queryFollowing error: \(error)")
+                    self.tableView.reloadData()
+                } else {
+                    guard let awsRelationships = response?.items as? [AWSRelationship] else {
+                        print("queryFollowing no relationship objects")
+                        self.tableView.reloadData()
+                        return
+                    }
+                    for awsRelationship in awsRelationships {
+                        if let followingId = awsRelationship._followingId {
+                            self.followingIds.append(followingId)
+                        }
+                    }
+                    self.tableView.reloadData()
+                }
+            })
+        })
+    }
+    
+    // In background.
+    fileprivate func followUser(_ followingId: String) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().createRelationshipDynamoDB(followingId, completionHandler: {
+            (task: AWSTask) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                if let error = task.error {
+                    print("followUser error: \(error)")
+                }
+            })
+            return nil
+        })
+    }
+    
+    // In background.
+    fileprivate func unfollowUser(_ followingId: String) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().removeRelationshipDynamoDB(followingId, completionHandler: {
+            (task: AWSTask) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                if let error = task.error {
+                    print("unfollowUser error: \(error)")
+                }
+            })
+            return nil
+        })
+    }
+    
     fileprivate func downloadImage(_ imageKey: String, imageType: ImageType, indexPath: IndexPath) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         let content = AWSUserFileManager.custom(key: "USEast1BucketManager").content(withKey: imageKey)
@@ -260,5 +330,25 @@ class UsersTableViewController: UITableViewController {
             })
         }
     }
+}
 
+extension UsersTableViewController: UserTableViewCellDelegate {
+    
+    func followButtonTapped(_ cell: UserTableViewCell) {
+        guard !self.isLoadingFollowingIds, let indexPath = self.tableView.indexPath(for: cell) else {
+            return
+        }
+        let user = self.users[indexPath.row]
+        guard let userId = user.userId else {
+            return
+        }
+        if let followingIdIndex = self.followingIds.index(of: userId) {
+            self.followingIds.remove(at: followingIdIndex)
+            self.unfollowUser(userId)
+        } else {
+            self.followingIds.append(userId)
+            self.followUser(userId)
+        }
+        self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
+    }
 }

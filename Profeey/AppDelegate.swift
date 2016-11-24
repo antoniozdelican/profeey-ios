@@ -49,8 +49,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // UITableView
         UITableView.appearance().tableFooterView = UIView()
         UITableView.appearance().separatorColor = Colors.greyLight
-        // WARNING
-        //UITableView.appearance().separatorInset = UIEdgeInsets.zero
         
         // UITableViewCell
         let colorView = UIView()

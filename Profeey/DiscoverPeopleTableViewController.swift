@@ -81,6 +81,7 @@ class DiscoverPeopleTableViewController: UITableViewController {
         cell.preferredUsernameLabel.text = user.preferredUsername
         cell.professionNameLabel.text = user.professionName
         cell.locationNameLabel.text = user.locationName
+        cell.locationStackView.isHidden = user.locationName != nil ? false : true
         cell.discoverUserTableViewCellDelegate = self
         if !self.isLoadingFollowingIds, let userId = user.userId {
             self.followingIds.contains(userId) ? cell.setFollowingButton() : cell.setFollowButton()
@@ -92,6 +93,9 @@ class DiscoverPeopleTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.layoutMargins = UIEdgeInsets.zero
+        if cell is NoResultsTableViewCell {
+            cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0)
+        }
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -103,10 +107,22 @@ class DiscoverPeopleTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 82.0
+        if self.isSearchingUsers {
+            return 64.0
+        }
+        if self.users.count == 0 {
+            return 64.0
+        }
+        return 104.0
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if self.isSearchingUsers {
+            return 64.0
+        }
+        if self.users.count == 0 {
+            return 64.0
+        }
         return UITableViewAutomaticDimension
     }
     
