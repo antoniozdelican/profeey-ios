@@ -99,12 +99,18 @@ class AlbumsTableViewController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
         self.albumsDelegate?.albumSelected(self.fetchResults[indexPath.row], title: self.titles[indexPath.row])
         self.dismiss(animated: true, completion: nil)
-        //self.performSegue(withIdentifier: "unwindToGalleryCollectionVc", sender: self)
     }
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.layoutMargins = UIEdgeInsets.zero
     }
+    
+    // MARK: IBActions
+    
+    @IBAction func cancelButtonTapped(_ sender: Any) {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
 }
 
 extension AlbumsTableViewController: PHPhotoLibraryChangeObserver {

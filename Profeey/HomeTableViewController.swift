@@ -161,11 +161,6 @@ class HomeTableViewController: UITableViewController {
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostImage", for: indexPath) as! PostImageTableViewCell
             cell.postImageView.image = post.image
-            // TODO change image size to fetch from DB
-//            if let image = post.image {
-//                let aspectRatio = image.size.width / image.size.height
-//                cell.postImageViewHeightConstraint.constant = ceil(tableView.bounds.width / aspectRatio)
-//            }
             if let imageWidth = post.imageWidth?.floatValue, let imageHeight = post.imageHeight?.floatValue {
                 let aspectRatio = CGFloat(imageWidth / imageHeight)
                 cell.postImageViewHeightConstraint.constant = ceil(tableView.bounds.width / aspectRatio)
@@ -252,7 +247,7 @@ class HomeTableViewController: UITableViewController {
         if section == 0 {
             return 1.0
         }
-        return 12.0
+        return 6.0
     }
     
     // MARK: IBActions

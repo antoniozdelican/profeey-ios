@@ -295,7 +295,7 @@ extension GalleryViewController: CaptureScrollViewDelegate {
         self.resetCachedAssets()
         self.album = album
         self.updateCachedAssets()
-        self.collectionView?.setContentOffset(CGPoint(x: 0.0, y: -44.0), animated: false)
+        self.collectionView?.setContentOffset(CGPoint(x: 0.0, y: 0.0), animated: false)
         self.collectionView?.reloadData()
     }
 }

@@ -34,15 +34,15 @@ class EditPostCategoryTableViewCell: UITableViewCell {
     
     
     func categoryRemoved() {
-        self.categoryImageView.image = UIImage(named: "ic_category_grey")
-        self.categoryLabel.textColor = Colors.grey
+        self.categoryImageView.image = UIImage(named: "ic_skills")
+        self.categoryLabel.textColor = Colors.disabled
         self.categoryLabel.text = "Add Skill"
         self.removeButton.isHidden = true
         
     }
     
     func categoryAdded(categoryName: String) {
-        self.categoryImageView.image = UIImage(named: "ic_category_black")
+        self.categoryImageView.image = UIImage(named: "ic_skills_active")
         self.categoryLabel.textColor = Colors.black
         self.categoryLabel.text = categoryName
         self.removeButton.isHidden = false
