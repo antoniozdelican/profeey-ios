@@ -95,7 +95,7 @@ typedef NS_ENUM(NSInteger, AWSPushManagerErrorType){
  
     AWSPushManager *pushManager = [AWSPushManager defaultPushManager];
  */
-+ (instancetype)defaultPushManager;
++ (instancetype)defaultPushManager NS_SWIFT_NAME(defaultPushManager());
 
 /**
  Creates a helper client for `AWSPushManager` for specified configuration with mentioned key.
@@ -179,7 +179,7 @@ typedef NS_ENUM(NSInteger, AWSPushManagerErrorType){
  
  *Swift*
  
-    let Pushmanager = AWSPushManager(forKey: "defaultPushManager")
+    let Pushmanager = AWSPushManager.PushManager(forKey: "defaultPushManager")
  
  *Objective-C*
  
@@ -188,7 +188,7 @@ typedef NS_ENUM(NSInteger, AWSPushManagerErrorType){
  @param  key  A string to identify the helper client.
  @return An instance of AWSPushManager for specified key.
  */
-+ (instancetype)PushManagerForKey:(NSString *)key;
++ (instancetype)PushManagerForKey:(NSString *)key NS_SWIFT_NAME(PushManager(forKey:));
 
 /**
  Removes the helper client associated with the key and release it.

@@ -190,7 +190,7 @@ class DiscoverPeopleTableViewController: UITableViewController {
     
     fileprivate func downloadImage(_ imageKey: String, imageType: ImageType, indexPath: IndexPath) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        let content = AWSUserFileManager.custom(key: "USEast1BucketManager").content(withKey: imageKey)
+        let content = AWSUserFileManager.UserFileManager(forKey: "USEast1BucketManager").content(withKey: imageKey)
         // TODO check if content.isImage()
         if content.isCached {
             print("Content cached:")

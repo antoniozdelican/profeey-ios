@@ -705,7 +705,7 @@ class ProfileTableViewController: UITableViewController {
     
     fileprivate func downloadImage(_ imageKey: String, imageType: ImageType, indexPath: IndexPath) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        let content = AWSUserFileManager.custom(key: "USEast1BucketManager").content(withKey: imageKey)
+        let content = AWSUserFileManager.UserFileManager(forKey: "USEast1BucketManager").content(withKey: imageKey)
         // TODO check if content.isImage()
         if content.isCached {
             print("Content cached:")
@@ -765,7 +765,7 @@ class ProfileTableViewController: UITableViewController {
     
     // In background when user deletes/changes profilePic or deletes post.
     fileprivate func removeImage(_ imageKey: String, postId: String?) {
-        let content = AWSUserFileManager.custom(key: "USEast1BucketManager").content(withKey: imageKey)
+        let content = AWSUserFileManager.UserFileManager(forKey: "USEast1BucketManager").content(withKey: imageKey)
         print("removeImageS3:")
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         content.removeRemoteContent(completionHandler: {

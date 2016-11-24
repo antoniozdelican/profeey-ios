@@ -15,10 +15,11 @@
 
 #import <Foundation/Foundation.h>
 
-@interface AWSLambdaResources : NSObject
+//! Project version number for AWSSNS.
+FOUNDATION_EXPORT double AWSSNSVersionNumber;
 
-+ (instancetype)sharedInstance;
+//! Project version string for AWSSNS.
+FOUNDATION_EXPORT const unsigned char AWSSNSVersionString[];
 
-- (NSDictionary *)JSONObject;
-
-@end
+#import <AWSCore/AWSCore.h>
+#import "AWSSNSService.h"

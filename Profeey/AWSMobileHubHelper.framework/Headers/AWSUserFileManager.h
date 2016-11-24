@@ -47,7 +47,7 @@ NS_ASSUME_NONNULL_BEGIN
     AWSUserFileManager *userFileManager = [AWSUserFileManager defaultFileManager];
  
  */
-+ (instancetype)defaultUserFileManager;
++ (instancetype)defaultUserFileManager NS_SWIFT_NAME(defaultUserFileManager());
 
 /**
  Creates a helper client for AWSUserFileManager for specified configuration with mentioned key.
@@ -124,7 +124,7 @@ NS_ASSUME_NONNULL_BEGIN
  
  *Swift*
  
- let UserFilemanager = AWSUserFileManager(forKey: "USWest2BucketManager")
+ let UserFilemanager = AWSUserFileManager.UserFileManager(forKey: "USWest2BucketManager")
  
  *Objective-C*
  
@@ -134,8 +134,8 @@ NS_ASSUME_NONNULL_BEGIN
  @param  key  A string to identify the helper client.
  @return An instance of AWSUserFileManager for specified key.
  */
-//+ (instancetype)UserFileManagerForKey:(NSString *)key;
-+ (instancetype)UserFileManagerForKey:(NSString *)key NS_SWIFT_NAME(custom(key:));
++ (instancetype)UserFileManagerForKey:(NSString *)key NS_SWIFT_NAME(UserFileManager(forKey:));
+//+ (instancetype)UserFileManagerForKey:(NSString *)key NS_SWIFT_NAME(custom(key:));
 
 /**
  Removes the helper client associated with the key and release it.

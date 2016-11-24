@@ -31,7 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
     AWSCloudLogic *cloudLogic =  [AWSCloudLogic defaultCloudLogic];
  
  */
-+ (instancetype)defaultCloudLogic;
++ (instancetype)defaultCloudLogic NS_SWIFT_NAME(defaultCloudLogic());
 
 /**
  Creates a helper client for `AWSCloud` for specified configuration with mentioned key.
@@ -96,7 +96,7 @@ NS_ASSUME_NONNULL_BEGIN
  
  *Swift*
  
- 	let CloudLogic = AWSCloudLogic(forKey: "USWest2cloudLogic")
+ 	let CloudLogic = AWSCloudLogic.CloudLogic(forKey: "USWest2cloudLogic")
  
  *Objective-C*
  
@@ -105,7 +105,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param  key  A string to identify the helper client.
  @return An instance of AWSCloudLogic for specified key.
  */
-+ (instancetype)CloudLogicForKey:(NSString *)key;
++ (instancetype)CloudLogicForKey:(NSString *)key NS_SWIFT_NAME(CloudLogic(forKey:));
 
 /**
  Removes the helper client associated with the key and release it.

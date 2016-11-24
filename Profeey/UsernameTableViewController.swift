@@ -197,7 +197,7 @@ class UsernameTableViewController: UITableViewController {
     fileprivate func uploadImage(_ preferredUsername: String, imageData: Data) {
         let uniqueImageName = NSUUID().uuidString.lowercased().replacingOccurrences(of: "-", with: "")
         let imageKey = "public/profile_pics/\(uniqueImageName).jpg"
-        let localContent = AWSUserFileManager.custom(key: "USEast1BucketManager").localContent(with: imageData, key: imageKey)
+        let localContent = AWSUserFileManager.UserFileManager(forKey: "USEast1BucketManager").localContent(with: imageData, key: imageKey)
         
         print("uploadImageS3:")
         UIApplication.shared.isNetworkActivityIndicatorVisible = true

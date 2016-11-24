@@ -85,7 +85,7 @@ typedef NS_ENUM(NSInteger, AWSContentManagerErrorType){
     AWSContentManager *contentManager =  [AWSContentManager defaultContentManager];
  
  */
-+ (instancetype)defaultContentManager;
++ (instancetype)defaultContentManager NS_SWIFT_NAME(defaultContentManager());
 
 /**
  Creates a helper client for AWSContentManager for specified configuration with mentioned key.
@@ -165,7 +165,7 @@ typedef NS_ENUM(NSInteger, AWSContentManagerErrorType){
  
  *Swift*
  
-    let ContentManager = AWSContentManager(forKey: "defaultManager")
+    let ContentManager = AWSContentManager.ContentManager(forKey: "defaultManager")
  
  *Objective-C*
  
@@ -174,7 +174,7 @@ typedef NS_ENUM(NSInteger, AWSContentManagerErrorType){
  @param  key  A string to identify the helper client.
  @return An instance of AWSUserFileManager for specified key.
  */
-+ (instancetype)ContentManagerForKey:(NSString *)key;
++ (instancetype)ContentManagerForKey:(NSString *)key NS_SWIFT_NAME(ContentManager(forKey:));
 
 /**
  Removes the helper client associated with the key and release it.
