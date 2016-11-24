@@ -50,8 +50,8 @@
                                             <constraint firstAttribute="height" constant="45" id="RZ3-mA-xZp"/>
                                             <constraint firstAttribute="width" constant="45" id="pMu-gD-x8k"/>
                                         </constraints>
-                                        <state key="normal" image="ic_send_blue"/>
-                                        <state key="disabled" image="ic_send_disabled"/>
+                                        <state key="normal" image="ic_send_comment_active"/>
+                                        <state key="disabled" image="ic_send_comment"/>
                                         <connections>
                                             <action selector="sendButtonTapped:" destination="b0v-eh-IFv" eventType="touchUpInside" id="H90-M3-d3b"/>
                                         </connections>
@@ -261,7 +261,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="ic_send_blue" width="25" height="25"/>
-        <image name="ic_send_disabled" width="25" height="25"/>
+        <image name="ic_send_comment" width="24" height="24"/>
+        <image name="ic_send_comment_active" width="24" height="24"/>
     </resources>
 </document>
