@@ -107,7 +107,6 @@
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="Post" id="hOg-aZ-oho">
-                            <color key="tintColor" red="0.30196078430000001" green="0.78823529410000004" blue="0.81960784310000001" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <action selector="postButtonTapped:" destination="PiB-yQ-Ple" id="EWm-Zq-MII"/>
                             </connections>

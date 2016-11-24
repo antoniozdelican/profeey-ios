@@ -615,6 +615,7 @@ class ProfileTableViewController: UITableViewController {
                         let workExperience = WorkExperience(userId: awsWorkExperience._userId, workExperienceId: awsWorkExperience._workExperienceId, title: awsWorkExperience._title, organization: awsWorkExperience._organization, workDescription: awsWorkExperience._workDescription, fromMonth: awsWorkExperience._fromMonth, fromYear: awsWorkExperience._fromYear, toMonth: awsWorkExperience._toMonth, toYear: awsWorkExperience._toYear)
                         self.workExperiences.append(workExperience)
                     }
+                    self.sortWorkExperiencesByToDate()
                     if self.selectedProfileSegment == ProfileSegment.experience {
                         UIView.performWithoutAnimation {
                             self.tableView.reloadSections(IndexSet([2, 3]), with: UITableViewRowAnimation.none)
@@ -653,6 +654,7 @@ class ProfileTableViewController: UITableViewController {
                         let education = Education(userId: awsEducation._userId, educationId: awsEducation._educationId, school: awsEducation._school, fieldOfStudy: awsEducation._fieldOfStudy, educationDescription: awsEducation._educationDescription, fromMonth: awsEducation._fromMonth, fromYear: awsEducation._fromYear, toMonth: awsEducation._toMonth, toYear: awsEducation._toYear)
                         self.educations.append(education)
                     }
+                    self.sortEducationsByToDate()
                     if self.selectedProfileSegment == ProfileSegment.experience {
                         UIView.performWithoutAnimation {
                             self.tableView.reloadSections(IndexSet([2, 3]), with: UITableViewRowAnimation.none)
@@ -974,6 +976,28 @@ extension ProfileTableViewController: ProfileMainTableViewCellDelegate {
             }
         }
     }
+    
+    // MARK: Helpers
+    
+    fileprivate func sortWorkExperiencesByToDate() {
+        let currentWorkExperiences = self.workExperiences.filter( { $0.toMonthInt == nil && $0.toYearInt == nil } )
+        let otherWorkExperiences = self.workExperiences.filter( { $0.toMonthInt != nil && $0.toYearInt != nil } )
+        let sortedOtherWorkExperiences = otherWorkExperiences.sorted(by: {
+            (workExperience1, workExperience2) in
+            return workExperience1.toYearInt! == workExperience2.toYearInt! ? (workExperience1.toMonthInt! > workExperience2.toMonthInt!) : (workExperience1.toYearInt! > workExperience2.toYearInt!)
+        })
+        self.workExperiences = currentWorkExperiences + sortedOtherWorkExperiences
+    }
+    
+    fileprivate func sortEducationsByToDate() {
+        let currentEducations = self.educations.filter( { $0.toMonthInt == nil && $0.toYearInt == nil } )
+        let otherEducations = self.educations.filter( { $0.toMonthInt != nil && $0.toYearInt != nil } )
+        let sortedOtherEducations = otherEducations.sorted(by: {
+            (education1, education2) in
+            return education1.toYearInt! == education2.toYearInt! ? (education1.toMonthInt! > education2.toMonthInt!) : (education1.toYearInt! > education2.toYearInt!)
+        })
+        self.educations = currentEducations + sortedOtherEducations
+    }
 }
 
 extension ProfileTableViewController: ProfileSegmentedControlTableViewCellDelegate {
@@ -1007,6 +1031,7 @@ extension ProfileTableViewController: ExperiencesTableViewControllerDelegate {
     
     func workExperiencesUpdated(_ workExperiences: [WorkExperience]) {
         self.workExperiences = workExperiences
+        self.sortWorkExperiencesByToDate()
         if self.selectedProfileSegment == ProfileSegment.experience {
             UIView.performWithoutAnimation {
                 self.tableView.reloadSections(IndexSet([2, 3]), with: UITableViewRowAnimation.none)
@@ -1016,6 +1041,7 @@ extension ProfileTableViewController: ExperiencesTableViewControllerDelegate {
     
     func educationsUpdated(_ educations: [Education]) {
         self.educations = educations
+        self.sortEducationsByToDate()
         if self.selectedProfileSegment == ProfileSegment.experience {
             UIView.performWithoutAnimation {
                 self.tableView.reloadSections(IndexSet([2, 3]), with: UITableViewRowAnimation.none)
