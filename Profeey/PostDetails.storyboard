@@ -117,16 +117,16 @@
                                     <outlet property="postImageViewHeightConstraint" destination="tv3-sA-ghy" id="CZO-gX-W5u"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellPostInfo" rowHeight="32" id="ocT-Vv-CbR" customClass="PostInfoTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="520" width="375" height="32"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellPostInfo" rowHeight="30" id="ocT-Vv-CbR" customClass="PostInfoTableViewCell" customModule="Profeey" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="520" width="375" height="30"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ocT-Vv-CbR" id="sYv-ji-mAB">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="31"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="29"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Caption" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YCe-IQ-VAV">
-                                            <rect key="frame" x="12" y="8" width="351" height="19.5"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Caption" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YCe-IQ-VAV" customClass="TTTAttributedLabel">
+                                            <rect key="frame" x="12" y="8" width="351" height="17"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <color key="textColor" red="0.1960784314" green="0.1960784314" blue="0.1960784314" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
@@ -134,16 +134,16 @@
                                     <constraints>
                                         <constraint firstItem="YCe-IQ-VAV" firstAttribute="top" secondItem="sYv-ji-mAB" secondAttribute="top" constant="8" id="Jk1-Tg-43g"/>
                                         <constraint firstItem="YCe-IQ-VAV" firstAttribute="leading" secondItem="sYv-ji-mAB" secondAttribute="leading" constant="12" id="Tek-6l-gNc"/>
-                                        <constraint firstAttribute="bottom" secondItem="YCe-IQ-VAV" secondAttribute="bottom" constant="4" id="Va3-0y-fu7"/>
                                         <constraint firstAttribute="trailing" secondItem="YCe-IQ-VAV" secondAttribute="trailing" constant="12" id="auy-KG-jg1"/>
+                                        <constraint firstAttribute="bottom" secondItem="YCe-IQ-VAV" secondAttribute="bottom" constant="4" id="dFk-6n-bvn"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="titleLabel" destination="YCe-IQ-VAV" id="0s1-eg-dmr"/>
+                                    <outlet property="captionLabel" destination="YCe-IQ-VAV" id="4aB-qW-c4r"/>
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellPostCategoryCreationDate" rowHeight="26" id="pcb-J2-CT8" customClass="PostCategoryCreationDateTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="552" width="375" height="26"/>
+                                <rect key="frame" x="0.0" y="550" width="375" height="26"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="pcb-J2-CT8" id="xUz-8Y-dg4">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="25"/>
@@ -174,7 +174,7 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellPostButtons" rowHeight="52" id="XwH-Og-4zn" customClass="PostButtonsTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="578" width="375" height="52"/>
+                                <rect key="frame" x="0.0" y="576" width="375" height="52"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="XwH-Og-4zn" id="XMe-Id-mzz">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="51"/>

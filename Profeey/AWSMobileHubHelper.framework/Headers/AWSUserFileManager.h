@@ -135,7 +135,6 @@ NS_ASSUME_NONNULL_BEGIN
  @return An instance of AWSUserFileManager for specified key.
  */
 + (instancetype)UserFileManagerForKey:(NSString *)key NS_SWIFT_NAME(UserFileManager(forKey:));
-//+ (instancetype)UserFileManagerForKey:(NSString *)key NS_SWIFT_NAME(custom(key:));
 
 /**
  Removes the helper client associated with the key and release it.

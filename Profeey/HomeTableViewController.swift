@@ -9,6 +9,7 @@
 import UIKit
 import AWSMobileHubHelper
 import AWSDynamoDB
+//import TTTAttributedLabel
 
 enum ImageType {
     case currentUserProfilePic
@@ -168,7 +169,8 @@ class HomeTableViewController: UITableViewController {
             return cell
         case 2:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostInfo", for: indexPath) as! PostInfoTableViewCell
-            cell.titleLabel.text = post.caption
+            cell.captionLabel.text = post.caption
+            post.isExpandedCaption ? cell.untruncate() : cell.truncate()
             return cell
         case 3:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostCategoryCreationDate", for: indexPath) as! PostCategoryCreationDateTableViewCell
@@ -194,7 +196,11 @@ class HomeTableViewController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
         let cell = tableView.cellForRow(at: indexPath)
         if cell is PostUserTableViewCell {
-           self.performSegue(withIdentifier: "segueToProfileVc", sender: indexPath)
+            self.performSegue(withIdentifier: "segueToProfileVc", sender: indexPath)
+        }
+        if cell is PostInfoTableViewCell {
+           self.posts[indexPath.section].isExpandedCaption = true
+            self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
         }
     }
     
@@ -213,7 +219,7 @@ class HomeTableViewController: UITableViewController {
             }
             return 400.0
         case 2:
-            return 36.0
+            return 30.0
         case 3:
             return 26.0
         case 4:

@@ -284,7 +284,7 @@ extension SearchViewController: UISearchBarDelegate {
             self.filterUsers(searchText.trimm())
             self.filterProfessions(searchText.trimm())
             
-            // TODO
+            // TODO CloudSearch domain is currently deleted.
 //            self.searchProfessionsDelegate?.isSearchingProfessions(true)
 //            self.searchProfessionsTest(searchText.trimm())
         }

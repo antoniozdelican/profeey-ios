@@ -96,6 +96,7 @@ class Post: NSObject {
 //    }
     
     var isLikedByCurrentUser: Bool = false
+    var isExpandedCaption: Bool = false
 
     override init() {
         super.init()
