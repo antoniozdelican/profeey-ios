@@ -43,25 +43,33 @@ class LogInTableViewController: UITableViewController {
         let forgotPasswordAttributedString = NSAttributedString(string: "Forgot password?", attributes: [NSUnderlineStyleAttributeName: NSUnderlineStyle.styleSingle.rawValue])
         self.forgotPasswordLabel.attributedText = forgotPasswordAttributedString
     }
-
-    // MARK: UITableViewDataSource
-
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
-    }
     
     // MARK: UITableViewDelegate
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 76.0
+        switch indexPath.row {
+        case 0:
+            return 150.0
+        case 1:
+            return 76.0
+        case 2:
+            return 65.0
+        default:
+            return 0.0
+        }
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableViewAutomaticDimension
+        switch indexPath.row {
+        case 0:
+            return 150.0
+        case 1:
+            return 76.0
+        case 2:
+            return UITableViewAutomaticDimension
+        default:
+            return 0.0
+        }
     }
     
     // MARK: UIScrollViewDelegate
