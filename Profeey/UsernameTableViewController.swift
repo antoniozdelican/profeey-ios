@@ -47,34 +47,12 @@ class UsernameTableViewController: UITableViewController {
             childViewController.profilePicUnwind = ProfilePicUnwind.usernameVc
         }
     }
-
-    // MARK: UITableViewController
-
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 4
-    }
     
     // MARK: UITableViewDelegate
     
-    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        cell.selectionStyle = UITableViewCellSelectionStyle.none
-    }
-    
-    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 76.0
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableViewAutomaticDimension
-    }
-    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        if (indexPath as NSIndexPath).row == 0 {
+        if indexPath.row == 0 {
             self.editProfilePicCellTapped()
         }
     }
@@ -87,7 +65,7 @@ class UsernameTableViewController: UITableViewController {
     
     // MARK: IBActions
     
-    @IBAction func textFieldChanged(_ sender: AnyObject) {
+    @IBAction func usernameTextFieldChanged(_ sender: Any) {
         guard let preferredUsername = self.usernameTextField.text?.trimm(), !preferredUsername.isEmpty else {
             self.continueButton.isEnabled = false
             return
