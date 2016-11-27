@@ -9,6 +9,7 @@
 import UIKit
 import AWSMobileHubHelper
 import AWSCognitoIdentityProvider
+import AWSDynamoDB
 
 class UsernameTableViewController: UITableViewController {
     
@@ -98,7 +99,7 @@ class UsernameTableViewController: UITableViewController {
     @IBAction func continueButtonTapped(_ sender: AnyObject) {
         self.view.endEditing(true)
         // CHECK IF IT IS Facebook user or UserPool!
-        self.userPoolUpdatePreferredUsername()
+        self.queryPreferredUsernames()
     }
     
     @IBAction func unwindToUsernameTableViewController(_ segue: UIStoryboardSegue) {
@@ -137,6 +138,37 @@ class UsernameTableViewController: UITableViewController {
     
     // MARK: AWS
     
+    // Check if preferredUsername already exists in DynamoDB. This is before any other action.
+    fileprivate func queryPreferredUsernames() {
+        guard let preferredUsername = self.usernameTextField.text?.trimm(), !preferredUsername.isEmpty else {
+            return
+        }
+        print("queryPreferredUsernames:")
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        FullScreenIndicator.show()
+        PRFYDynamoDBManager.defaultDynamoDBManager().queryPreferredUsernamesDynamoDB(preferredUsername, completionHandler: {
+            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                if let error = error as? NSError {
+                    FullScreenIndicator.hide()
+                    print("queryPreferredUsernames error: \(error)")
+                    let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.userInfo["__type"] as? String, cancelButtonTitle: "Try Again")
+                    self.present(alertController, animated: true, completion: nil)
+                } else {
+                    guard response == nil || response?.items.count == 0 else {
+                        FullScreenIndicator.hide()
+                        let alertController = self.getSimpleAlertWithTitle("Username exists", message: "This username already belongs to another account. Please choose a different one and try again.", cancelButtonTitle: "Try Again")
+                        self.present(alertController, animated: true, completion: nil)
+                        return
+                    }
+                    // 2. updatePreferredUsername in userPool if it's not for Fb
+                    self.userPoolUpdatePreferredUsername()
+                }
+            })
+        })
+    }
+    
     fileprivate func userPoolUpdatePreferredUsername() {
         guard let preferredUsername = self.usernameTextField.text?.trimm(), !preferredUsername.isEmpty else {
             return
@@ -146,7 +178,6 @@ class UsernameTableViewController: UITableViewController {
         
         print("userPoolUpdatePreferredUsername:")
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        FullScreenIndicator.show()
         self.userPool?.currentUser()?.update(userAttributes).continue({
             (task: AWSTask) in
             DispatchQueue.main.async(execute: {
@@ -170,54 +201,32 @@ class UsernameTableViewController: UITableViewController {
                     let alertController = self.getSimpleAlertWithTitle(title, message: message, cancelButtonTitle: "Try Again")
                     self.present(alertController, animated: true, completion: nil)
                 } else {
-                    
-                }
-            })
-            return nil
-        })
-    }
-    
-    fileprivate func updatePreferredUsername(_ preferredUsername: String) {
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        AWSClientManager.defaultClientManager().updatePreferredUsername(preferredUsername, completionHandler: {
-            (task: AWSTask) in
-            DispatchQueue.main.async(execute: {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                if let error = task.error {
-                    FullScreenIndicator.hide()
-                    print("updatePreferredUsernameUserPool error: \(error)")
-                    let alertController = UIAlertController(title: "Username unavailable", message: error.localizedDescription, preferredStyle: UIAlertControllerStyle.alert)
-                    let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil)
-                    alertController.addAction(okAction)
-                    self.present(alertController, animated: true, completion: nil)
-                } else {
+                    // 3. Stored profilePic if exists and update in DynamoDB with preferredUsername
                     if let profilePicImageData = self.newProfilePicImageData {
                         self.uploadImage(preferredUsername, imageData: profilePicImageData)
                     } else {
-                        self.saveUser(preferredUsername, profilePicUrl: nil)
+                        self.updateUser(preferredUsername, profilePicUrl: nil)
                     }
                 }
             })
             return nil
         })
-        
     }
     
-    fileprivate func saveUser(_ preferredUsername: String, profilePicUrl: String?) {
+    fileprivate func updateUser(_ preferredUsername: String, profilePicUrl: String?) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         PRFYDynamoDBManager.defaultDynamoDBManager().updateUserPreferredUsernameAndProfilePicDynamoDB(preferredUsername, profilePicUrl: profilePicUrl, completionHandler: {
             (task: AWSTask) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                FullScreenIndicator.hide()
                 if let error = task.error {
-                    FullScreenIndicator.hide()
                     print("saveUser error: \(error)")
                     let alertController = UIAlertController(title: "Save error", message: error.localizedDescription, preferredStyle: UIAlertControllerStyle.alert)
                     let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil)
                     alertController.addAction(okAction)
                     self.present(alertController, animated: true, completion: nil)
                 } else {
-                    FullScreenIndicator.hide()
                     self.performSegue(withIdentifier: "segueToWelcomeProfessionsVc", sender: self)
                 }
             })
@@ -228,7 +237,7 @@ class UsernameTableViewController: UITableViewController {
     fileprivate func uploadImage(_ preferredUsername: String, imageData: Data) {
         let uniqueImageName = NSUUID().uuidString.lowercased().replacingOccurrences(of: "-", with: "")
         let imageKey = "public/profile_pics/\(uniqueImageName).jpg"
-        let localContent = AWSUserFileManager.UserFileManager(forKey: "USEast1BucketManager").localContent(with: imageData, key: imageKey)
+        let localContent = AWSUserFileManager.defaultUserFileManager().localContent(with: imageData, key: imageKey)
         
         print("uploadImageS3:")
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
@@ -236,7 +245,7 @@ class UsernameTableViewController: UITableViewController {
             onCompletion: false,
             progressBlock: {
                 (content: AWSLocalContent?, progress: Progress?) -> Void in
-                // TODO
+                // Do nothing.
             }, completionHandler: {
                 (content: AWSLocalContent?, error: Error?) -> Void in
                 DispatchQueue.main.async(execute: {
@@ -244,12 +253,10 @@ class UsernameTableViewController: UITableViewController {
                     if let error = error {
                         FullScreenIndicator.hide()
                         print("uploadImageS3 error: \(error)")
-                        let alertController = UIAlertController(title: "Upload image failed", message: error.localizedDescription, preferredStyle: UIAlertControllerStyle.alert)
-                        let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil)
-                        alertController.addAction(okAction)
+                        let alertController = self.getSimpleAlertWithTitle("Upload image failed", message: error.localizedDescription, cancelButtonTitle: "Try Again")
                         self.present(alertController, animated: true, completion: nil)
                     } else {
-                        self.saveUser(preferredUsername, profilePicUrl: imageKey)
+                        self.updateUser(preferredUsername, profilePicUrl: imageKey)
                     }
                 })
         })
