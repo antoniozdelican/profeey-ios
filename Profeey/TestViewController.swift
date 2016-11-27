@@ -25,7 +25,7 @@ class TestViewController: UIViewController {
     }
     
     @IBAction func signOutButtonTapped(_ sender: Any) {
-        self.handleLogout()
+        self.logOut()
     }
     
     fileprivate func redirectToOnboarding() {
@@ -67,30 +67,25 @@ class TestViewController: UIViewController {
 
     }
     
-    fileprivate func handleLogout() {
-        print("handleLogout")
+    fileprivate func logOut() {
+        print("logOut:")
         if (AWSIdentityManager.defaultIdentityManager().isLoggedIn) {
-            print("AWSIdentityManager.defaultIdentityManager().isLoggedIn")
+            UIApplication.shared.isNetworkActivityIndicatorVisible = true
+            FullScreenIndicator.show()
             AWSIdentityManager.defaultIdentityManager().logout(completionHandler: {
                 (result: Any?, error: Error?) in
                 DispatchQueue.main.async(execute: {
+                    UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                    FullScreenIndicator.hide()
+                    // Credentials provider cleanUp.
+//                    AWSIdentityManager.defaultIdentityManager().credentialsProvider.clearKeychain()
+                    // User file manager cleanUp.
+                    AWSUserFileManager.defaultUserFileManager().clearCache()
+                    // Current user cleanUp.
+                    PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB = nil
                     self.redirectToOnboarding()
                 })
             })
         }
     }
-
-    
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

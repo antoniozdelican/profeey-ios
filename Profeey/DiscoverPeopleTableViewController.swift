@@ -25,7 +25,7 @@ class DiscoverPeopleTableViewController: UITableViewController {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         
-        if let currentUserId = AWSClientManager.defaultClientManager().credentialsProvider?.identityId {
+        if let currentUserId = AWSIdentityManager.defaultIdentityManager().identityId {
             self.currentUserId = currentUserId
             self.isSearchingUsers = true
             self.scanUsers()
@@ -190,7 +190,7 @@ class DiscoverPeopleTableViewController: UITableViewController {
     
     fileprivate func downloadImage(_ imageKey: String, imageType: ImageType, indexPath: IndexPath) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        let content = AWSUserFileManager.UserFileManager(forKey: "USEast1BucketManager").content(withKey: imageKey)
+        let content = AWSUserFileManager.defaultUserFileManager().content(withKey: imageKey)
         // TODO check if content.isImage()
         if content.isCached {
             print("Content cached:")

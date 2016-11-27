@@ -48,7 +48,7 @@ class UsersTableViewController: UITableViewController {
                     self.queryFollowers(followingId)
                 }
             }
-            if let currentUserId = AWSClientManager.defaultClientManager().credentialsProvider?.identityId {
+            if let currentUserId = AWSIdentityManager.defaultIdentityManager().identityId {
                 // Get followings.
                 self.isLoadingFollowingIds = true
                 self.queryFollowing(currentUserId)
@@ -97,7 +97,7 @@ class UsersTableViewController: UITableViewController {
             self.followingIds.contains(userId) ? cell.setFollowingButton() : cell.setFollowButton()
         }
         cell.userTableViewCellDelegate = self
-        cell.followButton.isHidden = (user.userId == AWSClientManager.defaultClientManager().credentialsProvider?.identityId) ? true : false
+        cell.followButton.isHidden = (user.userId == AWSIdentityManager.defaultIdentityManager().identityId) ? true : false
         return cell
     }
     
@@ -283,7 +283,7 @@ class UsersTableViewController: UITableViewController {
     
     fileprivate func downloadImage(_ imageKey: String, imageType: ImageType, indexPath: IndexPath) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        let content = AWSUserFileManager.UserFileManager(forKey: "USEast1BucketManager").content(withKey: imageKey)
+        let content = AWSUserFileManager.defaultUserFileManager().content(withKey: imageKey)
         // TODO check if content.isImage()
         if content.isCached {
             print("Content cached:")

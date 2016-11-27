@@ -21,10 +21,8 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         return sharedInstance
     }
     
-    // Properties
-    
-    // Stores some currentUser attributes from DynamoDB during the session.
-    // Need it just for saving likes, following and post in NoSQL tables.
+    // Stores currentUser attributes from DynamoDB during the session.
+    // Need it for saving likes, following and post in NoSQL tables.
     var currentUserDynamoDB: CurrentUser?
     
     // MARK: Users
@@ -96,32 +94,6 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         let awsUsersTable = AWSUsersTable()
         let awsUserUpdate = AWSUserUpdate(_userId: identityId, _firstName: firstName, _lastName: lastName, _professionName: professionName, _profilePicUrl: profilePicUrl, _about: about, _locationName: locationName, _searchProfessionName: professionName?.lowercased())
         awsUsersTable.saveUser(awsUserUpdate, completionHandler: completionHandler)
-        
-//        AWSClientManager.defaultClientManager().credentialsProvider?.getIdentityId().continue({
-//            (task: AWSTask) in
-//            if let error = task.error {
-//                print("getIdentityId error: \(error.localizedDescription)")
-//                return AWSTask(error: error).continue(completionHandler)
-//            } else if let identityId = task.result as? String {
-//                
-//                print("saveUserDynamoDB:")
-//                let usersTable = AWSUsersTable()
-//                let awsUserUpdate = AWSUserUpdate()
-//                awsUserUpdate?._userId = identityId
-//                awsUserUpdate?._firstName = user?.firstName
-//                awsUserUpdate?._lastName = user?.lastName
-//                awsUserUpdate?._professionName = user?.professionName
-//                awsUserUpdate?._profilePicUrl = user?.profilePicUrl
-//                awsUserUpdate?._about = user?.about
-//                awsUserUpdate?._locationName = user?.locationName
-//                awsUserUpdate?._searchProfessionName = user?.professionName?.lowercased()
-//                usersTable.saveUser(awsUserUpdate, completionHandler: completionHandler)
-//                return nil
-//            } else {
-//                print("This should not happen with getIdentityId!")
-//                return AWSTask().continue(completionHandler)
-//            }
-//        })
     }
     
     func scanUsersDynamoDB(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
@@ -145,7 +117,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
     // MARK: Relationships
     
     func getRelationshipDynamoDB(_ followingId: String, completionHandler: @escaping AWSContinuationBlock) {
-        guard let identityId = AWSClientManager.defaultClientManager().credentialsProvider?.identityId else {
+        guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
             print("getRelationshipDynamoDB no identityId!")
             AWSTask().continue(completionHandler)
             return
@@ -156,7 +128,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
     }
     
     func createRelationshipDynamoDB(_ followingId: String, completionHandler: @escaping AWSContinuationBlock) {
-        guard let identityId = AWSClientManager.defaultClientManager().credentialsProvider?.identityId else {
+        guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
             print("createRelationshipDynamoDB no identityId!")
             AWSTask().continue(completionHandler)
             return
@@ -169,7 +141,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
     }
     
     func removeRelationshipDynamoDB(_ followingId: String, completionHandler: @escaping AWSContinuationBlock) {
-        guard let identityId = AWSClientManager.defaultClientManager().credentialsProvider?.identityId else {
+        guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
             print("removeRelationshipDynamoDB no identityId!")
             AWSTask().continue(completionHandler)
             return
@@ -195,7 +167,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
     // MARK: Recommendations
     
     func getRecommendationDynamoDB(_ recommendingId: String, completionHandler: @escaping AWSContinuationBlock) {
-        guard let identityId = AWSClientManager.defaultClientManager().credentialsProvider?.identityId else {
+        guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
             print("getRecommendationDynamoDB no identityId!")
             AWSTask().continue(completionHandler)
             return
@@ -206,7 +178,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
     }
     
     func createRecommendationDynamoDB(_ recommendingId: String, recommendationText: String, completionHandler: @escaping AWSContinuationBlock) {
-        guard let identityId = AWSClientManager.defaultClientManager().credentialsProvider?.identityId else {
+        guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
             print("createRecommendationDynamoDB no identityId!")
             AWSTask().continue(completionHandler)
             return
@@ -219,7 +191,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
     }
     
     func removeRecommendationDynamoDB(_ recommendingId: String, completionHandler: @escaping AWSContinuationBlock) {
-        guard let identityId = AWSClientManager.defaultClientManager().credentialsProvider?.identityId else {
+        guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
             print("removeRecommendationDynamoDB no identityId!")
             AWSTask().continue(completionHandler)
             return
@@ -239,7 +211,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
     // MARK: Likes
     
     func getLikeDynamoDB(_ postId: String, completionHandler: @escaping AWSContinuationBlock) {
-        guard let identityId = AWSClientManager.defaultClientManager().credentialsProvider?.identityId else {
+        guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
             print("getLikeDynamoDB no identityId!")
             AWSTask().continue(completionHandler)
             return
@@ -250,7 +222,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
     }
     
     func createLikeDynamoDB(_ postId: String, postUserId: String, completionHandler: @escaping AWSContinuationBlock) {
-        guard let identityId = AWSClientManager.defaultClientManager().credentialsProvider?.identityId else {
+        guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
             print("createLikeDynamoDB no identityId!")
             AWSTask().continue(completionHandler)
             return
@@ -263,7 +235,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
     }
     
     func removeLikeDynamoDB(_ postId: String, completionHandler: @escaping AWSContinuationBlock) {
-        guard let identityId = AWSClientManager.defaultClientManager().credentialsProvider?.identityId else {
+        guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
             print("removeLikeDynamoDB no identityId!")
             AWSTask().continue(completionHandler)
             return
@@ -283,7 +255,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
     // MARK: Comments
     
     func createCommentDynamoDB(_ postId: String, postUserId: String, commentText: String, completionHandler: @escaping AWSContinuationBlock) {
-        guard let identityId = AWSClientManager.defaultClientManager().credentialsProvider?.identityId else {
+        guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
             print("createCommentDynamoDB no identityId!")
             AWSTask().continue(completionHandler)
             return
@@ -305,7 +277,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
     }
     
     func removeCommentDynamoDB(_ commentId: String, completionHandler: @escaping AWSContinuationBlock) {
-        guard let identityId = AWSClientManager.defaultClientManager().credentialsProvider?.identityId else {
+        guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
             print("removeCommentDynamoDB no identityId!")
             AWSTask().continue(completionHandler)
             return
@@ -337,7 +309,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
     }
     
     func createPostDynamoDB(_ imageUrl: String?, imageWidth: NSNumber?, imageHeight: NSNumber?, caption: String?, categoryName: String?, completionHandler: @escaping AWSContinuationBlock) {
-        guard let identityId = AWSClientManager.defaultClientManager().credentialsProvider?.identityId else {
+        guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
             print("createPostDynamoDB no identityId!")
             AWSTask().continue(completionHandler)
             return
@@ -360,7 +332,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
     }
     
     func updatePostDynamoDB(_ postId: String, caption: String?, categoryName: String?, completionHandler: @escaping AWSContinuationBlock) {
-        guard let identityId = AWSClientManager.defaultClientManager().credentialsProvider?.identityId else {
+        guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
             print("updatePostDynamoDB no identityId!")
             AWSTask().continue(completionHandler)
             return
@@ -368,12 +340,6 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         print("updatePostDynamoDB:")
         let awsPostsTable = AWSPostsTable()
         let awsPostUpdate = AWSPostUpdate(_userId: identityId, _postId: postId, _caption: caption, _categoryName: categoryName)
-        
-        
-//        awsPostUpdate?._userId = identityId
-//        awsPostUpdate?._postId = postId
-//        awsPostUpdate?._caption = caption
-//        awsPostUpdate?._categoryName = categoryName
         awsPostsTable.savePost(awsPostUpdate, completionHandler: {
             (task: AWSTask) in
             if let error = task.error {
@@ -386,7 +352,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
     }
     
     func removePostDynamoDB(_ postId: String, completionHandler: @escaping AWSContinuationBlock) {
-        guard let identityId = AWSClientManager.defaultClientManager().credentialsProvider?.identityId else {
+        guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
             print("removePostDynamoDB no identityId!")
             AWSTask().continue(completionHandler)
             return
@@ -458,7 +424,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
     // MARK: WorkExperiences
     
     func createWorkExperienceDynamoDB(_ title: String?, organization: String?, workDescription: String?, fromMonth: NSNumber?, fromYear: NSNumber?, toMonth: NSNumber?, toYear: NSNumber?, completionHandler: @escaping AWSContinuationBlock) {
-        guard let identityId = AWSClientManager.defaultClientManager().credentialsProvider?.identityId else {
+        guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
             print("createWorkExperienceDynamoDB no identityId!")
             AWSTask().continue(completionHandler)
             return
@@ -480,7 +446,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
     }
     
     func updateWorkExperienceDynamoDB(_ workExperienceId: String, title: String?, organization: String?, workDescription: String?, fromMonth: NSNumber?, fromYear: NSNumber?, toMonth: NSNumber?, toYear: NSNumber?, completionHandler: @escaping AWSContinuationBlock) {
-        guard let identityId = AWSClientManager.defaultClientManager().credentialsProvider?.identityId else {
+        guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
             print("updateWorkExperienceDynamoDB no identityId!")
             AWSTask().continue(completionHandler)
             return
@@ -500,7 +466,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
     }
     
     func removeWorkExperienceDynamoDB(_ workExperienceId: String, completionHandler: @escaping AWSContinuationBlock) {
-        guard let identityId = AWSClientManager.defaultClientManager().credentialsProvider?.identityId else {
+        guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
             print("removeWorkExperienceDynamoDB no identityId!")
             AWSTask().continue(completionHandler)
             return
@@ -520,7 +486,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
     // MARK: WorkExperiences
     
     func createEducationDynamoDB(_ school: String?, fieldOfStudy: String?, educationDescription: String?, fromMonth: NSNumber?, fromYear: NSNumber?, toMonth: NSNumber?, toYear: NSNumber?, completionHandler: @escaping AWSContinuationBlock) {
-        guard let identityId = AWSClientManager.defaultClientManager().credentialsProvider?.identityId else {
+        guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
             print("creatEducationDynamoDB no identityId!")
             AWSTask().continue(completionHandler)
             return
@@ -542,7 +508,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
     }
     
     func updateEducationDynamoDB(_ educationId: String, school: String?, fieldOfStudy: String?, educationDescription: String?, fromMonth: NSNumber?, fromYear: NSNumber?, toMonth: NSNumber?, toYear: NSNumber?, completionHandler: @escaping AWSContinuationBlock) {
-        guard let identityId = AWSClientManager.defaultClientManager().credentialsProvider?.identityId else {
+        guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
             print("updateEducationDynamoDB no identityId!")
             AWSTask().continue(completionHandler)
             return
@@ -562,7 +528,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
     }
     
     func removeEducationDynamoDB(_ educationId: String, completionHandler: @escaping AWSContinuationBlock) {
-        guard let identityId = AWSClientManager.defaultClientManager().credentialsProvider?.identityId else {
+        guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
             print("removeEducationDynamoDB no identityId!")
             AWSTask().continue(completionHandler)
             return

@@ -10,6 +10,9 @@ import Foundation
 import AWSMobileHubHelper
 import AWSDynamoDB
 
+typealias AWSContinuationBlock = (AWSTask<AnyObject>) -> Any?
+typealias AWSDynamoDBContinuationBlock = (AWSTask<AWSDynamoDBPaginatedOutput>) -> Any?
+
 protocol DynamoDBManager {
     
     // MARK: Users
@@ -20,7 +23,6 @@ protocol DynamoDBManager {
     func createUserDynamoDB(_ email: String, firstName: String, lastName: String, completionHandler: @escaping AWSContinuationBlock)
     func updateUserPreferredUsernameAndProfilePicDynamoDB(_ preferredUsername: String, profilePicUrl: String?, completionHandler: @escaping AWSContinuationBlock)
     func updateUserProfessionDynamoDB(_ professionName: String, completionHandler: @escaping AWSContinuationBlock)
-//    func updateUserDynamoDB(_ user: User?, completionHandler: @escaping AWSContinuationBlock)
     func updateUserDynamoDB(_ firstName: String?, lastName: String?, professionName: String?, profilePicUrl: String?, about: String?, locationName: String?, completionHandler: @escaping AWSContinuationBlock)
     
     func scanUsersDynamoDB(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)

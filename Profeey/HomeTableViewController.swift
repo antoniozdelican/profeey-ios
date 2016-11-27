@@ -45,6 +45,12 @@ class HomeTableViewController: UITableViewController {
         Bundle.main.loadNibNamed("HomeEmptyFeedView", owner: self, options: nil)
         self.homeEmptyFeedView.homeEmptyFeedViewDelegate = self
         
+        if AWSIdentityManager.defaultIdentityManager().isLoggedIn {
+            self.isLoadingPosts = true
+            self.activityIndicatorView?.startAnimating()
+            self.getCurrentUser()
+        }
+        
 //        if let currentUser = AWSClientManager.defaultClientManager().userPool?.currentUser(), currentUser.isSignedIn {
 //            self.isLoadingPosts = true
 //            self.activityIndicatorView?.startAnimating()
@@ -259,7 +265,7 @@ class HomeTableViewController: UITableViewController {
     // MARK: IBActions
     
     @IBAction func refreshControlChanged(_ sender: AnyObject) {
-        guard let userId = AWSClientManager.defaultClientManager().credentialsProvider?.identityId else {
+        guard let userId = AWSIdentityManager.defaultIdentityManager().identityId else {
             self.refreshControl?.endRefreshing()
             return
         }
@@ -294,10 +300,17 @@ class HomeTableViewController: UITableViewController {
         }
     }
     
+    fileprivate func redirectToWelcome() {
+        guard let window = UIApplication.shared.keyWindow,
+            let initialViewController = UIStoryboard(name: "Welcome", bundle: nil).instantiateInitialViewController() else {
+                return
+        }
+        window.rootViewController = initialViewController
+    }
+    
     // MARK: AWS
     
-    // Gets currentUser and credentialsProvider.idenityId
-    // Creates currentUserDynamoDB on singleton.
+    // Gets currentUser and creates currentUserDynamoDB on singleton.
     fileprivate func getCurrentUser() {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         PRFYDynamoDBManager.defaultDynamoDBManager().getCurrentUserDynamoDB({
@@ -308,6 +321,12 @@ class HomeTableViewController: UITableViewController {
                     print("getCurrentUser error: \(error)")
                 } else {
                     guard let awsUser = task.result as? AWSUser else {
+                        return
+                    }
+                    guard awsUser._preferredUsername != nil else {
+                        // This only happens if users closes the app on the UsernameTableViewController of the Welcome flow.
+                        print("getCurrentUser error: currentUser doesn't have preferredUsername.")
+                        self.redirectToWelcome()
                         return
                     }
                     let currentUser = CurrentUser(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationName: awsUser._locationName)
@@ -375,7 +394,7 @@ class HomeTableViewController: UITableViewController {
     
     fileprivate func downloadImage(_ imageKey: String, imageType: ImageType, indexPath: IndexPath?) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        let content = AWSUserFileManager.UserFileManager(forKey: "USEast1BucketManager").content(withKey: imageKey)
+        let content = AWSUserFileManager.defaultUserFileManager().content(withKey: imageKey)
         // TODO check if content.isImage()
         if content.isCached {
             print("Content cached:")
@@ -441,7 +460,7 @@ class HomeTableViewController: UITableViewController {
     fileprivate func uploadImage(_ imageData: Data, imageWidth: NSNumber, imageHeight: NSNumber, caption: String?, categoryName: String?) {
         let uniqueImageName = NSUUID().uuidString.lowercased().replacingOccurrences(of: "-", with: "")
         let imageKey = "public/\(uniqueImageName).jpg"
-        let localContent = AWSUserFileManager.UserFileManager(forKey: "USEast1BucketManager").localContent(with: imageData, key: imageKey)
+        let localContent = AWSUserFileManager.defaultUserFileManager().localContent(with: imageData, key: imageKey)
         
         print("uploadImageS3:")
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
@@ -475,7 +494,7 @@ class HomeTableViewController: UITableViewController {
     }
     
     fileprivate func removeImage(_ imageKey: String, postId: String) {
-        let content = AWSUserFileManager.UserFileManager(forKey: "USEast1BucketManager").content(withKey: imageKey)
+        let content = AWSUserFileManager.defaultUserFileManager().content(withKey: imageKey)
         print("removeImageS3:")
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         content.removeRemoteContent(completionHandler: {
@@ -602,7 +621,7 @@ extension HomeTableViewController: PostUserTableViewCellDelegate {
             return
         }
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
-        if postUserId == AWSClientManager.defaultClientManager().credentialsProvider?.identityId {
+        if postUserId == AWSIdentityManager.defaultIdentityManager().identityId {
             // DELETE
             let deleteAction = UIAlertAction(title: "Delete", style: UIAlertActionStyle.destructive, handler: {
                 (alert: UIAlertAction) in

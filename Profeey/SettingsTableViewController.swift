@@ -47,8 +47,7 @@ class SettingsTableViewController: UITableViewController {
         alertController.addAction(cancelAction)
         let deleteConfirmAction = UIAlertAction(title: "Sign Out", style: UIAlertActionStyle.default, handler: {
             (alert: UIAlertAction) in
-//            self.signOut()
-            self.handleLogout()
+            self.logOut()
         })
         alertController.addAction(deleteConfirmAction)
         self.present(alertController, animated: true, completion: nil)
@@ -64,31 +63,23 @@ class SettingsTableViewController: UITableViewController {
     
     // MARK: AWS
     
-//    fileprivate func signOut() {
-//        AWSClientManager.defaultClientManager().signOut({
-//            (task: AWSTask) in
-//            DispatchQueue.main.async(execute: {
-//                if let error = task.error {
-//                    print("signOut error: \(error)")
-//                } else {
-//                    self.redirectToOnboarding()
-//                }
-//            })
-//            return nil
-//        })
-//    }
-    
-    //NEW
-    func handleLogout() {
+    fileprivate func logOut() {
+        print("logOut:")
         if (AWSIdentityManager.defaultIdentityManager().isLoggedIn) {
+            UIApplication.shared.isNetworkActivityIndicatorVisible = true
+            FullScreenIndicator.show()
             AWSIdentityManager.defaultIdentityManager().logout(completionHandler: {
                 (result: Any?, error: Error?) in
                 DispatchQueue.main.async(execute: {
-                    if let error = error {
-                        print("signOut error: \(error)")
-                    } else {
-                        self.redirectToOnboarding()
-                    }
+                    UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                    FullScreenIndicator.hide()
+                    // Credentials provider cleanUp.
+//                    AWSIdentityManager.defaultIdentityManager().credentialsProvider.clearKeychain()
+                    // User file manager cleanUp.
+                    AWSUserFileManager.defaultUserFileManager().clearCache()
+                    // Current user cleanUp.
+                    PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB = nil
+                    self.redirectToOnboarding()
                 })
             })
         }

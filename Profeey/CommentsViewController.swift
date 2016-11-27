@@ -224,7 +224,7 @@ class CommentsViewController: UIViewController {
             return
         }
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
-        if userId == AWSClientManager.defaultClientManager().credentialsProvider?.identityId {
+        if userId == AWSIdentityManager.defaultIdentityManager().identityId {
             // DELETE
             let deleteAction = UIAlertAction(title: "Delete", style: UIAlertActionStyle.destructive, handler: {
                 (alert: UIAlertAction) in

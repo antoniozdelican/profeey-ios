@@ -232,7 +232,7 @@ extension PostDetailsTableViewController: PostUserTableViewCellDelegate {
             return
         }
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
-        if postUserId == AWSClientManager.defaultClientManager().credentialsProvider?.identityId {
+        if postUserId == AWSIdentityManager.defaultIdentityManager().identityId {
             // DELETE
             let deleteAction = UIAlertAction(title: "Delete", style: UIAlertActionStyle.destructive, handler: {
                 (alert: UIAlertAction) in
