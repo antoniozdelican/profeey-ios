@@ -45,11 +45,11 @@ class HomeTableViewController: UITableViewController {
         Bundle.main.loadNibNamed("HomeEmptyFeedView", owner: self, options: nil)
         self.homeEmptyFeedView.homeEmptyFeedViewDelegate = self
         
-        if let currentUser = AWSClientManager.defaultClientManager().userPool?.currentUser(), currentUser.isSignedIn {
-            self.isLoadingPosts = true
-            self.activityIndicatorView?.startAnimating()
-            self.getCurrentUser()
-        }
+//        if let currentUser = AWSClientManager.defaultClientManager().userPool?.currentUser(), currentUser.isSignedIn {
+//            self.isLoadingPosts = true
+//            self.activityIndicatorView?.startAnimating()
+//            self.getCurrentUser()
+//        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -199,7 +199,7 @@ class HomeTableViewController: UITableViewController {
             self.performSegue(withIdentifier: "segueToProfileVc", sender: indexPath)
         }
         if cell is PostInfoTableViewCell {
-           self.posts[indexPath.section].isExpandedCaption = true
+            self.posts[indexPath.section].isExpandedCaption = true
             self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
         }
     }

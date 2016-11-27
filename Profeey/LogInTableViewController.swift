@@ -8,6 +8,7 @@
 
 import UIKit
 import AWSMobileHubHelper
+import AWSCognitoIdentityProvider
 
 class LogInTableViewController: UITableViewController {
     
@@ -15,6 +16,9 @@ class LogInTableViewController: UITableViewController {
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var forgotPasswordLabel: UILabel!
     @IBOutlet weak var logInButton: UIButton!
+    
+    // NEW
+    var passwordAuthenticationCompletion: AWSTaskCompletionSource<AWSCognitoIdentityPasswordAuthenticationDetails>?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,21 +66,16 @@ class LogInTableViewController: UITableViewController {
     
     // MARK: UIScrollViewDelegate
     
-    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         self.view.endEditing(true)
     }
     
     // MARK: IBActions
     
     @IBAction func textFieldChanged(_ sender: AnyObject) {
-        guard let usernameText = self.usernameTextField.text,
-            let passwordText = self.passwordTextField.text else {
-                return
-        }
-        guard !usernameText.trimm().isEmpty &&
-            !passwordText.trimm().isEmpty else {
-                self.logInButton.isEnabled = false
-                return
+        guard let username = self.usernameTextField.text?.trimm(), !username.isEmpty, let password = self.passwordTextField.text?.trimm(), !password.isEmpty else {
+            self.logInButton.isEnabled = false
+            return
         }
         self.logInButton.isEnabled = true
     }
@@ -84,25 +83,10 @@ class LogInTableViewController: UITableViewController {
     
     @IBAction func logInButtonTapped(_ sender: AnyObject) {
         self.view.endEditing(true)
-        self.prepareForLogIn()
+        self.userPoolLogIn()
     }
     
     // MARK: Helpers
-    
-    fileprivate func prepareForLogIn() {
-        guard let usernameText = self.usernameTextField.text,
-            let passwordText = self.passwordTextField.text else {
-                return
-        }
-        guard !usernameText.trimm().isEmpty &&
-            !passwordText.trimm().isEmpty else {
-                return
-        }
-        let username = usernameText.trimm()
-        let password = passwordText.trimm()
-        FullScreenIndicator.show()
-        self.logIn(username, password: password)
-    }
     
     fileprivate func redirectToMain() {
         guard let window = UIApplication.shared.keyWindow,
@@ -114,25 +98,50 @@ class LogInTableViewController: UITableViewController {
     
     // MARK: AWS
     
-    fileprivate func logIn(_ username: String, password: String) {
+//    fileprivate func logIn(_ username: String, password: String) {
+//        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+//        AWSClientManager.defaultClientManager().logIn(username, password: password, completionHandler: {
+//            (task: AWSTask) in
+//            DispatchQueue.main.async(execute: {
+//                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+//                if let error = task.error {
+//                    FullScreenIndicator.hide()
+//                    print("logInUserPool error: \(error)")
+//                    let alertController = UIAlertController(title: "Login failed", message: error.localizedDescription, preferredStyle: UIAlertControllerStyle.alert)
+//                    let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil)
+//                    alertController.addAction(okAction)
+//                    self.present(alertController, animated: true, completion: nil)
+//                } else {
+//                    FullScreenIndicator.hide()
+//                    self.redirectToMain()
+//                }
+//            })
+//            return nil
+//        })
+//    }
+    
+    fileprivate func userPoolLogIn() {
+        print("userPoolLogIn")
+        AWSCognitoUserPoolsSignInProvider.sharedInstance().setInteractiveAuthDelegate(self)
+        self.logInWithSignInProvider(AWSCognitoUserPoolsSignInProvider.sharedInstance())
+    }
+
+    fileprivate func logInWithSignInProvider(_ signInProvider: AWSSignInProvider) {
+        print("logInWithSignInProvider")
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        AWSClientManager.defaultClientManager().logIn(username, password: password, completionHandler: {
-            (task: AWSTask) in
+        FullScreenIndicator.show()
+        AWSIdentityManager.defaultIdentityManager().loginWithSign(signInProvider, completionHandler: {
+            (result: Any?, error: Error?) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                if let error = task.error {
-                    FullScreenIndicator.hide()
-                    print("logInUserPool error: \(error)")
-                    let alertController = UIAlertController(title: "Login failed", message: error.localizedDescription, preferredStyle: UIAlertControllerStyle.alert)
-                    let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil)
-                    alertController.addAction(okAction)
+                FullScreenIndicator.hide()
+                if let error = error as? NSError {
+                    let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.userInfo["message"] as? String, cancelButtonTitle: "Try Again")
                     self.present(alertController, animated: true, completion: nil)
                 } else {
-                    FullScreenIndicator.hide()
                     self.redirectToMain()
                 }
             })
-            return nil
         })
     }
 }
@@ -151,5 +160,68 @@ extension LogInTableViewController: UITextFieldDelegate {
         default:
             return false
         }
+    }
+}
+
+extension LogInTableViewController: AWSCognitoIdentityInteractiveAuthenticationDelegate {
+    
+    // Handles the UI setup for initial login screen.
+    func startPasswordAuthentication() -> AWSCognitoIdentityPasswordAuthentication {
+        print("startPasswordAuthentication")
+        return self
+    }
+}
+
+extension LogInTableViewController: AWSCognitoIdentityPasswordAuthentication {
+    
+    func getDetails(_ authenticationInput: AWSCognitoIdentityPasswordAuthenticationInput, passwordAuthenticationCompletionSource: AWSTaskCompletionSource<AWSCognitoIdentityPasswordAuthenticationDetails>) {
+        print("getDetails")
+        self.passwordAuthenticationCompletion = passwordAuthenticationCompletionSource
+    }
+    
+    func didCompleteStepWithError(_ error: Error?) {
+        print("didCompleteStepWithError")
+        if let error = error as? NSError {
+            var title: String = "Something went wrong"
+            var message: String? = "Please try again."
+            if let type = error.userInfo["__type"] as? String {
+                switch type {
+                case "UserNotFoundException":
+                    title = "Incorrect Username"
+                    message = "The username you entered doesn't belong to an account. Please try again."
+                case "NotAuthorizedException":
+                    title = "Incorrect Password"
+                    message = "The password you entered doesn't match with the username. Please try again."
+                default:
+                    title = type
+                    message = error.userInfo["message"] as? String
+                }
+                
+            }
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                FullScreenIndicator.hide()
+                let alertController = self.getSimpleAlertWithTitle(title, message: message, cancelButtonTitle: "Try Again")
+                self.present(alertController, animated: true, completion: nil)
+            })
+        }
+    }
+}
+
+extension LogInTableViewController: AWSCognitoUserPoolsSignInHandler {
+    
+    func handleUserPoolSignInFlowStart() {
+        print("handleUserPoolSignInFlowStart")
+        guard let username = self.usernameTextField.text?.trimm(), !username.isEmpty, let password = self.passwordTextField.text?.trimm(), !password.isEmpty else {
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                FullScreenIndicator.hide()
+                let alertController = self.getSimpleAlertWithTitle("Missing username / password", message: "Please try again.", cancelButtonTitle: "Try Again")
+                self.present(alertController, animated: true, completion: nil)
+            })
+            return
+        }
+        // Set the task completion result as an object of AWSCognitoIdentityPasswordAuthenticationDetails with username and password.
+        self.passwordAuthenticationCompletion?.setResult(AWSCognitoIdentityPasswordAuthenticationDetails(username: username, password: password))
     }
 }

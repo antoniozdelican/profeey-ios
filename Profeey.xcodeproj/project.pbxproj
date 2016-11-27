@@ -186,6 +186,8 @@
 		A9CBBC661DB669EA009C8EC7 /* EditEducationDescriptionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CBBC651DB669EA009C8EC7 /* EditEducationDescriptionTableViewCell.swift */; };
 		A9D185D71D7192350073E65F /* AWSLikesTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D185D61D7192350073E65F /* AWSLikesTable.swift */; };
 		A9D185D91D71927E0073E65F /* AWSLike.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D185D81D71927E0073E65F /* AWSLike.swift */; };
+		A9D227011DE99B9700B2E894 /* AWSConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D227001DE99B9700B2E894 /* AWSConfiguration.swift */; };
+		A9D227211DE9BACA00B2E894 /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D227201DE9BACA00B2E894 /* TestViewController.swift */; };
 		A9D334081D800D8D005565C2 /* PostImageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D334071D800D8D005565C2 /* PostImageTableViewCell.swift */; };
 		A9D3340C1D801693005565C2 /* PostInfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D3340B1D801693005565C2 /* PostInfoTableViewCell.swift */; };
 		A9D334121D801B70005565C2 /* PostButtonsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D334111D801B70005565C2 /* PostButtonsTableViewCell.swift */; };
@@ -430,6 +432,8 @@
 		A9CBBC651DB669EA009C8EC7 /* EditEducationDescriptionTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditEducationDescriptionTableViewCell.swift; sourceTree = "<group>"; };
 		A9D185D61D7192350073E65F /* AWSLikesTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSLikesTable.swift; sourceTree = "<group>"; };
 		A9D185D81D71927E0073E65F /* AWSLike.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSLike.swift; sourceTree = "<group>"; };
+		A9D227001DE99B9700B2E894 /* AWSConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSConfiguration.swift; sourceTree = "<group>"; };
+		A9D227201DE9BACA00B2E894 /* TestViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
 		A9D334071D800D8D005565C2 /* PostImageTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostImageTableViewCell.swift; sourceTree = "<group>"; };
 		A9D3340B1D801693005565C2 /* PostInfoTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostInfoTableViewCell.swift; sourceTree = "<group>"; };
 		A9D334111D801B70005565C2 /* PostButtonsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostButtonsTableViewCell.swift; sourceTree = "<group>"; };
@@ -619,6 +623,7 @@
 				A903EB501D16A39600B33025 /* Profeey-Bridging-Header.h */,
 				A91198571DDDE99500E567D6 /* AWSCloudSearchManager.swift */,
 				A9D962281DE77180008EA0DF /* AWSMobileClient.swift */,
+				A9D227001DE99B9700B2E894 /* AWSConfiguration.swift */,
 				A930BC7B1D0DD43F004D49F7 /* AppDelegate.swift */,
 				A96622041D0EC49700298CE7 /* Colors.swift */,
 				A91A35231D1C26E6006F22B2 /* FullScreenIndicator.swift */,
@@ -1058,6 +1063,7 @@
 			isa = PBXGroup;
 			children = (
 				A9E53B681D10665100CD1D6C /* Home.storyboard */,
+				A9D227201DE9BACA00B2E894 /* TestViewController.swift */,
 				A944BAA91DD10323000BE754 /* HomeEmptyFeedView.xib */,
 				A944BAAB1DD10413000BE754 /* HomeEmptyFeedView.swift */,
 				A9B7A2491D65D8C0009DA340 /* HomeTableViewController.swift */,
@@ -1334,6 +1340,7 @@
 				A915F8751DC0D9CB0031C45F /* Location.swift in Sources */,
 				A9EAD3401D1E8E0C00994292 /* NoSQLModelHelpers.swift in Sources */,
 				A9543CAF1DA3C4DB002BF372 /* EditPostImageTableViewCell.swift in Sources */,
+				A9D227011DE99B9700B2E894 /* AWSConfiguration.swift in Sources */,
 				A9A5039F1D2FE0810030A472 /* AWSUser.swift in Sources */,
 				A9CBBC5A1DB6515A009C8EC7 /* WorkExperienceTableViewCell.swift in Sources */,
 				A990ECB51D6A582100C3C9CE /* UserTableViewCell.swift in Sources */,
@@ -1366,6 +1373,7 @@
 				A9CBBC641DB66856009C8EC7 /* EducationTableViewCell.swift in Sources */,
 				A91828451DC0E49800EC9E63 /* LocationTableViewCell.swift in Sources */,
 				A98A38241D8C076C00C9CA75 /* AWSUserCategory.swift in Sources */,
+				A9D227211DE9BACA00B2E894 /* TestViewController.swift in Sources */,
 				A95C31B91D3E35AA0003377F /* AWSClientManager.swift in Sources */,
 				A9AA36391D947C4E00E5EAFA /* LogInTableViewController.swift in Sources */,
 				A9D49EE51DD5DB1A000F90A8 /* UserCategoryTableViewController.swift in Sources */,

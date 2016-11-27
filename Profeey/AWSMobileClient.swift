@@ -10,21 +10,21 @@ import Foundation
 import UIKit
 import AWSCore
 import AWSMobileHubHelper
-import AWSMobileAnalytics
+//import AWSMobileAnalytics
 
 /**
  * AWSMobileClient is a singleton that bootstraps the app. It creates an identity manager to establish the user identity with Amazon Cognito.
  */
 class AWSMobileClient: NSObject {
     // Amazon Mobile Analytics client - Use to generate custom or monetization analytics events.
-    var mobileAnalytics: AWSMobileAnalytics!
+    //var mobileAnalytics: AWSMobileAnalytics!
     
     // Shared instance of this class
     static let sharedInstance = AWSMobileClient()
     private var isInitialized: Bool
     
     private override init() {
-        isInitialized = false
+        self.isInitialized = false
         super.init()
     }
     
@@ -43,14 +43,13 @@ class AWSMobileClient: NSObject {
      * - parameter annotation: from application delegate.
      * - returns: true if call was handled by this component
      */
-    func withApplication(application: UIApplication, withURL url: NSURL, withSourceApplication sourceApplication: String?, withAnnotation annotation: AnyObject) -> Bool {
+    func withApplication(_ application: UIApplication, withURL url: URL, withSourceApplication sourceApplication: String?, withAnnotation annotation: Any) -> Bool {
         print("withApplication:withURL")
-        AWSIdentityManager.defaultIdentityManager().interceptApplication(application, open: url as URL, sourceApplication: sourceApplication, annotation: annotation)
+        AWSIdentityManager.defaultIdentityManager().interceptApplication(application, open: url, sourceApplication: sourceApplication, annotation: annotation)
         
-        if (!isInitialized) {
-            isInitialized = true
+        if (!self.isInitialized) {
+            self.isInitialized = true
         }
-        
         return false;
     }
     
@@ -60,24 +59,24 @@ class AWSMobileClient: NSObject {
      *
      * - parameter application: from application delegate.
      */
-    func applicationDidBecomeActive(application: UIApplication) {
+    func applicationDidBecomeActive(_ application: UIApplication) {
         print("applicationDidBecomeActive:")
-        initializeMobileAnalytics()
+        //self.initializeMobileAnalytics()
     }
     
-    private func initializeMobileAnalytics() {
-        if (mobileAnalytics == nil) {
-            mobileAnalytics = AWSMobileAnalytics.default()
-        }
-    }
+//    private func initializeMobileAnalytics() {
+//        if (self.mobileAnalytics == nil) {
+//            self.mobileAnalytics = AWSMobileAnalytics.default()
+//        }
+//    }
     
     /**
      * Handles callback from iOS platform indicating push notification registration was a success.
      * - parameter application: application
      * - parameter deviceToken: device token
      */
-    func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
-        AWSPushManager.defaultPushManager().interceptApplication(application, didRegisterForRemoteNotificationsWithDeviceToken: deviceToken as Data)
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        AWSPushManager.defaultPushManager().interceptApplication(application, didRegisterForRemoteNotificationsWithDeviceToken: deviceToken)
     }
     
     /**
@@ -85,7 +84,7 @@ class AWSMobileClient: NSObject {
      * - parameter application: application
      * - parameter error: error
      */
-    func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
         AWSPushManager.defaultPushManager().interceptApplication(application, didFailToRegisterForRemoteNotificationsWithError: error)
     }
     
@@ -93,7 +92,7 @@ class AWSMobileClient: NSObject {
      * Handles a received push notification.
      * - parameter userInfo: push notification contents
      */
-    func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any]) {
         AWSPushManager.defaultPushManager().interceptApplication(application, didReceiveRemoteNotification: userInfo)
     }
     
@@ -103,23 +102,21 @@ class AWSMobileClient: NSObject {
      * - parameter application: instance from application delegate.
      * - parameter launchOptions: from application delegate.
      */
-    func didFinishLaunching(application: UIApplication, withOptions launchOptions: [NSObject : AnyObject]?) -> Bool {
+    func didFinishLaunching(_ application: UIApplication, withOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         print("didFinishLaunching:")
         
-        // Register the sign in provider instances with their unique identifier
+        // Register the sign in provider instances with their unique identifier.
         
-        // set up cognito user pool
-        setupUserPool()
-        
+        // Set up cognito user pool.
+        self.setupUserPool()
         
         var didFinishLaunching: Bool = AWSIdentityManager.defaultIdentityManager().interceptApplication(application, didFinishLaunchingWithOptions: launchOptions)
         didFinishLaunching = didFinishLaunching && AWSPushManager.defaultPushManager().interceptApplication(application, didFinishLaunchingWithOptions: launchOptions)
         
-        if (!isInitialized) {
+        if (!self.isInitialized) {
             AWSIdentityManager.defaultIdentityManager().resumeSession(completionHandler: {
                 (result: Any?, error: Error?) in
-                // If you get an EXC_BAD_ACCESS here in iOS Simulator, then do Simulator -> "Reset Content and Settings..."
-                // This will clear bad auth tokens stored by other apps with the same bundle ID.
+                print("resumeSession:")
                 print("Result: \(result) \n Error:\(error)")
             })
         }
@@ -127,11 +124,11 @@ class AWSMobileClient: NSObject {
         return didFinishLaunching
     }
     
-    func setupUserPool() {
-        // register your user pool configuration
-//        AWSCognitoUserPoolsSignInProvider.setupUserPoolWithId(AWSCognitoUserPoolId, cognitoIdentityUserPoolAppClientId: AWSCognitoUserPoolAppClientId, cognitoIdentityUserPoolAppClientSecret: AWSCognitoUserPoolClientSecret, region: AWSCognitoUserPoolRegion)
-//        
-//        AWSSignInProviderFactory.sharedInstance().registerAWSSignInProvider(AWSCognitoUserPoolsSignInProvider.sharedInstance(), forKey:AWSCognitoUserPoolsSignInProviderKey)
+    fileprivate func setupUserPool() {
+        // Register user pool configuration.
+        AWSCognitoUserPoolsSignInProvider.setupUserPool(withId: AWSCognitoUserPoolId, cognitoIdentityUserPoolAppClientId: AWSCognitoUserPoolAppClientId, cognitoIdentityUserPoolAppClientSecret: AWSCognitoUserPoolClientSecret, region: AWSCognitoUserPoolRegion)
+        
+        AWSSignInProviderFactory.sharedInstance().registerAWSSign(AWSCognitoUserPoolsSignInProvider.sharedInstance(), forKey:AWSCognitoUserPoolsSignInProviderKey)
         
     }
     

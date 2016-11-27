@@ -75,12 +75,12 @@ class AWSUsersTable: NSObject, Table {
     }
     
     // Skip null attributes (landing flow)
-    func saveUserSkipNull(_ user: AWSUser?, completionHandler: @escaping AWSContinuationBlock) {
+    func saveUserSkipNull(_ awsUser: AWSUser, completionHandler: @escaping AWSContinuationBlock) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
         
         let updateMapperConfig = AWSDynamoDBObjectMapperConfiguration()
         updateMapperConfig.saveBehavior = AWSDynamoDBObjectMapperSaveBehavior.updateSkipNullAttributes
         
-        objectMapper.save(user!, configuration: updateMapperConfig).continue(completionHandler)
+        objectMapper.save(awsUser, configuration: updateMapperConfig).continue(completionHandler)
     }
 }

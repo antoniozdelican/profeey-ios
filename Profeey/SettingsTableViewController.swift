@@ -47,7 +47,8 @@ class SettingsTableViewController: UITableViewController {
         alertController.addAction(cancelAction)
         let deleteConfirmAction = UIAlertAction(title: "Sign Out", style: UIAlertActionStyle.default, handler: {
             (alert: UIAlertAction) in
-            self.signOut()
+//            self.signOut()
+            self.handleLogout()
         })
         alertController.addAction(deleteConfirmAction)
         self.present(alertController, animated: true, completion: nil)
@@ -63,17 +64,33 @@ class SettingsTableViewController: UITableViewController {
     
     // MARK: AWS
     
-    fileprivate func signOut() {
-        AWSClientManager.defaultClientManager().signOut({
-            (task: AWSTask) in
-            DispatchQueue.main.async(execute: {
-                if let error = task.error {
-                    print("signOut error: \(error)")
-                } else {
-                    self.redirectToOnboarding()
-                }
+//    fileprivate func signOut() {
+//        AWSClientManager.defaultClientManager().signOut({
+//            (task: AWSTask) in
+//            DispatchQueue.main.async(execute: {
+//                if let error = task.error {
+//                    print("signOut error: \(error)")
+//                } else {
+//                    self.redirectToOnboarding()
+//                }
+//            })
+//            return nil
+//        })
+//    }
+    
+    //NEW
+    func handleLogout() {
+        if (AWSIdentityManager.defaultIdentityManager().isLoggedIn) {
+            AWSIdentityManager.defaultIdentityManager().logout(completionHandler: {
+                (result: Any?, error: Error?) in
+                DispatchQueue.main.async(execute: {
+                    if let error = error {
+                        print("signOut error: \(error)")
+                    } else {
+                        self.redirectToOnboarding()
+                    }
+                })
             })
-            return nil
-        })
+        }
     }
 }

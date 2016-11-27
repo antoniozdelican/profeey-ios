@@ -19,7 +19,7 @@ class UsernameTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.profilePicImageView.layer.cornerRadius = 40.0
+        self.profilePicImageView.layer.cornerRadius = 4.0
         self.usernameTextField.delegate = self
         self.continueButton.isEnabled = false
     }
@@ -75,19 +75,16 @@ class UsernameTableViewController: UITableViewController {
     
     // MARK: UIScrollViewDelegate
     
-    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         self.view.endEditing(true)
     }
     
     // MARK: IBActions
     
     @IBAction func textFieldChanged(_ sender: AnyObject) {
-        guard let usernameText = self.usernameTextField.text else {
-                return
-        }
-        guard !usernameText.trimm().isEmpty else {
-                self.continueButton.isEnabled = false
-                return
+        guard let preferredUsername = self.usernameTextField.text, !preferredUsername.trimm().isEmpty else {
+            self.continueButton.isEnabled = false
+            return
         }
         self.continueButton.isEnabled = true
     }
@@ -145,6 +142,12 @@ class UsernameTableViewController: UITableViewController {
     }
     
     // MARK: AWS
+    
+    fileprivate func userPoolUpdatePreferredUsername() {
+        guard let preferredUsername = self.usernameTextField.text?.trimm(), !preferredUsername.isEmpty else {
+            return
+        }
+    }
     
     fileprivate func updatePreferredUsername(_ preferredUsername: String) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true

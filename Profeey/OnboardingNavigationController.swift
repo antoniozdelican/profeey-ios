@@ -26,13 +26,13 @@ class OnboardingNavigationController: UINavigationController {
     }
 }
 
-extension OnboardingNavigationController: AWSCognitoIdentityPasswordAuthentication {
-    
-    func getDetails(_ authenticationInput: AWSCognitoIdentityPasswordAuthenticationInput, passwordAuthenticationCompletionSource: AWSTaskCompletionSource<AWSCognitoIdentityPasswordAuthenticationDetails>) {
-        // Do nothing.
-    }
-    
-    func didCompleteStepWithError(_ error: Error?) {
-        // Do nothing.
-    }
-}
+//extension OnboardingNavigationController: AWSCognitoIdentityPasswordAuthentication {
+//    
+//    func getDetails(_ authenticationInput: AWSCognitoIdentityPasswordAuthenticationInput, passwordAuthenticationCompletionSource: AWSTaskCompletionSource<AWSCognitoIdentityPasswordAuthenticationDetails>) {
+//        // Do nothing.
+//    }
+//    
+//    func didCompleteStepWithError(_ error: Error?) {
+//        // Do nothing.
+//    }
+//}

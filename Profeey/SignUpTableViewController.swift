@@ -8,6 +8,7 @@
 
 import UIKit
 import AWSMobileHubHelper
+import AWSCognitoIdentityProvider
 
 class SignUpTableViewController: UITableViewController {
 
@@ -18,8 +19,15 @@ class SignUpTableViewController: UITableViewController {
     @IBOutlet weak var legalLabel: UILabel!
     @IBOutlet weak var signUpButton: UIButton!
     
+    // NEW
+    fileprivate var userPool: AWSCognitoIdentityUserPool?
+    fileprivate var passwordAuthenticationCompletion: AWSTaskCompletionSource<AWSCognitoIdentityPasswordAuthenticationDetails>?
+    fileprivate var username: String?
+    fileprivate var password: String?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.userPool = AWSCognitoIdentityUserPool.init(forKey: AWSCognitoUserPoolsSignInProviderKey)
         self.configureLegalLabel()
         self.firstNameTextField.delegate = self
         self.lastNameTextField.delegate = self
@@ -72,23 +80,17 @@ class SignUpTableViewController: UITableViewController {
     
     // MARK: UIScrollViewDelegate
     
-    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         self.view.endEditing(true)
     }
     
     // MARK: IBActions
     
     @IBAction func textFieldChanged(_ sender: AnyObject) {
-        guard let firstNameText = self.firstNameTextField.text,
-            let lastNameText = self.lastNameTextField.text,
-            let emailText = self.emailTextField.text,
-            let passwordText = self.passwordTextField.text else {
-                return
-        }
-        guard !firstNameText.trimm().isEmpty &&
-            !lastNameText.trimm().isEmpty &&
-            !emailText.trimm().isEmpty &&
-            !passwordText.trimm().isEmpty else {
+        guard let firstName = self.firstNameTextField.text, !firstName.trimm().isEmpty,
+            let lastName = self.lastNameTextField.text, !lastName.trimm().isEmpty,
+            let email = self.emailTextField.text, !email.trimm().isEmpty,
+            let password = self.passwordTextField.text, !password.trimm().isEmpty else {
                 self.signUpButton.isEnabled = false
                 return
         }
@@ -98,47 +100,10 @@ class SignUpTableViewController: UITableViewController {
     
     @IBAction func signUpButtonTapped(_ sender: AnyObject) {
         self.view.endEditing(true)
-        self.prepareForSignUp()
+        self.userPoolSignUp()
     }
     
     // MARK: Helpers
-    
-    fileprivate func prepareForSignUp() {
-        guard let firstNameText = self.firstNameTextField.text,
-            let lastNameText = self.lastNameTextField.text,
-            let emailText = self.emailTextField.text,
-            let passwordText = self.passwordTextField.text else {
-                return
-        }
-        guard !firstNameText.trimm().isEmpty &&
-            !lastNameText.trimm().isEmpty &&
-            !emailText.trimm().isEmpty &&
-            !passwordText.trimm().isEmpty else {
-                return
-        }
-        let username = NSUUID().uuidString.lowercased()
-        let firstName = firstNameText.trimm()
-        let lastName = lastNameText.trimm()
-        let email = emailText.trimm()
-        let password = passwordText.trimm()
-        // Basic validation, stringer is on server side.
-        guard email.isEmail() else {
-            let alertController = UIAlertController(title: "Invalid Email ", message: "The email you entered is not valid. Please try again.", preferredStyle: UIAlertControllerStyle.alert)
-            let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil)
-            alertController.addAction(okAction)
-            self.present(alertController, animated: true, completion: nil)
-            return
-        }
-        guard password.isPassword() else {
-            let alertController = UIAlertController(title: "Invalid Password", message: "For your security, password should be at least 8 characters, uppercase, lowercase and numeric.", preferredStyle: UIAlertControllerStyle.alert)
-            let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil)
-            alertController.addAction(okAction)
-            self.present(alertController, animated: true, completion: nil)
-            return
-        }
-        FullScreenIndicator.show()
-        self.signUp(username, password: password, email: email, firstName: firstName, lastName: lastName)
-    }
     
     fileprivate func redirectToWelcome() {
         guard let window = UIApplication.shared.keyWindow,
@@ -151,64 +116,160 @@ class SignUpTableViewController: UITableViewController {
     
     // MARK: AWS
     
-    fileprivate func signUp(_ username: String, password: String, email: String, firstName: String, lastName: String) {
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        AWSClientManager.defaultClientManager().signUp(username, password: password, email: email, firstName: firstName, lastName: lastName, completionHandler: {
-            (task: AWSTask) in
-            DispatchQueue.main.async(execute: {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                if let error = task.error {
-                    FullScreenIndicator.hide()
-                    print("signUpUserPool error: \(error)")
-                    let alertController = UIAlertController(title: "Uups", message: error.localizedDescription, preferredStyle: UIAlertControllerStyle.alert)
-                    let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil)
-                    alertController.addAction(okAction)
-                    self.present(alertController, animated: true, completion: nil)
-                } else {
-                    self.logIn(username, password: password, email: email, firstName: firstName, lastName: lastName)
-                }
-            })
-            return nil
-        })
+    fileprivate func userPoolSignUp() {
+        guard let firstNameText = self.firstNameTextField.text, !firstNameText.trimm().isEmpty,
+            let lastNameText = self.lastNameTextField.text, !lastNameText.trimm().isEmpty,
+            let emailText = self.emailTextField.text, !emailText.trimm().isEmpty,
+            let passwordText = self.passwordTextField.text, !passwordText.trimm().isEmpty else {
+                return
+        }
+        let username = NSUUID().uuidString.lowercased()
+        let firstName = firstNameText.trimm()
+        let lastName = lastNameText.trimm()
+        let email = emailText.trimm()
+        let password = passwordText.trimm()
+        var userAttributes: [AWSCognitoIdentityUserAttributeType] = []
+        userAttributes.append(AWSCognitoIdentityUserAttributeType(name: "given_name", value: firstName))
+        userAttributes.append(AWSCognitoIdentityUserAttributeType(name: "family_name", value: lastName))
+        userAttributes.append(AWSCognitoIdentityUserAttributeType(name: "email", value: email))
         
-    }
-    
-    fileprivate func logIn(_ username: String, password: String, email: String, firstName: String, lastName: String) {
+        print("userPoolSignUp")
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        AWSClientManager.defaultClientManager().logIn(username, password: password, completionHandler: {
+        FullScreenIndicator.show()
+        self.userPool?.signUp(username, password: password, userAttributes: userAttributes, validationData: nil).continue({
             (task: AWSTask) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                if let error = task.error {
+                if let error = task.error as? NSError {
                     FullScreenIndicator.hide()
-                    print("signUpUserPool error: \(error)")
-                    let alertController = UIAlertController(title: "Uups", message: error.localizedDescription, preferredStyle: UIAlertControllerStyle.alert)
-                    let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil)
-                    alertController.addAction(okAction)
+                    print("userPoolSignUp error: \(error)")
+                    // Error handling.
+                    var title: String = "Something went wrong"
+                    var message: String? = "Please try again."
+                    if let type = error.userInfo["__type"] as? String {
+                        switch type {
+                        case "InvalidParameterException":
+                            if let userInfoMessage = error.userInfo["message"] as? String, userInfoMessage.contains("email") {
+                                title = "Invalid Email"
+                                message = "The email you entered is not in valid format. Please try again."
+                            } else {
+                                title = "Invalid Password"
+                                message = "The password you entered should be at least 8 characters long with numbers, uppercase and lowercase letters."
+                            }
+                        case "InvalidPasswordException":
+                            title = "Invalid Password"
+                            message = "The password you entered should be at least 8 characters long with numbers, uppercase and lowercase letters."
+                        default:
+                            title = type
+                            message = error.userInfo["message"] as? String
+                        }
+                        
+                    }
+                    let alertController = self.getSimpleAlertWithTitle(title, message: message, cancelButtonTitle: "Try Again")
                     self.present(alertController, animated: true, completion: nil)
                 } else {
-                    self.createUser(email, firstName: firstName, lastName: lastName)
+                    // 2. logIn user.
+                    self.username = username
+                    self.password = password
+                    self.userPoolLogIn()
                 }
             })
             return nil
         })
     }
     
-    fileprivate func createUser(_ email: String, firstName: String, lastName: String) {
+    fileprivate func userPoolLogIn() {
+        print("userPoolLogIn")
+        AWSCognitoUserPoolsSignInProvider.sharedInstance().setInteractiveAuthDelegate(self)
+        self.logInWithSignInProvider(AWSCognitoUserPoolsSignInProvider.sharedInstance())
+    }
+    
+    fileprivate func logInWithSignInProvider(_ signInProvider: AWSSignInProvider) {
+        print("logInWithSignInProvider")
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        AWSIdentityManager.defaultIdentityManager().loginWithSign(signInProvider, completionHandler: {
+            (result: Any?, error: Error?) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                if let error = error as? NSError {
+                    FullScreenIndicator.hide()
+                    print("logInWithSignInProvider error: \(error)")
+                    let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.userInfo["message"] as? String, cancelButtonTitle: "Try Again")
+                    self.present(alertController, animated: true, completion: nil)
+                } else {
+                    // 3. Create user in DynamoDB.
+                    self.createUser()
+                }
+            })
+        })
+    }
+    
+//    fileprivate func signUp(_ username: String, password: String, email: String, firstName: String, lastName: String) {
+//        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+//        AWSClientManager.defaultClientManager().signUp(username, password: password, email: email, firstName: firstName, lastName: lastName, completionHandler: {
+//            (task: AWSTask) in
+//            DispatchQueue.main.async(execute: {
+//                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+//                if let error = task.error {
+//                    FullScreenIndicator.hide()
+//                    print("signUpUserPool error: \(error)")
+//                    let alertController = UIAlertController(title: "Uups", message: error.localizedDescription, preferredStyle: UIAlertControllerStyle.alert)
+//                    let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil)
+//                    alertController.addAction(okAction)
+//                    self.present(alertController, animated: true, completion: nil)
+//                } else {
+//                    self.logIn(username, password: password, email: email, firstName: firstName, lastName: lastName)
+//                }
+//            })
+//            return nil
+//        })
+//        
+//    }
+    
+//    fileprivate func logIn(_ username: String, password: String, email: String, firstName: String, lastName: String) {
+//        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+//        AWSClientManager.defaultClientManager().logIn(username, password: password, completionHandler: {
+//            (task: AWSTask) in
+//            DispatchQueue.main.async(execute: {
+//                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+//                if let error = task.error {
+//                    FullScreenIndicator.hide()
+//                    print("signUpUserPool error: \(error)")
+//                    let alertController = UIAlertController(title: "Uups", message: error.localizedDescription, preferredStyle: UIAlertControllerStyle.alert)
+//                    let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil)
+//                    alertController.addAction(okAction)
+//                    self.present(alertController, animated: true, completion: nil)
+//                } else {
+//                    self.createUser(email, firstName: firstName, lastName: lastName)
+//                }
+//            })
+//            return nil
+//        })
+//    }
+    
+    fileprivate func createUser() {
+        guard let firstNameText = self.firstNameTextField.text, !firstNameText.trimm().isEmpty,
+            let lastNameText = self.lastNameTextField.text, !lastNameText.trimm().isEmpty,
+            let emailText = self.emailTextField.text, !emailText.trimm().isEmpty else {
+                return
+        }
+        let firstName = firstNameText.trimm()
+        let lastName = lastNameText.trimm()
+        let email = emailText.trimm()
+        
+        print("createUserDynamoDB")
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         PRFYDynamoDBManager.defaultDynamoDBManager().createUserDynamoDB(email, firstName: firstName, lastName: lastName, completionHandler: {
             (task: AWSTask) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                if let error = task.error {
-                    FullScreenIndicator.hide()
-                    print("signUpUserPool error: \(error)")
-                    let alertController = UIAlertController(title: "Uups", message: error.localizedDescription, preferredStyle: UIAlertControllerStyle.alert)
-                    let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil)
-                    alertController.addAction(okAction)
+                FullScreenIndicator.hide()
+                if let error = task.error as? NSError {
+                    print("createUserDynamoDB error: \(error)")
+                    let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.userInfo["message"] as? String, cancelButtonTitle: "Try Again")
                     self.present(alertController, animated: true, completion: nil)
                 } else {
-                    FullScreenIndicator.hide()
+                    // 4. Redirect.
                     self.redirectToWelcome()
                 }
             })
@@ -240,5 +301,67 @@ extension SignUpTableViewController: UITextFieldDelegate {
         default:
             return false
         }
+    }
+}
+
+extension SignUpTableViewController: AWSCognitoIdentityInteractiveAuthenticationDelegate {
+
+    func startPasswordAuthentication() -> AWSCognitoIdentityPasswordAuthentication {
+        print("startPasswordAuthentication")
+        return self
+    }
+}
+
+extension SignUpTableViewController: AWSCognitoIdentityPasswordAuthentication {
+    
+    func getDetails(_ authenticationInput: AWSCognitoIdentityPasswordAuthenticationInput, passwordAuthenticationCompletionSource: AWSTaskCompletionSource<AWSCognitoIdentityPasswordAuthenticationDetails>) {
+        print("getDetails")
+        self.passwordAuthenticationCompletion = passwordAuthenticationCompletionSource
+    }
+    
+    func didCompleteStepWithError(_ error: Error?) {
+        print("didCompleteStepWithError")
+        if let error = error as? NSError {
+            var title: String = "Something went wrong"
+            var message: String? = "Please try again."
+            if let type = error.userInfo["__type"] as? String {
+                switch type {
+                case "UserNotFoundException":
+                    title = "Incorrect Username"
+                    message = "The username you entered doesn't belong to an account. Please try again."
+                case "NotAuthorizedException":
+                    title = "Incorrect Password"
+                    message = "The password you entered doesn't match with the username. Please try again."
+                default:
+                    title = type
+                    message = error.userInfo["message"] as? String
+                }
+                
+            }
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                FullScreenIndicator.hide()
+                let alertController = self.getSimpleAlertWithTitle(title, message: message, cancelButtonTitle: "Try Again")
+                self.present(alertController, animated: true, completion: nil)
+            })
+        }
+    }
+}
+
+extension SignUpTableViewController: AWSCognitoUserPoolsSignInHandler {
+    
+    func handleUserPoolSignInFlowStart() {
+        print("handleUserPoolSignInFlowStart")
+        guard let username = self.username, !username.trimm().isEmpty, let password = self.password, !password.trimm().isEmpty else {
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                FullScreenIndicator.hide()
+                let alertController = self.getSimpleAlertWithTitle("Missing username / password", message: "Please try again.", cancelButtonTitle: "Try Again")
+                self.present(alertController, animated: true, completion: nil)
+            })
+            return
+        }
+        // Set the task completion result as an object of AWSCognitoIdentityPasswordAuthenticationDetails with username and password.
+        self.passwordAuthenticationCompletion?.setResult(AWSCognitoIdentityPasswordAuthenticationDetails(username: username, password: password))
     }
 }
