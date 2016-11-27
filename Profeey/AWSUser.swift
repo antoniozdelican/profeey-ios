@@ -55,6 +55,19 @@ class AWSUser: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
         self._searchProfessionName = _searchProfessionName
     }
     
+    // To update user on EditVc. Use AWSUserUpdate!
+    convenience init(_userId: String?, _firstName: String?, _lastName: String?, _professionName: String?, _profilePicUrl: String?, _about: String?, _locationName: String?, _searchProfessionName: String?) {
+        self.init()
+        self._userId = _userId
+        self._firstName = _firstName
+        self._lastName = _lastName
+        self._professionName = _professionName
+        self._profilePicUrl = _profilePicUrl
+        self._about = _about
+        self._locationName = _locationName
+        self._searchProfessionName = _searchProfessionName
+    }
+    
     class func dynamoDBTableName() -> String {
         
         return "profeey-mobilehub-294297648-Users"

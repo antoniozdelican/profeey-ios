@@ -178,7 +178,7 @@ class EditProfileTableViewController: UITableViewController {
         if let newProfilePicImageData = self.newProfilePicImageData {
             self.uploadImage(newProfilePicImageData)
         } else {
-            self.saveUser()
+            self.updateUser()
         }
     }
     
@@ -230,15 +230,15 @@ class EditProfileTableViewController: UITableViewController {
     
     // MARK: AWS
     
-    fileprivate func saveUser() {
+    fileprivate func updateUser() {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().saveUserDynamoDB(self.user, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().updateUserDynamoDB(self.user?.firstName, lastName: self.user?.lastName, professionName: self.user?.professionName, profilePicUrl: self.user?.profilePicUrl, about: self.user?.about, locationName: self.user?.locationName, completionHandler: {
             (task: AWSTask) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 FullScreenIndicator.hide()
                 if let error = task.error {
-                    print("saveUser error: \(error)")
+                    print("updateUser error: \(error)")
                     let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.localizedDescription, cancelButtonTitle: "Ok")
                     self.present(alertController, animated: true, completion: nil)
                 } else {
@@ -274,7 +274,7 @@ class EditProfileTableViewController: UITableViewController {
                     } else {
                         print("uploadImageS3 success!")
                         self.user?.profilePicUrl = imageKey
-                        self.saveUser()
+                        self.updateUser()
                     }
                 })
         })

@@ -98,28 +98,6 @@ class LogInTableViewController: UITableViewController {
     
     // MARK: AWS
     
-//    fileprivate func logIn(_ username: String, password: String) {
-//        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-//        AWSClientManager.defaultClientManager().logIn(username, password: password, completionHandler: {
-//            (task: AWSTask) in
-//            DispatchQueue.main.async(execute: {
-//                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-//                if let error = task.error {
-//                    FullScreenIndicator.hide()
-//                    print("logInUserPool error: \(error)")
-//                    let alertController = UIAlertController(title: "Login failed", message: error.localizedDescription, preferredStyle: UIAlertControllerStyle.alert)
-//                    let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil)
-//                    alertController.addAction(okAction)
-//                    self.present(alertController, animated: true, completion: nil)
-//                } else {
-//                    FullScreenIndicator.hide()
-//                    self.redirectToMain()
-//                }
-//            })
-//            return nil
-//        })
-//    }
-    
     fileprivate func userPoolLogIn() {
         print("userPoolLogIn")
         AWSCognitoUserPoolsSignInProvider.sharedInstance().setInteractiveAuthDelegate(self)

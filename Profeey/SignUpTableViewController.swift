@@ -19,7 +19,6 @@ class SignUpTableViewController: UITableViewController {
     @IBOutlet weak var legalLabel: UILabel!
     @IBOutlet weak var signUpButton: UIButton!
     
-    // NEW
     fileprivate var userPool: AWSCognitoIdentityUserPool?
     fileprivate var passwordAuthenticationCompletion: AWSTaskCompletionSource<AWSCognitoIdentityPasswordAuthenticationDetails>?
     fileprivate var username: String?
@@ -27,13 +26,14 @@ class SignUpTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.userPool = AWSCognitoIdentityUserPool.init(forKey: AWSCognitoUserPoolsSignInProviderKey)
         self.configureLegalLabel()
         self.firstNameTextField.delegate = self
         self.lastNameTextField.delegate = self
         self.emailTextField.delegate = self
         self.passwordTextField.delegate = self
         self.signUpButton.isEnabled = false
+        
+        self.userPool = AWSCognitoIdentityUserPool.init(forKey: AWSCognitoUserPoolsSignInProviderKey)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -87,10 +87,10 @@ class SignUpTableViewController: UITableViewController {
     // MARK: IBActions
     
     @IBAction func textFieldChanged(_ sender: AnyObject) {
-        guard let firstName = self.firstNameTextField.text, !firstName.trimm().isEmpty,
-            let lastName = self.lastNameTextField.text, !lastName.trimm().isEmpty,
-            let email = self.emailTextField.text, !email.trimm().isEmpty,
-            let password = self.passwordTextField.text, !password.trimm().isEmpty else {
+        guard let firstName = self.firstNameTextField.text?.trimm(), !firstName.isEmpty,
+            let lastName = self.lastNameTextField.text?.trimm(), !lastName.isEmpty,
+            let email = self.emailTextField.text?.trimm(), !email.isEmpty,
+            let password = self.passwordTextField.text?.trimm(), !password.isEmpty else {
                 self.signUpButton.isEnabled = false
                 return
         }
@@ -117,23 +117,19 @@ class SignUpTableViewController: UITableViewController {
     // MARK: AWS
     
     fileprivate func userPoolSignUp() {
-        guard let firstNameText = self.firstNameTextField.text, !firstNameText.trimm().isEmpty,
-            let lastNameText = self.lastNameTextField.text, !lastNameText.trimm().isEmpty,
-            let emailText = self.emailTextField.text, !emailText.trimm().isEmpty,
-            let passwordText = self.passwordTextField.text, !passwordText.trimm().isEmpty else {
+        guard let firstName = self.firstNameTextField.text?.trimm(), !firstName.isEmpty,
+            let lastName = self.lastNameTextField.text?.trimm(), !lastName.isEmpty,
+            let email = self.emailTextField.text?.trimm(), !email.isEmpty,
+            let password = self.passwordTextField.text?.trimm(), !password.isEmpty else {
                 return
         }
         let username = NSUUID().uuidString.lowercased()
-        let firstName = firstNameText.trimm()
-        let lastName = lastNameText.trimm()
-        let email = emailText.trimm()
-        let password = passwordText.trimm()
         var userAttributes: [AWSCognitoIdentityUserAttributeType] = []
         userAttributes.append(AWSCognitoIdentityUserAttributeType(name: "given_name", value: firstName))
         userAttributes.append(AWSCognitoIdentityUserAttributeType(name: "family_name", value: lastName))
         userAttributes.append(AWSCognitoIdentityUserAttributeType(name: "email", value: email))
         
-        print("userPoolSignUp")
+        print("userPoolSignUp:")
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         FullScreenIndicator.show()
         self.userPool?.signUp(username, password: password, userAttributes: userAttributes, validationData: nil).continue({
@@ -204,59 +200,12 @@ class SignUpTableViewController: UITableViewController {
         })
     }
     
-//    fileprivate func signUp(_ username: String, password: String, email: String, firstName: String, lastName: String) {
-//        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-//        AWSClientManager.defaultClientManager().signUp(username, password: password, email: email, firstName: firstName, lastName: lastName, completionHandler: {
-//            (task: AWSTask) in
-//            DispatchQueue.main.async(execute: {
-//                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-//                if let error = task.error {
-//                    FullScreenIndicator.hide()
-//                    print("signUpUserPool error: \(error)")
-//                    let alertController = UIAlertController(title: "Uups", message: error.localizedDescription, preferredStyle: UIAlertControllerStyle.alert)
-//                    let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil)
-//                    alertController.addAction(okAction)
-//                    self.present(alertController, animated: true, completion: nil)
-//                } else {
-//                    self.logIn(username, password: password, email: email, firstName: firstName, lastName: lastName)
-//                }
-//            })
-//            return nil
-//        })
-//        
-//    }
-    
-//    fileprivate func logIn(_ username: String, password: String, email: String, firstName: String, lastName: String) {
-//        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-//        AWSClientManager.defaultClientManager().logIn(username, password: password, completionHandler: {
-//            (task: AWSTask) in
-//            DispatchQueue.main.async(execute: {
-//                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-//                if let error = task.error {
-//                    FullScreenIndicator.hide()
-//                    print("signUpUserPool error: \(error)")
-//                    let alertController = UIAlertController(title: "Uups", message: error.localizedDescription, preferredStyle: UIAlertControllerStyle.alert)
-//                    let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil)
-//                    alertController.addAction(okAction)
-//                    self.present(alertController, animated: true, completion: nil)
-//                } else {
-//                    self.createUser(email, firstName: firstName, lastName: lastName)
-//                }
-//            })
-//            return nil
-//        })
-//    }
-    
     fileprivate func createUser() {
-        guard let firstNameText = self.firstNameTextField.text, !firstNameText.trimm().isEmpty,
-            let lastNameText = self.lastNameTextField.text, !lastNameText.trimm().isEmpty,
-            let emailText = self.emailTextField.text, !emailText.trimm().isEmpty else {
+        guard let firstName = self.firstNameTextField.text?.trimm(), !firstName.isEmpty,
+            let lastName = self.lastNameTextField.text?.trimm(), !lastName.isEmpty,
+            let email = self.emailTextField.text?.trimm(), !email.isEmpty else {
                 return
         }
-        let firstName = firstNameText.trimm()
-        let lastName = lastNameText.trimm()
-        let email = emailText.trimm()
-        
         print("createUserDynamoDB")
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         PRFYDynamoDBManager.defaultDynamoDBManager().createUserDynamoDB(email, firstName: firstName, lastName: lastName, completionHandler: {
@@ -352,7 +301,7 @@ extension SignUpTableViewController: AWSCognitoUserPoolsSignInHandler {
     
     func handleUserPoolSignInFlowStart() {
         print("handleUserPoolSignInFlowStart")
-        guard let username = self.username, !username.trimm().isEmpty, let password = self.password, !password.trimm().isEmpty else {
+        guard let username = self.username?.trimm(), !username.isEmpty, let password = self.password?.trimm(), !password.isEmpty else {
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 FullScreenIndicator.hide()

@@ -8,6 +8,7 @@
 
 import UIKit
 import AWSMobileHubHelper
+import AWSCognitoIdentityProvider
 
 class UsernameTableViewController: UITableViewController {
     
@@ -15,6 +16,7 @@ class UsernameTableViewController: UITableViewController {
     @IBOutlet weak var usernameTextField: UITextField!
     @IBOutlet weak var continueButton: UIButton!
     
+    fileprivate var userPool: AWSCognitoIdentityUserPool?
     fileprivate var newProfilePicImageData: Data?
 
     override func viewDidLoad() {
@@ -22,6 +24,9 @@ class UsernameTableViewController: UITableViewController {
         self.profilePicImageView.layer.cornerRadius = 4.0
         self.usernameTextField.delegate = self
         self.continueButton.isEnabled = false
+        
+        // CHECK IF IT IS Facebook user or UserPool!
+        self.userPool = AWSCognitoIdentityUserPool.init(forKey: AWSCognitoUserPoolsSignInProviderKey)
     }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -82,7 +87,7 @@ class UsernameTableViewController: UITableViewController {
     // MARK: IBActions
     
     @IBAction func textFieldChanged(_ sender: AnyObject) {
-        guard let preferredUsername = self.usernameTextField.text, !preferredUsername.trimm().isEmpty else {
+        guard let preferredUsername = self.usernameTextField.text?.trimm(), !preferredUsername.isEmpty else {
             self.continueButton.isEnabled = false
             return
         }
@@ -92,7 +97,8 @@ class UsernameTableViewController: UITableViewController {
     
     @IBAction func continueButtonTapped(_ sender: AnyObject) {
         self.view.endEditing(true)
-        self.prepareForUpdate()
+        // CHECK IF IT IS Facebook user or UserPool!
+        self.userPoolUpdatePreferredUsername()
     }
     
     @IBAction func unwindToUsernameTableViewController(_ segue: UIStoryboardSegue) {
@@ -129,24 +135,46 @@ class UsernameTableViewController: UITableViewController {
         self.present(alertController, animated: true, completion: nil)
     }
     
-    fileprivate func prepareForUpdate() {
-        guard let preferredUsernameText = self.usernameTextField.text else {
-                return
-        }
-        guard !preferredUsernameText.trimm().isEmpty else {
-                return
-        }
-        let preferredUsername = preferredUsernameText.trimm()
-        FullScreenIndicator.show()
-        self.updatePreferredUsername(preferredUsername)
-    }
-    
     // MARK: AWS
     
     fileprivate func userPoolUpdatePreferredUsername() {
         guard let preferredUsername = self.usernameTextField.text?.trimm(), !preferredUsername.isEmpty else {
             return
         }
+        var userAttributes: [AWSCognitoIdentityUserAttributeType] = []
+        userAttributes.append(AWSCognitoIdentityUserAttributeType(name: "preferred_username", value: preferredUsername))
+        
+        print("userPoolUpdatePreferredUsername:")
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        FullScreenIndicator.show()
+        self.userPool?.currentUser()?.update(userAttributes).continue({
+            (task: AWSTask) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                if let error = task.error as? NSError {
+                    FullScreenIndicator.hide()
+                    print("userPoolUpdatePreferredUsername error: \(error)")
+                    // Error handling.
+                    var title: String = "Something went wrong"
+                    var message: String? = "Please try again."
+                    if let type = error.userInfo["__type"] as? String {
+                        switch type {
+                        case "AliasExistsException":
+                            title = "Username exists"
+                            message = "This username already belongs to another account. Please choose a different one and try again."
+                        default:
+                            title = type
+                            message = error.userInfo["message"] as? String
+                        }
+                    }
+                    let alertController = self.getSimpleAlertWithTitle(title, message: message, cancelButtonTitle: "Try Again")
+                    self.present(alertController, animated: true, completion: nil)
+                } else {
+                    
+                }
+            })
+            return nil
+        })
     }
     
     fileprivate func updatePreferredUsername(_ preferredUsername: String) {
@@ -177,7 +205,7 @@ class UsernameTableViewController: UITableViewController {
     
     fileprivate func saveUser(_ preferredUsername: String, profilePicUrl: String?) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().saveUserPreferredUsernameAndProfilePicDynamoDB(preferredUsername, profilePicUrl: profilePicUrl, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().updateUserPreferredUsernameAndProfilePicDynamoDB(preferredUsername, profilePicUrl: profilePicUrl, completionHandler: {
             (task: AWSTask) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false

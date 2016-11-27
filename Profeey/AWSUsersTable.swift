@@ -69,18 +69,45 @@ class AWSUsersTable: NSObject, Table {
         objectMapper.load(AWSUser.self, hashKey: userId, rangeKey: nil).continue(completionHandler)
     }
     
-    func saveUser(_ user: AWSUser?, completionHandler: @escaping AWSContinuationBlock) {
+    func saveUser(_ awsUserUpdate: AWSUserUpdate, completionHandler: @escaping AWSContinuationBlock) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
-        objectMapper.save(user!).continue(completionHandler)
+        objectMapper.save(awsUserUpdate).continue(completionHandler)
     }
     
     // Skip null attributes (landing flow)
     func saveUserSkipNull(_ awsUser: AWSUser, completionHandler: @escaping AWSContinuationBlock) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
-        
         let updateMapperConfig = AWSDynamoDBObjectMapperConfiguration()
         updateMapperConfig.saveBehavior = AWSDynamoDBObjectMapperSaveBehavior.updateSkipNullAttributes
-        
         objectMapper.save(awsUser, configuration: updateMapperConfig).continue(completionHandler)
     }
+}
+
+class AWSUsersPreferredUsernameIndex: NSObject, Index {
+    
+    var indexName: String? {
+        
+        return "PreferredUsernameIndex"
+    }
+    
+    func supportedOperations() -> [String] {
+        return [
+            QueryWithPartitionKey,
+        ]
+    }
+    
+    // MARK: QueryWithPartitionKeyAndSortKey
+    
+    // Get preferredUsername(s). This is used to check if preferredUsername is available.
+    func queryPreferredUsernames(_ preferredUsername: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+        let objectMapper = AWSDynamoDBObjectMapper.default()
+        let queryExpression = AWSDynamoDBQueryExpression()
+        queryExpression.indexName = "PreferredUsernameIndex"
+        queryExpression.keyConditionExpression = "#preferredUsername = :preferredUsername"
+        queryExpression.expressionAttributeNames = ["#preferredUsername": "preferredUsername",]
+        queryExpression.expressionAttributeValues = [":preferredUsername": preferredUsername,]
+        queryExpression.projectionExpression = "#preferredUsername"
+        objectMapper.query(AWSUser.self, expression: queryExpression, completionHandler: completionHandler)
+    }
+
 }
