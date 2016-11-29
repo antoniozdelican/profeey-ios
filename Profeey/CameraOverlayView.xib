@@ -35,10 +35,10 @@
                     <rect key="frame" x="0.0" y="500" width="375" height="167"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="t3y-qN-lOP">
-                            <rect key="frame" x="151" y="47" width="74" height="74"/>
+                            <rect key="frame" x="152" y="48" width="72" height="72"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="74" id="pVD-r8-r1q"/>
-                                <constraint firstAttribute="width" constant="74" id="uyG-gO-Jke"/>
+                                <constraint firstAttribute="height" constant="72" id="pVD-r8-r1q"/>
+                                <constraint firstAttribute="width" constant="72" id="uyG-gO-Jke"/>
                             </constraints>
                             <state key="normal" image="btn_camera"/>
                             <connections>
@@ -95,7 +95,7 @@
         </view>
     </objects>
     <resources>
-        <image name="btn_camera" width="74" height="74"/>
+        <image name="btn_camera" width="72" height="72"/>
         <image name="ic_camera_switch" width="40" height="30"/>
         <image name="ic_gallery" width="40" height="30"/>
     </resources>
