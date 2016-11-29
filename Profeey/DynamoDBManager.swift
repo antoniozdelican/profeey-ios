@@ -84,6 +84,10 @@ protocol DynamoDBManager {
     
     func queryUserActivitiesDateSortedDynamoDB(_ userId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
     
+    // MARK: Notifications
+    
+    func queryUserNotificationsDateSortedDynamoDB(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
+    
     // MARK: UserCategories
     
     func queryUserCategoriesNumberOfPostsSortedDynamoDB(_ userId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)

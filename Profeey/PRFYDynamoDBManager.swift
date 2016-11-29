@@ -371,12 +371,6 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         awsCategoriesTable.scanCategories(completionHandler)
     }
     
-//    func scanCategoriesByCategoryNameDynamoDB(_ searchCategoryName: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
-//        print("scanCategoriesByCategoryNameDynamoDB:")
-//        let awsCategoriesTable = AWSCategoriesTable()
-//        awsCategoriesTable.scanCategoriesByCategoryName(searchCategoryName, completionHandler: completionHandler)
-//    }
-    
     // MARK: Professions
     
     func scanProfessionsDynamoDB(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
@@ -384,12 +378,6 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         let awsProfessionsTable = AWSProfessionsTable()
         awsProfessionsTable.scanProfessions(completionHandler)
     }
-    
-//    func scanProfessionsByProfessionNameDynamoDB(_ searchProfessionName: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
-//        print("scanProfessionsByProfessionNameDynamoDB:")
-//        let awsProfessionsTable = AWSProfessionsTable()
-//        awsProfessionsTable.scanProfessionsByProfessionName(searchProfessionName, completionHandler: completionHandler)
-//    }
     
     // MARK: Locations
     
@@ -399,18 +387,25 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         awsLocationsTable.scanLocations(completionHandler)
     }
     
-//    func scanLocationsByCountryOrCityNameDynamoDB(_ searchCountryName: String, searchCityName: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
-//        print("scanLocationsByCountryOrCityNameDynamoDB:")
-//        let awsLocationsTable = AWSLocationsTable()
-//        awsLocationsTable.scanLocationsByCountryOrCityName(searchCountryName, searchCityName: searchCityName, completionHandler: completionHandler)
-//    }
-    
     // MARK: Activities
     
     func queryUserActivitiesDateSortedDynamoDB(_ userId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+        // TODO don't think I need userId here since I can get it from identityId
         print("queryUserActivitiesDateSortedDynamoDB:")
         let awsActivitiesDateSortedIndex = AWSActivitiesDateSortedIndex()
         awsActivitiesDateSortedIndex.queryUserActivitiesDateSorted(userId, completionHandler: completionHandler)
+    }
+    
+    // MARK: Notifications
+    
+    func queryUserNotificationsDateSortedDynamoDB(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+        guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
+            print("queryUserNotificationsDateSortedDynamoDB no identityId!")
+            return
+        }
+        print("queryUserNotificationsDateSortedDynamoDB:")
+        let awsNotificationsDateSortedIndex = AWSNotificationsDateSortedIndex()
+        awsNotificationsDateSortedIndex.queryUserNotificationsDateSorted(identityId, completionHandler: completionHandler)
     }
     
     // MARK: UserCategories

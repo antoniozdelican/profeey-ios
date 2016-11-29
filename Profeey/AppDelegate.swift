@@ -85,8 +85,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // Added
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         AWSMobileClient.sharedInstance.application(application, didReceiveRemoteNotification: userInfo)
+        
         print("didReceiveRemoteNotification fetchCompletionHandler:")
         print(userInfo)
+        
+        // TODO play with constants depending on case.
+        completionHandler(UIBackgroundFetchResult.newData)
+        
+        // TODO now it's exclusively for Notifications and not yet for refreshing activities/feed/etc.
         if UIApplication.shared.applicationState != UIApplicationState.active {
             if let tabBarController = self.window?.rootViewController as? MainTabBarController {
                 tabBarController.selectMainChildViewController(MainChildController.notifications)
