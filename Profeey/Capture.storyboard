@@ -86,7 +86,7 @@
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="FhM-DF-oAK"/>
                     </toolbarItems>
                     <navigationItem key="navigationItem" title="Title" id="IFO-aM-FZM">
-                        <barButtonItem key="leftBarButtonItem" title="Close" id="6ZP-8O-v8d">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="6ZP-8O-v8d">
                             <connections>
                                 <action selector="closeButtonTapped:" destination="eIR-DP-y87" id="0kj-4x-M8j"/>
                             </connections>
@@ -348,7 +348,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="EI6-vo-bQR">
-                                <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="sPK-8X-9Jh">
                                     <size key="itemSize" width="194" height="194"/>
@@ -358,7 +358,7 @@
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="cellGallery" id="rDk-09-ZHZ" customClass="GalleryCollectionViewCell" customModule="Profeey" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="194" height="194"/>
+                                        <rect key="frame" x="91" y="0.0" width="194" height="194"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="0.0" y="0.0" width="194" height="194"/>
@@ -382,25 +382,47 @@
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7hA-Bo-sBB">
-                                <rect key="frame" x="935" y="935" width="65" height="65"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cdK-2l-nqj">
+                                <rect key="frame" x="0.0" y="559" width="375" height="44"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="J3Y-fl-9Fn" userLabel="Separator View">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="1"/>
+                                        <color key="backgroundColor" red="0.86274509799999999" green="0.86274509799999999" blue="0.86274509799999999" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="1" id="Dzi-Pn-Kdy"/>
+                                        </constraints>
+                                    </view>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7hA-Bo-sBB">
+                                        <rect key="frame" x="321" y="0.0" width="54" height="44"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="54" id="MSG-bo-8l5"/>
+                                            <constraint firstAttribute="height" constant="44" id="kT4-yv-kYz"/>
+                                        </constraints>
+                                        <state key="normal" image="ic_camera_gallery"/>
+                                        <connections>
+                                            <action selector="cameraButtonTapped:" destination="aXZ-IE-610" eventType="touchUpInside" id="HIl-la-SEo"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" red="0.98039215690000003" green="0.98039215690000003" blue="0.98039215690000003" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="65" id="MSG-bo-8l5"/>
-                                    <constraint firstAttribute="height" constant="65" id="kT4-yv-kYz"/>
+                                    <constraint firstAttribute="height" constant="44" id="BEv-r4-qM0"/>
+                                    <constraint firstItem="J3Y-fl-9Fn" firstAttribute="top" secondItem="cdK-2l-nqj" secondAttribute="top" id="LYU-Rs-9vn"/>
+                                    <constraint firstAttribute="trailing" secondItem="J3Y-fl-9Fn" secondAttribute="trailing" id="OEP-oM-6mi"/>
+                                    <constraint firstItem="J3Y-fl-9Fn" firstAttribute="leading" secondItem="cdK-2l-nqj" secondAttribute="leading" id="OxG-Dt-o33"/>
+                                    <constraint firstItem="7hA-Bo-sBB" firstAttribute="centerY" secondItem="cdK-2l-nqj" secondAttribute="centerY" id="a0T-1m-ktZ"/>
+                                    <constraint firstAttribute="trailing" secondItem="7hA-Bo-sBB" secondAttribute="trailing" id="viV-ah-4ME"/>
                                 </constraints>
-                                <state key="normal" image="ic_camera"/>
-                                <connections>
-                                    <action selector="cameraButtonTapped:" destination="aXZ-IE-610" eventType="touchUpInside" id="HIl-la-SEo"/>
-                                </connections>
-                            </button>
+                            </view>
                         </subviews>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="7hA-Bo-sBB" secondAttribute="trailing" id="8y9-N5-wRN"/>
+                            <constraint firstAttribute="trailing" secondItem="cdK-2l-nqj" secondAttribute="trailing" id="Bxu-rC-oCA"/>
+                            <constraint firstItem="cdK-2l-nqj" firstAttribute="leading" secondItem="t1f-Sd-bD0" secondAttribute="leading" id="F9R-8R-zbq"/>
                             <constraint firstItem="W8t-en-OvH" firstAttribute="top" secondItem="EI6-vo-bQR" secondAttribute="bottom" id="QUG-Zx-3wu"/>
                             <constraint firstItem="EI6-vo-bQR" firstAttribute="leading" secondItem="t1f-Sd-bD0" secondAttribute="leading" id="Qhw-x1-Z17"/>
                             <constraint firstItem="EI6-vo-bQR" firstAttribute="top" secondItem="B5a-f8-gB6" secondAttribute="bottom" id="Trm-kd-v29"/>
                             <constraint firstAttribute="trailing" secondItem="EI6-vo-bQR" secondAttribute="trailing" id="Zha-HE-oLL"/>
-                            <constraint firstItem="W8t-en-OvH" firstAttribute="top" secondItem="7hA-Bo-sBB" secondAttribute="bottom" id="ne1-Jj-2T2"/>
+                            <constraint firstItem="W8t-en-OvH" firstAttribute="top" secondItem="cdK-2l-nqj" secondAttribute="bottom" id="yH1-Gr-LlM"/>
                         </constraints>
                     </view>
                     <connections>
@@ -509,7 +531,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="ic_camera" width="35" height="35"/>
+        <image name="ic_camera_gallery" width="31" height="22"/>
         <image name="ic_remove_grey" width="14" height="14"/>
         <image name="ic_skills" width="20" height="20"/>
     </resources>

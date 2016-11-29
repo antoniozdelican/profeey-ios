@@ -93,7 +93,7 @@ class PostDetailsTableViewController: UITableViewController {
         case 2:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostInfo", for: indexPath) as! PostInfoTableViewCell
             cell.captionLabel.text = post.caption
-            post.isExpandedCaption ? cell.untruncate() : cell.truncate()
+            cell.untruncate()
             return cell
         case 3:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostCategoryCreationDate", for: indexPath) as! PostCategoryCreationDateTableViewCell

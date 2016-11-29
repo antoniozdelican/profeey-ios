@@ -13,15 +13,27 @@ protocol CaptureScrollViewDelegate {
     func albumSelected(_ album: PHFetchResult<PHAsset>, title: String?)
 }
 
+protocol FlashSwitchDelegate {
+    func flashBarButtonTapped()
+}
+
+enum FlashType {
+    case on
+    case off
+    case auto
+}
+
 class CaptureScrollViewController: UIViewController {
 
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet var albumButton: UIButton?
     
+    var flashBarButtonItem: UIBarButtonItem?
     var isProfilePic: Bool = false
     var profilePicUnwind: ProfilePicUnwind?
     
     fileprivate var captureScrollViewDelegate: CaptureScrollViewDelegate?
+    fileprivate var flashSwitchDelegate: FlashSwitchDelegate?
     fileprivate var photo: UIImage?
     fileprivate var asset: PHAsset?
     fileprivate var isPhoto: Bool = true
@@ -29,7 +41,7 @@ class CaptureScrollViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-        self.configureNavigationItem()
+        self.configureNavigationItems()
         self.configureScrollView()
     }
     
@@ -43,10 +55,12 @@ class CaptureScrollViewController: UIViewController {
     
     // MARK: Configuration
     
-    fileprivate func configureNavigationItem() {
+    fileprivate func configureNavigationItems() {
         Bundle.main.loadNibNamed("AlbumButton", owner: self, options: nil)
         self.albumButton?.addTarget(self, action: #selector(self.albumButtonTapped(_:)), for: UIControlEvents.touchUpInside)
+        self.flashBarButtonItem = UIBarButtonItem(image: UIImage(named: "ic_flash_auto"), style: UIBarButtonItemStyle.plain, target: self, action: #selector(self.flashBarButtonTapped(_:)))
         self.navigationItem.title = "Camera"
+        self.navigationItem.rightBarButtonItem = self.flashBarButtonItem
     }
     
     fileprivate func configureScrollView() {
@@ -62,6 +76,7 @@ class CaptureScrollViewController: UIViewController {
         if let destinationViewController = segue.destination as? CameraViewController {
             destinationViewController.cameraViewControllerDelegate = self
             destinationViewController.isProfilePic = self.isProfilePic
+            self.flashSwitchDelegate = destinationViewController
         }
         if let destinationViewController = segue.destination as? GalleryViewController {
             destinationViewController.galleryViewControllerDelegate = self
@@ -90,6 +105,10 @@ class CaptureScrollViewController: UIViewController {
         self.performSegue(withIdentifier: "segueToAlbumsVc", sender: self)
     }
     
+    func flashBarButtonTapped(_ sender: AnyObject) {
+        self.flashSwitchDelegate?.flashBarButtonTapped()
+    }
+    
     // MARK: IBActions
     
     @IBAction func closeButtonTapped(_ sender: AnyObject) {
@@ -103,9 +122,11 @@ extension CaptureScrollViewController: UIScrollViewDelegate {
         if scrollView.contentOffset.x == 0 {
             self.navigationItem.titleView = self.albumButton
             self.navigationItem.title = nil
+            self.navigationItem.rightBarButtonItem = nil
         } else if scrollView.contentOffset.x == self.view.bounds.width {
             self.navigationItem.titleView = nil
             self.navigationItem.title = "Camera"
+            self.navigationItem.rightBarButtonItem = self.flashBarButtonItem
         }
     }
 }
@@ -115,6 +136,21 @@ extension CaptureScrollViewController: CameraViewControllerDelegate {
     func galleryButtonTapped() {
         // Scroll to gallery.
         self.scrollView.setContentOffset(CGPoint(x: 0.0, y: 0.0), animated: true)
+    }
+    
+    func flashTypeChangedInto(_ flashType: FlashType) {
+        switch flashType {
+        case .auto:
+            self.flashBarButtonItem?.image = UIImage(named: "ic_flash_auto")
+        case .on:
+            self.flashBarButtonItem?.image = UIImage(named: "ic_flash_on")
+        case .off:
+            self.flashBarButtonItem?.image = UIImage(named: "ic_flash_off")
+        }
+    }
+    
+    func toggleFlashBarButton(_ isVisible: Bool) {
+        self.navigationItem.rightBarButtonItem = isVisible ? self.flashBarButtonItem : nil
     }
 }
 

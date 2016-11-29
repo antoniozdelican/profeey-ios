@@ -9,6 +9,13 @@
 import UIKit
 import AWSMobileHubHelper
 
+enum MainChildController: Int {
+    case home = 0
+    case search = 1
+    case notifications = 2
+    case profile = 3
+}
+
 class MainTabBarController: UITabBarController {
 
     override func viewDidLoad() {
@@ -66,12 +73,17 @@ class MainTabBarController: UITabBarController {
         }
     }
     
+    // Add backgroundView and color behind statusBar.
     fileprivate func configureStatusBar() {
-        // Add backgroundView and color behind statusBar.
         let statusBarFrame = UIApplication.shared.statusBarFrame
         let statusBarBackgroundView = UIView(frame: statusBarFrame)
         statusBarBackgroundView.backgroundColor = Colors.whiteDark
         self.view.addSubview(statusBarBackgroundView)
+    }
+    
+    // Public method to open NotificationsVc as response to user tapping push notification.
+    func selectMainChildViewController(_ mainChildController: MainChildController) {
+        self.selectedIndex = mainChildController.rawValue
     }
 }
 

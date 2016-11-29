@@ -11,7 +11,8 @@ import UIKit
 protocol CameraViewControllerDelegate {
     func galleryButtonTapped()
     func didSelectPhoto(photo: UIImage)
-    
+    func flashTypeChangedInto(_ flashType: FlashType)
+    func toggleFlashBarButton(_ isVisible: Bool)
 }
 
 class CameraViewController: UIViewController {
@@ -20,7 +21,6 @@ class CameraViewController: UIViewController {
     @IBOutlet weak var cameraWindowSubView: UIView!
     @IBOutlet weak var cameraWindowSubViewAspectRatioConstraint: NSLayoutConstraint!
     @IBOutlet weak var captureButton: UIButton!
-    @IBOutlet weak var flashButton: UIButton!
     @IBOutlet weak var cameraSwitchButton: UIButton!
     
     var cameraViewControllerDelegate: CameraViewControllerDelegate?
@@ -53,7 +53,7 @@ class CameraViewController: UIViewController {
             self.imagePickerController.delegate = self
             self.imagePickerController.allowsEditing = false
             self.imagePickerController.showsCameraControls = false
-            self.imagePickerController.cameraFlashMode = UIImagePickerControllerCameraFlashMode.off
+            self.imagePickerController.cameraFlashMode = UIImagePickerControllerCameraFlashMode.auto
             
             self.cameraOverlayView.frame = self.imagePickerController.cameraOverlayView!.frame
             self.imagePickerController.cameraOverlayView = self.cameraOverlayView
@@ -65,7 +65,8 @@ class CameraViewController: UIViewController {
             self.imagePickerController.didMove(toParentViewController: self)
         } else {
             // Disable buttons.
-            self.flashButton.isEnabled = false
+//            self.flashButton.isEnabled = false
+            self.cameraViewControllerDelegate?.toggleFlashBarButton(false)
             self.cameraSwitchButton.isEnabled = false
             self.captureButton.isEnabled = false
             // Present empty camera overlay view.
@@ -101,39 +102,28 @@ class CameraViewController: UIViewController {
         self.cameraViewControllerDelegate?.galleryButtonTapped()
     }
     
-    @IBAction func flashButtonTapped(_ sender: AnyObject) {
-        guard self.imagePickerController.cameraDevice == UIImagePickerControllerCameraDevice.rear else {
-            return
-        }
-        if self.imagePickerController.cameraFlashMode == UIImagePickerControllerCameraFlashMode.on {
-            self.imagePickerController.cameraFlashMode = UIImagePickerControllerCameraFlashMode.off
-            self.flashButton.setImage(UIImage(named: "ic_flash_white"), for: UIControlState())
-            
-        } else if self.imagePickerController.cameraFlashMode == UIImagePickerControllerCameraFlashMode.off {
-            self.imagePickerController.cameraFlashMode = UIImagePickerControllerCameraFlashMode.on
-            self.flashButton.setImage(UIImage(named: "ic_flash_orange"), for: UIControlState())
-        }
-    }
-    
     @IBAction func cameraSwitchButtonTapped(_ sender: AnyObject) {
         if self.imagePickerController.cameraDevice == UIImagePickerControllerCameraDevice.rear {
             self.imagePickerController.cameraDevice = UIImagePickerControllerCameraDevice.front
-            UIView.animate(
-                withDuration: 0.0,
-                delay: 0.5,
-                options: [],
-                animations: {
-                    self.flashButton.alpha = 0.0
-                }, completion: nil)
+            self.cameraViewControllerDelegate?.toggleFlashBarButton(false)
+//            UIView.animate(
+//                withDuration: 0.0,
+//                delay: 0.5,
+//                options: [],
+//                animations: {
+//                    //self.flashButton.alpha = 0.0
+//                }, completion: nil)
         } else {
             self.imagePickerController.cameraDevice = UIImagePickerControllerCameraDevice.rear
-            UIView.animate(
-                withDuration: 0.0,
-                delay: 0.5,
-                options: [],
-                animations: {
-                    self.flashButton.alpha = 1.0
-                }, completion: nil)
+            self.cameraViewControllerDelegate?.toggleFlashBarButton(true)
+            
+//            UIView.animate(
+//                withDuration: 0.0,
+//                delay: 0.5,
+//                options: [],
+//                animations: {
+//                    //self.flashButton.alpha = 1.0
+//                }, completion: nil)
         }
     }
     
@@ -164,5 +154,24 @@ extension CameraViewController: UINavigationControllerDelegate, UIImagePickerCon
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         self.dismiss(animated: true, completion: nil)
     }
+}
+
+extension CameraViewController: FlashSwitchDelegate {
     
+    func flashBarButtonTapped() {
+        guard self.imagePickerController.cameraDevice == UIImagePickerControllerCameraDevice.rear else {
+            return
+        }
+        switch self.imagePickerController.cameraFlashMode {
+        case UIImagePickerControllerCameraFlashMode.auto:
+            self.imagePickerController.cameraFlashMode = UIImagePickerControllerCameraFlashMode.on
+            self.cameraViewControllerDelegate?.flashTypeChangedInto(FlashType.on)
+        case UIImagePickerControllerCameraFlashMode.on:
+            self.imagePickerController.cameraFlashMode = UIImagePickerControllerCameraFlashMode.off
+            self.cameraViewControllerDelegate?.flashTypeChangedInto(FlashType.off)
+        case UIImagePickerControllerCameraFlashMode.off:
+            self.imagePickerController.cameraFlashMode = UIImagePickerControllerCameraFlashMode.auto
+            self.cameraViewControllerDelegate?.flashTypeChangedInto(FlashType.auto)
+        }
+    }
 }

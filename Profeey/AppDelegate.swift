@@ -10,10 +10,6 @@ import Foundation
 import CoreFoundation
 
 import UIKit
-//import AWSCognito
-//import AWSCore
-//
-//import AWSCognitoIdentityProvider
 import AWSMobileHubHelper
 
 @UIApplicationMain
@@ -31,28 +27,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let storyboard = UIStoryboard(name: "Onboarding", bundle: nil)
             let rootViewController = storyboard.instantiateInitialViewController()
             self.window?.rootViewController = rootViewController
-        } else {
-            // Get currentUser from DynamoDB and check if it has preferredUsername in DynamoDB.
-            PRFYDynamoDBManager.defaultDynamoDBManager().getCurrentUserDynamoDB({
-                (task: AWSTask) in
-                DispatchQueue.main.async(execute: {
-                    if let error = task.error {
-                        print("getCurrentUser error: \(error)")
-                    } else {
-                        guard let awsUser = task.result as? AWSUser else {
-                            print("getCurrentUser error: Not an awsUser.")
-                            return
-                        }
-                        if awsUser._preferredUsername == nil {
-                            let storyboard = UIStoryboard(name: "Welcome", bundle: nil)
-                            let rootViewController = storyboard.instantiateInitialViewController()
-                            self.window?.rootViewController = rootViewController
-                        }
-                    }
-                })
-                return nil
-            })
         }
+        
+        print("didFinishLaunchingWithOptions:")
+        print(launchOptions)
         
         return didFinishLaunching
     }
@@ -97,100 +75,48 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         AWSMobileClient.sharedInstance.application(application, didFailToRegisterForRemoteNotificationsWithError: error)
     }
     
-    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any]) {
-        AWSMobileClient.sharedInstance.application(application, didReceiveRemoteNotification: userInfo)
-    }
-
-//    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-//        self.configureUI()
-//        
-//        AWSClientManager.defaultClientManager().userPool?.delegate = self
-//        AWSClientManager.defaultClientManager().getUserDetails({
-//            (task: AWSTask) in
-//            return nil
-//        })
-//        return true
+    // Removed
+//    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any]) {
+//        //AWSMobileClient.sharedInstance.application(application, didReceiveRemoteNotification: userInfo)
+//        print("didReceiveRemoteNotification:")
+//        print(userInfo)
 //    }
+    
+    // Added
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        AWSMobileClient.sharedInstance.application(application, didReceiveRemoteNotification: userInfo)
+        print("didReceiveRemoteNotification fetchCompletionHandler:")
+        print(userInfo)
+        if UIApplication.shared.applicationState != UIApplicationState.active {
+            if let tabBarController = self.window?.rootViewController as? MainTabBarController {
+                tabBarController.selectMainChildViewController(MainChildController.notifications)
+            }
+        }
+    }
     
     fileprivate func configureUI() {
         // UINavigationBar
         UINavigationBar.appearance().barTintColor = Colors.whiteDark
-        // DON'T FCKING CHANGE translucent!! it messes up capture.
         UINavigationBar.appearance().isTranslucent = false
         UINavigationBar.appearance().tintColor = Colors.black
         UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: Colors.black]
-        
         // UITabBar
         UITabBar.appearance().barTintColor = Colors.whiteDark
         UITabBar.appearance().isTranslucent = false
         UITabBar.appearance().tintColor = Colors.grey
-        
         // UITableView
         UITableView.appearance().tableFooterView = UIView()
         UITableView.appearance().separatorColor = Colors.greyLight
-        
         // UITableViewCell
         let colorView = UIView()
         colorView.backgroundColor = Colors.whiteDark
         UITableViewCell.appearance().selectedBackgroundView = colorView
-        
         // UITextField
         UITextField.appearance().tintColor = Colors.black
-        
         // UITextView
         UITextView.appearance().tintColor = Colors.black
-        
         // UISearchBar
         UISearchBar.appearance().searchBarStyle = UISearchBarStyle.minimal
     }
 }
-
-//extension AppDelegate: AWSCognitoIdentityInteractiveAuthenticationDelegate {
-//    
-//    func startPasswordAuthentication() -> AWSCognitoIdentityPasswordAuthentication {
-//        print("AWSCognitoIdentityInteractiveAuthenticationDelegate is AppDelegate")
-//        let storyboard = UIStoryboard(name: "Onboarding", bundle: nil)
-//        let rootViewController = storyboard.instantiateInitialViewController() as! OnboardingNavigationController
-//        DispatchQueue.main.async(execute: {
-//            self.window?.rootViewController = rootViewController
-//        })
-//        return rootViewController
-//    }
-//    
-//}
-
-//extension AppDelegate: AWSCognitoIdentityInteractiveAuthenticationDelegate {
-//    
-//    func startPasswordAuthentication() -> AWSCognitoIdentityPasswordAuthentication {
-//        print("Started password authentication:")
-//        // If calling from LogInViewController stay there.
-////        if let rootViewController = self.window?.rootViewController,
-////            let presentedViewController = rootViewController.presentedViewController as? UINavigationController,
-////            let logInViewController = presentedViewController.topViewController as? LogInViewController {
-////            print("Called from logInViewController.")
-////            return logInViewController
-////        }
-//        let storyboard = UIStoryboard(name: "Onboarding", bundle: nil)
-//        let rootViewController = storyboard.instantiateInitialViewController() as! OnboardingNavigationController
-//        DispatchQueue.main.async(execute: {
-//            self.window?.rootViewController = rootViewController
-//        })
-//        return rootViewController
-//    }
-//    
-//}
-//
-//extension AppDelegate: IncompleteSignUpDelegate {
-//    
-//    func preferredUsernameNotSet() {
-//        print("PreferredUsername not set:")
-////        let storyboard = UIStoryboard(name: "Welcome", bundle: nil)
-////        if let navigationViewController = storyboard.instantiateInitialViewController() as? UINavigationController,
-////        let _ = navigationViewController.childViewControllers[0] as? UsernameViewController {
-////            dispatch_async(dispatch_get_main_queue(), {
-////                self.window?.rootViewController = navigationViewController
-////            })
-////        }
-//    }
-//}
 

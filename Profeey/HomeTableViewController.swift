@@ -28,9 +28,8 @@ class HomeTableViewController: UITableViewController {
     // When uploading new post.
     fileprivate var isUploading: Bool = false
     fileprivate var newPostProgress: Progress?
-    // Remeber if navigationBar was hidden.
-    fileprivate var isNavigationBarHidden: Bool = false
     // Different behaviour depending on segue or tabBarSwitch.
+    fileprivate var isNavigationBarHidden: Bool = false
     var isTabBarSwitch: Bool = false
     
     override func viewDidLoad() {
@@ -46,16 +45,10 @@ class HomeTableViewController: UITableViewController {
         self.homeEmptyFeedView.homeEmptyFeedViewDelegate = self
         
         if AWSIdentityManager.defaultIdentityManager().isLoggedIn {
-            self.isLoadingPosts = true
-            self.activityIndicatorView?.startAnimating()
-            self.getCurrentUser()
-        }
-        
-//        if let currentUser = AWSClientManager.defaultClientManager().userPool?.currentUser(), currentUser.isSignedIn {
 //            self.isLoadingPosts = true
 //            self.activityIndicatorView?.startAnimating()
 //            self.getCurrentUser()
-//        }
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
