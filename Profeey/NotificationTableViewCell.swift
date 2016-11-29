@@ -1,0 +1,26 @@
+//
+//  NotificationTableViewCell.swift
+//  Profeey
+//
+//  Created by Antonio Zdelican on 29/11/16.
+//  Copyright © 2016 Profeey. All rights reserved.
+//
+
+import UIKit
+
+class NotificationTableViewCell: UITableViewCell {
+    
+    @IBOutlet weak var profilePicUrl: UIImageView!
+    @IBOutlet weak var messageLabel: UILabel!
+
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        self.profilePicUrl.layer.cornerRadius = 4.0
+        self.profilePicUrl.clipsToBounds = true
+    }
+
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+    }
+
+}

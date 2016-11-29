@@ -254,12 +254,7 @@ extension Date {
     }
     
     func offsetFromShort(_ date: Date) -> String {
-        if yearsFrom(date)   > 0 {
-            return "\(yearsFrom(date))y"
-        }
-        if monthsFrom(date)  > 0 {
-            return "\(monthsFrom(date))m"
-        }
+        // Top are weeks.
         if weeksFrom(date)   > 0 {
             return "\(weeksFrom(date))w"
         }

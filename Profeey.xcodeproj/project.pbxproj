@@ -36,6 +36,8 @@
 		A91A7B041DC4FA9300F7D6A7 /* AWSComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91A7B031DC4FA9300F7D6A7 /* AWSComment.swift */; };
 		A91C1CD31DED9C75006FBDD4 /* AWSNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91C1CD21DED9C75006FBDD4 /* AWSNotification.swift */; };
 		A91C1CD51DED9D85006FBDD4 /* AWSNotificationsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91C1CD41DED9D85006FBDD4 /* AWSNotificationsTable.swift */; };
+		A91C1CD71DEDA669006FBDD4 /* NotificationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91C1CD61DEDA669006FBDD4 /* NotificationTableViewCell.swift */; };
+		A91C1CD91DEDA8C2006FBDD4 /* PRFYNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91C1CD81DEDA8C2006FBDD4 /* PRFYNotification.swift */; };
 		A92F93ED1DC3940A00065CD1 /* EditProfileTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A92F93EC1DC3940A00065CD1 /* EditProfileTableViewController.swift */; };
 		A930BC7C1D0DD43F004D49F7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A930BC7B1D0DD43F004D49F7 /* AppDelegate.swift */; };
 		A930BC811D0DD43F004D49F7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A930BC7F1D0DD43F004D49F7 /* Main.storyboard */; };
@@ -283,6 +285,8 @@
 		A91A7B031DC4FA9300F7D6A7 /* AWSComment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSComment.swift; sourceTree = "<group>"; };
 		A91C1CD21DED9C75006FBDD4 /* AWSNotification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSNotification.swift; sourceTree = "<group>"; };
 		A91C1CD41DED9D85006FBDD4 /* AWSNotificationsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSNotificationsTable.swift; sourceTree = "<group>"; };
+		A91C1CD61DEDA669006FBDD4 /* NotificationTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationTableViewCell.swift; sourceTree = "<group>"; };
+		A91C1CD81DEDA8C2006FBDD4 /* PRFYNotification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PRFYNotification.swift; sourceTree = "<group>"; };
 		A92F93EC1DC3940A00065CD1 /* EditProfileTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditProfileTableViewController.swift; sourceTree = "<group>"; };
 		A930BC781D0DD43E004D49F7 /* Profeey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Profeey.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A930BC7B1D0DD43F004D49F7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -858,6 +862,7 @@
 				A99B9E301DB53E370047360D /* Education.swift */,
 				A9D49EDF1DD5C834000F90A8 /* UserCategory.swift */,
 				A915F8741DC0D9CB0031C45F /* Location.swift */,
+				A91C1CD81DEDA8C2006FBDD4 /* PRFYNotification.swift */,
 			);
 			name = Local;
 			sourceTree = "<group>";
@@ -1101,6 +1106,7 @@
 			children = (
 				A9E53B6E1D10667B00CD1D6C /* Notifications.storyboard */,
 				A9B68DA21D8999BB006AC4EA /* NotificationsTableViewController.swift */,
+				A91C1CD61DEDA669006FBDD4 /* NotificationTableViewCell.swift */,
 			);
 			name = Notifications;
 			sourceTree = "<group>";
@@ -1332,6 +1338,7 @@
 				A9CBBC5C1DB651BD009C8EC7 /* ExperiencesTableViewController.swift in Sources */,
 				A915F8711DC0D5A60031C45F /* AWSLocation.swift in Sources */,
 				A9D716A91D57486100300135 /* PostSmallTableViewCell.swift in Sources */,
+				A91C1CD91DEDA8C2006FBDD4 /* PRFYNotification.swift in Sources */,
 				A999CD481DBE93D400E7ADB1 /* ProfessionTableViewController.swift in Sources */,
 				A990ECB01D6A572500C3C9CE /* UsersTableViewController.swift in Sources */,
 				A9B68DA31D8999BB006AC4EA /* NotificationsTableViewController.swift in Sources */,
@@ -1465,6 +1472,7 @@
 				A9E4EC541D81F1B700929ED1 /* LocationsOldTableViewController.swift in Sources */,
 				A9ACA7411DB506A50004B8DE /* AWSWorkExperience.swift in Sources */,
 				A901CFE91DA78FA900C44B26 /* CameraViewController.swift in Sources */,
+				A91C1CD71DEDA669006FBDD4 /* NotificationTableViewCell.swift in Sources */,
 				A97A9AED1D85D0ED00507517 /* ProfessionsTableViewController.swift in Sources */,
 				A9CBBC561DB64A0E009C8EC7 /* EditEducationSchoolTableViewCell.swift in Sources */,
 				A9E3DD3F1D86A33C00DED8C8 /* AWSProfession.swift in Sources */,
