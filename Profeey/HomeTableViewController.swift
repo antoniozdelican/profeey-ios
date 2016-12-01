@@ -280,6 +280,25 @@ class HomeTableViewController: UITableViewController {
         }
     }
     
+    // MARK: Helpers
+    
+    fileprivate func setDownloadedImages(_ image: UIImage, imageType: ImageType, indexPath: IndexPath) {
+        switch imageType {
+        case .userProfilePic:
+            self.posts[indexPath.section].user?.profilePic = image
+            UIView.performWithoutAnimation {
+                self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
+            }
+        case .postPic:
+            self.posts[indexPath.section].image = image
+            UIView.performWithoutAnimation {
+                self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
+            }
+        default:
+            return
+        }
+    }
+    
     // MARK: AWS
     
     // Query the feed.
@@ -334,31 +353,18 @@ class HomeTableViewController: UITableViewController {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         let content = AWSUserFileManager.defaultUserFileManager().content(withKey: imageKey)
         // TODO check if content.isImage()
+        // TODO check content.status for duplicate content downloads.
         if content.isCached {
             print("Content cached:")
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                if let image = UIImage(data: content.cachedData) {
+                    self.setDownloadedImages(image, imageType: imageType, indexPath: indexPath)
+                }
             })
-            let image = UIImage(data: content.cachedData)
-            switch imageType {
-            case .userProfilePic:
-                self.posts[indexPath.section].user?.profilePic = image
-                UIView.performWithoutAnimation {
-                    self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
-                }
-            case .postPic:
-                self.posts[indexPath.section].image = image
-                UIView.performWithoutAnimation {
-                    self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
-                }
-            default:
-                return
-            }
         } else {
             print("Download content:")
-            content.download(
-                with: AWSContentDownloadType.ifNewerExists,
-                pinOnCompletion: false,
+            content.download(with: AWSContentDownloadType.ifNewerExists, pinOnCompletion: false,
                 progressBlock: {
                     (content: AWSContent?, progress: Progress?) -> Void in
                     // TODO
@@ -370,22 +376,8 @@ class HomeTableViewController: UITableViewController {
                         if let error = error {
                             print("downloadImage error: \(error)")
                         } else {
-                            if let imageData = data {
-                                let image = UIImage(data: imageData)
-                                switch imageType {
-                                case .userProfilePic:
-                                    self.posts[indexPath.section].user?.profilePic = image
-                                    UIView.performWithoutAnimation {
-                                        self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
-                                    }
-                                case .postPic:
-                                    self.posts[indexPath.section].image = image
-                                    UIView.performWithoutAnimation {
-                                        self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
-                                    }
-                                default:
-                                    return
-                                }
+                            if let imageData = data, let image = UIImage(data: imageData) {
+                                self.setDownloadedImages(image, imageType: imageType, indexPath: indexPath)
                             }
                         }
                     })
