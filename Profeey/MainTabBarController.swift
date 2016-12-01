@@ -24,6 +24,11 @@ class MainTabBarController: UITabBarController {
         self.delegate = self
         self.configureView()
         self.configureStatusBar()
+        
+        // Get currentUser from DynamoDB upon initialization of this rootVc.
+        if AWSIdentityManager.defaultIdentityManager().isLoggedIn && PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB == nil {
+            self.getCurrentUser()
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -80,6 +85,101 @@ class MainTabBarController: UITabBarController {
         statusBarBackgroundView.backgroundColor = Colors.whiteDark
         self.view.addSubview(statusBarBackgroundView)
     }
+    
+    // MARK: AWS
+    
+    // Gets currentUser and creates currentUserDynamoDB on PRFYDynamoDBManager singleton.
+    fileprivate func getCurrentUser() {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().getCurrentUserDynamoDB({
+            (task: AWSTask) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                if let error = task.error {
+                    print("getCurrentUser error: \(error)")
+                } else {
+                    guard let awsUser = task.result as? AWSUser else {
+                        return
+                    }
+                    guard awsUser._preferredUsername != nil else {
+                        // This only happens if users closes the app on the UsernameTableViewController of the Welcome flow.
+                        print("getCurrentUser error: currentUser doesn't have preferredUsername.")
+                        self.redirectToWelcome()
+                        return
+                    }
+                    let currentUser = CurrentUser(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationName: awsUser._locationName)
+                    // Store properties.
+                    PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB = currentUser
+                    // Get profilePic.
+                    if let profilePicUrl = awsUser._profilePicUrl {
+                        self.downloadImage(profilePicUrl, imageType: .currentUserProfilePic)
+                    }
+                }
+            })
+            return nil
+        })
+    }
+    
+    fileprivate func downloadImage(_ imageKey: String, imageType: ImageType) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        let content = AWSUserFileManager.defaultUserFileManager().content(withKey: imageKey)
+        // TODO check if content.isImage()
+        if content.isCached {
+            print("Content cached:")
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+            })
+            let image = UIImage(data: content.cachedData)
+            switch imageType {
+            case .currentUserProfilePic:
+                // Store profilePic.
+                PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB?.profilePic = image
+            default:
+                return
+            }
+        } else {
+            print("Download content:")
+            content.download(
+                with: AWSContentDownloadType.ifNewerExists,
+                pinOnCompletion: false,
+                progressBlock: {
+                    (content: AWSContent?, progress: Progress?) -> Void in
+                    // TODO
+            },
+                completionHandler: {
+                    (content: AWSContent?, data: Data?, error:  Error?) in
+                    DispatchQueue.main.async(execute: {
+                        UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                        if let error = error {
+                            print("downloadImage error: \(error)")
+                        } else {
+                            if let imageData = data {
+                                let image = UIImage(data: imageData)
+                                switch imageType {
+                                case .currentUserProfilePic:
+                                    // Store profilePic.
+                                    PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB?.profilePic = image
+                                default:
+                                    return
+                                }
+                            }
+                        }
+                    })
+            })
+        }
+    }
+    
+    // MARK: Helpers
+    
+    fileprivate func redirectToWelcome() {
+        guard let window = UIApplication.shared.keyWindow,
+            let initialViewController = UIStoryboard(name: "Welcome", bundle: nil).instantiateInitialViewController() else {
+                return
+        }
+        window.rootViewController = initialViewController
+    }
+    
+    // MARK: Public
     
     // Public method to open NotificationsVc as response to user tapping push notification.
     func selectMainChildViewController(_ mainChildController: MainChildController) {

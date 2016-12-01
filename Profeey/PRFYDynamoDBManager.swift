@@ -389,11 +389,14 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
     
     // MARK: Activities
     
-    func queryUserActivitiesDateSortedDynamoDB(_ userId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
-        // TODO don't think I need userId here since I can get it from identityId
+    func queryUserActivitiesDateSortedDynamoDB(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+        guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
+            print("queryUserActivitiesDateSortedDynamoDB no identityId!")
+            return
+        }
         print("queryUserActivitiesDateSortedDynamoDB:")
         let awsActivitiesDateSortedIndex = AWSActivitiesDateSortedIndex()
-        awsActivitiesDateSortedIndex.queryUserActivitiesDateSorted(userId, completionHandler: completionHandler)
+        awsActivitiesDateSortedIndex.queryUserActivitiesDateSorted(identityId, completionHandler: completionHandler)
     }
     
     // MARK: Notifications
@@ -406,6 +409,19 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         print("queryUserNotificationsDateSortedDynamoDB:")
         let awsNotificationsDateSortedIndex = AWSNotificationsDateSortedIndex()
         awsNotificationsDateSortedIndex.queryUserNotificationsDateSorted(identityId, completionHandler: completionHandler)
+    }
+    
+    // MARK: UserEndpoints
+    
+    func saveUserEndpointDynamoDB(_ endpointARN: String, completionHandler: @escaping AWSContinuationBlock) {
+        guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
+            print("saveEndpointDynamoDB no identityId!")
+            return
+        }
+        print("saveEndpointDynamoDB:")
+        let awsUserEndpointsTable = AWSUserEndpointsTable()
+        let awsUserEndpoint = AWSUserEndpoint(_userId: identityId, _endpointARN: endpointARN)
+        awsUserEndpointsTable.saveUserEndpoint(awsUserEndpoint, completionHandler: completionHandler)
     }
     
     // MARK: UserCategories

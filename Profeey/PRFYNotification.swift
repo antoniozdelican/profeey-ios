@@ -44,7 +44,7 @@ class PRFYNotification: NSObject {
             return " started following you. "
         case 3:
             // Recommendation
-            return " gave you a recommendation. "
+            return " recommended you. "
         default:
             return nil
         }

@@ -10,13 +10,13 @@ import UIKit
 
 class NotificationTableViewCell: UITableViewCell {
     
-    @IBOutlet weak var profilePicUrl: UIImageView!
+    @IBOutlet weak var profilePicImageView: UIImageView!
     @IBOutlet weak var messageLabel: UILabel!
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        self.profilePicUrl.layer.cornerRadius = 4.0
-        self.profilePicUrl.clipsToBounds = true
+        self.profilePicImageView.layer.cornerRadius = 4.0
+        self.profilePicImageView.clipsToBounds = true
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

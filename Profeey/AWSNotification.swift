@@ -28,7 +28,7 @@ class AWSNotification: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     
     class func dynamoDBTableName() -> String {
         
-        return "profeey-mobilehub-294297648-Activities"
+        return "profeey-mobilehub-294297648-Notifications"
     }
     
     class func hashKeyAttribute() -> String {
@@ -38,7 +38,7 @@ class AWSNotification: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     
     class func rangeKeyAttribute() -> String {
         
-        return "_activityId"
+        return "_notificationId"
     }
     
     override class func jsonKeyPathsByPropertyKey() -> [AnyHashable: Any] {

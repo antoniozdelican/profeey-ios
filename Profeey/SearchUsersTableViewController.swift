@@ -137,7 +137,9 @@ class SearchUsersTableViewController: UITableViewController {
             switch imageType {
             case .userProfilePic:
                 self.users[indexPath.row].profilePic = image
-                self.tableView.reloadData()
+                UIView.performWithoutAnimation {
+                    self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
+                }
             default:
                 return
             }
@@ -164,7 +166,9 @@ class SearchUsersTableViewController: UITableViewController {
                             switch imageType {
                             case .userProfilePic:
                                 self.users[indexPath.row].profilePic = image
-                                self.tableView.reloadData()
+                                UIView.performWithoutAnimation {
+                                    self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
+                                }
                             default:
                                 return
                             }

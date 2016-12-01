@@ -55,7 +55,7 @@
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="messageLabel" destination="K3k-cc-52Q" id="R0T-iI-wU6"/>
-                                    <outlet property="profilePicUrl" destination="g64-DK-Nbt" id="g9n-pT-PVp"/>
+                                    <outlet property="profilePicImageView" destination="g64-DK-Nbt" id="eEI-qZ-g5W"/>
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellLoading" rowHeight="112" id="aQj-sy-bua" customClass="LoadingTableViewCell" customModule="Profeey" customModuleProvider="target">

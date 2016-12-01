@@ -9,7 +9,6 @@
 import UIKit
 import AWSMobileHubHelper
 import AWSDynamoDB
-//import TTTAttributedLabel
 
 enum ImageType {
     case currentUserProfilePic
@@ -45,9 +44,9 @@ class HomeTableViewController: UITableViewController {
         self.homeEmptyFeedView.homeEmptyFeedViewDelegate = self
         
         if AWSIdentityManager.defaultIdentityManager().isLoggedIn {
-//            self.isLoadingPosts = true
-//            self.activityIndicatorView?.startAnimating()
-//            self.getCurrentUser()
+            self.isLoadingPosts = true
+            self.activityIndicatorView?.startAnimating()
+            self.queryUserActivitiesDateSorted()
         }
     }
     
@@ -258,11 +257,7 @@ class HomeTableViewController: UITableViewController {
     // MARK: IBActions
     
     @IBAction func refreshControlChanged(_ sender: AnyObject) {
-        guard let userId = AWSIdentityManager.defaultIdentityManager().identityId else {
-            self.refreshControl?.endRefreshing()
-            return
-        }
-        self.queryUserActivitiesDateSorted(userId)
+        self.queryUserActivitiesDateSorted()
     }
     
     @IBAction func unwindToHomeTableViewController(_ segue: UIStoryboardSegue) {
@@ -285,63 +280,12 @@ class HomeTableViewController: UITableViewController {
         }
     }
     
-    // MARK: Helpers
-    
-    fileprivate func reloadRow(_ indexPath: IndexPath) {
-        UIView.performWithoutAnimation {
-            self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
-        }
-    }
-    
-    fileprivate func redirectToWelcome() {
-        guard let window = UIApplication.shared.keyWindow,
-            let initialViewController = UIStoryboard(name: "Welcome", bundle: nil).instantiateInitialViewController() else {
-                return
-        }
-        window.rootViewController = initialViewController
-    }
-    
     // MARK: AWS
     
-    // Gets currentUser and creates currentUserDynamoDB on singleton.
-    fileprivate func getCurrentUser() {
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().getCurrentUserDynamoDB({
-            (task: AWSTask) in
-            DispatchQueue.main.async(execute: {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                if let error = task.error {
-                    print("getCurrentUser error: \(error)")
-                } else {
-                    guard let awsUser = task.result as? AWSUser else {
-                        return
-                    }
-                    guard awsUser._preferredUsername != nil else {
-                        // This only happens if users closes the app on the UsernameTableViewController of the Welcome flow.
-                        print("getCurrentUser error: currentUser doesn't have preferredUsername.")
-                        self.redirectToWelcome()
-                        return
-                    }
-                    let currentUser = CurrentUser(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationName: awsUser._locationName)
-                    // Store properties!
-                    PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB = currentUser
-                    
-                    if let profilePicUrl = awsUser._profilePicUrl {
-                        self.downloadImage(profilePicUrl, imageType: .currentUserProfilePic, indexPath: nil)
-                    }
-                    if let userId = awsUser._userId {
-                        self.queryUserActivitiesDateSorted(userId)
-                    }
-                }
-            })
-            return nil
-        })
-    }
-    
     // Query the feed.
-    fileprivate func queryUserActivitiesDateSorted(_ userId: String) {
+    fileprivate func queryUserActivitiesDateSorted() {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().queryUserActivitiesDateSortedDynamoDB(userId, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().queryUserActivitiesDateSortedDynamoDB({
             (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
@@ -375,6 +319,7 @@ class HomeTableViewController: UITableViewController {
                             let indexPath = IndexPath(row: 1, section: index)
                             self.downloadImage(imageUrl, imageType: .postPic, indexPath: indexPath)
                         }
+                        // TODO this should be changed to query more likes at the time not one by one.
                         if let postId = post.postId {
                             let indexPath = IndexPath(row: 4, section: index)
                             self.getLike(postId, indexPath: indexPath)
@@ -385,7 +330,7 @@ class HomeTableViewController: UITableViewController {
         })
     }
     
-    fileprivate func downloadImage(_ imageKey: String, imageType: ImageType, indexPath: IndexPath?) {
+    fileprivate func downloadImage(_ imageKey: String, imageType: ImageType, indexPath: IndexPath) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         let content = AWSUserFileManager.defaultUserFileManager().content(withKey: imageKey)
         // TODO check if content.isImage()
@@ -396,19 +341,18 @@ class HomeTableViewController: UITableViewController {
             })
             let image = UIImage(data: content.cachedData)
             switch imageType {
-            case .currentUserProfilePic:
-                // Store profilePic.
-                PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB?.profilePic = image
             case .userProfilePic:
-                if let indexPath = indexPath {
-                    self.posts[indexPath.section].user?.profilePic = image
-                    self.reloadRow(indexPath)
+                self.posts[indexPath.section].user?.profilePic = image
+                UIView.performWithoutAnimation {
+                    self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
                 }
             case .postPic:
-                if let indexPath = indexPath {
-                    self.posts[indexPath.section].image = image
-                    self.reloadRow(indexPath)
+                self.posts[indexPath.section].image = image
+                UIView.performWithoutAnimation {
+                    self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
                 }
+            default:
+                return
             }
         } else {
             print("Download content:")
@@ -429,19 +373,18 @@ class HomeTableViewController: UITableViewController {
                             if let imageData = data {
                                 let image = UIImage(data: imageData)
                                 switch imageType {
-                                case .currentUserProfilePic:
-                                    // Store profilePic.
-                                    PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB?.profilePic = image
                                 case .userProfilePic:
-                                    if let indexPath = indexPath {
-                                        self.posts[indexPath.section].user?.profilePic = image
-                                        self.reloadRow(indexPath)
+                                    self.posts[indexPath.section].user?.profilePic = image
+                                    UIView.performWithoutAnimation {
+                                        self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
                                     }
                                 case .postPic:
-                                    if let indexPath = indexPath {
-                                        self.posts[indexPath.section].image = image
-                                        self.reloadRow(indexPath)
+                                    self.posts[indexPath.section].image = image
+                                    UIView.performWithoutAnimation {
+                                        self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
                                     }
+                                default:
+                                    return
                                 }
                             }
                         }
@@ -565,7 +508,9 @@ class HomeTableViewController: UITableViewController {
                 } else {
                     if task.result != nil {
                         self.posts[indexPath.section].isLikedByCurrentUser = true
-                        self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
+                        UIView.performWithoutAnimation {
+                            self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
+                        }
                     }
                 }
             })
@@ -573,7 +518,7 @@ class HomeTableViewController: UITableViewController {
         })
     }
     
-    // Create and remove like are done in background.
+    // In background.
     fileprivate func createLike(_ postId: String, postUserId: String) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         PRFYDynamoDBManager.defaultDynamoDBManager().createLikeDynamoDB(postId, postUserId: postUserId, completionHandler: {
@@ -588,6 +533,7 @@ class HomeTableViewController: UITableViewController {
         })
     }
     
+    // In background.
     fileprivate func removeLike(_ postId: String) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         PRFYDynamoDBManager.defaultDynamoDBManager().removeLikeDynamoDB(postId, completionHandler: {

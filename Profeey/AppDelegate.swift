@@ -29,8 +29,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             self.window?.rootViewController = rootViewController
         }
         
-        print("didFinishLaunchingWithOptions:")
-        print(launchOptions)
+        // TODO
+//        if let endpointARN = AWSPushManager.defaultPushManager().endpointARN {
+//            PRFYDynamoDBManager.defaultDynamoDBManager().saveUserEndpointDynamoDB(endpointARN, completionHandler: {
+//                (task: AWSTask) in
+//                return nil
+//            })
+//        }
         
         return didFinishLaunching
     }

@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import AWSMobileHubHelper
+import AWSDynamoDB
 
 class NotificationsTableViewController: UITableViewController {
     
@@ -17,16 +19,8 @@ class NotificationsTableViewController: UITableViewController {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         
-        let testUser = CurrentUser(userId: nil, firstName: nil, lastName: nil, preferredUsername: "Testonja", professionName: nil, profilePicUrl: nil, locationName: nil)
-        
-        let notificationLike = PRFYNotification(userId: nil, notificationId: nil, creationDate: 1476269401.008167, notificationType: 0, postId: nil, user: testUser)
-        let notificationComment = PRFYNotification(userId: nil, notificationId: nil, creationDate: 1476269401.008167, notificationType: 1, postId: nil, user: testUser)
-        let notificationFollowing = PRFYNotification(userId: nil, notificationId: nil, creationDate: 1476269401.008167, notificationType: 2, postId: nil, user: testUser)
-        let notificationRecommendation = PRFYNotification(userId: nil, notificationId: nil, creationDate: 1476269401.008167, notificationType: 3, postId: nil, user: testUser)
-        self.notifications.append(notificationLike)
-        self.notifications.append(notificationComment)
-        self.notifications.append(notificationFollowing)
-        self.notifications.append(notificationRecommendation)
+        self.isLoadingNotifications = true
+        self.queryUserNotificationsDateSorted()
     }
 
     override func didReceiveMemoryWarning() {
@@ -61,10 +55,8 @@ class NotificationsTableViewController: UITableViewController {
         }
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellNotification", for: indexPath) as! NotificationTableViewCell
         let notification = self.notifications[indexPath.row]
-        
-        if let preferredUsername = notification.user?.preferredUsername, let notificationMessage = notification.notificationMessage, let creationDateString = notification.creationDateString {
-            cell.messageLabel.attributedText = self.constructNotificationMessage(preferredUsername, notificationMessage: notificationMessage, creationDateString: creationDateString)
-        }
+        cell.profilePicImageView.image = notification.user?.profilePic
+        cell.messageLabel.attributedText = self.constructNotificationMessage(notification.user?.preferredUsername, notificationMessage: notification.notificationMessage, creationDateString: notification.creationDateString)
         return cell
     }
     
@@ -78,6 +70,7 @@ class NotificationsTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.layoutMargins = UIEdgeInsets.zero
         if !(cell is NotificationTableViewCell) {
+            cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
         }
     }
     
@@ -104,13 +97,16 @@ class NotificationsTableViewController: UITableViewController {
     // MARK: IBActions
     
     @IBAction func refreshControlChanged(_ sender: AnyObject) {
-        self.refreshControl?.endRefreshing()
         self.notifications = []
+        self.queryUserNotificationsDateSorted()
     }
     
     // MARK: Helpers
     
-    fileprivate func constructNotificationMessage(_ preferredUsername: String, notificationMessage: String, creationDateString: String) -> NSAttributedString {
+    fileprivate func constructNotificationMessage(_ preferredUsername: String?, notificationMessage: String?, creationDateString: String?) -> NSAttributedString? {
+        guard let preferredUsername = preferredUsername, let notificationMessage = notificationMessage, let creationDateString = creationDateString else {
+            return nil
+        }
         let messageAttributedString = NSMutableAttributedString()
         // preferredUsername
         let preferredUsernameAttributedString = NSAttributedString(string: preferredUsername, attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 14.0, weight: UIFontWeightMedium)])
@@ -122,5 +118,96 @@ class NotificationsTableViewController: UITableViewController {
         messageAttributedString.append(notificationMessageAttributedString)
         messageAttributedString.append(creationDateAttributedString)
         return messageAttributedString
+    }
+    
+    // MARK: AWS
+    
+    fileprivate func queryUserNotificationsDateSorted() {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().queryUserNotificationsDateSortedDynamoDB({
+            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                self.isLoadingNotifications = false
+                self.refreshControl?.endRefreshing()
+                if let error = error {
+                    print("queryUserNotificationsDateSorted error: \(error)")
+                    self.tableView.reloadData()
+                } else {
+                    guard let awsNotifications = response?.items as? [AWSNotification], awsNotifications.count > 0 else {
+                        self.tableView.reloadData()
+                        return
+                    }
+                    self.notifications = []
+                    for awsNotification in awsNotifications {
+                        let user = User(userId: awsNotification._notifierUserId, firstName: awsNotification._firstName, lastName: awsNotification._lastName, preferredUsername: awsNotification._preferredUsername, professionName: awsNotification._professionName, profilePicUrl: awsNotification._profilePicUrl)
+                        let notification = PRFYNotification(userId: awsNotification._userId, notificationId: awsNotification._notificationId, creationDate: awsNotification._creationDate, notificationType: awsNotification._notificationType, postId: awsNotification._postId, user: user)
+                        self.notifications.append(notification)
+                    }
+                    self.tableView.reloadData()
+                    
+                    for (index, notification) in self.notifications.enumerated() {
+                        if let profilePicUrl = notification.user?.profilePicUrl {
+                            let indexPath = IndexPath(row: index, section: 0)
+                            self.downloadImage(profilePicUrl, imageType: .userProfilePic, indexPath: indexPath)
+                        }
+                    }
+                }
+            })
+        })
+    }
+    
+    fileprivate func downloadImage(_ imageKey: String, imageType: ImageType, indexPath: IndexPath) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        let content = AWSUserFileManager.defaultUserFileManager().content(withKey: imageKey)
+        // TODO check if content.isImage()
+        if content.isCached {
+            print("Content cached:")
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+            })
+            let image = UIImage(data: content.cachedData)
+            switch imageType {
+            case .userProfilePic:
+                self.notifications[indexPath.row].user?.profilePic = image
+                UIView.performWithoutAnimation {
+                    self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
+                }
+            default:
+                return
+            }
+        } else {
+            print("Download content:")
+            content.download(
+                with: AWSContentDownloadType.ifNewerExists,
+                pinOnCompletion: false,
+                progressBlock: {
+                    (content: AWSContent?, progress: Progress?) -> Void in
+                    // TODO
+            },
+                completionHandler: {
+                    (content: AWSContent?, data: Data?, error: Error?) in
+                    DispatchQueue.main.async(execute: {
+                        UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                        if let error = error {
+                            print("downloadImage error: \(error)")
+                        } else {
+                            guard let imageData = data else {
+                                return
+                            }
+                            let image = UIImage(data: imageData)
+                            switch imageType {
+                            case .userProfilePic:
+                                self.notifications[indexPath.row].user?.profilePic = image
+                                UIView.performWithoutAnimation {
+                                    self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
+                                }
+                            default:
+                                return
+                            }
+                        }
+                    })
+            })
+        }
     }
 }
