@@ -308,6 +308,17 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         awsPostsDateSortedIndex.queryUserPostsDateSortedWithCategoryName(userId, categoryName: categoryName, completionHandler: completionHandler)
     }
     
+    func getPostDynamoDB(_ postId: String, completionHandler: @escaping AWSContinuationBlock) {
+        guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
+            print("getPostDynamoDB no identityId!")
+            AWSTask().continue(completionHandler)
+            return
+        }
+        print("getPostDynamoDB:")
+        let awsPostsTable = AWSPostsTable()
+        awsPostsTable.getPost(identityId, postId: postId, completionHandler: completionHandler)
+    }
+    
     func createPostDynamoDB(_ imageUrl: String?, imageWidth: NSNumber?, imageHeight: NSNumber?, caption: String?, categoryName: String?, completionHandler: @escaping AWSContinuationBlock) {
         guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
             print("createPostDynamoDB no identityId!")

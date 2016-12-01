@@ -364,11 +364,13 @@ class HomeTableViewController: UITableViewController {
             })
         } else {
             print("Download content:")
-            content.download(with: AWSContentDownloadType.ifNewerExists, pinOnCompletion: false,
+            content.download(
+                with: AWSContentDownloadType.ifNewerExists,
+                pinOnCompletion: false,
                 progressBlock: {
                     (content: AWSContent?, progress: Progress?) -> Void in
                     // TODO
-                },
+            },
                 completionHandler: {
                     (content: AWSContent?, data: Data?, error:  Error?) in
                     DispatchQueue.main.async(execute: {
@@ -384,7 +386,6 @@ class HomeTableViewController: UITableViewController {
             })
         }
     }
-    
     fileprivate func uploadImage(_ imageData: Data, imageWidth: NSNumber, imageHeight: NSNumber, caption: String?, categoryName: String?) {
         let uniqueImageName = NSUUID().uuidString.lowercased().replacingOccurrences(of: "-", with: "")
         let imageKey = "public/\(uniqueImageName).jpg"

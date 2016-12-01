@@ -51,6 +51,11 @@ class AWSPostsTable: NSObject, Table {
         return AWSPost.jsonKeyPathsByPropertyKey()[dataObjectAttributeName] as! String
     }
     
+    func getPost(_ userId: String, postId: String, completionHandler: @escaping AWSContinuationBlock) {
+        let objectMapper = AWSDynamoDBObjectMapper.default()
+        objectMapper.load(AWSPost.self, hashKey: userId, rangeKey: postId).continue(completionHandler)
+    }
+    
     func savePost(_ awsPost: AWSPost, completionHandler: @escaping AWSContinuationBlock) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
         objectMapper.save(awsPost).continue(completionHandler)

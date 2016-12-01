@@ -26,6 +26,22 @@ class NotificationsTableViewController: UITableViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
+    
+    // MARK: Navigation
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let destinationViewController = segue.destination as? ProfileTableViewController,
+            let cell = sender as? NotificationTableViewCell,
+            let indexPath = self.tableView.indexPath(for: cell) {
+            destinationViewController.user = self.notifications[indexPath.row].user
+        }
+        if let destinationViewController = segue.destination as? PostDetailsTableViewController,
+            let cell = sender as? NotificationTableViewCell,
+            let indexPath = self.tableView.indexPath(for: cell) {
+            destinationViewController.shouldDownloadPost = true
+            destinationViewController.notificationPostId = self.notifications[indexPath.row].postId
+        }
+    }
 
     // MARK: UITableViewDataSource
 
@@ -64,7 +80,15 @@ class NotificationsTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        // TODO
+        let cell = tableView.cellForRow(at: indexPath)
+        guard cell is NotificationTableViewCell, let notificationType = self.notifications[indexPath.row].notificationType else {
+            return
+        }
+        if notificationType.intValue == 0 || notificationType.intValue == 1 {
+            self.performSegue(withIdentifier: "segueToPostDetailsVc", sender: cell)
+        } else if notificationType.intValue == 2 || notificationType.intValue == 3 {
+            self.performSegue(withIdentifier: "segueToProfileVc", sender: cell)
+        }
     }
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
@@ -178,9 +202,7 @@ class NotificationsTableViewController: UITableViewController {
             }
         } else {
             print("Download content:")
-            content.download(
-                with: AWSContentDownloadType.ifNewerExists,
-                pinOnCompletion: false,
+            content.download(with: AWSContentDownloadType.ifNewerExists, pinOnCompletion: false,
                 progressBlock: {
                     (content: AWSContent?, progress: Progress?) -> Void in
                     // TODO

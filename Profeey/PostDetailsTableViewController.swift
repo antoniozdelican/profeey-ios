@@ -15,19 +15,32 @@ protocol PostDetailsTableViewControllerDelegate {
 
 class PostDetailsTableViewController: UITableViewController {
     
+    // If comming from NotificationVc, we have to download the post, otherwise it's already set.
+    var shouldDownloadPost: Bool = false
+    // If comming from NotificationVc.
+    var notificationPostId: String?
+    // If comming from ProfileVc of UserCategoriesVc.
     var post: Post?
-    var postIndexPath: IndexPath?
+    var postIndexPath: IndexPath? // TODO change this.
     var postDetailsTableViewControllerDelegate: PostDetailsTableViewControllerDelegate?
+    
+    fileprivate var isLoadingPost: Bool = false
+    fileprivate var activityIndicatorView: UIActivityIndicatorView?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-        
-        // To adjust header.
         self.tableView.contentInset = UIEdgeInsetsMake(-1.0, 0.0, 0.0, 0.0)
         
-        // Check if currentUser liked this post.
-        if let postId = self.post?.postId {
+        if self.shouldDownloadPost, let notificationPostId = self.notificationPostId {
+            // Downlod the post.
+            self.activityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
+            self.tableView.backgroundView = self.activityIndicatorView
+            self.activityIndicatorView?.startAnimating()
+            self.isLoadingPost = true
+            self.getPost(notificationPostId)
+        } else if let postId = self.post?.postId {
+            // Just check if currentUser liked this post.
             let indexPath = IndexPath(row: 4, section: 0)
             self.getLike(postId, indexPath: indexPath)
         }
@@ -47,9 +60,7 @@ class PostDetailsTableViewController: UITableViewController {
             destinationViewController.usersType = UsersType.likers
             destinationViewController.postId = self.post?.postId
         }
-        if let destinationViewController = segue.destination as? CommentsViewController,
-            let button = sender as? UIButton,
-            let _ = self.tableView.indexPathForView(view: button) {
+        if let destinationViewController = segue.destination as? CommentsViewController {
             destinationViewController.post = self.post
         }
         if let navigationController = segue.destination as? UINavigationController,
@@ -62,6 +73,9 @@ class PostDetailsTableViewController: UITableViewController {
     // MARK: UITableViewDataSource
 
     override func numberOfSections(in tableView: UITableView) -> Int {
+        if self.shouldDownloadPost, self.isLoadingPost {
+            return 0
+        }
         return 1
     }
 
@@ -85,8 +99,8 @@ class PostDetailsTableViewController: UITableViewController {
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostImage", for: indexPath) as! PostImageTableViewCell
             cell.postImageView.image = post.image
-            if let image = post.image {
-                let aspectRatio = image.size.width / image.size.height
+            if let imageWidth = post.imageWidth?.floatValue, let imageHeight = post.imageHeight?.floatValue {
+                let aspectRatio = CGFloat(imageWidth / imageHeight)
                 cell.postImageViewHeightConstraint.constant = ceil(tableView.bounds.width / aspectRatio)
             }
             return cell
@@ -170,7 +184,103 @@ class PostDetailsTableViewController: UITableViewController {
         return 1.0
     }
     
+    // MARK: Helpers
+    
+    fileprivate func setDownloadedImages(_ image: UIImage, imageType: ImageType, indexPath: IndexPath) {
+        switch imageType {
+        case .userProfilePic:
+            self.post?.user?.profilePic = image
+            UIView.performWithoutAnimation {
+                self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
+            }
+        case .postPic:
+            self.post?.image = image
+            UIView.performWithoutAnimation {
+                self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
+            }
+        default:
+            return
+        }
+    }
+    
     // MARK: AWS
+    
+    fileprivate func getPost(_ postId: String) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().getPostDynamoDB(postId, completionHandler: {
+            (task: AWSTask) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                self.isLoadingPost = false
+                self.activityIndicatorView?.stopAnimating()
+                if let error = task.error {
+                    print("getPost error: \(error)")
+                    self.tableView.reloadData()
+                } else {
+                    guard let awsPost = task.result as? AWSPost else {
+                        self.tableView.reloadData()
+                        return
+                    }
+                    let user = User(userId: awsPost._userId, firstName: awsPost._firstName, lastName: awsPost._lastName, preferredUsername: awsPost._preferredUsername, professionName: awsPost._professionName, profilePicUrl: awsPost._profilePicUrl)
+                    let post = Post(userId: awsPost._userId, postId: awsPost._postId, creationDate: awsPost._creationDate, caption: awsPost._caption, categoryName: awsPost._categoryName, imageUrl: awsPost._imageUrl, imageWidth: awsPost._imageWidth, imageHeight: awsPost._imageHeight, numberOfLikes: awsPost._numberOfLikes, numberOfComments: awsPost._numberOfComments, user: user)
+                    self.post = post
+                    self.tableView.reloadData()
+                    
+                    if let profilePicUrl = post.user?.profilePicUrl {
+                        let indexPath = IndexPath(row: 0, section: 0)
+                        self.downloadImage(profilePicUrl, imageType: .userProfilePic, indexPath: indexPath)
+                    }
+                    if let imageUrl = post.imageUrl {
+                        let indexPath = IndexPath(row: 1, section: 0)
+                        self.downloadImage(imageUrl, imageType: .postPic, indexPath: indexPath)
+                    }
+                    if let postId = post.postId {
+                        let indexPath = IndexPath(row: 4, section: 0)
+                        self.getLike(postId, indexPath: indexPath)
+                    }
+                }
+            })
+            return nil
+        })
+    }
+    
+    fileprivate func downloadImage(_ imageKey: String, imageType: ImageType, indexPath: IndexPath) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        let content = AWSUserFileManager.defaultUserFileManager().content(withKey: imageKey)
+        // TODO check if content.isImage()
+        // TODO check content.status for duplicate content downloads.
+        if content.isCached {
+            print("Content cached:")
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                if let image = UIImage(data: content.cachedData) {
+                    self.setDownloadedImages(image, imageType: imageType, indexPath: indexPath)
+                }
+            })
+        } else {
+            print("Download content:")
+            content.download(
+                with: AWSContentDownloadType.ifNewerExists,
+                pinOnCompletion: false,
+                progressBlock: {
+                    (content: AWSContent?, progress: Progress?) -> Void in
+                    // TODO
+            },
+                completionHandler: {
+                    (content: AWSContent?, data: Data?, error:  Error?) in
+                    DispatchQueue.main.async(execute: {
+                        UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                        if let error = error {
+                            print("downloadImage error: \(error)")
+                        } else {
+                            if let imageData = data, let image = UIImage(data: imageData) {
+                                self.setDownloadedImages(image, imageType: imageType, indexPath: indexPath)
+                            }
+                        }
+                    })
+            })
+        }
+    }
     
     // Check if currentUser liked a post.
     fileprivate func getLike(_ postId: String, indexPath: IndexPath) {
@@ -192,7 +302,7 @@ class PostDetailsTableViewController: UITableViewController {
         })
     }
     
-    // Create and remove like are done in background.
+    // In background.
     fileprivate func createLike(_ postId: String, postUserId: String) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         PRFYDynamoDBManager.defaultDynamoDBManager().createLikeDynamoDB(postId, postUserId: postUserId, completionHandler: {
@@ -207,6 +317,7 @@ class PostDetailsTableViewController: UITableViewController {
         })
     }
     
+    // In background.
     fileprivate func removeLike(_ postId: String) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         PRFYDynamoDBManager.defaultDynamoDBManager().removeLikeDynamoDB(postId, completionHandler: {

@@ -50,7 +50,6 @@ class AWSLikesTable: NSObject, Table {
     func getLike(_ userId: String, postId: String, completionHandler: @escaping AWSContinuationBlock) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
         objectMapper.load(AWSLike.self, hashKey: userId, rangeKey: postId).continue(completionHandler)
-        
     }
     
     func createLike(_ awsLike: AWSLike, completionHandler: @escaping AWSContinuationBlock) {

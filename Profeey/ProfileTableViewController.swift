@@ -1050,6 +1050,7 @@ extension ProfileTableViewController: ExperiencesTableViewControllerDelegate {
 extension ProfileTableViewController: PostDetailsTableViewControllerDelegate {
     
     func updatedPost(_ post: Post, postIndexPath: IndexPath) {
+        // TODO refactor this.
         self.posts[postIndexPath.row] = post
         self.tableView.reloadRows(at: [postIndexPath], with: UITableViewRowAnimation.none)
     }
