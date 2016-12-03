@@ -131,7 +131,6 @@ class WelcomeProfessionsTableViewController: UITableViewController {
             // Clear searched.
             self.searchedProfessions = []
             self.tableView.reloadData()
-            //self.scanProfessionsByProfessionName(searchText)
         }
     }
     

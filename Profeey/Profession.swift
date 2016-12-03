@@ -13,7 +13,6 @@ class Profession: NSObject {
     // Properties.
     var professionName: String?
     var numberOfUsers: NSNumber?
-    var searchProfessionName: String?
     
     // Generated.
     var numberOfUsersString: String? {
@@ -35,12 +34,5 @@ class Profession: NSObject {
         self.init()
         self.professionName = professionName
         self.numberOfUsers = numberOfUsers
-    }
-    
-    convenience init(professionName: String?, searchProfessionName: String?, numberOfUsers: NSNumber?) {
-        self.init()
-        self.professionName = professionName
-        self.numberOfUsers = numberOfUsers
-        self.searchProfessionName = searchProfessionName
     }
 }

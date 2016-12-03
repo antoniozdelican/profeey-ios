@@ -2,59 +2,45 @@
 //  SearchViewController.swift
 //  Profeey
 //
-//  Created by Antonio Zdelican on 26/09/16.
+//  Created by Antonio Zdelican on 02/12/16.
 //  Copyright © 2016 Profeey. All rights reserved.
 //
 
 import UIKit
-import AWSMobileHubHelper
-import AWSDynamoDB
 
-protocol SearchUsersDelegate {
-    func showUsers(_ users: [User], showAllUsers: Bool)
-    func isSearchingUsers(_ isSearching: Bool)
-}
-
-protocol SearchProfessionsDelegate {
-    func showProfessions(_ professions: [Profession], showAllProfessions: Bool)
-    func isSearchingProfessions(_ isSearching: Bool)
-}
-
-protocol SearchScrollDelegate {
-    func scrollViewWillBeginDragging()
+enum SearchSegmentType {
+    case people
+    case professions
 }
 
 class SearchViewController: UIViewController {
-    
-    @IBOutlet weak var indicatorScrollView: UIScrollView!
-    @IBOutlet weak var mainScrollView: UIScrollView!
-    @IBOutlet weak var peopleLabel: UILabel!
-    @IBOutlet weak var professionsLabel: UILabel!
-    @IBOutlet weak var segmentedControlView: UIView!
-    
-    fileprivate var searchController: UISearchController?
-    fileprivate var searchUsersDelegate: SearchUsersDelegate?
-    fileprivate var searchProfessionsDelegate: SearchProfessionsDelegate?
-    
-    fileprivate var users: [User] = []
-    fileprivate var allUsers: [User] = []
-    fileprivate var searchedUsers: [User] = []
-    
-    fileprivate var professions: [Profession] = []
-    fileprivate var allProfessions: [Profession] = []
-    fileprivate var searchedProfessions: [Profession] = []
 
+    @IBOutlet weak var mainScrollView: UIScrollView!
+    @IBOutlet weak var indicatorScrollView: UIScrollView!
+    @IBOutlet weak var peopleButton: UIButton!
+    @IBOutlet weak var professionsButton: UIButton!
+    
+    fileprivate var searchBar = UISearchBar()
+    fileprivate var locationBarButtonItem: UIBarButtonItem?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-        self.configureSearchController()
-        self.mainScrollView.delegate = self
-        self.adjustSegment(0)
         
-        self.searchUsersDelegate?.isSearchingUsers(true)
-        self.scanUsers()
-        self.searchProfessionsDelegate?.isSearchingProfessions(true)
-        self.scanProfessions()
+        // SearchBar configuration.
+        self.searchBar.searchBarStyle = UISearchBarStyle.minimal
+        self.searchBar.tintColor = Colors.black
+        self.searchBar.placeholder = "Search in Zagreb, Croatia"
+        self.searchBar.delegate = self
+        self.navigationItem.titleView = self.searchBar
+        
+        // BarButtonItem
+        self.locationBarButtonItem = UIBarButtonItem(image: UIImage(named: "ic_location_black"), style: UIBarButtonItemStyle.plain, target: nil, action: nil)
+        self.navigationItem.setRightBarButton(self.locationBarButtonItem, animated: true)
+        
+        // ScrollView
+        self.mainScrollView.delegate = self
+        self.adjustSegment(SearchSegmentType.people)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -64,197 +50,65 @@ class SearchViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        self.view.endEditing(true)
+        self.searchBar.resignFirstResponder()
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
     
-    // MARK: Configuration
-    
-    fileprivate func configureSearchController() {
-        self.searchController = UISearchController(searchResultsController: nil)
-        self.searchController?.hidesNavigationBarDuringPresentation = false
-        self.searchController?.dimsBackgroundDuringPresentation = false
-        self.searchController?.searchBar.delegate = self
-        self.definesPresentationContext = true
-        self.navigationItem.titleView = self.searchController?.searchBar
-    }
-    
     // MARK: Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destinationViewController = segue.destination as? SearchUsersTableViewController {
-            self.searchUsersDelegate = destinationViewController
-            destinationViewController.searchScrollDelegate = self
             destinationViewController.searchUsersTableViewControllerDelegate = self
+//            self.searchUsersDelegate = destinationViewController
+//            destinationViewController.searchScrollDelegate = self
+//            destinationViewController.searchUsersTableViewControllerDelegate = self
         }
         if let destinationViewController = segue.destination as? SearchProfessionsTableViewController {
-            self.searchProfessionsDelegate = destinationViewController
-            destinationViewController.searchScrollDelegate = self
             destinationViewController.searchProfessionsTableViewControllerDelegate = self
+//            self.searchProfessionsDelegate = destinationViewController
+//            destinationViewController.searchScrollDelegate = self
+//            destinationViewController.searchProfessionsTableViewControllerDelegate = self
         }
-        if let destinationViewController = segue.destination as? ProfileTableViewController,
-            let indexPath = sender as? IndexPath {
-            destinationViewController.user = self.users[indexPath.row]
-        }
-        if let destinationViewController = segue.destination as? ProfessionTableViewController,
-            let indexPath = sender as? IndexPath {
-            destinationViewController.profession = self.professions[indexPath.row]
-        }
+//        if let destinationViewController = segue.destination as? ProfileTableViewController,
+//            let indexPath = sender as? IndexPath {
+//            destinationViewController.user = self.users[indexPath.row]
+//        }
+//        if let destinationViewController = segue.destination as? ProfessionTableViewController,
+//            let indexPath = sender as? IndexPath {
+//            destinationViewController.profession = self.professions[indexPath.row]
+//        }
     }
     
     // MARK: IBActions
     
-    @IBAction func peopleSegmentTapped(_ sender: AnyObject) {
+    @IBAction func peopleButtonTapped(_ sender: Any) {
         let rect = CGRect(x: 0.0, y: 0.0, width: self.mainScrollView.bounds.width, height: self.mainScrollView.bounds.height)
         self.mainScrollView.scrollRectToVisible(rect, animated: true)
     }
     
-    @IBAction func professionsSegmentTapped(_ sender: AnyObject) {
+    @IBAction func professionButtonTapped(_ sender: Any) {
         let rect = CGRect(x: self.view.bounds.width, y: 0.0, width: self.mainScrollView.bounds.width, height: self.mainScrollView.bounds.height)
         self.mainScrollView.scrollRectToVisible(rect, animated: true)
     }
     
-    // MARK: AWS
-    
-    fileprivate func scanUsers() {
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().scanUsersDynamoDB({
-            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
-            DispatchQueue.main.async(execute: {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                self.searchUsersDelegate?.isSearchingUsers(false)
-                if let error = error {
-                    print("scanUsers error: \(error)")
-                    self.searchUsersDelegate?.showUsers(self.users, showAllUsers: true)
-                } else {
-                    guard let awsUsers = response?.items as? [AWSUser] else {
-                        self.searchUsersDelegate?.showUsers(self.users, showAllUsers: true)
-                        return
-                    }
-                    for awsUser in awsUsers {
-                        let user = User(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationName: awsUser._locationName)
-                        self.allUsers.append(user)
-                    }
-                    
-                    // If there is text already in text field, do the filter.
-                    if let searchText = self.searchController?.searchBar.text, !searchText.isEmpty {
-                        self.filterUsers(searchText)
-                    } else {
-                        self.users = self.allUsers
-                        self.searchUsersDelegate?.showUsers(self.users, showAllUsers: true)
-                    }
-                }
-            })
-        })
-    }
-    
-    fileprivate func scanProfessions() {
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().scanProfessionsDynamoDB({
-            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
-            DispatchQueue.main.async(execute: {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                self.searchProfessionsDelegate?.isSearchingProfessions(false)
-                if let error = error {
-                    print("scanProfessions error: \(error)")
-                    self.searchProfessionsDelegate?.showProfessions(self.professions, showAllProfessions: true)
-                } else {
-                    guard let awsProfessions = response?.items as? [AWSProfession] else {
-                        self.searchProfessionsDelegate?.showProfessions(self.professions, showAllProfessions: true)
-                        return
-                    }
-                    for awsProfession in awsProfessions {
-                        let profession = Profession(professionName: awsProfession._professionName, searchProfessionName: awsProfession._searchProfessionName, numberOfUsers: awsProfession._numberOfUsers)
-                        self.allProfessions.append(profession)
-                    }
-                    
-                    // If there is text already in text field, do the filter.
-                    if let searchText = self.searchController?.searchBar.text, !searchText.isEmpty {
-                        self.filterProfessions(searchText)
-                    } else {
-                        self.professions = self.allProfessions
-                        self.searchProfessionsDelegate?.showProfessions(self.professions, showAllProfessions: true)
-                    }
-                }
-            })
-        })
-    }
-    
-    // TEST
-    
-    fileprivate func searchProfessionsTest(_ searchText: String) {
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYCloudSearchProxyClient.defaultClient().rootGet(q: searchText).continue({
-            (task: AWSTask) in
-            DispatchQueue.main.async(execute: {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                self.searchProfessionsDelegate?.isSearchingProfessions(false)
-                if let error = task.error {
-                    print(error)
-                } else {
-                    guard let result = task.result as? PRFYCloudSearchProfessionsResult, let professions = result.professions else {
-                        print("No result!")
-                        return
-                    }
-                    self.professions = []
-                    for resultProfession in professions {
-                        let profession = Profession(professionName: resultProfession.professionName, numberOfUsers: resultProfession.numberOfUsers)
-                        self.professions.append(profession)
-                    }
-                    self.searchProfessionsDelegate?.showProfessions(self.professions, showAllProfessions: false)
-                }
-            })
-            return nil
-        })
-    }
-    
     // MARK: Helpers
     
-    fileprivate func adjustSegment(_ segmentIndex: Int) {
-        switch segmentIndex {
-        case 0:
-            if self.peopleLabel.textColor != Colors.black {
-                self.peopleLabel.textColor = Colors.black
-                self.professionsLabel.textColor = Colors.grey
+    fileprivate func adjustSegment(_ searchSegmentType: SearchSegmentType) {
+        switch searchSegmentType {
+        case SearchSegmentType.people:
+            if self.peopleButton.currentTitleColor != Colors.black {
+                self.peopleButton.setTitleColor(Colors.black, for: UIControlState.normal)
+                self.professionsButton.setTitleColor(Colors.grey, for: UIControlState.normal)
             }
-        case 1:
-            if self.professionsLabel.textColor != Colors.black {
-                self.peopleLabel.textColor = Colors.grey
-                self.professionsLabel.textColor = Colors.black
+        case SearchSegmentType.professions:
+            if self.professionsButton.currentTitleColor != Colors.black {
+                self.professionsButton.setTitleColor(Colors.black, for: UIControlState.normal)
+                self.peopleButton.setTitleColor(Colors.grey, for: UIControlState.normal)
             }
-        default:
-            return
         }
-    }
-    
-    fileprivate func filterUsers(_ searchText: String) {
-        let searchName = searchText.lowercased()
-        self.searchedUsers = self.allUsers.filter({
-            (user: User) in
-            if let searchFirstName = user.searchFirstName, searchFirstName.hasPrefix(searchName) {
-                return true
-            } else if let searchLastName = user.searchLastName, searchLastName.hasPrefix(searchName) {
-                return true
-            } else if let searchPreferredUsername = user.searchPreferredUsername, searchPreferredUsername.hasPrefix(searchName) {
-                return true
-            } else {
-                return false
-            }
-        })
-        self.users = self.searchedUsers
-        self.searchUsersDelegate?.showUsers(self.users, showAllUsers: false)
-    }
-    
-    fileprivate func filterProfessions(_ searchText: String) {
-        let searchProfessionName = searchText.lowercased()
-        let searchableProfessions = self.allProfessions.filter( { $0.searchProfessionName != nil } )
-        
-        self.searchedProfessions = searchableProfessions.filter( { $0.searchProfessionName!.hasPrefix(searchProfessionName) } )
-        self.professions = self.searchedProfessions
-        self.searchProfessionsDelegate?.showProfessions(self.professions, showAllProfessions: false)
     }
 }
 
@@ -263,9 +117,9 @@ extension SearchViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         self.indicatorScrollView.contentOffset.x = -scrollView.contentOffset.x / 2
         if scrollView.contentOffset.x > scrollView.bounds.width / 2 {
-            self.adjustSegment(1)
+            self.adjustSegment(SearchSegmentType.professions)
         } else {
-            self.adjustSegment(0)
+            self.adjustSegment(SearchSegmentType.people)
         }
     }
 }
@@ -273,49 +127,32 @@ extension SearchViewController: UIScrollViewDelegate {
 extension SearchViewController: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        
-        if searchText.trimm().isEmpty {
-            self.users = self.allUsers
-            self.searchUsersDelegate?.showUsers(self.users, showAllUsers: true)
-            
-            self.professions = self.allProfessions
-            self.searchProfessionsDelegate?.showProfessions(self.professions, showAllProfessions: true)
-        } else {
-            self.filterUsers(searchText.trimm())
-            self.filterProfessions(searchText.trimm())
-            
-            // TODO CloudSearch domain is currently deleted.
-//            self.searchProfessionsDelegate?.isSearchingProfessions(true)
-//            self.searchProfessionsTest(searchText.trimm())
-        }
+        // TODO
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        self.users = self.allUsers
-        self.searchUsersDelegate?.showUsers(self.users, showAllUsers: true)
-        
-        self.professions = self.allProfessions
-        self.searchProfessionsDelegate?.showProfessions(self.professions, showAllProfessions: true)
+        searchBar.text = ""
+        searchBar.resignFirstResponder()
+        searchBar.setShowsCancelButton(false, animated: true)
+        self.navigationItem.setRightBarButton(self.locationBarButtonItem, animated: true)
     }
-}
-
-extension SearchViewController: SearchScrollDelegate {
     
-    func scrollViewWillBeginDragging() {
-        self.searchController?.searchBar.resignFirstResponder()
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        self.navigationItem.setRightBarButton(nil, animated: true)
+        searchBar.setShowsCancelButton(true, animated: true)
     }
 }
 
 extension SearchViewController: SearchUsersTableViewControllerDelegate {
     
-    func didSelectUser(_ indexPath: IndexPath) {
-        self.performSegue(withIdentifier: "segueToProfileVc", sender: indexPath)
+    func usersTableViewWillBeginDragging() {
+        self.searchBar.resignFirstResponder()
     }
 }
 
 extension SearchViewController: SearchProfessionsTableViewControllerDelegate {
     
-    func didSelectProfession(_ indexPath: IndexPath) {
-        self.performSegue(withIdentifier: "segueToProfessionVc", sender: indexPath)
+    func professionsTableViewWillBeginDragging() {
+        self.searchBar.resignFirstResponder()
     }
 }

@@ -170,7 +170,7 @@ class ProfessionsTableViewController: UITableViewController {
                         return
                     }
                     for awsProfession in awsProfessions {
-                        let profession = Profession(professionName: awsProfession._professionName, searchProfessionName: awsProfession._searchProfessionName, numberOfUsers: awsProfession._numberOfUsers)
+                        let profession = Profession(professionName: awsProfession._professionName, numberOfUsers: awsProfession._numberOfUsers)
                         self.allProfessions.append(profession)
                     }
                     self.professions = self.allProfessions
@@ -185,7 +185,7 @@ class ProfessionsTableViewController: UITableViewController {
     fileprivate func filterProfessions(_ searchText: String) {
         self.searchedProfessions = self.allProfessions.filter({
             (profession: Profession) in
-            if let searchProfessionName = profession.searchProfessionName, searchProfessionName.hasPrefix(searchText.lowercased()) {
+            if let searchProfessionName = profession.professionName?.lowercased(), searchProfessionName.hasPrefix(searchText.lowercased()) {
                 return true
             } else {
                 return false

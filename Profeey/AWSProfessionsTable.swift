@@ -51,18 +51,4 @@ class AWSProfessionsTable: NSObject, Table {
 //        scanExpression.limit = 10
         objectMapper.scan(AWSProfession.self, expression: scanExpression, completionHandler: completionHandler)
     }
-    
-    func scanProfessionsByProfessionName(_ searchProfessionName: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
-        let objectMapper = AWSDynamoDBObjectMapper.default()
-        let scanExpression = AWSDynamoDBScanExpression()
-        scanExpression.filterExpression = "begins_with(#searchProfessionName, :searchProfessionName)"
-        scanExpression.expressionAttributeNames = [
-            "#searchProfessionName": "searchProfessionName",
-        ]
-        scanExpression.expressionAttributeValues = [
-            ":searchProfessionName": searchProfessionName,
-        ]
-//        scanExpression.limit = 10
-        objectMapper.scan(AWSProfession.self, expression: scanExpression, completionHandler: completionHandler)
-    }
 }

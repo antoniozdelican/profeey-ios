@@ -86,6 +86,8 @@
 		A97A3F6B1DF027F200FC5AEA /* AWSUserEndpointsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A97A3F6A1DF027F200FC5AEA /* AWSUserEndpointsTable.swift */; };
 		A97A9AEB1D85C03B00507517 /* HeaderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A97A9AEA1D85C03B00507517 /* HeaderTableViewCell.swift */; };
 		A97A9AED1D85D0ED00507517 /* ProfessionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A97A9AEC1D85D0ED00507517 /* ProfessionsTableViewController.swift */; };
+		A97DBEEB1DF16ACB00A9F4FE /* Search.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A97DBEEA1DF16ACB00A9F4FE /* Search.storyboard */; };
+		A97DBEED1DF16BD400A9F4FE /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A97DBEEC1DF16BD400A9F4FE /* SearchViewController.swift */; };
 		A98A38241D8C076C00C9CA75 /* AWSUserCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98A38231D8C076C00C9CA75 /* AWSUserCategory.swift */; };
 		A98A38261D8C07DA00C9CA75 /* AWSUserCategoriesTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98A38251D8C07DA00C9CA75 /* AWSUserCategoriesTable.swift */; };
 		A98B42E11D43C95A0089A769 /* ProfessionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98B42E01D43C95A0089A769 /* ProfessionTableViewCell.swift */; };
@@ -164,7 +166,6 @@
 		A9BF16491D6514C900060A9E /* NoResultsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9BF16481D6514C900060A9E /* NoResultsTableViewCell.swift */; };
 		A9BF164B1D6519D100060A9E /* SearchingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9BF164A1D6519D100060A9E /* SearchingTableViewCell.swift */; };
 		A9C0ED3A1D3C21C30036F791 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C0ED391D3C21C30036F791 /* Post.swift */; };
-		A9C4D2701D991FCC000E1F35 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C4D26F1D991FCC000E1F35 /* SearchViewController.swift */; };
 		A9C4D2731D992A67000E1F35 /* SearchUsersTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C4D2721D992A67000E1F35 /* SearchUsersTableViewController.swift */; };
 		A9C6CB7F1D2929AA00863816 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C6CB7E1D2929AA00863816 /* Extensions.swift */; };
 		A9C808151D916C1B0018109C /* EditProfilePicTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C808141D916C1B0018109C /* EditProfilePicTableViewCell.swift */; };
@@ -213,7 +214,6 @@
 		A9E450801D5A09F100D14553 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E4507F1D5A09F100D14553 /* Comment.swift */; };
 		A9E4EC541D81F1B700929ED1 /* LocationsOldTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E4EC531D81F1B700929ED1 /* LocationsOldTableViewController.swift */; };
 		A9E53B691D10665100CD1D6C /* Home.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9E53B681D10665100CD1D6C /* Home.storyboard */; };
-		A9E53B6B1D10666800CD1D6C /* Search.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9E53B6A1D10666800CD1D6C /* Search.storyboard */; };
 		A9E53B6D1D10667100CD1D6C /* Capture.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9E53B6C1D10667100CD1D6C /* Capture.storyboard */; };
 		A9E53B6F1D10667B00CD1D6C /* Notifications.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9E53B6E1D10667B00CD1D6C /* Notifications.storyboard */; };
 		A9E53B711D10668400CD1D6C /* Profile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9E53B701D10668400CD1D6C /* Profile.storyboard */; };
@@ -331,6 +331,8 @@
 		A97A3F6A1DF027F200FC5AEA /* AWSUserEndpointsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSUserEndpointsTable.swift; sourceTree = "<group>"; };
 		A97A9AEA1D85C03B00507517 /* HeaderTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeaderTableViewCell.swift; sourceTree = "<group>"; };
 		A97A9AEC1D85D0ED00507517 /* ProfessionsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfessionsTableViewController.swift; sourceTree = "<group>"; };
+		A97DBEEA1DF16ACB00A9F4FE /* Search.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Search.storyboard; sourceTree = "<group>"; };
+		A97DBEEC1DF16BD400A9F4FE /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		A98A38231D8C076C00C9CA75 /* AWSUserCategory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSUserCategory.swift; sourceTree = "<group>"; };
 		A98A38251D8C07DA00C9CA75 /* AWSUserCategoriesTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSUserCategoriesTable.swift; sourceTree = "<group>"; };
 		A98B42E01D43C95A0089A769 /* ProfessionTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfessionTableViewCell.swift; sourceTree = "<group>"; };
@@ -411,7 +413,6 @@
 		A9BF16481D6514C900060A9E /* NoResultsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoResultsTableViewCell.swift; sourceTree = "<group>"; };
 		A9BF164A1D6519D100060A9E /* SearchingTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchingTableViewCell.swift; sourceTree = "<group>"; };
 		A9C0ED391D3C21C30036F791 /* Post.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
-		A9C4D26F1D991FCC000E1F35 /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		A9C4D2721D992A67000E1F35 /* SearchUsersTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchUsersTableViewController.swift; sourceTree = "<group>"; };
 		A9C6CB7E1D2929AA00863816 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		A9C808141D916C1B0018109C /* EditProfilePicTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditProfilePicTableViewCell.swift; sourceTree = "<group>"; };
@@ -460,7 +461,6 @@
 		A9E4507F1D5A09F100D14553 /* Comment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
 		A9E4EC531D81F1B700929ED1 /* LocationsOldTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationsOldTableViewController.swift; sourceTree = "<group>"; };
 		A9E53B681D10665100CD1D6C /* Home.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Home.storyboard; sourceTree = "<group>"; };
-		A9E53B6A1D10666800CD1D6C /* Search.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Search.storyboard; sourceTree = "<group>"; };
 		A9E53B6C1D10667100CD1D6C /* Capture.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Capture.storyboard; sourceTree = "<group>"; };
 		A9E53B6E1D10667B00CD1D6C /* Notifications.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Notifications.storyboard; sourceTree = "<group>"; };
 		A9E53B701D10668400CD1D6C /* Profile.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Profile.storyboard; sourceTree = "<group>"; };
@@ -730,6 +730,20 @@
 				A97A3F6A1DF027F200FC5AEA /* AWSUserEndpointsTable.swift */,
 			);
 			name = AWSUserEndpoints;
+			sourceTree = "<group>";
+		};
+		A97DBEE91DF16AB400A9F4FE /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				A97DBEEA1DF16ACB00A9F4FE /* Search.storyboard */,
+				A999CD441DBE829F00E7ADB1 /* SearchTableSectionHeader.xib */,
+				A97DBEEC1DF16BD400A9F4FE /* SearchViewController.swift */,
+				A999CD421DBE828800E7ADB1 /* SearchTableSectionHeader.swift */,
+				A9DC4E371D994E9400AF4AB8 /* Search Users */,
+				A999CD3D1DBE6F8900E7ADB1 /* Search Professions */,
+				A999CD461DBE939700E7ADB1 /* Profession */,
+			);
+			name = Search;
 			sourceTree = "<group>";
 		};
 		A97EDECC1D9A596F002E63F7 /* Shared Cells */ = {
@@ -1062,7 +1076,7 @@
 			children = (
 				A967FFCC1D25215100AE4E24 /* Root */,
 				A9E53B621D1065D000CD1D6C /* Home */,
-				A9E53B631D1065DD00CD1D6C /* Search */,
+				A97DBEE91DF16AB400A9F4FE /* Search */,
 				A901CFE51DA78D9800C44B26 /* Capture */,
 				A9E53B651D1065FB00CD1D6C /* Notifications */,
 				A9E53B661D10660200CD1D6C /* Profile */,
@@ -1098,20 +1112,6 @@
 				A9B7A2491D65D8C0009DA340 /* HomeTableViewController.swift */,
 			);
 			name = Home;
-			sourceTree = "<group>";
-		};
-		A9E53B631D1065DD00CD1D6C /* Search */ = {
-			isa = PBXGroup;
-			children = (
-				A9E53B6A1D10666800CD1D6C /* Search.storyboard */,
-				A999CD441DBE829F00E7ADB1 /* SearchTableSectionHeader.xib */,
-				A9C4D26F1D991FCC000E1F35 /* SearchViewController.swift */,
-				A999CD421DBE828800E7ADB1 /* SearchTableSectionHeader.swift */,
-				A9DC4E371D994E9400AF4AB8 /* Search Users */,
-				A999CD3D1DBE6F8900E7ADB1 /* Search Professions */,
-				A999CD461DBE939700E7ADB1 /* Profession */,
-			);
-			name = Search;
 			sourceTree = "<group>";
 		};
 		A9E53B651D1065FB00CD1D6C /* Notifications */ = {
@@ -1275,6 +1275,7 @@
 				A9A1961B1DDC643D008D6494 /* Settings.storyboard in Resources */,
 				A930BC861D0DD43F004D49F7 /* LaunchScreen.storyboard in Resources */,
 				A945973E1DA7E463006A4C9B /* AlbumButton.xib in Resources */,
+				A97DBEEB1DF16ACB00A9F4FE /* Search.storyboard in Resources */,
 				A930BC831D0DD43F004D49F7 /* Assets.xcassets in Resources */,
 				A930BC811D0DD43F004D49F7 /* Main.storyboard in Resources */,
 				A9AFFB0D1D8AFEB800219627 /* Categories.storyboard in Resources */,
@@ -1284,7 +1285,6 @@
 				A96622001D0EBBC200298CE7 /* Onboarding.storyboard in Resources */,
 				A9AFFB081D8AFE0C00219627 /* Professions.storyboard in Resources */,
 				A91828471DC0E59100EC9E63 /* Locations.storyboard in Resources */,
-				A9E53B6B1D10666800CD1D6C /* Search.storyboard in Resources */,
 				A9E53B6D1D10667100CD1D6C /* Capture.storyboard in Resources */,
 				A9E53B711D10668400CD1D6C /* Profile.storyboard in Resources */,
 				A9A1D7F01DBCFE83002AF221 /* ProfileTableSectionHeader.xib in Resources */,
@@ -1448,10 +1448,10 @@
 				A9EAEC071DA6A38600DA6A4D /* AWSPostUpdate.swift in Sources */,
 				A9A21DB51D95397A0093F162 /* UsernameTableViewController.swift in Sources */,
 				A99FD1A31DCA657400BD2CC5 /* AWSCommentUpdate.swift in Sources */,
-				A9C4D2701D991FCC000E1F35 /* SearchViewController.swift in Sources */,
 				A9C0ED3A1D3C21C30036F791 /* Post.swift in Sources */,
 				A9AFFB0F1D8AFF1800219627 /* CategoryTableViewCell.swift in Sources */,
 				A9AA36351D945DE200E5EAFA /* OnboardingNavigationController.swift in Sources */,
+				A97DBEED1DF16BD400A9F4FE /* SearchViewController.swift in Sources */,
 				A999CD3F1DBE6F9F00E7ADB1 /* SearchProfessionsTableViewController.swift in Sources */,
 				A918284B1DC1233400EC9E63 /* SearchLocationTableViewCell.swift in Sources */,
 				A99B9E311DB53E370047360D /* Education.swift in Sources */,

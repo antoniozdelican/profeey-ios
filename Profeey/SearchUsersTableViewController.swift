@@ -8,28 +8,42 @@
 
 import UIKit
 import AWSMobileHubHelper
+import AWSDynamoDB
+
+//protocol SearchUsersTableViewControllerDelegate {
+//    func didSelectUser(_ indexPath: IndexPath)
+//}
 
 protocol SearchUsersTableViewControllerDelegate {
-    func didSelectUser(_ indexPath: IndexPath)
+    func usersTableViewWillBeginDragging()
 }
 
 class SearchUsersTableViewController: UITableViewController {
     
-    var searchScrollDelegate: SearchScrollDelegate?
     var searchUsersTableViewControllerDelegate: SearchUsersTableViewControllerDelegate?
     fileprivate var users: [User] = []
-    fileprivate var showAllUsers: Bool = true
+//    fileprivate var showAllUsers: Bool = true
     fileprivate var isSearchingUsers: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // Register custom header.
         self.tableView.register(UINib(nibName: "SearchTableSectionHeader", bundle: nil), forHeaderFooterViewReuseIdentifier: "searchTableSectionHeader")
+        
+        self.isSearchingUsers = true
+        self.scanUsers()
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+    }
+    
+    // MARK: Navigation
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let destinationViewController = segue.destination as? ProfileTableViewController,
+            let indexPath = sender as? IndexPath {
+            destinationViewController.user = self.users[indexPath.row]
+        }
     }
 
     // MARK: UITableViewDataSource
@@ -82,7 +96,8 @@ class SearchUsersTableViewController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
         let cell = tableView.cellForRow(at: indexPath)
         if cell is SearchUserTableViewCell {
-            self.searchUsersTableViewControllerDelegate?.didSelectUser(indexPath)
+            self.performSegue(withIdentifier: "segueToProfileVc", sender: indexPath)
+            //self.searchUsersTableViewControllerDelegate?.didSelectUser(indexPath)
         }
     }
     
@@ -108,7 +123,8 @@ class SearchUsersTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "searchTableSectionHeader") as? SearchTableSectionHeader
-        header?.titleLabel.text = self.showAllUsers ? "POPULAR" : "BEST MATCHES"
+        header?.titleLabel.text = "POPULAR in Zagreb, Croatia"
+//        header?.titleLabel.text = self.showAllUsers ? "POPULAR" : "BEST MATCHES"
         return header
     }
     
@@ -119,10 +135,52 @@ class SearchUsersTableViewController: UITableViewController {
     // MARK: UIScrollViewDelegate
     
     override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        self.searchScrollDelegate?.scrollViewWillBeginDragging()
+        self.searchUsersTableViewControllerDelegate?.usersTableViewWillBeginDragging()
     }
     
     // MARK: AWS
+    
+    fileprivate func scanUsers() {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().scanUsersDynamoDB({
+            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                self.isSearchingUsers = false
+                if let error = error {
+                    print("scanUsers error: \(error)")
+                    self.tableView.reloadData()
+                    //self.searchUsersDelegate?.showUsers(self.users, showAllUsers: true)
+                } else {
+                    guard let awsUsers = response?.items as? [AWSUser] else {
+                        self.tableView.reloadData()
+                        //self.searchUsersDelegate?.showUsers(self.users, showAllUsers: true)
+                        return
+                    }
+                    for awsUser in awsUsers {
+                        let user = User(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationName: awsUser._locationName)
+                        self.users.append(user)
+                    }
+                    self.tableView.reloadData()
+                    
+                    for (index, user) in self.users.enumerated() {
+                        if let profilePicUrl = user.profilePicUrl {
+                            let indexPath = IndexPath(row: index, section: 0)
+                            self.downloadImage(profilePicUrl, imageType: .userProfilePic, indexPath: indexPath)
+                        }
+                    }
+                    
+                    // If there is text already in text field, do the filter.
+//                    if let searchText = self.searchController?.searchBar.text, !searchText.isEmpty {
+//                        self.filterUsers(searchText)
+//                    } else {
+//                        self.users = self.allUsers
+//                        self.searchUsersDelegate?.showUsers(self.users, showAllUsers: true)
+//                    }
+                }
+            })
+        })
+    }
     
     fileprivate func downloadImage(_ imageKey: String, imageType: ImageType, indexPath: IndexPath) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
@@ -150,7 +208,7 @@ class SearchUsersTableViewController: UITableViewController {
                 pinOnCompletion: false,
                 progressBlock: {
                     (content: AWSContent?, progress: Progress?) -> Void in
-                    // TODO
+                    // Do nothing.
                 },
                 completionHandler: {
                     (content: AWSContent?, data: Data?, error: Error?) in
@@ -179,23 +237,23 @@ class SearchUsersTableViewController: UITableViewController {
     }
 }
 
-extension SearchUsersTableViewController: SearchUsersDelegate {
-    
-    func isSearchingUsers(_ isSearching: Bool) {
-        self.isSearchingUsers = isSearching
-        self.tableView.reloadData()
-    }
-    
-    func showUsers(_ users: [User], showAllUsers: Bool) {
-        self.users = users
-        self.showAllUsers = showAllUsers
-        self.tableView.reloadData()
-        
-        for (index, user) in users.enumerated() {
-            if let profilePicUrl = user.profilePicUrl {
-                let indexPath = IndexPath(row: index, section: 0)
-                self.downloadImage(profilePicUrl, imageType: ImageType.userProfilePic, indexPath: indexPath)
-            }
-        }
-    }
-}
+//extension SearchUsersTableViewController: SearchUsersDelegate {
+//    
+//    func isSearchingUsers(_ isSearching: Bool) {
+//        self.isSearchingUsers = isSearching
+//        self.tableView.reloadData()
+//    }
+//    
+//    func showUsers(_ users: [User], showAllUsers: Bool) {
+//        self.users = users
+//        self.showAllUsers = showAllUsers
+//        self.tableView.reloadData()
+//        
+//        for (index, user) in users.enumerated() {
+//            if let profilePicUrl = user.profilePicUrl {
+//                let indexPath = IndexPath(row: index, section: 0)
+//                self.downloadImage(profilePicUrl, imageType: ImageType.userProfilePic, indexPath: indexPath)
+//            }
+//        }
+//    }
+//}

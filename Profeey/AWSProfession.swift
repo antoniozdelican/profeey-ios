@@ -13,7 +13,6 @@ class AWSProfession: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     
     var _professionName: String?
     var _numberOfUsers: NSNumber?
-    var _searchProfessionName: String?
     var _creationDate: NSNumber?
     
     class func dynamoDBTableName() -> String {
@@ -30,7 +29,6 @@ class AWSProfession: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
         return [
             "_professionName" : "professionName",
             "_numberOfUsers" : "numberOfUsers",
-            "_searchProfessionName" : "searchProfessionName",
             "_creationDate" : "creationDate",
         ]
     }
