@@ -69,7 +69,6 @@ protocol DynamoDBManager {
     // MARK: Categories
     
     func scanCategoriesDynamoDB(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
-//    func scanCategoriesByCategoryNameDynamoDB(_ searchCategoryName: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
     
     // MARK: Professions
     

@@ -51,18 +51,4 @@ class AWSCategoriesTable: NSObject, Table {
 //        scanExpression.limit = 10
         objectMapper.scan(AWSCategory.self, expression: scanExpression, completionHandler: completionHandler)
     }
-    
-    func scanCategoriesByCategoryName(_ searchCategoryName: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
-        let objectMapper = AWSDynamoDBObjectMapper.default()
-        let scanExpression = AWSDynamoDBScanExpression()
-        scanExpression.filterExpression = "begins_with(#searchCategoryName, :searchCategoryName)"
-        scanExpression.expressionAttributeNames = [
-            "#searchCategoryName": "searchCategoryName",
-        ]
-        scanExpression.expressionAttributeValues = [
-            ":searchCategoryName": searchCategoryName,
-        ]
-//        scanExpression.limit = 10
-        objectMapper.scan(AWSCategory.self, expression: scanExpression, completionHandler: completionHandler)
-    }
 }

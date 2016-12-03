@@ -175,7 +175,7 @@ class CategoriesTableViewController: UITableViewController {
                         return
                     }
                     for awsCategory in awsCategories {
-                        let category = Category(categoryName: awsCategory._categoryName, searchCategoryName: awsCategory._searchCategoryName, numberOfPosts: awsCategory._numberOfPosts)
+                        let category = Category(categoryName: awsCategory._categoryName, numberOfPosts: awsCategory._numberOfPosts)
                         self.allCategories.append(category)
                     }
                     self.categories = self.allCategories
@@ -190,7 +190,7 @@ class CategoriesTableViewController: UITableViewController {
     fileprivate func filterCategories(_ searchText: String) {
         self.searchedCategories = self.allCategories.filter({
             (category: Category) in
-            if let searchCategoryName = category.searchCategoryName, searchCategoryName.hasPrefix(searchText.lowercased()) {
+            if let searchCategoryName = category.categoryName?.lowercased(), searchCategoryName.hasPrefix(searchText.lowercased()) {
                 return true
             } else {
                 return false
