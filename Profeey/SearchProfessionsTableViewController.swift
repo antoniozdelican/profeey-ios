@@ -30,7 +30,7 @@ class SearchProfessionsTableViewController: UITableViewController {
         self.tableView.register(UINib(nibName: "SearchTableSectionHeader", bundle: nil), forHeaderFooterViewReuseIdentifier: "searchTableSectionHeader")
         
         self.isSearchingProfessions = true
-        self.scanProfessions()
+        self.getAllProfessions()
     }
 
     override func didReceiveMemoryWarning() {
@@ -134,26 +134,23 @@ class SearchProfessionsTableViewController: UITableViewController {
     
     // MARK: AWS
     
-    fileprivate func scanProfessions() {
+    fileprivate func getAllProfessions() {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().scanProfessionsDynamoDB({
-            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
+        PRFYCloudSearchProxyClient.defaultClient().getAllProfessions().continue({
+            (task: AWSTask) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 self.isSearchingProfessions = false
-                //self.searchProfessionsDelegate?.isSearchingProfessions(false)
-                if let error = error {
-                    print("scanProfessions error: \(error)")
+                if let error = task.error {
+                    print("getAllProfessions error: \(error)")
                     self.tableView.reloadData()
-                    //self.searchProfessionsDelegate?.showProfessions(self.professions, showAllProfessions: true)
                 } else {
-                    guard let awsProfessions = response?.items as? [AWSProfession] else {
+                    guard let cloudSearchProfessionsResult = task.result as? PRFYCloudSearchProfessionsResult, let cloudSearchProfessions = cloudSearchProfessionsResult.professions else {
                         self.tableView.reloadData()
-                        //self.searchProfessionsDelegate?.showProfessions(self.professions, showAllProfessions: true)
                         return
                     }
-                    for awsProfession in awsProfessions {
-                        let profession = Profession(professionName: awsProfession._professionName, numberOfUsers: awsProfession._numberOfUsers)
+                    for cloudSearchProfession in cloudSearchProfessions {
+                        let profession = Profession(professionName: cloudSearchProfession.professionName, numberOfUsers: cloudSearchProfession.numberOfUsers)
                         self.professions.append(profession)
                     }
                     self.tableView.reloadData()
@@ -167,6 +164,7 @@ class SearchProfessionsTableViewController: UITableViewController {
 //                    }
                 }
             })
+            return nil
         })
     }
 }

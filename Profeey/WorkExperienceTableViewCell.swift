@@ -22,13 +22,12 @@ class WorkExperienceTableViewCell: UITableViewCell {
     // Used in ProfileVc for custom separator.
     @IBOutlet weak var separatorViewLeftConstraint: NSLayoutConstraint?
     
-    
     var workExperienceTableViewCellDelegate: WorkExperienceTableViewCellDelegate?
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        self.workExperienceImageView.layer.cornerRadius = 4.0
-        self.workExperienceImageView.clipsToBounds = true
+//        self.workExperienceImageView.layer.cornerRadius = 4.0
+//        self.workExperienceImageView.clipsToBounds = true
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

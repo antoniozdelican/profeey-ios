@@ -45,6 +45,7 @@
 		A930BC861D0DD43F004D49F7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A930BC841D0DD43F004D49F7 /* LaunchScreen.storyboard */; };
 		A930BCA61D0DD61A004D49F7 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = A930BCA51D0DD61A004D49F7 /* libsqlite3.tbd */; };
 		A930BCA81D0DD623004D49F7 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = A930BCA71D0DD623004D49F7 /* libz.tbd */; };
+		A941CB6B1DF3445700343802 /* PRFYCloudSearchUsersResultItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A941CB6A1DF3445700343802 /* PRFYCloudSearchUsersResultItem.swift */; };
 		A944BAAA1DD10323000BE754 /* HomeEmptyFeedView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A944BAA91DD10323000BE754 /* HomeEmptyFeedView.xib */; };
 		A944BAAC1DD10413000BE754 /* HomeEmptyFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A944BAAB1DD10413000BE754 /* HomeEmptyFeedView.swift */; };
 		A945973E1DA7E463006A4C9B /* AlbumButton.xib in Resources */ = {isa = PBXBuildFile; fileRef = A945973D1DA7E463006A4C9B /* AlbumButton.xib */; };
@@ -160,6 +161,7 @@
 		A9B7A2441D65A562009DA340 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B7A2431D65A562009DA340 /* Category.swift */; };
 		A9B7A24A1D65D8C0009DA340 /* HomeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B7A2491D65D8C0009DA340 /* HomeTableViewController.swift */; };
 		A9B934B01D1BD9BB00ACC2B8 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B934AF1D1BD9BB00ACC2B8 /* OnboardingViewController.swift */; };
+		A9BB32211DF34228005233F3 /* PRFYCloudSearchUsersResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9BB32201DF34228005233F3 /* PRFYCloudSearchUsersResult.swift */; };
 		A9BCBDC11DDAF95F00265AFA /* RecommendationsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9BCBDC01DDAF95F00265AFA /* RecommendationsTableViewController.swift */; };
 		A9BCBDC31DDAF97200265AFA /* RecommendationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9BCBDC21DDAF97200265AFA /* RecommendationTableViewCell.swift */; };
 		A9BCBDC51DDAFA0F00265AFA /* Recommendation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9BCBDC41DDAFA0F00265AFA /* Recommendation.swift */; };
@@ -298,6 +300,7 @@
 		A930BC871D0DD43F004D49F7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A930BCA51D0DD61A004D49F7 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		A930BCA71D0DD623004D49F7 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		A941CB6A1DF3445700343802 /* PRFYCloudSearchUsersResultItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PRFYCloudSearchUsersResultItem.swift; sourceTree = "<group>"; };
 		A944BAA91DD10323000BE754 /* HomeEmptyFeedView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HomeEmptyFeedView.xib; sourceTree = "<group>"; };
 		A944BAAB1DD10413000BE754 /* HomeEmptyFeedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeEmptyFeedView.swift; sourceTree = "<group>"; };
 		A945973D1DA7E463006A4C9B /* AlbumButton.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AlbumButton.xib; sourceTree = "<group>"; };
@@ -407,6 +410,7 @@
 		A9B7A2491D65D8C0009DA340 /* HomeTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeTableViewController.swift; sourceTree = "<group>"; };
 		A9B934AF1D1BD9BB00ACC2B8 /* OnboardingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		A9B977281DE3750B00D37E5B /* Profeey.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Profeey.entitlements; sourceTree = "<group>"; };
+		A9BB32201DF34228005233F3 /* PRFYCloudSearchUsersResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PRFYCloudSearchUsersResult.swift; sourceTree = "<group>"; };
 		A9BCBDC01DDAF95F00265AFA /* RecommendationsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecommendationsTableViewController.swift; sourceTree = "<group>"; };
 		A9BCBDC21DDAF97200265AFA /* RecommendationTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecommendationTableViewCell.swift; sourceTree = "<group>"; };
 		A9BCBDC41DDAFA0F00265AFA /* Recommendation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Recommendation.swift; sourceTree = "<group>"; };
@@ -1188,6 +1192,8 @@
 			children = (
 				A9A202FC1DDF9DDF00408574 /* AWSApiGatewayBridge.h */,
 				A9A202F11DDF7F7100408574 /* PRFYCloudSearchProxyClient.swift */,
+				A9BB32201DF34228005233F3 /* PRFYCloudSearchUsersResult.swift */,
+				A941CB6A1DF3445700343802 /* PRFYCloudSearchUsersResultItem.swift */,
 				A9F345921DE0C81800A5D368 /* PRFYCloudSearchProfessionsResult.swift */,
 				A9F345901DE0C80D00A5D368 /* PRFYCloudSearchProfessionsResultItem.swift */,
 			);
@@ -1452,11 +1458,13 @@
 				A9AFFB0F1D8AFF1800219627 /* CategoryTableViewCell.swift in Sources */,
 				A9AA36351D945DE200E5EAFA /* OnboardingNavigationController.swift in Sources */,
 				A97DBEED1DF16BD400A9F4FE /* SearchViewController.swift in Sources */,
+				A9BB32211DF34228005233F3 /* PRFYCloudSearchUsersResult.swift in Sources */,
 				A999CD3F1DBE6F9F00E7ADB1 /* SearchProfessionsTableViewController.swift in Sources */,
 				A918284B1DC1233400EC9E63 /* SearchLocationTableViewCell.swift in Sources */,
 				A99B9E311DB53E370047360D /* Education.swift in Sources */,
 				A9D962291DE77180008EA0DF /* AWSMobileClient.swift in Sources */,
 				A9B6A89F1D7F8063001EE407 /* PostUserTableViewCell.swift in Sources */,
+				A941CB6B1DF3445700343802 /* PRFYCloudSearchUsersResultItem.swift in Sources */,
 				A903EB571D16A39700B33025 /* LLSimpleCamera.m in Sources */,
 				A95EB85B1D8FBE870039E51D /* DateTableViewCell.swift in Sources */,
 				A9C8081A1D916C590018109C /* EditLastNameTableViewCell.swift in Sources */,

@@ -44,9 +44,9 @@ class HomeTableViewController: UITableViewController {
         self.homeEmptyFeedView.homeEmptyFeedViewDelegate = self
         
         if AWSIdentityManager.defaultIdentityManager().isLoggedIn {
-            self.isLoadingPosts = true
-            self.activityIndicatorView?.startAnimating()
-            self.queryUserActivitiesDateSorted()
+//            self.isLoadingPosts = true
+//            self.activityIndicatorView?.startAnimating()
+//            self.queryUserActivitiesDateSorted()
         }
     }
     

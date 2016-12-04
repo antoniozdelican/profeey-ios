@@ -11,16 +11,19 @@ import AWSMobileHubHelper
 import AWSAPIGateway
 
 class PRFYCloudSearchProxyClient: AWSAPIGatewayClient {
-    
+
     static let AWSInfoClientKey = "PRFYCloudSearchProxyClient"
     private static let _serviceClients = AWSSynchronizedMutableDictionary()
     
     fileprivate static var sharedInstance: PRFYCloudSearchProxyClient!
-    static func defaultClient() -> PRFYCloudSearchProxyClient {
-        if sharedInstance == nil {
-            sharedInstance = PRFYCloudSearchProxyClient(configuration: AWSServiceManager.default().defaultServiceConfiguration)
-        }
+    class func defaultClient() -> PRFYCloudSearchProxyClient {
+        let serviceConfiguration = AWSServiceConfiguration(region: AWSCloudLogicDefaultRegion, credentialsProvider: AWSIdentityManager.defaultIdentityManager().credentialsProvider)
+        sharedInstance = PRFYCloudSearchProxyClient(configuration: serviceConfiguration!)
         return sharedInstance
+    }
+    
+    class func registerClientWithConfiguration(configuration: AWSServiceConfiguration, forKey key: NSString){
+        self._serviceClients.setObject(PRFYCloudSearchProxyClient(configuration: configuration), forKey: key)
     }
     
     init(configuration: AWSServiceConfiguration) {
@@ -41,14 +44,10 @@ class PRFYCloudSearchProxyClient: AWSAPIGatewayClient {
         self.configuration.requestInterceptors = [AWSNetworkingRequestInterceptor(), signer]
     }
     
-    /*
-     
-     @param q
-     
-     return type: PRFYCloudSearchProfessionsResult
-     */
+    // MARK: Users
     
-    public func rootGet(q: String?) -> AWSTask<AnyObject> {
+    // Get users based on namePrefix (firstName or lastName or preferredUsername), sorted by numberOfRecommendations.
+    public func getUsers(namePrefix: String) -> AWSTask<AnyObject> {
         let headerParameters = [
             "Content-Type": "application/json",
             "Accept": "application/json",
@@ -56,11 +55,69 @@ class PRFYCloudSearchProxyClient: AWSAPIGatewayClient {
             ]
         
         var queryParameters: [String:AnyObject] = [:]
-        queryParameters["q"] = q as AnyObject?
+        queryParameters["q"] = "(or (prefix field=firstname '" + namePrefix + "') (prefix field=lastname '" + namePrefix + "') (prefix field=preferredusername '" + namePrefix + "'))" as AnyObject?
+        queryParameters["sort"] = "numberofrecommendations desc" as AnyObject?
+        queryParameters["q.parser"] = "structured" as AnyObject?
         
         let pathParameters: [String:AnyObject] = [:]
         
-        return self.invokeHTTPRequest("GET", urlString: "/", pathParameters: pathParameters, queryParameters: queryParameters, headerParameters: headerParameters, body: nil, responseClass: PRFYCloudSearchProfessionsResult.self)
+        return self.invokeHTTPRequest("GET", urlString: "/users", pathParameters: pathParameters, queryParameters: queryParameters, headerParameters: headerParameters, body: nil, responseClass: PRFYCloudSearchUsersResult.self)
+    }
+    
+    // Get top 10 (matchall) users, sorted by numberOfRecommendations.
+    public func getAllUsers() -> AWSTask<AnyObject> {
+        let headerParameters = [
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            
+            ]
+        
+        var queryParameters: [String:AnyObject] = [:]
+        queryParameters["q"] = "matchall" as AnyObject?
+        queryParameters["sort"] = "numberofrecommendations desc" as AnyObject?
+        queryParameters["q.parser"] = "structured" as AnyObject?
+        
+        let pathParameters: [String:AnyObject] = [:]
+        
+        return self.invokeHTTPRequest("GET", urlString: "/users", pathParameters: pathParameters, queryParameters: queryParameters, headerParameters: headerParameters, body: nil, responseClass: PRFYCloudSearchUsersResult.self)
+    }
+    
+    // MARK: Professions
+    
+    // Get professions based on namePrefix, sorted by numberOfUsers.
+    public func getProfessions(namePrefix: String) -> AWSTask<AnyObject> {
+        let headerParameters = [
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            
+            ]
+        
+        var queryParameters: [String:AnyObject] = [:]
+        queryParameters["q"] = "(prefix field=professionName '" + namePrefix + "')" as AnyObject?
+        queryParameters["sort"] = "numberofusers desc" as AnyObject?
+        queryParameters["q.parser"] = "structured" as AnyObject?
+        
+        let pathParameters: [String:AnyObject] = [:]
+        
+        return self.invokeHTTPRequest("GET", urlString: "/professions", pathParameters: pathParameters, queryParameters: queryParameters, headerParameters: headerParameters, body: nil, responseClass: PRFYCloudSearchProfessionsResult.self)
+    }
+    
+    // Get top 10 (matchall) professions, sorted by numberOfUsers.
+    public func getAllProfessions() -> AWSTask<AnyObject> {
+        let headerParameters = [
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            
+            ]
+        
+        var queryParameters: [String:AnyObject] = [:]
+        queryParameters["q"] = "matchall" as AnyObject?
+        queryParameters["sort"] = "numberofusers desc" as AnyObject?
+        queryParameters["q.parser"] = "structured" as AnyObject?
+        
+        let pathParameters: [String:AnyObject] = [:]
+        
+        return self.invokeHTTPRequest("GET", urlString: "/professions", pathParameters: pathParameters, queryParameters: queryParameters, headerParameters: headerParameters, body: nil, responseClass: PRFYCloudSearchProfessionsResult.self)
     }
 }
 

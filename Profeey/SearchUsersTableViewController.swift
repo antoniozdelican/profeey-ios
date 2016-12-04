@@ -30,7 +30,7 @@ class SearchUsersTableViewController: UITableViewController {
         self.tableView.register(UINib(nibName: "SearchTableSectionHeader", bundle: nil), forHeaderFooterViewReuseIdentifier: "searchTableSectionHeader")
         
         self.isSearchingUsers = true
-        self.scanUsers()
+        self.getAllUsers()
     }
 
     override func didReceiveMemoryWarning() {
@@ -97,7 +97,6 @@ class SearchUsersTableViewController: UITableViewController {
         let cell = tableView.cellForRow(at: indexPath)
         if cell is SearchUserTableViewCell {
             self.performSegue(withIdentifier: "segueToProfileVc", sender: indexPath)
-            //self.searchUsersTableViewControllerDelegate?.didSelectUser(indexPath)
         }
     }
     
@@ -140,25 +139,23 @@ class SearchUsersTableViewController: UITableViewController {
     
     // MARK: AWS
     
-    fileprivate func scanUsers() {
+    fileprivate func getAllUsers() {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().scanUsersDynamoDB({
-            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
+        PRFYCloudSearchProxyClient.defaultClient().getAllUsers().continue({
+            (task: AWSTask) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 self.isSearchingUsers = false
-                if let error = error {
-                    print("scanUsers error: \(error)")
+                if let error = task.error {
+                    print("getUsersAll error: \(error)")
                     self.tableView.reloadData()
-                    //self.searchUsersDelegate?.showUsers(self.users, showAllUsers: true)
                 } else {
-                    guard let awsUsers = response?.items as? [AWSUser] else {
+                    guard let cloudSearchUsersResult = task.result as? PRFYCloudSearchUsersResult, let cloudSearchUsers = cloudSearchUsersResult.users else {
                         self.tableView.reloadData()
-                        //self.searchUsersDelegate?.showUsers(self.users, showAllUsers: true)
                         return
                     }
-                    for awsUser in awsUsers {
-                        let user = User(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationName: awsUser._locationName)
+                    for cloudSearchUser in cloudSearchUsers {
+                        let user = User(userId: cloudSearchUser.userId, firstName: cloudSearchUser.firstName, lastName: cloudSearchUser.lastName, preferredUsername: cloudSearchUser.preferredUsername, professionName: cloudSearchUser.professionName, profilePicUrl: cloudSearchUser.profilePicUrl, locationName: cloudSearchUser.locationName)
                         self.users.append(user)
                     }
                     self.tableView.reloadData()
@@ -179,6 +176,7 @@ class SearchUsersTableViewController: UITableViewController {
 //                    }
                 }
             })
+            return nil
         })
     }
     

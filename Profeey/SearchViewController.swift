@@ -35,7 +35,7 @@ class SearchViewController: UIViewController {
         self.navigationItem.titleView = self.searchBar
         
         // BarButtonItem
-        self.locationBarButtonItem = UIBarButtonItem(image: UIImage(named: "ic_location_black"), style: UIBarButtonItemStyle.plain, target: nil, action: nil)
+        self.locationBarButtonItem = UIBarButtonItem(image: UIImage(named: "ic_location_off")?.withRenderingMode(UIImageRenderingMode.alwaysOriginal), style: UIBarButtonItemStyle.plain, target: nil, action: nil)
         self.navigationItem.setRightBarButton(self.locationBarButtonItem, animated: true)
         
         // ScrollView

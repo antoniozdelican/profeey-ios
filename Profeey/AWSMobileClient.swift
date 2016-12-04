@@ -112,6 +112,9 @@ class AWSMobileClient: NSObject {
         // Set up cognito user pool.
         self.setupUserPool()
         
+        // Set up Cloud Logic API invocation clients.
+        self.setupCloudLogicAPI()
+        
         var didFinishLaunching: Bool = AWSIdentityManager.defaultIdentityManager().interceptApplication(application, didFinishLaunchingWithOptions: launchOptions)
         didFinishLaunching = didFinishLaunching && AWSPushManager.defaultPushManager().interceptApplication(application, didFinishLaunchingWithOptions: launchOptions)
         
@@ -131,7 +134,11 @@ class AWSMobileClient: NSObject {
         AWSCognitoUserPoolsSignInProvider.setupUserPool(withId: AWSCognitoUserPoolId, cognitoIdentityUserPoolAppClientId: AWSCognitoUserPoolAppClientId, cognitoIdentityUserPoolAppClientSecret: AWSCognitoUserPoolClientSecret, region: AWSCognitoUserPoolRegion)
         
         AWSSignInProviderFactory.sharedInstance().registerAWSSign(AWSCognitoUserPoolsSignInProvider.sharedInstance(), forKey:AWSCognitoUserPoolsSignInProviderKey)
-        
+    }
+    
+    fileprivate func setupCloudLogicAPI() {
+        let serviceConfiguration = AWSServiceConfiguration(region: AWSCloudLogicDefaultRegion, credentialsProvider: AWSIdentityManager.defaultIdentityManager().credentialsProvider)
+        PRFYCloudSearchProxyClient.registerClientWithConfiguration(configuration: serviceConfiguration!, forKey: AWSCloudLogicDefaultConfigurationKey as NSString)
     }
     
 }

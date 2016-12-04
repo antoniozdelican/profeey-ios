@@ -22,13 +22,12 @@ class EducationTableViewCell: UITableViewCell {
     // Used in ProfileVc for custom separator.
     @IBOutlet weak var separatorViewLeftConstraint: NSLayoutConstraint?
     
-    
     var educationTableViewCellDelegate: EducationTableViewCellDelegate?
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        self.educationImageView.layer.cornerRadius = 4.0
-        self.educationImageView.clipsToBounds = true
+//        self.educationImageView.layer.cornerRadius = 4.0
+//        self.educationImageView.clipsToBounds = true
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
