@@ -16,11 +16,13 @@ enum SearchSegmentType {
 protocol SearchUsersDelegate {
     func addLocation(_ locationName: String)
     func removeLocation()
+    func searchBarTextChanged(_ searchText: String)
 }
 
 protocol SearchProfessionsDelegate {
     func addLocation(_ locationName: String)
     func removeLocation()
+    func searchBarTextChanged(_ searchText: String)
 }
 
 class SearchViewController: UIViewController {
@@ -148,7 +150,8 @@ extension SearchViewController: UIScrollViewDelegate {
 extension SearchViewController: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        // TODO
+        self.searchUsersDelegate?.searchBarTextChanged(searchText)
+        self.searchProfessionsDelegate?.searchBarTextChanged(searchText)
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
@@ -156,6 +159,8 @@ extension SearchViewController: UISearchBarDelegate {
         searchBar.resignFirstResponder()
         searchBar.setShowsCancelButton(false, animated: true)
         self.navigationItem.setRightBarButton(self.locationBarButtonItem, animated: true)
+        self.searchUsersDelegate?.searchBarTextChanged("")
+        self.searchProfessionsDelegate?.searchBarTextChanged("")
     }
     
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {

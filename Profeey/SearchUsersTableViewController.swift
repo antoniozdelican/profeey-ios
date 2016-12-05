@@ -17,9 +17,14 @@ protocol SearchUsersTableViewControllerDelegate {
 class SearchUsersTableViewController: UITableViewController {
     
     var searchUsersTableViewControllerDelegate: SearchUsersTableViewControllerDelegate?
-    fileprivate var users: [User] = []
-//    fileprivate var showAllUsers: Bool = true
-    fileprivate var isSearchingUsers: Bool = false
+    // Popular users are 10 (20) most popular that are loaded immidiately.
+    // Regular users are the searched ones depending on searchBar text.
+    //fileprivate var users: [User] = []
+    fileprivate var popularUsers: [User] = []
+    fileprivate var regularUsers: [User] = []
+    fileprivate var isSearchingPopularUsers: Bool = false
+    fileprivate var isSearchingRegularUsers: Bool = false
+    fileprivate var isShowingPopularUsers: Bool = true
     
     fileprivate var isLocationActive: Bool = false
     fileprivate var locationName: String?
@@ -28,7 +33,8 @@ class SearchUsersTableViewController: UITableViewController {
         super.viewDidLoad()
         self.tableView.register(UINib(nibName: "SearchTableSectionHeader", bundle: nil), forHeaderFooterViewReuseIdentifier: "searchTableSectionHeader")
         
-        self.isSearchingUsers = true
+        self.isShowingPopularUsers = true
+        self.isSearchingPopularUsers = true
         self.getAllUsers()
     }
 
@@ -41,45 +47,90 @@ class SearchUsersTableViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destinationViewController = segue.destination as? ProfileTableViewController,
             let indexPath = sender as? IndexPath {
-            destinationViewController.user = self.users[indexPath.row]
+            destinationViewController.user = self.isShowingPopularUsers ? self.popularUsers[indexPath.row] : self.regularUsers[indexPath.row]
         }
     }
 
     // MARK: UITableViewDataSource
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return 2
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if self.isSearchingUsers {
-            return 1
+        switch section {
+        case 0:
+            guard self.isShowingPopularUsers else {
+                return 0
+            }
+            if self.isSearchingPopularUsers {
+                return 1
+            }
+            if self.popularUsers.count == 0 {
+                return 1
+            }
+            return self.popularUsers.count
+        case 1:
+            guard !self.isShowingPopularUsers else {
+                return 0
+            }
+            if self.isSearchingRegularUsers {
+                return 1
+            }
+            if self.regularUsers.count == 0 {
+                return 1
+            }
+            return self.regularUsers.count
+        default:
+            return 0
         }
-        if self.users.count == 0 {
-            return 1
-        }
-        return self.users.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if self.isSearchingUsers {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cellSearching", for: indexPath) as! SearchingTableViewCell
-            cell.activityIndicator.startAnimating()
+        switch indexPath.section {
+        case 0:
+            if self.isSearchingPopularUsers {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellSearching", for: indexPath) as! SearchingTableViewCell
+                cell.activityIndicator.startAnimating()
+                // TODO update text.
+                return cell
+            }
+            if self.popularUsers.count == 0 {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellNoResults", for: indexPath) as! NoResultsTableViewCell
+                return cell
+            }
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellSearchUser", for: indexPath) as! SearchUserTableViewCell
+            let user = self.popularUsers[indexPath.row]
+            cell.profilePicImageView.image = user.profilePic
+            cell.fullNameLabel.text = user.fullName
+            cell.preferredUsernameLabel.text = user.preferredUsername
+            cell.professionNameLabel.text = user.professionName
+            cell.locationNameLabel.text = user.locationName
+            cell.locationStackView.isHidden = user.locationName != nil ? false : true
             return cell
-        }
-        if self.users.count == 0 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cellNoResults", for: indexPath) as! NoResultsTableViewCell
+        case 1:
+            if self.isSearchingRegularUsers {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellSearching", for: indexPath) as! SearchingTableViewCell
+                cell.activityIndicator.startAnimating()
+                // TODO update text.
+                return cell
+            }
+            if self.regularUsers.count == 0 {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellNoResults", for: indexPath) as! NoResultsTableViewCell
+                return cell
+            }
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellSearchUser", for: indexPath) as! SearchUserTableViewCell
+            let user = self.regularUsers[indexPath.row]
+            cell.profilePicImageView.image = user.profilePic
+            cell.fullNameLabel.text = user.fullName
+            cell.preferredUsernameLabel.text = user.preferredUsername
+            cell.professionNameLabel.text = user.professionName
+            cell.locationNameLabel.text = user.locationName
+            cell.locationStackView.isHidden = user.locationName != nil ? false : true
             return cell
+        default:
+            return UITableViewCell()
         }
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cellSearchUser", for: indexPath) as! SearchUserTableViewCell
-        let user = self.users[indexPath.row]
-        cell.profilePicImageView.image = user.profilePic
-        cell.fullNameLabel.text = user.fullName
-        cell.preferredUsernameLabel.text = user.preferredUsername
-        cell.professionNameLabel.text = user.professionName
-        cell.locationNameLabel.text = user.locationName
-        cell.locationStackView.isHidden = user.locationName != nil ? false : true
-        return cell
     }
     
     // MARK: UITableViewDelegate
@@ -100,38 +151,89 @@ class SearchUsersTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        if self.isSearchingUsers {
-            return 64.0
+        switch indexPath.section {
+        case 0:
+            if self.isSearchingPopularUsers {
+                return 64.0
+            }
+            if self.popularUsers.count == 0 {
+                return 64.0
+            }
+            return 104.0
+        case 1:
+            if self.isSearchingRegularUsers {
+                return 64.0
+            }
+            if self.regularUsers.count == 0 {
+                return 64.0
+            }
+            return 104.0
+        default:
+            return 0.0
         }
-        if self.users.count == 0 {
-            return 64.0
-        }
-        return 104.0
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if self.isSearchingUsers {
-            return 64.0
+        switch indexPath.section {
+        case 0:
+            if self.isSearchingPopularUsers {
+                return 64.0
+            }
+            if self.popularUsers.count == 0 {
+                return 64.0
+            }
+            return UITableViewAutomaticDimension
+        case 1:
+            if self.isSearchingRegularUsers {
+                return 64.0
+            }
+            if self.regularUsers.count == 0 {
+                return 64.0
+            }
+            return UITableViewAutomaticDimension
+        default:
+            return 0.0
         }
-        if self.users.count == 0 {
-            return 64.0
-        }
-        return UITableViewAutomaticDimension
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let header = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "searchTableSectionHeader") as? SearchTableSectionHeader
-        var titleText = "POPULAR"
-        if self.isLocationActive, let locationName = self.locationName {
-            titleText = titleText + " in \(locationName)"
+        switch section {
+        case 0:
+            let header = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "searchTableSectionHeader") as? SearchTableSectionHeader
+            var titleText = "POPULAR"
+            if self.isLocationActive, let locationName = self.locationName {
+                titleText = titleText + " in \(locationName)"
+            }
+            header?.titleLabel.text = titleText
+            return header
+        case 1:
+            let header = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "searchTableSectionHeader") as? SearchTableSectionHeader
+            var titleText = "BEST MATCHES"
+            if self.isLocationActive, let locationName = self.locationName {
+                titleText = titleText + " in \(locationName)"
+            }
+            header?.titleLabel.text = titleText
+            return header
+        default:
+            return UIView()
         }
-        header?.titleLabel.text = titleText
-//        header?.titleLabel.text = self.showAllUsers ? "POPULAR" : "BEST MATCHES"
-        return header
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 32.0
+        switch section {
+        case 0:
+            guard self.isShowingPopularUsers else {
+                return 0.0
+            }
+            return 32.0
+        case 1:
+            guard !self.isShowingPopularUsers else {
+                return 0.0
+            }
+            return 32.0
+        default:
+            return 0.0
+        }
     }
     
     // MARK: UIScrollViewDelegate
@@ -148,9 +250,9 @@ class SearchUsersTableViewController: UITableViewController {
             (task: AWSTask) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                self.isSearchingUsers = false
+                self.isSearchingPopularUsers = false
                 if let error = task.error {
-                    print("getUsersAll error: \(error)")
+                    print("getAllUsers error: \(error)")
                     self.tableView.reloadData()
                 } else {
                     guard let cloudSearchUsersResult = task.result as? PRFYCloudSearchUsersResult, let cloudSearchUsers = cloudSearchUsersResult.users else {
@@ -159,33 +261,61 @@ class SearchUsersTableViewController: UITableViewController {
                     }
                     for cloudSearchUser in cloudSearchUsers {
                         let user = User(userId: cloudSearchUser.userId, firstName: cloudSearchUser.firstName, lastName: cloudSearchUser.lastName, preferredUsername: cloudSearchUser.preferredUsername, professionName: cloudSearchUser.professionName, profilePicUrl: cloudSearchUser.profilePicUrl, locationName: cloudSearchUser.locationName)
-                        self.users.append(user)
+                        self.popularUsers.append(user)
                     }
                     self.tableView.reloadData()
                     
-                    for (index, user) in self.users.enumerated() {
+                    for user in self.popularUsers {
                         if let profilePicUrl = user.profilePicUrl {
-                            let indexPath = IndexPath(row: index, section: 0)
-                            self.downloadImage(profilePicUrl, imageType: .userProfilePic, indexPath: indexPath)
+                            self.downloadProfilePic(profilePicUrl, isPopularUser: true)
                         }
                     }
-                    
-                    // If there is text already in text field, do the filter.
-//                    if let searchText = self.searchController?.searchBar.text, !searchText.isEmpty {
-//                        self.filterUsers(searchText)
-//                    } else {
-//                        self.users = self.allUsers
-//                        self.searchUsersDelegate?.showUsers(self.users, showAllUsers: true)
-//                    }
                 }
             })
             return nil
         })
     }
     
-    fileprivate func downloadImage(_ imageKey: String, imageType: ImageType, indexPath: IndexPath) {
+    fileprivate func getUsers(_ namePrefix: String) {
+        // TEST to cancel all tasks
+        // DANGER to cancel getAllUsers()
+        //PRFYCloudSearchProxyClient.defaultClient().session.invalidateAndCancel()
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        let content = AWSUserFileManager.defaultUserFileManager().content(withKey: imageKey)
+        PRFYCloudSearchProxyClient.defaultClient().getUsers(namePrefix: namePrefix).continue({
+            (task: AWSTask) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                self.isSearchingRegularUsers = false
+                if let error = task.error {
+                    print("getUsers error: \(error)")
+                    self.tableView.reloadData()
+                } else {
+                    guard let cloudSearchUsersResult = task.result as? PRFYCloudSearchUsersResult, let cloudSearchUsers = cloudSearchUsersResult.users else {
+                        self.tableView.reloadData()
+                        return
+                    }
+                    // Clear old.
+                    self.regularUsers = []
+                    for cloudSearchUser in cloudSearchUsers {
+                        let user = User(userId: cloudSearchUser.userId, firstName: cloudSearchUser.firstName, lastName: cloudSearchUser.lastName, preferredUsername: cloudSearchUser.preferredUsername, professionName: cloudSearchUser.professionName, profilePicUrl: cloudSearchUser.profilePicUrl, locationName: cloudSearchUser.locationName)
+                        self.regularUsers.append(user)
+                    }
+                    self.tableView.reloadData()
+                    
+                    for user in self.regularUsers {
+                        if let profilePicUrl = user.profilePicUrl {
+                            self.downloadProfilePic(profilePicUrl, isPopularUser: false)
+                        }
+                    }
+                }
+            })
+            return nil
+        })
+    }
+    
+    fileprivate func downloadProfilePic(_ profilePicUrl: String, isPopularUser: Bool) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        let content = AWSUserFileManager.defaultUserFileManager().content(withKey: profilePicUrl)
         // TODO check if content.isImage()
         if content.isCached {
             print("Content cached:")
@@ -193,14 +323,27 @@ class SearchUsersTableViewController: UITableViewController {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
             })
             let image = UIImage(data: content.cachedData)
-            switch imageType {
-            case .userProfilePic:
-                self.users[indexPath.row].profilePic = image
-                UIView.performWithoutAnimation {
-                    self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
+            if isPopularUser {
+                // Need to check if user exists because of autocomplete search.
+                guard let userIndex = self.popularUsers.index(where: { $0.profilePicUrl == profilePicUrl }) else {
+                    return
                 }
-            default:
-                return
+                self.popularUsers[userIndex].profilePic = image
+                if self.isShowingPopularUsers {
+                    UIView.performWithoutAnimation {
+                        self.tableView.reloadRows(at: [IndexPath(row: userIndex, section: 0)], with: UITableViewRowAnimation.none)
+                    }
+                }
+            } else {
+                guard let userIndex = self.regularUsers.index(where: { $0.profilePicUrl == profilePicUrl }) else {
+                    return
+                }
+                self.regularUsers[userIndex].profilePic = image
+                if !self.isShowingPopularUsers {
+                    UIView.performWithoutAnimation {
+                        self.tableView.reloadRows(at: [IndexPath(row: userIndex, section: 1)], with: UITableViewRowAnimation.none)
+                    }
+                }
             }
         } else {
             print("Download content:")
@@ -222,14 +365,26 @@ class SearchUsersTableViewController: UITableViewController {
                                 return
                             }
                             let image = UIImage(data: imageData)
-                            switch imageType {
-                            case .userProfilePic:
-                                self.users[indexPath.row].profilePic = image
-                                UIView.performWithoutAnimation {
-                                    self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
+                            if isPopularUser {
+                                guard let userIndex = self.popularUsers.index(where: { $0.profilePicUrl == profilePicUrl }) else {
+                                    return
                                 }
-                            default:
-                                return
+                                self.popularUsers[userIndex].profilePic = image
+                                if self.isShowingPopularUsers {
+                                    UIView.performWithoutAnimation {
+                                        self.tableView.reloadRows(at: [IndexPath(row: userIndex, section: 0)], with: UITableViewRowAnimation.none)
+                                    }
+                                }
+                            } else {
+                                guard let userIndex = self.regularUsers.index(where: { $0.profilePicUrl == profilePicUrl }) else {
+                                    return
+                                }
+                                self.regularUsers[userIndex].profilePic = image
+                                if !self.isShowingPopularUsers {
+                                    UIView.performWithoutAnimation {
+                                        self.tableView.reloadRows(at: [IndexPath(row: userIndex, section: 1)], with: UITableViewRowAnimation.none)
+                                    }
+                                }
                             }
                         }
                     })
@@ -250,5 +405,23 @@ extension SearchUsersTableViewController: SearchUsersDelegate {
         self.locationName = nil
         self.isLocationActive = false
         self.tableView.reloadData()
+    }
+    
+    func searchBarTextChanged(_ searchText: String) {
+        if searchText.trimm().isEmpty {
+            self.isShowingPopularUsers = true
+            // Clear old.
+            self.regularUsers = []
+            self.isSearchingRegularUsers = false
+            self.tableView.reloadData()
+        } else {
+            self.isShowingPopularUsers = false
+            // Clear old.
+            self.regularUsers = []
+            self.isSearchingRegularUsers = true
+            self.tableView.reloadData()
+            // Start search.
+            self.getUsers(searchText)
+        }
     }
 }

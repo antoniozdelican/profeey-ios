@@ -186,4 +186,9 @@ extension SearchProfessionsTableViewController: SearchProfessionsDelegate {
         self.isLocationActive = false
         self.tableView.reloadData()
     }
+    
+    func searchBarTextChanged(_ searchText: String) {
+        print("professions:")
+        print(searchText)
+    }
 }
