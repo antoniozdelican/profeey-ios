@@ -423,4 +423,8 @@ extension SearchUsersTableViewController: SearchUsersDelegate {
             self.getUsers(searchText)
         }
     }
+    
+    func scrollToTop() {
+        self.tableView.setContentOffset(CGPoint.zero, animated: true)
+    }
 }

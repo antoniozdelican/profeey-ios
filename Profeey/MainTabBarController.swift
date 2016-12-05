@@ -197,4 +197,24 @@ extension MainTabBarController: UITabBarControllerDelegate {
         }
         return true
     }
+    
+    func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
+        guard let navigationController = viewController as? UINavigationController else {
+            return
+        }
+        if let childViewController = navigationController.childViewControllers[0] as? HomeTableViewController, tabBarController.selectedIndex == 0 {
+            childViewController.navigationController?.setNavigationBarHidden(false, animated: true)
+            // Offset is 1.0 on y due to the inset of -1.0 and upper separator.
+            childViewController.tableView.setContentOffset(CGPoint(x: 0.0, y: 1.0), animated: true)
+        }
+        if let childViewController = navigationController.childViewControllers[0] as? SearchViewController, tabBarController.selectedIndex == 1 {
+            childViewController.searchTabBarButtonTapped()
+        }
+        if let childViewController = navigationController.childViewControllers[0] as? NotificationsTableViewController, tabBarController.selectedIndex == 2 {
+            childViewController.tableView.setContentOffset(CGPoint.zero, animated: true)
+        }
+        if let childViewController = navigationController.childViewControllers[0] as? ProfileTableViewController, tabBarController.selectedIndex == 3 {
+            childViewController.tableView.setContentOffset(CGPoint.zero, animated: true)
+        }
+    }
 }

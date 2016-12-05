@@ -317,6 +317,12 @@ extension SearchProfessionsTableViewController: SearchProfessionsDelegate {
             self.tableView.reloadData()
             // Start search.
             self.getProfessions(searchText)
+            
+            // TODO filter local professions.
         }
+    }
+    
+    func scrollToTop() {
+        self.tableView.setContentOffset(CGPoint.zero, animated: true)
     }
 }

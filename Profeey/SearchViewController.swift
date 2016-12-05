@@ -17,12 +17,14 @@ protocol SearchUsersDelegate {
     func addLocation(_ locationName: String)
     func removeLocation()
     func searchBarTextChanged(_ searchText: String)
+    func scrollToTop()
 }
 
 protocol SearchProfessionsDelegate {
     func addLocation(_ locationName: String)
     func removeLocation()
     func searchBarTextChanged(_ searchText: String)
+    func scrollToTop()
 }
 
 class SearchViewController: UIViewController {
@@ -103,6 +105,12 @@ class SearchViewController: UIViewController {
         } else {
             self.performSegue(withIdentifier: "segueToLocationsVc", sender: self)
         }
+    }
+    
+    // From MainTabBarController to scroll to top.
+    func searchTabBarButtonTapped() {
+        self.searchUsersDelegate?.scrollToTop()
+        self.searchProfessionsDelegate?.scrollToTop()
     }
     
     // MARK: IBActions
