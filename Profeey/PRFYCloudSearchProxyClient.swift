@@ -93,7 +93,7 @@ class PRFYCloudSearchProxyClient: AWSAPIGatewayClient {
             ]
         
         var queryParameters: [String:AnyObject] = [:]
-        queryParameters["q"] = "(prefix field=professionName '" + namePrefix + "')" as AnyObject?
+        queryParameters["q"] = "(prefix field=professionname '" + namePrefix + "')" as AnyObject?
         queryParameters["sort"] = "numberofusers desc" as AnyObject?
         queryParameters["q.parser"] = "structured" as AnyObject?
         

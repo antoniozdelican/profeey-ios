@@ -22,14 +22,14 @@ public class PRFYCloudSearchProfessionsResultItem : AWSModel {
     
     // not using id because id in DynamoDB is professionName
     var id: String?
-    // numberOfUsers is truly optional
-    var numberOfUsers: NSNumber?
+    
     var professionName: String?
+    var numberOfUsers: NSNumber?
     
    	override public class func jsonKeyPathsByPropertyKey() -> [AnyHashable: Any] {
         return [
-            "numberOfUsers" : "numberOfUsers",
             "professionName" : "professionName",
+            "numberOfUsers" : "numberOfUsers",
         ]
 	}
 }

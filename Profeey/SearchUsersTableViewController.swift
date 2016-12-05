@@ -19,7 +19,6 @@ class SearchUsersTableViewController: UITableViewController {
     var searchUsersTableViewControllerDelegate: SearchUsersTableViewControllerDelegate?
     // Popular users are 10 (20) most popular that are loaded immidiately.
     // Regular users are the searched ones depending on searchBar text.
-    //fileprivate var users: [User] = []
     fileprivate var popularUsers: [User] = []
     fileprivate var regularUsers: [User] = []
     fileprivate var isSearchingPopularUsers: Bool = false
