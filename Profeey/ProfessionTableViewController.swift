@@ -13,7 +13,8 @@ import AWSDynamoDB
 class ProfessionTableViewController: UITableViewController {
     
     var profession: Profession?
-    fileprivate var locationName: String?
+    var isLocationActive: Bool = false
+    var locationName: String?
     
     fileprivate var users: [User] = []
     fileprivate var allUsers: [User] = []
@@ -23,6 +24,7 @@ class ProfessionTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        self.tableView.register(UINib(nibName: "SearchTableSectionHeader", bundle: nil), forHeaderFooterViewReuseIdentifier: "searchTableSectionHeader")
         
         self.navigationItem.title = self.profession?.professionName
         if let professionName = self.profession?.professionName {
@@ -42,72 +44,43 @@ class ProfessionTableViewController: UITableViewController {
             let indexPath = sender as? IndexPath {
             destinationViewController.user = self.users[indexPath.row]
         }
-        if let navigationController = segue.destination as? UINavigationController,
-            let childViewController = navigationController.childViewControllers[0] as? LocationsTableViewController {
-            childViewController.locationsTableViewControllerDelegate = self
-        }
     }
 
     // MARK: UITableViewDataSource
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return 1
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch section {
-        case 0:
+        if self.isSearchingUsers {
             return 1
-        case 1:
-            if self.isSearchingUsers {
-                return 1
-            }
-            if self.users.count == 0 {
-                return 1
-            }
-            return self.users.count
-        default:
-            return 0
         }
+        if self.users.count == 0 {
+            return 1
+        }
+        return self.users.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        switch indexPath.section {
-        case 0:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cellAddLocation", for: indexPath) as! AddLocationTableViewCell
-            if self.locationName != nil {
-                cell.locationNameLabel.text = self.locationName
-                cell.setActiveLocation()
-                cell.clearButton.isHidden = false
-            } else {
-                cell.locationNameLabel.text = "Add city..."
-                cell.setIncativeLocation()
-                cell.clearButton.isHidden = true
-            }
-            cell.addLocationTableViewCellDelegate = self
+        if self.isSearchingUsers {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellSearching", for: indexPath) as! SearchingTableViewCell
+            cell.activityIndicator.startAnimating()
             return cell
-        case 1:
-            if self.isSearchingUsers {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "cellSearching", for: indexPath) as! SearchingTableViewCell
-                cell.activityIndicator.startAnimating()
-                return cell
-            }
-            if self.users.count == 0 {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "cellNoResults", for: indexPath) as! NoResultsTableViewCell
-                return cell
-            }
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cellSearchUser", for: indexPath) as! SearchUserTableViewCell
-            let user = self.users[indexPath.row]
-            cell.profilePicImageView.image = user.profilePic
-            cell.fullNameLabel.text = user.fullName
-            cell.preferredUsernameLabel.text = user.preferredUsername
-            cell.professionNameLabel.text = user.professionName
-            cell.locationNameLabel.text = user.locationName
-            cell.locationStackView.isHidden = user.locationName != nil ? false : true
-            return cell
-        default:
-            return UITableViewCell()
         }
+        if self.users.count == 0 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellNoResults", for: indexPath) as! NoResultsTableViewCell
+            return cell
+        }
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cellSearchUser", for: indexPath) as! SearchUserTableViewCell
+        let user = self.users[indexPath.row]
+        cell.profilePicImageView.image = user.profilePic
+        cell.fullNameLabel.text = user.fullName
+        cell.preferredUsernameLabel.text = user.preferredUsername
+        cell.professionNameLabel.text = user.professionName
+        cell.locationNameLabel.text = user.locationName
+        cell.locationStackView.isHidden = user.locationName != nil ? false : true
+        return cell
     }
     
     // MARK: UITableViewDelegate
@@ -125,43 +98,40 @@ class ProfessionTableViewController: UITableViewController {
         if cell is SearchUserTableViewCell {
             self.performSegue(withIdentifier: "segueToProfileVc", sender: indexPath)
         }
-        if cell is AddLocationTableViewCell {
-            self.performSegue(withIdentifier: "segueToLocationsVc", sender: indexPath)
-        }
     }
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        switch indexPath.section {
-        case 0:
-            return 52.0
-        case 1:
-            if self.isSearchingUsers {
-                return 64.0
-            }
-            if self.users.count == 0 {
-                return 64.0
-            }
-            return 104.0
-        default:
-            return 0.0
+        if self.isSearchingUsers {
+            return 64.0
         }
+        if self.users.count == 0 {
+            return 64.0
+        }
+        return 104.0
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        switch indexPath.section {
-        case 0:
-            return 52.0
-        case 1:
-            if self.isSearchingUsers {
-                return 64.0
-            }
-            if self.users.count == 0 {
-                return 64.0
-            }
-            return UITableViewAutomaticDimension
-        default:
-            return 0.0
+        if self.isSearchingUsers {
+            return 64.0
         }
+        if self.users.count == 0 {
+            return 64.0
+        }
+        return UITableViewAutomaticDimension
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let header = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "searchTableSectionHeader") as? SearchTableSectionHeader
+        var titleText = "TOP"
+        if self.isLocationActive, let locationName = self.locationName {
+            titleText = titleText + " in \(locationName)"
+        }
+        header?.titleLabel.text = titleText
+        return header
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 32.0
     }
     
     // MARK: AWS
@@ -177,10 +147,10 @@ class ProfessionTableViewController: UITableViewController {
                 self.isSearchingUsers = false
                 if let error = error {
                     print("scanUsersByProfessionName error: \(error)")
-                    self.reloadUsersSection()
+                    self.tableView.reloadData()
                 } else {
                     guard let awsUsers = response?.items as? [AWSUser], awsUsers.count > 0 else {
-                        self.reloadUsersSection()
+                        self.tableView.reloadData()
                         return
                     }
                     for awsUser in awsUsers {
@@ -188,11 +158,11 @@ class ProfessionTableViewController: UITableViewController {
                         self.allUsers.append(user)
                     }
                     self.users = self.allUsers
-                    self.reloadUsersSection()
+                    self.tableView.reloadData()
                     
                     for (index, user) in self.allUsers.enumerated() {
                         if let profilePicUrl = user.profilePicUrl {
-                            let indexPath = IndexPath(row: index, section: 1)
+                            let indexPath = IndexPath(row: index, section: 0)
                             self.downloadImage(profilePicUrl, imageType: ImageType.userProfilePic, indexPath: indexPath)
                         }
                     }
@@ -214,7 +184,9 @@ class ProfessionTableViewController: UITableViewController {
             switch imageType {
             case .userProfilePic:
                 self.allUsers[indexPath.row].profilePic = image
-                self.reloadUsersSection()
+                UIView.performWithoutAnimation {
+                    self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
+                }
             default:
                 return
             }
@@ -225,7 +197,7 @@ class ProfessionTableViewController: UITableViewController {
                 pinOnCompletion: false,
                 progressBlock: {
                     (content: AWSContent?, progress: Progress?) -> Void in
-                    // TODO
+                    // Do nothing.
                 },
                 completionHandler: {
                     (content: AWSContent?, data: Data?, error: Error?) in
@@ -241,7 +213,9 @@ class ProfessionTableViewController: UITableViewController {
                             switch imageType {
                             case .userProfilePic:
                                 self.allUsers[indexPath.row].profilePic = image
-                                self.reloadUsersSection()
+                                UIView.performWithoutAnimation {
+                                    self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
+                                }
                             default:
                                 return
                             }
@@ -249,55 +223,5 @@ class ProfessionTableViewController: UITableViewController {
                     })
             })
         }
-    }
-    
-    // MARK: Helper
-    
-    fileprivate func filterUsers(_ searchText: String) {
-//        let searchLocationName = searchText.lowercased()
-        let searchLocationName = searchText
-        self.locationUsers = self.allUsers.filter({
-            (user: User) in
-            if let locationName = user.locationName, locationName.hasPrefix(searchLocationName) {
-                return true
-            } else {
-                return false
-            }
-        })
-        self.users = self.locationUsers
-        self.reloadUsersSection()
-    }
-    
-    fileprivate func reloadUsersSection () {
-        UIView.performWithoutAnimation {
-            self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
-        }
-    }
-    
-    fileprivate func reloadAddLocationSection () {
-        UIView.performWithoutAnimation {
-            self.tableView.reloadSections(IndexSet(integer: 0), with: UITableViewRowAnimation.none)
-        }
-    }
-}
-
-extension ProfessionTableViewController: AddLocationTableViewCellDelegate {
-    
-    func clearButtonTapped(_ button: UIButton) {
-        self.locationName = nil
-        self.reloadAddLocationSection()
-        self.users = self.allUsers
-        self.reloadUsersSection()
-    }
-}
-
-extension ProfessionTableViewController: LocationsTableViewControllerDelegate {
-    
-    func didSelectLocation(_ locationName: String?) {
-        self.locationName = locationName
-        if locationName != nil {
-            self.filterUsers(locationName!)
-        }
-        self.reloadAddLocationSection()
     }
 }

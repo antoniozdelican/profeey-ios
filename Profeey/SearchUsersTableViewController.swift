@@ -10,10 +10,6 @@ import UIKit
 import AWSMobileHubHelper
 import AWSDynamoDB
 
-//protocol SearchUsersTableViewControllerDelegate {
-//    func didSelectUser(_ indexPath: IndexPath)
-//}
-
 protocol SearchUsersTableViewControllerDelegate {
     func usersTableViewWillBeginDragging()
 }
@@ -24,6 +20,9 @@ class SearchUsersTableViewController: UITableViewController {
     fileprivate var users: [User] = []
 //    fileprivate var showAllUsers: Bool = true
     fileprivate var isSearchingUsers: Bool = false
+    
+    fileprivate var isLocationActive: Bool = false
+    fileprivate var locationName: String?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -122,7 +121,11 @@ class SearchUsersTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "searchTableSectionHeader") as? SearchTableSectionHeader
-        header?.titleLabel.text = "POPULAR in Zagreb, Croatia"
+        var titleText = "POPULAR"
+        if self.isLocationActive, let locationName = self.locationName {
+            titleText = titleText + " in \(locationName)"
+        }
+        header?.titleLabel.text = titleText
 //        header?.titleLabel.text = self.showAllUsers ? "POPULAR" : "BEST MATCHES"
         return header
     }
@@ -235,23 +238,17 @@ class SearchUsersTableViewController: UITableViewController {
     }
 }
 
-//extension SearchUsersTableViewController: SearchUsersDelegate {
-//    
-//    func isSearchingUsers(_ isSearching: Bool) {
-//        self.isSearchingUsers = isSearching
-//        self.tableView.reloadData()
-//    }
-//    
-//    func showUsers(_ users: [User], showAllUsers: Bool) {
-//        self.users = users
-//        self.showAllUsers = showAllUsers
-//        self.tableView.reloadData()
-//        
-//        for (index, user) in users.enumerated() {
-//            if let profilePicUrl = user.profilePicUrl {
-//                let indexPath = IndexPath(row: index, section: 0)
-//                self.downloadImage(profilePicUrl, imageType: ImageType.userProfilePic, indexPath: indexPath)
-//            }
-//        }
-//    }
-//}
+extension SearchUsersTableViewController: SearchUsersDelegate {
+    
+    func addLocation(_ locationName: String) {
+        self.locationName = locationName
+        self.isLocationActive = true
+        self.tableView.reloadData()
+    }
+    
+    func removeLocation() {
+        self.locationName = nil
+        self.isLocationActive = false
+        self.tableView.reloadData()
+    }
+}

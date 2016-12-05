@@ -33,6 +33,14 @@
             </objects>
             <point key="canvasLocation" x="846" y="-63"/>
         </scene>
+        <!--Locations-->
+        <scene sceneID="0k8-Ud-tsz">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Locations" id="xov-Jp-aIP" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="LR0-i9-PKO" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2641" y="-479"/>
+        </scene>
         <!--Search View Controller-->
         <scene sceneID="ah3-hY-u7R">
             <objects>
@@ -169,6 +177,7 @@
                         <outlet property="mainScrollView" destination="6dh-pb-sZN" id="kQ5-gv-NvT"/>
                         <outlet property="peopleButton" destination="00O-NK-cBk" id="HTV-mm-Fpg"/>
                         <outlet property="professionsButton" destination="aew-Wr-4ki" id="8jM-9i-ufD"/>
+                        <segue destination="xov-Jp-aIP" kind="presentation" identifier="segueToLocationsVc" id="e5V-T2-fRp"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YSb-UZ-dPL" userLabel="First Responder" sceneMemberID="firstResponder"/>

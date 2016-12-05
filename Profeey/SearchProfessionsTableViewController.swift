@@ -10,10 +10,6 @@ import UIKit
 import AWSMobileHubHelper
 import AWSDynamoDB
 
-//protocol SearchProfessionsTableViewControllerDelegate {
-//    func didSelectProfession(_ indexPath: IndexPath)
-//}
-
 protocol SearchProfessionsTableViewControllerDelegate {
     func professionsTableViewWillBeginDragging()
 }
@@ -24,6 +20,9 @@ class SearchProfessionsTableViewController: UITableViewController {
     fileprivate var professions: [Profession] = []
     //fileprivate var showAllProfessions: Bool = true
     fileprivate var isSearchingProfessions: Bool = false
+    
+    fileprivate var isLocationActive: Bool = false
+    fileprivate var locationName: String?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,6 +40,8 @@ class SearchProfessionsTableViewController: UITableViewController {
         if let destinationViewController = segue.destination as? ProfessionTableViewController,
             let indexPath = sender as? IndexPath {
             destinationViewController.profession = self.professions[indexPath.row]
+            destinationViewController.isLocationActive = self.isLocationActive
+            destinationViewController.locationName = self.locationName
         }
     }
 
@@ -91,7 +92,6 @@ class SearchProfessionsTableViewController: UITableViewController {
         let cell = tableView.cellForRow(at: indexPath)
         if cell is SearchProfessionTableViewCell {
             self.performSegue(withIdentifier: "segueToProfessionVc", sender: indexPath)
-//            self.searchProfessionsTableViewControllerDelegate?.didSelectProfession(indexPath)
         }
     }
     
@@ -117,8 +117,12 @@ class SearchProfessionsTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "searchTableSectionHeader") as? SearchTableSectionHeader
-        header?.titleLabel.text = "POPULAR in Zagreb, Croatia"
-        //header?.titleLabel.text = self.showAllProfessions ? "POPULAR" : "BEST MATCHES"
+        var titleText = "POPULAR"
+        if self.isLocationActive, let locationName = self.locationName {
+            titleText = titleText + " in \(locationName)"
+        }
+        header?.titleLabel.text = titleText
+//        header?.titleLabel.text = self.showAllUsers ? "POPULAR" : "BEST MATCHES"
         return header
     }
     
@@ -169,16 +173,17 @@ class SearchProfessionsTableViewController: UITableViewController {
     }
 }
 
-//extension SearchProfessionsTableViewController: SearchProfessionsDelegate {
-//    
-//    func isSearchingProfessions(_ isSearching: Bool) {
-//        self.isSearchingProfessions = isSearching
-//        self.tableView.reloadData()
-//    }
-//    
-//    func showProfessions(_ professions: [Profession], showAllProfessions: Bool) {
-//        self.professions = professions
-//        self.showAllProfessions = showAllProfessions
-//        self.tableView.reloadData()
-//    }
-//}
+extension SearchProfessionsTableViewController: SearchProfessionsDelegate {
+    
+    func addLocation(_ locationName: String) {
+        self.locationName = locationName
+        self.isLocationActive = true
+        self.tableView.reloadData()
+    }
+    
+    func removeLocation() {
+        self.locationName = nil
+        self.isLocationActive = false
+        self.tableView.reloadData()
+    }
+}

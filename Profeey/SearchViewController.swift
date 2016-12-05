@@ -13,6 +13,16 @@ enum SearchSegmentType {
     case professions
 }
 
+protocol SearchUsersDelegate {
+    func addLocation(_ locationName: String)
+    func removeLocation()
+}
+
+protocol SearchProfessionsDelegate {
+    func addLocation(_ locationName: String)
+    func removeLocation()
+}
+
 class SearchViewController: UIViewController {
 
     @IBOutlet weak var mainScrollView: UIScrollView!
@@ -22,6 +32,11 @@ class SearchViewController: UIViewController {
     
     fileprivate var searchBar = UISearchBar()
     fileprivate var locationBarButtonItem: UIBarButtonItem?
+    fileprivate var isLocationActive: Bool = false
+    // TODO change to Location.
+    fileprivate var locationName: String?
+    fileprivate var searchUsersDelegate: SearchUsersDelegate?
+    fileprivate var searchProfessionsDelegate: SearchProfessionsDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,12 +45,12 @@ class SearchViewController: UIViewController {
         // SearchBar configuration.
         self.searchBar.searchBarStyle = UISearchBarStyle.minimal
         self.searchBar.tintColor = Colors.black
-        self.searchBar.placeholder = "Search in Zagreb, Croatia"
+        self.searchBar.placeholder = "Search"
         self.searchBar.delegate = self
         self.navigationItem.titleView = self.searchBar
         
         // BarButtonItem
-        self.locationBarButtonItem = UIBarButtonItem(image: UIImage(named: "ic_location_off")?.withRenderingMode(UIImageRenderingMode.alwaysOriginal), style: UIBarButtonItemStyle.plain, target: nil, action: nil)
+        self.locationBarButtonItem = UIBarButtonItem(image: UIImage(named: "ic_location_off")?.withRenderingMode(UIImageRenderingMode.alwaysOriginal), style: UIBarButtonItemStyle.plain, target: self, action: #selector(self.locationBarButtonItemTapped(_:)))
         self.navigationItem.setRightBarButton(self.locationBarButtonItem, animated: true)
         
         // ScrollView
@@ -62,24 +77,30 @@ class SearchViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destinationViewController = segue.destination as? SearchUsersTableViewController {
             destinationViewController.searchUsersTableViewControllerDelegate = self
-//            self.searchUsersDelegate = destinationViewController
-//            destinationViewController.searchScrollDelegate = self
-//            destinationViewController.searchUsersTableViewControllerDelegate = self
+            self.searchUsersDelegate = destinationViewController
         }
         if let destinationViewController = segue.destination as? SearchProfessionsTableViewController {
             destinationViewController.searchProfessionsTableViewControllerDelegate = self
-//            self.searchProfessionsDelegate = destinationViewController
-//            destinationViewController.searchScrollDelegate = self
-//            destinationViewController.searchProfessionsTableViewControllerDelegate = self
+            self.searchProfessionsDelegate = destinationViewController
         }
-//        if let destinationViewController = segue.destination as? ProfileTableViewController,
-//            let indexPath = sender as? IndexPath {
-//            destinationViewController.user = self.users[indexPath.row]
-//        }
-//        if let destinationViewController = segue.destination as? ProfessionTableViewController,
-//            let indexPath = sender as? IndexPath {
-//            destinationViewController.profession = self.professions[indexPath.row]
-//        }
+        if let navigationController = segue.destination as? UINavigationController,
+            let childViewController = navigationController.childViewControllers[0] as? LocationsTableViewController {
+            childViewController.locationsTableViewControllerDelegate = self
+        }
+    }
+    
+    // MARK: Tappers
+    
+    func locationBarButtonItemTapped(_ sender: Any) {
+        if self.isLocationActive {
+            self.isLocationActive = false
+            self.locationBarButtonItem?.image = UIImage(named: "ic_location_off")?.withRenderingMode(UIImageRenderingMode.alwaysOriginal)
+            self.searchBar.placeholder = "Search"
+            self.searchUsersDelegate?.removeLocation()
+            self.searchProfessionsDelegate?.removeLocation()
+        } else {
+            self.performSegue(withIdentifier: "segueToLocationsVc", sender: self)
+        }
     }
     
     // MARK: IBActions
@@ -154,5 +175,20 @@ extension SearchViewController: SearchProfessionsTableViewControllerDelegate {
     
     func professionsTableViewWillBeginDragging() {
         self.searchBar.resignFirstResponder()
+    }
+}
+
+extension SearchViewController: LocationsTableViewControllerDelegate {
+    
+    func didSelectLocation(_ locationName: String?) {
+        guard let locationName = locationName else {
+            return
+        }
+        self.locationName = locationName
+        self.isLocationActive = true
+        self.locationBarButtonItem?.image = UIImage(named: "ic_location_active")
+        self.searchBar.placeholder = "Search in \(locationName)"
+        self.searchUsersDelegate?.addLocation(locationName)
+        self.searchProfessionsDelegate?.addLocation(locationName)
     }
 }

@@ -11,6 +11,7 @@ import AWSMobileHubHelper
 import AWSDynamoDB
 
 protocol LocationsTableViewControllerDelegate {
+    // TODO change this to Location
     func didSelectLocation(_ locationName: String?)
 }
 

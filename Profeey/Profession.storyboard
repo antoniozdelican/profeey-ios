@@ -202,20 +202,11 @@
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <segue destination="7um-Rs-52O" kind="show" identifier="segueToProfileVc" id="kMh-XP-MK8"/>
-                        <segue destination="OAk-2q-uO7" kind="presentation" identifier="segueToLocationsVc" id="gU9-ii-vbh"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yel-U9-x6t" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2208.8000000000002" y="-1096.1019490254873"/>
-        </scene>
-        <!--Locations-->
-        <scene sceneID="qy0-vU-Q8M">
-            <objects>
-                <viewControllerPlaceholder storyboardName="Locations" id="OAk-2q-uO7" sceneMemberID="viewController"/>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="xJ0-dz-qMu" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2835" y="-1316"/>
         </scene>
         <!--Profile-->
         <scene sceneID="jRP-2U-Rfm">
