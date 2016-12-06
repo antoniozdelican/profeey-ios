@@ -46,8 +46,8 @@ class PRFYCloudSearchProxyClient: AWSAPIGatewayClient {
     
     // MARK: Users
     
-    // Get users based on namePrefix (firstName or lastName or preferredUsername), sorted by numberOfRecommendations.
-    public func getUsers(namePrefix: String) -> AWSTask<AnyObject> {
+    // Get top 10 (matchall) users and in location (if provided), sorted by numberOfRecommendations.
+    public func getAllUsers(locationName: String?) -> AWSTask<AnyObject> {
         let headerParameters = [
             "Content-Type": "application/json",
             "Accept": "application/json",
@@ -55,13 +55,12 @@ class PRFYCloudSearchProxyClient: AWSAPIGatewayClient {
             ]
         
         var queryParameters: [String:AnyObject] = [:]
-        
-        // Using prefix and fullText so we can search engineer* or engineer.
-        let firstNameQ = "(or (prefix field=firstname '" + namePrefix + "') firstname: '" + namePrefix + "')"
-        let lastNameQ = "(or (prefix field=lastname '" + namePrefix + "') lastname: '" + namePrefix + "')"
-        let preferredUsernameQ = "(or (prefix field=preferredusername '" + namePrefix + "') preferredusername: '" + namePrefix + "')"
-        
-        queryParameters["q"] = "(or " + firstNameQ + " " +  lastNameQ + " " + preferredUsernameQ + ")" as AnyObject?
+        if let locationName = locationName {
+            queryParameters["q"] = "locationname: '\(locationName)'" as AnyObject?
+        } else {
+            queryParameters["q"] = "matchall" as AnyObject?
+        }
+//        queryParameters["q"] = "matchall" as AnyObject?
         queryParameters["sort"] = "numberofrecommendations desc" as AnyObject?
         queryParameters["q.parser"] = "structured" as AnyObject?
         
@@ -70,8 +69,8 @@ class PRFYCloudSearchProxyClient: AWSAPIGatewayClient {
         return self.invokeHTTPRequest("GET", urlString: "/users", pathParameters: pathParameters, queryParameters: queryParameters, headerParameters: headerParameters, body: nil, responseClass: PRFYCloudSearchUsersResult.self)
     }
     
-    // Get top 10 (matchall) users, sorted by numberOfRecommendations.
-    public func getAllUsers() -> AWSTask<AnyObject> {
+    // Get users based on namePrefix (firstName or lastName or preferredUsername) and in location (if provided), sorted by numberOfRecommendations.
+    public func getUsers(namePrefix: String, locationName: String?) -> AWSTask<AnyObject> {
         let headerParameters = [
             "Content-Type": "application/json",
             "Accept": "application/json",
@@ -79,7 +78,17 @@ class PRFYCloudSearchProxyClient: AWSAPIGatewayClient {
             ]
         
         var queryParameters: [String:AnyObject] = [:]
-        queryParameters["q"] = "matchall" as AnyObject?
+        
+        let firstNameQ = "(or (prefix field=firstname '\(namePrefix)') firstname: '\(namePrefix)')"
+        let lastNameQ = "(or (prefix field=lastname '\(namePrefix)') lastname: '\(namePrefix)')"
+        let preferredUsernameQ = "(or (prefix field=preferredusername '\(namePrefix)') preferredusername: '\(namePrefix)')"
+        let nameQ = "(or \(firstNameQ) \(lastNameQ) \(preferredUsernameQ))"
+        
+        if let locationName = locationName {
+            queryParameters["q"] = "(and \(nameQ) locationname: '\(locationName)')" as AnyObject?
+        } else {
+            queryParameters["q"] = nameQ as AnyObject?
+        }
         queryParameters["sort"] = "numberofrecommendations desc" as AnyObject?
         queryParameters["q.parser"] = "structured" as AnyObject?
         

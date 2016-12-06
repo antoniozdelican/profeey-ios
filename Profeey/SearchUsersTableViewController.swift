@@ -34,7 +34,7 @@ class SearchUsersTableViewController: UITableViewController {
         
         self.isShowingPopularUsers = true
         self.isSearchingPopularUsers = true
-        self.getAllUsers()
+        self.getAllUsers(self.locationName)
     }
 
     override func didReceiveMemoryWarning() {
@@ -243,9 +243,9 @@ class SearchUsersTableViewController: UITableViewController {
     
     // MARK: AWS
     
-    fileprivate func getAllUsers() {
+    fileprivate func getAllUsers(_ locationName: String?) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYCloudSearchProxyClient.defaultClient().getAllUsers().continue({
+        PRFYCloudSearchProxyClient.defaultClient().getAllUsers(locationName: locationName).continue({
             (task: AWSTask) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
@@ -275,12 +275,11 @@ class SearchUsersTableViewController: UITableViewController {
         })
     }
     
-    fileprivate func getUsers(_ namePrefix: String) {
-        // TEST to cancel all tasks
+    fileprivate func getUsers(_ namePrefix: String, locationName: String?) {
         // DANGER to cancel getAllUsers()
         //PRFYCloudSearchProxyClient.defaultClient().session.invalidateAndCancel()
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYCloudSearchProxyClient.defaultClient().getUsers(namePrefix: namePrefix).continue({
+        PRFYCloudSearchProxyClient.defaultClient().getUsers(namePrefix: namePrefix, locationName: locationName).continue({
             (task: AWSTask) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
@@ -397,13 +396,21 @@ extension SearchUsersTableViewController: SearchUsersDelegate {
     func addLocation(_ locationName: String) {
         self.locationName = locationName
         self.isLocationActive = true
+        // Clear old.
+        self.popularUsers = []
+        self.isSearchingPopularUsers = true
         self.tableView.reloadData()
+        self.getAllUsers(self.locationName)
     }
     
     func removeLocation() {
         self.locationName = nil
         self.isLocationActive = false
+        // Clear old.
+        self.popularUsers = []
+        self.isSearchingPopularUsers = true
         self.tableView.reloadData()
+        self.getAllUsers(self.locationName)
     }
     
     func searchBarTextChanged(_ searchText: String) {
@@ -420,7 +427,7 @@ extension SearchUsersTableViewController: SearchUsersDelegate {
             self.isSearchingRegularUsers = true
             self.tableView.reloadData()
             // Start search.
-            self.getUsers(searchText)
+            self.getUsers(searchText, locationName: self.locationName)
         }
     }
     
