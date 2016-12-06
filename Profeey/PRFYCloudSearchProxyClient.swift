@@ -55,7 +55,13 @@ class PRFYCloudSearchProxyClient: AWSAPIGatewayClient {
             ]
         
         var queryParameters: [String:AnyObject] = [:]
-        queryParameters["q"] = "(or (prefix field=firstname '" + namePrefix + "') (prefix field=lastname '" + namePrefix + "') (prefix field=preferredusername '" + namePrefix + "'))" as AnyObject?
+        
+        // Using prefix and fullText so we can search engineer* or engineer.
+        let firstNameQ = "(or (prefix field=firstname '" + namePrefix + "') firstname: '" + namePrefix + "')"
+        let lastNameQ = "(or (prefix field=lastname '" + namePrefix + "') lastname: '" + namePrefix + "')"
+        let preferredUsernameQ = "(or (prefix field=preferredusername '" + namePrefix + "') preferredusername: '" + namePrefix + "')"
+        
+        queryParameters["q"] = "(or " + firstNameQ + " " +  lastNameQ + " " + preferredUsernameQ + ")" as AnyObject?
         queryParameters["sort"] = "numberofrecommendations desc" as AnyObject?
         queryParameters["q.parser"] = "structured" as AnyObject?
         
@@ -93,7 +99,10 @@ class PRFYCloudSearchProxyClient: AWSAPIGatewayClient {
             ]
         
         var queryParameters: [String:AnyObject] = [:]
-        queryParameters["q"] = "(prefix field=professionname '" + namePrefix + "')" as AnyObject?
+        
+        let professionNameQ = "(or (prefix field=professionname '" + namePrefix + "') professionname: '" + namePrefix + "')"
+        
+        queryParameters["q"] = professionNameQ as AnyObject?
         queryParameters["sort"] = "numberofusers desc" as AnyObject?
         queryParameters["q.parser"] = "structured" as AnyObject?
         
