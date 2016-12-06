@@ -24,12 +24,12 @@ class ProfessionTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        self.navigationItem.title = self.profession?.professionName
         self.tableView.register(UINib(nibName: "SearchTableSectionHeader", bundle: nil), forHeaderFooterViewReuseIdentifier: "searchTableSectionHeader")
         
-        self.navigationItem.title = self.profession?.professionName
         if let professionName = self.profession?.professionName {
             self.isSearchingUsers = true
-            self.scanUsersByProfessionName(professionName)
+            self.getUsersWithProfession(professionName, locationName: self.locationName)
         }
     }
 
@@ -136,44 +136,78 @@ class ProfessionTableViewController: UITableViewController {
     
     // MARK: AWS
     
-    fileprivate func scanUsersByProfessionName(_ professionName: String) {
-        let searchProfessionName = professionName.lowercased()
-        
+    fileprivate func getUsersWithProfession(_ professionName: String, locationName: String?) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().scanUsersByProfessionNameDynamoDB(searchProfessionName, completionHandler: {
-            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
+        PRFYCloudSearchProxyClient.defaultClient().getUsersWithProfession(professionName: professionName, locationName: locationName).continue({
+            (task: AWSTask) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 self.isSearchingUsers = false
-                if let error = error {
-                    print("scanUsersByProfessionName error: \(error)")
+                if let error = task.error {
+                    print("getUsersWithProfession error: \(error)")
                     self.tableView.reloadData()
                 } else {
-                    guard let awsUsers = response?.items as? [AWSUser], awsUsers.count > 0 else {
+                    guard let cloudSearchUsersResult = task.result as? PRFYCloudSearchUsersResult, let cloudSearchUsers = cloudSearchUsersResult.users else {
                         self.tableView.reloadData()
                         return
                     }
-                    for awsUser in awsUsers {
-                        let user = User(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationName: awsUser._locationName)
-                        self.allUsers.append(user)
+                    // Clear old.
+                    self.users = []
+                    for cloudSearchUser in cloudSearchUsers {
+                        let user = User(userId: cloudSearchUser.userId, firstName: cloudSearchUser.firstName, lastName: cloudSearchUser.lastName, preferredUsername: cloudSearchUser.preferredUsername, professionName: cloudSearchUser.professionName, profilePicUrl: cloudSearchUser.profilePicUrl, locationName: cloudSearchUser.locationName)
+                        self.users.append(user)
                     }
-                    self.users = self.allUsers
                     self.tableView.reloadData()
                     
-                    for (index, user) in self.allUsers.enumerated() {
+                    for user in self.users {
                         if let profilePicUrl = user.profilePicUrl {
-                            let indexPath = IndexPath(row: index, section: 0)
-                            self.downloadImage(profilePicUrl, imageType: ImageType.userProfilePic, indexPath: indexPath)
+                            self.downloadProfilePic(profilePicUrl)
                         }
                     }
                 }
             })
+            return nil
         })
     }
     
-    fileprivate func downloadImage(_ imageKey: String, imageType: ImageType, indexPath: IndexPath) {
+//    fileprivate func scanUsersByProfessionName(_ professionName: String) {
+//        let searchProfessionName = professionName.lowercased()
+//        
+//        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+//        PRFYDynamoDBManager.defaultDynamoDBManager().scanUsersByProfessionNameDynamoDB(searchProfessionName, completionHandler: {
+//            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
+//            DispatchQueue.main.async(execute: {
+//                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+//                self.isSearchingUsers = false
+//                if let error = error {
+//                    print("scanUsersByProfessionName error: \(error)")
+//                    self.tableView.reloadData()
+//                } else {
+//                    guard let awsUsers = response?.items as? [AWSUser], awsUsers.count > 0 else {
+//                        self.tableView.reloadData()
+//                        return
+//                    }
+//                    for awsUser in awsUsers {
+//                        let user = User(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationName: awsUser._locationName)
+//                        self.allUsers.append(user)
+//                    }
+//                    self.users = self.allUsers
+//                    self.tableView.reloadData()
+//                    
+//                    for (index, user) in self.allUsers.enumerated() {
+//                        if let profilePicUrl = user.profilePicUrl {
+//                            let indexPath = IndexPath(row: index, section: 0)
+//                            self.downloadImage(profilePicUrl, imageType: ImageType.userProfilePic, indexPath: indexPath)
+//                        }
+//                    }
+//                }
+//            })
+//        })
+//    }
+    
+    fileprivate func downloadProfilePic(_ profilePicUrl: String) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        let content = AWSUserFileManager.defaultUserFileManager().content(withKey: imageKey)
+        let content = AWSUserFileManager.defaultUserFileManager().content(withKey: profilePicUrl)
         // TODO check if content.isImage()
         if content.isCached {
             print("Content cached:")
@@ -181,14 +215,12 @@ class ProfessionTableViewController: UITableViewController {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
             })
             let image = UIImage(data: content.cachedData)
-            switch imageType {
-            case .userProfilePic:
-                self.allUsers[indexPath.row].profilePic = image
-                UIView.performWithoutAnimation {
-                    self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
-                }
-            default:
+            guard let userIndex = self.users.index(where: { $0.profilePicUrl == profilePicUrl }) else {
                 return
+            }
+            self.users[userIndex].profilePic = image
+            UIView.performWithoutAnimation {
+                self.tableView.reloadRows(at: [IndexPath(row: userIndex, section: 0)], with: UITableViewRowAnimation.none)
             }
         } else {
             print("Download content:")
@@ -198,7 +230,7 @@ class ProfessionTableViewController: UITableViewController {
                 progressBlock: {
                     (content: AWSContent?, progress: Progress?) -> Void in
                     // Do nothing.
-                },
+            },
                 completionHandler: {
                     (content: AWSContent?, data: Data?, error: Error?) in
                     DispatchQueue.main.async(execute: {
@@ -210,18 +242,70 @@ class ProfessionTableViewController: UITableViewController {
                                 return
                             }
                             let image = UIImage(data: imageData)
-                            switch imageType {
-                            case .userProfilePic:
-                                self.allUsers[indexPath.row].profilePic = image
-                                UIView.performWithoutAnimation {
-                                    self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
-                                }
-                            default:
+                            guard let userIndex = self.users.index(where: { $0.profilePicUrl == profilePicUrl }) else {
                                 return
+                            }
+                            self.users[userIndex].profilePic = image
+                            UIView.performWithoutAnimation {
+                                self.tableView.reloadRows(at: [IndexPath(row: userIndex, section: 0)], with: UITableViewRowAnimation.none)
                             }
                         }
                     })
             })
         }
     }
+    
+//    fileprivate func downloadProfilePic(_ imageKey: String, indexPath: IndexPath) {
+//        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+//        let content = AWSUserFileManager.defaultUserFileManager().content(withKey: imageKey)
+//        // TODO check if content.isImage()
+//        if content.isCached {
+//            print("Content cached:")
+//            DispatchQueue.main.async(execute: {
+//                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+//            })
+//            let image = UIImage(data: content.cachedData)
+//            switch imageType {
+//            case .userProfilePic:
+//                self.allUsers[indexPath.row].profilePic = image
+//                UIView.performWithoutAnimation {
+//                    self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
+//                }
+//            default:
+//                return
+//            }
+//        } else {
+//            print("Download content:")
+//            content.download(
+//                with: AWSContentDownloadType.ifNewerExists,
+//                pinOnCompletion: false,
+//                progressBlock: {
+//                    (content: AWSContent?, progress: Progress?) -> Void in
+//                    // Do nothing.
+//                },
+//                completionHandler: {
+//                    (content: AWSContent?, data: Data?, error: Error?) in
+//                    DispatchQueue.main.async(execute: {
+//                        UIApplication.shared.isNetworkActivityIndicatorVisible = false
+//                        if let error = error {
+//                            print("downloadImage error: \(error)")
+//                        } else {
+//                            guard let imageData = data else {
+//                                return
+//                            }
+//                            let image = UIImage(data: imageData)
+//                            switch imageType {
+//                            case .userProfilePic:
+//                                self.allUsers[indexPath.row].profilePic = image
+//                                UIView.performWithoutAnimation {
+//                                    self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
+//                                }
+//                            default:
+//                                return
+//                            }
+//                        }
+//                    })
+//            })
+//        }
+//    }
 }

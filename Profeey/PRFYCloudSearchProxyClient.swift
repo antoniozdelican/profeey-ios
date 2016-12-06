@@ -97,6 +97,31 @@ class PRFYCloudSearchProxyClient: AWSAPIGatewayClient {
         return self.invokeHTTPRequest("GET", urlString: "/users", pathParameters: pathParameters, queryParameters: queryParameters, headerParameters: headerParameters, body: nil, responseClass: PRFYCloudSearchUsersResult.self)
     }
     
+    // Get users with professionName and in location (if provided), sorted by numberOfRecommendations.
+    public func getUsersWithProfession(professionName: String, locationName: String?) -> AWSTask<AnyObject> {
+        let headerParameters = [
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            
+            ]
+        
+        var queryParameters: [String:AnyObject] = [:]
+        
+        let professionNameQ = "professionname: '\(professionName)'"
+        
+        if let locationName = locationName {
+            queryParameters["q"] = "(and \(professionNameQ) locationname: '\(locationName)')" as AnyObject?
+        } else {
+            queryParameters["q"] = professionNameQ as AnyObject?
+        }
+        queryParameters["sort"] = "numberofrecommendations desc" as AnyObject?
+        queryParameters["q.parser"] = "structured" as AnyObject?
+        
+        let pathParameters: [String:AnyObject] = [:]
+        
+        return self.invokeHTTPRequest("GET", urlString: "/users", pathParameters: pathParameters, queryParameters: queryParameters, headerParameters: headerParameters, body: nil, responseClass: PRFYCloudSearchUsersResult.self)
+    }
+    
     // MARK: Professions
     
     // Get professions based on namePrefix, sorted by numberOfUsers.

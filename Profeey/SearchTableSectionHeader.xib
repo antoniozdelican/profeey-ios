@@ -26,7 +26,7 @@
                         </label>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uUx-aJ-gfj" userLabel="Separator View">
                             <rect key="frame" x="0.0" y="31" width="375" height="1"/>
-                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            <color key="backgroundColor" red="0.86274509799999999" green="0.86274509799999999" blue="0.86274509799999999" alpha="1" colorSpace="calibratedRGB"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="1" id="hLb-fc-bRJ">
                                     <userDefinedRuntimeAttributes>
@@ -38,7 +38,7 @@
                             </constraints>
                         </view>
                     </subviews>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <color key="backgroundColor" red="0.98039215690000003" green="0.98039215690000003" blue="0.98039215690000003" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstItem="enw-mZ-bcO" firstAttribute="leading" secondItem="hjW-oI-Vtz" secondAttribute="leading" constant="16" id="C1u-Il-hc9"/>
                         <constraint firstAttribute="trailing" secondItem="uUx-aJ-gfj" secondAttribute="trailing" id="Sn8-tk-RYq"/>
