@@ -32,7 +32,7 @@ class SearchProfessionsTableViewController: UITableViewController {
         
         self.isShowingPopularProfessions = true
         self.isSearchingPopularProfessions = true
-        self.getAllProfessions()
+        self.getAllProfessions(self.locationName)
     }
 
     override func didReceiveMemoryWarning() {
@@ -233,9 +233,9 @@ class SearchProfessionsTableViewController: UITableViewController {
     
     // MARK: AWS
     
-    fileprivate func getAllProfessions() {
+    fileprivate func getAllProfessions(_ locationName: String?) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYCloudSearchProxyClient.defaultClient().getAllProfessions().continue({
+        PRFYCloudSearchProxyClient.defaultClient().getAllProfessions(locationName: locationName).continue({
             (task: AWSTask) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
@@ -259,9 +259,9 @@ class SearchProfessionsTableViewController: UITableViewController {
         })
     }
     
-    fileprivate func getProfessions(_ namePrefix: String) {
+    fileprivate func getProfessions(_ namePrefix: String, locationName: String?) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYCloudSearchProxyClient.defaultClient().getProfessions(namePrefix: namePrefix).continue({
+        PRFYCloudSearchProxyClient.defaultClient().getProfessions(namePrefix: namePrefix, locationName: locationName).continue({
             (task: AWSTask) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
@@ -286,6 +286,7 @@ class SearchProfessionsTableViewController: UITableViewController {
             return nil
         })
     }
+    
 }
 
 extension SearchProfessionsTableViewController: SearchProfessionsDelegate {
@@ -293,13 +294,21 @@ extension SearchProfessionsTableViewController: SearchProfessionsDelegate {
     func addLocation(_ locationName: String) {
         self.locationName = locationName
         self.isLocationActive = true
+        // Clear old.
+        self.popularProfessions = []
+        self.isSearchingPopularProfessions = true
         self.tableView.reloadData()
+        self.getAllProfessions(self.locationName)
     }
     
     func removeLocation() {
         self.locationName = nil
         self.isLocationActive = false
+        // Clear old.
+        self.popularProfessions = []
+        self.isSearchingPopularProfessions = true
         self.tableView.reloadData()
+        self.getAllProfessions(self.locationName)
     }
     
     func searchBarTextChanged(_ searchText: String) {
@@ -316,9 +325,7 @@ extension SearchProfessionsTableViewController: SearchProfessionsDelegate {
             self.isSearchingRegularProfessions = true
             self.tableView.reloadData()
             // Start search.
-            self.getProfessions(searchText)
-            
-            // TODO filter local professions.
+            self.getProfessions(searchText, locationName: self.locationName)
         }
     }
     
