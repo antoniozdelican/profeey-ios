@@ -47,20 +47,6 @@ class AWSUsersTable: NSObject, Table {
     func scanUsers(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
         let scanExpression = AWSDynamoDBScanExpression()
-//        scanExpression.limit = 10
-        objectMapper.scan(AWSUser.self, expression: scanExpression, completionHandler: completionHandler)
-    }
-    
-    func scanUsersByProfessionName(_ searchProfessionName: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
-        let objectMapper = AWSDynamoDBObjectMapper.default()
-        let scanExpression = AWSDynamoDBScanExpression()
-        scanExpression.filterExpression = "begins_with(#searchProfessionName, :searchProfessionName)"
-        scanExpression.expressionAttributeNames = [
-            "#searchProfessionName": "searchProfessionName",
-        ]
-        scanExpression.expressionAttributeValues = [
-            ":searchProfessionName": searchProfessionName,
-        ]
         objectMapper.scan(AWSUser.self, expression: scanExpression, completionHandler: completionHandler)
     }
 

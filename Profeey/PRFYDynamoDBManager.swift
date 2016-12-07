@@ -101,12 +101,6 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         awsUsersTable.scanUsers(completionHandler)
     }
     
-    func scanUsersByProfessionNameDynamoDB(_ searchProfessionName: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
-        print("scanUsersByProfessionNameDynamoDB:")
-        let awsUsersTable = AWSUsersTable()
-        awsUsersTable.scanUsersByProfessionName(searchProfessionName, completionHandler: completionHandler)
-    }
-    
     // Check if preferredUsername already exists in DynamoDB.
     func queryPreferredUsernamesDynamoDB(_ preferredUsername: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         print("queryPreferredUsernamesDynamoDB:")

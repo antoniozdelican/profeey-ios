@@ -29,7 +29,7 @@ class ProfessionTableViewController: UITableViewController {
         
         if let professionName = self.profession?.professionName {
             self.isSearchingUsers = true
-            self.getUsersWithProfession(professionName, locationName: self.locationName)
+            self.getAllUsersWithProfession(professionName, locationName: self.locationName)
         }
     }
 
@@ -136,9 +136,9 @@ class ProfessionTableViewController: UITableViewController {
     
     // MARK: AWS
     
-    fileprivate func getUsersWithProfession(_ professionName: String, locationName: String?) {
+    fileprivate func getAllUsersWithProfession(_ professionName: String, locationName: String?) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYCloudSearchProxyClient.defaultClient().getUsersWithProfession(professionName: professionName, locationName: locationName).continue({
+        PRFYCloudSearchProxyClient.defaultClient().getAllUsersWithProfession(professionName: professionName, locationName: locationName).continue({
             (task: AWSTask) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
@@ -169,41 +169,6 @@ class ProfessionTableViewController: UITableViewController {
             return nil
         })
     }
-    
-//    fileprivate func scanUsersByProfessionName(_ professionName: String) {
-//        let searchProfessionName = professionName.lowercased()
-//        
-//        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-//        PRFYDynamoDBManager.defaultDynamoDBManager().scanUsersByProfessionNameDynamoDB(searchProfessionName, completionHandler: {
-//            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
-//            DispatchQueue.main.async(execute: {
-//                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-//                self.isSearchingUsers = false
-//                if let error = error {
-//                    print("scanUsersByProfessionName error: \(error)")
-//                    self.tableView.reloadData()
-//                } else {
-//                    guard let awsUsers = response?.items as? [AWSUser], awsUsers.count > 0 else {
-//                        self.tableView.reloadData()
-//                        return
-//                    }
-//                    for awsUser in awsUsers {
-//                        let user = User(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationName: awsUser._locationName)
-//                        self.allUsers.append(user)
-//                    }
-//                    self.users = self.allUsers
-//                    self.tableView.reloadData()
-//                    
-//                    for (index, user) in self.allUsers.enumerated() {
-//                        if let profilePicUrl = user.profilePicUrl {
-//                            let indexPath = IndexPath(row: index, section: 0)
-//                            self.downloadImage(profilePicUrl, imageType: ImageType.userProfilePic, indexPath: indexPath)
-//                        }
-//                    }
-//                }
-//            })
-//        })
-//    }
     
     fileprivate func downloadProfilePic(_ profilePicUrl: String) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
@@ -254,58 +219,4 @@ class ProfessionTableViewController: UITableViewController {
             })
         }
     }
-    
-//    fileprivate func downloadProfilePic(_ imageKey: String, indexPath: IndexPath) {
-//        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-//        let content = AWSUserFileManager.defaultUserFileManager().content(withKey: imageKey)
-//        // TODO check if content.isImage()
-//        if content.isCached {
-//            print("Content cached:")
-//            DispatchQueue.main.async(execute: {
-//                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-//            })
-//            let image = UIImage(data: content.cachedData)
-//            switch imageType {
-//            case .userProfilePic:
-//                self.allUsers[indexPath.row].profilePic = image
-//                UIView.performWithoutAnimation {
-//                    self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
-//                }
-//            default:
-//                return
-//            }
-//        } else {
-//            print("Download content:")
-//            content.download(
-//                with: AWSContentDownloadType.ifNewerExists,
-//                pinOnCompletion: false,
-//                progressBlock: {
-//                    (content: AWSContent?, progress: Progress?) -> Void in
-//                    // Do nothing.
-//                },
-//                completionHandler: {
-//                    (content: AWSContent?, data: Data?, error: Error?) in
-//                    DispatchQueue.main.async(execute: {
-//                        UIApplication.shared.isNetworkActivityIndicatorVisible = false
-//                        if let error = error {
-//                            print("downloadImage error: \(error)")
-//                        } else {
-//                            guard let imageData = data else {
-//                                return
-//                            }
-//                            let image = UIImage(data: imageData)
-//                            switch imageType {
-//                            case .userProfilePic:
-//                                self.allUsers[indexPath.row].profilePic = image
-//                                UIView.performWithoutAnimation {
-//                                    self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
-//                                }
-//                            default:
-//                                return
-//                            }
-//                        }
-//                    })
-//            })
-//        }
-//    }
 }

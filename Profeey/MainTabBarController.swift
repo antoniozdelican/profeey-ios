@@ -17,6 +17,9 @@ enum MainChildController: Int {
 }
 
 class MainTabBarController: UITabBarController {
+    
+    // For double tap on tabBarItem and tableView scroll.
+    fileprivate var previousViewController: UIViewController?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,13 +60,20 @@ class MainTabBarController: UITabBarController {
                 tabBarItem?.selectedImage = selectedImage
             }
             if tabBarItem?.tag == 2 {
-                guard let image = UIImage(named: "ic_notifications"), let selectedImage = UIImage(named: "ic_notifications_active") else {
+                guard let image = UIImage(named: "ic_camera"), let selectedImage = UIImage(named: "ic_camera_active") else {
                     return
                 }
                 tabBarItem?.image = image.withRenderingMode(UIImageRenderingMode.alwaysOriginal)
                 tabBarItem?.selectedImage = selectedImage
             }
             if tabBarItem?.tag == 3 {
+                guard let image = UIImage(named: "ic_notifications"), let selectedImage = UIImage(named: "ic_notifications_active") else {
+                    return
+                }
+                tabBarItem?.image = image.withRenderingMode(UIImageRenderingMode.alwaysOriginal)
+                tabBarItem?.selectedImage = selectedImage
+            }
+            if tabBarItem?.tag == 4 {
                 guard let image = UIImage(named: "ic_profile"), let selectedImage = UIImage(named: "ic_profile_active") else {
                     return
                 }
@@ -190,8 +200,15 @@ class MainTabBarController: UITabBarController {
 extension MainTabBarController: UITabBarControllerDelegate {
     
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
-        if let navigationController = viewController as? UINavigationController,
-            let childViewController = navigationController.childViewControllers[0] as? HomeTableViewController {
+        // If it's dummyCaptureNavigationController, don't show it and instead present Capture.storyboard.
+        if let restorationIdentifier = viewController.restorationIdentifier, restorationIdentifier == "dummyCaptureNavigationController" {
+            if let captureNavigationController = UIStoryboard(name: "Capture", bundle: nil).instantiateInitialViewController() {
+                self.present(captureNavigationController, animated: true, completion: nil)
+            }
+            return false
+        }
+        
+        if let navigationController = viewController as? UINavigationController, let childViewController = navigationController.childViewControllers[0] as? HomeTableViewController {
             // Set tabBarSwitch.
             childViewController.isTabBarSwitch = true
         }
@@ -202,19 +219,32 @@ extension MainTabBarController: UITabBarControllerDelegate {
         guard let navigationController = viewController as? UINavigationController else {
             return
         }
-        if let childViewController = navigationController.childViewControllers[0] as? HomeTableViewController, tabBarController.selectedIndex == 0 {
-            childViewController.navigationController?.setNavigationBarHidden(false, animated: true)
-            // Offset is 1.0 on y due to the inset of -1.0 and upper separator.
-            childViewController.tableView.setContentOffset(CGPoint(x: 0.0, y: 1.0), animated: true)
+
+        if let childViewController = navigationController.childViewControllers[0] as? HomeTableViewController {
+            if self.previousViewController == childViewController || self.previousViewController == nil {
+                childViewController.navigationController?.setNavigationBarHidden(false, animated: true)
+                // Offset is 1.0 on y due to the inset of -1.0 and upper separator.
+                childViewController.tableView.setContentOffset(CGPoint(x: 0.0, y: 1.0), animated: true)
+            }
+            self.previousViewController = childViewController
         }
-        if let childViewController = navigationController.childViewControllers[0] as? SearchViewController, tabBarController.selectedIndex == 1 {
-            childViewController.searchTabBarButtonTapped()
+        if let childViewController = navigationController.childViewControllers[0] as? SearchViewController {
+            if self.previousViewController == childViewController {
+                childViewController.searchTabBarButtonTapped()
+            }
+            self.previousViewController = childViewController
         }
-        if let childViewController = navigationController.childViewControllers[0] as? NotificationsTableViewController, tabBarController.selectedIndex == 2 {
-            childViewController.tableView.setContentOffset(CGPoint.zero, animated: true)
+        if let childViewController = navigationController.childViewControllers[0] as? NotificationsTableViewController {
+            if self.previousViewController == childViewController {
+                childViewController.tableView.setContentOffset(CGPoint.zero, animated: true)
+            }
+            self.previousViewController = childViewController
         }
-        if let childViewController = navigationController.childViewControllers[0] as? ProfileTableViewController, tabBarController.selectedIndex == 3 {
-            childViewController.tableView.setContentOffset(CGPoint.zero, animated: true)
+        if let childViewController = navigationController.childViewControllers[0] as? ProfileTableViewController {
+            if self.previousViewController == childViewController {
+                childViewController.tableView.setContentOffset(CGPoint.zero, animated: true)
+            }
+            self.previousViewController = childViewController
         }
     }
 }

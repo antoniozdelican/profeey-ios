@@ -20,6 +20,7 @@
                     <connections>
                         <segue destination="97w-Xf-MCQ" kind="relationship" relationship="viewControllers" id="gqd-rf-IV7"/>
                         <segue destination="i34-VO-fQf" kind="relationship" relationship="viewControllers" id="4Xl-FK-d0C"/>
+                        <segue destination="mGX-QG-puc" kind="relationship" relationship="viewControllers" id="Hat-yC-APf"/>
                         <segue destination="0VB-vA-lol" kind="relationship" relationship="viewControllers" id="HUj-4u-qdN"/>
                         <segue destination="PkX-gg-apD" kind="relationship" relationship="viewControllers" id="NXb-c0-2Gb"/>
                     </connections>
@@ -38,7 +39,7 @@
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VDG-6c-cWh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-110" y="-124"/>
+            <point key="canvasLocation" x="-77" y="-365"/>
         </scene>
         <!--Search-->
         <scene sceneID="ZWc-gX-qBX">
@@ -50,25 +51,25 @@
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="M6i-p5-pVC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-121.5" y="152"/>
+            <point key="canvasLocation" x="-76" y="-223"/>
         </scene>
         <!--Notifications-->
         <scene sceneID="nTt-kK-HNC">
             <objects>
                 <viewControllerPlaceholder storyboardName="Notifications" id="0VB-vA-lol" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" tag="2" title="" image="ic_notifications" id="xbh-mp-FOv">
+                    <tabBarItem key="tabBarItem" tag="3" title="" image="ic_notifications" id="xbh-mp-FOv">
                         <inset key="imageInsets" minX="0.0" minY="6" maxX="0.0" maxY="-6"/>
                     </tabBarItem>
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Sh3-eB-dGd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-122" y="258"/>
+            <point key="canvasLocation" x="-77" y="331"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="cb4-oG-6WN">
             <objects>
                 <navigationController id="PkX-gg-apD" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" tag="3" title="" image="ic_profile" id="OwU-Yo-zab">
+                    <tabBarItem key="tabBarItem" tag="4" title="" image="ic_profile" id="OwU-Yo-zab">
                         <inset key="imageInsets" minX="0.0" minY="6" maxX="0.0" maxY="-6"/>
                     </tabBarItem>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
@@ -82,7 +83,23 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LSF-m8-xvb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="83" y="1026"/>
+            <point key="canvasLocation" x="-9" y="754"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="LJr-5E-6zZ">
+            <objects>
+                <navigationController storyboardIdentifier="dummyCaptureNavigationController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="mGX-QG-puc" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" tag="2" title="" image="ic_camera" id="hqh-jT-SdQ">
+                        <inset key="imageInsets" minX="0.0" minY="6" maxX="0.0" maxY="-6"/>
+                    </tabBarItem>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="476-Eb-hrs">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="CNf-rm-hnz" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="746" y="182"/>
         </scene>
         <!--Profile-->
         <scene sceneID="3tZ-oM-Pzc">
@@ -92,10 +109,11 @@
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IIY-DB-4Sw" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="618" y="1026"/>
+            <point key="canvasLocation" x="746" y="754"/>
         </scene>
     </scenes>
     <resources>
+        <image name="ic_camera" width="25" height="25"/>
         <image name="ic_home" width="25" height="25"/>
         <image name="ic_notifications" width="25" height="25"/>
         <image name="ic_profile" width="25" height="25"/>
