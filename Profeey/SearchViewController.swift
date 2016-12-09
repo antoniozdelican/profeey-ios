@@ -193,8 +193,8 @@ extension SearchViewController: SearchProfessionsTableViewControllerDelegate {
 
 extension SearchViewController: LocationsTableViewControllerDelegate {
     
-    func didSelectLocation(_ locationName: String?) {
-        guard let locationName = locationName else {
+    func didSelectLocation(_ location: Location) {
+        guard let locationName = location.locationName else {
             return
         }
         self.locationName = locationName

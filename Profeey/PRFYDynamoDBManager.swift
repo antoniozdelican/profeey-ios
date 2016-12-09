@@ -384,14 +384,6 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         awsProfessionsTable.scanProfessions(completionHandler)
     }
     
-    // MARK: Locations
-    
-    func scanLocationsDynamoDB(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
-        print("scanLocationsDynamoDB:")
-        let awsLocationsTable = AWSLocationsTable()
-        awsLocationsTable.scanLocations(completionHandler)
-    }
-    
     // MARK: Activities
     
     func queryUserActivitiesDateSortedDynamoDB(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {

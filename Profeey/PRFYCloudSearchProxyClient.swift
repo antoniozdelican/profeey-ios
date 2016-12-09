@@ -171,5 +171,50 @@ class PRFYCloudSearchProxyClient: AWSAPIGatewayClient {
         
         return self.invokeHTTPRequest("GET", urlString: urlString, pathParameters: pathParameters, queryParameters: queryParameters, headerParameters: headerParameters, body: nil, responseClass: PRFYCloudSearchProfessionsResult.self)
     }
+    
+    // MARK: Locations
+    
+    // Get 10 (matchall) locations.
+    public func getAllLocations() -> AWSTask<AnyObject> {
+        let headerParameters = [
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            
+            ]
+        
+        var queryParameters: [String:AnyObject] = [:]
+        queryParameters["q"] = "matchall" as AnyObject?
+//        queryParameters["sort"] = "numberofrecommendations desc" as AnyObject?
+        queryParameters["q.parser"] = "structured" as AnyObject?
+        let pathParameters: [String:AnyObject] = [:]
+        
+        return self.invokeHTTPRequest("GET", urlString: "/locations", pathParameters: pathParameters, queryParameters: queryParameters, headerParameters: headerParameters, body: nil, responseClass: PRFYCloudSearchLocationsResult.self)
+    }
+    
+    // Get locations based on namePrefix (country or state or city).
+    public func getLocations(namePrefix: String) -> AWSTask<AnyObject> {
+        let headerParameters = [
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            
+            ]
+        
+        // Using simple parser.
+//        let countryQ = "(or (prefix field=country '\(namePrefix)') country: '\(namePrefix)')"
+//        let stateQ = "(or (prefix field=state '\(namePrefix)') state: '\(namePrefix)')"
+//        let cityQ = "(or (prefix field=city '\(namePrefix)') city: '\(namePrefix)')"
+//        let nameQ = "(or \(countryQ) \(stateQ) \(cityQ))"
+        let nameQ = "(\(namePrefix)*)"
+        
+        var queryParameters: [String:AnyObject] = [:]
+        queryParameters["q"] = nameQ as AnyObject?
+//        queryParameters["sort"] = "numberofrecommendations desc" as AnyObject?
+//        queryParameters["q.parser"] = "structured" as AnyObject?
+        queryParameters["q.parser"] = "simple" as AnyObject?
+        
+        let pathParameters: [String:AnyObject] = [:]
+        
+        return self.invokeHTTPRequest("GET", urlString: "/locations", pathParameters: pathParameters, queryParameters: queryParameters, headerParameters: headerParameters, body: nil, responseClass: PRFYCloudSearchLocationsResult.self)
+    }
 }
 

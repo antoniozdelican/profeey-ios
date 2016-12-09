@@ -317,8 +317,8 @@ extension EditProfileTableViewController: UITextViewDelegate {
 
 extension EditProfileTableViewController: LocationsTableViewControllerDelegate {
     
-    func didSelectLocation(_ locationName: String?) {
-        self.user?.locationName = locationName
+    func didSelectLocation(_ location: Location) {
+        self.user?.locationName = location.locationName
         self.tableView.reloadData()
     }
 }
