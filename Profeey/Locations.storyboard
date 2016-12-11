@@ -66,21 +66,33 @@
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="63.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Location Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RCa-VS-ZwJ">
-                                            <rect key="frame" x="16" y="23.5" width="343" height="17"/>
-                                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
-                                            <color key="textColor" red="0.1960784314" green="0.1960784314" blue="0.1960784314" alpha="1" colorSpace="calibratedRGB"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
+                                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="SKH-fY-JnJ">
+                                            <rect key="frame" x="16" y="14" width="343" height="36"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Location Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RCa-VS-ZwJ">
+                                                    <rect key="frame" x="0.0" y="0.0" width="343" height="17"/>
+                                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
+                                                    <color key="textColor" red="0.1960784314" green="0.1960784314" blue="0.1960784314" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0 profeeys" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xkm-kw-9S1">
+                                                    <rect key="frame" x="0.0" y="19" width="343" height="17"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <color key="textColor" red="0.4941176471" green="0.4941176471" blue="0.4941176471" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </stackView>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="RCa-VS-ZwJ" firstAttribute="leading" secondItem="We4-rk-PSM" secondAttribute="leading" constant="16" id="9x6-4s-ysF"/>
-                                        <constraint firstItem="RCa-VS-ZwJ" firstAttribute="centerY" secondItem="We4-rk-PSM" secondAttribute="centerY" id="ERr-Vg-0rh"/>
-                                        <constraint firstAttribute="trailing" secondItem="RCa-VS-ZwJ" secondAttribute="trailing" constant="16" id="nPu-fY-rR3"/>
+                                        <constraint firstAttribute="trailing" secondItem="SKH-fY-JnJ" secondAttribute="trailing" constant="16" id="6qp-zO-eln"/>
+                                        <constraint firstItem="SKH-fY-JnJ" firstAttribute="centerY" secondItem="We4-rk-PSM" secondAttribute="centerY" id="Jxb-Ir-4o8"/>
+                                        <constraint firstItem="SKH-fY-JnJ" firstAttribute="leading" secondItem="We4-rk-PSM" secondAttribute="leading" constant="16" id="PQz-vF-vH1"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="locationNameLabel" destination="RCa-VS-ZwJ" id="4rV-uX-IO1"/>
+                                    <outlet property="numberOfUsersLabel" destination="xkm-kw-9S1" id="h15-yV-bHF"/>
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellSearching" rowHeight="64" id="qL8-t1-5j4" customClass="SearchingTableViewCell" customModule="Profeey" customModuleProvider="target">

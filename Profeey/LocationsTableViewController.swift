@@ -27,7 +27,8 @@ class LocationsTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationItem.title = "Cities"
+        self.tableView.register(UINib(nibName: "SearchTableSectionHeader", bundle: nil), forHeaderFooterViewReuseIdentifier: "searchTableSectionHeader")
+        self.navigationItem.title = "Choose city"
         
         self.isShowingPopularLocations = true
         self.isSearchingPopularLocations = true
@@ -103,6 +104,7 @@ class LocationsTableViewController: UITableViewController {
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellLocation", for: indexPath) as! LocationTableViewCell
             let location = self.popularLocations[indexPath.row]
             cell.locationNameLabel.text = location.locationName
+            cell.numberOfUsersLabel.text = location.numberOfUsersString
             return cell
         case 2:
             if self.isSearchingRegularLocations {
@@ -118,6 +120,7 @@ class LocationsTableViewController: UITableViewController {
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellLocation", for: indexPath) as! LocationTableViewCell
             let location = self.regularLocations[indexPath.row]
             cell.locationNameLabel.text = location.locationName
+            cell.numberOfUsersLabel.text = location.numberOfUsersString
             return cell
         default:
             return UITableViewCell()
@@ -166,6 +169,38 @@ class LocationsTableViewController: UITableViewController {
         }
     }
     
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        switch section {
+        case 1:
+            let header = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "searchTableSectionHeader") as? SearchTableSectionHeader
+            header?.titleLabel.text = "POPULAR"
+            return header
+        case 2:
+            let header = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "searchTableSectionHeader") as? SearchTableSectionHeader
+            header?.titleLabel.text = "BEST MATCHES"
+            return header
+        default:
+            return UIView()
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        switch section {
+        case 1:
+            guard self.isShowingPopularLocations else {
+                return 0.0
+            }
+            return 32.0
+        case 2:
+            guard !self.isShowingPopularLocations else {
+                return 0.0
+            }
+            return 32.0
+        default:
+            return 0.0
+        }
+    }
+    
     // MARK: UIScrollViewDelegate
     
     override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
@@ -206,7 +241,7 @@ class LocationsTableViewController: UITableViewController {
                         return
                     }
                     for cloudSearchLocation in cloudSearchLocations {
-                        let location = Location(locationId: cloudSearchLocation.locationId, country: cloudSearchLocation.country, state: cloudSearchLocation.state, city: cloudSearchLocation.city, latitude: cloudSearchLocation.latitude, longitude: cloudSearchLocation.longitude)
+                        let location = Location(locationId: cloudSearchLocation.locationId, country: cloudSearchLocation.country, state: cloudSearchLocation.state, city: cloudSearchLocation.city, latitude: cloudSearchLocation.latitude, longitude: cloudSearchLocation.longitude, numberOfUsers: cloudSearchLocation.numberOfUsers)
                         self.popularLocations.append(location)
                     }
                     UIView.performWithoutAnimation {
@@ -240,7 +275,7 @@ class LocationsTableViewController: UITableViewController {
                     // Clear old.
                     self.regularLocations = []
                     for cloudSearchLocation in cloudSearchLocations {
-                        let location = Location(locationId: cloudSearchLocation.locationId, country: cloudSearchLocation.country, state: cloudSearchLocation.state, city: cloudSearchLocation.city, latitude: cloudSearchLocation.latitude, longitude: cloudSearchLocation.longitude)
+                        let location = Location(locationId: cloudSearchLocation.locationId, country: cloudSearchLocation.country, state: cloudSearchLocation.state, city: cloudSearchLocation.city, latitude: cloudSearchLocation.latitude, longitude: cloudSearchLocation.longitude, numberOfUsers: cloudSearchLocation.numberOfUsers)
                         self.regularLocations.append(location)
                     }
                     UIView.performWithoutAnimation {
@@ -292,7 +327,7 @@ extension LocationsTableViewController: UISearchBarDelegate {
                 self.tableView.reloadSections(IndexSet(integersIn: 1...2), with: UITableViewRowAnimation.none)
             }
             // Start search.
-            self.getLocations(searchText)
+            self.getLocations(searchText.trimm())
         }
         
 //        let locationName = searchText.trimm()

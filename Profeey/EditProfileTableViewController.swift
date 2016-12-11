@@ -29,7 +29,7 @@ class EditProfileTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.contentInset = UIEdgeInsetsMake(-1.0, 0.0, 0.0, 0.0)
-        self.user = User(userId: self.originalUser?.userId, firstName: self.originalUser?.firstName, lastName: self.originalUser?.lastName, professionName: self.originalUser?.professionName, profilePicUrl: self.originalUser?.profilePicUrl, about: self.originalUser?.about, locationName: self.originalUser?.locationName)
+        self.user = User(userId: self.originalUser?.userId, firstName: self.originalUser?.firstName, lastName: self.originalUser?.lastName, professionId: self.originalUser?.professionId, professionName: self.originalUser?.professionName, profilePicUrl: self.originalUser?.profilePicUrl, about: self.originalUser?.about, locationId: self.originalUser?.locationId, locationName: self.originalUser?.locationName)
         self.user?.profilePic = self.originalUser?.profilePic
     }
 
@@ -232,7 +232,7 @@ class EditProfileTableViewController: UITableViewController {
     
     fileprivate func updateUser() {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().updateUserDynamoDB(self.user?.firstName, lastName: self.user?.lastName, professionName: self.user?.professionName, profilePicUrl: self.user?.profilePicUrl, about: self.user?.about, locationName: self.user?.locationName, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().updateUserDynamoDB(self.user?.firstName, lastName: self.user?.lastName, professionId: self.user?.professionId, professionName: self.user?.professionName, profilePicUrl: self.user?.profilePicUrl, about: self.user?.about, locationId: self.user?.locationId, locationName: self.user?.locationName, completionHandler: {
             (task: AWSTask) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
@@ -318,6 +318,8 @@ extension EditProfileTableViewController: UITextViewDelegate {
 extension EditProfileTableViewController: LocationsTableViewControllerDelegate {
     
     func didSelectLocation(_ location: Location) {
+        // TODO
+        self.user?.locationId = location.locationId
         self.user?.locationName = location.locationName
         self.tableView.reloadData()
     }
@@ -325,8 +327,10 @@ extension EditProfileTableViewController: LocationsTableViewControllerDelegate {
 
 extension EditProfileTableViewController: ProfessionsTableViewControllerDelegate {
     
-    func didSelectProfession(_ professionName: String?) {
-        self.user?.professionName = professionName
+    func didSelectProfession(_ profession: Profession) {
+        // TODO generate professionId UUID
+        self.user?.professionId = profession.professionId
+        self.user?.professionName = profession.professionName
         self.tableView.reloadData()
     }
 }

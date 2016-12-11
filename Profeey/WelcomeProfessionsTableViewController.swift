@@ -19,7 +19,8 @@ class WelcomeProfessionsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.hidesBackButton = true
-        self.scanProfessions()
+//        self.scanProfessions()
+        // TODO unfinished!!
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -113,7 +114,8 @@ class WelcomeProfessionsTableViewController: UITableViewController {
         } else {
             self.view.endEditing(true)
             FullScreenIndicator.show()
-            self.saveUserProfession(professionName)
+            // TODO
+            //self.saveUserProfession(professionName)
         }
     }
     
@@ -146,34 +148,34 @@ class WelcomeProfessionsTableViewController: UITableViewController {
     
     // MARK: AWS
     
-    fileprivate func scanProfessions() {
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().scanProfessionsDynamoDB({
-            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
-            DispatchQueue.main.async(execute: {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                if let error = error {
-                    print("scanProfessions error: \(error)")
-                } else {
-                    guard let awsProfessions = response?.items as? [AWSProfession] else {
-                        return
-                    }
-                    guard awsProfessions.count > 0 else {
-                        return
-                    }
-                    for awsProfession in awsProfessions {
-                        let profession = Profession(professionName: awsProfession._professionName, numberOfUsers: awsProfession._numberOfUsers)
-                        self.recentProfessions.append(profession)
-                    }
-                    self.tableView.reloadData()
-                }
-            })
-        })
-    }
+//    fileprivate func scanProfessions() {
+//        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+//        PRFYDynamoDBManager.defaultDynamoDBManager().scanProfessionsDynamoDB({
+//            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
+//            DispatchQueue.main.async(execute: {
+//                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+//                if let error = error {
+//                    print("scanProfessions error: \(error)")
+//                } else {
+//                    guard let awsProfessions = response?.items as? [AWSProfession] else {
+//                        return
+//                    }
+//                    guard awsProfessions.count > 0 else {
+//                        return
+//                    }
+//                    for awsProfession in awsProfessions {
+//                        let profession = Profession(professionName: awsProfession._professionName, numberOfUsers: awsProfession._numberOfUsers)
+//                        self.recentProfessions.append(profession)
+//                    }
+//                    self.tableView.reloadData()
+//                }
+//            })
+//        })
+//    }
     
-    fileprivate func saveUserProfession(_ professionName: String) {
+    fileprivate func saveUserProfession(_ professionId: String, professionName: String) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().updateUserProfessionDynamoDB(professionName, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().updateUserProfessionDynamoDB(professionId, professionName: professionName, completionHandler: {
             (task: AWSTask) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false

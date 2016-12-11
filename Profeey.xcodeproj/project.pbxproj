@@ -205,8 +205,6 @@
 		A9D962291DE77180008EA0DF /* AWSMobileClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D962281DE77180008EA0DF /* AWSMobileClient.swift */; };
 		A9D97BF81D95718C00D6F22E /* WelcomeProfessionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D97BF71D95718C00D6F22E /* WelcomeProfessionsTableViewController.swift */; };
 		A9E050F41D83065D00DD992D /* LocationOldTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E050F31D83065D00DD992D /* LocationOldTableViewCell.swift */; };
-		A9E3DD3F1D86A33C00DED8C8 /* AWSProfession.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E3DD3E1D86A33C00DED8C8 /* AWSProfession.swift */; };
-		A9E3DD411D86A37600DED8C8 /* AWSProfessionsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E3DD401D86A37600DED8C8 /* AWSProfessionsTable.swift */; };
 		A9E3DD431D86A42400DED8C8 /* Profession.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E3DD421D86A42400DED8C8 /* Profession.swift */; };
 		A9E4507A1D59E6C500D14553 /* CommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E450791D59E6C500D14553 /* CommentTableViewCell.swift */; };
 		A9E4507C1D59E6D300D14553 /* CommentsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E4507B1D59E6D300D14553 /* CommentsTableViewController.swift */; };
@@ -454,8 +452,6 @@
 		A9D962281DE77180008EA0DF /* AWSMobileClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSMobileClient.swift; sourceTree = "<group>"; };
 		A9D97BF71D95718C00D6F22E /* WelcomeProfessionsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeProfessionsTableViewController.swift; sourceTree = "<group>"; };
 		A9E050F31D83065D00DD992D /* LocationOldTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationOldTableViewCell.swift; sourceTree = "<group>"; };
-		A9E3DD3E1D86A33C00DED8C8 /* AWSProfession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSProfession.swift; sourceTree = "<group>"; };
-		A9E3DD401D86A37600DED8C8 /* AWSProfessionsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSProfessionsTable.swift; sourceTree = "<group>"; };
 		A9E3DD421D86A42400DED8C8 /* Profession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Profession.swift; sourceTree = "<group>"; };
 		A9E450791D59E6C500D14553 /* CommentTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentTableViewCell.swift; sourceTree = "<group>"; };
 		A9E4507B1D59E6D300D14553 /* CommentsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentsTableViewController.swift; sourceTree = "<group>"; };
@@ -1057,15 +1053,6 @@
 			name = "Search Users";
 			sourceTree = "<group>";
 		};
-		A9E3DD3D1D86A31B00DED8C8 /* AWSProfessions */ = {
-			isa = PBXGroup;
-			children = (
-				A9E3DD3E1D86A33C00DED8C8 /* AWSProfession.swift */,
-				A9E3DD401D86A37600DED8C8 /* AWSProfessionsTable.swift */,
-			);
-			name = AWSProfessions;
-			sourceTree = "<group>";
-		};
 		A9E53B611D10657400CD1D6C /* Main */ = {
 			isa = PBXGroup;
 			children = (
@@ -1157,7 +1144,6 @@
 				A9193A2F1D6F130700E38F56 /* AWSRelationships */,
 				A98A38221D8C070A00C9CA75 /* AWSUserCategories */,
 				A9EDB7971D72CFF900499FBB /* AWSCategories */,
-				A9E3DD3D1D86A31B00DED8C8 /* AWSProfessions */,
 				A9ACA73F1DB506910004B8DE /* AWSWorkExperiences */,
 				A99B9E291DB53C8D0047360D /* AWSEducations */,
 				A91C1CD11DED9C5B006FBDD4 /* AWSNotifications */,
@@ -1394,7 +1380,6 @@
 				A9AA36391D947C4E00E5EAFA /* LogInTableViewController.swift in Sources */,
 				A9D49EE51DD5DB1A000F90A8 /* UserCategoryTableViewController.swift in Sources */,
 				A9B68DA11D897A24006AC4EA /* EmptyTableViewCell.swift in Sources */,
-				A9E3DD411D86A37600DED8C8 /* AWSProfessionsTable.swift in Sources */,
 				A9BCBDC11DDAF95F00265AFA /* RecommendationsTableViewController.swift in Sources */,
 				A91C1CD31DED9C75006FBDD4 /* AWSNotification.swift in Sources */,
 				A999CD411DBE6FB000E7ADB1 /* SearchProfessionTableViewCell.swift in Sources */,
@@ -1491,7 +1476,6 @@
 				A91C1CD71DEDA669006FBDD4 /* NotificationTableViewCell.swift in Sources */,
 				A97A9AED1D85D0ED00507517 /* ProfessionsTableViewController.swift in Sources */,
 				A9CBBC561DB64A0E009C8EC7 /* EditEducationSchoolTableViewCell.swift in Sources */,
-				A9E3DD3F1D86A33C00DED8C8 /* AWSProfession.swift in Sources */,
 				A901CFE71DA78DDC00C44B26 /* CaptureScrollViewController.swift in Sources */,
 				A96C9AB51D7DADC3007E0B9D /* UploadingTableViewCell.swift in Sources */,
 				A9AFFB111D8B00DF00219627 /* CategoriesTableViewController.swift in Sources */,

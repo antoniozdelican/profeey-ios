@@ -27,7 +27,8 @@ class AWSUser: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     var _numberOfPosts: NSNumber?
     var _numberOfRecommendations: NSNumber?
     
-    var _searchProfessionName: String?
+    var _professionId: String?
+    var _locationId: String?
     
     // To create User on landing.
     convenience init(_userId: String?, _creationDate: NSNumber?, _firstName: String?, _lastName: String?, _email: String?) {
@@ -47,25 +48,26 @@ class AWSUser: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
         self._profilePicUrl = _profilePicUrl
     }
     
-    // To update professionName and searcProfessionName on landing.
-    convenience init(_userId: String?, _professionName: String?, _searchProfessionName: String?) {
+    // To update professionName on landing.
+    convenience init(_userId: String?, _professionId: String?, _professionName: String?) {
         self.init()
         self._userId = _userId
+        self._professionId = _professionId
         self._professionName = _professionName
-        self._searchProfessionName = _searchProfessionName
     }
     
     // To update user on EditVc. Use AWSUserUpdate!
-    convenience init(_userId: String?, _firstName: String?, _lastName: String?, _professionName: String?, _profilePicUrl: String?, _about: String?, _locationName: String?, _searchProfessionName: String?) {
+    convenience init(_userId: String?, _firstName: String?, _lastName: String?, _professionId: String?, _professionName: String?, _profilePicUrl: String?, _about: String?, _locationId: String?, _locationName: String?) {
         self.init()
         self._userId = _userId
         self._firstName = _firstName
         self._lastName = _lastName
+        self._professionId = _professionId
         self._professionName = _professionName
         self._profilePicUrl = _profilePicUrl
         self._about = _about
+        self._locationId = _locationId
         self._locationName = _locationName
-        self._searchProfessionName = _searchProfessionName
     }
     
     class func dynamoDBTableName() -> String {
@@ -93,7 +95,8 @@ class AWSUser: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
             "_numberOfFollowers" : "numberOfFollowers",
             "_numberOfPosts" : "numberOfPosts",
             "_numberOfRecommendations" : "numberOfRecommendations",
-            "_searchProfessionName" : "searchProfessionName",
+            "_professionId" : "professionId",
+            "_locationId" : "locationId",
         ]
     }
     

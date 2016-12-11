@@ -184,7 +184,7 @@ class PRFYCloudSearchProxyClient: AWSAPIGatewayClient {
         
         var queryParameters: [String:AnyObject] = [:]
         queryParameters["q"] = "matchall" as AnyObject?
-//        queryParameters["sort"] = "numberofrecommendations desc" as AnyObject?
+        queryParameters["sort"] = "numberofusers desc" as AnyObject?
         queryParameters["q.parser"] = "structured" as AnyObject?
         let pathParameters: [String:AnyObject] = [:]
         
@@ -208,7 +208,7 @@ class PRFYCloudSearchProxyClient: AWSAPIGatewayClient {
         
         var queryParameters: [String:AnyObject] = [:]
         queryParameters["q"] = nameQ as AnyObject?
-//        queryParameters["sort"] = "numberofrecommendations desc" as AnyObject?
+        queryParameters["sort"] = "numberofusers desc" as AnyObject?
 //        queryParameters["q.parser"] = "structured" as AnyObject?
         queryParameters["q.parser"] = "simple" as AnyObject?
         

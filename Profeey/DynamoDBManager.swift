@@ -22,8 +22,8 @@ protocol DynamoDBManager {
     
     func createUserDynamoDB(_ email: String, firstName: String, lastName: String, completionHandler: @escaping AWSContinuationBlock)
     func updateUserPreferredUsernameAndProfilePicDynamoDB(_ preferredUsername: String, profilePicUrl: String?, completionHandler: @escaping AWSContinuationBlock)
-    func updateUserProfessionDynamoDB(_ professionName: String, completionHandler: @escaping AWSContinuationBlock)
-    func updateUserDynamoDB(_ firstName: String?, lastName: String?, professionName: String?, profilePicUrl: String?, about: String?, locationName: String?, completionHandler: @escaping AWSContinuationBlock)
+    func updateUserProfessionDynamoDB(_ professionId: String, professionName: String, completionHandler: @escaping AWSContinuationBlock)
+    func updateUserDynamoDB(_ firstName: String?, lastName: String?, professionId: String?, professionName: String?, profilePicUrl: String?, about: String?, locationId: String?, locationName: String?, completionHandler: @escaping AWSContinuationBlock)
     
     func scanUsersDynamoDB(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
     func queryPreferredUsernamesDynamoDB(_ preferredUsername: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
@@ -71,7 +71,7 @@ protocol DynamoDBManager {
     
     // MARK: Professions
     
-    func scanProfessionsDynamoDB(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
+//    func scanProfessionsDynamoDB(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
     
     // MARK: Activities
     

@@ -427,7 +427,7 @@ extension SearchUsersTableViewController: SearchUsersDelegate {
             self.isSearchingRegularUsers = true
             self.tableView.reloadData()
             // Start search.
-            self.getUsers(searchText, locationName: self.locationName)
+            self.getUsers(searchText.trimm(), locationName: self.locationName)
         }
     }
     

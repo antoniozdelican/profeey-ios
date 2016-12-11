@@ -11,6 +11,7 @@ import Foundation
 class Profession: NSObject {
     
     // Properties.
+    var professionId: String?
     var professionName: String?
     var numberOfUsers: NSNumber?
     
@@ -30,8 +31,9 @@ class Profession: NSObject {
         super.init()
     }
     
-    convenience init(professionName: String?, numberOfUsers: NSNumber?) {
+    convenience init(professionId: String?, professionName: String?, numberOfUsers: NSNumber?) {
         self.init()
+        self.professionId = professionId
         self.professionName = professionName
         self.numberOfUsers = numberOfUsers
     }

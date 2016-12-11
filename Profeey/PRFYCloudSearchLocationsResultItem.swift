@@ -21,6 +21,7 @@ public class PRFYCloudSearchLocationsResultItem : AWSModel {
     var city: String?
     var latitude: NSNumber?
     var longitude: NSNumber?
+    var numberOfUsers: NSNumber?
     
    	override public class func jsonKeyPathsByPropertyKey() -> [AnyHashable: Any] {
         return [
@@ -30,6 +31,7 @@ public class PRFYCloudSearchLocationsResultItem : AWSModel {
             "city" : "city",
             "latitude" : "latitude",
             "longitude" : "longitude",
+            "numberOfUsers" : "numberOfUsers",
         ]
     }
 }

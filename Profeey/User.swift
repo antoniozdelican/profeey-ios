@@ -25,6 +25,9 @@ class User: NSObject {
     var numberOfPosts: NSNumber?
     var numberOfRecommendations: NSNumber?
     
+    var professionId: String?
+    var locationId: String?
+    
     // For SignUp flow.
     var email: String?
     
@@ -33,12 +36,6 @@ class User: NSObject {
     var fullName: String? {
         return [self.firstName, self.lastName].flatMap{$0}.joined(separator: " ")
     }
-//    var fullUsername: String? {
-//        guard let preferredUsername = self.preferredUsername else {
-//            return nil
-//        }
-//        return "@\(preferredUsername)"
-//    }
     var numberOfPostsInt: Int {
         guard let numberOfPostsInt = self.numberOfPosts else {
             return 0
@@ -106,7 +103,7 @@ class User: NSObject {
     }
     
     // Partial user for EditVc
-    convenience init(userId: String?, firstName: String?, lastName: String?, professionName: String?, profilePicUrl: String?, about: String?, locationName: String?) {
+    convenience init(userId: String?, firstName: String?, lastName: String?, professionId: String?, professionName: String?, profilePicUrl: String?, about: String?, locationId: String?, locationName: String?) {
         self.init()
         self.userId = userId
         self.firstName = firstName
@@ -115,10 +112,12 @@ class User: NSObject {
         self.profilePicUrl = profilePicUrl
         self.about = about
         self.locationName = locationName
+        self.professionId = professionId
+        self.locationId = locationId
     }
     
     // Full user for ProfileVc.
-    convenience init(userId: String?, firstName: String?, lastName: String?, preferredUsername: String?, professionName: String?, profilePicUrl: String?, about: String?, locationName: String?, numberOfFollowers: NSNumber?, numberOfPosts: NSNumber?, numberOfRecommendations: NSNumber?) {
+    convenience init(userId: String?, firstName: String?, lastName: String?, preferredUsername: String?, professionId: String?, professionName: String?, profilePicUrl: String?, about: String?, locationId: String?, locationName: String?, numberOfFollowers: NSNumber?, numberOfPosts: NSNumber?, numberOfRecommendations: NSNumber?) {
         self.init()
         self.userId = userId
         self.firstName = firstName
@@ -131,5 +130,7 @@ class User: NSObject {
         self.numberOfFollowers = numberOfFollowers
         self.numberOfPosts = numberOfPosts
         self.numberOfRecommendations = numberOfRecommendations
+        self.professionId = professionId
+        self.locationId = locationId
     }
 }

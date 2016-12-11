@@ -249,7 +249,7 @@ class SearchProfessionsTableViewController: UITableViewController {
                         return
                     }
                     for cloudSearchProfession in cloudSearchProfessions {
-                        let profession = Profession(professionName: cloudSearchProfession.professionName, numberOfUsers: cloudSearchProfession.numberOfUsers)
+                        let profession = Profession(professionId: cloudSearchProfession.professionId, professionName: cloudSearchProfession.professionName, numberOfUsers: cloudSearchProfession.numberOfUsers)
                         self.popularProfessions.append(profession)
                     }
                     self.tableView.reloadData()
@@ -277,7 +277,7 @@ class SearchProfessionsTableViewController: UITableViewController {
                     // Clear old.
                     self.regularProfessions = []
                     for cloudSearchProfession in cloudSearchProfessions {
-                        let profession = Profession(professionName: cloudSearchProfession.professionName, numberOfUsers: cloudSearchProfession.numberOfUsers)
+                        let profession = Profession(professionId: cloudSearchProfession.professionId, professionName: cloudSearchProfession.professionName, numberOfUsers: cloudSearchProfession.numberOfUsers)
                         self.regularProfessions.append(profession)
                     }
                     self.tableView.reloadData()
@@ -325,7 +325,7 @@ extension SearchProfessionsTableViewController: SearchProfessionsDelegate {
             self.isSearchingRegularProfessions = true
             self.tableView.reloadData()
             // Start search.
-            self.getProfessions(searchText, locationName: self.locationName)
+            self.getProfessions(searchText.trimm(), locationName: self.locationName)
         }
     }
     
