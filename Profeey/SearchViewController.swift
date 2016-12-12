@@ -14,14 +14,14 @@ enum SearchSegmentType {
 }
 
 protocol SearchUsersDelegate {
-    func addLocation(_ locationName: String)
+    func addLocation(_ location: Location)
     func removeLocation()
     func searchBarTextChanged(_ searchText: String)
     func scrollToTop()
 }
 
 protocol SearchProfessionsDelegate {
-    func addLocation(_ locationName: String)
+    func addLocation(_ location: Location)
     func removeLocation()
     func searchBarTextChanged(_ searchText: String)
     func scrollToTop()
@@ -37,8 +37,6 @@ class SearchViewController: UIViewController {
     fileprivate var searchBar = UISearchBar()
     fileprivate var locationBarButtonItem: UIBarButtonItem?
     fileprivate var isLocationActive: Bool = false
-    // TODO change to Location.
-    fileprivate var locationName: String?
     fileprivate var searchUsersDelegate: SearchUsersDelegate?
     fileprivate var searchProfessionsDelegate: SearchProfessionsDelegate?
     
@@ -197,11 +195,10 @@ extension SearchViewController: LocationsTableViewControllerDelegate {
         guard let locationName = location.locationName else {
             return
         }
-        self.locationName = locationName
         self.isLocationActive = true
         self.locationBarButtonItem?.image = UIImage(named: "ic_location_active")
         self.searchBar.placeholder = "Search in \(locationName)"
-        self.searchUsersDelegate?.addLocation(locationName)
-        self.searchProfessionsDelegate?.addLocation(locationName)
+        self.searchUsersDelegate?.addLocation(location)
+        self.searchProfessionsDelegate?.addLocation(location)
     }
 }

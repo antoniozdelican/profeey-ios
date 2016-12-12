@@ -207,14 +207,6 @@ class LocationsTableViewController: UITableViewController {
         self.view.endEditing(true)
     }
     
-    // MARK: IBActions
-    
-    @IBAction func doneButtonTapped(_ sender: AnyObject) {
-        // TODO
-//        self.locationsTableViewControllerDelegate?.didSelectLocation(self.locationName)
-//        self.dismiss(animated: true, completion: nil)
-    }
-    
     @IBAction func cancelButtonTapped(_ sender: AnyObject) {
         self.dismiss(animated: true, completion: nil)
     }

@@ -14,7 +14,7 @@ class ProfessionTableViewController: UITableViewController {
     
     var profession: Profession?
     var isLocationActive: Bool = false
-    var locationName: String?
+    var location: Location?
     
     fileprivate var users: [User] = []
     fileprivate var allUsers: [User] = []
@@ -29,7 +29,7 @@ class ProfessionTableViewController: UITableViewController {
         
         if let professionName = self.profession?.professionName {
             self.isSearchingUsers = true
-            self.getAllUsersWithProfession(professionName, locationName: self.locationName)
+            self.getAllUsersWithProfession(professionName, locationId: self.location?.locationName)
         }
     }
 
@@ -123,7 +123,7 @@ class ProfessionTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "searchTableSectionHeader") as? SearchTableSectionHeader
         var titleText = "TOP"
-        if self.isLocationActive, let locationName = self.locationName {
+        if self.isLocationActive, let locationName = self.location?.locationName {
             titleText = titleText + " in \(locationName)"
         }
         header?.titleLabel.text = titleText
@@ -136,9 +136,9 @@ class ProfessionTableViewController: UITableViewController {
     
     // MARK: AWS
     
-    fileprivate func getAllUsersWithProfession(_ professionName: String, locationName: String?) {
+    fileprivate func getAllUsersWithProfession(_ professionName: String, locationId: String?) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYCloudSearchProxyClient.defaultClient().getAllUsersWithProfession(professionName: professionName, locationName: locationName).continue({
+        PRFYCloudSearchProxyClient.defaultClient().getAllUsersWithProfession(professionName: professionName, locationId: locationId).continue({
             (task: AWSTask) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false

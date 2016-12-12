@@ -90,7 +90,7 @@ class User: NSObject {
         self.profilePicUrl = profilePicUrl
     }
     
-    // Basic with location.
+    // Basic with location, no professionId nor locationId.
     convenience init(userId: String?, firstName: String?, lastName: String?, preferredUsername: String?, professionName: String?, profilePicUrl: String?, locationName: String?) {
         self.init()
         self.userId = userId

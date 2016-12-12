@@ -69,10 +69,6 @@ protocol DynamoDBManager {
     
     func scanCategoriesDynamoDB(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
     
-    // MARK: Professions
-    
-//    func scanProfessionsDynamoDB(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
-    
     // MARK: Activities
     
     func queryUserActivitiesDateSortedDynamoDB(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)

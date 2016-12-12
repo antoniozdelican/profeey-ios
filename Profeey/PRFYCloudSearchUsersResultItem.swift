@@ -32,6 +32,9 @@ public class PRFYCloudSearchUsersResultItem : AWSModel {
     var locationName: String?
     var numberOfRecommendations: NSNumber?
     
+    var professionId: String?
+    var locationId: String?
+    
    	override public class func jsonKeyPathsByPropertyKey() -> [AnyHashable: Any] {
         return [
             "userId" : "userId",
@@ -42,6 +45,8 @@ public class PRFYCloudSearchUsersResultItem : AWSModel {
             "profilePicUrl" : "profilePicUrl",
             "locationName" : "locationName",
             "numberOfRecommendations" : "numberOfRecommendations",
+            "professionId" : "professionId",
+            "locationId" : "locationId",
         ]
     }
 }

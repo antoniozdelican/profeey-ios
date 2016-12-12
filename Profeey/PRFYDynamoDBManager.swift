@@ -96,6 +96,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         awsUsersTable.saveUser(awsUserUpdate, completionHandler: completionHandler)
     }
     
+    // TODO remove this.
     func scanUsersDynamoDB(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         let awsUsersTable = AWSUsersTable()
         awsUsersTable.scanUsers(completionHandler)
@@ -375,14 +376,6 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         let awsCategoriesTable = AWSCategoriesTable()
         awsCategoriesTable.scanCategories(completionHandler)
     }
-    
-    // MARK: Professions
-    
-//    func scanProfessionsDynamoDB(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
-//        print("scanProfessionsDynamoDB:")
-//        let awsProfessionsTable = AWSProfessionsTable()
-//        awsProfessionsTable.scanProfessions(completionHandler)
-//    }
     
     // MARK: Activities
     

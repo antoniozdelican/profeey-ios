@@ -157,11 +157,6 @@
                                 <action selector="cancelButtonTapped:" destination="OOJ-SG-eKd" id="rUX-Yl-d5i"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="CUy-gU-6eq">
-                            <connections>
-                                <action selector="doneButtonTapped:" destination="OOJ-SG-eKd" id="dHB-Eb-GLT"/>
-                            </connections>
-                        </barButtonItem>
                     </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mMM-ao-gas" userLabel="First Responder" sceneMemberID="firstResponder"/>

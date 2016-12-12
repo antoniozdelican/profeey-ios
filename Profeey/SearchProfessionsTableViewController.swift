@@ -24,7 +24,7 @@ class SearchProfessionsTableViewController: UITableViewController {
     fileprivate var isShowingPopularProfessions: Bool = true
     
     fileprivate var isLocationActive: Bool = false
-    fileprivate var locationName: String?
+    fileprivate var location: Location?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,7 +32,7 @@ class SearchProfessionsTableViewController: UITableViewController {
         
         self.isShowingPopularProfessions = true
         self.isSearchingPopularProfessions = true
-        self.getAllProfessions(self.locationName)
+        self.getAllProfessions(self.location?.locationId)
     }
 
     override func didReceiveMemoryWarning() {
@@ -44,7 +44,7 @@ class SearchProfessionsTableViewController: UITableViewController {
             let indexPath = sender as? IndexPath {
             destinationViewController.profession = self.isShowingPopularProfessions ? self.popularProfessions[indexPath.row] : self.regularProfessions[indexPath.row]
             destinationViewController.isLocationActive = self.isLocationActive
-            destinationViewController.locationName = self.locationName
+            destinationViewController.location = self.location
         }
     }
 
@@ -190,7 +190,7 @@ class SearchProfessionsTableViewController: UITableViewController {
         case 0:
             let header = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "searchTableSectionHeader") as? SearchTableSectionHeader
             var titleText = "POPULAR"
-            if self.isLocationActive, let locationName = self.locationName {
+            if self.isLocationActive, let locationName = self.location?.locationName {
                 titleText = titleText + " in \(locationName)"
             }
             header?.titleLabel.text = titleText
@@ -198,7 +198,7 @@ class SearchProfessionsTableViewController: UITableViewController {
         case 1:
             let header = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "searchTableSectionHeader") as? SearchTableSectionHeader
             var titleText = "BEST MATCHES"
-            if self.isLocationActive, let locationName = self.locationName {
+            if self.isLocationActive, let locationName = self.location?.locationName {
                 titleText = titleText + " in \(locationName)"
             }
             header?.titleLabel.text = titleText
@@ -233,9 +233,9 @@ class SearchProfessionsTableViewController: UITableViewController {
     
     // MARK: AWS
     
-    fileprivate func getAllProfessions(_ locationName: String?) {
+    fileprivate func getAllProfessions(_ locationId: String?) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYCloudSearchProxyClient.defaultClient().getAllProfessions(locationName: locationName).continue({
+        PRFYCloudSearchProxyClient.defaultClient().getAllProfessions(locationId: locationId).continue({
             (task: AWSTask) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
@@ -259,9 +259,9 @@ class SearchProfessionsTableViewController: UITableViewController {
         })
     }
     
-    fileprivate func getProfessions(_ namePrefix: String, locationName: String?) {
+    fileprivate func getProfessions(_ namePrefix: String, locationId: String?) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYCloudSearchProxyClient.defaultClient().getProfessions(namePrefix: namePrefix, locationName: locationName).continue({
+        PRFYCloudSearchProxyClient.defaultClient().getProfessions(namePrefix: namePrefix, locationId: locationId).continue({
             (task: AWSTask) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
@@ -291,24 +291,24 @@ class SearchProfessionsTableViewController: UITableViewController {
 
 extension SearchProfessionsTableViewController: SearchProfessionsDelegate {
     
-    func addLocation(_ locationName: String) {
-        self.locationName = locationName
+    func addLocation(_ location: Location) {
+        self.location = location
         self.isLocationActive = true
         // Clear old.
         self.popularProfessions = []
         self.isSearchingPopularProfessions = true
         self.tableView.reloadData()
-        self.getAllProfessions(self.locationName)
+        self.getAllProfessions(self.location?.locationId)
     }
     
     func removeLocation() {
-        self.locationName = nil
+        self.location = nil
         self.isLocationActive = false
         // Clear old.
         self.popularProfessions = []
         self.isSearchingPopularProfessions = true
         self.tableView.reloadData()
-        self.getAllProfessions(self.locationName)
+        self.getAllProfessions(self.location?.locationId)
     }
     
     func searchBarTextChanged(_ searchText: String) {
@@ -325,7 +325,7 @@ extension SearchProfessionsTableViewController: SearchProfessionsDelegate {
             self.isSearchingRegularProfessions = true
             self.tableView.reloadData()
             // Start search.
-            self.getProfessions(searchText.trimm(), locationName: self.locationName)
+            self.getProfessions(searchText.trimm(), locationId: self.location?.locationId)
         }
     }
     

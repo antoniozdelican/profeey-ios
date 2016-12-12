@@ -15,8 +15,10 @@ protocol ProfessionsTableViewControllerDelegate {
 
 class ProfessionsTableViewController: UITableViewController {
     
-    var professionName: String?
+    var originalProfession: Profession?
     var professionsTableViewControllerDelegate: ProfessionsTableViewControllerDelegate?
+    
+    fileprivate var newProfessionName: String?
     
     fileprivate var popularProfessions: [Profession] = []
     fileprivate var regularProfessions: [Profession] = []
@@ -28,9 +30,10 @@ class ProfessionsTableViewController: UITableViewController {
         super.viewDidLoad()
         self.tableView.contentInset = UIEdgeInsetsMake(-1.0, 0.0, 0.0, 0.0)
         
+        self.newProfessionName = self.originalProfession?.professionName
         self.isShowingPopularProfessions = true
         self.isSearchingPopularProfessions = true
-        self.getAllProfessions(nil)
+        self.getAllProfessions()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -83,9 +86,10 @@ class ProfessionsTableViewController: UITableViewController {
         switch indexPath.section {
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellAddProfession", for: indexPath) as! AddProfessionTableViewCell
-            if self.professionName != nil {
-                cell.addProfessionTextField.text = self.professionName
-            }
+//            if self.originalProfession?.professionName != nil {
+//                cell.addProfessionTextField.text = self.originalProfession?.professionName
+//            }
+            cell.addProfessionTextField.text = self.originalProfession?.professionName
             cell.addProfessionTableViewCellDelegate = self
             return cell
         case 1:
@@ -182,9 +186,15 @@ class ProfessionsTableViewController: UITableViewController {
     
     // MARK: IBActions
     
+    /*
+     Should create a new profession in DynamoDB and add that professionId and professionName to user.
+     This is done via AWSLambda when user is saved.
+     */
     @IBAction func doneButtonTapped(_ sender: AnyObject) {
-//        self.professionsTableViewControllerDelegate?.didSelectProfession(self.professionName)
-//        self.dismiss(animated: true, completion: nil)
+        let newProfessionName = self.newProfessionName
+        let newProfession = Profession(professionId: nil, professionName: newProfessionName)
+        self.professionsTableViewControllerDelegate?.didSelectProfession(newProfession)
+        self.dismiss(animated: true, completion: nil)
     }
     
     @IBAction func cancelButtonTapped(_ sender: AnyObject) {
@@ -193,9 +203,9 @@ class ProfessionsTableViewController: UITableViewController {
     
     // MARK: AWS
     
-    fileprivate func getAllProfessions(_ locationName: String?) {
+    fileprivate func getAllProfessions() {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYCloudSearchProxyClient.defaultClient().getAllProfessions(locationName: locationName).continue({
+        PRFYCloudSearchProxyClient.defaultClient().getAllProfessions(locationId: nil).continue({
             (task: AWSTask) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
@@ -225,9 +235,9 @@ class ProfessionsTableViewController: UITableViewController {
         })
     }
     
-    fileprivate func getProfessions(_ namePrefix: String, locationName: String?) {
+    fileprivate func getProfessions(_ namePrefix: String) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYCloudSearchProxyClient.defaultClient().getProfessions(namePrefix: namePrefix, locationName: locationName).continue({
+        PRFYCloudSearchProxyClient.defaultClient().getProfessions(namePrefix: namePrefix, locationId: nil).continue({
             (task: AWSTask) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
@@ -293,6 +303,8 @@ extension ProfessionsTableViewController: AddProfessionTableViewCellDelegate {
             UIView.performWithoutAnimation {
                 self.tableView.reloadSections(IndexSet(integersIn: 1...2), with: UITableViewRowAnimation.none)
             }
+            // Remove newProfessionName (or old one if user just want's to remove profession)
+            self.newProfessionName = nil
         } else {
             self.isShowingPopularProfessions = false
             // Clear old.
@@ -301,8 +313,10 @@ extension ProfessionsTableViewController: AddProfessionTableViewCellDelegate {
             UIView.performWithoutAnimation {
                 self.tableView.reloadSections(IndexSet(integersIn: 1...2), with: UITableViewRowAnimation.none)
             }
-            // Start search.
-            self.getProfessions(text.trimm(), locationName: nil)
+            // Update newProfessionName.
+            self.newProfessionName = text.trimm()
+            // Start search for existing professions.
+            self.getProfessions(text.trimm())
         }
     }
 }

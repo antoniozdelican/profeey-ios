@@ -52,7 +52,7 @@ class EditProfileTableViewController: UITableViewController {
         }
         if let destinationViewController = segue.destination as? UINavigationController,
             let childViewController = destinationViewController.childViewControllers[0] as? ProfessionsTableViewController {
-            childViewController.professionName = self.user?.professionName
+            childViewController.originalProfession = Profession(professionId: self.user?.professionId, professionName: self.user?.professionName)
             childViewController.professionsTableViewControllerDelegate = self
         }
     }
@@ -318,7 +318,6 @@ extension EditProfileTableViewController: UITextViewDelegate {
 extension EditProfileTableViewController: LocationsTableViewControllerDelegate {
     
     func didSelectLocation(_ location: Location) {
-        // TODO
         self.user?.locationId = location.locationId
         self.user?.locationName = location.locationName
         self.tableView.reloadData()
@@ -327,8 +326,13 @@ extension EditProfileTableViewController: LocationsTableViewControllerDelegate {
 
 extension EditProfileTableViewController: ProfessionsTableViewControllerDelegate {
     
+    /*
+     User can choose an existing profession, create a new profession (via Lambda) and remove profession.
+     1. professionId != nil && professionName != nil (selected profession from existing in tableView)
+     2. professionId == nil && professionName == nil (textField was empty and Done button pressed)
+     3. professionId == nil && professionName != nil (textField was not empty and Done button pressed)
+    */
     func didSelectProfession(_ profession: Profession) {
-        // TODO generate professionId UUID
         self.user?.professionId = profession.professionId
         self.user?.professionName = profession.professionName
         self.tableView.reloadData()

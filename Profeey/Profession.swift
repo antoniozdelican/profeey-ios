@@ -37,4 +37,11 @@ class Profession: NSObject {
         self.professionName = professionName
         self.numberOfUsers = numberOfUsers
     }
+    
+    // EditProfileVc.
+    convenience init(professionId: String?, professionName: String?) {
+        self.init()
+        self.professionId = professionId
+        self.professionName = professionName
+    }
 }
