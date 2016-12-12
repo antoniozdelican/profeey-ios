@@ -27,9 +27,9 @@ class ProfessionTableViewController: UITableViewController {
         self.navigationItem.title = self.profession?.professionName
         self.tableView.register(UINib(nibName: "SearchTableSectionHeader", bundle: nil), forHeaderFooterViewReuseIdentifier: "searchTableSectionHeader")
         
-        if let professionName = self.profession?.professionName {
+        if let professionId = self.profession?.professionId {
             self.isSearchingUsers = true
-            self.getAllUsersWithProfession(professionName, locationId: self.location?.locationName)
+            self.getAllUsersWithProfession(professionId, locationId: self.location?.locationId)
         }
     }
 
@@ -136,9 +136,9 @@ class ProfessionTableViewController: UITableViewController {
     
     // MARK: AWS
     
-    fileprivate func getAllUsersWithProfession(_ professionName: String, locationId: String?) {
+    fileprivate func getAllUsersWithProfession(_ professionId: String, locationId: String?) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYCloudSearchProxyClient.defaultClient().getAllUsersWithProfession(professionName: professionName, locationId: locationId).continue({
+        PRFYCloudSearchProxyClient.defaultClient().getAllUsersWithProfession(professionId: professionId, locationId: locationId).continue({
             (task: AWSTask) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false

@@ -68,21 +68,21 @@ class PRFYCloudSearchProxyClient: AWSAPIGatewayClient {
         return self.invokeHTTPRequest("GET", urlString: "/users", pathParameters: pathParameters, queryParameters: queryParameters, headerParameters: headerParameters, body: nil, responseClass: PRFYCloudSearchUsersResult.self)
     }
     
-    // Get users with professionName in location (if provided), sorted by numberOfRecommendations.
-    public func getAllUsersWithProfession(professionName: String, locationId: String?) -> AWSTask<AnyObject> {
+    // Get users with professionId in location (if provided), sorted by numberOfRecommendations.
+    public func getAllUsersWithProfession(professionId: String, locationId: String?) -> AWSTask<AnyObject> {
         let headerParameters = [
             "Content-Type": "application/json",
             "Accept": "application/json",
             
             ]
         
-        let professionNameQ = "professionname: '\(professionName)'"
+        let professionIdQ = "professionid: '\(professionId)'"
         
         var queryParameters: [String:AnyObject] = [:]
         if let locationId = locationId {
-            queryParameters["q"] = "(and \(professionNameQ) locationid: '\(locationId)')" as AnyObject?
+            queryParameters["q"] = "(and \(professionIdQ) locationid: '\(locationId)')" as AnyObject?
         } else {
-            queryParameters["q"] = professionNameQ as AnyObject?
+            queryParameters["q"] = professionIdQ as AnyObject?
         }
         queryParameters["sort"] = "numberofrecommendations desc" as AnyObject?
         queryParameters["q.parser"] = "structured" as AnyObject?
