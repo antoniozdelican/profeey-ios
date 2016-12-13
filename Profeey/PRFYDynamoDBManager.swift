@@ -369,14 +369,6 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         awsPostsTable.removePost(awsPost, completionHandler: completionHandler)
     }
     
-    // MARK: Categories
-    
-//    func scanCategoriesDynamoDB(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
-//        print("scanCategoriesDynamoDB:")
-//        let awsCategoriesTable = AWSCategoriesTable()
-//        awsCategoriesTable.scanCategories(completionHandler)
-//    }
-    
     // MARK: Activities
     
     func queryUserActivitiesDateSortedDynamoDB(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {

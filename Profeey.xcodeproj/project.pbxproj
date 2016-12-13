@@ -150,8 +150,6 @@
 		A9B318E11D73769000FF8E2E /* ProfileSegmentedControlTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B318E01D73769000FF8E2E /* ProfileSegmentedControlTableViewCell.swift */; };
 		A9B68DA11D897A24006AC4EA /* EmptyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B68DA01D897A24006AC4EA /* EmptyTableViewCell.swift */; };
 		A9B68DA31D8999BB006AC4EA /* NotificationsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B68DA21D8999BB006AC4EA /* NotificationsTableViewController.swift */; };
-		A9B6A89B1D7F2E5D001EE407 /* AWSCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B6A89A1D7F2E5D001EE407 /* AWSCategory.swift */; };
-		A9B6A89D1D7F2ED4001EE407 /* AWSCategoriesTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B6A89C1D7F2ED4001EE407 /* AWSCategoriesTable.swift */; };
 		A9B6A89F1D7F8063001EE407 /* PostUserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B6A89E1D7F8063001EE407 /* PostUserTableViewCell.swift */; };
 		A9B6F0B11DD9EF180031FA2F /* AddRecommendationTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B6F0B01DD9EF180031FA2F /* AddRecommendationTableViewController.swift */; };
 		A9B6F0B41DDA22D80031FA2F /* AWSRecommendation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B6F0B31DDA22D80031FA2F /* AWSRecommendation.swift */; };
@@ -400,8 +398,6 @@
 		A9B318E01D73769000FF8E2E /* ProfileSegmentedControlTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileSegmentedControlTableViewCell.swift; sourceTree = "<group>"; };
 		A9B68DA01D897A24006AC4EA /* EmptyTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptyTableViewCell.swift; sourceTree = "<group>"; };
 		A9B68DA21D8999BB006AC4EA /* NotificationsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationsTableViewController.swift; sourceTree = "<group>"; };
-		A9B6A89A1D7F2E5D001EE407 /* AWSCategory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSCategory.swift; sourceTree = "<group>"; };
-		A9B6A89C1D7F2ED4001EE407 /* AWSCategoriesTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSCategoriesTable.swift; sourceTree = "<group>"; };
 		A9B6A89E1D7F8063001EE407 /* PostUserTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostUserTableViewCell.swift; sourceTree = "<group>"; };
 		A9B6F0B01DD9EF180031FA2F /* AddRecommendationTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddRecommendationTableViewController.swift; sourceTree = "<group>"; };
 		A9B6F0B31DDA22D80031FA2F /* AWSRecommendation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSRecommendation.swift; sourceTree = "<group>"; };
@@ -1153,7 +1149,6 @@
 				A9B6F0B21DDA22BB0031FA2F /* AWSRecommendations */,
 				A9193A2F1D6F130700E38F56 /* AWSRelationships */,
 				A98A38221D8C070A00C9CA75 /* AWSUserCategories */,
-				A9EDB7971D72CFF900499FBB /* AWSCategories */,
 				A9ACA73F1DB506910004B8DE /* AWSWorkExperiences */,
 				A99B9E291DB53C8D0047360D /* AWSEducations */,
 				A91C1CD11DED9C5B006FBDD4 /* AWSNotifications */,
@@ -1162,15 +1157,6 @@
 				A9CC71A81DEB44DE0054DA93 /* DynamoDB */,
 			);
 			name = AWS;
-			sourceTree = "<group>";
-		};
-		A9EDB7971D72CFF900499FBB /* AWSCategories */ = {
-			isa = PBXGroup;
-			children = (
-				A9B6A89A1D7F2E5D001EE407 /* AWSCategory.swift */,
-				A9B6A89C1D7F2ED4001EE407 /* AWSCategoriesTable.swift */,
-			);
-			name = AWSCategories;
 			sourceTree = "<group>";
 		};
 		A9F345881DE0AA9700A5D368 /* CloudSearchProxyClient */ = {
@@ -1335,7 +1321,6 @@
 				A99734E41DA12F2D007FCE11 /* PostCategoryCreationDateTableViewCell.swift in Sources */,
 				A903EB5B1D16A3C800B33025 /* ProfeeySimpleCamera.swift in Sources */,
 				A9B750051D8783BE00DDC8C8 /* AWSActivitiesTable.swift in Sources */,
-				A9B6A89B1D7F2E5D001EE407 /* AWSCategory.swift in Sources */,
 				A9B318E11D73769000FF8E2E /* ProfileSegmentedControlTableViewCell.swift in Sources */,
 				A99030FD1D46634600336D26 /* AlbumTableViewCell.swift in Sources */,
 				A9543CB71DA3EF4B002BF372 /* EditPostViewController.swift in Sources */,
@@ -1402,7 +1387,6 @@
 				A91A103C1DA836050042B4CA /* AddInfoImageTableViewCell.swift in Sources */,
 				A9D185D91D71927E0073E65F /* AWSLike.swift in Sources */,
 				A9D450631DCA247B000967E2 /* AWSCommentsTable.swift in Sources */,
-				A9B6A89D1D7F2ED4001EE407 /* AWSCategoriesTable.swift in Sources */,
 				A9BCBDC51DDAFA0F00265AFA /* Recommendation.swift in Sources */,
 				A9B6F0B61DDA23B40031FA2F /* AWSRecommendationsTable.swift in Sources */,
 				A915F86E1DC0D49C0031C45F /* LocationsTableViewController.swift in Sources */,

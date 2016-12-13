@@ -65,10 +65,6 @@ protocol DynamoDBManager {
     func updatePostDynamoDB(_ postId: String, caption: String?, categoryName: String?, completionHandler: @escaping AWSContinuationBlock)
     func removePostDynamoDB(_ postId: String, completionHandler: @escaping AWSContinuationBlock)
     
-    // MARK: Categories
-    
-//    func scanCategoriesDynamoDB(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
-    
     // MARK: Activities
     
     func queryUserActivitiesDateSortedDynamoDB(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
