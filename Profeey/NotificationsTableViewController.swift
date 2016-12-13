@@ -72,7 +72,8 @@ class NotificationsTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellNotification", for: indexPath) as! NotificationTableViewCell
         let notification = self.notifications[indexPath.row]
         cell.profilePicImageView.image = notification.user?.profilePic
-        cell.messageLabel.attributedText = self.constructNotificationMessage(notification.user?.preferredUsername, notificationMessage: notification.notificationMessage, creationDateString: notification.creationDateString)
+        cell.messageLabel.attributedText = self.constructNotificationMessage(notification.user?.preferredUsername, notificationMessage: notification.notificationMessage)
+        cell.timeLabel.text = notification.creationDateString
         return cell
     }
     
@@ -127,8 +128,8 @@ class NotificationsTableViewController: UITableViewController {
     
     // MARK: Helpers
     
-    fileprivate func constructNotificationMessage(_ preferredUsername: String?, notificationMessage: String?, creationDateString: String?) -> NSAttributedString? {
-        guard let preferredUsername = preferredUsername, let notificationMessage = notificationMessage, let creationDateString = creationDateString else {
+    fileprivate func constructNotificationMessage(_ preferredUsername: String?, notificationMessage: String?) -> NSAttributedString? {
+        guard let preferredUsername = preferredUsername, let notificationMessage = notificationMessage else {
             return nil
         }
         let messageAttributedString = NSMutableAttributedString()
@@ -136,11 +137,8 @@ class NotificationsTableViewController: UITableViewController {
         let preferredUsernameAttributedString = NSAttributedString(string: preferredUsername, attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 14.0, weight: UIFontWeightMedium)])
         // message
         let notificationMessageAttributedString = NSAttributedString(string: notificationMessage)
-        // creationDateString
-        let creationDateAttributedString = NSAttributedString(string: creationDateString, attributes: [NSForegroundColorAttributeName: Colors.grey])
         messageAttributedString.append(preferredUsernameAttributedString)
         messageAttributedString.append(notificationMessageAttributedString)
-        messageAttributedString.append(creationDateAttributedString)
         return messageAttributedString
     }
     

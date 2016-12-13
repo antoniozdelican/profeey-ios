@@ -25,7 +25,7 @@ class PRFYNotification: NSObject {
             return nil
         }
         let currentDate = Date()
-        return currentDate.offsetFromShort(Date(timeIntervalSince1970: TimeInterval(creationDate)))
+        return currentDate.offsetFrom(Date(timeIntervalSince1970: TimeInterval(creationDate)))
     }
     
     var notificationMessage: String? {
