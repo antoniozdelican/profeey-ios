@@ -47,7 +47,7 @@ class LocationsTableViewController: UITableViewController {
     // MARK: UITableViewDataSource
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 3
+        return 2
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -55,27 +55,23 @@ class LocationsTableViewController: UITableViewController {
         case 0:
             return 1
         case 1:
-            guard self.isShowingPopularLocations else {
-                return 0
+            if self.isShowingPopularLocations {
+                if self.isSearchingPopularLocations {
+                    return 1
+                }
+                if self.popularLocations.count == 0 {
+                    return 1
+                }
+                return self.popularLocations.count
+            } else {
+                if self.isSearchingRegularLocations {
+                    return 1
+                }
+                if self.regularLocations.count == 0 {
+                    return 1
+                }
+                return self.regularLocations.count
             }
-            if self.isSearchingPopularLocations {
-                return 1
-            }
-            if self.popularLocations.count == 0 {
-                return 1
-            }
-            return self.popularLocations.count
-        case 2:
-            guard !self.isShowingPopularLocations else {
-                return 0
-            }
-            if self.isSearchingRegularLocations {
-                return 1
-            }
-            if self.regularLocations.count == 0 {
-                return 1
-            }
-            return self.regularLocations.count
         default:
             return 0
         }
@@ -85,43 +81,43 @@ class LocationsTableViewController: UITableViewController {
         switch indexPath.section {
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellSearchLocation", for: indexPath) as! SearchLocationTableViewCell
-            if self.locationName != nil {
-                cell.searchBar.text = self.locationName
-            }
+            cell.searchBar.text = self.locationName
             cell.searchBar.delegate = self
             return cell
         case 1:
-            if self.isSearchingPopularLocations {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "cellSearching", for: indexPath) as! SearchingTableViewCell
-                cell.activityIndicator.startAnimating()
-                // TODO update text.
+            if self.isShowingPopularLocations {
+                if self.isSearchingPopularLocations {
+                    let cell = tableView.dequeueReusableCell(withIdentifier: "cellSearching", for: indexPath) as! SearchingTableViewCell
+                    cell.activityIndicator.startAnimating()
+                    // TODO update text.
+                    return cell
+                }
+                if self.popularLocations.count == 0 {
+                    let cell = tableView.dequeueReusableCell(withIdentifier: "cellNoResults", for: indexPath) as! NoResultsTableViewCell
+                    return cell
+                }
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellLocation", for: indexPath) as! LocationTableViewCell
+                let location = self.popularLocations[indexPath.row]
+                cell.locationNameLabel.text = location.locationName
+                cell.numberOfUsersLabel.text = location.numberOfUsersString
+                return cell
+            } else {
+                if self.isSearchingRegularLocations {
+                    let cell = tableView.dequeueReusableCell(withIdentifier: "cellSearching", for: indexPath) as! SearchingTableViewCell
+                    cell.activityIndicator.startAnimating()
+                    // TODO update text.
+                    return cell
+                }
+                if self.regularLocations.count == 0 {
+                    let cell = tableView.dequeueReusableCell(withIdentifier: "cellNoResults", for: indexPath) as! NoResultsTableViewCell
+                    return cell
+                }
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellLocation", for: indexPath) as! LocationTableViewCell
+                let location = self.regularLocations[indexPath.row]
+                cell.locationNameLabel.text = location.locationName
+                cell.numberOfUsersLabel.text = location.numberOfUsersString
                 return cell
             }
-            if self.popularLocations.count == 0 {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "cellNoResults", for: indexPath) as! NoResultsTableViewCell
-                return cell
-            }
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cellLocation", for: indexPath) as! LocationTableViewCell
-            let location = self.popularLocations[indexPath.row]
-            cell.locationNameLabel.text = location.locationName
-            cell.numberOfUsersLabel.text = location.numberOfUsersString
-            return cell
-        case 2:
-            if self.isSearchingRegularLocations {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "cellSearching", for: indexPath) as! SearchingTableViewCell
-                cell.activityIndicator.startAnimating()
-                // TODO update text.
-                return cell
-            }
-            if self.regularLocations.count == 0 {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "cellNoResults", for: indexPath) as! NoResultsTableViewCell
-                return cell
-            }
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cellLocation", for: indexPath) as! LocationTableViewCell
-            let location = self.regularLocations[indexPath.row]
-            cell.locationNameLabel.text = location.locationName
-            cell.numberOfUsersLabel.text = location.numberOfUsersString
-            return cell
         default:
             return UITableViewCell()
         }
@@ -149,8 +145,6 @@ class LocationsTableViewController: UITableViewController {
             return 45.0
         case 1:
             return 64.0
-        case 2:
-            return 64.0
         default:
             return 0.0
         }
@@ -162,43 +156,25 @@ class LocationsTableViewController: UITableViewController {
             return 45.0
         case 1:
             return 64.0
-        case 2:
-            return 64.0
         default:
             return 0.0
         }
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        switch section {
-        case 1:
-            let header = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "searchTableSectionHeader") as? SearchTableSectionHeader
-            header?.titleLabel.text = "POPULAR"
-            return header
-        case 2:
-            let header = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "searchTableSectionHeader") as? SearchTableSectionHeader
-            header?.titleLabel.text = "BEST MATCHES"
-            return header
-        default:
+        if section == 0 {
             return UIView()
         }
+        let header = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "searchTableSectionHeader") as? SearchTableSectionHeader
+        header?.titleLabel.text = self.isShowingPopularLocations ? "POPULAR" : "BEST MATCHES"
+        return header
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        switch section {
-        case 1:
-            guard self.isShowingPopularLocations else {
-                return 0.0
-            }
-            return 32.0
-        case 2:
-            guard !self.isShowingPopularLocations else {
-                return 0.0
-            }
-            return 32.0
-        default:
-            return 0.0
+        if section == 0 {
+            return 1.0
         }
+        return 32.0
     }
     
     // MARK: UIScrollViewDelegate
@@ -223,12 +199,12 @@ class LocationsTableViewController: UITableViewController {
                 if let error = task.error {
                     print("getAllLocations error: \(error)")
                     UIView.performWithoutAnimation {
-                        self.tableView.reloadSections(IndexSet(integersIn: 1...2), with: UITableViewRowAnimation.none)
+                        self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
                     }
                 } else {
                     guard let cloudSearchLocationsResult = task.result as? PRFYCloudSearchLocationsResult, let cloudSearchLocations = cloudSearchLocationsResult.locations else {
                         UIView.performWithoutAnimation {
-                            self.tableView.reloadSections(IndexSet(integersIn: 1...2), with: UITableViewRowAnimation.none)
+                            self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
                         }
                         return
                     }
@@ -237,7 +213,7 @@ class LocationsTableViewController: UITableViewController {
                         self.popularLocations.append(location)
                     }
                     UIView.performWithoutAnimation {
-                        self.tableView.reloadSections(IndexSet(integersIn: 1...2), with: UITableViewRowAnimation.none)
+                        self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
                     }
                 }
             })
@@ -255,12 +231,12 @@ class LocationsTableViewController: UITableViewController {
                 if let error = task.error {
                     print("getLocations error: \(error)")
                     UIView.performWithoutAnimation {
-                        self.tableView.reloadSections(IndexSet(integersIn: 1...2), with: UITableViewRowAnimation.none)
+                        self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
                     }
                 } else {
                     guard let cloudSearchLocationsResult = task.result as? PRFYCloudSearchLocationsResult, let cloudSearchLocations = cloudSearchLocationsResult.locations else {
                         UIView.performWithoutAnimation {
-                            self.tableView.reloadSections(IndexSet(integersIn: 1...2), with: UITableViewRowAnimation.none)
+                            self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
                         }
                         return
                     }
@@ -271,7 +247,7 @@ class LocationsTableViewController: UITableViewController {
                         self.regularLocations.append(location)
                     }
                     UIView.performWithoutAnimation {
-                        self.tableView.reloadSections(IndexSet(integersIn: 1...2), with: UITableViewRowAnimation.none)
+                        self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
                     }
                 }
             })
@@ -302,13 +278,14 @@ class LocationsTableViewController: UITableViewController {
 extension LocationsTableViewController: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchText.trimm().isEmpty {
+        let locationName = searchText.trimm()
+        if locationName.isEmpty {
             self.isShowingPopularLocations = true
             // Clear old.
             self.regularLocations = []
             self.isSearchingRegularLocations = false
             UIView.performWithoutAnimation {
-                self.tableView.reloadSections(IndexSet(integersIn: 1...2), with: UITableViewRowAnimation.none)
+                self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
             }
         } else {
             self.isShowingPopularLocations = false
@@ -316,22 +293,10 @@ extension LocationsTableViewController: UISearchBarDelegate {
             self.regularLocations = []
             self.isSearchingRegularLocations = true
             UIView.performWithoutAnimation {
-                self.tableView.reloadSections(IndexSet(integersIn: 1...2), with: UITableViewRowAnimation.none)
+                self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
             }
             // Start search.
-            self.getLocations(searchText.trimm())
+            self.getLocations(locationName)
         }
-        
-//        let locationName = searchText.trimm()
-//        if locationName.isEmpty {
-////            self.isSearching = false
-//            self.locations = self.allLocations
-//            self.reloadLocationsSection()
-//            self.locationName = nil
-//        } else {
-////            self.isSearching = true
-//            self.filterLocations(locationName)
-//            self.locationName = locationName
-//        }
     }
 }

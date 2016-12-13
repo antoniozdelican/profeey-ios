@@ -173,9 +173,9 @@ class WelcomeProfessionsTableViewController: UITableViewController {
 //        })
 //    }
     
-    fileprivate func saveUserProfession(_ professionId: String, professionName: String) {
+    fileprivate func saveUserProfession(_ professionName: String) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().updateUserProfessionDynamoDB(professionId, professionName: professionName, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().updateUserProfessionDynamoDB(professionName, completionHandler: {
             (task: AWSTask) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false

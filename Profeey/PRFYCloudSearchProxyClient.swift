@@ -68,21 +68,21 @@ class PRFYCloudSearchProxyClient: AWSAPIGatewayClient {
         return self.invokeHTTPRequest("GET", urlString: "/users", pathParameters: pathParameters, queryParameters: queryParameters, headerParameters: headerParameters, body: nil, responseClass: PRFYCloudSearchUsersResult.self)
     }
     
-    // Get users with professionId in location (if provided), sorted by numberOfRecommendations.
-    public func getAllUsersWithProfession(professionId: String, locationId: String?) -> AWSTask<AnyObject> {
+    // Get users with professionName in location (if provided), sorted by numberOfRecommendations.
+    public func getAllUsersWithProfession(professionName: String, locationId: String?) -> AWSTask<AnyObject> {
         let headerParameters = [
             "Content-Type": "application/json",
             "Accept": "application/json",
             
             ]
         
-        let professionIdQ = "professionid: '\(professionId)'"
+        let professionNameQ = "professionname: '\(professionName)'"
         
         var queryParameters: [String:AnyObject] = [:]
         if let locationId = locationId {
-            queryParameters["q"] = "(and \(professionIdQ) locationid: '\(locationId)')" as AnyObject?
+            queryParameters["q"] = "(and \(professionNameQ) locationid: '\(locationId)')" as AnyObject?
         } else {
-            queryParameters["q"] = professionIdQ as AnyObject?
+            queryParameters["q"] = professionNameQ as AnyObject?
         }
         queryParameters["sort"] = "numberofrecommendations desc" as AnyObject?
         queryParameters["q.parser"] = "structured" as AnyObject?
@@ -170,6 +170,44 @@ class PRFYCloudSearchProxyClient: AWSAPIGatewayClient {
         let urlString = (locationId != nil) ? "/professions-locations" : "/professions"
         
         return self.invokeHTTPRequest("GET", urlString: urlString, pathParameters: pathParameters, queryParameters: queryParameters, headerParameters: headerParameters, body: nil, responseClass: PRFYCloudSearchProfessionsResult.self)
+    }
+    
+    // MARK: Categories
+    
+    // Get top 10 (matchall) categories, sorted by numberOfPosts.
+    public func getAllCategories() -> AWSTask<AnyObject> {
+        let headerParameters = [
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            
+            ]
+        
+        var queryParameters: [String:AnyObject] = [:]
+        queryParameters["q"] = "matchall" as AnyObject?
+        queryParameters["sort"] = "numberofposts desc" as AnyObject?
+        queryParameters["q.parser"] = "structured" as AnyObject?
+        let pathParameters: [String:AnyObject] = [:]
+        
+        return self.invokeHTTPRequest("GET", urlString: "/categories", pathParameters: pathParameters, queryParameters: queryParameters, headerParameters: headerParameters, body: nil, responseClass: PRFYCloudSearchCategoriesResult.self)
+    }
+    
+    // Get categories based on namePrefix, sorted by numberOfPosts.
+    public func getCategories(namePrefix: String) -> AWSTask<AnyObject> {
+        let headerParameters = [
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            
+            ]
+        
+        let categoryNameQ = "(or (prefix field=categoryname '\(namePrefix)') categoryname: '\(namePrefix)')"
+        
+        var queryParameters: [String:AnyObject] = [:]
+        queryParameters["q"] = categoryNameQ as AnyObject?
+        queryParameters["sort"] = "numberofposts desc" as AnyObject?
+        queryParameters["q.parser"] = "structured" as AnyObject?
+        let pathParameters: [String:AnyObject] = [:]
+        
+        return self.invokeHTTPRequest("GET", urlString: "/categories", pathParameters: pathParameters, queryParameters: queryParameters, headerParameters: headerParameters, body: nil, responseClass: PRFYCloudSearchCategoriesResult.self)
     }
     
     // MARK: Locations

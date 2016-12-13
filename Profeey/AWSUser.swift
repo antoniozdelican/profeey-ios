@@ -21,14 +21,12 @@ class AWSUser: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     
     var _about: String?
     var _email: String?
+    var _locationId: String?
     var _locationName: String?
     
     var _numberOfFollowers: NSNumber?
     var _numberOfPosts: NSNumber?
     var _numberOfRecommendations: NSNumber?
-    
-    var _professionId: String?
-    var _locationId: String?
     
     // To create User on landing.
     convenience init(_userId: String?, _creationDate: NSNumber?, _firstName: String?, _lastName: String?, _email: String?) {
@@ -49,20 +47,18 @@ class AWSUser: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     }
     
     // To update professionName on landing.
-    convenience init(_userId: String?, _professionId: String?, _professionName: String?) {
+    convenience init(_userId: String?, _professionName: String?) {
         self.init()
         self._userId = _userId
-        self._professionId = _professionId
         self._professionName = _professionName
     }
     
     // To update user on EditVc. Use AWSUserUpdate!
-    convenience init(_userId: String?, _firstName: String?, _lastName: String?, _professionId: String?, _professionName: String?, _profilePicUrl: String?, _about: String?, _locationId: String?, _locationName: String?) {
+    convenience init(_userId: String?, _firstName: String?, _lastName: String?, _professionName: String?, _profilePicUrl: String?, _about: String?, _locationId: String?, _locationName: String?) {
         self.init()
         self._userId = _userId
         self._firstName = _firstName
         self._lastName = _lastName
-        self._professionId = _professionId
         self._professionName = _professionName
         self._profilePicUrl = _profilePicUrl
         self._about = _about
@@ -91,12 +87,11 @@ class AWSUser: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
             "_profilePicUrl" : "profilePicUrl",
             "_about" : "about",
             "_email" : "email",
+            "_locationId" : "locationId",
             "_locationName" : "locationName",
             "_numberOfFollowers" : "numberOfFollowers",
             "_numberOfPosts" : "numberOfPosts",
             "_numberOfRecommendations" : "numberOfRecommendations",
-            "_professionId" : "professionId",
-            "_locationId" : "locationId",
         ]
     }
     

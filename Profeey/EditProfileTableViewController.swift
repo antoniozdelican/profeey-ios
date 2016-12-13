@@ -29,7 +29,7 @@ class EditProfileTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.contentInset = UIEdgeInsetsMake(-1.0, 0.0, 0.0, 0.0)
-        self.user = User(userId: self.originalUser?.userId, firstName: self.originalUser?.firstName, lastName: self.originalUser?.lastName, professionId: self.originalUser?.professionId, professionName: self.originalUser?.professionName, profilePicUrl: self.originalUser?.profilePicUrl, about: self.originalUser?.about, locationId: self.originalUser?.locationId, locationName: self.originalUser?.locationName)
+        self.user = User(userId: self.originalUser?.userId, firstName: self.originalUser?.firstName, lastName: self.originalUser?.lastName, professionName: self.originalUser?.professionName, profilePicUrl: self.originalUser?.profilePicUrl, about: self.originalUser?.about, locationId: self.originalUser?.locationId, locationName: self.originalUser?.locationName)
         self.user?.profilePic = self.originalUser?.profilePic
     }
 
@@ -52,7 +52,7 @@ class EditProfileTableViewController: UITableViewController {
         }
         if let destinationViewController = segue.destination as? UINavigationController,
             let childViewController = destinationViewController.childViewControllers[0] as? ProfessionsTableViewController {
-            childViewController.originalProfession = Profession(professionId: self.user?.professionId, professionName: self.user?.professionName)
+            childViewController.professionName = self.user?.professionName
             childViewController.professionsTableViewControllerDelegate = self
         }
     }
@@ -232,7 +232,7 @@ class EditProfileTableViewController: UITableViewController {
     
     fileprivate func updateUser() {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().updateUserDynamoDB(self.user?.firstName, lastName: self.user?.lastName, professionId: self.user?.professionId, professionName: self.user?.professionName, profilePicUrl: self.user?.profilePicUrl, about: self.user?.about, locationId: self.user?.locationId, locationName: self.user?.locationName, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().updateUserDynamoDB(self.user?.firstName, lastName: self.user?.lastName, professionName: self.user?.professionName, profilePicUrl: self.user?.profilePicUrl, about: self.user?.about, locationId: self.user?.locationId, locationName: self.user?.locationName, completionHandler: {
             (task: AWSTask) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
@@ -325,16 +325,9 @@ extension EditProfileTableViewController: LocationsTableViewControllerDelegate {
 }
 
 extension EditProfileTableViewController: ProfessionsTableViewControllerDelegate {
-    
-    /*
-     User can choose an existing profession, create a new profession (via Lambda) and remove profession.
-     1. professionId != nil && professionName != nil (selected profession from existing in tableView)
-     2. professionId == nil && professionName == nil (textField was empty and Done button pressed)
-     3. professionId == nil && professionName != nil (textField was not empty and Done button pressed)
-    */
-    func didSelectProfession(_ profession: Profession) {
-        self.user?.professionId = profession.professionId
-        self.user?.professionName = profession.professionName
+
+    func didSelectProfession(_ professionName: String?) {
+        self.user?.professionName = professionName
         self.tableView.reloadData()
     }
 }

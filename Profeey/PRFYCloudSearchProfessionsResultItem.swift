@@ -20,16 +20,14 @@ import AWSCore
  
 public class PRFYCloudSearchProfessionsResultItem : AWSModel {
     
-    // not using id because id in DynamoDB is professionId
+    // not using id because id in DynamoDB is professionName
     var id: String?
     
-    var professionId: String?
     var professionName: String?
     var numberOfUsers: NSNumber?
     
    	override public class func jsonKeyPathsByPropertyKey() -> [AnyHashable: Any] {
         return [
-            "professionId" : "professionId",
             "professionName" : "professionName",
             "numberOfUsers" : "numberOfUsers",
         ]

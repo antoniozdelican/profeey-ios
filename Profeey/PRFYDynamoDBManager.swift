@@ -72,7 +72,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
     }
     
     // Updates user on landing.
-    func updateUserProfessionDynamoDB(_ professionId: String, professionName: String, completionHandler: @escaping AWSContinuationBlock) {
+    func updateUserProfessionDynamoDB(_ professionName: String, completionHandler: @escaping AWSContinuationBlock) {
         guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
             print("saveUserProfessionDynamoDB no identityId!")
             AWSTask().continue(completionHandler)
@@ -80,11 +80,11 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         }
         print("saveUserProfessionDynamoDB:")
         let awsUsersTable = AWSUsersTable()
-        let awsUser = AWSUser(_userId: identityId, _professionId: professionId, _professionName: professionName)
+        let awsUser = AWSUser(_userId: identityId, _professionName: professionName)
         awsUsersTable.saveUserSkipNull(awsUser, completionHandler: completionHandler)
     }
     
-    func updateUserDynamoDB(_ firstName: String?, lastName: String?, professionId: String?, professionName: String?, profilePicUrl: String?, about: String?, locationId: String?, locationName: String?, completionHandler: @escaping AWSContinuationBlock) {
+    func updateUserDynamoDB(_ firstName: String?, lastName: String?, professionName: String?, profilePicUrl: String?, about: String?, locationId: String?, locationName: String?, completionHandler: @escaping AWSContinuationBlock) {
         guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
             print("updateUserDynamoDB no identityId!")
             AWSTask().continue(completionHandler)
@@ -92,7 +92,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         }
         print("updateUserDynamoDB:")
         let awsUsersTable = AWSUsersTable()
-        let awsUserUpdate = AWSUserUpdate(_userId: identityId, _firstName: firstName, _lastName: lastName, _professionId: professionId, _professionName: professionName, _profilePicUrl: profilePicUrl, _about: about, _locationId: locationId, _locationName: locationName)
+        let awsUserUpdate = AWSUserUpdate(_userId: identityId, _firstName: firstName, _lastName: lastName, _professionName: professionName, _profilePicUrl: profilePicUrl, _about: about, _locationId: locationId, _locationName: locationName)
         awsUsersTable.saveUser(awsUserUpdate, completionHandler: completionHandler)
     }
     
@@ -371,11 +371,11 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
     
     // MARK: Categories
     
-    func scanCategoriesDynamoDB(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
-        print("scanCategoriesDynamoDB:")
-        let awsCategoriesTable = AWSCategoriesTable()
-        awsCategoriesTable.scanCategories(completionHandler)
-    }
+//    func scanCategoriesDynamoDB(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+//        print("scanCategoriesDynamoDB:")
+//        let awsCategoriesTable = AWSCategoriesTable()
+//        awsCategoriesTable.scanCategories(completionHandler)
+//    }
     
     // MARK: Activities
     

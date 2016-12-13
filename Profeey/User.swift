@@ -20,13 +20,11 @@ class User: NSObject {
     
     // Extra properties.
     var about: String?
+    var locationId: String?
     var locationName: String?
     var numberOfFollowers: NSNumber?
     var numberOfPosts: NSNumber?
     var numberOfRecommendations: NSNumber?
-    
-    var professionId: String?
-    var locationId: String?
     
     // For SignUp flow.
     var email: String?
@@ -90,7 +88,7 @@ class User: NSObject {
         self.profilePicUrl = profilePicUrl
     }
     
-    // Basic with location, no professionId nor locationId.
+    // Basic with location, no locationId.
     convenience init(userId: String?, firstName: String?, lastName: String?, preferredUsername: String?, professionName: String?, profilePicUrl: String?, locationName: String?) {
         self.init()
         self.userId = userId
@@ -103,7 +101,7 @@ class User: NSObject {
     }
     
     // Partial user for EditVc
-    convenience init(userId: String?, firstName: String?, lastName: String?, professionId: String?, professionName: String?, profilePicUrl: String?, about: String?, locationId: String?, locationName: String?) {
+    convenience init(userId: String?, firstName: String?, lastName: String?, professionName: String?, profilePicUrl: String?, about: String?, locationId: String?, locationName: String?) {
         self.init()
         self.userId = userId
         self.firstName = firstName
@@ -111,13 +109,12 @@ class User: NSObject {
         self.professionName = professionName
         self.profilePicUrl = profilePicUrl
         self.about = about
-        self.locationName = locationName
-        self.professionId = professionId
         self.locationId = locationId
+        self.locationName = locationName
     }
     
     // Full user for ProfileVc.
-    convenience init(userId: String?, firstName: String?, lastName: String?, preferredUsername: String?, professionId: String?, professionName: String?, profilePicUrl: String?, about: String?, locationId: String?, locationName: String?, numberOfFollowers: NSNumber?, numberOfPosts: NSNumber?, numberOfRecommendations: NSNumber?) {
+    convenience init(userId: String?, firstName: String?, lastName: String?, preferredUsername: String?, professionName: String?, profilePicUrl: String?, about: String?, locationId: String?, locationName: String?, numberOfFollowers: NSNumber?, numberOfPosts: NSNumber?, numberOfRecommendations: NSNumber?) {
         self.init()
         self.userId = userId
         self.firstName = firstName
@@ -126,11 +123,10 @@ class User: NSObject {
         self.professionName = professionName
         self.profilePicUrl = profilePicUrl
         self.about = about
+        self.locationId = locationId
         self.locationName = locationName
         self.numberOfFollowers = numberOfFollowers
         self.numberOfPosts = numberOfPosts
         self.numberOfRecommendations = numberOfRecommendations
-        self.professionId = professionId
-        self.locationId = locationId
     }
 }
