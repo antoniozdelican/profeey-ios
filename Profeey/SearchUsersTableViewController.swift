@@ -260,6 +260,9 @@ class SearchUsersTableViewController: UITableViewController {
                     }
                     for cloudSearchUser in cloudSearchUsers {
                         let user = User(userId: cloudSearchUser.userId, firstName: cloudSearchUser.firstName, lastName: cloudSearchUser.lastName, preferredUsername: cloudSearchUser.preferredUsername, professionName: cloudSearchUser.professionName, profilePicUrl: cloudSearchUser.profilePicUrl, locationName: cloudSearchUser.locationName)
+                        if user.profilePicUrl == nil {
+                            user.profilePic = UIImage(named: "ic_no_profile_pic_feed")
+                        }
                         self.popularUsers.append(user)
                     }
                     self.tableView.reloadData()
@@ -294,6 +297,9 @@ class SearchUsersTableViewController: UITableViewController {
                     self.regularUsers = []
                     for cloudSearchUser in cloudSearchUsers {
                         let user = User(userId: cloudSearchUser.userId, firstName: cloudSearchUser.firstName, lastName: cloudSearchUser.lastName, preferredUsername: cloudSearchUser.preferredUsername, professionName: cloudSearchUser.professionName, profilePicUrl: cloudSearchUser.profilePicUrl, locationName: cloudSearchUser.locationName)
+                        if user.profilePicUrl == nil {
+                            user.profilePic = UIImage(named: "ic_no_profile_pic_feed")
+                        }
                         self.regularUsers.append(user)
                     }
                     self.tableView.reloadData()

@@ -87,7 +87,7 @@
                                 <rect key="frame" x="0.0" y="92" width="375" height="112"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="SJh-1n-A1D" id="YjQ-Fr-xnT">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="111.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="111"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="HhN-3p-pib">
