@@ -35,3 +35,11 @@ class AddProfessionTableViewCell: UITableViewCell {
         self.addProfessionTableViewCellDelegate?.addProfessionTextFieldChanged(text)
     }
 }
+
+// For Welcome flow.
+extension AddProfessionTableViewCell: WelcomeProfessionsTableViewControllerDelegate {
+    
+    func didSelectProfession(_ professionName: String?) {
+        self.addProfessionTextField.text = professionName
+    }
+}

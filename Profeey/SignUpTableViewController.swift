@@ -16,7 +16,11 @@ class SignUpTableViewController: UITableViewController {
     @IBOutlet weak var lastNameTextField: UITextField!
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
-    @IBOutlet weak var legalLabel: UILabel!
+    @IBOutlet weak var firstNameBoxView: UIView!
+    @IBOutlet weak var lastNameBoxView: UIView!
+    @IBOutlet weak var emailBoxView: UIView!
+    @IBOutlet weak var passwordBoxView: UIView!
+    
     @IBOutlet weak var signUpButton: UIButton!
     
     fileprivate var userPool: AWSCognitoIdentityUserPool?
@@ -26,11 +30,17 @@ class SignUpTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.configureLegalLabel()
         self.firstNameTextField.delegate = self
         self.lastNameTextField.delegate = self
         self.emailTextField.delegate = self
         self.passwordTextField.delegate = self
+        self.firstNameBoxView.layer.cornerRadius = 4.0
+        self.lastNameBoxView.layer.cornerRadius = 4.0
+        self.emailBoxView.layer.cornerRadius = 4.0
+        self.passwordBoxView.layer.cornerRadius = 4.0
+        
+        self.signUpButton.setBackgroundImage(UIImage(named: "btn_white_resizable"), for: UIControlState.normal)
+        self.signUpButton.setBackgroundImage(UIImage(named: "btn_white_resizable"), for: UIControlState.highlighted)
         self.signUpButton.isEnabled = false
         
         self.userPool = AWSCognitoIdentityUserPool.init(forKey: AWSCognitoUserPoolsSignInProviderKey)
@@ -43,47 +53,6 @@ class SignUpTableViewController: UITableViewController {
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-    }
-    
-    // MARK: Configuration
-    
-    fileprivate func configureLegalLabel() {
-        let legalMutableAttributedString = NSMutableAttributedString(string: "By signing up, you agree to our ")
-        let termsOfServiceAttributedString = NSAttributedString(string: "Terms of service", attributes: [NSUnderlineStyleAttributeName: NSUnderlineStyle.styleSingle.rawValue])
-        let privacyPolicyAttributedString = NSAttributedString(string: "Privacy Policy", attributes: [NSUnderlineStyleAttributeName: NSUnderlineStyle.styleSingle.rawValue])
-        legalMutableAttributedString.append(termsOfServiceAttributedString)
-        legalMutableAttributedString.append(NSAttributedString(string: " and "))
-        legalMutableAttributedString.append(privacyPolicyAttributedString)
-        legalMutableAttributedString.append(NSAttributedString(string: "."))
-        self.legalLabel.attributedText = legalMutableAttributedString
-    }
-    
-    // MARK: UITableViewDelegate
-    
-    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        switch indexPath.row {
-        case 0:
-            return 264.0
-        case 1:
-            return 76.0
-        case 2:
-            return 82.0
-        default:
-            return 0.0
-        }
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        switch indexPath.row {
-        case 0:
-            return 264.0
-        case 1:
-            return 76.0
-        case 2:
-            return UITableViewAutomaticDimension
-        default:
-            return 0.0
-        }
     }
     
     // MARK: UIScrollViewDelegate
@@ -258,6 +227,15 @@ extension SignUpTableViewController: UITextFieldDelegate {
         default:
             return false
         }
+    }
+}
+
+extension SignUpTableViewController: UITextViewDelegate {
+    
+    func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange) -> Bool {
+        print("bla")
+        print(URL)
+        return true
     }
 }
 

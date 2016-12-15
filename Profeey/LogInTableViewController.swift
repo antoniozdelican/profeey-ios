@@ -14,7 +14,9 @@ class LogInTableViewController: UITableViewController {
     
     @IBOutlet weak var usernameTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
-    @IBOutlet weak var forgotPasswordLabel: UILabel!
+    @IBOutlet weak var usernameBoxView: UIView!
+    @IBOutlet weak var passwordBoxView: UIView!
+    @IBOutlet weak var forgotPasswordButton: UIButton!
     @IBOutlet weak var logInButton: UIButton!
     
     // NEW
@@ -22,9 +24,13 @@ class LogInTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.configureForgotPasswordLabel()
         self.usernameTextField.delegate = self
         self.passwordTextField.delegate = self
+        self.usernameBoxView.layer.cornerRadius = 4.0
+        self.passwordBoxView.layer.cornerRadius = 4.0
+        
+        self.logInButton.setBackgroundImage(UIImage(named: "btn_white_resizable"), for: UIControlState.normal)
+        self.logInButton.setBackgroundImage(UIImage(named: "btn_white_resizable"), for: UIControlState.highlighted)
         self.logInButton.isEnabled = false
     }
     
@@ -35,41 +41,6 @@ class LogInTableViewController: UITableViewController {
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-    }
-    
-    // MARK: Configuration
-    
-    fileprivate func configureForgotPasswordLabel() {
-        let forgotPasswordAttributedString = NSAttributedString(string: "Forgot password?", attributes: [NSUnderlineStyleAttributeName: NSUnderlineStyle.styleSingle.rawValue])
-        self.forgotPasswordLabel.attributedText = forgotPasswordAttributedString
-    }
-    
-    // MARK: UITableViewDelegate
-    
-    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        switch indexPath.row {
-        case 0:
-            return 150.0
-        case 1:
-            return 76.0
-        case 2:
-            return 65.0
-        default:
-            return 0.0
-        }
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        switch indexPath.row {
-        case 0:
-            return 150.0
-        case 1:
-            return 76.0
-        case 2:
-            return UITableViewAutomaticDimension
-        default:
-            return 0.0
-        }
     }
     
     // MARK: UIScrollViewDelegate

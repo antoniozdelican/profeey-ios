@@ -15,6 +15,7 @@ class UsernameTableViewController: UITableViewController {
     
     @IBOutlet weak var profilePicImageView: UIImageView!
     @IBOutlet weak var usernameTextField: UITextField!
+    @IBOutlet weak var usernameBoxView: UIView!
     @IBOutlet weak var continueButton: UIButton!
     
     fileprivate var userPool: AWSCognitoIdentityUserPool?
@@ -22,8 +23,14 @@ class UsernameTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.configureNavigationBar()
         self.profilePicImageView.layer.cornerRadius = 4.0
+        
         self.usernameTextField.delegate = self
+        self.usernameBoxView.layer.cornerRadius = 4.0
+        
+        self.continueButton.setBackgroundImage(UIImage(named: "btn_white_resizable"), for: UIControlState.normal)
+        self.continueButton.setBackgroundImage(UIImage(named: "btn_white_resizable"), for: UIControlState.highlighted)
         self.continueButton.isEnabled = false
         
         // CHECK IF IT IS Facebook user or UserPool!
@@ -38,6 +45,20 @@ class UsernameTableViewController: UITableViewController {
         super.didReceiveMemoryWarning()
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return UIStatusBarStyle.lightContent
+    }
+    
+    // MARK: Configuration
+    
+    fileprivate func configureNavigationBar() {
+        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        self.navigationController?.navigationBar.shadowImage = UIImage()
+        self.navigationController?.navigationBar.barTintColor = Colors.turquoise
+        self.navigationController?.navigationBar.tintColor = UIColor.white
+        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
+    }
+    
     // MARK: Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -48,15 +69,6 @@ class UsernameTableViewController: UITableViewController {
         }
     }
     
-    // MARK: UITableViewDelegate
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        if indexPath.row == 0 {
-            self.editProfilePicCellTapped()
-        }
-    }
-    
     // MARK: UIScrollViewDelegate
     
     override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
@@ -64,6 +76,26 @@ class UsernameTableViewController: UITableViewController {
     }
     
     // MARK: IBActions
+    
+    @IBAction func profilePicImageViewTapped(_ sender: Any) {
+        self.usernameTextField.resignFirstResponder()
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
+        let removePhotoAction = UIAlertAction(title: "Remove Photo", style: UIAlertActionStyle.destructive, handler: {
+            (alert: UIAlertAction) in
+            self.newProfilePicImageData = nil
+            self.profilePicImageView.image = UIImage(named: "ic_add_profile_pic")
+            self.tableView.reloadData()
+        })
+        alertController.addAction(removePhotoAction)
+        let changePhotoAction = UIAlertAction(title: "Add Profile Photo", style: UIAlertActionStyle.default, handler: {
+            (alert: UIAlertAction) in
+            self.performSegue(withIdentifier: "segueToCaptureVc", sender: self)
+        })
+        alertController.addAction(changePhotoAction)
+        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil)
+        alertController.addAction(cancelAction)
+        self.present(alertController, animated: true, completion: nil)
+    }
     
     @IBAction func usernameTextFieldChanged(_ sender: Any) {
         guard let preferredUsername = self.usernameTextField.text?.trimm(), !preferredUsername.isEmpty else {
@@ -78,6 +110,7 @@ class UsernameTableViewController: UITableViewController {
         self.view.endEditing(true)
         // CHECK IF IT IS Facebook user or UserPool!
         self.queryPreferredUsernames()
+        self.performSegue(withIdentifier: "segueToWelcomeProfessionsVc", sender: self)
     }
     
     @IBAction func unwindToUsernameTableViewController(_ segue: UIStoryboardSegue) {
@@ -90,28 +123,6 @@ class UsernameTableViewController: UITableViewController {
             self.profilePicImageView.image = finalImage
             self.tableView.reloadData()
         }
-    }
-    
-    // MARK: Helpers
-    
-    fileprivate func editProfilePicCellTapped() {
-        self.view.endEditing(true)
-        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
-        let removePhotoAction = UIAlertAction(title: "Remove Photo", style: UIAlertActionStyle.destructive, handler: {
-            (alert: UIAlertAction) in
-            self.newProfilePicImageData = nil
-            self.profilePicImageView.image = nil
-            self.tableView.reloadData()
-        })
-        alertController.addAction(removePhotoAction)
-        let changePhotoAction = UIAlertAction(title: "Add Profile Photo", style: UIAlertActionStyle.default, handler: {
-            (alert: UIAlertAction) in
-            self.performSegue(withIdentifier: "segueToCaptureVc", sender: self)
-        })
-        alertController.addAction(changePhotoAction)
-        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil)
-        alertController.addAction(cancelAction)
-        self.present(alertController, animated: true, completion: nil)
     }
     
     // MARK: AWS

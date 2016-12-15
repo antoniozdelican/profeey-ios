@@ -15,14 +15,17 @@ class OnboardingNavigationController: UINavigationController {
         super.viewDidLoad()
         self.navigationBar.setBackgroundImage(UIImage(), for: .default)
         self.navigationBar.shadowImage = UIImage()
-        self.navigationBar.backgroundColor = UIColor.white
-        self.navigationBar.barTintColor = UIColor.white
-        self.navigationBar.tintColor = Colors.black
-        self.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: Colors.black]
+        self.navigationBar.barTintColor = Colors.turquoise
+        self.navigationBar.tintColor = UIColor.white
+        self.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
     }
 }
 

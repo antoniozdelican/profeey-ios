@@ -93,15 +93,6 @@ class LocationsOldTableViewController: UITableViewController {
     
     // MARK: UITableViewDelegate
     
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let searchText = self.searchBar.text else {
-            return nil
-        }
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cellHeader") as! HeaderTableViewCell
-        cell.headerTitle.text = searchText.isEmpty ? "RECENT" : "BEST MATCHES"
-        cell.backgroundColor = UIColor.white
-        return cell
-    }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)

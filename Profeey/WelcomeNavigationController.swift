@@ -12,15 +12,13 @@ class WelcomeNavigationController: UINavigationController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        self.navigationBar.shadowImage = UIImage()
-        self.navigationBar.backgroundColor = UIColor.white
-        self.navigationBar.barTintColor = UIColor.white
-        self.navigationBar.tintColor = Colors.black
-        self.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: Colors.black]
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+    }
+    
+    override var childViewControllerForStatusBarStyle: UIViewController? {
+        return visibleViewController
     }
 }

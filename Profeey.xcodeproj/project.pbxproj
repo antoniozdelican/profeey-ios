@@ -17,7 +17,6 @@
 		A903EB591D16A39700B33025 /* UIImage+FixOrientation.m in Sources */ = {isa = PBXBuildFile; fileRef = A903EB561D16A39700B33025 /* UIImage+FixOrientation.m */; };
 		A903EB5B1D16A3C800B33025 /* ProfeeySimpleCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = A903EB5A1D16A3C800B33025 /* ProfeeySimpleCamera.swift */; };
 		A905470D1D8956E700315AB0 /* LoadingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A905470C1D8956E700315AB0 /* LoadingTableViewCell.swift */; };
-		A90A09581D43E5A7006AC49D /* WelcomeNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A90A09571D43E5A7006AC49D /* WelcomeNavigationController.swift */; };
 		A913FC701D51F6AF000D10A6 /* DynamoDBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A913FC6F1D51F6AF000D10A6 /* DynamoDBManager.swift */; };
 		A913FC721D51FAD6000D10A6 /* PRFYDynamoDBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A913FC711D51FAD6000D10A6 /* PRFYDynamoDBManager.swift */; };
 		A915F86E1DC0D49C0031C45F /* LocationsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A915F86D1DC0D49C0031C45F /* LocationsTableViewController.swift */; };
@@ -82,10 +81,10 @@
 		A96622001D0EBBC200298CE7 /* Onboarding.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A96621FF1D0EBBC200298CE7 /* Onboarding.storyboard */; };
 		A96622051D0EC49700298CE7 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96622041D0EC49700298CE7 /* Colors.swift */; };
 		A96C9AB51D7DADC3007E0B9D /* UploadingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96C9AB41D7DADC3007E0B9D /* UploadingTableViewCell.swift */; };
+		A9707D231E02997D005D729D /* WelcomeNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9707D221E02997D005D729D /* WelcomeNavigationController.swift */; };
 		A975529C1D4F4D0300F773FF /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A975529B1D4F4D0300F773FF /* PreviewViewController.swift */; };
 		A97A3F691DF027E800FC5AEA /* AWSUserEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = A97A3F681DF027E800FC5AEA /* AWSUserEndpoint.swift */; };
 		A97A3F6B1DF027F200FC5AEA /* AWSUserEndpointsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A97A3F6A1DF027F200FC5AEA /* AWSUserEndpointsTable.swift */; };
-		A97A9AEB1D85C03B00507517 /* HeaderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A97A9AEA1D85C03B00507517 /* HeaderTableViewCell.swift */; };
 		A97A9AED1D85D0ED00507517 /* ProfessionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A97A9AEC1D85D0ED00507517 /* ProfessionsTableViewController.swift */; };
 		A97DBEEB1DF16ACB00A9F4FE /* Search.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A97DBEEA1DF16ACB00A9F4FE /* Search.storyboard */; };
 		A97DBEED1DF16BD400A9F4FE /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A97DBEEC1DF16BD400A9F4FE /* SearchViewController.swift */; };
@@ -223,7 +222,6 @@
 		A9EAD3401D1E8E0C00994292 /* NoSQLModelHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9EAD33F1D1E8E0C00994292 /* NoSQLModelHelpers.swift */; };
 		A9EAEC071DA6A38600DA6A4D /* AWSPostUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9EAEC061DA6A38600DA6A4D /* AWSPostUpdate.swift */; };
 		A9F2E7881DE89FF7001A25EC /* TTTAttributedLabel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9F2E7871DE89FF7001A25EC /* TTTAttributedLabel.framework */; };
-		A9F2E7891DE8A003001A25EC /* TTTAttributedLabel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9F2E7871DE89FF7001A25EC /* TTTAttributedLabel.framework */; };
 		A9F2E78A1DE8A003001A25EC /* TTTAttributedLabel.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A9F2E7871DE89FF7001A25EC /* TTTAttributedLabel.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A9F345911DE0C80D00A5D368 /* PRFYCloudSearchProfessionsResultItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F345901DE0C80D00A5D368 /* PRFYCloudSearchProfessionsResultItem.swift */; };
 		A9F345931DE0C81800A5D368 /* PRFYCloudSearchProfessionsResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F345921DE0C81800A5D368 /* PRFYCloudSearchProfessionsResult.swift */; };
@@ -270,7 +268,6 @@
 		A903EB561D16A39700B33025 /* UIImage+FixOrientation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+FixOrientation.m"; sourceTree = "<group>"; };
 		A903EB5A1D16A3C800B33025 /* ProfeeySimpleCamera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfeeySimpleCamera.swift; sourceTree = "<group>"; };
 		A905470C1D8956E700315AB0 /* LoadingTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingTableViewCell.swift; sourceTree = "<group>"; };
-		A90A09571D43E5A7006AC49D /* WelcomeNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeNavigationController.swift; sourceTree = "<group>"; };
 		A913FC6F1D51F6AF000D10A6 /* DynamoDBManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DynamoDBManager.swift; sourceTree = "<group>"; };
 		A913FC711D51FAD6000D10A6 /* PRFYDynamoDBManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PRFYDynamoDBManager.swift; sourceTree = "<group>"; };
 		A915F86D1DC0D49C0031C45F /* LocationsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationsTableViewController.swift; sourceTree = "<group>"; };
@@ -329,10 +326,10 @@
 		A96621FF1D0EBBC200298CE7 /* Onboarding.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Onboarding.storyboard; sourceTree = "<group>"; };
 		A96622041D0EC49700298CE7 /* Colors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		A96C9AB41D7DADC3007E0B9D /* UploadingTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UploadingTableViewCell.swift; sourceTree = "<group>"; };
+		A9707D221E02997D005D729D /* WelcomeNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeNavigationController.swift; sourceTree = "<group>"; };
 		A975529B1D4F4D0300F773FF /* PreviewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreviewViewController.swift; sourceTree = "<group>"; };
 		A97A3F681DF027E800FC5AEA /* AWSUserEndpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSUserEndpoint.swift; sourceTree = "<group>"; };
 		A97A3F6A1DF027F200FC5AEA /* AWSUserEndpointsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSUserEndpointsTable.swift; sourceTree = "<group>"; };
-		A97A9AEA1D85C03B00507517 /* HeaderTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeaderTableViewCell.swift; sourceTree = "<group>"; };
 		A97A9AEC1D85D0ED00507517 /* ProfessionsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfessionsTableViewController.swift; sourceTree = "<group>"; };
 		A97DBEEA1DF16ACB00A9F4FE /* Search.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Search.storyboard; sourceTree = "<group>"; };
 		A97DBEEC1DF16BD400A9F4FE /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
@@ -484,7 +481,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A9F2E7891DE8A003001A25EC /* TTTAttributedLabel.framework in Frameworks */,
 				A9F2E7881DE89FF7001A25EC /* TTTAttributedLabel.framework in Frameworks */,
 				A961E71A1DE847CA00D45634 /* AWSMobileHubHelper.framework in Frameworks */,
 				A961E7251DE847F600D45634 /* AWSMobileAnalytics.framework in Frameworks */,
@@ -746,7 +742,6 @@
 			children = (
 				A9459F6F1E00196100978DA8 /* TableSectionHeader.xib */,
 				A9459F711E00197200978DA8 /* TableSectionHeader.swift */,
-				A97A9AEA1D85C03B00507517 /* HeaderTableViewCell.swift */,
 				A905470C1D8956E700315AB0 /* LoadingTableViewCell.swift */,
 				A9B68DA01D897A24006AC4EA /* EmptyTableViewCell.swift */,
 				A9BF16481D6514C900060A9E /* NoResultsTableViewCell.swift */,
@@ -833,7 +828,7 @@
 			isa = PBXGroup;
 			children = (
 				A99ADA1E1D0F189E0050E329 /* Welcome.storyboard */,
-				A90A09571D43E5A7006AC49D /* WelcomeNavigationController.swift */,
+				A9707D221E02997D005D729D /* WelcomeNavigationController.swift */,
 				A9A21DB41D95397A0093F162 /* UsernameTableViewController.swift */,
 				A9D97BF71D95718C00D6F22E /* WelcomeProfessionsTableViewController.swift */,
 			);
@@ -1330,7 +1325,6 @@
 				A9CBBC581DB64A2B009C8EC7 /* EditEducationFieldOfStudyTableViewCell.swift in Sources */,
 				A9CBBC451DB634A8009C8EC7 /* EditWorkExperienceTableViewController.swift in Sources */,
 				A99B9E2F1DB53DFC0047360D /* AWSEducationUpdate.swift in Sources */,
-				A97A9AEB1D85C03B00507517 /* HeaderTableViewCell.swift in Sources */,
 				A9CBBC5C1DB651BD009C8EC7 /* ExperiencesTableViewController.swift in Sources */,
 				A9D716A91D57486100300135 /* PostSmallTableViewCell.swift in Sources */,
 				A91C1CD91DEDA8C2006FBDD4 /* PRFYNotification.swift in Sources */,
@@ -1348,7 +1342,6 @@
 				A9BF164B1D6519D100060A9E /* SearchingTableViewCell.swift in Sources */,
 				A95E93B11DBF8D4500A1FF6E /* AddLocationTableViewCell.swift in Sources */,
 				A9E9EDAC1DFAC3C600BC2253 /* PRFYCloudSearchLocationsResultItem.swift in Sources */,
-				A90A09581D43E5A7006AC49D /* WelcomeNavigationController.swift in Sources */,
 				A92F93ED1DC3940A00065CD1 /* EditProfileTableViewController.swift in Sources */,
 				A9459F721E00197200978DA8 /* TableSectionHeader.swift in Sources */,
 				A9F345931DE0C81800A5D368 /* PRFYCloudSearchProfessionsResult.swift in Sources */,
@@ -1428,6 +1421,7 @@
 				A9E3DD431D86A42400DED8C8 /* Profession.swift in Sources */,
 				A9A503991D2FA9180030A472 /* LocalService.swift in Sources */,
 				A9CBBC661DB669EA009C8EC7 /* EditEducationDescriptionTableViewCell.swift in Sources */,
+				A9707D231E02997D005D729D /* WelcomeNavigationController.swift in Sources */,
 				A9EAEC071DA6A38600DA6A4D /* AWSPostUpdate.swift in Sources */,
 				A9A21DB51D95397A0093F162 /* UsernameTableViewController.swift in Sources */,
 				A99FD1A31DCA657400BD2CC5 /* AWSCommentUpdate.swift in Sources */,
