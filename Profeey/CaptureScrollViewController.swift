@@ -38,15 +38,27 @@ class CaptureScrollViewController: UIViewController {
     fileprivate var asset: PHAsset?
     fileprivate var isPhoto: Bool = true
     
+    // Initialy is not but as soon as it's loaded, hide it.
+    fileprivate var isStatusBarHidden: Bool = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         self.configureNavigationItems()
         self.configureScrollView()
+        
+        self.isStatusBarHidden = true
+        UIView.animate(withDuration: 0.2, animations: {
+            self.setNeedsStatusBarAppearanceUpdate()
+        })
     }
     
     override var prefersStatusBarHidden: Bool {
-        return true
+        return self.isStatusBarHidden
+    }
+    
+    override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
+        return UIStatusBarAnimation.slide
     }
 
     override func didReceiveMemoryWarning() {

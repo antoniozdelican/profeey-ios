@@ -37,17 +37,23 @@ class HomeTableViewController: UITableViewController {
         self.tableView.delaysContentTouches = false
         self.tableView.contentInset = UIEdgeInsetsMake(-1.0, 0.0, 0.0, 0.0)
         
-        // Set background views
+        // Set background views.
         self.activityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
         self.tableView.backgroundView = self.activityIndicatorView
         Bundle.main.loadNibNamed("HomeEmptyFeedView", owner: self, options: nil)
         self.homeEmptyFeedView.homeEmptyFeedViewDelegate = self
         
+        // Set backgroundView for statusBar.
+        if let navigationController = self.navigationController {
+            let statusBarBackgroundView = UIView(frame: UIApplication.shared.statusBarFrame)
+            statusBarBackgroundView.backgroundColor = Colors.whiteDark
+            navigationController.view.insertSubview(statusBarBackgroundView, belowSubview: navigationController.navigationBar)
+        }
+        
         if AWSIdentityManager.defaultIdentityManager().isLoggedIn {
             self.isLoadingPosts = true
             self.activityIndicatorView?.startAnimating()
             self.queryUserActivitiesDateSorted()
-            
         }
     }
     
@@ -65,13 +71,19 @@ class HomeTableViewController: UITableViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        if let navigationController = self.navigationController , navigationController.isNavigationBarHidden {
+        guard let navigationController = self.navigationController else {
+            return
+        }
+        if navigationController.isNavigationBarHidden {
             self.isNavigationBarHidden = true
         } else {
             self.isNavigationBarHidden = false
         }
-        self.navigationController?.hidesBarsOnSwipe = false
-        self.navigationController?.setNavigationBarHidden(false, animated: true)
+        // Only hide navigationBar if it's push, not CaptureVc presenting modally.
+        if navigationController.childViewControllers.count > 1 {
+            navigationController.hidesBarsOnSwipe = false
+            navigationController.setNavigationBarHidden(false, animated: true)
+        }
     }
 
     override func didReceiveMemoryWarning() {

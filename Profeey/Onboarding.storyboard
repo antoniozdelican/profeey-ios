@@ -439,8 +439,8 @@
                                             </subviews>
                                             <constraints>
                                                 <constraint firstAttribute="trailing" secondItem="3gb-hs-OsF" secondAttribute="trailing" constant="28" id="6Ls-rg-afZ"/>
+                                                <constraint firstAttribute="bottom" secondItem="3gb-hs-OsF" secondAttribute="bottom" constant="16.5" id="PQi-b8-Lbd"/>
                                                 <constraint firstItem="3gb-hs-OsF" firstAttribute="leading" secondItem="86j-Ki-a7j" secondAttribute="leading" constant="28" id="Rkq-ZW-1g2"/>
-                                                <constraint firstAttribute="bottom" secondItem="3gb-hs-OsF" secondAttribute="bottom" constant="16.5" id="ly3-sm-Zo7"/>
                                                 <constraint firstItem="3gb-hs-OsF" firstAttribute="top" secondItem="86j-Ki-a7j" secondAttribute="top" constant="16" id="rEy-Qw-Jn3"/>
                                             </constraints>
                                         </tableViewCellContentView>
@@ -703,7 +703,7 @@
         <!--Missing Username Navigation Controller-->
         <scene sceneID="I6E-gb-xEt">
             <objects>
-                <navigationController storyboardIdentifier="MissingUsernameNavigationController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="2Ni-Ae-Ynk" customClass="MissingUsernameNavigationController" customModule="Profeey" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="missingUsernameNavigationController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="2Ni-Ae-Ynk" customClass="MissingUsernameNavigationController" customModule="Profeey" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="8Bn-kE-da8">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -1007,6 +1007,6 @@
         <image name="ic_facebook_f" width="24" height="24"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="2ZL-dX-jrn"/>
+        <segue reference="0y1-PW-dx7"/>
     </inferredMetricsTieBreakers>
 </document>

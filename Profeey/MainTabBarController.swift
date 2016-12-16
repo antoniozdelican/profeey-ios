@@ -26,7 +26,6 @@ class MainTabBarController: UITabBarController {
         self.view.backgroundColor = Colors.whiteDark
         self.delegate = self
         self.configureView()
-        self.configureStatusBar()
         
         // Get currentUser from DynamoDB upon initialization of this rootVc.
         if AWSIdentityManager.defaultIdentityManager().isLoggedIn && PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB == nil {
@@ -86,14 +85,6 @@ class MainTabBarController: UITabBarController {
                 }
             }
         }
-    }
-    
-    // Add backgroundView and color behind statusBar.
-    fileprivate func configureStatusBar() {
-        let statusBarFrame = UIApplication.shared.statusBarFrame
-        let statusBarBackgroundView = UIView(frame: statusBarFrame)
-        statusBarBackgroundView.backgroundColor = Colors.whiteDark
-        self.view.addSubview(statusBarBackgroundView)
     }
     
     // MARK: AWS
@@ -182,7 +173,7 @@ class MainTabBarController: UITabBarController {
     // MARK: Helpers
     
     fileprivate func showMissingUsernameFlow() {
-        let navigationController = UIStoryboard(name: "Onboarding", bundle: nil).instantiateViewController(withIdentifier: "MissingUsernameNavigationController")
+        let navigationController = UIStoryboard(name: "Onboarding", bundle: nil).instantiateViewController(withIdentifier: "missingUsernameNavigationController")
         self.present(navigationController, animated: true, completion: nil)
     }
     
