@@ -207,7 +207,7 @@
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3cm-Ol-T31">
                                                             <rect key="frame" x="0.0" y="0.0" width="319" height="44"/>
                                                             <subviews>
-                                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="First Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="srH-1R-MlK">
+                                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="First Name" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="srH-1R-MlK">
                                                                     <rect key="frame" x="12" y="0.0" width="295" height="44"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="height" constant="44" id="M1q-fw-7le"/>
@@ -232,7 +232,7 @@
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iwg-ES-JFf">
                                                             <rect key="frame" x="0.0" y="52" width="319" height="44"/>
                                                             <subviews>
-                                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Last Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="aFK-HK-ttC">
+                                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Last Name" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="aFK-HK-ttC">
                                                                     <rect key="frame" x="12" y="0.0" width="295" height="44"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="height" constant="44" id="eav-Mx-I6r"/>
@@ -257,7 +257,7 @@
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HS8-ss-NkF">
                                                             <rect key="frame" x="0.0" y="104" width="319" height="44"/>
                                                             <subviews>
-                                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Wb0-0V-eba">
+                                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Wb0-0V-eba">
                                                                     <rect key="frame" x="12" y="0.0" width="295" height="44"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="height" constant="44" id="BeB-Er-CAP"/>
@@ -282,7 +282,7 @@
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4OB-C4-0CN">
                                                             <rect key="frame" x="0.0" y="156" width="319" height="44"/>
                                                             <subviews>
-                                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="WfY-L6-mYn">
+                                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="WfY-L6-mYn">
                                                                     <rect key="frame" x="12" y="0.0" width="295" height="44"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="height" constant="44" id="W1a-U9-Hgs"/>
@@ -412,7 +412,7 @@
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="G4z-an-XnT">
                                                             <rect key="frame" x="0.0" y="58.5" width="319" height="44"/>
                                                             <subviews>
-                                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Confirmation Code" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Gnj-Vb-jQV">
+                                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Confirmation Code" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Gnj-Vb-jQV">
                                                                     <rect key="frame" x="12" y="0.0" width="295" height="44"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="height" constant="44" id="UYQ-lu-qZF"/>
@@ -528,7 +528,7 @@
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nvS-Db-phe">
                                                             <rect key="frame" x="0.0" y="0.0" width="319" height="44"/>
                                                             <subviews>
-                                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Username of Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6ty-PG-Mr8">
+                                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Username of Email" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="6ty-PG-Mr8">
                                                                     <rect key="frame" x="12" y="0.0" width="295" height="44"/>
                                                                     <color key="textColor" red="0.14748379589999999" green="0.1474793851" blue="0.14748191829999999" alpha="1" colorSpace="calibratedRGB"/>
                                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
@@ -550,7 +550,7 @@
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1qd-2d-bF1">
                                                             <rect key="frame" x="0.0" y="52" width="319" height="44"/>
                                                             <subviews>
-                                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Wmm-ux-myl">
+                                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Wmm-ux-myl">
                                                                     <rect key="frame" x="12" y="0.0" width="295" height="44"/>
                                                                     <color key="textColor" red="0.14748379589999999" green="0.1474793851" blue="0.14748191829999999" alpha="1" colorSpace="calibratedRGB"/>
                                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
@@ -743,7 +743,7 @@
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5FN-cn-fzt">
                                                     <rect key="frame" x="28" y="146" width="319" height="44"/>
                                                     <subviews>
-                                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Username" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="s5C-cX-UZr">
+                                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Username" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="s5C-cX-UZr">
                                                             <rect key="frame" x="12" y="0.0" width="295" height="44"/>
                                                             <color key="textColor" red="0.14748378100000001" green="0.1474793851" blue="0.14748187360000001" alpha="1" colorSpace="calibratedRGB"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
@@ -1007,6 +1007,6 @@
         <image name="ic_facebook_f" width="24" height="24"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="0y1-PW-dx7"/>
+        <segue reference="2ZL-dX-jrn"/>
     </inferredMetricsTieBreakers>
 </document>

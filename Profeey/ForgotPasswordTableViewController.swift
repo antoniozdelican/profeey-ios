@@ -117,9 +117,7 @@ class ForgotPasswordTableViewController: UITableViewController {
                         
                     }
                     let alertController = self.getSimpleAlertWithTitle(title, message: message, cancelButtonTitle: "Try Again")
-                    self.present(alertController, animated: true, completion: {
-                        self.usernameTextField.becomeFirstResponder()
-                    })
+                    self.present(alertController, animated: true, completion: nil)
                 } else {
                     self.performSegue(withIdentifier: "segueToNewPasswordVc", sender: self)
                 }
