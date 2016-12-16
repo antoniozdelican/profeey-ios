@@ -52,6 +52,7 @@ class ForgotPasswordTableViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destinationViewController = segue.destination as? NewPasswordTableViewController {
             destinationViewController.user = self.user
+            destinationViewController.username = self.usernameTextField.text
         }
     }
     
@@ -73,8 +74,7 @@ class ForgotPasswordTableViewController: UITableViewController {
     
     @IBAction func sendLinkButtonTapped(_ sender: AnyObject) {
         self.view.endEditing(true)
-        self.performSegue(withIdentifier: "segueToNewPasswordVc", sender: self)
-        //self.sendForgotPasswordCode()
+        self.sendForgotPasswordCode()
     }
     
     @IBAction func closeButtonTapped(_ sender: AnyObject) {

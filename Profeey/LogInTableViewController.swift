@@ -73,6 +73,14 @@ class LogInTableViewController: UITableViewController {
         self.performSegue(withIdentifier: "segueToForgotPasswordVc", sender: self)
     }
     
+    // When coming back from NewPasswordVc.
+    @IBAction func unwindToLogInTableViewController(_ segue: UIStoryboardSegue) {
+        if let sourceViewController = segue.source as? NewPasswordTableViewController {
+            self.usernameTextField.text = sourceViewController.username
+            self.passwordTextField.becomeFirstResponder()
+        }
+    }
+    
     
     // MARK: Helpers
     

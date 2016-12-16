@@ -144,7 +144,6 @@ class SignUpTableViewController: UITableViewController {
                             title = type
                             message = error.userInfo["message"] as? String
                         }
-                        
                     }
                     let alertController = self.getSimpleAlertWithTitle(title, message: message, cancelButtonTitle: "Try Again")
                     self.present(alertController, animated: true, completion: nil)

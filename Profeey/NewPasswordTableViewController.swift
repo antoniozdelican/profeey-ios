@@ -18,7 +18,9 @@ class NewPasswordTableViewController: UITableViewController {
     @IBOutlet weak var newPasswordBoxView: UIView!
     @IBOutlet weak var resetPasswordButton: UIButton!
     
+    // Got from ForgotPasswordVc.
     var user: AWSCognitoIdentityUser?
+    var username: String?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,6 +49,14 @@ class NewPasswordTableViewController: UITableViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
+    
+    // MARK: Navigation
+    
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        if let destinationViewController = segue.destination as? NewPasswordTableViewController {
+//            destinationViewController.user = self.user
+//        }
+//    }
     
     // MARK: UIScrollViewDelegate
     
@@ -92,25 +102,27 @@ class NewPasswordTableViewController: UITableViewController {
                     var title: String = "Something went wrong"
                     var message: String? = "Please try again."
                     print(error.localizedDescription)
-//                    if let type = error.userInfo["__type"] as? String {
-//                        switch type {
-//                        case "UserNotFoundException":
-//                            title = "User Not Found"
-//                            message = "The username/email you entered doesn't belong to an account. Please try again."
-//                        case "InvalidParameterException":
-//                            title = "Unverified Email"
-//                            message = "It appears that your email is not verfied so we can not reset your password. Please contact our support."
-//                        default:
-//                            title = type
-//                            message = error.userInfo["message"] as? String
-//                        }
-//                        
-//                    }
-//                    let alertController = self.getSimpleAlertWithTitle(title, message: message, cancelButtonTitle: "Try Again")
-//                    self.present(alertController, animated: true, completion: nil)
+                    if let type = error.userInfo["__type"] as? String {
+                        switch type {
+                        case "CodeMismatchException":
+                            title = "Invalid Code"
+                            message = "The confirmation code you entered is invalid. Please try again."
+                        case "InvalidParameterException":
+                            title = "Invalid Password"
+                            message = "The password you entered should be at least 8 characters long with numbers, uppercase and lowercase letters."
+                        case "InvalidPasswordException":
+                            title = "Invalid Password"
+                            message = "The password you entered should be at least 8 characters long with numbers, uppercase and lowercase letters."
+                        default:
+                            title = type
+                            message = error.userInfo["message"] as? String
+                        }
+                    }
+                    let alertController = self.getSimpleAlertWithTitle(title, message: message, cancelButtonTitle: "Try Again")
+                    self.present(alertController, animated: true, completion: nil)
                 } else {
-//                    self.performSegue(withIdentifier: "segueToNewPasswordVc", sender: self)
-                    print("TODO")
+                    // Unwind to LogInVc and pass username/email.
+                    self.performSegue(withIdentifier: "segueUnwindToLogInVc", sender: self)
                 }
             })
             return nil
