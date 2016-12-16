@@ -112,9 +112,9 @@ class MainTabBarController: UITabBarController {
                         return
                     }
                     guard awsUser._preferredUsername != nil else {
-                        // This only happens if users closes the app on the UsernameTableViewController of the Welcome flow.
+                        // This only happens if users closes the app on the UsernameTableViewController of the Onboarding flow.
                         print("getCurrentUser error: currentUser doesn't have preferredUsername.")
-                        self.redirectToWelcome()
+                        self.showMissingUsernameFlow()
                         return
                     }
                     let currentUser = CurrentUser(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationName: awsUser._locationName)
@@ -181,12 +181,9 @@ class MainTabBarController: UITabBarController {
     
     // MARK: Helpers
     
-    fileprivate func redirectToWelcome() {
-        guard let window = UIApplication.shared.keyWindow,
-            let initialViewController = UIStoryboard(name: "Welcome", bundle: nil).instantiateInitialViewController() else {
-                return
-        }
-        window.rootViewController = initialViewController
+    fileprivate func showMissingUsernameFlow() {
+        let navigationController = UIStoryboard(name: "Onboarding", bundle: nil).instantiateViewController(withIdentifier: "MissingUsernameNavigationController")
+        self.present(navigationController, animated: true, completion: nil)
     }
     
     // MARK: Public

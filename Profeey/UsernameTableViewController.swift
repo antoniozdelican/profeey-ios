@@ -23,7 +23,8 @@ class UsernameTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.configureNavigationBar()
+        self.navigationItem.hidesBackButton = true
+        
         self.profilePicImageView.layer.cornerRadius = 4.0
         
         self.usernameTextField.delegate = self
@@ -51,13 +52,13 @@ class UsernameTableViewController: UITableViewController {
     
     // MARK: Configuration
     
-    fileprivate func configureNavigationBar() {
-        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        self.navigationController?.navigationBar.shadowImage = UIImage()
-        self.navigationController?.navigationBar.barTintColor = Colors.turquoise
-        self.navigationController?.navigationBar.tintColor = UIColor.white
-        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
-    }
+//    fileprivate func configureNavigationBar() {
+//        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+//        self.navigationController?.navigationBar.shadowImage = UIImage()
+//        self.navigationController?.navigationBar.barTintColor = Colors.turquoise
+//        self.navigationController?.navigationBar.tintColor = UIColor.white
+//        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
+//    }
     
     // MARK: Navigation
     
@@ -84,7 +85,7 @@ class UsernameTableViewController: UITableViewController {
             (alert: UIAlertAction) in
             self.newProfilePicImageData = nil
             self.profilePicImageView.image = UIImage(named: "ic_add_profile_pic")
-            self.tableView.reloadData()
+            self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.none)
         })
         alertController.addAction(removePhotoAction)
         let changePhotoAction = UIAlertAction(title: "Add Profile Photo", style: UIAlertActionStyle.default, handler: {
@@ -110,7 +111,6 @@ class UsernameTableViewController: UITableViewController {
         self.view.endEditing(true)
         // CHECK IF IT IS Facebook user or UserPool!
         self.queryPreferredUsernames()
-        self.performSegue(withIdentifier: "segueToWelcomeProfessionsVc", sender: self)
     }
     
     @IBAction func unwindToUsernameTableViewController(_ segue: UIStoryboardSegue) {
@@ -121,7 +121,7 @@ class UsernameTableViewController: UITableViewController {
             }
             self.newProfilePicImageData = imageData
             self.profilePicImageView.image = finalImage
-            self.tableView.reloadData()
+            self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.none)
         }
     }
     

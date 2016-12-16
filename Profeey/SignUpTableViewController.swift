@@ -46,13 +46,31 @@ class SignUpTableViewController: UITableViewController {
         self.userPool = AWSCognitoIdentityUserPool.init(forKey: AWSCognitoUserPoolsSignInProviderKey)
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.firstNameTextField.becomeFirstResponder()
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.view.endEditing(true)
     }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return UIStatusBarStyle.lightContent
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+    }
+    
+    // MARK: Navigation
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let destinationViewController = segue.destination as? WelcomeVerificationTableViewController {
+            destinationViewController.firstName = self.firstNameTextField.text
+            destinationViewController.email = self.emailTextField.text
+        }
     }
     
     // MARK: UIScrollViewDelegate
@@ -78,16 +96,6 @@ class SignUpTableViewController: UITableViewController {
     @IBAction func signUpButtonTapped(_ sender: AnyObject) {
         self.view.endEditing(true)
         self.userPoolSignUp()
-    }
-    
-    // MARK: Helpers
-    
-    fileprivate func redirectToWelcome() {
-        guard let window = UIApplication.shared.keyWindow,
-            let initialViewController = UIStoryboard(name: "Welcome", bundle: nil).instantiateInitialViewController() else {
-                return
-        }
-        window.rootViewController = initialViewController
     }
     
     
@@ -195,8 +203,30 @@ class SignUpTableViewController: UITableViewController {
                     let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.userInfo["message"] as? String, cancelButtonTitle: "Try Again")
                     self.present(alertController, animated: true, completion: nil)
                 } else {
-                    // 4. Redirect.
-                    self.redirectToWelcome()
+                    // 4. getEmailVerificationCode in background.
+                    self.getEmailVerificationCode()
+                    // 5. Segue to Verification.
+                    self.performSegue(withIdentifier: "segueToWelcomeVerificationVc", sender: self)
+                }
+            })
+            return nil
+        })
+    }
+    
+    /*
+     User is confirmed via Lambda but in order to verify email/phone, it has to be done manually by entering the code.
+     To request verification code, user has to be authenticated (logged in) already - currentUser.
+     This function is executed in background.
+     */
+    fileprivate func getEmailVerificationCode() {
+        print("getEmailVerificationCode:")
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        self.userPool?.currentUser()?.getAttributeVerificationCode("email").continue({
+            (task: AWSTask) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                if let error = task.error as? NSError {
+                    print("getEmailVerificationCode error: \(error)")
                 }
             })
             return nil
@@ -222,20 +252,18 @@ extension SignUpTableViewController: UITextFieldDelegate {
             self.passwordTextField.becomeFirstResponder()
             return true
         case self.passwordTextField:
+            guard let firstName = self.firstNameTextField.text?.trimm(), !firstName.isEmpty,
+                let lastName = self.lastNameTextField.text?.trimm(), !lastName.isEmpty,
+                let email = self.emailTextField.text?.trimm(), !email.isEmpty,
+                let password = self.passwordTextField.text?.trimm(), !password.isEmpty else {
+                    return true
+            }
             self.passwordTextField.resignFirstResponder()
+            self.userPoolSignUp()
             return true
         default:
             return false
         }
-    }
-}
-
-extension SignUpTableViewController: UITextViewDelegate {
-    
-    func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange) -> Bool {
-        print("bla")
-        print(URL)
-        return true
     }
 }
 

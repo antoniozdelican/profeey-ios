@@ -13,7 +13,7 @@ class SettingsTableViewController: UITableViewController {
 
     @IBOutlet weak var privacyPolicyTableViewCell: UITableViewCell!
     @IBOutlet weak var termsAndConditionsTableViewCell: UITableViewCell!
-    @IBOutlet weak var signOutTableViewCell: UITableViewCell!
+    @IBOutlet weak var logOutTableViewCell: UITableViewCell!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,19 +33,19 @@ class SettingsTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let cell = tableView.cellForRow(at: indexPath)
-        if cell == self.signOutTableViewCell {
-            self.signOutTableViewCellTapped()
+        if cell == self.logOutTableViewCell {
+            self.logOutTableViewCellTapped()
         }
     }
     
     
     // MARK: Helpers
     
-    fileprivate func signOutTableViewCellTapped() {
-        let alertController = UIAlertController(title: "Sign Out from Profeey?", message: nil, preferredStyle: UIAlertControllerStyle.alert)
+    fileprivate func logOutTableViewCellTapped() {
+        let alertController = UIAlertController(title: "Log Out from Profeey?", message: nil, preferredStyle: UIAlertControllerStyle.alert)
         let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil)
         alertController.addAction(cancelAction)
-        let deleteConfirmAction = UIAlertAction(title: "Sign Out", style: UIAlertActionStyle.default, handler: {
+        let deleteConfirmAction = UIAlertAction(title: "Log Out", style: UIAlertActionStyle.default, handler: {
             (alert: UIAlertAction) in
             self.logOut()
         })

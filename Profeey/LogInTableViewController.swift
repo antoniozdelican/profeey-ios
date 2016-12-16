@@ -38,6 +38,10 @@ class LogInTableViewController: UITableViewController {
         super.viewWillDisappear(animated)
         self.view.endEditing(true)
     }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return UIStatusBarStyle.lightContent
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -64,6 +68,11 @@ class LogInTableViewController: UITableViewController {
         self.view.endEditing(true)
         self.userPoolLogIn()
     }
+    
+    @IBAction func forgotPasswordButtonTapped(_ sender: Any) {
+        self.performSegue(withIdentifier: "segueToForgotPasswordVc", sender: self)
+    }
+    
     
     // MARK: Helpers
     
@@ -112,7 +121,12 @@ extension LogInTableViewController: UITextFieldDelegate {
             self.passwordTextField.becomeFirstResponder()
             return true
         case self.passwordTextField:
+            guard let username = self.usernameTextField.text?.trimm(), !username.isEmpty,
+                let password = self.passwordTextField.text?.trimm(), !password.isEmpty else {
+                    return true
+            }
             self.passwordTextField.resignFirstResponder()
+            self.userPoolLogIn()
             return true
         default:
             return false
@@ -153,7 +167,6 @@ extension LogInTableViewController: AWSCognitoIdentityPasswordAuthentication {
                     title = type
                     message = error.userInfo["message"] as? String
                 }
-                
             }
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
@@ -169,7 +182,8 @@ extension LogInTableViewController: AWSCognitoUserPoolsSignInHandler {
     
     func handleUserPoolSignInFlowStart() {
         print("handleUserPoolSignInFlowStart")
-        guard let username = self.usernameTextField.text?.trimm(), !username.isEmpty, let password = self.passwordTextField.text?.trimm(), !password.isEmpty else {
+        guard let username = self.usernameTextField.text?.trimm(), !username.isEmpty,
+            let password = self.passwordTextField.text?.trimm(), !password.isEmpty else {
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 FullScreenIndicator.hide()
