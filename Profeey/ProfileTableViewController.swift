@@ -62,6 +62,10 @@ class ProfileTableViewController: UITableViewController {
         } else {
             self.settingsButton.image = UIImage(named: "ic_mail")
         }
+        
+        // Add observers.
+        NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNumberOfLikes(_:)), name: NSNotification.Name(UpdatePostNumberOfLikesNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNumberOfComments(_:)), name: NSNotification.Name(UpdatePostNumberOfCommentsNotificationKey), object: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -500,6 +504,28 @@ class ProfileTableViewController: UITableViewController {
         self.getUser(userId)
     }
     
+    // MARK: Helpers
+    
+    fileprivate func sortWorkExperiencesByToDate() {
+        let currentWorkExperiences = self.workExperiences.filter( { $0.toMonthInt == nil && $0.toYearInt == nil } )
+        let otherWorkExperiences = self.workExperiences.filter( { $0.toMonthInt != nil && $0.toYearInt != nil } )
+        let sortedOtherWorkExperiences = otherWorkExperiences.sorted(by: {
+            (workExperience1, workExperience2) in
+            return workExperience1.toYearInt! == workExperience2.toYearInt! ? (workExperience1.toMonthInt! > workExperience2.toMonthInt!) : (workExperience1.toYearInt! > workExperience2.toYearInt!)
+        })
+        self.workExperiences = currentWorkExperiences + sortedOtherWorkExperiences
+    }
+    
+    fileprivate func sortEducationsByToDate() {
+        let currentEducations = self.educations.filter( { $0.toMonthInt == nil && $0.toYearInt == nil } )
+        let otherEducations = self.educations.filter( { $0.toMonthInt != nil && $0.toYearInt != nil } )
+        let sortedOtherEducations = otherEducations.sorted(by: {
+            (education1, education2) in
+            return education1.toYearInt! == education2.toYearInt! ? (education1.toMonthInt! > education2.toMonthInt!) : (education1.toYearInt! > education2.toYearInt!)
+        })
+        self.educations = currentEducations + sortedOtherEducations
+    }
+    
     // MARK: AWS
     
     fileprivate func getUser(_ userId: String) {
@@ -883,6 +909,40 @@ class ProfileTableViewController: UITableViewController {
     }
 }
 
+// MARK: NotificationCenterActions
+
+extension ProfileTableViewController {
+    
+    func updatePostNumberOfLikes(_ notification: NSNotification) {
+        guard let postId = notification.userInfo?["postId"] as? String, let numberOfLikes = notification.userInfo?["numberOfLikes"] as? NSNumber else {
+            return
+        }
+        guard let postIndex = self.posts.index(where: { $0.postId == postId }) else {
+            return
+        }
+        let post = self.posts[postIndex]
+        post.numberOfLikes = numberOfLikes
+        post.isLikedByCurrentUser = !post.isLikedByCurrentUser
+        if self.selectedProfileSegment == ProfileSegment.posts {
+            self.tableView.reloadRows(at: [IndexPath(row: postIndex, section: 1)], with: UITableViewRowAnimation.none)
+        }
+    }
+    
+    func updatePostNumberOfComments(_ notification: NSNotification) {
+        guard let postId = notification.userInfo?["postId"] as? String, let numberOfComments = notification.userInfo?["numberOfComments"] as? NSNumber else {
+            return
+        }
+        guard let postIndex = self.posts.index(where: { $0.postId == postId }) else {
+            return
+        }
+        let post = self.posts[postIndex]
+        post.numberOfComments = numberOfComments
+        if self.selectedProfileSegment == ProfileSegment.posts {
+            self.tableView.reloadRows(at: [IndexPath(row: postIndex, section: 1)], with: UITableViewRowAnimation.none)
+        }
+    }
+}
+
 extension ProfileTableViewController: ProfileMainTableViewCellDelegate {
     
     func numberOfPostsButtonTapped() {
@@ -972,28 +1032,6 @@ extension ProfileTableViewController: ProfileMainTableViewCellDelegate {
                 self.performSegue(withIdentifier: "segueToAddRecommendationVc", sender: self)
             }
         }
-    }
-    
-    // MARK: Helpers
-    
-    fileprivate func sortWorkExperiencesByToDate() {
-        let currentWorkExperiences = self.workExperiences.filter( { $0.toMonthInt == nil && $0.toYearInt == nil } )
-        let otherWorkExperiences = self.workExperiences.filter( { $0.toMonthInt != nil && $0.toYearInt != nil } )
-        let sortedOtherWorkExperiences = otherWorkExperiences.sorted(by: {
-            (workExperience1, workExperience2) in
-            return workExperience1.toYearInt! == workExperience2.toYearInt! ? (workExperience1.toMonthInt! > workExperience2.toMonthInt!) : (workExperience1.toYearInt! > workExperience2.toYearInt!)
-        })
-        self.workExperiences = currentWorkExperiences + sortedOtherWorkExperiences
-    }
-    
-    fileprivate func sortEducationsByToDate() {
-        let currentEducations = self.educations.filter( { $0.toMonthInt == nil && $0.toYearInt == nil } )
-        let otherEducations = self.educations.filter( { $0.toMonthInt != nil && $0.toYearInt != nil } )
-        let sortedOtherEducations = otherEducations.sorted(by: {
-            (education1, education2) in
-            return education1.toYearInt! == education2.toYearInt! ? (education1.toMonthInt! > education2.toMonthInt!) : (education1.toYearInt! > education2.toYearInt!)
-        })
-        self.educations = currentEducations + sortedOtherEducations
     }
 }
 

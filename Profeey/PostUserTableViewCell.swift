@@ -9,7 +9,7 @@
 import UIKit
 
 protocol PostUserTableViewCellDelegate {
-    func expandButtonTapped(_ button: UIButton)
+    func expandButtonTapped(_ cell: PostUserTableViewCell)
 }
 
 class PostUserTableViewCell: UITableViewCell {
@@ -32,10 +32,7 @@ class PostUserTableViewCell: UITableViewCell {
     }
     
     @IBAction func expandButtonTapped(_ sender: AnyObject) {
-        guard let button = sender as? UIButton else {
-            return
-        }
-        self.postUserTableViewCellDelegate?.expandButtonTapped(button)
+        self.postUserTableViewCellDelegate?.expandButtonTapped(self)
     }
 
 }

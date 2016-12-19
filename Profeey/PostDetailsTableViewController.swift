@@ -9,6 +9,7 @@
 import UIKit
 import AWSMobileHubHelper
 
+// TODO: change this
 protocol PostDetailsTableViewControllerDelegate {
     func updatedPost(_ post: Post, postIndexPath: IndexPath)
 }
@@ -44,6 +45,10 @@ class PostDetailsTableViewController: UITableViewController {
             let indexPath = IndexPath(row: 4, section: 0)
             self.getLike(postId, indexPath: indexPath)
         }
+        
+        // Add observers.
+        NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNumberOfLikes(_:)), name: NSNotification.Name(UpdatePostNumberOfLikesNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNumberOfComments(_:)), name: NSNotification.Name(UpdatePostNumberOfCommentsNotificationKey), object: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -333,9 +338,41 @@ class PostDetailsTableViewController: UITableViewController {
     }
 }
 
+// MARK: NotificationCenterActions
+
+extension PostDetailsTableViewController {
+    
+    func updatePostNumberOfLikes(_ notification: NSNotification) {
+        guard let postId = notification.userInfo?["postId"] as? String, let numberOfLikes = notification.userInfo?["numberOfLikes"] as? NSNumber else {
+            return
+        }
+        guard let post = self.post, post.postId == postId else {
+            return
+        }
+        post.numberOfLikes = numberOfLikes
+        post.isLikedByCurrentUser = !post.isLikedByCurrentUser
+        UIView.performWithoutAnimation {
+            self.tableView.reloadRows(at: [IndexPath(row: 4, section: 0)], with: UITableViewRowAnimation.none)
+        }
+    }
+    
+    func updatePostNumberOfComments(_ notification: NSNotification) {
+        guard let postId = notification.userInfo?["postId"] as? String, let numberOfComments = notification.userInfo?["numberOfComments"] as? NSNumber else {
+            return
+        }
+        guard let post = self.post, post.postId == postId else {
+            return
+        }
+        post.numberOfComments = numberOfComments
+        UIView.performWithoutAnimation {
+            self.tableView.reloadRows(at: [IndexPath(row: 4, section: 0)], with: UITableViewRowAnimation.none)
+        }
+    }
+}
+
 extension PostDetailsTableViewController: PostUserTableViewCellDelegate {
     
-    func expandButtonTapped(_ button: UIButton) {
+    func expandButtonTapped(_ cell: PostUserTableViewCell) {
         guard let post = self.post else {
             return
         }
@@ -344,7 +381,6 @@ extension PostDetailsTableViewController: PostUserTableViewCellDelegate {
         }
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
         if postUserId == AWSIdentityManager.defaultIdentityManager().identityId {
-            // DELETE
             let deleteAction = UIAlertAction(title: "Delete", style: UIAlertActionStyle.destructive, handler: {
                 (alert: UIAlertAction) in
                 let alertController = UIAlertController(title: "Delete Post?", message: nil, preferredStyle: UIAlertControllerStyle.alert)
@@ -360,18 +396,15 @@ extension PostDetailsTableViewController: PostUserTableViewCellDelegate {
                 self.present(alertController, animated: true, completion: nil)
             })
             alertController.addAction(deleteAction)
-            // EDIT
             let editAction = UIAlertAction(title: "Edit", style: UIAlertActionStyle.default, handler: {
                 (alert: UIAlertAction) in
-                self.performSegue(withIdentifier: "segueToEditPostVc", sender: button)
+                self.performSegue(withIdentifier: "segueToEditPostVc", sender: cell)
             })
             alertController.addAction(editAction)
         } else {
-            // REPORT
             let reportAction = UIAlertAction(title: "Report", style: UIAlertActionStyle.destructive, handler: nil)
             alertController.addAction(reportAction)
         }
-        // CANCEL
         let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil)
         alertController.addAction(cancelAction)
         self.present(alertController, animated: true, completion: nil)
@@ -380,52 +413,42 @@ extension PostDetailsTableViewController: PostUserTableViewCellDelegate {
 
 extension PostDetailsTableViewController: PostButtonsTableViewCellDelegate {
     
-    func likeButtonTapped(_ button: UIButton) {
-        guard let indexPath = self.tableView.indexPathForView(view: button) else {
+    func likeButtonTapped(_ cell: PostButtonsTableViewCell) {
+        guard let _ = self.tableView.indexPath(for: cell) else {
             return
         }
-        guard let post = self.post else {
+        guard let post = self.post, let postId = post.postId, let postUserId = post.userId else {
             return
         }
-        guard let postId = post.postId, let postUserId = post.userId else {
-            return
-        }
-        let numberOfLikes = (post.numberOfLikes != nil) ? post.numberOfLikes! : 0
-        let numberOfLikesInteger = numberOfLikes.intValue
+        var numberOfLikes = (post.numberOfLikes != nil) ? post.numberOfLikes! : 0
         if post.isLikedByCurrentUser {
-            post.isLikedByCurrentUser = false
-            post.numberOfLikes = NSNumber(value: (numberOfLikesInteger - 1) as Int)
+            numberOfLikes = NSNumber(value: numberOfLikes.intValue - 1)
+            post.numberOfLikes = numberOfLikes
             self.removeLike(postId)
         } else {
-            post.isLikedByCurrentUser = true
-            post.numberOfLikes = NSNumber(value: (numberOfLikesInteger + 1) as Int)
+            numberOfLikes = NSNumber(value: numberOfLikes.intValue + 1)
+            post.numberOfLikes = numberOfLikes
             self.createLike(postId, postUserId: postUserId)
         }
-        self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
-        // For ProfileVc
-        if let postIndexPath = self.postIndexPath {
-            self.postDetailsTableViewControllerDelegate?.updatedPost(post, postIndexPath: postIndexPath)
-        }
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: UpdatePostNumberOfLikesNotificationKey), object: self, userInfo: ["postId": postId, "numberOfLikes": numberOfLikes])
     }
     
-    func commentButtonTapped(_ button: UIButton) {
-        self.performSegue(withIdentifier: "segueToCommentsVc", sender: button)
+    func commentButtonTapped(_ cell: PostButtonsTableViewCell) {
+        self.performSegue(withIdentifier: "segueToCommentsVc", sender: cell)
     }
     
-    func numberOfLikesButtonTapped(_ button: UIButton) {
-        guard let indexPath = self.tableView.indexPathForView(view: button) else {
-            return
-        }
-        self.performSegue(withIdentifier: "segueToUsersVc", sender: indexPath)
+    func numberOfLikesButtonTapped(_ cell: PostButtonsTableViewCell) {
+        self.performSegue(withIdentifier: "segueToUsersVc", sender: cell)
     }
     
-    func numberOfCommentsButtonTapped(_ button: UIButton) {
-        self.performSegue(withIdentifier: "segueToCommentsVc", sender: button)
+    func numberOfCommentsButtonTapped(_ cell: PostButtonsTableViewCell) {
+        self.performSegue(withIdentifier: "segueToCommentsVc", sender: cell)
     }
 }
 
 extension PostDetailsTableViewController: EditPostViewControllerDelegate {
     
+    // TODO: refactor
     func updatedPost(_ post: Post) {
         self.post = post
         self.tableView.reloadSections(IndexSet(integer: 0), with: UITableViewRowAnimation.none)

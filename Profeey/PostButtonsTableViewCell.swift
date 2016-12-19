@@ -9,10 +9,11 @@
 import UIKit
 
 protocol PostButtonsTableViewCellDelegate {
-    func likeButtonTapped(_ button: UIButton)
-    func commentButtonTapped(_ button: UIButton)
-    func numberOfLikesButtonTapped(_ button: UIButton)
-    func numberOfCommentsButtonTapped(_ button: UIButton)
+    func likeButtonTapped(_ cell: PostButtonsTableViewCell)
+//    func likeButtonTapped(_ button: UIButton)
+    func commentButtonTapped(_ cell: PostButtonsTableViewCell)
+    func numberOfLikesButtonTapped(_ cell: PostButtonsTableViewCell)
+    func numberOfCommentsButtonTapped(_ cell: PostButtonsTableViewCell)
 }
 
 class PostButtonsTableViewCell: UITableViewCell {
@@ -56,31 +57,22 @@ class PostButtonsTableViewCell: UITableViewCell {
     }
     
     @IBAction func likeButtonTapped(_ sender: AnyObject) {
-        guard let button = sender as? UIButton else {
-            return
-        }
-        self.postButtonsTableViewCellDelegate?.likeButtonTapped(button)
+//        guard let button = sender as? UIButton else {
+//            return
+//        }
+        self.postButtonsTableViewCellDelegate?.likeButtonTapped(self)
     }
     
     @IBAction func commentButtonTapped(_ sender: AnyObject) {
-        guard let button = sender as? UIButton else {
-            return
-        }
-        self.postButtonsTableViewCellDelegate?.commentButtonTapped(button)
+        self.postButtonsTableViewCellDelegate?.commentButtonTapped(self)
     }
     
     @IBAction func numberOfLikesButtonTapped(_ sender: AnyObject) {
-        guard let button = sender as? UIButton else {
-            return
-        }
-        self.postButtonsTableViewCellDelegate?.numberOfLikesButtonTapped(button)
+        self.postButtonsTableViewCellDelegate?.numberOfLikesButtonTapped(self)
     }
     
     @IBAction func numberOfCommentsButtonTapped(_ sender: AnyObject) {
-        guard let button = sender as? UIButton else {
-            return
-        }
-        self.postButtonsTableViewCellDelegate?.numberOfCommentsButtonTapped(button)
+        self.postButtonsTableViewCellDelegate?.numberOfCommentsButtonTapped(self)
     }
 
 }

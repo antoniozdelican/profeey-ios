@@ -55,6 +55,10 @@ class HomeTableViewController: UITableViewController {
             self.activityIndicatorView?.startAnimating()
             self.queryUserActivitiesDateSorted()
         }
+        
+        // Add observers, don't need deinit removeObserver.
+        NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNumberOfLikes(_:)), name: NSNotification.Name(UpdatePostNumberOfLikesNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNumberOfComments(_:)), name: NSNotification.Name(UpdatePostNumberOfCommentsNotificationKey), object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -96,25 +100,31 @@ class HomeTableViewController: UITableViewController {
         // Reset tabBarSwitch.
         self.isTabBarSwitch = false
         if let destinationViewController = segue.destination as? ProfileTableViewController,
-            let indexPath = sender as? IndexPath {
+            let cell = sender as? PostUserTableViewCell,
+            let indexPath = self.tableView.indexPath(for: cell) {
             destinationViewController.user = self.posts[indexPath.section].user
         }
         if let destinationViewController = segue.destination as? UsersTableViewController,
-            let indexPath = sender as? IndexPath {
+            let cell = sender as? PostButtonsTableViewCell,
+            let indexPath = self.tableView.indexPath(for: cell) {
             destinationViewController.usersType = UsersType.likers
             destinationViewController.postId = self.posts[indexPath.section].postId
         }
         if let destinationViewController = segue.destination as? CommentsViewController,
-            let button = sender as? UIButton,
-            let indexPath = self.tableView.indexPathForView(view: button) {
+            let cell = sender as? PostButtonsTableViewCell,
+            let indexPath = self.tableView.indexPath(for: cell) {
             destinationViewController.post = self.posts[indexPath.section]
+            
+            // TODO: refactor this
             destinationViewController.commentsViewControllerNotificationDelegate = self
         }
         if let navigationController = segue.destination as? UINavigationController,
             let childViewController =  navigationController.childViewControllers[0] as? EditPostViewController,
-            let button = sender as? UIButton,
-            let indexPath = self.tableView.indexPathForView(view: button) {
+            let cell = sender as? PostUserTableViewCell,
+            let indexPath = self.tableView.indexPath(for: cell) {
             childViewController.post = self.posts[indexPath.section]
+            
+            // TODO: refactor this
             childViewController.postIndexPath = indexPath
             childViewController.editPostViewControllerDelegate = self
         }
@@ -207,7 +217,7 @@ class HomeTableViewController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
         let cell = tableView.cellForRow(at: indexPath)
         if cell is PostUserTableViewCell {
-            self.performSegue(withIdentifier: "segueToProfileVc", sender: indexPath)
+            self.performSegue(withIdentifier: "segueToProfileVc", sender: cell)
         }
         if cell is PostInfoTableViewCell {
             self.posts[indexPath.section].isExpandedCaption = true
@@ -280,6 +290,10 @@ class HomeTableViewController: UITableViewController {
                 let imageData = UIImageJPEGRepresentation(image, 0.6) else {
                 return
             }
+            // TODO
+            // Scroll to beginning.
+            
+            
             self.isUploading = true
             // Add dummy post for uploading.
             let dummyPost = Post()
@@ -555,10 +569,44 @@ class HomeTableViewController: UITableViewController {
     }
 }
 
+ // MARK: NotificationCenterActions
+
+extension HomeTableViewController {
+    
+    func updatePostNumberOfLikes(_ notification: NSNotification) {
+        guard let postId = notification.userInfo?["postId"] as? String, let numberOfLikes = notification.userInfo?["numberOfLikes"] as? NSNumber else {
+            return
+        }
+        guard let postIndex = self.posts.index(where: { $0.postId == postId }) else {
+            return
+        }
+        let post = self.posts[postIndex]
+        post.numberOfLikes = numberOfLikes
+        post.isLikedByCurrentUser = !post.isLikedByCurrentUser
+        UIView.performWithoutAnimation {
+            self.tableView.reloadRows(at: [IndexPath(row: 4, section: postIndex)], with: UITableViewRowAnimation.none)
+        }
+    }
+    
+    func updatePostNumberOfComments(_ notification: NSNotification) {
+        guard let postId = notification.userInfo?["postId"] as? String, let numberOfComments = notification.userInfo?["numberOfComments"] as? NSNumber else {
+            return
+        }
+        guard let postIndex = self.posts.index(where: { $0.postId == postId }) else {
+            return
+        }
+        let post = self.posts[postIndex]
+        post.numberOfComments = numberOfComments
+        UIView.performWithoutAnimation {
+            self.tableView.reloadRows(at: [IndexPath(row: 4, section: postIndex)], with: UITableViewRowAnimation.none)
+        }
+    }
+}
+
 extension HomeTableViewController: PostUserTableViewCellDelegate {
     
-    func expandButtonTapped(_ button: UIButton) {
-        guard let indexPath = self.tableView.indexPathForView(view: button) else {
+    func expandButtonTapped(_ cell: PostUserTableViewCell) {
+        guard let indexPath = self.tableView.indexPath(for: cell) else {
             return
         }
         let post = self.posts[indexPath.section]
@@ -567,7 +615,6 @@ extension HomeTableViewController: PostUserTableViewCellDelegate {
         }
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
         if postUserId == AWSIdentityManager.defaultIdentityManager().identityId {
-            // DELETE
             let deleteAction = UIAlertAction(title: "Delete", style: UIAlertActionStyle.destructive, handler: {
                 (alert: UIAlertAction) in
                 let alertController = UIAlertController(title: "Delete Post?", message: nil, preferredStyle: UIAlertControllerStyle.alert)
@@ -590,18 +637,15 @@ extension HomeTableViewController: PostUserTableViewCellDelegate {
                 self.present(alertController, animated: true, completion: nil)
             })
             alertController.addAction(deleteAction)
-            // EDIT
             let editAction = UIAlertAction(title: "Edit", style: UIAlertActionStyle.default, handler: {
                 (alert: UIAlertAction) in
-                self.performSegue(withIdentifier: "segueToEditPostVc", sender: button)
+                self.performSegue(withIdentifier: "segueToEditPostVc", sender: cell)
             })
             alertController.addAction(editAction)
         } else {
-            // REPORT
             let reportAction = UIAlertAction(title: "Report", style: UIAlertActionStyle.destructive, handler: nil)
             alertController.addAction(reportAction)
         }
-        // CANCEL
         let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil)
         alertController.addAction(cancelAction)
         self.present(alertController, animated: true, completion: nil)
@@ -610,46 +654,43 @@ extension HomeTableViewController: PostUserTableViewCellDelegate {
 
 extension HomeTableViewController: PostButtonsTableViewCellDelegate {
     
-    func likeButtonTapped(_ button: UIButton) {
-        guard let indexPath = self.tableView.indexPathForView(view: button) else {
+    func likeButtonTapped(_ cell: PostButtonsTableViewCell) {
+        guard let indexPath = self.tableView.indexPath(for: cell) else {
             return
         }
         let post = self.posts[indexPath.section]
         guard let postId = post.postId, let postUserId = post.userId else {
             return
         }
-        let numberOfLikes = (post.numberOfLikes != nil) ? post.numberOfLikes! : 0
-        let numberOfLikesInteger = numberOfLikes.intValue
+        var numberOfLikes = (post.numberOfLikes != nil) ? post.numberOfLikes! : 0
         if post.isLikedByCurrentUser {
-            post.isLikedByCurrentUser = false
-            post.numberOfLikes = NSNumber(value: (numberOfLikesInteger - 1) as Int)
+            numberOfLikes = NSNumber(value: numberOfLikes.intValue - 1)
+            post.numberOfLikes = numberOfLikes
             self.removeLike(postId)
         } else {
-            post.isLikedByCurrentUser = true
-            post.numberOfLikes = NSNumber(value: (numberOfLikesInteger + 1) as Int)
+            numberOfLikes = NSNumber(value: numberOfLikes.intValue + 1)
+            post.numberOfLikes = numberOfLikes
             self.createLike(postId, postUserId: postUserId)
         }
-        self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: UpdatePostNumberOfLikesNotificationKey), object: self, userInfo: ["postId": postId, "numberOfLikes": numberOfLikes])
     }
     
-    func commentButtonTapped(_ button: UIButton) {
-        self.performSegue(withIdentifier: "segueToCommentsVc", sender: button)
+    func commentButtonTapped(_ cell: PostButtonsTableViewCell) {
+        self.performSegue(withIdentifier: "segueToCommentsVc", sender: cell)
     }
     
-    func numberOfLikesButtonTapped(_ button: UIButton) {
-        guard let indexPath = self.tableView.indexPathForView(view: button) else {
-            return
-        }
-        self.performSegue(withIdentifier: "segueToUsersVc", sender: indexPath)
+    func numberOfLikesButtonTapped(_ cell: PostButtonsTableViewCell) {
+        self.performSegue(withIdentifier: "segueToUsersVc", sender: cell)
     }
     
-    func numberOfCommentsButtonTapped(_ button: UIButton) {
-        self.performSegue(withIdentifier: "segueToCommentsVc", sender: button)
+    func numberOfCommentsButtonTapped(_ cell: PostButtonsTableViewCell) {
+        self.performSegue(withIdentifier: "segueToCommentsVc", sender: cell)
     }
 }
 
 extension HomeTableViewController: EditPostViewControllerDelegate {
     
+    // TODO: refactor
     func updatedPost(_ post: Post, withIndexPath postIndexPath: IndexPath) {
         self.posts[postIndexPath.section].caption = post.caption
         self.posts[postIndexPath.section].categoryName = post.categoryName
@@ -666,6 +707,7 @@ extension HomeTableViewController: HomeEmptyFeedViewDelegate {
 
 extension HomeTableViewController: CommentsViewControllerNotificationDelegate {
     
+    // TODO: refactor
     func commentCreated(_ postId: String) {
         guard let updatedPost = self.posts.first(where: { $0.postId == postId }), let postIndex = self.posts.index(of: updatedPost) else {
             return
