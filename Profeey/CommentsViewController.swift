@@ -12,7 +12,7 @@ import AWSDynamoDB
 
 protocol CommentsViewControllerDelegate {
     func commentPosted(_ comment: Comment)
-    func commentRemoved(_ indexPath: IndexPath)
+    func commentRemoved(_ commentId: String)
     func showComments(_ comments: [Comment])
     func isLoadingComments(_ isLoading: Bool)
 }
@@ -229,7 +229,7 @@ class CommentsViewController: UIViewController {
                 let deleteConfirmAction = UIAlertAction(title: "Delete", style: UIAlertActionStyle.default, handler: {
                     (alert: UIAlertAction) in
                     self.comments.remove(at: indexPath.row)
-                    self.commentsViewControllerDelegate?.commentRemoved(indexPath)
+                    self.commentsViewControllerDelegate?.commentRemoved(commentId)
                     // Notify observers.
                     NotificationCenter.default.post(name: NSNotification.Name(rawValue: UpdatePostNumberOfCommentsNotificationKey), object: self, userInfo: ["postId": postId, "numberOfComments": self.comments.count])
                     // In background

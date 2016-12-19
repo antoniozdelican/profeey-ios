@@ -193,16 +193,23 @@ extension CommentsTableViewController: CommentsViewControllerDelegate {
     func commentPosted(_ comment: Comment) {
         self.comments.append(comment)
         let indexPath = IndexPath(row: self.comments.count - 1, section: 0)
-        self.tableView.reloadData()
+        if self.comments.count == 1 {
+            self.tableView.reloadData()
+        } else {
+            self.tableView.insertRows(at: [indexPath], with: UITableViewRowAnimation.fade)
+        }
         self.tableView.scrollToRow(at: indexPath, at: UITableViewScrollPosition.bottom, animated: false)
     }
     
-    func commentRemoved(_ indexPath: IndexPath) {
-        self.comments.remove(at: indexPath.row)
+    func commentRemoved(_ commentId: String) {
+        guard let commentIndex = self.comments.index(where: { $0.commentId == commentId }) else {
+            return
+        }
+        self.comments.remove(at: commentIndex)
         if self.comments.count == 0 {
             self.tableView.reloadData()
         } else {
-            self.tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.fade)
+            self.tableView.deleteRows(at: [IndexPath(row: commentIndex, section: 0)], with: UITableViewRowAnimation.fade)
         }
     }
 }
