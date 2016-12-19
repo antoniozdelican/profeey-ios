@@ -60,7 +60,8 @@ class PostDetailsTableViewController: UITableViewController {
             destinationViewController.postId = self.post?.postId
         }
         if let destinationViewController = segue.destination as? CommentsViewController {
-            destinationViewController.post = self.post
+            destinationViewController.postId = self.post?.postId
+            destinationViewController.postUserId = self.post?.userId
         }
         if let navigationController = segue.destination as? UINavigationController,
             let childViewController =  navigationController.childViewControllers[0] as? EditPostViewController {

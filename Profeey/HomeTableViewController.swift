@@ -117,13 +117,8 @@ class HomeTableViewController: UITableViewController {
         if let destinationViewController = segue.destination as? CommentsViewController,
             let cell = sender as? PostButtonsTableViewCell,
             let indexPath = self.tableView.indexPath(for: cell) {
-            
-            // TODO copy?
-            
-            destinationViewController.post = self.posts[indexPath.section]
-            
-            // TODO: refactor this
-            destinationViewController.commentsViewControllerNotificationDelegate = self
+            destinationViewController.postId = self.posts[indexPath.section].postId
+            destinationViewController.postUserId = self.posts[indexPath.section].userId
         }
         if let navigationController = segue.destination as? UINavigationController,
             let childViewController =  navigationController.childViewControllers[0] as? EditPostViewController,
@@ -697,13 +692,9 @@ extension HomeTableViewController: PostButtonsTableViewCellDelegate {
         var numberOfLikes = (post.numberOfLikes != nil) ? post.numberOfLikes! : 0
         if post.isLikedByCurrentUser {
             numberOfLikes = NSNumber(value: numberOfLikes.intValue - 1)
-//            post.numberOfLikes = numberOfLikes
-//            post.isLikedByCurrentUser = false
             self.removeLike(postId)
         } else {
             numberOfLikes = NSNumber(value: numberOfLikes.intValue + 1)
-//            post.numberOfLikes = numberOfLikes
-//            post.isLikedByCurrentUser = true
             self.createLike(postId, postUserId: postUserId)
         }
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: UpdatePostNumberOfLikesNotificationKey), object: self, userInfo: ["postId": postId, "numberOfLikes": numberOfLikes])
@@ -726,38 +717,5 @@ extension HomeTableViewController: HomeEmptyFeedViewDelegate {
     
     func discoverButtonTapped() {
         self.performSegue(withIdentifier: "segueToDiscoverPeopleVc", sender: self)
-    }
-}
-
-extension HomeTableViewController: CommentsViewControllerNotificationDelegate {
-    
-    // TODO: refactor
-    func commentCreated(_ postId: String) {
-        guard let updatedPost = self.posts.first(where: { $0.postId == postId }), let postIndex = self.posts.index(of: updatedPost) else {
-            return
-        }
-        if let numberOfComments = self.posts[postIndex].numberOfComments {
-            self.posts[postIndex].numberOfComments = NSNumber(value: numberOfComments.intValue + 1)
-        } else {
-            self.posts[postIndex].numberOfComments = NSNumber(value: 1)
-        }
-        UIView.performWithoutAnimation {
-            self.tableView.reloadSections(IndexSet(integer: postIndex), with: UITableViewRowAnimation.none)
-        }
-        
-    }
-    
-    func commentRemoved(_ postId: String) {
-        guard let updatedPost = self.posts.first(where: { $0.postId == postId }), let postIndex = self.posts.index(of: updatedPost) else {
-            return
-        }
-        if let numberOfComments = self.posts[postIndex].numberOfComments, numberOfComments.intValue > 0 {
-            self.posts[postIndex].numberOfComments = NSNumber(value: numberOfComments.intValue - 1)
-        } else {
-            self.posts[postIndex].numberOfComments = NSNumber(value: 0)
-        }
-        UIView.performWithoutAnimation {
-            self.tableView.reloadSections(IndexSet(integer: postIndex), with: UITableViewRowAnimation.none)
-        }
     }
 }
