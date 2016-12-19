@@ -9,21 +9,14 @@
 import UIKit
 import AWSMobileHubHelper
 
-// TODO: change this
-protocol PostDetailsTableViewControllerDelegate {
-    func updatedPost(_ post: Post, postIndexPath: IndexPath)
-}
-
 class PostDetailsTableViewController: UITableViewController {
     
     // If comming from NotificationVc, we have to download the post, otherwise it's already set.
     var shouldDownloadPost: Bool = false
     // If comming from NotificationVc.
     var notificationPostId: String?
-    // If comming from ProfileVc of UserCategoriesVc.
+    // If comming from ProfileVc or UserCategoriesVc (copied).
     var post: Post?
-    var postIndexPath: IndexPath? // TODO change this.
-    var postDetailsTableViewControllerDelegate: PostDetailsTableViewControllerDelegate?
     
     fileprivate var isLoadingPost: Bool = false
     fileprivate var activityIndicatorView: UIActivityIndicatorView?
@@ -42,13 +35,14 @@ class PostDetailsTableViewController: UITableViewController {
             self.getPost(notificationPostId)
         } else if let postId = self.post?.postId {
             // Just check if currentUser liked this post.
-            let indexPath = IndexPath(row: 4, section: 0)
-            self.getLike(postId, indexPath: indexPath)
+            self.getLike(postId)
         }
         
         // Add observers.
+        NotificationCenter.default.addObserver(self, selector: #selector(self.updatePost(_:)), name: NSNotification.Name(UpdatePostNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNumberOfLikes(_:)), name: NSNotification.Name(UpdatePostNumberOfLikesNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNumberOfComments(_:)), name: NSNotification.Name(UpdatePostNumberOfCommentsNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.deletePost(_:)), name: NSNotification.Name(DeletePostNotificationKey), object: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -70,8 +64,7 @@ class PostDetailsTableViewController: UITableViewController {
         }
         if let navigationController = segue.destination as? UINavigationController,
             let childViewController =  navigationController.childViewControllers[0] as? EditPostViewController {
-            childViewController.post = self.post
-            childViewController.editPostViewControllerDelegate = self
+            childViewController.editPost = EditPost(userId: self.post?.userId, postId: self.post?.postId, caption: self.post?.caption, categoryName: self.post?.categoryName, imageWidth: self.post?.imageWidth, imageHeight: self.post?.imageHeight, image: self.post?.image)
         }
     }
 
@@ -89,10 +82,7 @@ class PostDetailsTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let post = self.post else {
-            return UITableViewCell()
-        }
-        let user = post.user
+        let user = self.post?.user
         switch indexPath.row {
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostUser", for: indexPath) as! PostUserTableViewCell
@@ -103,29 +93,29 @@ class PostDetailsTableViewController: UITableViewController {
             return cell
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostImage", for: indexPath) as! PostImageTableViewCell
-            cell.postImageView.image = post.image
-            if let imageWidth = post.imageWidth?.floatValue, let imageHeight = post.imageHeight?.floatValue {
+            cell.postImageView.image = self.post?.image
+            if let imageWidth = self.post?.imageWidth?.floatValue, let imageHeight = self.post?.imageHeight?.floatValue {
                 let aspectRatio = CGFloat(imageWidth / imageHeight)
                 cell.postImageViewHeightConstraint.constant = ceil(tableView.bounds.width / aspectRatio)
             }
             return cell
         case 2:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostInfo", for: indexPath) as! PostInfoTableViewCell
-            cell.captionLabel.text = post.caption
+            cell.captionLabel.text = self.post?.caption
             cell.untruncate()
             return cell
         case 3:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostCategoryCreationDate", for: indexPath) as! PostCategoryCreationDateTableViewCell
-            cell.categoryNameCreationDateLabel.text = [post.categoryName, post.creationDateString].flatMap({$0}).joined(separator: " · ")
+            cell.categoryNameCreationDateLabel.text = [self.post?.categoryName, self.post?.creationDateString].flatMap({$0}).joined(separator: " · ")
             return cell
         case 4:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostButtons", for: indexPath) as! PostButtonsTableViewCell
-            post.isLikedByCurrentUser ? cell.setSelectedLikeButton() : cell.setUnselectedLikeButton()
+            (self.post?.isLikedByCurrentUser != nil && self.post!.isLikedByCurrentUser) ? cell.setSelectedLikeButton() : cell.setUnselectedLikeButton()
             cell.postButtonsTableViewCellDelegate = self
-            cell.numberOfLikesButton.isHidden = (post.numberOfLikesString != nil) ? false : true
-            cell.numberOfLikesButton.setTitle(post.numberOfLikesString, for: UIControlState())
-            cell.numberOfCommentsButton.isHidden = (post.numberOfCommentsString != nil) ? false : true
-            cell.numberOfCommentsButton.setTitle(post.numberOfCommentsString, for: UIControlState())
+            cell.numberOfLikesButton.isHidden = (self.post?.numberOfLikesString != nil) ? false : true
+            cell.numberOfLikesButton.setTitle(self.post?.numberOfLikesString, for: UIControlState())
+            cell.numberOfCommentsButton.isHidden = (self.post?.numberOfCommentsString != nil) ? false : true
+            cell.numberOfCommentsButton.setTitle(self.post?.numberOfCommentsString, for: UIControlState())
             return cell
         default:
             return UITableViewCell()
@@ -240,8 +230,7 @@ class PostDetailsTableViewController: UITableViewController {
                         self.downloadImage(imageUrl, imageType: .postPic, indexPath: indexPath)
                     }
                     if let postId = post.postId {
-                        let indexPath = IndexPath(row: 4, section: 0)
-                        self.getLike(postId, indexPath: indexPath)
+                        self.getLike(postId)
                     }
                 }
             })
@@ -287,8 +276,48 @@ class PostDetailsTableViewController: UITableViewController {
         }
     }
     
+    fileprivate func removePost(_ postId: String, imageKey: String) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        FullScreenIndicator.show()
+        PRFYDynamoDBManager.defaultDynamoDBManager().removePostDynamoDB(postId, completionHandler: {
+            (task: AWSTask) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                if let error = task.error {
+                    FullScreenIndicator.hide()
+                    print("removePost error: \(error)")
+                } else {
+                    self.removeImage(postId, imageKey: imageKey)
+                }
+            })
+            return nil
+        })
+    }
+    
+    fileprivate func removeImage(_ postId: String, imageKey: String) {
+        let content = AWSUserFileManager.defaultUserFileManager().content(withKey: imageKey)
+        print("removeImageS3:")
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        content.removeRemoteContent(completionHandler: {
+            (content: AWSContent?, error: Error?) -> Void in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                FullScreenIndicator.hide()
+                if let error = error {
+                    print("removeImageS3 error: \(error)")
+                } else {
+                    content?.removeLocal()
+                    // Notifiy obervers.
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: DeletePostNotificationKey), object: self, userInfo: ["postId": postId])
+                    self.performSegue(withIdentifier: "segueUnwindToProfileVc", sender: self)
+                    
+                }
+            })
+        })
+    }
+    
     // Check if currentUser liked a post.
-    fileprivate func getLike(_ postId: String, indexPath: IndexPath) {
+    fileprivate func getLike(_ postId: String) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         PRFYDynamoDBManager.defaultDynamoDBManager().getLikeDynamoDB(postId, completionHandler: {
             (task: AWSTask) in
@@ -299,7 +328,7 @@ class PostDetailsTableViewController: UITableViewController {
                 } else {
                     if task.result != nil {
                         self.post?.isLikedByCurrentUser = true
-                        self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
+                        self.tableView.reloadRows(at: [IndexPath(row: 4, section: 0)], with: UITableViewRowAnimation.none)
                     }
                 }
             })
@@ -338,9 +367,23 @@ class PostDetailsTableViewController: UITableViewController {
     }
 }
 
-// MARK: NotificationCenterActions
-
 extension PostDetailsTableViewController {
+    
+    // MARK: NotificationCenterActions
+    
+    func updatePost(_ notification: NSNotification) {
+        guard let postId = notification.userInfo?["postId"] as? String else {
+            return
+        }
+        guard let post = self.post, post.postId == postId else {
+            return
+        }
+        post.caption = notification.userInfo?["caption"] as? String
+        post.categoryName = notification.userInfo?["categoryName"] as? String
+        UIView.performWithoutAnimation {
+            self.tableView.reloadSections(IndexSet(integer: 0), with: UITableViewRowAnimation.none)
+        }
+    }
     
     func updatePostNumberOfLikes(_ notification: NSNotification) {
         guard let postId = notification.userInfo?["postId"] as? String, let numberOfLikes = notification.userInfo?["numberOfLikes"] as? NSNumber else {
@@ -368,15 +411,23 @@ extension PostDetailsTableViewController {
             self.tableView.reloadRows(at: [IndexPath(row: 4, section: 0)], with: UITableViewRowAnimation.none)
         }
     }
+    
+    func deletePost(_ notification: NSNotification) {
+        guard let postId = notification.userInfo?["postId"] as? String else {
+            return
+        }
+        guard let post = self.post, post.postId == postId else {
+            return
+        }
+        // Just unwind to ProfileVc in case deletion was on HomeVc.
+        self.performSegue(withIdentifier: "segueUnwindToProfileVc", sender: self)
+    }
 }
 
 extension PostDetailsTableViewController: PostUserTableViewCellDelegate {
     
     func expandButtonTapped(_ cell: PostUserTableViewCell) {
-        guard let post = self.post else {
-            return
-        }
-        guard let postUserId = post.userId else {
+        guard let post = self.post, let postId = post.postId, let postUserId = post.userId, let imageKey = post.imageUrl else {
             return
         }
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
@@ -388,9 +439,7 @@ extension PostDetailsTableViewController: PostUserTableViewCellDelegate {
                 alertController.addAction(cancelAction)
                 let deleteConfirmAction = UIAlertAction(title: "Delete", style: UIAlertActionStyle.default, handler: {
                     (alert: UIAlertAction) in
-                    
-                    // Go back and delete post.
-                    self.performSegue(withIdentifier: "segueUnwindToProfileVc", sender: self)
+                    self.removePost(postId, imageKey: imageKey)
                 })
                 alertController.addAction(deleteConfirmAction)
                 self.present(alertController, animated: true, completion: nil)
@@ -423,11 +472,9 @@ extension PostDetailsTableViewController: PostButtonsTableViewCellDelegate {
         var numberOfLikes = (post.numberOfLikes != nil) ? post.numberOfLikes! : 0
         if post.isLikedByCurrentUser {
             numberOfLikes = NSNumber(value: numberOfLikes.intValue - 1)
-            post.numberOfLikes = numberOfLikes
             self.removeLike(postId)
         } else {
             numberOfLikes = NSNumber(value: numberOfLikes.intValue + 1)
-            post.numberOfLikes = numberOfLikes
             self.createLike(postId, postUserId: postUserId)
         }
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: UpdatePostNumberOfLikesNotificationKey), object: self, userInfo: ["postId": postId, "numberOfLikes": numberOfLikes])
@@ -443,18 +490,5 @@ extension PostDetailsTableViewController: PostButtonsTableViewCellDelegate {
     
     func numberOfCommentsButtonTapped(_ cell: PostButtonsTableViewCell) {
         self.performSegue(withIdentifier: "segueToCommentsVc", sender: cell)
-    }
-}
-
-extension PostDetailsTableViewController: EditPostViewControllerDelegate {
-    
-    // TODO: refactor
-    func updatedPost(_ post: Post) {
-        self.post = post
-        self.tableView.reloadSections(IndexSet(integer: 0), with: UITableViewRowAnimation.none)
-        // For ProfileVc
-        if let postIndexPath = self.postIndexPath {
-            self.postDetailsTableViewControllerDelegate?.updatedPost(post, postIndexPath: postIndexPath)
-        }
     }
 }

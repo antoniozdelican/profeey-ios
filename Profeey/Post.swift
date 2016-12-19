@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Post: NSObject {
+class Post: NSObject, NSCopying {
     
     // Properties.
     var userId: String?
@@ -25,6 +25,7 @@ class Post: NSObject {
     // Generated.
     var user: User?
     var image: UIImage?
+    
     var creationDateString: String? {
         guard let creationDate = self.creationDate else {
             return nil
@@ -52,21 +53,6 @@ class Post: NSObject {
         }
         return numberOfCommentsInt.numberToString()
     }
-    
-    
-//    var numberOfLikesString: String? {
-//        guard let numberOfLikes = self.numberOfLikes else {
-//            return nil
-//        }
-//        let numberOfLikesInt = numberOfLikes.intValue
-//        guard numberOfLikesInt > 0 else {
-//            return nil
-//        }
-//        guard numberOfLikesInt > 1 else {
-//            return "\(numberOfLikesInt) like"
-//        }
-//        return "\(numberOfLikesInt) likes"
-//    }
     var numberOfLikesSmallString: String? {
         guard let numberOfLikes = self.numberOfLikes else {
             return "0"
@@ -74,26 +60,6 @@ class Post: NSObject {
         let numberOfLikesInt = numberOfLikes.intValue
         return numberOfLikesInt.numberToString()
     }
-//    var numberOfCommentsString: String? {
-//        guard let numberOfComments = self.numberOfComments else {
-//            return nil
-//        }
-//        let numberOfCommentsInt = numberOfComments.intValue
-//        guard numberOfCommentsInt > 0 else {
-//            return nil
-//        }
-//        guard numberOfCommentsInt > 1 else {
-//            return "\(numberOfCommentsInt) comment"
-//        }
-//        return "\(numberOfCommentsInt) comments"
-//    }
-//    var numberOfCommentsSmallString: String? {
-//        guard let numberOfComments = self.numberOfComments else {
-//            return "0"
-//        }
-//        let numberOfCommentsInt = numberOfComments.intValue
-//        return numberOfCommentsInt.numberToString()
-//    }
     
     var isLikedByCurrentUser: Bool = false
     var isExpandedCaption: Bool = false
@@ -117,12 +83,10 @@ class Post: NSObject {
         self.user = user
     }
     
-    // Partial post for EditPostVc
-    convenience init(userId: String?, postId: String?, caption: String?, categoryName: String?) {
-        self.init()
-        self.userId = userId
-        self.postId = postId
-        self.caption = caption
-        self.categoryName = categoryName
+    // Used to copy Post object for PostDetailsVc.
+    func copy(with zone: NSZone? = nil) -> Any {
+        let post = Post(userId: userId, postId: postId, creationDate: creationDate, caption: caption, categoryName: categoryName, imageUrl: imageUrl, imageWidth: imageWidth, imageHeight: imageHeight, numberOfLikes: numberOfLikes, numberOfComments: numberOfComments, user: user)
+        post.image = image
+        return post
     }
 }

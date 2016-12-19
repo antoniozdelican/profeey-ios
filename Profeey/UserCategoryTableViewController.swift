@@ -10,16 +10,10 @@ import UIKit
 import AWSMobileHubHelper
 import AWSDynamoDB
 
-// Notifies ProfileVc that post has been updated.
-protocol UserCategoryTableViewControllerDelegate {
-    func updatedPost(_ post: Post)
-}
-
 class UserCategoryTableViewController: UITableViewController {
     
     var user: User?
     var userCategory: UserCategory?
-    var userCategoryTableViewControllerDelegate: UserCategoryTableViewControllerDelegate?
     fileprivate var isLoadingPosts: Bool = false
     fileprivate var posts: [Post] = []
 
@@ -32,6 +26,12 @@ class UserCategoryTableViewController: UITableViewController {
             self.isLoadingPosts = true
             self.queryUserPostsDateSortedWithCategory(userId, categoryName: categoryName)
         }
+        
+        // Add observers.
+        NotificationCenter.default.addObserver(self, selector: #selector(self.updatePost(_:)), name: NSNotification.Name(UpdatePostNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNumberOfLikes(_:)), name: NSNotification.Name(UpdatePostNumberOfLikesNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNumberOfComments(_:)), name: NSNotification.Name(UpdatePostNumberOfCommentsNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.deletePost(_:)), name: NSNotification.Name(DeletePostNotificationKey), object: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -44,9 +44,7 @@ class UserCategoryTableViewController: UITableViewController {
         if let destinationViewController = segue.destination as? PostDetailsTableViewController,
             let cell = sender as? PostSmallTableViewCell,
             let indexPath = self.tableView.indexPath(for: cell) {
-            destinationViewController.post = self.posts[indexPath.row]
-            destinationViewController.postIndexPath = indexPath
-            destinationViewController.postDetailsTableViewControllerDelegate = self
+            destinationViewController.post = self.posts[indexPath.row].copy() as? Post
         }
     }
 
@@ -221,12 +219,60 @@ class UserCategoryTableViewController: UITableViewController {
     }
 }
 
-extension UserCategoryTableViewController: PostDetailsTableViewControllerDelegate {
+extension UserCategoryTableViewController {
     
-    func updatedPost(_ post: Post, postIndexPath: IndexPath) {
-        self.posts[postIndexPath.row] = post
-        self.tableView.reloadRows(at: [postIndexPath], with: UITableViewRowAnimation.none)
-        // Notify ProfileVc
-        self.userCategoryTableViewControllerDelegate?.updatedPost(post)
+    // MARK: NotificationCenterActions
+    
+    func updatePost(_ notification: NSNotification) {
+        guard let postId = notification.userInfo?["postId"] as? String else {
+            return
+        }
+        guard let postIndex = self.posts.index(where: { $0.postId == postId }) else {
+            return
+        }
+        let post = self.posts[postIndex]
+        post.caption = notification.userInfo?["caption"] as? String
+        post.categoryName = notification.userInfo?["categoryName"] as? String
+        self.tableView.reloadRows(at: [IndexPath(row: postIndex, section: 0)], with: UITableViewRowAnimation.none)
+    }
+    
+    func updatePostNumberOfLikes(_ notification: NSNotification) {
+        guard let postId = notification.userInfo?["postId"] as? String, let numberOfLikes = notification.userInfo?["numberOfLikes"] as? NSNumber else {
+            return
+        }
+        guard let postIndex = self.posts.index(where: { $0.postId == postId }) else {
+            return
+        }
+        let post = self.posts[postIndex]
+        post.numberOfLikes = numberOfLikes
+        post.isLikedByCurrentUser = !post.isLikedByCurrentUser
+        self.tableView.reloadRows(at: [IndexPath(row: postIndex, section: 0)], with: UITableViewRowAnimation.none)
+    }
+    
+    func updatePostNumberOfComments(_ notification: NSNotification) {
+        guard let postId = notification.userInfo?["postId"] as? String, let numberOfComments = notification.userInfo?["numberOfComments"] as? NSNumber else {
+            return
+        }
+        guard let postIndex = self.posts.index(where: { $0.postId == postId }) else {
+            return
+        }
+        let post = self.posts[postIndex]
+        post.numberOfComments = numberOfComments
+        self.tableView.reloadRows(at: [IndexPath(row: postIndex, section: 0)], with: UITableViewRowAnimation.none)
+    }
+    
+    func deletePost(_ notification: NSNotification) {
+        guard let postId = notification.userInfo?["postId"] as? String else {
+            return
+        }
+        guard let postIndex = self.posts.index(where: { $0.postId == postId }) else {
+            return
+        }
+        self.posts.remove(at: postIndex)
+        if self.posts.count == 0 {
+            self.tableView.reloadSections(IndexSet(integer: 0), with: UITableViewRowAnimation.none)
+        } else {
+            self.tableView.deleteRows(at: [IndexPath(row: postIndex, section: 0)], with: UITableViewRowAnimation.fade)
+        }
     }
 }

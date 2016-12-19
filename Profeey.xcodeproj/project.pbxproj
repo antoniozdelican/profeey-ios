@@ -225,6 +225,7 @@
 		A9E9EDAC1DFAC3C600BC2253 /* PRFYCloudSearchLocationsResultItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E9EDAB1DFAC3C600BC2253 /* PRFYCloudSearchLocationsResultItem.swift */; };
 		A9EAD3401D1E8E0C00994292 /* NoSQLModelHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9EAD33F1D1E8E0C00994292 /* NoSQLModelHelpers.swift */; };
 		A9EAEC071DA6A38600DA6A4D /* AWSPostUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9EAEC061DA6A38600DA6A4D /* AWSPostUpdate.swift */; };
+		A9EC9E391E086EAD00A5F619 /* EditPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9EC9E381E086EAD00A5F619 /* EditPost.swift */; };
 		A9F2E7881DE89FF7001A25EC /* TTTAttributedLabel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9F2E7871DE89FF7001A25EC /* TTTAttributedLabel.framework */; };
 		A9F2E78A1DE8A003001A25EC /* TTTAttributedLabel.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A9F2E7871DE89FF7001A25EC /* TTTAttributedLabel.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A9F345911DE0C80D00A5D368 /* PRFYCloudSearchProfessionsResultItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F345901DE0C80D00A5D368 /* PRFYCloudSearchProfessionsResultItem.swift */; };
@@ -476,6 +477,7 @@
 		A9E9EDAB1DFAC3C600BC2253 /* PRFYCloudSearchLocationsResultItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PRFYCloudSearchLocationsResultItem.swift; sourceTree = "<group>"; };
 		A9EAD33F1D1E8E0C00994292 /* NoSQLModelHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoSQLModelHelpers.swift; sourceTree = "<group>"; };
 		A9EAEC061DA6A38600DA6A4D /* AWSPostUpdate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSPostUpdate.swift; sourceTree = "<group>"; };
+		A9EC9E381E086EAD00A5F619 /* EditPost.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditPost.swift; sourceTree = "<group>"; };
 		A9F2E7871DE89FF7001A25EC /* TTTAttributedLabel.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TTTAttributedLabel.framework; path = Profeey/TTTAttributedLabel.framework; sourceTree = "<group>"; };
 		A9F345901DE0C80D00A5D368 /* PRFYCloudSearchProfessionsResultItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PRFYCloudSearchProfessionsResultItem.swift; sourceTree = "<group>"; };
 		A9F345921DE0C81800A5D368 /* PRFYCloudSearchProfessionsResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PRFYCloudSearchProfessionsResult.swift; sourceTree = "<group>"; };
@@ -885,6 +887,7 @@
 				A94797A61D2E3451007CBF08 /* User.swift */,
 				A99ADD251DB361BE00A34C8D /* CurrentUser.swift */,
 				A9C0ED391D3C21C30036F791 /* Post.swift */,
+				A9EC9E381E086EAD00A5F619 /* EditPost.swift */,
 				A9BCBDC41DDAFA0F00265AFA /* Recommendation.swift */,
 				A9E4507F1D5A09F100D14553 /* Comment.swift */,
 				A9B7A2431D65A562009DA340 /* Category.swift */,
@@ -1480,6 +1483,7 @@
 				A9A57B2C1DD1CBB0004F0177 /* DiscoverPeopleTableViewController.swift in Sources */,
 				A99B9E2D1DB53D8C0047360D /* AWSEducationsTable.swift in Sources */,
 				A9E4EC541D81F1B700929ED1 /* LocationsOldTableViewController.swift in Sources */,
+				A9EC9E391E086EAD00A5F619 /* EditPost.swift in Sources */,
 				A9ACA7411DB506A50004B8DE /* AWSWorkExperience.swift in Sources */,
 				A901CFE91DA78FA900C44B26 /* CameraViewController.swift in Sources */,
 				A91C1CD71DEDA669006FBDD4 /* NotificationTableViewCell.swift in Sources */,

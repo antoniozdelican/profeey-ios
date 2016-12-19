@@ -64,8 +64,10 @@ class ProfileTableViewController: UITableViewController {
         }
         
         // Add observers.
+        NotificationCenter.default.addObserver(self, selector: #selector(self.updatePost(_:)), name: NSNotification.Name(UpdatePostNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNumberOfLikes(_:)), name: NSNotification.Name(UpdatePostNumberOfLikesNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNumberOfComments(_:)), name: NSNotification.Name(UpdatePostNumberOfCommentsNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.deletePost(_:)), name: NSNotification.Name(DeletePostNotificationKey), object: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -113,16 +115,14 @@ class ProfileTableViewController: UITableViewController {
         }
         if let destinationViewController = segue.destination as? PostDetailsTableViewController,
             let indexPath = sender as? IndexPath {
-            destinationViewController.post = self.posts[indexPath.row]
-            destinationViewController.postIndexPath = indexPath
-            destinationViewController.postDetailsTableViewControllerDelegate = self
+            // Copy Post object to separate data.
+            destinationViewController.post = self.posts[indexPath.row].copy() as? Post
         }
         if let destinationViewController = segue.destination as? UserCategoryTableViewController,
             let cell = sender as? UserCategoryTableViewCell,
             let indexPath = self.tableView.indexPath(for: cell) {
             destinationViewController.user = self.user
             destinationViewController.userCategory = self.userCategories[indexPath.row]
-            destinationViewController.userCategoryTableViewControllerDelegate = self
         }
         if let destinationViewController = segue.destination as? UINavigationController,
             let childViewController = destinationViewController.childViewControllers[0] as? AddRecommendationTableViewController {
@@ -420,7 +420,6 @@ class ProfileTableViewController: UITableViewController {
             header?.profileTableSectionHeaderDelegate = self
             return header
         default:
-            // To display empty white view.
             return UIView()
         }
     }
@@ -480,20 +479,7 @@ class ProfileTableViewController: UITableViewController {
     }
     
     @IBAction func unwindToProfileTableViewController(_ segue: UIStoryboardSegue) {
-        if let sourceViewController = segue.source as? PostDetailsTableViewController,
-            let post = sourceViewController.post,
-            let postIndexPath = sourceViewController.postIndexPath {
-            self.posts.remove(at: postIndexPath.row)
-            if self.posts.count == 0 {
-                self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
-            } else {
-                self.tableView.deleteRows(at: [postIndexPath], with: UITableViewRowAnimation.fade)
-            }
-            if let imageKey = post.imageUrl, let postId = post.postId {
-                // In background
-                self.removeImage(imageKey, postId: postId)
-            }
-        }
+        // From PostDetailsVc on Post delete.
     }
     
     @IBAction func refreshControlChanged(_ sender: AnyObject) {
@@ -800,28 +786,29 @@ class ProfileTableViewController: UITableViewController {
                 } else {
                     print("removeImageS3 success")
                     content?.removeLocal()
-                    if let postId = postId {
-                        // If it's post.
-                        self.removePost(postId)
-                    }
+//                    if let postId = postId {
+//                        // If it's post.
+//                        self.removePost(postId)
+//                    }
                 }
             })
         })
     }
     
-    fileprivate func removePost(_ postId: String) {
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().removePostDynamoDB(postId, completionHandler: {
-            (task: AWSTask) in
-            DispatchQueue.main.async(execute: {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                if let error = task.error {
-                    print("removePost error: \(error)")
-                }
-            })
-            return nil
-        })
-    }
+    // In background.
+//    fileprivate func removePost(_ postId: String) {
+//        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+//        PRFYDynamoDBManager.defaultDynamoDBManager().removePostDynamoDB(postId, completionHandler: {
+//            (task: AWSTask) in
+//            DispatchQueue.main.async(execute: {
+//                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+//                if let error = task.error {
+//                    print("removePost error: \(error)")
+//                }
+//            })
+//            return nil
+//        })
+//    }
     
     fileprivate func getRelationship(_ followingId: String) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
@@ -909,9 +896,24 @@ class ProfileTableViewController: UITableViewController {
     }
 }
 
-// MARK: NotificationCenterActions
-
 extension ProfileTableViewController {
+    
+    // MARK: NotificationCenterActions
+    
+    func updatePost(_ notification: NSNotification) {
+        guard let postId = notification.userInfo?["postId"] as? String else {
+            return
+        }
+        guard let postIndex = self.posts.index(where: { $0.postId == postId }) else {
+            return
+        }
+        let post = self.posts[postIndex]
+        post.caption = notification.userInfo?["caption"] as? String
+        post.categoryName = notification.userInfo?["categoryName"] as? String
+        if self.selectedProfileSegment == ProfileSegment.posts {
+            self.tableView.reloadRows(at: [IndexPath(row: postIndex, section: 1)], with: UITableViewRowAnimation.none)
+        }
+    }
     
     func updatePostNumberOfLikes(_ notification: NSNotification) {
         guard let postId = notification.userInfo?["postId"] as? String, let numberOfLikes = notification.userInfo?["numberOfLikes"] as? NSNumber else {
@@ -939,6 +941,23 @@ extension ProfileTableViewController {
         post.numberOfComments = numberOfComments
         if self.selectedProfileSegment == ProfileSegment.posts {
             self.tableView.reloadRows(at: [IndexPath(row: postIndex, section: 1)], with: UITableViewRowAnimation.none)
+        }
+    }
+    
+    func deletePost(_ notification: NSNotification) {
+        guard let postId = notification.userInfo?["postId"] as? String else {
+            return
+        }
+        guard let postIndex = self.posts.index(where: { $0.postId == postId }) else {
+            return
+        }
+        self.posts.remove(at: postIndex)
+        if self.selectedProfileSegment == ProfileSegment.posts {
+            if self.posts.count == 0 {
+                self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
+            } else {
+                self.tableView.deleteRows(at: [IndexPath(row: postIndex, section: 1)], with: UITableViewRowAnimation.fade)
+            }
         }
     }
 }
@@ -1081,28 +1100,6 @@ extension ProfileTableViewController: ExperiencesTableViewControllerDelegate {
             UIView.performWithoutAnimation {
                 self.tableView.reloadSections(IndexSet([2, 3]), with: UITableViewRowAnimation.none)
             }
-        }
-    }
-}
-
-extension ProfileTableViewController: PostDetailsTableViewControllerDelegate {
-    
-    func updatedPost(_ post: Post, postIndexPath: IndexPath) {
-        // TODO refactor this.
-        self.posts[postIndexPath.row] = post
-        self.tableView.reloadRows(at: [postIndexPath], with: UITableViewRowAnimation.none)
-    }
-}
-
-extension ProfileTableViewController: UserCategoryTableViewControllerDelegate {
-    
-    func updatedPost(_ post: Post) {
-        guard let postId = post.postId, let updatedPost = self.posts.first(where: { $0.postId == postId }), let postIndex = self.posts.index(of: updatedPost) else {
-            return
-        }
-        self.posts[postIndex] = post
-        if self.selectedProfileSegment == ProfileSegment.posts {
-            self.tableView.reloadRows(at: [IndexPath(row: postIndex, section: 1)], with: UITableViewRowAnimation.none)
         }
     }
 }

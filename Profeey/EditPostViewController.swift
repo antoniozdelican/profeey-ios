@@ -9,18 +9,11 @@
 import UIKit
 import AWSMobileHubHelper
 
-@objc protocol EditPostViewControllerDelegate {
-    @objc optional func updatedPost(_ post: Post, withIndexPath postIndexPath: IndexPath)
-    @objc optional func updatedPost(_ post: Post)
-}
-
 class EditPostViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
     
-    var post: Post?
-    var postIndexPath: IndexPath?
-    var editPostViewControllerDelegate: EditPostViewControllerDelegate?
+    var editPost: EditPost?
     fileprivate var bottomIndexPath: IndexPath = IndexPath(row: 2, section: 0)
     
     override func viewDidLoad() {
@@ -99,15 +92,12 @@ class EditPostViewController: UIViewController {
     // MARK: AWS
     
     fileprivate func updatePost() {
-        guard let post = self.post else {
-            return
-        }
-        guard let postId = post.postId else {
+        guard let postId = self.editPost?.postId else {
             return
         }
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         FullScreenIndicator.show()
-        PRFYDynamoDBManager.defaultDynamoDBManager().updatePostDynamoDB(postId, caption: post.caption, categoryName: post.categoryName, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().updatePostDynamoDB(postId, caption: self.editPost?.caption, categoryName: self.editPost?.categoryName, completionHandler: {
             (task: AWSTask) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
@@ -117,17 +107,8 @@ class EditPostViewController: UIViewController {
                     let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.localizedDescription, cancelButtonTitle: "Ok")
                     self.present(alertController, animated: true, completion: nil)
                 } else {
-                    // Setting only local post for simplicity.
-                    guard let post = self.post else {
-                        return
-                    }
-                    if let postIndexPath = self.postIndexPath {
-                        // HomeVc
-                        self.editPostViewControllerDelegate?.updatedPost?(post, withIndexPath: postIndexPath)
-                    } else {
-                        // PostDetailsVc
-                        self.editPostViewControllerDelegate?.updatedPost?(post)
-                    }
+                    let userInfo = ["postId": postId, "caption": self.editPost?.caption, "categoryName": self.editPost?.categoryName]
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: UpdatePostNotificationKey), object: self, userInfo: userInfo)
                     self.dismiss(animated: false, completion: nil)
                 }
             })
@@ -153,22 +134,23 @@ extension EditPostViewController: UITableViewDataSource, UITableViewDelegate {
         switch indexPath.row {
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellEditPostImage", for: indexPath) as! EditPostImageTableViewCell
-            cell.postImageView.image = self.post?.image
-            if let image = self.post?.image {
-                let aspectRatio = image.size.width / image.size.height
+            cell.postImageView.image = self.editPost?.image
+            if let imageWidth = self.editPost?.imageWidth?.floatValue, let imageHeight = self.editPost?.imageHeight?.floatValue {
+                let aspectRatio = CGFloat(imageWidth / imageHeight)
                 cell.postImageViewHeightConstraint.constant = ceil(tableView.bounds.width / aspectRatio)
             }
+            
             return cell
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellEditPostDescription", for: indexPath) as! EditPostDescriptionTableViewCell
             cell.editPostDescriptionTableViewCellDelegate = self
-            cell.descriptionTextView.text = self.post?.caption
-            cell.descriptionPlaceholderLabel.isHidden = self.post?.caption != nil ? true : false
+            cell.descriptionTextView.text = self.editPost?.caption
+            cell.descriptionPlaceholderLabel.isHidden = self.editPost?.caption != nil ? true : false
             return cell
         case 2:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellEditPostCategory", for: indexPath) as! EditPostCategoryTableViewCell
             cell.editPostCategoryTableViewCellDelegate = self
-            if let categoryName = self.post?.categoryName {
+            if let categoryName = self.editPost?.categoryName {
                 cell.categoryAdded(categoryName: categoryName)
             } else {
                 cell.categoryRemoved()
@@ -236,14 +218,14 @@ extension EditPostViewController: EditPostDescriptionTableViewCellDelegate {
             UIView.setAnimationsEnabled(true)
             self.tableView.scrollToRow(at: self.bottomIndexPath, at: UITableViewScrollPosition.bottom, animated: false)
         }
-        self.post?.caption = textView.text.trimm().isEmpty ? nil : textView.text.trimm()
+        self.editPost?.caption = textView.text.trimm().isEmpty ? nil : textView.text.trimm()
     }
 }
 
 extension EditPostViewController: EditPostCategoryTableViewCellDelegate {
     
     func removeButtonTapped() {
-        self.post?.categoryName = nil
+        self.editPost?.categoryName = nil
         self.tableView.reloadRows(at: [self.bottomIndexPath], with: UITableViewRowAnimation.none)
     }
 }
@@ -251,7 +233,7 @@ extension EditPostViewController: EditPostCategoryTableViewCellDelegate {
 extension EditPostViewController: CategoriesTableViewControllerDelegate {
     
     func didSelectCategory(_ categoryName: String?) {
-        self.post?.categoryName = categoryName
+        self.editPost?.categoryName = categoryName
         self.tableView.reloadRows(at: [self.bottomIndexPath], with: UITableViewRowAnimation.none)
     }
 }

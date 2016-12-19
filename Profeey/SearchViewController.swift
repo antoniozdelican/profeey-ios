@@ -196,7 +196,7 @@ extension SearchViewController: LocationsTableViewControllerDelegate {
             return
         }
         self.isLocationActive = true
-        self.locationBarButtonItem?.image = UIImage(named: "ic_location_active")
+        self.locationBarButtonItem?.image = UIImage(named: "ic_location_active")?.withRenderingMode(UIImageRenderingMode.alwaysOriginal)
         self.searchBar.placeholder = "Search in \(locationName)"
         self.searchUsersDelegate?.addLocation(location)
         self.searchProfessionsDelegate?.addLocation(location)
