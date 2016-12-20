@@ -198,7 +198,7 @@ class HomeTableViewController: UITableViewController {
             return cell
         case 4:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostButtons", for: indexPath) as! PostButtonsTableViewCell
-            post.isLikedByCurrentUser ? cell.setSelectedLikeButton() : cell.setUnselectedLikeButton()
+            self.posts[indexPath.section].isLikedByCurrentUser ? cell.setSelectedLikeButton() : cell.setUnselectedLikeButton()
             cell.postButtonsTableViewCellDelegate = self
             cell.numberOfLikesButton.isHidden = (post.numberOfLikesString != nil) ? false : true
             cell.numberOfLikesButton.setTitle(post.numberOfLikesString, for: UIControlState())
@@ -282,6 +282,7 @@ class HomeTableViewController: UITableViewController {
         self.queryUserActivitiesDateSorted()
     }
     
+    // From Capture flow.
     @IBAction func unwindToHomeTableViewController(_ segue: UIStoryboardSegue) {
         if let sourceViewController = segue.source as? AddInfoTableViewController {
             guard let post = sourceViewController.post,
@@ -289,19 +290,22 @@ class HomeTableViewController: UITableViewController {
                 let imageData = UIImageJPEGRepresentation(image, 0.6) else {
                 return
             }
-            // TODO
-            // Scroll to beginning.
-            
-            
             self.isUploading = true
             // Add dummy post for uploading.
             let dummyPost = Post()
             dummyPost.user = PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB
             self.posts.insert(dummyPost, at: 0)
+            // Adjust tableView and other views.
+            self.tableView.beginUpdates()
+            self.tableView.insertSections(IndexSet(integer: 0), with: UITableViewRowAnimation.none)
             if let _ = self.tableView.backgroundView as? HomeEmptyFeedView {
                 self.tableView.backgroundView = nil
             }
-            self.tableView.reloadData()
+            self.tableView.endUpdates()
+            self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: UITableViewScrollPosition.top, animated: false)
+            self.navigationController?.setNavigationBarHidden(false, animated: true)
+            self.isNavigationBarHidden = false
+            // Upload image sync.
             self.uploadImage(imageData, imageWidth: NSNumber(value: Float(image.size.width)), imageHeight: NSNumber(value: Float(image.size.height)), caption: post.caption, categoryName: post.categoryName)
         }
     }
@@ -477,22 +481,26 @@ class HomeTableViewController: UITableViewController {
                     print("savePost error: \(error)")
                     // Remove dummy post.
                     self.posts.remove(at: 0)
-                    // Add HomeEmptyFeedView if there's no followed posts.
                     if self.posts.count == 0 {
                         self.tableView.backgroundView = self.homeEmptyFeedView
+                        self.tableView.reloadData()
+                    } else {
+                        self.tableView.deleteSections(IndexSet(integer: 0), with: UITableViewRowAnimation.none)
                     }
-                    self.tableView.reloadData()
                 } else {
                     if let awsPost = task.result as? AWSPost {
                         let post = Post(userId: awsPost._userId, postId: awsPost._postId, creationDate: awsPost._creationDate, caption: awsPost._caption, categoryName: awsPost._categoryName, imageUrl: awsPost._imageUrl, imageWidth: awsPost._imageWidth, imageHeight: awsPost._imageHeight, numberOfLikes: awsPost._numberOfLikes, numberOfComments: awsPost._numberOfComments, user: PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB)
-                        let image = UIImage(data: imageData)
-                        post.image = image
+                        post.image = UIImage(data: imageData)
                         
-                        // Remove dummy post.
+                        // Remove dummy post and insert new.
                         self.posts.remove(at: 0)
-                        // Add new post.
                         self.posts.insert(post, at: 0)
-                        self.tableView.reloadData()
+                        UIView.performWithoutAnimation {
+                            self.tableView.reloadSections(IndexSet(integer: 0), with: UITableViewRowAnimation.none)
+                        }
+                        // Notifiy observers (ProfileVc)
+                        let userInfo = ["post": post.copy() as? Post]
+                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: CreatePostNotificationKey), object: self, userInfo: userInfo)
                     }
                 }
             })
@@ -597,8 +605,8 @@ extension HomeTableViewController {
             return
         }
         let post = self.posts[postIndex]
-        post.numberOfLikes = numberOfLikes
-        post.isLikedByCurrentUser = !post.isLikedByCurrentUser
+        self.posts[postIndex].numberOfLikes = numberOfLikes
+        self.posts[postIndex].isLikedByCurrentUser = !self.posts[postIndex].isLikedByCurrentUser
         UIView.performWithoutAnimation {
             self.tableView.reloadRows(at: [IndexPath(row: 4, section: postIndex)], with: UITableViewRowAnimation.none)
         }

@@ -64,6 +64,7 @@ class ProfileTableViewController: UITableViewController {
         }
         
         // Add observers.
+        NotificationCenter.default.addObserver(self, selector: #selector(self.createPost(_:)), name: NSNotification.Name(CreatePostNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.updatePost(_:)), name: NSNotification.Name(UpdatePostNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNumberOfLikes(_:)), name: NSNotification.Name(UpdatePostNumberOfLikesNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNumberOfComments(_:)), name: NSNotification.Name(UpdatePostNumberOfCommentsNotificationKey), object: nil)
@@ -188,7 +189,6 @@ class ProfileTableViewController: UITableViewController {
                 cell.numberOfPostsButton.setTitle(self.user?.numberOfPostsInt.numberToString(), for: UIControlState.normal)
                 cell.numberOfFollowersButton.setTitle(self.user?.numberOfFollowersInt.numberToString(), for: UIControlState.normal)
                 cell.numberOfRecommendationsButton.setTitle(self.user?.numberOfRecommendationsInt.numberToString(), for: UIControlState.normal)
-                
                 if self.isCurrentUser {
                     cell.recommendButton.isHidden = true
                     cell.setEditButton()
@@ -333,7 +333,7 @@ class ProfileTableViewController: UITableViewController {
             case 0:
                 return 92.0
             case 1:
-                return 112.0
+                return 109.0
             case 2:
                 return 46.0
             default:
@@ -900,6 +900,31 @@ extension ProfileTableViewController {
     
     // MARK: NotificationCenterActions
     
+    func createPost(_ notification: NSNotification) {
+        guard let post = notification.userInfo?["post"] as? Post else {
+            return
+        }
+        guard let userId = self.user?.userId, userId == post.userId else {
+            return
+        }
+        self.posts.insert(post, at: 0)
+        if self.selectedProfileSegment == ProfileSegment.posts {
+            if self.posts.count == 1 {
+                // To remove Add Posts button.
+                self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
+            } else {
+                self.tableView.insertRows(at: [IndexPath(row: 0, section: 1)], with: UITableViewRowAnimation.none)
+            }
+        }
+        // Update numberOfPosts
+        if let numberOfPosts = self.user?.numberOfPosts {
+            self.user?.numberOfPosts = NSNumber(value: numberOfPosts.intValue + 1)
+        } else {
+            self.user?.numberOfPosts = NSNumber(value: 1)
+        }
+        self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.none)
+    }
+    
     func updatePost(_ notification: NSNotification) {
         guard let postId = notification.userInfo?["postId"] as? String else {
             return
@@ -956,9 +981,16 @@ extension ProfileTableViewController {
             if self.posts.count == 0 {
                 self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
             } else {
-                self.tableView.deleteRows(at: [IndexPath(row: postIndex, section: 1)], with: UITableViewRowAnimation.fade)
+                self.tableView.deleteRows(at: [IndexPath(row: postIndex, section: 1)], with: UITableViewRowAnimation.none)
             }
         }
+        // Update numberOfPosts
+        if let numberOfPosts = self.user?.numberOfPosts {
+            self.user?.numberOfPosts = NSNumber(value: numberOfPosts.intValue - 1)
+        } else {
+            self.user?.numberOfPosts = NSNumber(value: 0)
+        }
+        self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.none)
     }
 }
 
@@ -966,8 +998,7 @@ extension ProfileTableViewController: ProfileMainTableViewCellDelegate {
     
     func numberOfPostsButtonTapped() {
         if self.posts.count > 0 && self.selectedProfileSegment == ProfileSegment.posts {
-            let indexPath = IndexPath(row: 0, section: 1)
-            self.tableView.scrollToRow(at: indexPath, at: UITableViewScrollPosition.top, animated: true)
+            self.tableView.scrollToRow(at: IndexPath(row: 0, section: 1), at: UITableViewScrollPosition.top, animated: true)
         }
     }
     

@@ -8,6 +8,7 @@
 
 import Foundation
 
+let CreatePostNotificationKey: String = "CreatePostNotificationKey"
 let UpdatePostNotificationKey: String = "UpdatePostNotificationKey"
 let UpdatePostNumberOfLikesNotificationKey: String = "UpdatePostNumberOfLikesNotificationKey"
 let UpdatePostNumberOfCommentsNotificationKey: String = "UpdatePostNumberOfCommentsNotificationKey"
