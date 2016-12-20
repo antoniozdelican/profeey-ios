@@ -25,6 +25,9 @@ class UserTableViewCell: UITableViewCell {
         super.awakeFromNib()
         self.profilePicImageView.layer.cornerRadius = 4.0
         self.profilePicImageView.clipsToBounds = true
+        
+        // Loading buttons.
+        self.followButton.setBackgroundImage(UIImage(named: "btn_disabled_resizable"), for: UIControlState.normal)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -35,7 +38,7 @@ class UserTableViewCell: UITableViewCell {
         UIView.performWithoutAnimation {
             self.followButton.setTitle("Follow", for: UIControlState())
             self.followButton.setTitleColor(Colors.blue, for: UIControlState())
-            self.followButton.setBackgroundImage(UIImage(named: "btn_follow_small"), for: UIControlState.normal)
+            self.followButton.setBackgroundImage(UIImage(named: "btn_follow_resizable"), for: UIControlState.normal)
             self.followButton.layoutIfNeeded()
         }
     }
@@ -44,7 +47,7 @@ class UserTableViewCell: UITableViewCell {
         UIView.performWithoutAnimation {
             self.followButton.setTitle("Following", for: UIControlState())
             self.followButton.setTitleColor(UIColor.white, for: UIControlState())
-            self.followButton.setBackgroundImage(UIImage(named: "btn_following_small"), for: UIControlState.normal)
+            self.followButton.setBackgroundImage(UIImage(named: "btn_following_resizable"), for: UIControlState.normal)
             self.followButton.layoutIfNeeded()
         }
     }

@@ -29,7 +29,7 @@
             </objects>
             <point key="canvasLocation" x="-58" y="446"/>
         </scene>
-        <!--Home-->
+        <!--Profeey-->
         <scene sceneID="arT-UO-kgp">
             <objects>
                 <tableViewController id="Qkr-xF-wW1" customClass="HomeTableViewController" customModule="Profeey" customModuleProvider="target" sceneMemberID="viewController">
@@ -311,7 +311,7 @@
                             <outlet property="delegate" destination="Qkr-xF-wW1" id="eEI-MF-th6"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Home" id="odO-LM-84T"/>
+                    <navigationItem key="navigationItem" title="Profeey" id="odO-LM-84T"/>
                     <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" misplaced="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="pv7-Wk-vhh">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>

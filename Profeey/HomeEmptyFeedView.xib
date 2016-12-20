@@ -28,14 +28,18 @@
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Text" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vPr-Za-XZF">
                                     <rect key="frame" x="129" y="0.0" width="37.5" height="24"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                    <color key="textColor" red="0.4941176471" green="0.4941176471" blue="0.4941176471" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="textColor" red="0.41868340970000001" green="0.41867089270000002" blue="0.41867792609999999" alpha="1" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tEI-iH-UMD">
                                     <rect key="frame" x="84.5" y="44" width="126" height="32"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="32" id="xZ1-tb-tah"/>
+                                        <constraint firstAttribute="width" constant="126" id="zsI-wq-s2L"/>
+                                    </constraints>
                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                    <state key="normal" title="Find profeeys" backgroundImage="btn_edit_profile">
-                                        <color key="titleColor" red="0.4941176471" green="0.4941176471" blue="0.4941176471" alpha="1" colorSpace="calibratedRGB"/>
+                                    <state key="normal" title="Find profeeys">
+                                        <color key="titleColor" red="0.41868340970000001" green="0.41867089270000002" blue="0.41867792609999999" alpha="1" colorSpace="calibratedRGB"/>
                                     </state>
                                     <connections>
                                         <action selector="discoverButtonTapped:" destination="iN0-l3-epB" eventType="touchUpInside" id="JOC-Lq-yhE"/>
@@ -66,7 +70,4 @@
             <point key="canvasLocation" x="20" y="54"/>
         </view>
     </objects>
-    <resources>
-        <image name="btn_edit_profile" width="126" height="32"/>
-    </resources>
 </document>

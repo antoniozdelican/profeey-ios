@@ -32,7 +32,7 @@ class ProfileMainTableViewCell: UITableViewCell {
         self.profilePicImageView.layer.cornerRadius = 4.0
         self.profilePicImageView.clipsToBounds = true
         
-        // Loading buttons
+        // Loading buttons.
         self.recommendButton.setBackgroundImage(UIImage(named: "btn_disabled_resizable"), for: UIControlState.normal)
         self.followButton.setBackgroundImage(UIImage(named: "btn_disabled_resizable"), for: UIControlState.normal)
     }

@@ -27,6 +27,7 @@ class ProfileEmptyTableViewCell: UITableViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
+        self.addButton.setBackgroundImage(UIImage(named: "btn_edit_profile_resizable"), for: UIControlState.normal)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

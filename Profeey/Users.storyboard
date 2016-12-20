@@ -58,7 +58,7 @@
                                                 <constraint firstAttribute="width" constant="80" id="zqj-CA-FdH"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                            <state key="normal" title="Loading" backgroundImage="btn_disabled_small">
+                                            <state key="normal" title="Loading">
                                                 <color key="titleColor" red="0.73251521590000002" green="0.7315930128" blue="0.76011711360000001" alpha="1" colorSpace="calibratedRGB"/>
                                             </state>
                                             <connections>
@@ -132,7 +132,4 @@
             <point key="canvasLocation" x="1523" y="-127"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="btn_disabled_small" width="80" height="32"/>
-    </resources>
 </document>
