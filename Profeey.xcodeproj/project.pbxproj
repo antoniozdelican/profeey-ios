@@ -60,7 +60,6 @@
 		A95C31B51D3E164C0003377F /* UICKeyChainStore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A95C31B31D3E16370003377F /* UICKeyChainStore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A95E40D01D35410500FD61F9 /* CaptureNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95E40CF1D35410500FD61F9 /* CaptureNavigationController.swift */; };
 		A95E93AF1DBF6D0000A1FF6E /* Profession.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A95E93AE1DBF6D0000A1FF6E /* Profession.storyboard */; };
-		A95E93B11DBF8D4500A1FF6E /* AddLocationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95E93B01DBF8D4500A1FF6E /* AddLocationTableViewCell.swift */; };
 		A95EB85B1D8FBE870039E51D /* DateTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95EB85A1D8FBE870039E51D /* DateTableViewCell.swift */; };
 		A95EB85D1D8FBEAB0039E51D /* DatePickerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95EB85C1D8FBEAB0039E51D /* DatePickerTableViewCell.swift */; };
 		A961E71A1DE847CA00D45634 /* AWSMobileHubHelper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A961E7191DE847CA00D45634 /* AWSMobileHubHelper.framework */; };
@@ -318,7 +317,6 @@
 		A95C31B31D3E16370003377F /* UICKeyChainStore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = UICKeyChainStore.framework; sourceTree = "<group>"; };
 		A95E40CF1D35410500FD61F9 /* CaptureNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CaptureNavigationController.swift; sourceTree = "<group>"; };
 		A95E93AE1DBF6D0000A1FF6E /* Profession.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Profession.storyboard; sourceTree = "<group>"; };
-		A95E93B01DBF8D4500A1FF6E /* AddLocationTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddLocationTableViewCell.swift; sourceTree = "<group>"; };
 		A95EB85A1D8FBE870039E51D /* DateTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateTableViewCell.swift; sourceTree = "<group>"; };
 		A95EB85C1D8FBEAB0039E51D /* DatePickerTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatePickerTableViewCell.swift; sourceTree = "<group>"; };
 		A961E6F71DE8458D00D45634 /* AWSAPIGateway.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AWSAPIGateway.framework; path = Profeey/AWSAPIGateway.framework; sourceTree = "<group>"; };
@@ -844,7 +842,6 @@
 			children = (
 				A95E93AE1DBF6D0000A1FF6E /* Profession.storyboard */,
 				A999CD471DBE93D400E7ADB1 /* ProfessionTableViewController.swift */,
-				A95E93B01DBF8D4500A1FF6E /* AddLocationTableViewCell.swift */,
 			);
 			name = Profession;
 			sourceTree = "<group>";
@@ -1355,7 +1352,6 @@
 				A990ECB51D6A582100C3C9CE /* UserTableViewCell.swift in Sources */,
 				A9B750011D8782C200DDC8C8 /* AWSActivity.swift in Sources */,
 				A9BF164B1D6519D100060A9E /* SearchingTableViewCell.swift in Sources */,
-				A95E93B11DBF8D4500A1FF6E /* AddLocationTableViewCell.swift in Sources */,
 				A9E9EDAC1DFAC3C600BC2253 /* PRFYCloudSearchLocationsResultItem.swift in Sources */,
 				A9C3C0EA1E02B7DC005CA18C /* NewPasswordTableViewController.swift in Sources */,
 				A92F93ED1DC3940A00065CD1 /* EditProfileTableViewController.swift in Sources */,

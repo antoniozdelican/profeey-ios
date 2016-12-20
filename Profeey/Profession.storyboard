@@ -19,59 +19,8 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <inset key="separatorInset" minX="68" minY="0.0" maxX="0.0" maxY="0.0"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellAddLocation" rowHeight="52" id="Nxz-8d-PWa" customClass="AddLocationTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="28" width="375" height="52"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Nxz-8d-PWa" id="8aY-bY-Bib">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="51"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <stackView opaque="NO" contentMode="scaleToFill" spacing="25" translatesAutoresizingMaskIntoConstraints="NO" id="ZIe-NY-GAz">
-                                            <rect key="frame" x="28" y="16" width="291" height="19.5"/>
-                                            <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_location_disabled" translatesAutoresizingMaskIntoConstraints="NO" id="DCf-Yq-LT5">
-                                                    <rect key="frame" x="0.0" y="0.0" width="14" height="19.5"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="14" id="9lC-bv-Zke"/>
-                                                    </constraints>
-                                                </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add city..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4zV-ou-yJC">
-                                                    <rect key="frame" x="39" y="0.0" width="252" height="19.5"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                                    <color key="textColor" red="0.41868340970000001" green="0.41867089270000002" blue="0.41867792609999999" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                        </stackView>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9hL-74-3oY">
-                                            <rect key="frame" x="331" y="4" width="44" height="44"/>
-                                            <constraints>
-                                                <constraint firstAttribute="height" constant="44" id="e2h-k3-j0f"/>
-                                                <constraint firstAttribute="width" constant="44" id="f3e-jf-MtZ"/>
-                                            </constraints>
-                                            <state key="normal" image="ic_remove_grey"/>
-                                            <connections>
-                                                <action selector="clearButtonTapped:" destination="Nxz-8d-PWa" eventType="touchUpInside" id="waK-sQ-1Fw"/>
-                                            </connections>
-                                        </button>
-                                    </subviews>
-                                    <constraints>
-                                        <constraint firstAttribute="trailing" secondItem="9hL-74-3oY" secondAttribute="trailing" id="EkF-Oa-ZcM"/>
-                                        <constraint firstItem="ZIe-NY-GAz" firstAttribute="leading" secondItem="8aY-bY-Bib" secondAttribute="leading" constant="28" id="H4B-sf-c33"/>
-                                        <constraint firstItem="ZIe-NY-GAz" firstAttribute="centerY" secondItem="8aY-bY-Bib" secondAttribute="centerY" id="cJd-50-iHE"/>
-                                        <constraint firstItem="9hL-74-3oY" firstAttribute="centerY" secondItem="8aY-bY-Bib" secondAttribute="centerY" id="kd5-qW-k4F"/>
-                                        <constraint firstItem="9hL-74-3oY" firstAttribute="leading" secondItem="ZIe-NY-GAz" secondAttribute="trailing" constant="12" id="lD0-He-2MP"/>
-                                    </constraints>
-                                </tableViewCellContentView>
-                                <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                <connections>
-                                    <outlet property="clearButton" destination="9hL-74-3oY" id="Fth-YJ-yzF"/>
-                                    <outlet property="locationImageView" destination="DCf-Yq-LT5" id="oXQ-6w-0pd"/>
-                                    <outlet property="locationNameLabel" destination="4zV-ou-yJC" id="cRB-tJ-Y2n"/>
-                                </connections>
-                            </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellSearchUser" rowHeight="104" id="6Jd-ri-OEg" customClass="SearchUserTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="80" width="375" height="104"/>
+                                <rect key="frame" x="0.0" y="28" width="375" height="104"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="6Jd-ri-OEg" id="Cyx-17-n3t">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="103"/>
@@ -142,7 +91,7 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellSearching" rowHeight="64" id="1ft-ob-b5b" customClass="SearchingTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="184" width="375" height="64"/>
+                                <rect key="frame" x="0.0" y="132" width="375" height="64"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="1ft-ob-b5b" id="dgW-ol-nQi">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="63"/>
@@ -171,7 +120,7 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellNoResults" rowHeight="64" id="38U-Bd-GxB" customClass="NoResultsTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="248" width="375" height="64"/>
+                                <rect key="frame" x="0.0" y="196" width="375" height="64"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="38U-Bd-GxB" id="r2g-3H-Lmr">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="63"/>
@@ -219,7 +168,5 @@
     </scenes>
     <resources>
         <image name="ic_location" width="11" height="17"/>
-        <image name="ic_location_disabled" width="14" height="19"/>
-        <image name="ic_remove_grey" width="14" height="14"/>
     </resources>
 </document>

@@ -14,7 +14,7 @@ class EditProfilePicTableViewCell: UITableViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        self.profilePicImageView.layer.cornerRadius = 40.0
+        self.profilePicImageView.layer.cornerRadius = 4.0
         self.profilePicImageView.clipsToBounds = true
     }
 

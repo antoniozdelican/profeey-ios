@@ -333,7 +333,7 @@ class ProfileTableViewController: UITableViewController {
             case 0:
                 return 92.0
             case 1:
-                return 109.0
+                return 107.0
             case 2:
                 return 46.0
             default:
@@ -348,9 +348,9 @@ class ProfileTableViewController: UITableViewController {
             if self.isLoadingExperiences || self.isEmptyExperiences {
                 return 112.0
             }
-            return 74.0
+            return 105.0
         case 3:
-            return 74.0
+            return 105.0
         case 4:
             return 42.0
         default:

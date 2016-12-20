@@ -147,12 +147,12 @@ class ExperiencesTableViewController: UITableViewController {
             if indexPath.row == self.workExperiences.count {
                 return 52.0
             }
-            return 108.0
+            return 105.0
         case 1:
             if indexPath.row == self.educations.count {
                 return 52.0
             }
-            return 108.0
+            return 105.0
         default:
             return 0.0
         }

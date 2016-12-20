@@ -198,7 +198,7 @@ class HomeTableViewController: UITableViewController {
             return cell
         case 4:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostButtons", for: indexPath) as! PostButtonsTableViewCell
-            self.posts[indexPath.section].isLikedByCurrentUser ? cell.setSelectedLikeButton() : cell.setUnselectedLikeButton()
+            post.isLikedByCurrentUser ? cell.setSelectedLikeButton() : cell.setUnselectedLikeButton()
             cell.postButtonsTableViewCellDelegate = self
             cell.numberOfLikesButton.isHidden = (post.numberOfLikesString != nil) ? false : true
             cell.numberOfLikesButton.setTitle(post.numberOfLikesString, for: UIControlState())
@@ -605,8 +605,8 @@ extension HomeTableViewController {
             return
         }
         let post = self.posts[postIndex]
-        self.posts[postIndex].numberOfLikes = numberOfLikes
-        self.posts[postIndex].isLikedByCurrentUser = !self.posts[postIndex].isLikedByCurrentUser
+        post.numberOfLikes = numberOfLikes
+        post.isLikedByCurrentUser = !post.isLikedByCurrentUser
         UIView.performWithoutAnimation {
             self.tableView.reloadRows(at: [IndexPath(row: 4, section: postIndex)], with: UITableViewRowAnimation.none)
         }

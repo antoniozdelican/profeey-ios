@@ -16,7 +16,7 @@
         }
       },
       "idiom" : "universal",
-      "filename" : "btn_white_resizable.png",
+      "filename" : "btn_white_not_active_resizable.png",
       "scale" : "1x"
     },
     {
@@ -35,7 +35,7 @@
         }
       },
       "idiom" : "universal",
-      "filename" : "btn_white_resizable@2x.png",
+      "filename" : "btn_white_not_active_resizable@2x.png",
       "scale" : "2x"
     },
     {
@@ -54,7 +54,7 @@
         }
       },
       "idiom" : "universal",
-      "filename" : "btn_white_resizable@3x.png",
+      "filename" : "btn_white_not_active_resizable@3x.png",
       "scale" : "3x"
     }
   ],

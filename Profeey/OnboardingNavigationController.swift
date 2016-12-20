@@ -24,9 +24,6 @@ class OnboardingNavigationController: UINavigationController {
         super.didReceiveMemoryWarning()
     }
     
-//    override var preferredStatusBarStyle: UIStatusBarStyle {
-//        return .lightContent
-//    }
     override var childViewControllerForStatusBarStyle: UIViewController? {
         return self.visibleViewController
     }

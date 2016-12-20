@@ -36,10 +36,10 @@ class OnboardingViewController: UIViewController {
         self.facebookButton.setBackgroundImage(UIImage(named: "btn_white_active_resizable"), for: UIControlState.normal)
         self.facebookButton.setBackgroundImage(UIImage(named: "btn_white_active_resizable"), for: UIControlState.highlighted)
         self.facebookButton.setTitleColor(Colors.turquoise, for: UIControlState.normal)
-        self.signUpButton.setBackgroundImage(UIImage(named: "btn_white_resizable"), for: UIControlState.normal)
-        self.signUpButton.setBackgroundImage(UIImage(named: "btn_white_resizable"), for: UIControlState.highlighted)
+        self.signUpButton.setBackgroundImage(UIImage(named: "btn_white_borders_resizable"), for: UIControlState.normal)
+        self.signUpButton.setBackgroundImage(UIImage(named: "btn_white_borders_resizable"), for: UIControlState.highlighted)
         
-        self.termsButton.setAttributedTitle(NSAttributedString(string: "Terms", attributes: [NSUnderlineStyleAttributeName: NSUnderlineStyle.styleSingle.rawValue, NSForegroundColorAttributeName: UIColor.white]), for: UIControlState.normal)
+        self.termsButton.setAttributedTitle(NSAttributedString(string: "Terms of Service", attributes: [NSUnderlineStyleAttributeName: NSUnderlineStyle.styleSingle.rawValue, NSForegroundColorAttributeName: UIColor.white]), for: UIControlState.normal)
         self.privacyPolicyButton.setAttributedTitle(NSAttributedString(string: "Privacy and Policy.", attributes: [NSUnderlineStyleAttributeName: NSUnderlineStyle.styleSingle.rawValue, NSForegroundColorAttributeName: UIColor.white]), for: UIControlState.normal)
         self.logInButton.setAttributedTitle(NSAttributedString(string: "Log in.", attributes: [NSUnderlineStyleAttributeName: NSUnderlineStyle.styleSingle.rawValue, NSForegroundColorAttributeName: UIColor.white]), for: UIControlState.normal)
     }

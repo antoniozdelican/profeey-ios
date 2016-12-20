@@ -39,8 +39,11 @@ class SignUpTableViewController: UITableViewController {
         self.emailBoxView.layer.cornerRadius = 4.0
         self.passwordBoxView.layer.cornerRadius = 4.0
         
-        self.signUpButton.setBackgroundImage(UIImage(named: "btn_white_resizable"), for: UIControlState.normal)
-        self.signUpButton.setBackgroundImage(UIImage(named: "btn_white_resizable"), for: UIControlState.highlighted)
+        self.signUpButton.setBackgroundImage(UIImage(named: "btn_white_active_resizable"), for: UIControlState.normal)
+        self.signUpButton.setBackgroundImage(UIImage(named: "btn_white_active_resizable"), for: UIControlState.highlighted)
+        self.signUpButton.setBackgroundImage(UIImage(named: "btn_white_not_active_resizable"), for: UIControlState.disabled)
+        self.signUpButton.setTitleColor(Colors.turquoise, for: UIControlState.normal)
+        self.signUpButton.setTitleColor(UIColor.white, for: UIControlState.disabled)
         self.signUpButton.isEnabled = false
         
         self.userPool = AWSCognitoIdentityUserPool.init(forKey: AWSCognitoUserPoolsSignInProviderKey)

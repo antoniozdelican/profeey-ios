@@ -55,10 +55,9 @@ class WelcomeProfessionsTableViewController: UITableViewController {
     fileprivate func configureNavigationBar() {
         self.navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
         self.navigationController?.navigationBar.shadowImage = nil
-        // TODO
-        self.navigationController?.navigationBar.barTintColor = UIColor.white
-        self.navigationController?.navigationBar.tintColor = Colors.turquoise
-        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: Colors.turquoise]
+        self.navigationController?.navigationBar.barTintColor = Colors.whiteDark
+        self.navigationController?.navigationBar.tintColor = Colors.black
+        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: Colors.black]
     }
 
     // MARK: UITableViewDataSource

@@ -30,8 +30,11 @@ class UsernameTableViewController: UITableViewController {
         self.usernameTextField.delegate = self
         self.usernameBoxView.layer.cornerRadius = 4.0
         
-        self.continueButton.setBackgroundImage(UIImage(named: "btn_white_resizable"), for: UIControlState.normal)
-        self.continueButton.setBackgroundImage(UIImage(named: "btn_white_resizable"), for: UIControlState.highlighted)
+        self.continueButton.setBackgroundImage(UIImage(named: "btn_white_active_resizable"), for: UIControlState.normal)
+        self.continueButton.setBackgroundImage(UIImage(named: "btn_white_active_resizable"), for: UIControlState.highlighted)
+        self.continueButton.setBackgroundImage(UIImage(named: "btn_white_not_active_resizable"), for: UIControlState.disabled)
+        self.continueButton.setTitleColor(Colors.turquoise, for: UIControlState.normal)
+        self.continueButton.setTitleColor(UIColor.white, for: UIControlState.disabled)
         self.continueButton.isEnabled = false
         
         // CHECK IF IT IS Facebook user or UserPool!

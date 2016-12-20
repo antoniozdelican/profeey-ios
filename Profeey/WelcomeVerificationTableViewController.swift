@@ -31,8 +31,11 @@ class WelcomeVerificationTableViewController: UITableViewController {
         self.confirmationCodeTextField.delegate = self
         self.confirmationCodeBoxView.layer.cornerRadius = 4.0
         
-        self.confirmButton.setBackgroundImage(UIImage(named: "btn_white_resizable"), for: UIControlState.normal)
-        self.confirmButton.setBackgroundImage(UIImage(named: "btn_white_resizable"), for: UIControlState.highlighted)
+        self.confirmButton.setBackgroundImage(UIImage(named: "btn_white_active_resizable"), for: UIControlState.normal)
+        self.confirmButton.setBackgroundImage(UIImage(named: "btn_white_active_resizable"), for: UIControlState.highlighted)
+        self.confirmButton.setBackgroundImage(UIImage(named: "btn_white_not_active_resizable"), for: UIControlState.disabled)
+        self.confirmButton.setTitleColor(Colors.turquoise, for: UIControlState.normal)
+        self.confirmButton.setTitleColor(UIColor.white, for: UIControlState.disabled)
         self.confirmButton.isEnabled = false
         
         if let firstName = self.firstName, let email = self.email {

@@ -26,8 +26,11 @@ class ForgotPasswordTableViewController: UITableViewController {
         self.usernameTextField.delegate = self
         self.usernameBoxView.layer.cornerRadius = 4.0
         
-        self.sendLinkButton.setBackgroundImage(UIImage(named: "btn_white_resizable"), for: UIControlState.normal)
-        self.sendLinkButton.setBackgroundImage(UIImage(named: "btn_white_resizable"), for: UIControlState.highlighted)
+        self.sendLinkButton.setBackgroundImage(UIImage(named: "btn_white_active_resizable"), for: UIControlState.normal)
+        self.sendLinkButton.setBackgroundImage(UIImage(named: "btn_white_active_resizable"), for: UIControlState.highlighted)
+        self.sendLinkButton.setBackgroundImage(UIImage(named: "btn_white_not_active_resizable"), for: UIControlState.disabled)
+        self.sendLinkButton.setTitleColor(Colors.turquoise, for: UIControlState.normal)
+        self.sendLinkButton.setTitleColor(UIColor.white, for: UIControlState.disabled)
         self.sendLinkButton.isEnabled = false
         
         self.userPool = AWSCognitoIdentityUserPool.init(forKey: AWSCognitoUserPoolsSignInProviderKey)

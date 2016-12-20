@@ -29,8 +29,11 @@ class LogInTableViewController: UITableViewController {
         self.usernameBoxView.layer.cornerRadius = 4.0
         self.passwordBoxView.layer.cornerRadius = 4.0
         
-        self.logInButton.setBackgroundImage(UIImage(named: "btn_white_resizable"), for: UIControlState.normal)
-        self.logInButton.setBackgroundImage(UIImage(named: "btn_white_resizable"), for: UIControlState.highlighted)
+        self.logInButton.setBackgroundImage(UIImage(named: "btn_white_active_resizable"), for: UIControlState.normal)
+        self.logInButton.setBackgroundImage(UIImage(named: "btn_white_active_resizable"), for: UIControlState.highlighted)
+        self.logInButton.setBackgroundImage(UIImage(named: "btn_white_not_active_resizable"), for: UIControlState.disabled)
+        self.logInButton.setTitleColor(Colors.turquoise, for: UIControlState.normal)
+        self.logInButton.setTitleColor(UIColor.white, for: UIControlState.disabled)
         self.logInButton.isEnabled = false
     }
     

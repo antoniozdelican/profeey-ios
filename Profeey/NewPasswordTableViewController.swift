@@ -31,8 +31,11 @@ class NewPasswordTableViewController: UITableViewController {
         self.confirmationCodeBoxView.layer.cornerRadius = 4.0
         self.newPasswordBoxView.layer.cornerRadius = 4.0
         
-        self.resetPasswordButton.setBackgroundImage(UIImage(named: "btn_white_resizable"), for: UIControlState.normal)
-        self.resetPasswordButton.setBackgroundImage(UIImage(named: "btn_white_resizable"), for: UIControlState.highlighted)
+        self.resetPasswordButton.setBackgroundImage(UIImage(named: "btn_white_active_resizable"), for: UIControlState.normal)
+        self.resetPasswordButton.setBackgroundImage(UIImage(named: "btn_white_active_resizable"), for: UIControlState.highlighted)
+        self.resetPasswordButton.setBackgroundImage(UIImage(named: "btn_white_not_active_resizable"), for: UIControlState.disabled)
+        self.resetPasswordButton.setTitleColor(Colors.turquoise, for: UIControlState.normal)
+        self.resetPasswordButton.setTitleColor(UIColor.white, for: UIControlState.disabled)
         self.resetPasswordButton.isEnabled = false
     }
     
