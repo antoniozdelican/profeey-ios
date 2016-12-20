@@ -26,6 +26,8 @@ class Recommendation: NSObject {
         return currentDate.offsetFromShort(Date(timeIntervalSince1970: TimeInterval(creationDate)))
     }
     
+    var isExpandedRecommendationText: Bool = false
+    
     override init() {
         super.init()
     }

@@ -62,6 +62,8 @@ class Education: NSObject {
         return "\(fromDate) - \(toDate)"
     }
     
+    var isExpandedEducationDescription: Bool = false
+    
     override init() {
         super.init()
     }

@@ -61,6 +61,8 @@ class WorkExperience: NSObject {
         return "\(fromDate) - \(toDate)"
     }
     
+    var isExpandedWorkDescription: Bool = false
+    
     override init() {
         super.init()
     }

@@ -1,19 +1,18 @@
 //
-//  RecommendationTableViewCell.swift
+//  RecommendationUserTableViewCell.swift
 //  Profeey
 //
-//  Created by Antonio Zdelican on 15/11/16.
+//  Created by Antonio Zdelican on 20/12/16.
 //  Copyright © 2016 Profeey. All rights reserved.
 //
 
 import UIKit
 
-class RecommendationTableViewCell: UITableViewCell {
+class RecommendationUserTableViewCell: UITableViewCell {
     
     @IBOutlet weak var profilePicImageView: UIImageView!
     @IBOutlet weak var preferredUsernameLabel: UILabel!
     @IBOutlet weak var professionNameLabel: UILabel!
-    @IBOutlet weak var recommendationTextLabel: UILabel!
     @IBOutlet weak var timeLabel: UILabel!
 
     override func awakeFromNib() {

@@ -35,9 +35,9 @@ class RecommendationsTableViewController: UITableViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destinationViewController = segue.destination as? ProfileTableViewController,
-            let cell = sender as? RecommendationTableViewCell,
+            let cell = sender as? RecommendationUserTableViewCell,
             let indexPath = self.tableView.indexPath(for: cell) {
-            destinationViewController.user = self.recommendations[indexPath.row].user
+            destinationViewController.user = self.recommendations[indexPath.section].user
         }
     }
     
@@ -45,7 +45,13 @@ class RecommendationsTableViewController: UITableViewController {
     // MARK: UITableViewDataSource
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        if self.isLoadingRecommendations {
+            return 1
+        }
+        if self.recommendations.count == 0 {
+            return 1
+        }
+        return self.recommendations.count
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -55,7 +61,7 @@ class RecommendationsTableViewController: UITableViewController {
         if self.recommendations.count == 0 {
             return 1
         }
-        return self.recommendations.count
+        return 2
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -69,22 +75,31 @@ class RecommendationsTableViewController: UITableViewController {
             cell.emptyMessageLabel.text = "No recommendations yet"
             return cell
         }
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cellRecommendation", for: indexPath) as! RecommendationTableViewCell
-        let recommendation = self.recommendations[indexPath.row]
+        let recommendation = self.recommendations[indexPath.section]
         let user = recommendation.user
-        cell.profilePicImageView.image = user?.profilePic
-        cell.preferredUsernameLabel.text = user?.preferredUsername
-        cell.professionNameLabel.text = user?.professionName
-        cell.recommendationTextLabel.text = recommendation.recommendationText
-        cell.timeLabel.text = recommendation.creationDateString
-        return cell
+        switch indexPath.row {
+        case 0:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellRecommendationUser", for: indexPath) as! RecommendationUserTableViewCell
+            cell.profilePicImageView.image = user?.profilePic
+            cell.preferredUsernameLabel.text = user?.preferredUsername
+            cell.professionNameLabel.text = user?.professionName
+            cell.timeLabel.text = recommendation.creationDateString
+            return cell
+        case 1:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellRecommendationText", for: indexPath) as! RecommendationTextTableViewCell
+            cell.recommendationTextLabel.text = recommendation.recommendationText
+            recommendation.isExpandedRecommendationText ? cell.untruncate() : cell.truncate()
+            return cell
+        default:
+            return UITableViewCell()
+        }
     }
     
     // MARK: UITableViewDelegate
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.layoutMargins = UIEdgeInsets.zero
-        if !(cell is RecommendationTableViewCell) {
+        if !(cell is RecommendationTextTableViewCell) {
             cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
         }
     }
@@ -92,8 +107,12 @@ class RecommendationsTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let cell = tableView.cellForRow(at: indexPath)
-        if cell is RecommendationTableViewCell {
+        if cell is RecommendationUserTableViewCell {
             self.performSegue(withIdentifier: "segueToProfileVc", sender: cell)
+        }
+        if cell is RecommendationTextTableViewCell && !self.recommendations[indexPath.section].isExpandedRecommendationText {
+            self.recommendations[indexPath.section].isExpandedRecommendationText = true
+            self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
         }
     }
     
@@ -101,14 +120,28 @@ class RecommendationsTableViewController: UITableViewController {
         if self.isLoadingRecommendations || self.recommendations.count == 0 {
             return 112
         }
-        return 104.0
+        switch indexPath.row {
+        case 0:
+            return 56.0
+        case 1:
+            return 32.0
+        default:
+            return 0.0
+        }
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if self.isLoadingRecommendations || self.recommendations.count == 0 {
             return 112
         }
-        return UITableViewAutomaticDimension
+        switch indexPath.row {
+        case 0:
+            return 56.0
+        case 1:
+            return UITableViewAutomaticDimension
+        default:
+            return 0.0
+        }
     }
     
     // MARK: AWS
@@ -136,7 +169,7 @@ class RecommendationsTableViewController: UITableViewController {
                     self.tableView.reloadData()
                     for (index, recommendation) in self.recommendations.enumerated() {
                         if let profilePicUrl = recommendation.user?.profilePicUrl {
-                            let indexPath = IndexPath(row: index, section: 0)
+                            let indexPath = IndexPath(row: 0, section: index)
                             self.downloadImage(profilePicUrl, imageType: .userProfilePic, indexPath: indexPath)
                         }
                     }
@@ -157,7 +190,7 @@ class RecommendationsTableViewController: UITableViewController {
             let image = UIImage(data: content.cachedData)
             switch imageType {
             case .userProfilePic:
-                self.recommendations[indexPath.row].user?.profilePic = image
+                self.recommendations[indexPath.section].user?.profilePic = image
                 self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
             default:
                 return
@@ -184,7 +217,7 @@ class RecommendationsTableViewController: UITableViewController {
                             let image = UIImage(data: imageData)
                             switch imageType {
                             case .userProfilePic:
-                                self.recommendations[indexPath.row].user?.profilePic = image
+                                self.recommendations[indexPath.section].user?.profilePic = image
                                 self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
                             default:
                                 return

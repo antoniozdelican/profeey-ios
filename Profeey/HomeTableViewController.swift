@@ -218,7 +218,7 @@ class HomeTableViewController: UITableViewController {
         if cell is PostUserTableViewCell {
             self.performSegue(withIdentifier: "segueToProfileVc", sender: cell)
         }
-        if cell is PostInfoTableViewCell {
+        if cell is PostInfoTableViewCell && !self.posts[indexPath.section].isExpandedCaption {
             self.posts[indexPath.section].isExpandedCaption = true
             self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
         }
@@ -281,6 +281,11 @@ class HomeTableViewController: UITableViewController {
     @IBAction func refreshControlChanged(_ sender: AnyObject) {
         self.queryUserActivitiesDateSorted()
     }
+    
+    @IBAction func discoverPeopleButtonTapped(_ sender: Any) {
+        self.performSegue(withIdentifier: "segueToDiscoverPeopleVc", sender: self)
+    }
+    
     
     // From Capture flow.
     @IBAction func unwindToHomeTableViewController(_ segue: UIStoryboardSegue) {
