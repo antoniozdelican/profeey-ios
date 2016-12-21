@@ -46,6 +46,7 @@ class ExperiencesTableViewController: UITableViewController {
         if let navigationViewController = segue.destination as? UINavigationController,
             let childViewController = navigationViewController.childViewControllers[0] as? EditWorkExperienceTableViewController {
             if let indexPath = sender as? IndexPath {
+                // TODO: refactor as copy.
                 childViewController.workExperience = self.workExperiences[indexPath.row]
                 childViewController.isNewWorkExperience = false
                 childViewController.indexPath = indexPath
@@ -98,6 +99,7 @@ class ExperiencesTableViewController: UITableViewController {
             cell.organizationLabel.text = workExperience.organization
             cell.timePeriodLabel.text = workExperience.timePeriod
             cell.workDescriptionLabel.text = workExperience.workDescription
+            workExperience.isExpandedWorkDescription ? cell.untruncate() : cell.truncate()
             cell.workExperienceTableViewCellDelegate = self
             return cell
         case 1:
@@ -112,6 +114,7 @@ class ExperiencesTableViewController: UITableViewController {
             cell.fieldOfStudyLabel.text = education.fieldOfStudy
             cell.timePeriodLabel.text = education.timePeriod
             cell.educationDescriptionLabel.text = education.educationDescription
+            education.isExpandedEducationDescription ? cell.untruncate() : cell.truncate()
             cell.educationTableViewCellDelegate = self
             return cell
         default:
@@ -307,21 +310,45 @@ class ExperiencesTableViewController: UITableViewController {
 
 extension ExperiencesTableViewController: WorkExperienceTableViewCellDelegate {
     
-    func workExperienceExpandButtonTapped(_ button: UIButton) {
-        guard let indexPath = self.tableView.indexPathForView(view: button) else {
+    func workExperienceExpandButtonTapped(_ cell: WorkExperienceTableViewCell) {
+        guard let indexPath = self.tableView.indexPath(for: cell) else {
             return
         }
         self.expandButtonTapped(indexPath, experienceType: ExperienceType.workExperience)
+    }
+    
+    func workDescriptionLabelTapped(_ cell: WorkExperienceTableViewCell) {
+        guard let indexPath = self.tableView.indexPath(for: cell) else {
+            return
+        }
+        if !self.workExperiences[indexPath.row].isExpandedWorkDescription {
+            self.workExperiences[indexPath.row].isExpandedWorkDescription = true
+            UIView.performWithoutAnimation {
+                self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
+            }
+        }
     }
 }
 
 extension ExperiencesTableViewController: EducationTableViewCellDelegate {
     
-    func educationExpandButtonTapped(_ button: UIButton) {
-        guard let indexPath = self.tableView.indexPathForView(view: button) else {
+    func educationExpandButtonTapped(_ cell: EducationTableViewCell) {
+        guard let indexPath = self.tableView.indexPath(for: cell) else {
             return
         }
         self.expandButtonTapped(indexPath, experienceType: ExperienceType.education)
+    }
+    
+    func educationDescriptionLabelTapped(_ cell: EducationTableViewCell) {
+        guard let indexPath = self.tableView.indexPath(for: cell) else {
+            return
+        }
+        if !self.educations[indexPath.row].isExpandedEducationDescription {
+            self.educations[indexPath.row].isExpandedEducationDescription = true
+            UIView.performWithoutAnimation {
+                self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
+            }
+        }
     }
 }
 

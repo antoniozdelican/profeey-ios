@@ -102,6 +102,8 @@ class ProfileTableViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destinationViewController = segue.destination as? UINavigationController,
             let childViewController = destinationViewController.childViewControllers[0] as? EditProfileTableViewController {
+            
+            // TODO: refactor
             childViewController.originalUser = self.user
             childViewController.editProfileTableViewControllerDelegate = self
         }
@@ -110,8 +112,8 @@ class ProfileTableViewController: UITableViewController {
             destinationViewController.userId = self.user?.userId
         }
         if let destinationViewController = segue.destination as? ExperiencesTableViewController {
-            destinationViewController.workExperiences = self.workExperiences
-            destinationViewController.educations = self.educations
+            destinationViewController.workExperiences = self.workExperiences.map( { $0.copy() as! WorkExperience })
+            destinationViewController.educations = self.educations.map( { $0.copy() as! Education })
             destinationViewController.experiencesTableViewControllerDelegate = self
         }
         if let destinationViewController = segue.destination as? PostDetailsTableViewController,
@@ -268,7 +270,8 @@ class ProfileTableViewController: UITableViewController {
             cell.organizationLabel.text = workExperience.organization
             cell.timePeriodLabel.text = workExperience.timePeriod
             cell.workDescriptionLabel.text = workExperience.workDescription
-            cell.workDescriptionLabel.isHidden = workExperience.workDescription != nil ? false : true
+            workExperience.isExpandedWorkDescription ? cell.untruncate() : cell.truncate()
+            cell.workExperienceTableViewCellDelegate = self
             cell.separatorViewLeftConstraint?.constant = (indexPath.row == self.workExperiences.count - 1) ? 0.0 : 12.0
             return cell
         case 3:
@@ -278,7 +281,8 @@ class ProfileTableViewController: UITableViewController {
             cell.fieldOfStudyLabel.text = education.fieldOfStudy
             cell.timePeriodLabel.text = education.timePeriod
             cell.educationDescriptionLabel.text = education.educationDescription
-            cell.educationDescriptionLabel.isHidden = education.educationDescription != nil ? false : true
+            education.isExpandedEducationDescription ? cell.untruncate() : cell.truncate()
+            cell.educationTableViewCellDelegate = self
             cell.separatorViewLeftConstraint?.constant = (indexPath.row == self.educations.count - 1) ? 0.0 : 12.0
             return cell
         case 4:
@@ -1130,6 +1134,36 @@ extension ProfileTableViewController: ExperiencesTableViewControllerDelegate {
         if self.selectedProfileSegment == ProfileSegment.experience {
             UIView.performWithoutAnimation {
                 self.tableView.reloadSections(IndexSet([2, 3]), with: UITableViewRowAnimation.none)
+            }
+        }
+    }
+}
+
+extension ProfileTableViewController: WorkExperienceTableViewCellDelegate {
+    
+    func workDescriptionLabelTapped(_ cell: WorkExperienceTableViewCell) {
+        guard let indexPath = self.tableView.indexPath(for: cell) else {
+            return
+        }
+        if !self.workExperiences[indexPath.row].isExpandedWorkDescription {
+            self.workExperiences[indexPath.row].isExpandedWorkDescription = true
+            UIView.performWithoutAnimation {
+                self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
+            }
+        }
+    }
+}
+
+extension ProfileTableViewController: EducationTableViewCellDelegate {
+    
+    func educationDescriptionLabelTapped(_ cell: EducationTableViewCell) {
+        guard let indexPath = self.tableView.indexPath(for: cell) else {
+            return
+        }
+        if !self.educations[indexPath.row].isExpandedEducationDescription {
+            self.educations[indexPath.row].isExpandedEducationDescription = true
+            UIView.performWithoutAnimation {
+                self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
             }
         }
     }

@@ -7,9 +7,11 @@
 //
 
 import UIKit
+import TTTAttributedLabel
 
-protocol EducationTableViewCellDelegate {
-    func educationExpandButtonTapped(_ button: UIButton)
+@objc protocol EducationTableViewCellDelegate {
+    @objc optional func educationExpandButtonTapped(_ cell: EducationTableViewCell)
+    func educationDescriptionLabelTapped(_ cell: EducationTableViewCell)
 }
 
 class EducationTableViewCell: UITableViewCell {
@@ -18,7 +20,7 @@ class EducationTableViewCell: UITableViewCell {
     @IBOutlet weak var schoolLabel: UILabel!
     @IBOutlet weak var fieldOfStudyLabel: UILabel!
     @IBOutlet weak var timePeriodLabel: UILabel!
-    @IBOutlet weak var educationDescriptionLabel: UILabel!
+    @IBOutlet weak var educationDescriptionLabel: TTTAttributedLabel!
     // Used in ProfileVc for custom separator.
     @IBOutlet weak var separatorViewLeftConstraint: NSLayoutConstraint?
     
@@ -26,8 +28,9 @@ class EducationTableViewCell: UITableViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-//        self.educationImageView.layer.cornerRadius = 4.0
-//        self.educationImageView.clipsToBounds = true
+        
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.educationDescriptionLabelTapped(_:)))
+        self.educationDescriptionLabel.addGestureRecognizer(tapGestureRecognizer)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -36,11 +39,28 @@ class EducationTableViewCell: UITableViewCell {
     
     // MARK: IBActions
     
+    // Used in ExperiencesVc.
     @IBAction func expandButtonTapped(_ sender: AnyObject) {
-        guard let button = sender as? UIButton else {
-            return
-        }
-        self.educationTableViewCellDelegate?.educationExpandButtonTapped(button)
+        self.educationTableViewCellDelegate?.educationExpandButtonTapped?(self)
+    }
+    
+    func educationDescriptionLabelTapped(_ sender: AnyObject) {
+        self.educationTableViewCellDelegate?.educationDescriptionLabelTapped(self)
+    }
+    
+    func truncate() {
+        let attributedTruncationToken = NSMutableAttributedString()
+        let ellipsis = NSAttributedString(string: "...", attributes: [NSFontAttributeName: self.educationDescriptionLabel.font, NSForegroundColorAttributeName: Colors.black])
+        let more = NSAttributedString(string: " more", attributes: [NSFontAttributeName: self.educationDescriptionLabel.font, NSForegroundColorAttributeName: Colors.grey])
+        attributedTruncationToken.append(ellipsis)
+        attributedTruncationToken.append(more)
+        self.educationDescriptionLabel.attributedTruncationToken = attributedTruncationToken
+        self.educationDescriptionLabel.numberOfLines = 3
+    }
+    
+    func untruncate() {
+        self.educationDescriptionLabel.attributedTruncationToken = nil
+        self.educationDescriptionLabel.numberOfLines = 0
     }
 
 }

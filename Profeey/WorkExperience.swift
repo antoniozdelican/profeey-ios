@@ -8,7 +8,7 @@
 
 import Foundation
 
-class WorkExperience: NSObject {
+class WorkExperience: NSObject, NSCopying {
     
     // Properties.
     var userId: String?
@@ -78,5 +78,11 @@ class WorkExperience: NSObject {
         self.fromYear = fromYear
         self.toMonth = toMonth
         self.toYear = toYear
+    }
+    
+    // Used to copy WorkExperience object for ExperiencesVc.
+    func copy(with zone: NSZone? = nil) -> Any {
+        let workExperience = WorkExperience(userId: userId, workExperienceId: workExperienceId, title: title, organization: organization, workDescription: workDescription, fromMonth: fromMonth, fromYear: fromYear, toMonth: toMonth, toYear: toYear)
+        return workExperience
     }
 }

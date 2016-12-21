@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Education: NSObject {
+class Education: NSObject, NSCopying {
     
     // Properties.
     var userId: String?
@@ -79,5 +79,11 @@ class Education: NSObject {
         self.fromYear = fromYear
         self.toMonth = toMonth
         self.toYear = toYear
+    }
+    
+    // Used to copy Education object for ExperiencesVc.
+    func copy(with zone: NSZone? = nil) -> Any {
+        let education = Education(userId: userId, educationId: educationId, school: school, fieldOfStudy: fieldOfStudy, educationDescription: educationDescription, fromMonth: fromMonth, fromYear: fromYear, toMonth: toMonth, toYear: toYear)
+        return education
     }
 }
