@@ -32,7 +32,8 @@ class SearchProfessionsTableViewController: UITableViewController {
         
         self.isShowingPopularProfessions = true
         self.isSearchingPopularProfessions = true
-        self.getAllProfessions(self.location?.locationId)
+        self.scanProfessions()
+//        self.getAllProfessions(self.location?.locationId)
     }
 
     override func didReceiveMemoryWarning() {
@@ -231,61 +232,112 @@ class SearchProfessionsTableViewController: UITableViewController {
         self.searchProfessionsTableViewControllerDelegate?.professionsTableViewWillBeginDragging()
     }
     
+    // MARK: Helpers
+    
+    fileprivate func filterProfessions(_ namePrefix: String) {
+        // Clear old.
+        self.regularProfessions = []
+        self.regularProfessions = self.popularProfessions.filter({
+            (profession: Profession) in
+            if let searchProfessionName = profession.professionName?.lowercased(), searchProfessionName.hasPrefix(namePrefix.lowercased()) {
+                return true
+            } else {
+                return false
+            }
+        })
+        self.regularProfessions = self.sortProfessions(self.regularProfessions)
+        self.isSearchingRegularProfessions = false
+        self.tableView.reloadData()
+    }
+    
+    fileprivate func sortProfessions(_ professions: [Profession]) -> [Profession] {
+        return professions.sorted(by: {
+            (profession1, profession2) in
+            return profession1.numberOfUsersInt > profession2.numberOfUsersInt
+        })
+    }
+    
     // MARK: AWS
     
-    fileprivate func getAllProfessions(_ locationId: String?) {
+    fileprivate func scanProfessions() {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYCloudSearchProxyClient.defaultClient().getAllProfessions(locationId: locationId).continue({
-            (task: AWSTask) in
+        PRFYDynamoDBManager.defaultDynamoDBManager().scanProfessionsDynamoDB({
+            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 self.isSearchingPopularProfessions = false
-                if let error = task.error {
-                    print("getAllProfessions error: \(error)")
+                if let error = error {
+                    print("scanProfessions error: \(error)")
                     self.tableView.reloadData()
                 } else {
-                    guard let cloudSearchProfessionsResult = task.result as? PRFYCloudSearchProfessionsResult, let cloudSearchProfessions = cloudSearchProfessionsResult.professions else {
+                    guard let awsProfessions = response?.items as? [AWSProfession] else {
                         self.tableView.reloadData()
                         return
                     }
-                    for cloudSearchProfession in cloudSearchProfessions {
-                        let profession = Profession(professionName: cloudSearchProfession.professionName, numberOfUsers: cloudSearchProfession.numberOfUsers)
+                    for awsProfession in awsProfessions {
+                        let profession = Profession(professionName: awsProfession._professionName, numberOfUsers: awsProfession._numberOfUsers)
                         self.popularProfessions.append(profession)
                     }
+                    self.popularProfessions = self.sortProfessions(self.popularProfessions)
                     self.tableView.reloadData()
                 }
             })
-            return nil
         })
     }
     
-    fileprivate func getProfessions(_ namePrefix: String, locationId: String?) {
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYCloudSearchProxyClient.defaultClient().getProfessions(namePrefix: namePrefix, locationId: locationId).continue({
-            (task: AWSTask) in
-            DispatchQueue.main.async(execute: {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                self.isSearchingRegularProfessions = false
-                if let error = task.error {
-                    print("getProfessions error: \(error)")
-                    self.tableView.reloadData()
-                } else {
-                    guard let cloudSearchProfessionsResult = task.result as? PRFYCloudSearchProfessionsResult, let cloudSearchProfessions = cloudSearchProfessionsResult.professions else {
-                        self.tableView.reloadData()
-                        return
-                    }
-                    // Clear old.
-                    self.regularProfessions = []
-                    for cloudSearchProfession in cloudSearchProfessions {
-                        let profession = Profession(professionName: cloudSearchProfession.professionName, numberOfUsers: cloudSearchProfession.numberOfUsers)
-                        self.regularProfessions.append(profession)
-                    }
-                    self.tableView.reloadData()
-                }
-            })
-            return nil
-        })
-    }
+//    fileprivate func getAllProfessions(_ locationId: String?) {
+//        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+//        PRFYCloudSearchProxyClient.defaultClient().getAllProfessions(locationId: locationId).continue({
+//            (task: AWSTask) in
+//            DispatchQueue.main.async(execute: {
+//                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+//                self.isSearchingPopularProfessions = false
+//                if let error = task.error {
+//                    print("getAllProfessions error: \(error)")
+//                    self.tableView.reloadData()
+//                } else {
+//                    guard let cloudSearchProfessionsResult = task.result as? PRFYCloudSearchProfessionsResult, let cloudSearchProfessions = cloudSearchProfessionsResult.professions else {
+//                        self.tableView.reloadData()
+//                        return
+//                    }
+//                    for cloudSearchProfession in cloudSearchProfessions {
+//                        let profession = Profession(professionName: cloudSearchProfession.professionName, numberOfUsers: cloudSearchProfession.numberOfUsers)
+//                        self.popularProfessions.append(profession)
+//                    }
+//                    self.tableView.reloadData()
+//                }
+//            })
+//            return nil
+//        })
+//    }
+//    
+//    fileprivate func getProfessions(_ namePrefix: String, locationId: String?) {
+//        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+//        PRFYCloudSearchProxyClient.defaultClient().getProfessions(namePrefix: namePrefix, locationId: locationId).continue({
+//            (task: AWSTask) in
+//            DispatchQueue.main.async(execute: {
+//                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+//                self.isSearchingRegularProfessions = false
+//                if let error = task.error {
+//                    print("getProfessions error: \(error)")
+//                    self.tableView.reloadData()
+//                } else {
+//                    guard let cloudSearchProfessionsResult = task.result as? PRFYCloudSearchProfessionsResult, let cloudSearchProfessions = cloudSearchProfessionsResult.professions else {
+//                        self.tableView.reloadData()
+//                        return
+//                    }
+//                    // Clear old.
+//                    self.regularProfessions = []
+//                    for cloudSearchProfession in cloudSearchProfessions {
+//                        let profession = Profession(professionName: cloudSearchProfession.professionName, numberOfUsers: cloudSearchProfession.numberOfUsers)
+//                        self.regularProfessions.append(profession)
+//                    }
+//                    self.tableView.reloadData()
+//                }
+//            })
+//            return nil
+//        })
+//    }
     
 }
 
@@ -298,7 +350,8 @@ extension SearchProfessionsTableViewController: SearchProfessionsDelegate {
         self.popularProfessions = []
         self.isSearchingPopularProfessions = true
         self.tableView.reloadData()
-        self.getAllProfessions(self.location?.locationId)
+        // TODO
+        //self.getAllProfessions(self.location?.locationId)
     }
     
     func removeLocation() {
@@ -308,11 +361,13 @@ extension SearchProfessionsTableViewController: SearchProfessionsDelegate {
         self.popularProfessions = []
         self.isSearchingPopularProfessions = true
         self.tableView.reloadData()
-        self.getAllProfessions(self.location?.locationId)
+        // TODO
+        //self.getAllProfessions(self.location?.locationId)
     }
     
     func searchBarTextChanged(_ searchText: String) {
-        if searchText.trimm().isEmpty {
+        let professionName = searchText.trimm()
+        if professionName.isEmpty {
             self.isShowingPopularProfessions = true
             // Clear old.
             self.regularProfessions = []
@@ -325,7 +380,8 @@ extension SearchProfessionsTableViewController: SearchProfessionsDelegate {
             self.isSearchingRegularProfessions = true
             self.tableView.reloadData()
             // Start search.
-            self.getProfessions(searchText.trimm(), locationId: self.location?.locationId)
+//            self.getProfessions(professionName, locationId: self.location?.locationId)
+            self.filterProfessions(professionName)
         }
     }
     

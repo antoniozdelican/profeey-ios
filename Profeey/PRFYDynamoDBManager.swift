@@ -537,4 +537,11 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         let awsEducationsPrimaryIndex = AWSEducationsPrimaryIndex()
         awsEducationsPrimaryIndex.queryEducations(userId, completionHandler: completionHandler)
     }
+    
+    // MARK: Professions
+    
+    func scanProfessionsDynamoDB(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?){
+        let awsProfessionsTable = AWSProfessionsTable()
+        awsProfessionsTable.scanProfessions(completionHandler)
+    }
 }

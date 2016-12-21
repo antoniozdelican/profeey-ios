@@ -202,6 +202,8 @@
 		A9D49EE71DD5F58B000F90A8 /* ProfileEmptyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D49EE61DD5F58B000F90A8 /* ProfileEmptyTableViewCell.swift */; };
 		A9D49EEB1DD602D6000F90A8 /* AddRecommendation.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9D49EEA1DD602D6000F90A8 /* AddRecommendation.storyboard */; };
 		A9D49EED1DD602E5000F90A8 /* Recommendations.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9D49EEC1DD602E5000F90A8 /* Recommendations.storyboard */; };
+		A9D688851E0AE06500A07D86 /* AWSProfession.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D688841E0AE06500A07D86 /* AWSProfession.swift */; };
+		A9D688871E0AE06F00A07D86 /* AWSProfessionsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D688861E0AE06F00A07D86 /* AWSProfessionsTable.swift */; };
 		A9D716A91D57486100300135 /* PostSmallTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D716A81D57486100300135 /* PostSmallTableViewCell.swift */; };
 		A9D828751E07DDC30085FD95 /* NSNotificationCenterKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D828741E07DDC30085FD95 /* NSNotificationCenterKeys.swift */; };
 		A9D962291DE77180008EA0DF /* AWSMobileClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D962281DE77180008EA0DF /* AWSMobileClient.swift */; };
@@ -452,6 +454,8 @@
 		A9D49EE61DD5F58B000F90A8 /* ProfileEmptyTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileEmptyTableViewCell.swift; sourceTree = "<group>"; };
 		A9D49EEA1DD602D6000F90A8 /* AddRecommendation.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = AddRecommendation.storyboard; sourceTree = "<group>"; };
 		A9D49EEC1DD602E5000F90A8 /* Recommendations.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Recommendations.storyboard; sourceTree = "<group>"; };
+		A9D688841E0AE06500A07D86 /* AWSProfession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSProfession.swift; sourceTree = "<group>"; };
+		A9D688861E0AE06F00A07D86 /* AWSProfessionsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSProfessionsTable.swift; sourceTree = "<group>"; };
 		A9D716A81D57486100300135 /* PostSmallTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostSmallTableViewCell.swift; sourceTree = "<group>"; };
 		A9D828741E07DDC30085FD95 /* NSNotificationCenterKeys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSNotificationCenterKeys.swift; sourceTree = "<group>"; };
 		A9D962281DE77180008EA0DF /* AWSMobileClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSMobileClient.swift; sourceTree = "<group>"; };
@@ -1054,6 +1058,39 @@
 			name = "Add Recommendation";
 			sourceTree = "<group>";
 		};
+		A9D688801E0AE01100A07D86 /* TempSearch */ = {
+			isa = PBXGroup;
+			children = (
+				A9D688811E0AE02D00A07D86 /* AWSProfessions */,
+				A9D688821E0AE03B00A07D86 /* AWSCategories */,
+				A9D688831E0AE04A00A07D86 /* AWSLocations */,
+			);
+			name = TempSearch;
+			sourceTree = "<group>";
+		};
+		A9D688811E0AE02D00A07D86 /* AWSProfessions */ = {
+			isa = PBXGroup;
+			children = (
+				A9D688841E0AE06500A07D86 /* AWSProfession.swift */,
+				A9D688861E0AE06F00A07D86 /* AWSProfessionsTable.swift */,
+			);
+			name = AWSProfessions;
+			sourceTree = "<group>";
+		};
+		A9D688821E0AE03B00A07D86 /* AWSCategories */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = AWSCategories;
+			sourceTree = "<group>";
+		};
+		A9D688831E0AE04A00A07D86 /* AWSLocations */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = AWSLocations;
+			sourceTree = "<group>";
+		};
 		A9DC4E371D994E9400AF4AB8 /* Search Users */ = {
 			isa = PBXGroup;
 			children = (
@@ -1157,6 +1194,7 @@
 				A99B9E291DB53C8D0047360D /* AWSEducations */,
 				A91C1CD11DED9C5B006FBDD4 /* AWSNotifications */,
 				A97A3F631DF0271000FC5AEA /* AWSUserEndpoints */,
+				A9D688801E0AE01100A07D86 /* TempSearch */,
 				A9F345881DE0AA9700A5D368 /* CloudSearchProxyClient */,
 				A9CC71A81DEB44DE0054DA93 /* DynamoDB */,
 			);
@@ -1422,6 +1460,7 @@
 				A9C3C0E81E02B7D2005CA18C /* ForgotPasswordTableViewController.swift in Sources */,
 				A9D334121D801B70005565C2 /* PostButtonsTableViewCell.swift in Sources */,
 				A9E050F41D83065D00DD992D /* LocationOldTableViewCell.swift in Sources */,
+				A9D688871E0AE06F00A07D86 /* AWSProfessionsTable.swift in Sources */,
 				A97A3F6B1DF027F200FC5AEA /* AWSUserEndpointsTable.swift in Sources */,
 				A94797A71D2E3451007CBF08 /* User.swift in Sources */,
 				A90146E41DB2662E0092ED21 /* ProfileMainTableViewCell.swift in Sources */,
@@ -1479,6 +1518,7 @@
 				A9ACA7411DB506A50004B8DE /* AWSWorkExperience.swift in Sources */,
 				A901CFE91DA78FA900C44B26 /* CameraViewController.swift in Sources */,
 				A91C1CD71DEDA669006FBDD4 /* NotificationTableViewCell.swift in Sources */,
+				A9D688851E0AE06500A07D86 /* AWSProfession.swift in Sources */,
 				A97A9AED1D85D0ED00507517 /* ProfessionsTableViewController.swift in Sources */,
 				A9CBBC561DB64A0E009C8EC7 /* EditEducationSchoolTableViewCell.swift in Sources */,
 				A901CFE71DA78DDC00C44B26 /* CaptureScrollViewController.swift in Sources */,

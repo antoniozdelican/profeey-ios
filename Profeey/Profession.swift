@@ -15,6 +15,12 @@ class Profession: NSObject {
     var numberOfUsers: NSNumber?
     
     // Generated.
+    var numberOfUsersInt: Int {
+        guard let numberOfUsers = self.numberOfUsers else {
+            return 0
+        }
+        return numberOfUsers.intValue
+    }
     var numberOfUsersString: String? {
         guard let numberOfUsers = self.numberOfUsers else {
             return nil
