@@ -113,7 +113,7 @@
                                 <rect key="frame" x="85" y="463" width="206" height="29.5"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="eEd-Up-ii0">
-                                        <rect key="frame" x="13" y="0.0" width="179.5" height="14.5"/>
+                                        <rect key="frame" x="13.5" y="0.0" width="179.5" height="14.5"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="By signing up, you agree to our " textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jmm-JZ-Pcs">
                                                 <rect key="frame" x="0.0" y="0.0" width="179.5" height="14.5"/>
@@ -633,14 +633,14 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hVZ-4a-wih">
-                                                    <rect key="frame" x="28" y="142" width="142" height="1"/>
+                                                    <rect key="frame" x="28" y="142" width="141.5" height="1"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="1" id="kUf-ml-d77"/>
                                                     </constraints>
                                                 </view>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LtK-v0-dbi">
-                                                    <rect key="frame" x="205" y="142" width="142" height="1"/>
+                                                    <rect key="frame" x="205.5" y="142" width="141.5" height="1"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="1" id="jag-eP-4Ux"/>
@@ -983,13 +983,23 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Choose your profession" id="Pzj-Hc-z1x">
-                        <barButtonItem key="rightBarButtonItem" title="Next" id="4au-yz-FOJ">
-                            <color key="tintColor" red="0.080254554749999998" green="0.61858558649999995" blue="0.93965935710000004" alpha="1" colorSpace="calibratedRGB"/>
-                            <connections>
-                                <action selector="nextButtonTapped:" destination="vkP-Dh-uMO" id="Nhf-WJ-PNm"/>
-                            </connections>
+                        <barButtonItem key="rightBarButtonItem" id="V9e-RL-yBO">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="1Kp-px-S8S">
+                                <rect key="frame" x="323" y="5" width="36" height="33"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <state key="normal" title="Next">
+                                    <color key="titleColor" red="0.080254554749999998" green="0.61858558649999995" blue="0.93965935710000004" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="nextButtonTapped:" destination="vkP-Dh-uMO" eventType="touchUpInside" id="oqH-mm-Yqv"/>
+                                </connections>
+                            </button>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="nextButton" destination="1Kp-px-S8S" id="vA7-ci-ZLA"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ds4-FH-5bX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

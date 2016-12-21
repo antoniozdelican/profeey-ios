@@ -53,16 +53,6 @@ class UsernameTableViewController: UITableViewController {
         return UIStatusBarStyle.lightContent
     }
     
-    // MARK: Configuration
-    
-//    fileprivate func configureNavigationBar() {
-//        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-//        self.navigationController?.navigationBar.shadowImage = UIImage()
-//        self.navigationController?.navigationBar.barTintColor = Colors.turquoise
-//        self.navigationController?.navigationBar.tintColor = UIColor.white
-//        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
-//    }
-    
     // MARK: Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

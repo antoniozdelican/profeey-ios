@@ -45,6 +45,10 @@ class ForgotPasswordTableViewController: UITableViewController {
         super.viewWillDisappear(animated)
         self.view.endEditing(true)
     }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return UIStatusBarStyle.lightContent
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

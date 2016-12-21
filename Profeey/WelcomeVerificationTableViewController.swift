@@ -96,7 +96,7 @@ class WelcomeVerificationTableViewController: UITableViewController {
     
     @IBAction func skipButtonTapped(_ sender: Any) {
         self.view.endEditing(true)
-        let alertController = UIAlertController(title: "Account Not Confirmed", message: "If you ever forget your password, we can help you only if your account is confirmed. You can do this later.", preferredStyle: UIAlertControllerStyle.alert)
+        let alertController = UIAlertController(title: "Account Not Confirmed", message: "If you ever forget your password, we can only help you if your account is confirmed.", preferredStyle: UIAlertControllerStyle.alert)
         let cancelAction = UIAlertAction(title: "Confirm Now", style: UIAlertActionStyle.cancel, handler: nil)
         let okAction = UIAlertAction(title: "Later", style: UIAlertActionStyle.default, handler: {
             (alertAction: UIAlertAction) in

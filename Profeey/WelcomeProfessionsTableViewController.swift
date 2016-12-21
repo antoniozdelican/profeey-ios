@@ -15,6 +15,8 @@ protocol WelcomeProfessionsTableViewControllerDelegate {
 
 class WelcomeProfessionsTableViewController: UITableViewController {
     
+    @IBOutlet weak var nextButton: UIButton!
+    
     fileprivate var professionName: String?
     fileprivate var welcomeProfessionsTableViewControllerDelegate: WelcomeProfessionsTableViewControllerDelegate?
     
@@ -58,6 +60,8 @@ class WelcomeProfessionsTableViewController: UITableViewController {
         self.navigationController?.navigationBar.barTintColor = Colors.whiteDark
         self.navigationController?.navigationBar.tintColor = Colors.black
         self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: Colors.black]
+        // Fix alignment for custom rightBarButtonItem.
+        self.nextButton.contentEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, 0.0, -8.0)
     }
 
     // MARK: UITableViewDataSource
@@ -207,7 +211,7 @@ class WelcomeProfessionsTableViewController: UITableViewController {
         if let professionName = self.professionName {
             self.saveUserProfession(professionName)
         } else {
-            let alertController = UIAlertController(title: "Empty profession", message: "Are you sure you don't want to pick a profession?", preferredStyle: UIAlertControllerStyle.alert)
+            let alertController = UIAlertController(title: "No Profession", message: "Are you sure you don't want to pick a profession?", preferredStyle: UIAlertControllerStyle.alert)
             let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil)
             let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: {
                 (alertAction: UIAlertAction) in
