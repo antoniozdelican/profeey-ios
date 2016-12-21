@@ -71,8 +71,9 @@ class CommentsTableViewController: UITableViewController {
         cell.profilePicImageView.image = user?.profilePic
         cell.preferredUsernameLabel.text = user?.preferredUsername
         cell.professionNameLabel.text = user?.professionName
-        cell.commentLabel.text = comment.commentText
+        cell.commentTextLabel.text = comment.commentText
         cell.timeLabel.text = comment.creationDateString
+        comment.isExpandedCommentText ? cell.untruncate() : cell.truncate()
         cell.commentTableViewCellDelegate = self
         return cell
     }
@@ -218,5 +219,17 @@ extension CommentsTableViewController: CommentTableViewCellDelegate {
     
     func userTapped(_ cell: CommentTableViewCell) {
         self.performSegue(withIdentifier: "segueToProfileVc", sender: cell)
+    }
+    
+    func commentTextLabelTapped(_ cell: CommentTableViewCell) {
+        guard let indexPath = self.tableView.indexPath(for: cell) else {
+            return
+        }
+        if !self.comments[indexPath.row].isExpandedCommentText {
+            self.comments[indexPath.row].isExpandedCommentText = true
+            UIView.performWithoutAnimation {
+                self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
+            }
+        }
     }
 }

@@ -29,8 +29,7 @@ class EducationTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.educationDescriptionLabelTapped(_:)))
-        self.educationDescriptionLabel.addGestureRecognizer(tapGestureRecognizer)
+        self.educationDescriptionLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.educationDescriptionLabelTapped(_:))))
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -44,9 +43,13 @@ class EducationTableViewCell: UITableViewCell {
         self.educationTableViewCellDelegate?.educationExpandButtonTapped?(self)
     }
     
+    // MARK: Tappers
+    
     func educationDescriptionLabelTapped(_ sender: AnyObject) {
         self.educationTableViewCellDelegate?.educationDescriptionLabelTapped(self)
     }
+    
+    // MARK: Helpers
     
     func truncate() {
         let attributedTruncationToken = NSMutableAttributedString()

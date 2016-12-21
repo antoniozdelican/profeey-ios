@@ -161,7 +161,7 @@
                                                 </label>
                                             </subviews>
                                         </stackView>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Comment Text" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IZe-Lu-Yhc">
+                                        <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Comment Text" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IZe-Lu-Yhc" customClass="TTTAttributedLabel">
                                             <rect key="frame" x="64" y="57.5" width="299" height="17"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <color key="textColor" red="0.14748379589999999" green="0.1474793851" blue="0.14748191829999999" alpha="1" colorSpace="calibratedRGB"/>
@@ -182,7 +182,7 @@
                                 </tableViewCellContentView>
                                 <gestureRecognizers/>
                                 <connections>
-                                    <outlet property="commentLabel" destination="IZe-Lu-Yhc" id="QrR-oa-r68"/>
+                                    <outlet property="commentTextLabel" destination="IZe-Lu-Yhc" id="ibj-pe-Ath"/>
                                     <outlet property="nameStackView" destination="2Il-9f-GqI" id="ifX-br-Ety"/>
                                     <outlet property="preferredUsernameLabel" destination="xof-gB-ML3" id="MLH-LU-4ER"/>
                                     <outlet property="professionNameLabel" destination="cQT-p1-OVS" id="xhZ-H0-Kzr"/>

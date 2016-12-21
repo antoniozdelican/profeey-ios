@@ -29,8 +29,7 @@ class WorkExperienceTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.workDescriptionLabelTapped(_:)))
-        self.workDescriptionLabel.addGestureRecognizer(tapGestureRecognizer)
+        self.workDescriptionLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.workDescriptionLabelTapped(_:))))
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -44,9 +43,13 @@ class WorkExperienceTableViewCell: UITableViewCell {
         self.workExperienceTableViewCellDelegate?.workExperienceExpandButtonTapped?(self)
     }
     
+    // MARK: Tappers
+    
     func workDescriptionLabelTapped(_ sender: AnyObject) {
         self.workExperienceTableViewCellDelegate?.workDescriptionLabelTapped(self)
     }
+    
+    // MARK: Helpers
     
     func truncate() {
         let attributedTruncationToken = NSMutableAttributedString()

@@ -36,7 +36,7 @@
                                             </constraints>
                                         </imageView>
                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="feb-gr-aq6">
-                                            <rect key="frame" x="64" y="15" width="299" height="35"/>
+                                            <rect key="frame" x="64" y="14" width="299" height="35"/>
                                             <subviews>
                                                 <stackView opaque="NO" contentMode="scaleToFill" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="URw-7N-aVk">
                                                     <rect key="frame" x="0.0" y="0.0" width="299" height="17"/>
@@ -66,7 +66,7 @@
                                         </stackView>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="feb-gr-aq6" firstAttribute="top" secondItem="bI6-PF-tvi" secondAttribute="top" constant="15" id="246-ne-JeS"/>
+                                        <constraint firstItem="feb-gr-aq6" firstAttribute="top" secondItem="bI6-PF-tvi" secondAttribute="top" constant="14" id="246-ne-JeS"/>
                                         <constraint firstAttribute="trailing" secondItem="feb-gr-aq6" secondAttribute="trailing" constant="12" id="2qw-4k-jvk"/>
                                         <constraint firstItem="feb-gr-aq6" firstAttribute="leading" secondItem="4yk-zU-wlY" secondAttribute="trailing" constant="12" id="Fth-rc-V4g"/>
                                         <constraint firstItem="4yk-zU-wlY" firstAttribute="leading" secondItem="bI6-PF-tvi" secondAttribute="leading" constant="12" id="GGi-00-Laa"/>
