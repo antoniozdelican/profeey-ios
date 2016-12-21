@@ -10,10 +10,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Capture Navigation Controller-->
+        <!--Navigation Controller-->
         <scene sceneID="NhL-vA-tN3">
             <objects>
-                <navigationController id="yJv-yj-4UH" customClass="CaptureNavigationController" customModule="Profeey" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController id="yJv-yj-4UH" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="jQn-ki-A3U">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -164,6 +164,7 @@
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" title="Edit Photo" id="fGv-od-DV5">
                         <barButtonItem key="rightBarButtonItem" title="Next" id="v1I-o3-dbb">
+                            <color key="tintColor" red="0.14748379589999999" green="0.1474793851" blue="0.14748191829999999" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <action selector="nextButtonTapped:" destination="ixS-Ir-1f0" id="luV-Zp-guM"/>
                             </connections>
@@ -199,7 +200,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="125"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="XlH-uU-Rc7" id="H9u-nW-GUW">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="124"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="124.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="6oc-K7-UH8">
@@ -224,7 +225,7 @@
                                 <rect key="frame" x="0.0" y="153" width="375" height="69"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="UWV-6f-46t" id="b6f-cF-kwr">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="68"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="68.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Write a description..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SRP-Bv-wNP">
@@ -259,7 +260,7 @@
                                 <rect key="frame" x="0.0" y="222" width="375" height="69"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Gpe-cA-10U" id="Fs8-el-dBL">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="68"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="68.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_skills" translatesAutoresizingMaskIntoConstraints="NO" id="Pfb-v2-8PN">
@@ -311,13 +312,22 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Create Post" id="NUf-jD-zmH">
-                        <barButtonItem key="rightBarButtonItem" title="Finish" id="VGz-Np-EWn">
-                            <connections>
-                                <action selector="doneButtonTapped:" destination="FPM-YV-5sc" id="Edl-Qn-Vks"/>
-                            </connections>
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="ND5-hO-T2S">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="6U0-RU-lIm">
+                                <rect key="frame" x="314" y="5" width="45" height="33"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <state key="normal" title="Finish">
+                                    <color key="titleColor" red="0.080254554749999998" green="0.61858558649999995" blue="0.93965935710000004" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="doneButtonTapped:" destination="FPM-YV-5sc" eventType="touchUpInside" id="KTZ-3M-nRq"/>
+                                </connections>
+                            </button>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="doneButton" destination="6U0-RU-lIm" id="kiE-Lz-CjP"/>
                         <segue destination="G2u-io-Bjn" kind="presentation" identifier="segueToCategoriesVc" id="Rc1-rU-LXd"/>
                         <segue destination="iKd-2b-WgM" kind="unwind" identifier="segueUnwindToHomeVc" unwindAction="unwindToHomeTableViewController:" id="rLg-hr-15o"/>
                     </connections>
@@ -358,7 +368,7 @@
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="cellGallery" id="rDk-09-ZHZ" customClass="GalleryCollectionViewCell" customModule="Profeey" customModuleProvider="target">
-                                        <rect key="frame" x="91" y="0.0" width="194" height="194"/>
+                                        <rect key="frame" x="90.5" y="0.0" width="194" height="194"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="0.0" y="0.0" width="194" height="194"/>
@@ -480,7 +490,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="78"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="e8m-N1-CRI" id="Do6-MK-Yzp">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="77"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="77.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Album title" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TRf-8O-wuX">

@@ -10,6 +10,8 @@ import UIKit
 
 class AddInfoTableViewController: UITableViewController {
     
+    @IBOutlet weak var doneButton: UIButton!
+    
     var post: Post?
     var photo: UIImage?
     
@@ -19,6 +21,9 @@ class AddInfoTableViewController: UITableViewController {
         super.viewDidLoad()
         self.post = Post()
         self.post?.image = self.photo
+        
+        // Fix alignment for custom rightBarButtonItem.
+        self.doneButton.contentEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, 0.0, -8.0)
     }
     
     override func viewWillDisappear(_ animated: Bool) {

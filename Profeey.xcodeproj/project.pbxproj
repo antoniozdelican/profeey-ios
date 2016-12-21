@@ -58,7 +58,6 @@
 		A9543CB31DA3C531002BF372 /* EditPostCategoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9543CB21DA3C531002BF372 /* EditPostCategoryTableViewCell.swift */; };
 		A9543CB71DA3EF4B002BF372 /* EditPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9543CB61DA3EF4B002BF372 /* EditPostViewController.swift */; };
 		A95C31B51D3E164C0003377F /* UICKeyChainStore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A95C31B31D3E16370003377F /* UICKeyChainStore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		A95E40D01D35410500FD61F9 /* CaptureNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95E40CF1D35410500FD61F9 /* CaptureNavigationController.swift */; };
 		A95E93AF1DBF6D0000A1FF6E /* Profession.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A95E93AE1DBF6D0000A1FF6E /* Profession.storyboard */; };
 		A95EB85B1D8FBE870039E51D /* DateTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95EB85A1D8FBE870039E51D /* DateTableViewCell.swift */; };
 		A95EB85D1D8FBEAB0039E51D /* DatePickerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95EB85C1D8FBEAB0039E51D /* DatePickerTableViewCell.swift */; };
@@ -315,7 +314,6 @@
 		A9543CB21DA3C531002BF372 /* EditPostCategoryTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditPostCategoryTableViewCell.swift; sourceTree = "<group>"; };
 		A9543CB61DA3EF4B002BF372 /* EditPostViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditPostViewController.swift; sourceTree = "<group>"; };
 		A95C31B31D3E16370003377F /* UICKeyChainStore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = UICKeyChainStore.framework; sourceTree = "<group>"; };
-		A95E40CF1D35410500FD61F9 /* CaptureNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CaptureNavigationController.swift; sourceTree = "<group>"; };
 		A95E93AE1DBF6D0000A1FF6E /* Profession.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Profession.storyboard; sourceTree = "<group>"; };
 		A95EB85A1D8FBE870039E51D /* DateTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateTableViewCell.swift; sourceTree = "<group>"; };
 		A95EB85C1D8FBEAB0039E51D /* DatePickerTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatePickerTableViewCell.swift; sourceTree = "<group>"; };
@@ -511,7 +509,6 @@
 			isa = PBXGroup;
 			children = (
 				A9E53B6C1D10667100CD1D6C /* Capture.storyboard */,
-				A95E40CF1D35410500FD61F9 /* CaptureNavigationController.swift */,
 				A901CFE61DA78DDC00C44B26 /* CaptureScrollViewController.swift */,
 				A91A10361DA7FBCC0042B4CA /* Camera */,
 				A91A10371DA7FBD70042B4CA /* Gallery */,
@@ -1461,7 +1458,6 @@
 				A99030F91D464FEE00336D26 /* GalleryCollectionViewCell.swift in Sources */,
 				A91A103A1DA833E40042B4CA /* AddInfoTableViewController.swift in Sources */,
 				A9E4507E1D59E6E400D14553 /* CommentsViewController.swift in Sources */,
-				A95E40D01D35410500FD61F9 /* CaptureNavigationController.swift in Sources */,
 				A99030FB1D46632500336D26 /* AlbumsTableViewController.swift in Sources */,
 				A9C8081C1D916C660018109C /* EditAboutTableViewCell.swift in Sources */,
 				A91A10351DA7F59F0042B4CA /* GalleryViewController.swift in Sources */,
