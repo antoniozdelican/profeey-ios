@@ -65,14 +65,14 @@ class CommentsTableViewController: UITableViewController {
             cell.emptyMessageLabel.text = "No comments yet"
             return cell
         }
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cellComment", for: indexPath) as! CommentTableViewCell
         let comment = self.comments[indexPath.row]
         let user = comment.user
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cellComment", for: indexPath) as! CommentTableViewCell
         cell.profilePicImageView.image = user?.profilePic
         cell.preferredUsernameLabel.text = user?.preferredUsername
         cell.professionNameLabel.text = user?.professionName
-        cell.commentTextLabel.text = comment.commentText
         cell.timeLabel.text = comment.creationDateString
+        cell.commentTextLabel.text = comment.commentText
         comment.isExpandedCommentText ? cell.untruncate() : cell.truncate()
         cell.commentTableViewCellDelegate = self
         return cell
@@ -99,7 +99,7 @@ class CommentsTableViewController: UITableViewController {
         if self.isLoadingComments || self.comments.count == 0 {
             return 112.0
         }
-        return 104.0
+        return 87.0
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
