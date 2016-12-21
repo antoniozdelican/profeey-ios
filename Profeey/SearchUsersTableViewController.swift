@@ -34,7 +34,8 @@ class SearchUsersTableViewController: UITableViewController {
         
         self.isShowingPopularUsers = true
         self.isSearchingPopularUsers = true
-        self.getAllUsers(self.location?.locationId)
+        self.scanUsers()
+//        self.getAllUsers(self.location?.locationId)
     }
 
     override func didReceiveMemoryWarning() {
@@ -245,30 +246,66 @@ class SearchUsersTableViewController: UITableViewController {
         self.searchUsersTableViewControllerDelegate?.usersTableViewWillBeginDragging()
     }
     
+    // MARK: Helpers
+    
+    fileprivate func filterUsers(_ namePrefix: String) {
+        // Clear old.
+        self.regularUsers = []
+        self.regularUsers = self.popularUsers.filter({
+            (user: User) in
+            if let searchFirstName = user.firstName?.lowercased(), searchFirstName.hasPrefix(namePrefix.lowercased()) {
+                return true
+            } else if let searchLastName = user.lastName?.lowercased(), searchLastName.hasPrefix(namePrefix.lowercased()) {
+                return true
+            } else if let searchPreferredUsername = user.preferredUsername?.lowercased(), searchPreferredUsername.hasPrefix(namePrefix.lowercased()) {
+                return true
+            } else {
+                return false
+            }
+        })
+        self.regularUsers = self.sortUsers(self.regularUsers)
+        self.isSearchingRegularUsers = false
+        self.tableView.reloadData()
+        
+        for user in self.regularUsers {
+            if let profilePicUrl = user.profilePicUrl {
+                self.downloadProfilePic(profilePicUrl, isPopularUser: false)
+            }
+        }
+    }
+    
+    fileprivate func sortUsers(_ users: [User]) -> [User] {
+        return users.sorted(by: {
+            (user1, user2) in
+            return user1.numberOfRecommendationsInt > user2.numberOfRecommendationsInt
+        })
+    }
+    
     // MARK: AWS
     
-    fileprivate func getAllUsers(_ locationId: String?) {
+    fileprivate func scanUsers() {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYCloudSearchProxyClient.defaultClient().getAllUsers(locationId: locationId).continue({
-            (task: AWSTask) in
+        PRFYDynamoDBManager.defaultDynamoDBManager().scanUsersDynamoDB({
+            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 self.isSearchingPopularUsers = false
-                if let error = task.error {
-                    print("getAllUsers error: \(error)")
+                if let error = error {
+                    print("scanUsers error: \(error)")
                     self.tableView.reloadData()
                 } else {
-                    guard let cloudSearchUsersResult = task.result as? PRFYCloudSearchUsersResult, let cloudSearchUsers = cloudSearchUsersResult.users else {
+                    guard let awsUsers = response?.items as? [AWSUser] else {
                         self.tableView.reloadData()
                         return
                     }
-                    for cloudSearchUser in cloudSearchUsers {
-                        let user = User(userId: cloudSearchUser.userId, firstName: cloudSearchUser.firstName, lastName: cloudSearchUser.lastName, preferredUsername: cloudSearchUser.preferredUsername, professionName: cloudSearchUser.professionName, profilePicUrl: cloudSearchUser.profilePicUrl, locationName: cloudSearchUser.locationName, numberOfRecommendations: cloudSearchUser.numberOfRecommendations)
+                    for awsUser in awsUsers {
+                        let user = User(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationName: awsUser._locationName, numberOfRecommendations: awsUser._numberOfRecommendations)
                         if user.profilePicUrl == nil {
                             user.profilePic = UIImage(named: "ic_no_profile_pic_feed")
                         }
                         self.popularUsers.append(user)
                     }
+                    self.popularUsers = self.sortUsers(self.popularUsers)
                     self.tableView.reloadData()
                     
                     for user in self.popularUsers {
@@ -278,46 +315,115 @@ class SearchUsersTableViewController: UITableViewController {
                     }
                 }
             })
-            return nil
         })
     }
     
-    fileprivate func getUsers(_ namePrefix: String, locationId: String?) {
+    fileprivate func queryLocationUsers(_ locationId: String) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYCloudSearchProxyClient.defaultClient().getUsers(namePrefix: namePrefix, locationId: locationId).continue({
-            (task: AWSTask) in
+        PRFYDynamoDBManager.defaultDynamoDBManager().queryLocationUsers(locationId, completionHandler: {
+            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                self.isSearchingRegularUsers = false
-                if let error = task.error {
-                    print("getUsers error: \(error)")
+                self.isSearchingPopularUsers = false
+                if let error = error {
+                    print("queryLocationUsers error: \(error)")
                     self.tableView.reloadData()
                 } else {
-                    guard let cloudSearchUsersResult = task.result as? PRFYCloudSearchUsersResult, let cloudSearchUsers = cloudSearchUsersResult.users else {
+                    guard let awsUsers = response?.items as? [AWSUser] else {
                         self.tableView.reloadData()
                         return
                     }
-                    // Clear old.
-                    self.regularUsers = []
-                    for cloudSearchUser in cloudSearchUsers {
-                        let user = User(userId: cloudSearchUser.userId, firstName: cloudSearchUser.firstName, lastName: cloudSearchUser.lastName, preferredUsername: cloudSearchUser.preferredUsername, professionName: cloudSearchUser.professionName, profilePicUrl: cloudSearchUser.profilePicUrl, locationName: cloudSearchUser.locationName, numberOfRecommendations: cloudSearchUser.numberOfRecommendations)
+                    for awsUser in awsUsers {
+                        let user = User(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationName: awsUser._locationName, numberOfRecommendations: awsUser._numberOfRecommendations)
                         if user.profilePicUrl == nil {
                             user.profilePic = UIImage(named: "ic_no_profile_pic_feed")
                         }
-                        self.regularUsers.append(user)
+                        self.popularUsers.append(user)
                     }
+                    self.popularUsers = self.sortUsers(self.popularUsers)
                     self.tableView.reloadData()
                     
-                    for user in self.regularUsers {
+                    for user in self.popularUsers {
                         if let profilePicUrl = user.profilePicUrl {
-                            self.downloadProfilePic(profilePicUrl, isPopularUser: false)
+                            self.downloadProfilePic(profilePicUrl, isPopularUser: true)
                         }
                     }
                 }
             })
-            return nil
         })
     }
+    
+//    fileprivate func getAllUsers(_ locationId: String?) {
+//        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+//        PRFYCloudSearchProxyClient.defaultClient().getAllUsers(locationId: locationId).continue({
+//            (task: AWSTask) in
+//            DispatchQueue.main.async(execute: {
+//                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+//                self.isSearchingPopularUsers = false
+//                if let error = task.error {
+//                    print("getAllUsers error: \(error)")
+//                    self.tableView.reloadData()
+//                } else {
+//                    guard let cloudSearchUsersResult = task.result as? PRFYCloudSearchUsersResult, let cloudSearchUsers = cloudSearchUsersResult.users else {
+//                        self.tableView.reloadData()
+//                        return
+//                    }
+//                    for cloudSearchUser in cloudSearchUsers {
+//                        let user = User(userId: cloudSearchUser.userId, firstName: cloudSearchUser.firstName, lastName: cloudSearchUser.lastName, preferredUsername: cloudSearchUser.preferredUsername, professionName: cloudSearchUser.professionName, profilePicUrl: cloudSearchUser.profilePicUrl, locationName: cloudSearchUser.locationName, numberOfRecommendations: cloudSearchUser.numberOfRecommendations)
+//                        if user.profilePicUrl == nil {
+//                            user.profilePic = UIImage(named: "ic_no_profile_pic_feed")
+//                        }
+//                        self.popularUsers.append(user)
+//                    }
+//                    self.tableView.reloadData()
+//                    
+//                    for user in self.popularUsers {
+//                        if let profilePicUrl = user.profilePicUrl {
+//                            self.downloadProfilePic(profilePicUrl, isPopularUser: true)
+//                        }
+//                    }
+//                }
+//            })
+//            return nil
+//        })
+//    }
+//
+//    fileprivate func getUsers(_ namePrefix: String, locationId: String?) {
+//        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+//        PRFYCloudSearchProxyClient.defaultClient().getUsers(namePrefix: namePrefix, locationId: locationId).continue({
+//            (task: AWSTask) in
+//            DispatchQueue.main.async(execute: {
+//                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+//                self.isSearchingRegularUsers = false
+//                if let error = task.error {
+//                    print("getUsers error: \(error)")
+//                    self.tableView.reloadData()
+//                } else {
+//                    guard let cloudSearchUsersResult = task.result as? PRFYCloudSearchUsersResult, let cloudSearchUsers = cloudSearchUsersResult.users else {
+//                        self.tableView.reloadData()
+//                        return
+//                    }
+//                    // Clear old.
+//                    self.regularUsers = []
+//                    for cloudSearchUser in cloudSearchUsers {
+//                        let user = User(userId: cloudSearchUser.userId, firstName: cloudSearchUser.firstName, lastName: cloudSearchUser.lastName, preferredUsername: cloudSearchUser.preferredUsername, professionName: cloudSearchUser.professionName, profilePicUrl: cloudSearchUser.profilePicUrl, locationName: cloudSearchUser.locationName, numberOfRecommendations: cloudSearchUser.numberOfRecommendations)
+//                        if user.profilePicUrl == nil {
+//                            user.profilePic = UIImage(named: "ic_no_profile_pic_feed")
+//                        }
+//                        self.regularUsers.append(user)
+//                    }
+//                    self.tableView.reloadData()
+//                    
+//                    for user in self.regularUsers {
+//                        if let profilePicUrl = user.profilePicUrl {
+//                            self.downloadProfilePic(profilePicUrl, isPopularUser: false)
+//                        }
+//                    }
+//                }
+//            })
+//            return nil
+//        })
+//    }
     
     fileprivate func downloadProfilePic(_ profilePicUrl: String, isPopularUser: Bool) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
@@ -402,13 +508,17 @@ class SearchUsersTableViewController: UITableViewController {
 extension SearchUsersTableViewController: SearchUsersDelegate {
     
     func addLocation(_ location: Location) {
+        guard let locationId = location.locationId else {
+            return
+        }
         self.location = location
         self.isLocationActive = true
         // Clear old.
         self.popularUsers = []
         self.isSearchingPopularUsers = true
         self.tableView.reloadData()
-        self.getAllUsers(self.location?.locationId)
+//        self.getAllUsers(self.location?.locationId)
+        self.queryLocationUsers(locationId)
     }
     
     func removeLocation() {
@@ -418,11 +528,13 @@ extension SearchUsersTableViewController: SearchUsersDelegate {
         self.popularUsers = []
         self.isSearchingPopularUsers = true
         self.tableView.reloadData()
-        self.getAllUsers(self.location?.locationId)
+//        self.getAllUsers(self.location?.locationId)
+        self.scanUsers()
     }
     
     func searchBarTextChanged(_ searchText: String) {
-        if searchText.trimm().isEmpty {
+        let name = searchText.trimm()
+        if name.isEmpty {
             self.isShowingPopularUsers = true
             // Clear old.
             self.regularUsers = []
@@ -435,7 +547,8 @@ extension SearchUsersTableViewController: SearchUsersDelegate {
             self.isSearchingRegularUsers = true
             self.tableView.reloadData()
             // Start search.
-            self.getUsers(searchText.trimm(), locationId: self.location?.locationId)
+//            self.getUsers(searchText.trimm(), locationId: self.location?.locationId)
+            self.filterUsers(name)
         }
     }
     

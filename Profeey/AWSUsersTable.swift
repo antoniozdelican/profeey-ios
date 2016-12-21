@@ -97,3 +97,67 @@ class AWSUsersPreferredUsernameIndex: NSObject, Index {
     }
 
 }
+
+class AWSUsersLocationIndex: NSObject, Index {
+    
+    var indexName: String? {
+        
+        return "LocationIndex"
+    }
+    
+    func supportedOperations() -> [String] {
+        return [
+            QueryWithPartitionKey,
+        ]
+    }
+    
+    // MARK: QueryWithPartitionKey
+    
+    // Query all users with locationId.
+    func queryLocationUsers(_ locationId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+        let objectMapper = AWSDynamoDBObjectMapper.default()
+        let queryExpression = AWSDynamoDBQueryExpression()
+        queryExpression.indexName = "LocationIndex"
+        queryExpression.keyConditionExpression = "#locationId = :locationId"
+        queryExpression.expressionAttributeNames = ["#locationId": "locationId",]
+        queryExpression.expressionAttributeValues = [":locationId": locationId,]
+        objectMapper.query(AWSUser.self, expression: queryExpression, completionHandler: completionHandler)
+    }
+}
+
+class AWSUsersProfessionIndex: NSObject, Index {
+    
+    var indexName: String? {
+        
+        return "ProfessionIndex"
+    }
+    
+    func supportedOperations() -> [String] {
+        return [
+            QueryWithPartitionKey,
+            QueryWithPartitionKeyAndFilter
+        ]
+    }
+    
+    // MARK: QueryWithPartitionKey and QueryWithPartitionKeyAndFilter
+    
+    // Query all users with professionName (and locationId if provided).
+    func queryProfessionUsers(_ professionName: String, locationId: String?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+        let objectMapper = AWSDynamoDBObjectMapper.default()
+        let queryExpression = AWSDynamoDBQueryExpression()
+        queryExpression.indexName = "ProfessionIndex"
+        queryExpression.keyConditionExpression = "#professionName = :professionName"
+        queryExpression.expressionAttributeNames = ["#professionName": "professionName"]
+        queryExpression.expressionAttributeValues = [":professionName": professionName]
+        
+        if let locationId = locationId {
+            queryExpression.filterExpression = "#locationId = :locationId"
+            queryExpression.expressionAttributeNames?["#locationId"] = "locationId"
+            queryExpression.expressionAttributeValues?[":locationId"] = locationId
+        }
+        
+        objectMapper.query(AWSUser.self, expression: queryExpression, completionHandler: completionHandler)
+    }
+    
+    
+}

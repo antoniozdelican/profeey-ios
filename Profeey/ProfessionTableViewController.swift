@@ -29,7 +29,8 @@ class ProfessionTableViewController: UITableViewController {
         
         if let professionName = self.profession?.professionName {
             self.isSearchingUsers = true
-            self.getAllUsersWithProfession(professionName, locationId: self.location?.locationId)
+//            self.getAllUsersWithProfession(professionName, locationId: self.location?.locationId)
+            self.queryProfessionUsers(professionName, locationId: self.location?.locationId)
         }
     }
 
@@ -134,29 +135,40 @@ class ProfessionTableViewController: UITableViewController {
         return 32.0
     }
     
+    // MARK: Helpers
+    
+    fileprivate func sortUsers(_ users: [User]) -> [User] {
+        return users.sorted(by: {
+            (user1, user2) in
+            return user1.numberOfRecommendationsInt > user2.numberOfRecommendationsInt
+        })
+    }
+    
     // MARK: AWS
     
-    fileprivate func getAllUsersWithProfession(_ professionName: String, locationId: String?) {
+    fileprivate func queryProfessionUsers(_ professionName: String, locationId: String?) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYCloudSearchProxyClient.defaultClient().getAllUsersWithProfession(professionName: professionName, locationId: locationId).continue({
-            (task: AWSTask) in
+        PRFYDynamoDBManager.defaultDynamoDBManager().queryProfessionUsers(professionName, locationId: locationId, completionHandler: {
+            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 self.isSearchingUsers = false
-                if let error = task.error {
-                    print("getUsersWithProfession error: \(error)")
+                if let error = error {
+                    print("queryProfessionUsers error: \(error)")
                     self.tableView.reloadData()
                 } else {
-                    guard let cloudSearchUsersResult = task.result as? PRFYCloudSearchUsersResult, let cloudSearchUsers = cloudSearchUsersResult.users else {
+                    guard let awsUsers = response?.items as? [AWSUser] else {
                         self.tableView.reloadData()
                         return
                     }
-                    // Clear old.
-                    self.users = []
-                    for cloudSearchUser in cloudSearchUsers {
-                        let user = User(userId: cloudSearchUser.userId, firstName: cloudSearchUser.firstName, lastName: cloudSearchUser.lastName, preferredUsername: cloudSearchUser.preferredUsername, professionName: cloudSearchUser.professionName, profilePicUrl: cloudSearchUser.profilePicUrl, locationName: cloudSearchUser.locationName)
+                    for awsUser in awsUsers {
+                        let user = User(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationName: awsUser._locationName, numberOfRecommendations: awsUser._numberOfRecommendations)
+                        if user.profilePicUrl == nil {
+                            user.profilePic = UIImage(named: "ic_no_profile_pic_feed")
+                        }
                         self.users.append(user)
                     }
+                    self.users = self.sortUsers(self.users)
                     self.tableView.reloadData()
                     
                     for user in self.users {
@@ -166,9 +178,42 @@ class ProfessionTableViewController: UITableViewController {
                     }
                 }
             })
-            return nil
         })
     }
+    
+//    fileprivate func getAllUsersWithProfession(_ professionName: String, locationId: String?) {
+//        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+//        PRFYCloudSearchProxyClient.defaultClient().getAllUsersWithProfession(professionName: professionName, locationId: locationId).continue({
+//            (task: AWSTask) in
+//            DispatchQueue.main.async(execute: {
+//                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+//                self.isSearchingUsers = false
+//                if let error = task.error {
+//                    print("getUsersWithProfession error: \(error)")
+//                    self.tableView.reloadData()
+//                } else {
+//                    guard let cloudSearchUsersResult = task.result as? PRFYCloudSearchUsersResult, let cloudSearchUsers = cloudSearchUsersResult.users else {
+//                        self.tableView.reloadData()
+//                        return
+//                    }
+//                    // Clear old.
+//                    self.users = []
+//                    for cloudSearchUser in cloudSearchUsers {
+//                        let user = User(userId: cloudSearchUser.userId, firstName: cloudSearchUser.firstName, lastName: cloudSearchUser.lastName, preferredUsername: cloudSearchUser.preferredUsername, professionName: cloudSearchUser.professionName, profilePicUrl: cloudSearchUser.profilePicUrl, locationName: cloudSearchUser.locationName)
+//                        self.users.append(user)
+//                    }
+//                    self.tableView.reloadData()
+//                    
+//                    for user in self.users {
+//                        if let profilePicUrl = user.profilePicUrl {
+//                            self.downloadProfilePic(profilePicUrl)
+//                        }
+//                    }
+//                }
+//            })
+//            return nil
+//        })
+//    }
     
     fileprivate func downloadProfilePic(_ profilePicUrl: String) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true

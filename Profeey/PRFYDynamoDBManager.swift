@@ -96,10 +96,19 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         awsUsersTable.saveUser(awsUserUpdate, completionHandler: completionHandler)
     }
     
-    // TODO remove this.
     func scanUsersDynamoDB(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         let awsUsersTable = AWSUsersTable()
         awsUsersTable.scanUsers(completionHandler)
+    }
+    
+    func queryLocationUsers(_ locationId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+        let awsUsersLocationIndex = AWSUsersLocationIndex()
+        awsUsersLocationIndex.queryLocationUsers(locationId, completionHandler: completionHandler)
+    }
+    
+    func queryProfessionUsers(_ professionName: String, locationId: String?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+        let awsUsersProfessionIndex = AWSUsersProfessionIndex()
+        awsUsersProfessionIndex.queryProfessionUsers(professionName, locationId: locationId, completionHandler: completionHandler)
     }
     
     // Check if preferredUsername already exists in DynamoDB.

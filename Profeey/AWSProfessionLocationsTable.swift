@@ -71,7 +71,6 @@ class AWSProfessionLocationsLocationIndex: NSObject, Index {
         queryExpression.keyConditionExpression = "#locationId = :locationId"
         queryExpression.expressionAttributeNames = ["#locationId": "locationId",]
         queryExpression.expressionAttributeValues = [":locationId": locationId,]
-        
         objectMapper.query(AWSProfessionLocation.self, expression: queryExpression, completionHandler: completionHandler)
     }
 }
