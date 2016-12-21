@@ -558,4 +558,11 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         let awsLocationsTable = AWSLocationsTable()
         awsLocationsTable.scanLocations(completionHandler)
     }
+    
+    // MARK: ProfessionLocations
+    
+    func queryLocationProfessions(_ locationId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?){
+        let awsProfessionLocationsLocationIndex = AWSProfessionLocationsLocationIndex()
+        awsProfessionLocationsLocationIndex.queryLocationProfessions(locationId, completionHandler: completionHandler)
+    }
 }

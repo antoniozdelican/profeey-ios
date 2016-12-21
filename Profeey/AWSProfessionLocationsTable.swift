@@ -45,11 +45,33 @@ class AWSProfessionLocationsTable: NSObject, Table {
     func tableAttributeName(_ dataObjectAttributeName: String) -> String {
         return AWSProfessionLocation.jsonKeyPathsByPropertyKey()[dataObjectAttributeName] as! String
     }
+}
+
+// Query professions from a location.
+class AWSProfessionLocationsLocationIndex: NSObject, Index {
     
-    // TODO: index
-    func scanProfessionLocations(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+    var indexName: String? {
+        
+        return "LocationIndex"
+    }
+    
+    func supportedOperations() -> [String] {
+        return [
+            QueryWithPartitionKey,
+        ]
+    }
+    
+    // MARK: QueryWithPartitionKey
+    
+    // Query all professions with locationId.
+    func queryLocationProfessions(_ locationId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
-        let scanExpression = AWSDynamoDBScanExpression()
-        objectMapper.scan(AWSProfession.self, expression: scanExpression, completionHandler: completionHandler)
+        let queryExpression = AWSDynamoDBQueryExpression()
+        queryExpression.indexName = "LocationIndex"
+        queryExpression.keyConditionExpression = "#locationId = :locationId"
+        queryExpression.expressionAttributeNames = ["#locationId": "locationId",]
+        queryExpression.expressionAttributeValues = [":locationId": locationId,]
+        
+        objectMapper.query(AWSProfessionLocation.self, expression: queryExpression, completionHandler: completionHandler)
     }
 }

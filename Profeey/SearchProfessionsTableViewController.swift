@@ -285,6 +285,32 @@ class SearchProfessionsTableViewController: UITableViewController {
         })
     }
     
+    fileprivate func queryLocationProfessions(_ locationId: String) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().queryLocationProfessions(locationId, completionHandler: {
+            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                self.isSearchingPopularProfessions = false
+                if let error = error {
+                    print("queryLocationProfessions error: \(error)")
+                    self.tableView.reloadData()
+                } else {
+                    guard let awsProfessionLocations = response?.items as? [AWSProfessionLocation] else {
+                        self.tableView.reloadData()
+                        return
+                    }
+                    for awsProfessionLocation in awsProfessionLocations {
+                        let profession = Profession(professionName: awsProfessionLocation._professionName, numberOfUsers: awsProfessionLocation._numberOfUsers)
+                        self.popularProfessions.append(profession)
+                    }
+                    self.popularProfessions = self.sortProfessions(self.popularProfessions)
+                    self.tableView.reloadData()
+                }
+            })
+        })
+    }
+    
 //    fileprivate func getAllProfessions(_ locationId: String?) {
 //        UIApplication.shared.isNetworkActivityIndicatorVisible = true
 //        PRFYCloudSearchProxyClient.defaultClient().getAllProfessions(locationId: locationId).continue({
@@ -344,14 +370,17 @@ class SearchProfessionsTableViewController: UITableViewController {
 extension SearchProfessionsTableViewController: SearchProfessionsDelegate {
     
     func addLocation(_ location: Location) {
+        guard let locationId = location.locationId else {
+            return
+        }
         self.location = location
         self.isLocationActive = true
         // Clear old.
         self.popularProfessions = []
         self.isSearchingPopularProfessions = true
         self.tableView.reloadData()
-        // TODO
         //self.getAllProfessions(self.location?.locationId)
+        self.queryLocationProfessions(locationId)
     }
     
     func removeLocation() {
@@ -361,8 +390,8 @@ extension SearchProfessionsTableViewController: SearchProfessionsDelegate {
         self.popularProfessions = []
         self.isSearchingPopularProfessions = true
         self.tableView.reloadData()
-        // TODO
         //self.getAllProfessions(self.location?.locationId)
+        self.scanProfessions()
     }
     
     func searchBarTextChanged(_ searchText: String) {

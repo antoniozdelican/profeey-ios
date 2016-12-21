@@ -106,4 +106,8 @@ protocol DynamoDBManager {
     // MARK: Locations
     
     func scanLocationsDynamoDB(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
+    
+    // MARK: ProfessionLocations
+    
+    func queryLocationProfessions(_ locationId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
 }
