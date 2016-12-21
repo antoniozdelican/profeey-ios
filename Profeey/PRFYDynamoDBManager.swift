@@ -544,4 +544,11 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         let awsProfessionsTable = AWSProfessionsTable()
         awsProfessionsTable.scanProfessions(completionHandler)
     }
+    
+    // MARK: Locations
+    
+    func scanLocationsDynamoDB(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?){
+        let awsLocationsTable = AWSLocationsTable()
+        awsLocationsTable.scanLocations(completionHandler)
+    }
 }

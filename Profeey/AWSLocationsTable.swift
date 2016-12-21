@@ -1,5 +1,5 @@
 //
-//  AWSProfessionsTable.swift
+//  AWSLocationsTable.swift
 //  Profeey
 //
 //  Created by Antonio Zdelican on 21/12/16.
@@ -10,7 +10,7 @@ import Foundation
 import AWSDynamoDB
 import AWSMobileHubHelper
 
-class AWSProfessionsTable: NSObject, Table {
+class AWSLocationsTable: NSObject, Table {
     
     var tableName: String
     var partitionKeyName: String
@@ -24,12 +24,12 @@ class AWSProfessionsTable: NSObject, Table {
     }
     var tableDisplayName: String {
         
-        return "Professions"
+        return "Locations"
     }
     
     override init() {
         
-        model = AWSProfession()
+        model = AWSLocation()
         
         tableName = model.classForCoder.dynamoDBTableName()
         partitionKeyName = model.classForCoder.hashKeyAttribute()
@@ -43,12 +43,12 @@ class AWSProfessionsTable: NSObject, Table {
     }
     
     func tableAttributeName(_ dataObjectAttributeName: String) -> String {
-        return AWSProfession.jsonKeyPathsByPropertyKey()[dataObjectAttributeName] as! String
+        return AWSLocation.jsonKeyPathsByPropertyKey()[dataObjectAttributeName] as! String
     }
     
-    func scanProfessions(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+    func scanLocations(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
         let scanExpression = AWSDynamoDBScanExpression()
-        objectMapper.scan(AWSProfession.self, expression: scanExpression, completionHandler: completionHandler)
+        objectMapper.scan(AWSLocation.self, expression: scanExpression, completionHandler: completionHandler)
     }
 }

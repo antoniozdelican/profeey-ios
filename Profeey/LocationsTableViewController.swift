@@ -32,7 +32,8 @@ class LocationsTableViewController: UITableViewController {
         
         self.isShowingPopularLocations = true
         self.isSearchingPopularLocations = true
-        self.getAllLocations()
+        self.scanLocations()
+//        self.getAllLocations()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -187,91 +188,137 @@ class LocationsTableViewController: UITableViewController {
         self.dismiss(animated: true, completion: nil)
     }
     
+    // MARK: Helpers
+    
+    fileprivate func filterLocations(_ namePrefix: String) {
+        // Clear old.
+        self.regularLocations = []
+        self.regularLocations = self.popularLocations.filter({
+            (location: Location) in
+            if let searchCountry = location.country?.lowercased(), searchCountry.hasPrefix(namePrefix.lowercased()) {
+                return true
+            } else if let searchState = location.state?.lowercased(), searchState.hasPrefix(namePrefix.lowercased()) {
+                return true
+            } else if let searchCity = location.city?.lowercased(), searchCity.hasPrefix(namePrefix.lowercased()) {
+                return true
+            } else if let searchLocationName = location.locationName?.lowercased(), searchLocationName.hasPrefix(namePrefix.lowercased()) {
+                return true
+            } else {
+                return false
+            }
+        })
+        self.regularLocations = self.sortLocations(self.regularLocations)
+        self.isSearchingRegularLocations = false
+        UIView.performWithoutAnimation {
+            self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
+        }
+    }
+    
+    fileprivate func sortLocations(_ locations: [Location]) -> [Location] {
+        return locations.sorted(by: {
+            (location1, location2) in
+            return location1.numberOfUsersInt > location2.numberOfUsersInt
+        })
+    }
+    
     // MARK: AWS
     
-    fileprivate func getAllLocations() {
+    fileprivate func scanLocations() {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYCloudSearchProxyClient.defaultClient().getAllLocations().continue({
-            (task: AWSTask) in
+        PRFYDynamoDBManager.defaultDynamoDBManager().scanLocationsDynamoDB({
+            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 self.isSearchingPopularLocations = false
-                if let error = task.error {
-                    print("getAllLocations error: \(error)")
+                if let error = error {
+                    print("scanLocations error: \(error)")
                     UIView.performWithoutAnimation {
                         self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
                     }
                 } else {
-                    guard let cloudSearchLocationsResult = task.result as? PRFYCloudSearchLocationsResult, let cloudSearchLocations = cloudSearchLocationsResult.locations else {
+                    guard let awsLocations = response?.items as? [AWSLocation] else {
                         UIView.performWithoutAnimation {
                             self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
                         }
                         return
                     }
-                    for cloudSearchLocation in cloudSearchLocations {
-                        let location = Location(locationId: cloudSearchLocation.locationId, country: cloudSearchLocation.country, state: cloudSearchLocation.state, city: cloudSearchLocation.city, latitude: cloudSearchLocation.latitude, longitude: cloudSearchLocation.longitude, numberOfUsers: cloudSearchLocation.numberOfUsers)
+                    for awsLocation in awsLocations {
+                        let location = Location(locationId: awsLocation._locationId, country: awsLocation._country, state: awsLocation._state, city: awsLocation._city, latitude: awsLocation._latitude, longitude: awsLocation._longitude, numberOfUsers: awsLocation._numberOfUsers)
                         self.popularLocations.append(location)
                     }
+                    self.popularLocations = self.sortLocations(self.popularLocations)
                     UIView.performWithoutAnimation {
                         self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
                     }
                 }
             })
-            return nil
         })
     }
     
-    fileprivate func getLocations(_ namePrefix: String) {
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYCloudSearchProxyClient.defaultClient().getLocations(namePrefix: namePrefix).continue({
-            (task: AWSTask) in
-            DispatchQueue.main.async(execute: {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                self.isSearchingRegularLocations = false
-                if let error = task.error {
-                    print("getLocations error: \(error)")
-                    UIView.performWithoutAnimation {
-                        self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
-                    }
-                } else {
-                    guard let cloudSearchLocationsResult = task.result as? PRFYCloudSearchLocationsResult, let cloudSearchLocations = cloudSearchLocationsResult.locations else {
-                        UIView.performWithoutAnimation {
-                            self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
-                        }
-                        return
-                    }
-                    // Clear old.
-                    self.regularLocations = []
-                    for cloudSearchLocation in cloudSearchLocations {
-                        let location = Location(locationId: cloudSearchLocation.locationId, country: cloudSearchLocation.country, state: cloudSearchLocation.state, city: cloudSearchLocation.city, latitude: cloudSearchLocation.latitude, longitude: cloudSearchLocation.longitude, numberOfUsers: cloudSearchLocation.numberOfUsers)
-                        self.regularLocations.append(location)
-                    }
-                    UIView.performWithoutAnimation {
-                        self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
-                    }
-                }
-            })
-            return nil
-        })
-    }
-    
-    // MARK: Helper
-    
-//    fileprivate func filterLocations(_ searchText: String) {
-//        let searchCountryName = searchText.lowercased()
-//        let searchCityName = searchText.lowercased()
-//        let searchableLocations = self.allLocations.filter( { $0.searchCountryName != nil && $0.searchCityName != nil } )
-//        
-//        self.searchedLocations = searchableLocations.filter( { $0.searchCountryName!.hasPrefix(searchCountryName) || $0.searchCityName!.hasPrefix(searchCityName) } )
-//        self.locations = self.searchedLocations
-//        self.isSearching = false
-//        self.reloadLocationsSection()
+//    fileprivate func getAllLocations() {
+//        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+//        PRFYCloudSearchProxyClient.defaultClient().getAllLocations().continue({
+//            (task: AWSTask) in
+//            DispatchQueue.main.async(execute: {
+//                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+//                self.isSearchingPopularLocations = false
+//                if let error = task.error {
+//                    print("getAllLocations error: \(error)")
+//                    UIView.performWithoutAnimation {
+//                        self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
+//                    }
+//                } else {
+//                    guard let cloudSearchLocationsResult = task.result as? PRFYCloudSearchLocationsResult, let cloudSearchLocations = cloudSearchLocationsResult.locations else {
+//                        UIView.performWithoutAnimation {
+//                            self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
+//                        }
+//                        return
+//                    }
+//                    for cloudSearchLocation in cloudSearchLocations {
+//                        let location = Location(locationId: cloudSearchLocation.locationId, country: cloudSearchLocation.country, state: cloudSearchLocation.state, city: cloudSearchLocation.city, latitude: cloudSearchLocation.latitude, longitude: cloudSearchLocation.longitude, numberOfUsers: cloudSearchLocation.numberOfUsers)
+//                        self.popularLocations.append(location)
+//                    }
+//                    UIView.performWithoutAnimation {
+//                        self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
+//                    }
+//                }
+//            })
+//            return nil
+//        })
 //    }
 //    
-//    fileprivate func reloadLocationsSection () {
-//        UIView.performWithoutAnimation {
-//            self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
-//        }
+//    fileprivate func getLocations(_ namePrefix: String) {
+//        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+//        PRFYCloudSearchProxyClient.defaultClient().getLocations(namePrefix: namePrefix).continue({
+//            (task: AWSTask) in
+//            DispatchQueue.main.async(execute: {
+//                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+//                self.isSearchingRegularLocations = false
+//                if let error = task.error {
+//                    print("getLocations error: \(error)")
+//                    UIView.performWithoutAnimation {
+//                        self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
+//                    }
+//                } else {
+//                    guard let cloudSearchLocationsResult = task.result as? PRFYCloudSearchLocationsResult, let cloudSearchLocations = cloudSearchLocationsResult.locations else {
+//                        UIView.performWithoutAnimation {
+//                            self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
+//                        }
+//                        return
+//                    }
+//                    // Clear old.
+//                    self.regularLocations = []
+//                    for cloudSearchLocation in cloudSearchLocations {
+//                        let location = Location(locationId: cloudSearchLocation.locationId, country: cloudSearchLocation.country, state: cloudSearchLocation.state, city: cloudSearchLocation.city, latitude: cloudSearchLocation.latitude, longitude: cloudSearchLocation.longitude, numberOfUsers: cloudSearchLocation.numberOfUsers)
+//                        self.regularLocations.append(location)
+//                    }
+//                    UIView.performWithoutAnimation {
+//                        self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
+//                    }
+//                }
+//            })
+//            return nil
+//        })
 //    }
 }
 
@@ -296,7 +343,8 @@ extension LocationsTableViewController: UISearchBarDelegate {
                 self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
             }
             // Start search.
-            self.getLocations(locationName)
+//            self.getLocations(locationName)
+            self.filterLocations(locationName)
         }
     }
 }

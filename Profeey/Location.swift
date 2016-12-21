@@ -27,6 +27,12 @@ class Location: NSObject {
            return [self.city, self.country].flatMap({$0}).joined(separator: ", ")
         }
     }
+    var numberOfUsersInt: Int {
+        guard let numberOfUsers = self.numberOfUsers else {
+            return 0
+        }
+        return numberOfUsers.intValue
+    }
     var numberOfUsersString: String? {
         guard let numberOfUsers = self.numberOfUsers else {
             return nil
