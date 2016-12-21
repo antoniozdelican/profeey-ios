@@ -106,6 +106,8 @@ class SearchUsersTableViewController: UITableViewController {
             cell.professionNameLabel.text = user.professionName
             cell.locationNameLabel.text = user.locationName
             cell.locationStackView.isHidden = user.locationName != nil ? false : true
+            cell.numberOfRecommendationsLabel.text = user.numberOfRecommendationsInt.numberToString()
+            cell.numberOfRecommendationsStackView.isHidden = user.numberOfRecommendationsInt > 0 ? false : true
             return cell
         case 1:
             if self.isSearchingRegularUsers {
@@ -126,6 +128,8 @@ class SearchUsersTableViewController: UITableViewController {
             cell.professionNameLabel.text = user.professionName
             cell.locationNameLabel.text = user.locationName
             cell.locationStackView.isHidden = user.locationName != nil ? false : true
+            cell.numberOfRecommendationsLabel.text = user.numberOfRecommendationsInt.numberToString()
+            cell.numberOfRecommendationsStackView.isHidden = user.numberOfRecommendationsInt > 0 ? false : true
             return cell
         default:
             return UITableViewCell()
@@ -259,7 +263,7 @@ class SearchUsersTableViewController: UITableViewController {
                         return
                     }
                     for cloudSearchUser in cloudSearchUsers {
-                        let user = User(userId: cloudSearchUser.userId, firstName: cloudSearchUser.firstName, lastName: cloudSearchUser.lastName, preferredUsername: cloudSearchUser.preferredUsername, professionName: cloudSearchUser.professionName, profilePicUrl: cloudSearchUser.profilePicUrl, locationName: cloudSearchUser.locationName)
+                        let user = User(userId: cloudSearchUser.userId, firstName: cloudSearchUser.firstName, lastName: cloudSearchUser.lastName, preferredUsername: cloudSearchUser.preferredUsername, professionName: cloudSearchUser.professionName, profilePicUrl: cloudSearchUser.profilePicUrl, locationName: cloudSearchUser.locationName, numberOfRecommendations: cloudSearchUser.numberOfRecommendations)
                         if user.profilePicUrl == nil {
                             user.profilePic = UIImage(named: "ic_no_profile_pic_feed")
                         }
@@ -296,7 +300,7 @@ class SearchUsersTableViewController: UITableViewController {
                     // Clear old.
                     self.regularUsers = []
                     for cloudSearchUser in cloudSearchUsers {
-                        let user = User(userId: cloudSearchUser.userId, firstName: cloudSearchUser.firstName, lastName: cloudSearchUser.lastName, preferredUsername: cloudSearchUser.preferredUsername, professionName: cloudSearchUser.professionName, profilePicUrl: cloudSearchUser.profilePicUrl, locationName: cloudSearchUser.locationName)
+                        let user = User(userId: cloudSearchUser.userId, firstName: cloudSearchUser.firstName, lastName: cloudSearchUser.lastName, preferredUsername: cloudSearchUser.preferredUsername, professionName: cloudSearchUser.professionName, profilePicUrl: cloudSearchUser.profilePicUrl, locationName: cloudSearchUser.locationName, numberOfRecommendations: cloudSearchUser.numberOfRecommendations)
                         if user.profilePicUrl == nil {
                             user.profilePic = UIImage(named: "ic_no_profile_pic_feed")
                         }

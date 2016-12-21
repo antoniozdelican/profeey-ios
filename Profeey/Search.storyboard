@@ -194,11 +194,11 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <inset key="separatorInset" minX="68" minY="0.0" maxX="0.0" maxY="0.0"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellSearchUser" rowHeight="104" id="TID-kN-pyz" customClass="SearchUserTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="28" width="375" height="104"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellSearchUser" rowHeight="122" id="TID-kN-pyz" customClass="SearchUserTableViewCell" customModule="Profeey" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="28" width="375" height="122"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="TID-kN-pyz" id="LZ4-C2-WzF">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="103.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="121"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="nbg-4b-fvK">
@@ -210,7 +210,7 @@
                                             </constraints>
                                         </imageView>
                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="5Vd-7o-rk2">
-                                            <rect key="frame" x="68" y="16" width="291" height="71"/>
+                                            <rect key="frame" x="68" y="16" width="291" height="89"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Preferred Username" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WvC-2Q-N4u">
                                                     <rect key="frame" x="0.0" y="0.0" width="291" height="17"/>
@@ -233,11 +233,25 @@
                                                 <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="zLq-F9-PXN">
                                                     <rect key="frame" x="0.0" y="54" width="291" height="17"/>
                                                     <subviews>
-                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="252" verticalHuggingPriority="251" image="ic_location" translatesAutoresizingMaskIntoConstraints="NO" id="1PG-Q7-whf">
-                                                            <rect key="frame" x="0.0" y="0.0" width="11" height="17"/>
+                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="252" verticalHuggingPriority="251" image="ic_location_profile" translatesAutoresizingMaskIntoConstraints="NO" id="1PG-Q7-whf">
+                                                            <rect key="frame" x="0.0" y="0.0" width="12" height="17"/>
                                                         </imageView>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Location Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="827-4V-8os">
-                                                            <rect key="frame" x="16" y="0.0" width="275" height="17"/>
+                                                            <rect key="frame" x="17" y="0.0" width="274" height="17"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                            <color key="textColor" red="0.41868340970000001" green="0.41867089270000002" blue="0.41867792609999999" alpha="1" colorSpace="calibratedRGB"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                    </subviews>
+                                                </stackView>
+                                                <stackView opaque="NO" contentMode="scaleToFill" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="5NR-PR-JHl">
+                                                    <rect key="frame" x="0.0" y="72" width="291" height="17"/>
+                                                    <subviews>
+                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="252" verticalHuggingPriority="251" image="ic_recommendations_search" translatesAutoresizingMaskIntoConstraints="NO" id="I1V-ef-LKy">
+                                                            <rect key="frame" x="0.0" y="0.0" width="17" height="17"/>
+                                                        </imageView>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="14" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ayT-Bh-wXX">
+                                                            <rect key="frame" x="21" y="0.0" width="270" height="17"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                             <color key="textColor" red="0.41868340970000001" green="0.41867089270000002" blue="0.41867792609999999" alpha="1" colorSpace="calibratedRGB"/>
                                                             <nil key="highlightedColor"/>
@@ -249,9 +263,9 @@
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="nbg-4b-fvK" firstAttribute="leading" secondItem="LZ4-C2-WzF" secondAttribute="leading" constant="16" id="Jdo-ws-1K2"/>
-                                        <constraint firstAttribute="bottom" secondItem="5Vd-7o-rk2" secondAttribute="bottom" constant="16" id="PYs-pQ-ht7"/>
                                         <constraint firstItem="nbg-4b-fvK" firstAttribute="top" secondItem="LZ4-C2-WzF" secondAttribute="top" constant="16" id="b5B-6y-wKB"/>
                                         <constraint firstAttribute="trailing" secondItem="5Vd-7o-rk2" secondAttribute="trailing" constant="16" id="bTz-2S-cjQ"/>
+                                        <constraint firstAttribute="bottom" secondItem="5Vd-7o-rk2" secondAttribute="bottom" constant="16" id="n0T-46-XZp"/>
                                         <constraint firstItem="5Vd-7o-rk2" firstAttribute="top" secondItem="LZ4-C2-WzF" secondAttribute="top" constant="16" id="wuE-gC-jaZ"/>
                                         <constraint firstItem="5Vd-7o-rk2" firstAttribute="leading" secondItem="nbg-4b-fvK" secondAttribute="trailing" constant="12" id="zrr-jC-27J"/>
                                     </constraints>
@@ -260,16 +274,18 @@
                                     <outlet property="fullNameLabel" destination="mmW-nR-t6u" id="Sc9-1W-v1W"/>
                                     <outlet property="locationNameLabel" destination="827-4V-8os" id="BEJ-wT-ypp"/>
                                     <outlet property="locationStackView" destination="zLq-F9-PXN" id="JSK-Yp-Kef"/>
+                                    <outlet property="numberOfRecommendationsLabel" destination="ayT-Bh-wXX" id="x3R-lI-a5a"/>
+                                    <outlet property="numberOfRecommendationsStackView" destination="5NR-PR-JHl" id="LfV-p6-sux"/>
                                     <outlet property="preferredUsernameLabel" destination="WvC-2Q-N4u" id="G5P-Bh-eZ3"/>
                                     <outlet property="professionNameLabel" destination="6gY-o4-5dF" id="8tX-fH-CCS"/>
                                     <outlet property="profilePicImageView" destination="nbg-4b-fvK" id="Y9s-NJ-s1G"/>
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellSearching" rowHeight="64" id="37P-0R-zjM" customClass="SearchingTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="132" width="375" height="64"/>
+                                <rect key="frame" x="0.0" y="150" width="375" height="64"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="37P-0R-zjM" id="4JL-0T-2rI">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="63.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="63"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="CCY-Ke-St3">
@@ -295,10 +311,10 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellNoResults" rowHeight="64" id="Lps-bi-iwi" customClass="NoResultsTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="196" width="375" height="64"/>
+                                <rect key="frame" x="0.0" y="214" width="375" height="64"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Lps-bi-iwi" id="9w8-RR-LeS">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="63.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="63"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No results found" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ara-GL-pDP">
@@ -327,7 +343,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0sD-cv-VBO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3329" y="-283"/>
+            <point key="canvasLocation" x="3328.8000000000002" y="-283.35832083958024"/>
         </scene>
         <!--Profile-->
         <scene sceneID="sKQ-1Q-faz">
@@ -351,7 +367,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="72"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="aJe-nY-JRF" id="pe6-U2-jxt">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="71.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="71"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="SND-dw-PNb">
@@ -397,7 +413,7 @@
                                 <rect key="frame" x="0.0" y="100" width="375" height="64"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="owJ-bO-ECF" id="A0W-pT-ZAF">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="63.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="63"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="N49-YI-R1N">
@@ -426,7 +442,7 @@
                                 <rect key="frame" x="0.0" y="164" width="375" height="64"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Shm-a4-RzR" id="uPm-KD-Wxp">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="63.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="63"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No results found" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ulw-2N-ive">
@@ -467,8 +483,9 @@
         </scene>
     </scenes>
     <resources>
-        <image name="ic_location" width="11" height="17"/>
+        <image name="ic_location_profile" width="12" height="17"/>
         <image name="ic_profession" width="40" height="40"/>
+        <image name="ic_recommendations_search" width="17" height="17"/>
         <image name="ic_search" width="25" height="25"/>
     </resources>
 </document>

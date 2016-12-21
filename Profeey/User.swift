@@ -100,6 +100,19 @@ class User: NSObject {
         self.locationName = locationName
     }
     
+    // Basic with location, no locationId and numberOfRecommendations.
+    convenience init(userId: String?, firstName: String?, lastName: String?, preferredUsername: String?, professionName: String?, profilePicUrl: String?, locationName: String?, numberOfRecommendations: NSNumber?) {
+        self.init()
+        self.userId = userId
+        self.firstName = firstName
+        self.lastName = lastName
+        self.preferredUsername = preferredUsername
+        self.professionName = professionName
+        self.profilePicUrl = profilePicUrl
+        self.locationName = locationName
+        self.numberOfRecommendations = numberOfRecommendations
+    }
+    
     // Partial user for EditVc
     convenience init(userId: String?, firstName: String?, lastName: String?, professionName: String?, profilePicUrl: String?, about: String?, locationId: String?, locationName: String?) {
         self.init()

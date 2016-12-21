@@ -16,7 +16,9 @@ class SearchUserTableViewCell: UITableViewCell {
     @IBOutlet weak var professionNameLabel: UILabel!
     @IBOutlet weak var locationNameLabel: UILabel!
     @IBOutlet weak var locationStackView: UIStackView!
-
+    @IBOutlet weak var numberOfRecommendationsLabel: UILabel!
+    @IBOutlet weak var numberOfRecommendationsStackView: UIStackView!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         self.profilePicImageView.layer.cornerRadius = 4.0
