@@ -208,6 +208,8 @@
 		A9D6888C1E0AEEA400A07D86 /* AWSProfessionLocationsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D6888B1E0AEEA400A07D86 /* AWSProfessionLocationsTable.swift */; };
 		A9D6888E1E0AF3BF00A07D86 /* AWSLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D6888D1E0AF3BF00A07D86 /* AWSLocation.swift */; };
 		A9D688901E0AF3CE00A07D86 /* AWSLocationsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D6888F1E0AF3CE00A07D86 /* AWSLocationsTable.swift */; };
+		A9D688921E0AF9C000A07D86 /* AWSCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D688911E0AF9C000A07D86 /* AWSCategory.swift */; };
+		A9D688941E0AF9CC00A07D86 /* AWSCategoriesTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D688931E0AF9CC00A07D86 /* AWSCategoriesTable.swift */; };
 		A9D716A91D57486100300135 /* PostSmallTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D716A81D57486100300135 /* PostSmallTableViewCell.swift */; };
 		A9D828751E07DDC30085FD95 /* NSNotificationCenterKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D828741E07DDC30085FD95 /* NSNotificationCenterKeys.swift */; };
 		A9D962291DE77180008EA0DF /* AWSMobileClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D962281DE77180008EA0DF /* AWSMobileClient.swift */; };
@@ -464,6 +466,8 @@
 		A9D6888B1E0AEEA400A07D86 /* AWSProfessionLocationsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSProfessionLocationsTable.swift; sourceTree = "<group>"; };
 		A9D6888D1E0AF3BF00A07D86 /* AWSLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSLocation.swift; sourceTree = "<group>"; };
 		A9D6888F1E0AF3CE00A07D86 /* AWSLocationsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSLocationsTable.swift; sourceTree = "<group>"; };
+		A9D688911E0AF9C000A07D86 /* AWSCategory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSCategory.swift; sourceTree = "<group>"; };
+		A9D688931E0AF9CC00A07D86 /* AWSCategoriesTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSCategoriesTable.swift; sourceTree = "<group>"; };
 		A9D716A81D57486100300135 /* PostSmallTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostSmallTableViewCell.swift; sourceTree = "<group>"; };
 		A9D828741E07DDC30085FD95 /* NSNotificationCenterKeys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSNotificationCenterKeys.swift; sourceTree = "<group>"; };
 		A9D962281DE77180008EA0DF /* AWSMobileClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSMobileClient.swift; sourceTree = "<group>"; };
@@ -1089,6 +1093,8 @@
 		A9D688821E0AE03B00A07D86 /* AWSCategories */ = {
 			isa = PBXGroup;
 			children = (
+				A9D688911E0AF9C000A07D86 /* AWSCategory.swift */,
+				A9D688931E0AF9CC00A07D86 /* AWSCategoriesTable.swift */,
 			);
 			name = AWSCategories;
 			sourceTree = "<group>";
@@ -1380,6 +1386,7 @@
 				A9D185D71D7192350073E65F /* AWSLikesTable.swift in Sources */,
 				A9A202F21DDF7F7100408574 /* PRFYCloudSearchProxyClient.swift in Sources */,
 				A9B185931DCF25C000E1981D /* AWSRelationship.swift in Sources */,
+				A9D688941E0AF9CC00A07D86 /* AWSCategoriesTable.swift in Sources */,
 				A99734E41DA12F2D007FCE11 /* PostCategoryCreationDateTableViewCell.swift in Sources */,
 				A903EB5B1D16A3C800B33025 /* ProfeeySimpleCamera.swift in Sources */,
 				A9B750051D8783BE00DDC8C8 /* AWSActivitiesTable.swift in Sources */,
@@ -1483,6 +1490,7 @@
 				A96622051D0EC49700298CE7 /* Colors.swift in Sources */,
 				A9C3C0E81E02B7D2005CA18C /* ForgotPasswordTableViewController.swift in Sources */,
 				A9D334121D801B70005565C2 /* PostButtonsTableViewCell.swift in Sources */,
+				A9D688921E0AF9C000A07D86 /* AWSCategory.swift in Sources */,
 				A9E050F41D83065D00DD992D /* LocationOldTableViewCell.swift in Sources */,
 				A9D688871E0AE06F00A07D86 /* AWSProfessionsTable.swift in Sources */,
 				A97A3F6B1DF027F200FC5AEA /* AWSUserEndpointsTable.swift in Sources */,

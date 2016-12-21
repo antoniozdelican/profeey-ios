@@ -15,6 +15,12 @@ class Category: NSObject {
     var numberOfPosts: NSNumber?
     
     // Generated.
+    var numberOfPostsInt: Int {
+        guard let numberOfPosts = self.numberOfPosts else {
+            return 0
+        }
+        return numberOfPosts.intValue
+    }
     var numberOfPostsString: String? {
         guard let numberOfPosts = self.numberOfPosts else {
             return nil

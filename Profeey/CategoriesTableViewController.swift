@@ -32,7 +32,8 @@ class CategoriesTableViewController: UITableViewController {
         
         self.isShowingPopularCategories = true
         self.isSearchingPopularCategories = true
-        self.getAllCategories()
+        self.scanCategories()
+//        self.getAllCategories()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -200,87 +201,131 @@ class CategoriesTableViewController: UITableViewController {
         self.dismiss(animated: true, completion: nil)
     }
     
+    // MARK: Helpers
+    
+    fileprivate func filterCategories(_ namePrefix: String) {
+        // Clear old.
+        self.regularCategories = []
+        self.regularCategories = self.popularCategories.filter({
+            (category: Category) in
+            if let searchCategoryName = category.categoryName?.lowercased(), searchCategoryName.hasPrefix(namePrefix.lowercased()) {
+                return true
+            } else {
+                return false
+            }
+        })
+        self.regularCategories = self.sortCategories(self.regularCategories)
+        self.isSearchingRegularCategories = false
+        UIView.performWithoutAnimation {
+            self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
+        }
+    }
+    
+    fileprivate func sortCategories(_ categories: [Category]) -> [Category] {
+        return categories.sorted(by: {
+            (category1, category2) in
+            return category1.numberOfPostsInt > category2.numberOfPostsInt
+        })
+    }
+    
     // MARK: AWS
     
-    fileprivate func getAllCategories() {
+    fileprivate func scanCategories() {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYCloudSearchProxyClient.defaultClient().getAllCategories().continue({
-            (task: AWSTask) in
+        PRFYDynamoDBManager.defaultDynamoDBManager().scanCategoriesDynamoDB({
+            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 self.isSearchingPopularCategories = false
-                if let error = task.error {
-                    print("getAllCategories error: \(error)")
+                if let error = error {
+                    print("scanCategories error: \(error)")
                     UIView.performWithoutAnimation {
                         self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
                     }
                 } else {
-                    guard let cloudSearchCategoriesResult = task.result as? PRFYCloudSearchCategoriesResult, let cloudSearchCategories = cloudSearchCategoriesResult.categories else {
+                    guard let awsCategories = response?.items as? [AWSCategory] else {
                         UIView.performWithoutAnimation {
                             self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
                         }
                         return
                     }
-                    for cloudSearchCategory in cloudSearchCategories {
-                        let category = Category(categoryName: cloudSearchCategory.categoryName, numberOfPosts: cloudSearchCategory.numberOfPosts)
+                    for awsCategory in awsCategories {
+                        let category = Category(categoryName: awsCategory._categoryName, numberOfPosts: awsCategory._numberOfPosts)
                         self.popularCategories.append(category)
                     }
+                    self.popularCategories = self.sortCategories(self.popularCategories)
                     UIView.performWithoutAnimation {
                         self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
                     }
                 }
             })
-            return nil
         })
     }
     
-    fileprivate func getCategories(_ namePrefix: String) {
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYCloudSearchProxyClient.defaultClient().getCategories(namePrefix: namePrefix).continue({
-            (task: AWSTask) in
-            DispatchQueue.main.async(execute: {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                self.isSearchingRegularCategories = false
-                if let error = task.error {
-                    print("getCategories error: \(error)")
-                    UIView.performWithoutAnimation {
-                        self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
-                    }
-                } else {
-                    guard let cloudSearchCategoriesResult = task.result as? PRFYCloudSearchCategoriesResult, let cloudSearchCategories = cloudSearchCategoriesResult.categories else {
-                        UIView.performWithoutAnimation {
-                            self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
-                        }
-                        return
-                    }
-                    // Clear old.
-                    self.regularCategories = []
-                    for cloudSearchCategory in cloudSearchCategories {
-                        let category = Category(categoryName: cloudSearchCategory.categoryName, numberOfPosts: cloudSearchCategory.numberOfPosts)
-                        self.regularCategories.append(category)
-                    }
-                    UIView.performWithoutAnimation {
-                        self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
-                    }
-                }
-            })
-            return nil
-        })
-    }
-    
-    // MARK: Helper
-    
-//    fileprivate func filterCategories(_ searchText: String) {
-//        self.searchedCategories = self.allCategories.filter({
-//            (category: Category) in
-//            if let searchCategoryName = category.categoryName?.lowercased(), searchCategoryName.hasPrefix(searchText.lowercased()) {
-//                return true
-//            } else {
-//                return false
-//            }
+//    fileprivate func getAllCategories() {
+//        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+//        PRFYCloudSearchProxyClient.defaultClient().getAllCategories().continue({
+//            (task: AWSTask) in
+//            DispatchQueue.main.async(execute: {
+//                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+//                self.isSearchingPopularCategories = false
+//                if let error = task.error {
+//                    print("getAllCategories error: \(error)")
+//                    UIView.performWithoutAnimation {
+//                        self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
+//                    }
+//                } else {
+//                    guard let cloudSearchCategoriesResult = task.result as? PRFYCloudSearchCategoriesResult, let cloudSearchCategories = cloudSearchCategoriesResult.categories else {
+//                        UIView.performWithoutAnimation {
+//                            self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
+//                        }
+//                        return
+//                    }
+//                    for cloudSearchCategory in cloudSearchCategories {
+//                        let category = Category(categoryName: cloudSearchCategory.categoryName, numberOfPosts: cloudSearchCategory.numberOfPosts)
+//                        self.popularCategories.append(category)
+//                    }
+//                    UIView.performWithoutAnimation {
+//                        self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
+//                    }
+//                }
+//            })
+//            return nil
 //        })
-//        self.categories = self.searchedCategories
-//        self.reloadCategoriesSection()
+//    }
+//    
+//    fileprivate func getCategories(_ namePrefix: String) {
+//        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+//        PRFYCloudSearchProxyClient.defaultClient().getCategories(namePrefix: namePrefix).continue({
+//            (task: AWSTask) in
+//            DispatchQueue.main.async(execute: {
+//                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+//                self.isSearchingRegularCategories = false
+//                if let error = task.error {
+//                    print("getCategories error: \(error)")
+//                    UIView.performWithoutAnimation {
+//                        self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
+//                    }
+//                } else {
+//                    guard let cloudSearchCategoriesResult = task.result as? PRFYCloudSearchCategoriesResult, let cloudSearchCategories = cloudSearchCategoriesResult.categories else {
+//                        UIView.performWithoutAnimation {
+//                            self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
+//                        }
+//                        return
+//                    }
+//                    // Clear old.
+//                    self.regularCategories = []
+//                    for cloudSearchCategory in cloudSearchCategories {
+//                        let category = Category(categoryName: cloudSearchCategory.categoryName, numberOfPosts: cloudSearchCategory.numberOfPosts)
+//                        self.regularCategories.append(category)
+//                    }
+//                    UIView.performWithoutAnimation {
+//                        self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
+//                    }
+//                }
+//            })
+//            return nil
+//        })
 //    }
 }
 
@@ -308,7 +353,8 @@ extension CategoriesTableViewController: AddCategoryTableViewCellDelegate {
             }
             self.categoryName = categoryName
             // Start search for existing categories.
-            self.getCategories(categoryName)
+//            self.getCategories(categoryName)
+            self.filterCategories(categoryName)
         }
     }
 }
