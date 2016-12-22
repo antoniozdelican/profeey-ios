@@ -107,7 +107,13 @@ class EditPostViewController: UIViewController {
                     let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.localizedDescription, cancelButtonTitle: "Ok")
                     self.present(alertController, animated: true, completion: nil)
                 } else {
-                    let userInfo = ["postId": postId, "caption": self.editPost?.caption, "categoryName": self.editPost?.categoryName]
+                    var userInfo = ["postId": postId]
+                    if let caption = self.editPost?.caption {
+                        userInfo["caption"] = caption
+                    }
+                    if let categoryName = self.editPost?.categoryName {
+                        userInfo["categoryName"] = categoryName
+                    }
                     NotificationCenter.default.post(name: NSNotification.Name(rawValue: UpdatePostNotificationKey), object: self, userInfo: userInfo)
                     self.dismiss(animated: false, completion: nil)
                 }

@@ -39,10 +39,10 @@ class PostDetailsTableViewController: UITableViewController {
         }
         
         // Add observers.
-        NotificationCenter.default.addObserver(self, selector: #selector(self.updatePost(_:)), name: NSNotification.Name(UpdatePostNotificationKey), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNumberOfLikes(_:)), name: NSNotification.Name(UpdatePostNumberOfLikesNotificationKey), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNumberOfComments(_:)), name: NSNotification.Name(UpdatePostNumberOfCommentsNotificationKey), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.deletePost(_:)), name: NSNotification.Name(DeletePostNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNotification(_:)), name: NSNotification.Name(UpdatePostNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNumberOfLikesNotification(_:)), name: NSNotification.Name(UpdatePostNumberOfLikesNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNumberOfCommentsNotification(_:)), name: NSNotification.Name(UpdatePostNumberOfCommentsNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.deletePostNotification(_:)), name: NSNotification.Name(DeletePostNotificationKey), object: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -372,7 +372,7 @@ extension PostDetailsTableViewController {
     
     // MARK: NotificationCenterActions
     
-    func updatePost(_ notification: NSNotification) {
+    func updatePostNotification(_ notification: NSNotification) {
         guard let postId = notification.userInfo?["postId"] as? String else {
             return
         }
@@ -386,7 +386,7 @@ extension PostDetailsTableViewController {
         }
     }
     
-    func updatePostNumberOfLikes(_ notification: NSNotification) {
+    func updatePostNumberOfLikesNotification(_ notification: NSNotification) {
         guard let postId = notification.userInfo?["postId"] as? String, let numberOfLikes = notification.userInfo?["numberOfLikes"] as? NSNumber else {
             return
         }
@@ -400,7 +400,7 @@ extension PostDetailsTableViewController {
         }
     }
     
-    func updatePostNumberOfComments(_ notification: NSNotification) {
+    func updatePostNumberOfCommentsNotification(_ notification: NSNotification) {
         guard let postId = notification.userInfo?["postId"] as? String, let numberOfComments = notification.userInfo?["numberOfComments"] as? NSNumber else {
             return
         }
@@ -413,7 +413,7 @@ extension PostDetailsTableViewController {
         }
     }
     
-    func deletePost(_ notification: NSNotification) {
+    func deletePostNotification(_ notification: NSNotification) {
         guard let postId = notification.userInfo?["postId"] as? String else {
             return
         }

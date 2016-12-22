@@ -64,11 +64,11 @@ class ProfileTableViewController: UITableViewController {
         }
         
         // Add observers.
-        NotificationCenter.default.addObserver(self, selector: #selector(self.createPost(_:)), name: NSNotification.Name(CreatePostNotificationKey), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.updatePost(_:)), name: NSNotification.Name(UpdatePostNotificationKey), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNumberOfLikes(_:)), name: NSNotification.Name(UpdatePostNumberOfLikesNotificationKey), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNumberOfComments(_:)), name: NSNotification.Name(UpdatePostNumberOfCommentsNotificationKey), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.deletePost(_:)), name: NSNotification.Name(DeletePostNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.createPostNotification(_:)), name: NSNotification.Name(CreatePostNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNotification(_:)), name: NSNotification.Name(UpdatePostNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNumberOfLikesNotification(_:)), name: NSNotification.Name(UpdatePostNumberOfLikesNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNumberOfCommentsNotification(_:)), name: NSNotification.Name(UpdatePostNumberOfCommentsNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.deletePostNotification(_:)), name: NSNotification.Name(DeletePostNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.followingUserNotification(_:)), name: NSNotification.Name(FollowingUserNotificationKey), object: nil)
     }
 
@@ -517,6 +517,19 @@ class ProfileTableViewController: UITableViewController {
         self.educations = currentEducations + sortedOtherEducations
     }
     
+    fileprivate func sortUserCategories() {
+        self.userCategories = self.userCategories.sorted(by: {
+            (userCategory1, userCategory2) in
+            return userCategory1.numberOfPostsInt > userCategory2.numberOfPostsInt
+        })
+        if self.selectedProfileSegment == ProfileSegment.skills {
+            UIView.performWithoutAnimation {
+                self.tableView.reloadSections(IndexSet([4]), with: UITableViewRowAnimation.none)
+            }
+        }
+    }
+
+    
     // MARK: AWS
     
     fileprivate func getUser(_ userId: String) {
@@ -707,11 +720,7 @@ class ProfileTableViewController: UITableViewController {
                         let userCategory = UserCategory(userId: awsUserCategory._userId, categoryName: awsUserCategory._categoryName, numberOfPosts: awsUserCategory._numberOfPosts)
                         self.userCategories.append(userCategory)
                     }
-                    if self.selectedProfileSegment == ProfileSegment.skills {
-                        UIView.performWithoutAnimation {
-                            self.tableView.reloadSections(IndexSet([4]), with: UITableViewRowAnimation.none)
-                        }
-                    }
+                    self.sortUserCategories()
                 }
             })
         })
@@ -905,11 +914,11 @@ extension ProfileTableViewController {
     
     // MARK: NotificationCenterActions
     
-    func createPost(_ notification: NSNotification) {
+    func createPostNotification(_ notification: NSNotification) {
         guard let post = notification.userInfo?["post"] as? Post else {
             return
         }
-        guard let userId = self.user?.userId, userId == post.userId else {
+        guard self.user?.userId == post.userId else {
             return
         }
         self.posts.insert(post, at: 0)
@@ -921,16 +930,25 @@ extension ProfileTableViewController {
                 self.tableView.insertRows(at: [IndexPath(row: 0, section: 1)], with: UITableViewRowAnimation.none)
             }
         }
-        // Update numberOfPosts
+        // Update numberOfPosts.
         if let numberOfPosts = self.user?.numberOfPosts {
             self.user?.numberOfPosts = NSNumber(value: numberOfPosts.intValue + 1)
         } else {
             self.user?.numberOfPosts = NSNumber(value: 1)
         }
         self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.none)
+        // Update UserCategory.
+        if let categoryName = post.categoryName {
+            if let userCategoyIndex = self.userCategories.index(where: { $0.categoryName == categoryName }) {
+                self.userCategories[userCategoyIndex].numberOfPosts = NSNumber(value: self.userCategories[userCategoyIndex].numberOfPostsInt + 1)
+            } else {
+                self.userCategories.append(UserCategory(userId: self.user?.userId, categoryName: categoryName, numberOfPosts: NSNumber(value: 1)))
+            }
+            self.sortUserCategories()
+        }
     }
     
-    func updatePost(_ notification: NSNotification) {
+    func updatePostNotification(_ notification: NSNotification) {
         guard let postId = notification.userInfo?["postId"] as? String else {
             return
         }
@@ -938,14 +956,33 @@ extension ProfileTableViewController {
             return
         }
         let post = self.posts[postIndex]
+        let oldCategoryName = post.categoryName
         post.caption = notification.userInfo?["caption"] as? String
         post.categoryName = notification.userInfo?["categoryName"] as? String
         if self.selectedProfileSegment == ProfileSegment.posts {
             self.tableView.reloadRows(at: [IndexPath(row: postIndex, section: 1)], with: UITableViewRowAnimation.none)
         }
+        // Update UserCategories.
+        if let categoryName = post.categoryName {
+            if let userCategoyIndex = self.userCategories.index(where: { $0.categoryName == categoryName }) {
+                self.userCategories[userCategoyIndex].numberOfPosts = NSNumber(value: self.userCategories[userCategoyIndex].numberOfPostsInt + 1)
+            } else {
+                self.userCategories.append(UserCategory(userId: self.user?.userId, categoryName: categoryName, numberOfPosts: NSNumber(value: 1)))
+            }
+            self.sortUserCategories()
+        }
+        if let categoryName = oldCategoryName {
+            if let userCategoyIndex = self.userCategories.index(where: { $0.categoryName == categoryName }) {
+                self.userCategories[userCategoyIndex].numberOfPosts = NSNumber(value: self.userCategories[userCategoyIndex].numberOfPostsInt - 1)
+                if self.userCategories[userCategoyIndex].numberOfPostsInt == 0 {
+                    self.userCategories.remove(at: userCategoyIndex)
+                }
+            }
+            self.sortUserCategories()
+        }
     }
     
-    func updatePostNumberOfLikes(_ notification: NSNotification) {
+    func updatePostNumberOfLikesNotification(_ notification: NSNotification) {
         guard let postId = notification.userInfo?["postId"] as? String, let numberOfLikes = notification.userInfo?["numberOfLikes"] as? NSNumber else {
             return
         }
@@ -960,7 +997,7 @@ extension ProfileTableViewController {
         }
     }
     
-    func updatePostNumberOfComments(_ notification: NSNotification) {
+    func updatePostNumberOfCommentsNotification(_ notification: NSNotification) {
         guard let postId = notification.userInfo?["postId"] as? String, let numberOfComments = notification.userInfo?["numberOfComments"] as? NSNumber else {
             return
         }
@@ -974,13 +1011,14 @@ extension ProfileTableViewController {
         }
     }
     
-    func deletePost(_ notification: NSNotification) {
+    func deletePostNotification(_ notification: NSNotification) {
         guard let postId = notification.userInfo?["postId"] as? String else {
             return
         }
         guard let postIndex = self.posts.index(where: { $0.postId == postId }) else {
             return
         }
+        let oldCategoryName = self.posts[postIndex].categoryName
         self.posts.remove(at: postIndex)
         if self.selectedProfileSegment == ProfileSegment.posts {
             if self.posts.count == 0 {
@@ -996,6 +1034,16 @@ extension ProfileTableViewController {
             self.user?.numberOfPosts = NSNumber(value: 0)
         }
         self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.none)
+        // Update UserCategory.
+        if let categoryName = oldCategoryName {
+            if let userCategoyIndex = self.userCategories.index(where: { $0.categoryName == categoryName }) {
+                self.userCategories[userCategoyIndex].numberOfPosts = NSNumber(value: self.userCategories[userCategoyIndex].numberOfPostsInt - 1)
+                if self.userCategories[userCategoyIndex].numberOfPostsInt == 0 {
+                    self.userCategories.remove(at: userCategoyIndex)
+                }
+            }
+            self.sortUserCategories()
+        }
     }
     
     func followingUserNotification(_ notification: NSNotification) {

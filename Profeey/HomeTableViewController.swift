@@ -57,10 +57,10 @@ class HomeTableViewController: UITableViewController {
         }
         
         // Add observers, don't need deinit removeObserver.
-        NotificationCenter.default.addObserver(self, selector: #selector(self.updatePost(_:)), name: NSNotification.Name(UpdatePostNotificationKey), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNumberOfLikes(_:)), name: NSNotification.Name(UpdatePostNumberOfLikesNotificationKey), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNumberOfComments(_:)), name: NSNotification.Name(UpdatePostNumberOfCommentsNotificationKey), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.deletePost(_:)), name: NSNotification.Name(DeletePostNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNotification(_:)), name: NSNotification.Name(UpdatePostNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNumberOfLikesNotification(_:)), name: NSNotification.Name(UpdatePostNumberOfLikesNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNumberOfCommentsNotification(_:)), name: NSNotification.Name(UpdatePostNumberOfCommentsNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.deletePostNotification(_:)), name: NSNotification.Name(DeletePostNotificationKey), object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -504,8 +504,7 @@ class HomeTableViewController: UITableViewController {
                             self.tableView.reloadSections(IndexSet(integer: 0), with: UITableViewRowAnimation.none)
                         }
                         // Notifiy observers (ProfileVc)
-                        let userInfo = ["post": post.copy() as? Post]
-                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: CreatePostNotificationKey), object: self, userInfo: userInfo)
+                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: CreatePostNotificationKey), object: self, userInfo: ["post": post.copy() as! Post])
                     }
                 }
             })
@@ -587,7 +586,11 @@ extension HomeTableViewController {
     
      // MARK: NotificationCenterActions
     
-    func updatePost(_ notification: NSNotification) {
+    func createPostNotification() {
+        // TODO
+    }
+    
+    func updatePostNotification(_ notification: NSNotification) {
         guard let postId = notification.userInfo?["postId"] as? String else {
             return
         }
@@ -602,7 +605,7 @@ extension HomeTableViewController {
         }
     }
     
-    func updatePostNumberOfLikes(_ notification: NSNotification) {
+    func updatePostNumberOfLikesNotification(_ notification: NSNotification) {
         guard let postId = notification.userInfo?["postId"] as? String, let numberOfLikes = notification.userInfo?["numberOfLikes"] as? NSNumber else {
             return
         }
@@ -617,7 +620,7 @@ extension HomeTableViewController {
         }
     }
     
-    func updatePostNumberOfComments(_ notification: NSNotification) {
+    func updatePostNumberOfCommentsNotification(_ notification: NSNotification) {
         guard let postId = notification.userInfo?["postId"] as? String, let numberOfComments = notification.userInfo?["numberOfComments"] as? NSNumber else {
             return
         }
@@ -631,7 +634,7 @@ extension HomeTableViewController {
         }
     }
     
-    func deletePost(_ notification: NSNotification) {
+    func deletePostNotification(_ notification: NSNotification) {
         guard let postId = notification.userInfo?["postId"] as? String else {
             return
         }

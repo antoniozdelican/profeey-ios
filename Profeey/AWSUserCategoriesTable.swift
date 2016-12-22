@@ -35,7 +35,6 @@ class AWSUserCategoriesTable: NSObject, Table {
         partitionKeyName = model.classForCoder.hashKeyAttribute()
         partitionKeyType = "String"
         indexes = [
-            
             AWSUserCategoriesNumberOfPostsSortedIndex(),
             
         ]
@@ -49,7 +48,6 @@ class AWSUserCategoriesTable: NSObject, Table {
     }
 }
 
-// Query all user categories order by numberOfPosts.
 class AWSUserCategoriesNumberOfPostsSortedIndex: NSObject, Index {
     
     var indexName: String? {
@@ -75,12 +73,9 @@ class AWSUserCategoriesNumberOfPostsSortedIndex: NSObject, Index {
             "#userId": "userId",
             "#numberOfPosts": "numberOfPosts",
         ]
-        
-        let numberOfPosts: NSNumber = 0
-        
         queryExpression.expressionAttributeValues = [
             ":userId": userId,
-            ":numberOfPosts": numberOfPosts,
+            ":numberOfPosts": NSNumber(value: 0),
         ]
         queryExpression.scanIndexForward = false
         objectMapper.query(AWSUserCategory.self, expression: queryExpression, completionHandler: completionHandler)

@@ -93,6 +93,7 @@ class AWSPostsPrimaryIndex: NSObject, Index {
     }
 }
 
+// TODO: refactor
 class AWSPostsDateSortedIndex: NSObject, Index {
     
     var indexName: String? {

@@ -28,10 +28,11 @@ class UserCategoryTableViewController: UITableViewController {
         }
         
         // Add observers.
-        NotificationCenter.default.addObserver(self, selector: #selector(self.updatePost(_:)), name: NSNotification.Name(UpdatePostNotificationKey), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNumberOfLikes(_:)), name: NSNotification.Name(UpdatePostNumberOfLikesNotificationKey), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNumberOfComments(_:)), name: NSNotification.Name(UpdatePostNumberOfCommentsNotificationKey), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.deletePost(_:)), name: NSNotification.Name(DeletePostNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.createPostNotification(_:)), name: NSNotification.Name(CreatePostNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNotification(_:)), name: NSNotification.Name(UpdatePostNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNumberOfLikesNotification(_:)), name: NSNotification.Name(UpdatePostNumberOfLikesNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNumberOfCommentsNotification(_:)), name: NSNotification.Name(UpdatePostNumberOfCommentsNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.deletePostNotification(_:)), name: NSNotification.Name(DeletePostNotificationKey), object: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -137,6 +138,7 @@ class UserCategoryTableViewController: UITableViewController {
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 self.isLoadingPosts = false
+                self.refreshControl?.endRefreshing()
                 if let error = error {
                     print("queryUserPostsDateSortedWithCategory error: \(error)")
                     UIView.performWithoutAnimation {
@@ -223,7 +225,25 @@ extension UserCategoryTableViewController {
     
     // MARK: NotificationCenterActions
     
-    func updatePost(_ notification: NSNotification) {
+    func createPostNotification(_ notification: NSNotification) {
+        guard let post = notification.userInfo?["post"] as? Post else {
+            return
+        }
+        guard self.user?.userId == post.userId else {
+            return
+        }
+        guard self.userCategory?.categoryName == post.categoryName else {
+            return
+        }
+        self.posts.insert(post, at: 0)
+        if self.posts.count == 1 {
+            self.tableView.reloadSections(IndexSet([0]), with: UITableViewRowAnimation.none)
+        } else {
+            self.tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.none)
+        }
+    }
+    
+    func updatePostNotification(_ notification: NSNotification) {
         guard let postId = notification.userInfo?["postId"] as? String else {
             return
         }
@@ -234,9 +254,18 @@ extension UserCategoryTableViewController {
         post.caption = notification.userInfo?["caption"] as? String
         post.categoryName = notification.userInfo?["categoryName"] as? String
         self.tableView.reloadRows(at: [IndexPath(row: postIndex, section: 0)], with: UITableViewRowAnimation.none)
+        // Remove if different categoryName.
+        if self.userCategory?.categoryName != post.categoryName {
+            self.posts.remove(at: postIndex)
+            if self.posts.count == 0 {
+                self.tableView.reloadSections(IndexSet([0]), with: UITableViewRowAnimation.none)
+            } else {
+                self.tableView.deleteRows(at: [IndexPath(row: postIndex, section: 0)], with: UITableViewRowAnimation.none)
+            }
+        }
     }
     
-    func updatePostNumberOfLikes(_ notification: NSNotification) {
+    func updatePostNumberOfLikesNotification(_ notification: NSNotification) {
         guard let postId = notification.userInfo?["postId"] as? String, let numberOfLikes = notification.userInfo?["numberOfLikes"] as? NSNumber else {
             return
         }
@@ -249,7 +278,7 @@ extension UserCategoryTableViewController {
         self.tableView.reloadRows(at: [IndexPath(row: postIndex, section: 0)], with: UITableViewRowAnimation.none)
     }
     
-    func updatePostNumberOfComments(_ notification: NSNotification) {
+    func updatePostNumberOfCommentsNotification(_ notification: NSNotification) {
         guard let postId = notification.userInfo?["postId"] as? String, let numberOfComments = notification.userInfo?["numberOfComments"] as? NSNumber else {
             return
         }
@@ -261,7 +290,7 @@ extension UserCategoryTableViewController {
         self.tableView.reloadRows(at: [IndexPath(row: postIndex, section: 0)], with: UITableViewRowAnimation.none)
     }
     
-    func deletePost(_ notification: NSNotification) {
+    func deletePostNotification(_ notification: NSNotification) {
         guard let postId = notification.userInfo?["postId"] as? String else {
             return
         }
@@ -270,7 +299,7 @@ extension UserCategoryTableViewController {
         }
         self.posts.remove(at: postIndex)
         if self.posts.count == 0 {
-            self.tableView.reloadSections(IndexSet(integer: 0), with: UITableViewRowAnimation.none)
+            self.tableView.reloadSections(IndexSet([0]), with: UITableViewRowAnimation.none)
         } else {
             self.tableView.deleteRows(at: [IndexPath(row: postIndex, section: 0)], with: UITableViewRowAnimation.fade)
         }
