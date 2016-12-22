@@ -54,6 +54,9 @@ class UsersTableViewController: UITableViewController {
                 self.queryFollowing(currentUserId)
             }
         }
+        
+        // Add observers.
+        NotificationCenter.default.addObserver(self, selector: #selector(self.followingUserNotification(_:)), name: NSNotification.Name(FollowingUserNotificationKey), object: nil)
     }
     
     override func didReceiveMemoryWarning() {
@@ -332,23 +335,40 @@ class UsersTableViewController: UITableViewController {
     }
 }
 
+extension UsersTableViewController {
+    
+    // MARK: NotificationCenterActions
+    
+    func followingUserNotification(_ notification: NSNotification) {
+        guard let followingId = notification.userInfo?["followingId"] as? String else {
+            return
+        }
+        guard let userIndex = self.users.index(where: { $0.userId == followingId }) else {
+            return
+        }
+        if let followingIdIndex = self.followingIds.index(of: followingId) {
+            self.followingIds.remove(at: followingIdIndex)
+        } else {
+            self.followingIds.append(followingId)
+        }
+        self.tableView.reloadRows(at: [IndexPath(row: userIndex, section: 0)], with: UITableViewRowAnimation.none)
+    }
+}
+
 extension UsersTableViewController: UserTableViewCellDelegate {
     
     func followButtonTapped(_ cell: UserTableViewCell) {
         guard !self.isLoadingFollowingIds, let indexPath = self.tableView.indexPath(for: cell) else {
             return
         }
-        let user = self.users[indexPath.row]
-        guard let userId = user.userId else {
+        guard let userId = self.users[indexPath.row].userId else {
             return
         }
-        if let followingIdIndex = self.followingIds.index(of: userId) {
-            self.followingIds.remove(at: followingIdIndex)
+        if self.followingIds.contains(userId) {
             self.unfollowUser(userId)
         } else {
-            self.followingIds.append(userId)
             self.followUser(userId)
         }
-        self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: FollowingUserNotificationKey), object: self, userInfo: ["followingId": userId])
     }
 }

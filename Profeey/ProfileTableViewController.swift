@@ -69,6 +69,7 @@ class ProfileTableViewController: UITableViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNumberOfLikes(_:)), name: NSNotification.Name(UpdatePostNumberOfLikesNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNumberOfComments(_:)), name: NSNotification.Name(UpdatePostNumberOfCommentsNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.deletePost(_:)), name: NSNotification.Name(DeletePostNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.followingUserNotification(_:)), name: NSNotification.Name(FollowingUserNotificationKey), object: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -996,6 +997,36 @@ extension ProfileTableViewController {
         }
         self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.none)
     }
+    
+    func followingUserNotification(_ notification: NSNotification) {
+        guard let followingId = notification.userInfo?["followingId"] as? String else {
+            return
+        }
+        guard self.user?.userId == followingId else {
+            return
+        }
+        guard self.hasRelationshipLoaded else {
+            return
+        }
+        if self.isFollowing {
+            // Unfollow.
+            self.isFollowing = false
+            if let numberOfFollowers = self.user?.numberOfFollowers, numberOfFollowers.intValue > 0 {
+                self.user?.numberOfFollowers = NSNumber(value: numberOfFollowers.intValue - 1)
+            } else {
+                self.user?.numberOfFollowers = NSNumber(value: 0)
+            }
+        } else {
+            // Follow.
+            self.isFollowing = true
+            if let numberOfFollowers = self.user?.numberOfFollowers {
+                self.user?.numberOfFollowers = NSNumber(value: numberOfFollowers.intValue + 1)
+            } else {
+                self.user?.numberOfFollowers = NSNumber(value: 1)
+            }
+        }
+        self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.none)
+    }
 }
 
 extension ProfileTableViewController: ProfileMainTableViewCellDelegate {
@@ -1028,15 +1059,9 @@ extension ProfileTableViewController: ProfileMainTableViewCellDelegate {
                     // DELETE
                     let deleteAction = UIAlertAction(title: "Unfollow", style: UIAlertActionStyle.destructive, handler: {
                         (alert: UIAlertAction) in
-                        if let numberOfFollowers = self.user?.numberOfFollowers, numberOfFollowers.intValue > 0 {
-                            self.user?.numberOfFollowers = NSNumber(value: numberOfFollowers.intValue - 1)
-                        } else {
-                            self.user?.numberOfFollowers = NSNumber(value: 0)
-                        }
-                        self.isFollowing = false
-                        self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.none)
-                        // In background.
+                        // DynamoDB and Notify observers (self also).
                         self.unfollowUser(followingId)
+                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: FollowingUserNotificationKey), object: self, userInfo: ["followingId": followingId])
                     })
                     alertController.addAction(deleteAction)
                     // CANCEL
@@ -1044,17 +1069,9 @@ extension ProfileTableViewController: ProfileMainTableViewCellDelegate {
                     alertController.addAction(cancelAction)
                     self.present(alertController, animated: true, completion: nil)
                 } else {
-                    if let numberOfFollowers = self.user?.numberOfFollowers {
-                        self.user?.numberOfFollowers = NSNumber(value: numberOfFollowers.intValue + 1)
-                    } else {
-                        self.user?.numberOfFollowers = NSNumber(value: 1)
-                    }
-                    self.isFollowing = true
-                    self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.none)
-                    // In background.
                     self.followUser(followingId)
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: FollowingUserNotificationKey), object: self, userInfo: ["followingId": followingId])
                 }
-                self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.none)
             }
         }
     }

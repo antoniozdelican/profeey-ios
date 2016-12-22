@@ -32,6 +32,9 @@ class DiscoverPeopleTableViewController: UITableViewController {
             self.isLoadingFollowingIds = true
             self.queryFollowing(currentUserId)
         }
+        
+        // Add observers.
+        NotificationCenter.default.addObserver(self, selector: #selector(self.followingUserNotification(_:)), name: NSNotification.Name(FollowingUserNotificationKey), object: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -127,6 +130,41 @@ class DiscoverPeopleTableViewController: UITableViewController {
     }
     
     // MARK: AWS
+    
+//    fileprivate func scanUsers() {
+//        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+//        PRFYDynamoDBManager.defaultDynamoDBManager().scanUsersDynamoDB({
+//            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
+//            DispatchQueue.main.async(execute: {
+//                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+//                self.isSearchingPopularUsers = false
+//                if let error = error {
+//                    print("scanUsers error: \(error)")
+//                    self.tableView.reloadData()
+//                } else {
+//                    guard let awsUsers = response?.items as? [AWSUser] else {
+//                        self.tableView.reloadData()
+//                        return
+//                    }
+//                    for awsUser in awsUsers {
+//                        let user = User(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationName: awsUser._locationName, numberOfRecommendations: awsUser._numberOfRecommendations)
+//                        if user.profilePicUrl == nil {
+//                            user.profilePic = UIImage(named: "ic_no_profile_pic_feed")
+//                        }
+//                        self.popularUsers.append(user)
+//                    }
+//                    self.popularUsers = self.sortUsers(self.popularUsers)
+//                    self.tableView.reloadData()
+//                    
+//                    for user in self.popularUsers {
+//                        if let profilePicUrl = user.profilePicUrl {
+//                            self.downloadProfilePic(profilePicUrl, isPopularUser: true)
+//                        }
+//                    }
+//                }
+//            })
+//        })
+//    }
     
     fileprivate func scanUsers() {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
@@ -272,24 +310,40 @@ class DiscoverPeopleTableViewController: UITableViewController {
     }
 }
 
+extension DiscoverPeopleTableViewController {
+    
+    // MARK: NotificationCenterActions
+    
+    func followingUserNotification(_ notification: NSNotification) {
+        guard let followingId = notification.userInfo?["followingId"] as? String else {
+            return
+        }
+        guard let userIndex = self.users.index(where: { $0.userId == followingId }) else {
+            return
+        }
+        if let followingIdIndex = self.followingIds.index(of: followingId) {
+            self.followingIds.remove(at: followingIdIndex)
+        } else {
+            self.followingIds.append(followingId)
+        }
+        self.tableView.reloadRows(at: [IndexPath(row: userIndex, section: 0)], with: UITableViewRowAnimation.none)
+    }
+}
+
 extension DiscoverPeopleTableViewController: DiscoverUserTableViewCellDelegate {
     
     func followButtonTapped(_ cell: DiscoverUserTableViewCell) {
         guard !self.isLoadingFollowingIds, let indexPath = self.tableView.indexPath(for: cell) else {
             return
         }
-        let user = self.users[indexPath.row]
-        guard let userId = user.userId else {
+        guard let userId = self.users[indexPath.row].userId else {
             return
         }
-        if let followingIdIndex = self.followingIds.index(of: userId) {
-            self.followingIds.remove(at: followingIdIndex)
+        if self.followingIds.contains(userId) {
             self.unfollowUser(userId)
         } else {
-            self.followingIds.append(userId)
             self.followUser(userId)
         }
-        self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
-        
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: FollowingUserNotificationKey), object: self, userInfo: ["followingId": userId])
     }
 }

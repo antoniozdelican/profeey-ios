@@ -13,3 +13,5 @@ let UpdatePostNotificationKey: String = "UpdatePostNotificationKey"
 let UpdatePostNumberOfLikesNotificationKey: String = "UpdatePostNumberOfLikesNotificationKey"
 let UpdatePostNumberOfCommentsNotificationKey: String = "UpdatePostNumberOfCommentsNotificationKey"
 let DeletePostNotificationKey: String = "DeletePostNotificationKey"
+
+let FollowingUserNotificationKey: String = "FollowingUserNotificationKey"
