@@ -69,6 +69,9 @@ class CaptureScrollViewController: UIViewController {
     
     fileprivate func configureNavigationItems() {
         Bundle.main.loadNibNamed("AlbumButton", owner: self, options: nil)
+        self.albumButton?.transform = CGAffineTransform(scaleX: -1.0, y: 1.0)
+        self.albumButton?.titleLabel?.transform = CGAffineTransform(scaleX: -1.0, y: 1.0)
+        self.albumButton?.imageView?.transform = CGAffineTransform(scaleX: -1.0, y: 1.0)
         self.albumButton?.addTarget(self, action: #selector(self.albumButtonTapped(_:)), for: UIControlEvents.touchUpInside)
         self.flashBarButtonItem = UIBarButtonItem(image: UIImage(named: "ic_flash_auto"), style: UIBarButtonItemStyle.plain, target: self, action: #selector(self.flashBarButtonTapped(_:)))
         self.navigationItem.title = "Camera"
