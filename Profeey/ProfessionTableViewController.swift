@@ -162,7 +162,7 @@ class ProfessionTableViewController: UITableViewController {
                         return
                     }
                     for awsUser in awsUsers {
-                        let user = User(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationName: awsUser._locationName, numberOfRecommendations: awsUser._numberOfRecommendations)
+                        let user = LocationUser(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationId: awsUser._locationId, locationName: awsUser._locationName, numberOfRecommendations: awsUser._numberOfRecommendations)
                         if user.profilePicUrl == nil {
                             user.profilePic = UIImage(named: "ic_no_profile_pic_feed")
                         }

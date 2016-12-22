@@ -1,20 +1,20 @@
 //
-//  CurrentUser.swift
+//  EditUser.swift
 //  Profeey
 //
-//  Created by Antonio Zdelican on 16/10/16.
+//  Created by Antonio Zdelican on 22/12/16.
 //  Copyright © 2016 Profeey. All rights reserved.
 //
 
 import Foundation
 
-class CurrentUser: User {
+class EditUser: User {
     
     override init() {
         super.init()
     }
     
-    convenience init(userId: String?, firstName: String?, lastName: String?, preferredUsername: String?, professionName: String?, profilePicUrl: String?, locationId: String?, locationName: String?) {
+    convenience init(userId: String?, firstName: String?, lastName: String?, preferredUsername: String?, professionName: String?, profilePicUrl: String?, locationId: String?, locationName: String?, about: String?) {
         self.init()
         self.userId = userId
         self.firstName = firstName
@@ -24,5 +24,6 @@ class CurrentUser: User {
         self.profilePicUrl = profilePicUrl
         self.locationId = locationId
         self.locationName = locationName
+        self.about = about
     }
 }

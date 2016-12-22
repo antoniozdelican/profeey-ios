@@ -29,7 +29,7 @@ class EditProfileTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.contentInset = UIEdgeInsetsMake(-1.0, 0.0, 0.0, 0.0)
-        self.user = User(userId: self.originalUser?.userId, firstName: self.originalUser?.firstName, lastName: self.originalUser?.lastName, professionName: self.originalUser?.professionName, profilePicUrl: self.originalUser?.profilePicUrl, about: self.originalUser?.about, locationId: self.originalUser?.locationId, locationName: self.originalUser?.locationName)
+        self.user = EditUser(userId: self.originalUser?.userId, firstName: self.originalUser?.firstName, lastName: self.originalUser?.lastName, preferredUsername: self.originalUser?.preferredUsername, professionName: self.originalUser?.professionName, profilePicUrl: self.originalUser?.profilePicUrl, locationId: self.originalUser?.locationId, locationName: self.originalUser?.locationName, about: self.originalUser?.about)
         self.user?.profilePic = self.originalUser?.profilePic
     }
 

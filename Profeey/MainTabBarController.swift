@@ -108,7 +108,7 @@ class MainTabBarController: UITabBarController {
                         self.showMissingUsernameFlow()
                         return
                     }
-                    let currentUser = CurrentUser(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationName: awsUser._locationName)
+                    let currentUser = CurrentUser(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationId: awsUser._locationId, locationName: awsUser._locationName)
                     // Store properties.
                     PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB = currentUser
                     // Get profilePic.
