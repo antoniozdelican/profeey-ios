@@ -308,26 +308,6 @@ extension EditProfileTableViewController: EditAboutTableViewCellDelegate {
     }
 }
 
-//extension EditProfileTableViewController: UITextViewDelegate {
-//    
-//    func textViewDidChange(_ textView: UITextView) {
-//        if textView.text.trimm().isEmpty {
-//            self.editAboutDelegate?.toggleAboutFakePlaceholderLabel(false)
-//        } else {
-//            self.editAboutDelegate?.toggleAboutFakePlaceholderLabel(true)
-//        }
-//        self.user?.about = textView.text.trimm().isEmpty ? nil : textView.text.trimm()
-//        
-//        // Changing height of the cell
-//        let currentOffset = self.tableView.contentOffset
-//        UIView.setAnimationsEnabled(false)
-//        self.tableView.beginUpdates()
-//        self.tableView.endUpdates()
-//        UIView.setAnimationsEnabled(true)
-//        self.tableView.setContentOffset(currentOffset, animated: false)
-//    }
-//}
-
 extension EditProfileTableViewController: LocationsTableViewControllerDelegate {
     
     func didSelectLocation(_ location: Location) {

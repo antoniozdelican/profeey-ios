@@ -45,7 +45,7 @@ class UserCategoryTableViewController: UITableViewController {
         if let destinationViewController = segue.destination as? PostDetailsTableViewController,
             let cell = sender as? PostSmallTableViewCell,
             let indexPath = self.tableView.indexPath(for: cell) {
-            destinationViewController.post = self.posts[indexPath.row].copy() as? Post
+            destinationViewController.post = self.posts[indexPath.row].copyPost()
         }
     }
 

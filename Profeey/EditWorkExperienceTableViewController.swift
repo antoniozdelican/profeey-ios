@@ -9,18 +9,12 @@
 import UIKit
 import AWSMobileHubHelper
 
-protocol EditWorkExperienceTableViewControllerDelegate {
-    func didEditWorkExperience(_ worExperience: WorkExperience, isNewWorkExperience: Bool, indexPath: IndexPath?)
-}
-
 class EditWorkExperienceTableViewController: UITableViewController {
     
     @IBOutlet weak var saveButton: UIBarButtonItem!
     
     var workExperience: WorkExperience?
     var isNewWorkExperience: Bool = true
-    var indexPath: IndexPath?
-    var editWorkExperienceTableViewControllerDelegate: EditWorkExperienceTableViewControllerDelegate?
     
     fileprivate var fromDatePickerActive: Bool = false
     fileprivate var toDatePickerActive: Bool = false
@@ -265,7 +259,7 @@ class EditWorkExperienceTableViewController: UITableViewController {
                         return
                     }
                     let workExperience = WorkExperience(userId: awsWorkExperience._userId, workExperienceId: awsWorkExperience._workExperienceId, title: awsWorkExperience._title, organization: awsWorkExperience._organization, workDescription: awsWorkExperience._workDescription, fromMonth: awsWorkExperience._fromMonth, fromYear: awsWorkExperience._fromYear, toMonth: awsWorkExperience._toMonth, toYear: awsWorkExperience._toYear)
-                    self.editWorkExperienceTableViewControllerDelegate?.didEditWorkExperience(workExperience, isNewWorkExperience: self.isNewWorkExperience, indexPath: self.indexPath)
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: CreateWorkExperienceNotificationKey), object: self, userInfo: ["workExperience": workExperience])
                     self.dismiss(animated: true, completion: nil)
                 }
             })
@@ -274,10 +268,7 @@ class EditWorkExperienceTableViewController: UITableViewController {
     }
     
     fileprivate func updateWorkExperience() {
-        guard let workExperience = self.workExperience else {
-            return
-        }
-        guard let workExperienceId = workExperience.workExperienceId else {
+        guard let workExperience = self.workExperience, let workExperienceId = workExperience.workExperienceId else {
             return
         }
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
@@ -297,7 +288,7 @@ class EditWorkExperienceTableViewController: UITableViewController {
                         return
                     }
                     let workExperience = WorkExperience(userId: awsWorkExperienceUpdate._userId, workExperienceId: awsWorkExperienceUpdate._workExperienceId, title: awsWorkExperienceUpdate._title, organization: awsWorkExperienceUpdate._organization, workDescription: awsWorkExperienceUpdate._workDescription, fromMonth: awsWorkExperienceUpdate._fromMonth, fromYear: awsWorkExperienceUpdate._fromYear, toMonth: awsWorkExperienceUpdate._toMonth, toYear: awsWorkExperienceUpdate._toYear)
-                    self.editWorkExperienceTableViewControllerDelegate?.didEditWorkExperience(workExperience, isNewWorkExperience: self.isNewWorkExperience, indexPath: self.indexPath)
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: UpdateWorkExperienceNotificationKey), object: self, userInfo: ["workExperience": workExperience])
                     self.dismiss(animated: true, completion: nil)
                 }
             })

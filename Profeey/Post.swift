@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Post: NSObject, NSCopying {
+class Post: NSObject {
     
     // Properties.
     var userId: String?
@@ -83,8 +83,9 @@ class Post: NSObject, NSCopying {
         self.user = user
     }
     
-    // Used to copy Post object for PostDetailsVc.
-    func copy(with zone: NSZone? = nil) -> Any {
+    // MARK: Custom copying.
+    
+    func copyPost() -> Post {
         let post = Post(userId: userId, postId: postId, creationDate: creationDate, caption: caption, categoryName: categoryName, imageUrl: imageUrl, imageWidth: imageWidth, imageHeight: imageHeight, numberOfLikes: numberOfLikes, numberOfComments: numberOfComments, user: user)
         post.image = image
         return post

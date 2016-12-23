@@ -9,18 +9,12 @@
 import UIKit
 import AWSMobileHubHelper
 
-protocol EditEducationTableViewControllerDelegate {
-    func didEditEducation(_ education: Education, isNewEducation: Bool, indexPath: IndexPath?)
-}
-
 class EditEducationTableViewController: UITableViewController {
     
     @IBOutlet weak var saveButton: UIBarButtonItem!
     
     var education: Education?
     var isNewEducation: Bool = true
-    var indexPath: IndexPath?
-    var editEducationTableViewControllerDelegate: EditEducationTableViewControllerDelegate?
     
     fileprivate var fromDatePickerActive: Bool = false
     fileprivate var toDatePickerActive: Bool = false
@@ -266,7 +260,7 @@ class EditEducationTableViewController: UITableViewController {
                         return
                     }
                     let education = Education(userId: awsEducation._userId, educationId: awsEducation._educationId, school: awsEducation._school, fieldOfStudy: awsEducation._fieldOfStudy, educationDescription: awsEducation._educationDescription, fromMonth: awsEducation._fromMonth, fromYear: awsEducation._fromYear, toMonth: awsEducation._toMonth, toYear: awsEducation._toYear)
-                    self.editEducationTableViewControllerDelegate?.didEditEducation(education, isNewEducation: self.isNewEducation, indexPath: self.indexPath)
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: CreateEducationNotificationKey), object: self, userInfo: ["education": education])
                     self.dismiss(animated: true, completion: nil)
                 }
             })
@@ -298,7 +292,7 @@ class EditEducationTableViewController: UITableViewController {
                         return
                     }
                     let education = Education(userId: awsEducationUpdate._userId, educationId: awsEducationUpdate._educationId, school: awsEducationUpdate._school, fieldOfStudy: awsEducationUpdate._fieldOfStudy, educationDescription: awsEducationUpdate._educationDescription, fromMonth: awsEducationUpdate._fromMonth, fromYear: awsEducationUpdate._fromYear, toMonth: awsEducationUpdate._toMonth, toYear: awsEducationUpdate._toYear)
-                    self.editEducationTableViewControllerDelegate?.didEditEducation(education, isNewEducation: self.isNewEducation, indexPath: self.indexPath)
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: UpdateEducationNotificationKey), object: self, userInfo: ["education": education])
                     self.dismiss(animated: true, completion: nil)
                 }
             })

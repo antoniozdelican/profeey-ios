@@ -119,21 +119,23 @@ class ProfileTableViewController: UITableViewController {
         }
         if let destinationViewController = segue.destination as? PostDetailsTableViewController,
             let indexPath = sender as? IndexPath {
-            // Copy Post object to separate data.
-            destinationViewController.post = self.posts[indexPath.row].copy() as? Post
+            destinationViewController.post = self.posts[indexPath.row].copyPost()
         }
         if let destinationViewController = segue.destination as? UserCategoryTableViewController,
             let cell = sender as? UserCategoryTableViewCell,
             let indexPath = self.tableView.indexPath(for: cell) {
+            // TODO: refactor
             destinationViewController.user = self.user
             destinationViewController.userCategory = self.userCategories[indexPath.row]
         }
         if let destinationViewController = segue.destination as? UINavigationController,
             let childViewController = destinationViewController.childViewControllers[0] as? AddRecommendationTableViewController {
+            // TODO: refactor
             childViewController.user = self.user
             childViewController.addRecommendationTableViewControllerDelegate = self
         }
         if let destinationViewController = segue.destination as? RecommendationsTableViewController {
+            // TODO: refactor ? or just send userId
             destinationViewController.user = self.user
         }
     }
@@ -1181,7 +1183,6 @@ extension ProfileTableViewController: ProfileEmptyTableViewCellDelegate {
     }
 }
 
-// TODO: refactor
 extension ProfileTableViewController: ExperiencesTableViewControllerDelegate {
     
     func workExperiencesUpdated(_ workExperiences: [WorkExperience]) {

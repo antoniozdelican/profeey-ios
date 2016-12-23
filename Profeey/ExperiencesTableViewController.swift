@@ -34,6 +34,12 @@ class ExperiencesTableViewController: UITableViewController {
         
         self.sortWorkExperiencesByToDate()
         self.sortEducationsByToDate()
+        
+        // Add observers.
+        NotificationCenter.default.addObserver(self, selector: #selector(self.createWorkExperienceNotification(_:)), name: NSNotification.Name(CreateWorkExperienceNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.updateWorkExperienceNotification(_:)), name: NSNotification.Name(UpdateWorkExperienceNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.createEducationNotification(_:)), name: NSNotification.Name(CreateEducationNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.updateEducationNotification(_:)), name: NSNotification.Name(UpdateEducationNotificationKey), object: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -45,26 +51,23 @@ class ExperiencesTableViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let navigationViewController = segue.destination as? UINavigationController,
             let childViewController = navigationViewController.childViewControllers[0] as? EditWorkExperienceTableViewController {
-            if let indexPath = sender as? IndexPath {
-                // TODO: refactor as copy.
-                childViewController.workExperience = self.workExperiences[indexPath.row]
+            if let cell = sender as? WorkExperienceTableViewCell,
+                let indexPath = self.tableView.indexPath(for: cell) {
+                childViewController.workExperience = self.workExperiences[indexPath.row].copy() as? WorkExperience
                 childViewController.isNewWorkExperience = false
-                childViewController.indexPath = indexPath
             } else {
                 childViewController.isNewWorkExperience = true
             }
-            childViewController.editWorkExperienceTableViewControllerDelegate = self
         }
         if let navigationViewController = segue.destination as? UINavigationController,
             let childViewController = navigationViewController.childViewControllers[0] as? EditEducationTableViewController {
-            if let indexPath = sender as? IndexPath {
-                childViewController.education = self.educations[indexPath.row]
+            if let cell = sender as? EducationTableViewCell,
+                let indexPath = self.tableView.indexPath(for: cell) {
+                childViewController.education = self.educations[indexPath.row].copy() as? Education
                 childViewController.isNewEducation = false
-                childViewController.indexPath = indexPath
             } else {
                 childViewController.isNewEducation = true
             }
-            childViewController.editEducationTableViewControllerDelegate = self
         }
     }
 
@@ -208,8 +211,6 @@ class ExperiencesTableViewController: UITableViewController {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 if let error = task.error {
                     print("removeWorkExperience error: \(error)")
-                } else {
-                    print("removeWorkExperience success!")
                 }
             })
             return nil
@@ -224,8 +225,6 @@ class ExperiencesTableViewController: UITableViewController {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 if let error = task.error {
                     print("removeEducation error: \(error)")
-                } else {
-                    print("removeEducation success!")
                 }
             })
             return nil
@@ -234,7 +233,10 @@ class ExperiencesTableViewController: UITableViewController {
     
     // MARK: Helpers
     
-    fileprivate func expandButtonTapped(_ indexPath: IndexPath, experienceType: ExperienceType) {
+    fileprivate func expandButtonTapped(_ cell: UITableViewCell, experienceType: ExperienceType) {
+        guard let indexPath = self.tableView.indexPath(for: cell) else {
+            return
+        }
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
         // DELETE
         let deleteAction = UIAlertAction(title: "Delete", style: UIAlertActionStyle.destructive, handler: {
@@ -275,9 +277,9 @@ class ExperiencesTableViewController: UITableViewController {
         let editAction = UIAlertAction(title: "Edit", style: UIAlertActionStyle.default, handler: {
             (alert: UIAlertAction) in
             if experienceType == ExperienceType.workExperience {
-                self.performSegue(withIdentifier: "segueToEditWorkExperienceVc", sender: indexPath)
+                self.performSegue(withIdentifier: "segueToEditWorkExperienceVc", sender: cell)
             } else {
-                self.performSegue(withIdentifier: "segueToEditEducationVc", sender: indexPath)
+                self.performSegue(withIdentifier: "segueToEditEducationVc", sender: cell)
             }
         })
         alertController.addAction(editAction)
@@ -295,6 +297,9 @@ class ExperiencesTableViewController: UITableViewController {
             return workExperience1.toYearInt! == workExperience2.toYearInt! ? (workExperience1.toMonthInt! > workExperience2.toMonthInt!) : (workExperience1.toYearInt! > workExperience2.toYearInt!)
         })
         self.workExperiences = currentWorkExperiences + sortedOtherWorkExperiences
+        UIView.performWithoutAnimation {
+            self.tableView.reloadSections(IndexSet([0]), with: UITableViewRowAnimation.none)
+        }
     }
     
     fileprivate func sortEducationsByToDate() {
@@ -305,16 +310,63 @@ class ExperiencesTableViewController: UITableViewController {
             return education1.toYearInt! == education2.toYearInt! ? (education1.toMonthInt! > education2.toMonthInt!) : (education1.toYearInt! > education2.toYearInt!)
         })
         self.educations = currentEducations + sortedOtherEducations
+        UIView.performWithoutAnimation {
+            self.tableView.reloadSections(IndexSet([1]), with: UITableViewRowAnimation.none)
+        }
+    }
+}
+
+extension ExperiencesTableViewController {
+    
+    // MARK: NSNotification
+    
+    func createWorkExperienceNotification(_ notification: NSNotification) {
+        guard let workExperience = notification.userInfo?["workExperience"] as? WorkExperience else {
+            return
+        }
+        self.workExperiences.append(workExperience)
+        self.sortWorkExperiencesByToDate()
+        self.experiencesTableViewControllerDelegate?.workExperiencesUpdated(self.workExperiences)
+    }
+    
+    func updateWorkExperienceNotification(_ notification: NSNotification) {
+        guard let workExperience = notification.userInfo?["workExperience"] as? WorkExperience else {
+            return
+        }
+        guard let workExperienceIndex = self.workExperiences.index(where: { $0.workExperienceId == workExperience.workExperienceId }) else {
+            return
+        }
+        self.workExperiences[workExperienceIndex] = workExperience
+        self.sortWorkExperiencesByToDate()
+        self.experiencesTableViewControllerDelegate?.workExperiencesUpdated(self.workExperiences)
+    }
+    
+    func createEducationNotification(_ notification: NSNotification) {
+        guard let education = notification.userInfo?["education"] as? Education else {
+            return
+        }
+        self.educations.append(education)
+        self.sortEducationsByToDate()
+        self.experiencesTableViewControllerDelegate?.educationsUpdated(self.educations)
+    }
+    
+    func updateEducationNotification(_ notification: NSNotification) {
+        guard let education = notification.userInfo?["education"] as? Education else {
+            return
+        }
+        guard let educationIndex = self.educations.index(where: { $0.educationId == education.educationId }) else {
+            return
+        }
+        self.educations[educationIndex] = education
+        self.sortEducationsByToDate()
+        self.experiencesTableViewControllerDelegate?.educationsUpdated(self.educations)
     }
 }
 
 extension ExperiencesTableViewController: WorkExperienceTableViewCellDelegate {
     
     func workExperienceExpandButtonTapped(_ cell: WorkExperienceTableViewCell) {
-        guard let indexPath = self.tableView.indexPath(for: cell) else {
-            return
-        }
-        self.expandButtonTapped(indexPath, experienceType: ExperienceType.workExperience)
+        self.expandButtonTapped(cell, experienceType: ExperienceType.workExperience)
     }
     
     func workDescriptionLabelTapped(_ cell: WorkExperienceTableViewCell) {
@@ -333,10 +385,7 @@ extension ExperiencesTableViewController: WorkExperienceTableViewCellDelegate {
 extension ExperiencesTableViewController: EducationTableViewCellDelegate {
     
     func educationExpandButtonTapped(_ cell: EducationTableViewCell) {
-        guard let indexPath = self.tableView.indexPath(for: cell) else {
-            return
-        }
-        self.expandButtonTapped(indexPath, experienceType: ExperienceType.education)
+        self.expandButtonTapped(cell, experienceType: ExperienceType.education)
     }
     
     func educationDescriptionLabelTapped(_ cell: EducationTableViewCell) {
@@ -349,39 +398,5 @@ extension ExperiencesTableViewController: EducationTableViewCellDelegate {
                 self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
             }
         }
-    }
-}
-
-extension ExperiencesTableViewController: EditWorkExperienceTableViewControllerDelegate {
-    
-    func didEditWorkExperience(_ workExperience: WorkExperience, isNewWorkExperience: Bool, indexPath: IndexPath?) {
-        if isNewWorkExperience {
-            self.workExperiences.append(workExperience)
-        } else {
-            guard let indexPath = indexPath else {
-                return
-            }
-            self.workExperiences[indexPath.row] = workExperience
-        }
-        self.sortWorkExperiencesByToDate()
-        self.tableView.reloadSections(IndexSet(integer: 0), with: UITableViewRowAnimation.automatic)
-        self.experiencesTableViewControllerDelegate?.workExperiencesUpdated(self.workExperiences)
-    }
-}
-
-extension ExperiencesTableViewController: EditEducationTableViewControllerDelegate {
-    
-    func didEditEducation(_ education: Education, isNewEducation: Bool, indexPath: IndexPath?) {
-        if isNewEducation {
-            self.educations.append(education)
-        } else {
-            guard let indexPath = indexPath else {
-                return
-            }
-            self.educations[indexPath.row] = education
-        }
-        self.sortEducationsByToDate()
-        self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.automatic)
-        self.experiencesTableViewControllerDelegate?.educationsUpdated(self.educations)
     }
 }
