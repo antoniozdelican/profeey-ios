@@ -12,12 +12,14 @@ import AWSMobileHubHelper
 class EditPostViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var saveButton: UIButton!
     
     var editPost: EditPost?
     fileprivate var bottomIndexPath: IndexPath = IndexPath(row: 2, section: 0)
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.saveButton.contentEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, 0.0, -8.0)
         self.tableView.dataSource = self
         self.tableView.delegate = self
         self.tableView.scrollToRow(at: self.bottomIndexPath, at: UITableViewScrollPosition.bottom, animated: false)
@@ -80,7 +82,7 @@ class EditPostViewController: UIViewController {
     
     // MARK: IBActions
     
-    @IBAction func doneButtonTapped(_ sender: AnyObject) {
+    @IBAction func saveButtonTapped(_ sender: AnyObject) {
         self.view.endEditing(true)
         self.updatePost()
     }

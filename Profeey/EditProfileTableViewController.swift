@@ -15,6 +15,8 @@ protocol EditAboutDelegate {
 
 class EditProfileTableViewController: UITableViewController {
     
+    @IBOutlet weak var saveButton: UIButton!
+    
     var user: EditUser?
     fileprivate var profilePicUrlToRemove: String?
     fileprivate var newProfilePicImageData: Data?
@@ -23,6 +25,7 @@ class EditProfileTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.contentInset = UIEdgeInsetsMake(-1.0, 0.0, 0.0, 0.0)
+        self.saveButton.contentEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, 0.0, -8.0)
     }
 
     override func didReceiveMemoryWarning() {

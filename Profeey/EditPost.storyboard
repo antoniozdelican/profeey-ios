@@ -170,13 +170,25 @@
                                 <action selector="cancelButtonTapped:" destination="47p-Og-t38" id="5rZ-ZF-286"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="udA-pX-odP">
-                            <connections>
-                                <action selector="doneButtonTapped:" destination="47p-Og-t38" id="Nak-jH-9BE"/>
-                            </connections>
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="bE0-m7-21Y">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Byk-R9-IPo">
+                                <rect key="frame" x="322" y="5" width="37" height="33"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <state key="normal" title="Save">
+                                    <color key="titleColor" red="0.080254554749999998" green="0.61858558649999995" blue="0.93965935710000004" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <state key="disabled">
+                                    <color key="titleColor" red="0.73251521590000002" green="0.7315930128" blue="0.76011711360000001" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="saveButtonTapped:" destination="47p-Og-t38" eventType="touchUpInside" id="fp7-uB-000"/>
+                                </connections>
+                            </button>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="saveButton" destination="Byk-R9-IPo" id="QOP-Jk-n2E"/>
                         <outlet property="tableView" destination="WeU-Kd-wxF" id="Zf2-1T-l0Z"/>
                         <segue destination="sNa-NW-AH5" kind="presentation" identifier="segueToCategoriesVc" id="I5b-Kn-UTm"/>
                     </connections>
