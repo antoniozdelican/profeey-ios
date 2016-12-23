@@ -8,13 +8,20 @@
 
 import UIKit
 
+protocol EditAboutTableViewCellDelegate {
+    func textViewDidChange(_ textView: UITextView)
+}
+
 class EditAboutTableViewCell: UITableViewCell {
     
     @IBOutlet weak var aboutTextView: UITextView!
-    @IBOutlet weak var aboutFakePlaceholderLabel: UILabel!
+    @IBOutlet weak var aboutPlaceholderLabel: UILabel!
+    
+    var editAboutTableViewCellDelegate: EditAboutTableViewCellDelegate?
 
     override func awakeFromNib() {
         super.awakeFromNib()
+        self.aboutTextView.delegate = self
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -22,9 +29,10 @@ class EditAboutTableViewCell: UITableViewCell {
     }
 }
 
-extension EditAboutTableViewCell: EditAboutDelegate {
+extension EditAboutTableViewCell: UITextViewDelegate {
     
-    func toggleAboutFakePlaceholderLabel(_ hidden: Bool) {
-        self.aboutFakePlaceholderLabel.isHidden = hidden
+    func textViewDidChange(_ textView: UITextView) {
+        self.aboutPlaceholderLabel.isHidden = !textView.text.isEmpty
+        self.editAboutTableViewCellDelegate?.textViewDidChange(textView)
     }
 }

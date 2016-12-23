@@ -9,19 +9,13 @@
 import UIKit
 import AWSMobileHubHelper
 
-protocol EditProfileTableViewControllerDelegate {
-    func userUpdated(_ user: User?, profilePicUrlToRemove: String?)
-}
-
 protocol EditAboutDelegate {
     func toggleAboutFakePlaceholderLabel(_ hidden: Bool)
 }
 
 class EditProfileTableViewController: UITableViewController {
     
-    var originalUser: User?
-    var editProfileTableViewControllerDelegate: EditProfileTableViewControllerDelegate?
-    fileprivate var user: User?
+    var user: EditUser?
     fileprivate var profilePicUrlToRemove: String?
     fileprivate var newProfilePicImageData: Data?
     fileprivate var editAboutDelegate: EditAboutDelegate?
@@ -29,8 +23,6 @@ class EditProfileTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.contentInset = UIEdgeInsetsMake(-1.0, 0.0, 0.0, 0.0)
-        self.user = EditUser(userId: self.originalUser?.userId, firstName: self.originalUser?.firstName, lastName: self.originalUser?.lastName, preferredUsername: self.originalUser?.preferredUsername, professionName: self.originalUser?.professionName, profilePicUrl: self.originalUser?.profilePicUrl, locationId: self.originalUser?.locationId, locationName: self.originalUser?.locationName, about: self.originalUser?.about)
-        self.user?.profilePic = self.originalUser?.profilePic
     }
 
     override func didReceiveMemoryWarning() {
@@ -86,11 +78,9 @@ class EditProfileTableViewController: UITableViewController {
         case 3:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellEditAbout", for: indexPath) as! EditAboutTableViewCell
             cell.aboutTextView.text = self.user?.about
-            cell.aboutTextView.delegate = self
-            if let about = self.user?.about {
-                cell.aboutFakePlaceholderLabel.isHidden = !about.isEmpty
-            }
-            self.editAboutDelegate = cell
+            cell.aboutPlaceholderLabel.isHidden = self.user?.about != nil ? true : false
+            cell.editAboutTableViewCellDelegate = self
+            
             return cell
         case 4:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellEditLocation", for: indexPath) as! EditLocationTableViewCell
@@ -126,10 +116,10 @@ class EditProfileTableViewController: UITableViewController {
             self.editProfilePicCellTapped()
         }
         if cell is EditLocationTableViewCell {
-            self.performSegue(withIdentifier: "segueToLocationsVc", sender: self)
+            self.performSegue(withIdentifier: "segueToLocationsVc", sender: cell)
         }
         if cell is EditProfessionTableViewCell {
-            self.performSegue(withIdentifier: "segueToProfessionsVc", sender: self)
+            self.performSegue(withIdentifier: "segueToProfessionsVc", sender: cell)
         }
     }
     
@@ -231,8 +221,11 @@ class EditProfileTableViewController: UITableViewController {
     // MARK: AWS
     
     fileprivate func updateUser() {
+        guard let user = self.user else {
+            return
+        }
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().updateUserDynamoDB(self.user?.firstName, lastName: self.user?.lastName, professionName: self.user?.professionName, profilePicUrl: self.user?.profilePicUrl, about: self.user?.about, locationId: self.user?.locationId, locationName: self.user?.locationName, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().updateUserDynamoDB(user.firstName, lastName: user.lastName, professionName: user.professionName, profilePicUrl: user.profilePicUrl, about: user.about, locationId: user.locationId, locationName: user.locationName, completionHandler: {
             (task: AWSTask) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
@@ -242,7 +235,13 @@ class EditProfileTableViewController: UITableViewController {
                     let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.localizedDescription, cancelButtonTitle: "Ok")
                     self.present(alertController, animated: true, completion: nil)
                 } else {
-                    self.editProfileTableViewControllerDelegate?.userUpdated(self.user, profilePicUrlToRemove: self.profilePicUrlToRemove)
+                    // Don't need to copy user.
+                    var userInfo: [String: Any] = ["user": user]
+                    // Remove old profilePic on ProfileVc.
+                    if let profilePicUrlToRemove = self.profilePicUrlToRemove {
+                        userInfo["profilePicUrlToRemove"] = profilePicUrlToRemove
+                    }
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: UpdateUserNotificationKey), object: self, userInfo: userInfo)
                     self.dismiss(animated: true, completion: nil)
                 }
             })
@@ -295,16 +294,10 @@ extension EditProfileTableViewController: EditLastNameTableViewCellDelegate {
     }
 }
 
-extension EditProfileTableViewController: UITextViewDelegate {
+extension EditProfileTableViewController: EditAboutTableViewCellDelegate {
     
     func textViewDidChange(_ textView: UITextView) {
-        if textView.text.trimm().isEmpty {
-            self.editAboutDelegate?.toggleAboutFakePlaceholderLabel(false)
-        } else {
-            self.editAboutDelegate?.toggleAboutFakePlaceholderLabel(true)
-        }
         self.user?.about = textView.text.trimm().isEmpty ? nil : textView.text.trimm()
-        
         // Changing height of the cell
         let currentOffset = self.tableView.contentOffset
         UIView.setAnimationsEnabled(false)
@@ -314,6 +307,26 @@ extension EditProfileTableViewController: UITextViewDelegate {
         self.tableView.setContentOffset(currentOffset, animated: false)
     }
 }
+
+//extension EditProfileTableViewController: UITextViewDelegate {
+//    
+//    func textViewDidChange(_ textView: UITextView) {
+//        if textView.text.trimm().isEmpty {
+//            self.editAboutDelegate?.toggleAboutFakePlaceholderLabel(false)
+//        } else {
+//            self.editAboutDelegate?.toggleAboutFakePlaceholderLabel(true)
+//        }
+//        self.user?.about = textView.text.trimm().isEmpty ? nil : textView.text.trimm()
+//        
+//        // Changing height of the cell
+//        let currentOffset = self.tableView.contentOffset
+//        UIView.setAnimationsEnabled(false)
+//        self.tableView.beginUpdates()
+//        self.tableView.endUpdates()
+//        UIView.setAnimationsEnabled(true)
+//        self.tableView.setContentOffset(currentOffset, animated: false)
+//    }
+//}
 
 extension EditProfileTableViewController: LocationsTableViewControllerDelegate {
     

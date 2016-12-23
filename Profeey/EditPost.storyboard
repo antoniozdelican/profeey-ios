@@ -46,7 +46,7 @@
                                         <rect key="frame" x="0.0" y="28" width="375" height="501"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="UTf-4x-40a" id="iGO-X2-nUF">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="500"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="500.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="K1l-hD-bgh">
@@ -73,7 +73,7 @@
                                         <rect key="frame" x="0.0" y="529" width="375" height="53"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ySL-Fj-tHQ" id="Ofw-in-Yxy">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="52"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="52.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Write a description..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JZc-Vm-QBL">
@@ -108,24 +108,24 @@
                                         <rect key="frame" x="0.0" y="582" width="375" height="53"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="rnb-OK-bbK" id="Qx9-QP-oj7">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="52"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="52.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_skills" translatesAutoresizingMaskIntoConstraints="NO" id="khR-lT-BR3">
-                                                    <rect key="frame" x="20" y="16" width="21" height="21"/>
+                                                    <rect key="frame" x="20" y="11" width="30" height="31"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="21" id="7cR-B9-T1a"/>
-                                                        <constraint firstAttribute="width" constant="21" id="WKX-d0-Q6K"/>
+                                                        <constraint firstAttribute="height" constant="31" id="7cR-B9-T1a"/>
+                                                        <constraint firstAttribute="width" constant="30" id="WKX-d0-Q6K"/>
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add Skill" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Dnw-hA-wp8">
-                                                    <rect key="frame" x="61" y="16" width="242" height="20.5"/>
+                                                    <rect key="frame" x="70" y="16" width="233" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                     <color key="textColor" red="0.73251521590000002" green="0.7315930128" blue="0.76011711360000001" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KVM-aR-937">
-                                                    <rect key="frame" x="323" y="0.5" width="52" height="52"/>
+                                                    <rect key="frame" x="323" y="1" width="52" height="52"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="52" id="AYE-9R-1d0"/>
                                                         <constraint firstAttribute="height" constant="52" id="y4u-Pc-Gym"/>
@@ -196,6 +196,6 @@
     </scenes>
     <resources>
         <image name="ic_remove_grey" width="14" height="14"/>
-        <image name="ic_skills" width="21" height="21"/>
+        <image name="ic_skills" width="30" height="31"/>
     </resources>
 </document>

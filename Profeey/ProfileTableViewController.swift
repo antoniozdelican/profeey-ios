@@ -23,6 +23,8 @@ class ProfileTableViewController: UITableViewController {
     var user: User?
     var isCurrentUser: Bool = false
     
+    fileprivate var hasUserLoaded = false
+    
     fileprivate var hasRecommendationLoaded = false
     fileprivate var isRecommending: Bool = false
     
@@ -64,6 +66,7 @@ class ProfileTableViewController: UITableViewController {
         }
         
         // Add observers.
+        NotificationCenter.default.addObserver(self, selector: #selector(self.updateUserNotification(_:)), name: NSNotification.Name(UpdateUserNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.createPostNotification(_:)), name: NSNotification.Name(CreatePostNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNotification(_:)), name: NSNotification.Name(UpdatePostNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNumberOfLikesNotification(_:)), name: NSNotification.Name(UpdatePostNumberOfLikesNotificationKey), object: nil)
@@ -103,10 +106,7 @@ class ProfileTableViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destinationViewController = segue.destination as? UINavigationController,
             let childViewController = destinationViewController.childViewControllers[0] as? EditProfileTableViewController {
-            
-            // TODO: refactor
-            childViewController.originalUser = self.user
-            childViewController.editProfileTableViewControllerDelegate = self
+            childViewController.user = self.user?.copyEditUser()
         }
         if let destinationViewController = segue.destination as? UsersTableViewController {
             destinationViewController.usersType = UsersType.followers
@@ -194,7 +194,9 @@ class ProfileTableViewController: UITableViewController {
                 cell.numberOfRecommendationsButton.setTitle(self.user?.numberOfRecommendationsInt.numberToString(), for: UIControlState.normal)
                 if self.isCurrentUser {
                     cell.recommendButton.isHidden = true
-                    cell.setEditButton()
+                    if self.hasUserLoaded {
+                       cell.setEditButton()
+                    }
                 } else {
                     cell.recommendButton.isHidden = false
                     if self.hasRecommendationLoaded {
@@ -548,6 +550,7 @@ class ProfileTableViewController: UITableViewController {
                     }
                     let user = FullUser(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationId: awsUser._locationId, locationName: awsUser._locationName, about: awsUser._about, numberOfFollowers: awsUser._numberOfFollowers, numberOfPosts: awsUser._numberOfPosts, numberOfRecommendations: awsUser._numberOfRecommendations)
                     self.user = user
+                    self.hasUserLoaded = true
                     
                     self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0), IndexPath(row: 1, section: 0)], with: UITableViewRowAnimation.none)
                     self.navigationItem.title = self.user?.preferredUsername
@@ -786,8 +789,8 @@ class ProfileTableViewController: UITableViewController {
         }
     }
     
-    // In background when user deletes/changes profilePic or deletes post.
-    fileprivate func removeImage(_ imageKey: String, postId: String?) {
+    // In background when user deletes/changes profilePic.
+    fileprivate func removeImage(_ imageKey: String) {
         let content = AWSUserFileManager.defaultUserFileManager().content(withKey: imageKey)
         print("removeImageS3:")
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
@@ -800,29 +803,10 @@ class ProfileTableViewController: UITableViewController {
                 } else {
                     print("removeImageS3 success")
                     content?.removeLocal()
-//                    if let postId = postId {
-//                        // If it's post.
-//                        self.removePost(postId)
-//                    }
                 }
             })
         })
     }
-    
-    // In background.
-//    fileprivate func removePost(_ postId: String) {
-//        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-//        PRFYDynamoDBManager.defaultDynamoDBManager().removePostDynamoDB(postId, completionHandler: {
-//            (task: AWSTask) in
-//            DispatchQueue.main.async(execute: {
-//                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-//                if let error = task.error {
-//                    print("removePost error: \(error)")
-//                }
-//            })
-//            return nil
-//        })
-//    }
     
     fileprivate func getRelationship(_ followingId: String) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
@@ -892,10 +876,7 @@ class ProfileTableViewController: UITableViewController {
     }
     
     // In background.
-    fileprivate func removeRecommendation() {
-        guard let recommendingId = self.user?.userId else {
-            return
-        }
+    fileprivate func removeRecommendation(_ recommendingId: String) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         PRFYDynamoDBManager.defaultDynamoDBManager().removeRecommendationDynamoDB(recommendingId, completionHandler: {
             (task: AWSTask) in
@@ -913,6 +894,28 @@ class ProfileTableViewController: UITableViewController {
 extension ProfileTableViewController {
     
     // MARK: NotificationCenterActions
+    
+    func updateUserNotification(_ notification: NSNotification) {
+        guard let editUser = notification.userInfo?["user"] as? EditUser else {
+            return
+        }
+        guard self.user?.userId == editUser.userId else {
+            return
+        }
+        self.user?.firstName = editUser.firstName
+        self.user?.lastName = editUser.lastName
+        self.user?.professionName = editUser.professionName
+        self.user?.profilePicUrl = editUser.profilePicUrl
+        self.user?.locationId = editUser.locationId
+        self.user?.locationName = editUser.locationName
+        self.user?.about = editUser.about
+        self.user?.profilePic = editUser.profilePic
+        self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0), IndexPath(row: 1, section: 0)], with: UITableViewRowAnimation.none)
+        // Remove old profilePic in background.
+        if let profilePicUrlToRemove = notification.userInfo?["profilePicUrlToRemove"] as? String {
+            self.removeImage(profilePicUrlToRemove)
+        }
+    }
     
     func createPostNotification(_ notification: NSNotification) {
         guard let post = notification.userInfo?["post"] as? Post else {
@@ -1094,13 +1097,10 @@ extension ProfileTableViewController: ProfileMainTableViewCellDelegate {
     }
     
     func followButtonTapped() {
-        if self.isCurrentUser {
+        if self.isCurrentUser, self.hasUserLoaded {
             self.performSegue(withIdentifier: "segueToEditProfileVc", sender: self)
         } else {
-            if self.hasRelationshipLoaded {
-                guard let followingId = self.user?.userId else {
-                    return
-                }
+            if self.hasRelationshipLoaded, let followingId = self.user?.userId {
                 if self.isFollowing {
                     let message = ["Unfollow", self.user?.preferredUsername].flatMap({ $0 }).joined(separator: " ") + "?"
                     let alertController = UIAlertController(title: nil, message: message, preferredStyle: UIAlertControllerStyle.actionSheet)
@@ -1126,7 +1126,7 @@ extension ProfileTableViewController: ProfileMainTableViewCellDelegate {
     
     func recommendButtonTapped() {
         if !self.isCurrentUser, self.hasRecommendationLoaded {
-            if self.isRecommending {
+            if self.isRecommending, let recommedingId = self.user?.userId {
                 let message = ["Unrecommend", self.user?.preferredUsername].flatMap({ $0 }).joined(separator: " ") + "?"
                 let alertController = UIAlertController(title: nil, message: message, preferredStyle: UIAlertControllerStyle.actionSheet)
                 // DELETE
@@ -1140,7 +1140,7 @@ extension ProfileTableViewController: ProfileMainTableViewCellDelegate {
                     self.isRecommending = false
                     self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.none)
                     // In background.
-                    self.removeRecommendation()
+                    self.removeRecommendation(recommedingId)
                 })
                 alertController.addAction(deleteAction)
                 // CANCEL
@@ -1181,6 +1181,7 @@ extension ProfileTableViewController: ProfileEmptyTableViewCellDelegate {
     }
 }
 
+// TODO: refactor
 extension ProfileTableViewController: ExperiencesTableViewControllerDelegate {
     
     func workExperiencesUpdated(_ workExperiences: [WorkExperience]) {
@@ -1234,24 +1235,7 @@ extension ProfileTableViewController: EducationTableViewCellDelegate {
     }
 }
 
-extension ProfileTableViewController: EditProfileTableViewControllerDelegate {
-    
-    func userUpdated(_ user: User?, profilePicUrlToRemove: String?) {
-        self.user?.profilePic = user?.profilePic
-        self.user?.profilePicUrl = user?.profilePicUrl
-        self.user?.firstName = user?.firstName
-        self.user?.lastName = user?.lastName
-        self.user?.professionName = user?.professionName
-        self.user?.about = user?.about
-        self.user?.locationName = user?.locationName
-        self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0), IndexPath(row: 1, section: 0)], with: UITableViewRowAnimation.none)
-        // Remove image in background.
-        if let profilePicUrlToRemove = profilePicUrlToRemove {
-            self.removeImage(profilePicUrlToRemove, postId: nil)
-        }
-    }
-}
-
+// TODO: refactor
 extension ProfileTableViewController: AddRecommendationTableViewControllerDelegate {
     
     func recommendationAdded() {

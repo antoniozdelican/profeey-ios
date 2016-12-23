@@ -87,4 +87,12 @@ class User: NSObject {
         self.professionName = professionName
         self.profilePicUrl = profilePicUrl
     }
+    
+    // MARK: Custom copying.
+    
+    func copyEditUser() -> EditUser {
+        let editUser = EditUser(userId: userId, firstName: firstName, lastName: lastName, preferredUsername: preferredUsername, professionName: professionName, profilePicUrl: profilePicUrl, locationId: locationId, locationName: locationName, about: about)
+        editUser.profilePic = self.profilePic
+        return editUser
+    }
 }

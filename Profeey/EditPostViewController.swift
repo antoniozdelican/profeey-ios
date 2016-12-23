@@ -149,9 +149,9 @@ extension EditPostViewController: UITableViewDataSource, UITableViewDelegate {
             return cell
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellEditPostDescription", for: indexPath) as! EditPostDescriptionTableViewCell
-            cell.editPostDescriptionTableViewCellDelegate = self
             cell.descriptionTextView.text = self.editPost?.caption
             cell.descriptionPlaceholderLabel.isHidden = self.editPost?.caption != nil ? true : false
+            cell.editPostDescriptionTableViewCellDelegate = self
             return cell
         case 2:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellEditPostCategory", for: indexPath) as! EditPostCategoryTableViewCell
