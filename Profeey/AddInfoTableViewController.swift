@@ -10,7 +10,7 @@ import UIKit
 
 class AddInfoTableViewController: UITableViewController {
     
-    @IBOutlet weak var doneButton: UIButton!
+    @IBOutlet weak var saveButton: UIButton!
     
     var post: Post?
     var photo: UIImage?
@@ -23,7 +23,7 @@ class AddInfoTableViewController: UITableViewController {
         self.post?.image = self.photo
         
         // Fix alignment for custom rightBarButtonItem.
-        self.doneButton.contentEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, 0.0, -8.0)
+        self.saveButton.contentEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, 0.0, -8.0)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -135,7 +135,7 @@ class AddInfoTableViewController: UITableViewController {
     
     // MARK: IBActions
     
-    @IBAction func doneButtonTapped(_ sender: AnyObject) {
+    @IBAction func saveButtonTapped(_ sender: AnyObject) {
         // Upload is on HomeVc.
         self.performSegue(withIdentifier: "segueUnwindToHomeVc", sender: self)
     }

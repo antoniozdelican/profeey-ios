@@ -163,17 +163,25 @@
                     </view>
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" title="Edit Photo" id="fGv-od-DV5">
-                        <barButtonItem key="rightBarButtonItem" title="Next" id="v1I-o3-dbb">
-                            <color key="tintColor" red="0.14748379589999999" green="0.1474793851" blue="0.14748191829999999" alpha="1" colorSpace="calibratedRGB"/>
-                            <connections>
-                                <action selector="nextButtonTapped:" destination="ixS-Ir-1f0" id="luV-Zp-guM"/>
-                            </connections>
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="Jru-wq-oyC">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="8fA-Wc-xIC">
+                                <rect key="frame" x="323" y="5" width="36" height="33"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <state key="normal" title="Next">
+                                    <color key="titleColor" red="0.080254554749999998" green="0.61858558649999995" blue="0.93965935710000004" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="nextButtonTapped:" destination="ixS-Ir-1f0" eventType="touchUpInside" id="HOk-JR-Ib9"/>
+                                </connections>
+                            </button>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="imageView" destination="CZd-YY-5Tf" id="FNV-v4-fSU"/>
                         <outlet property="imageViewHeightConstraint" destination="bq5-UO-ukJ" id="znP-pn-0zj"/>
                         <outlet property="imageViewWidthConstraint" destination="Eji-Eh-8QF" id="8Lb-48-pSD"/>
+                        <outlet property="nextButton" destination="8fA-Wc-xIC" id="zTr-Vi-zx1"/>
                         <outlet property="scrollView" destination="BWk-eA-M4D" id="IZ6-8G-GjZ"/>
                         <outlet property="scrollViewAspectRatioConstraint" destination="9sw-uF-VyI" id="4od-0Z-a0V"/>
                         <segue destination="FPM-YV-5sc" kind="show" identifier="segueToAddInfoVc" id="Uvs-SQ-TVB"/>
@@ -312,22 +320,22 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Create Post" id="NUf-jD-zmH">
-                        <barButtonItem key="rightBarButtonItem" id="ND5-hO-T2S">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="6U0-RU-lIm">
-                                <rect key="frame" x="314" y="5" width="45" height="33"/>
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="FgV-Fd-LkN">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="aan-i8-wiU">
+                                <rect key="frame" x="324" y="5" width="35" height="33"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <state key="normal" title="Finish">
+                                <state key="normal" title="Post">
                                     <color key="titleColor" red="0.080254554749999998" green="0.61858558649999995" blue="0.93965935710000004" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
                                 <connections>
-                                    <action selector="doneButtonTapped:" destination="FPM-YV-5sc" eventType="touchUpInside" id="KTZ-3M-nRq"/>
+                                    <action selector="saveButtonTapped:" destination="FPM-YV-5sc" eventType="touchUpInside" id="AbD-cf-8sy"/>
                                 </connections>
                             </button>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="doneButton" destination="6U0-RU-lIm" id="kiE-Lz-CjP"/>
+                        <outlet property="saveButton" destination="aan-i8-wiU" id="XRn-6g-Bxx"/>
                         <segue destination="G2u-io-Bjn" kind="presentation" identifier="segueToCategoriesVc" id="Rc1-rU-LXd"/>
                         <segue destination="iKd-2b-WgM" kind="unwind" identifier="segueUnwindToHomeVc" unwindAction="unwindToHomeTableViewController:" id="rLg-hr-15o"/>
                     </connections>
@@ -543,6 +551,6 @@
     <resources>
         <image name="ic_camera_gallery" width="25" height="25"/>
         <image name="ic_remove_grey" width="14" height="14"/>
-        <image name="ic_skills" width="21" height="21"/>
+        <image name="ic_skills" width="30" height="31"/>
     </resources>
 </document>
