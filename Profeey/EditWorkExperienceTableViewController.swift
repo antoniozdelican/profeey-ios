@@ -11,7 +11,7 @@ import AWSMobileHubHelper
 
 class EditWorkExperienceTableViewController: UITableViewController {
     
-    @IBOutlet weak var saveButton: UIBarButtonItem!
+    @IBOutlet weak var saveButton: UIButton!
     
     var workExperience: WorkExperience?
     var isNewWorkExperience: Bool = true
@@ -30,6 +30,8 @@ class EditWorkExperienceTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.tableView.contentInset = UIEdgeInsetsMake(-1.0, 0.0, 0.0, 0.0)
+        self.saveButton.contentEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, 0.0, -8.0)
         self.configureWorkExperience()
     }
 
@@ -190,6 +192,10 @@ class EditWorkExperienceTableViewController: UITableViewController {
             return UITableViewAutomaticDimension
         }
         return 52.0
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 1.0
     }
     
     // MARK: UIScrollViewDelegate

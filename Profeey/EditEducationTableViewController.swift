@@ -10,8 +10,8 @@ import UIKit
 import AWSMobileHubHelper
 
 class EditEducationTableViewController: UITableViewController {
-    
-    @IBOutlet weak var saveButton: UIBarButtonItem!
+
+    @IBOutlet weak var saveButton: UIButton!
     
     var education: Education?
     var isNewEducation: Bool = true
@@ -30,6 +30,8 @@ class EditEducationTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.tableView.contentInset = UIEdgeInsetsMake(-1.0, 0.0, 0.0, 0.0)
+        self.saveButton.contentEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, 0.0, -8.0)
         self.configureEducation()
     }
 
@@ -191,6 +193,10 @@ class EditEducationTableViewController: UITableViewController {
             return UITableViewAutomaticDimension
         }
         return 52.0
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 1.0
     }
     
     // MARK: UIScrollViewDelegate
