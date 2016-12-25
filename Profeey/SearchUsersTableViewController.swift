@@ -36,6 +36,10 @@ class SearchUsersTableViewController: UITableViewController {
         self.isSearchingPopularUsers = true
         self.scanUsers()
 //        self.getAllUsers(self.location?.locationId)
+        
+        // Add observers.
+        NotificationCenter.default.addObserver(self, selector: #selector(self.recommendUserNotification(_:)), name: NSNotification.Name(RecommendUserNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.unrecommendUserNotification(_:)), name: NSNotification.Name(UnrecommendUserNotificationKey), object: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -263,9 +267,8 @@ class SearchUsersTableViewController: UITableViewController {
                 return false
             }
         })
-        self.regularUsers = self.sortUsers(self.regularUsers)
         self.isSearchingRegularUsers = false
-        self.tableView.reloadData()
+        self.sortUsers()
         
         for user in self.regularUsers {
             if let profilePicUrl = user.profilePicUrl {
@@ -274,11 +277,24 @@ class SearchUsersTableViewController: UITableViewController {
         }
     }
     
-    fileprivate func sortUsers(_ users: [User]) -> [User] {
-        return users.sorted(by: {
-            (user1, user2) in
-            return user1.numberOfRecommendationsInt > user2.numberOfRecommendationsInt
-        })
+    fileprivate func sortUsers() {
+        if self.isShowingPopularUsers {
+            self.popularUsers = self.popularUsers.sorted(by: {
+                (user1, user2) in
+                return user1.numberOfRecommendationsInt > user2.numberOfRecommendationsInt
+            })
+            UIView.performWithoutAnimation {
+                self.tableView.reloadSections(IndexSet([0]), with: UITableViewRowAnimation.none)
+            }
+        } else {
+            self.regularUsers = self.popularUsers.sorted(by: {
+                (user1, user2) in
+                return user1.numberOfRecommendationsInt > user2.numberOfRecommendationsInt
+            })
+            UIView.performWithoutAnimation {
+                self.tableView.reloadSections(IndexSet([1]), with: UITableViewRowAnimation.none)
+            }
+        }
     }
     
     // MARK: AWS
@@ -305,8 +321,7 @@ class SearchUsersTableViewController: UITableViewController {
                         }
                         self.popularUsers.append(user)
                     }
-                    self.popularUsers = self.sortUsers(self.popularUsers)
-                    self.tableView.reloadData()
+                    self.sortUsers()
                     
                     for user in self.popularUsers {
                         if let profilePicUrl = user.profilePicUrl {
@@ -340,8 +355,7 @@ class SearchUsersTableViewController: UITableViewController {
                         }
                         self.popularUsers.append(user)
                     }
-                    self.popularUsers = self.sortUsers(self.popularUsers)
-                    self.tableView.reloadData()
+                    self.sortUsers()
                     
                     for user in self.popularUsers {
                         if let profilePicUrl = user.profilePicUrl {
@@ -502,6 +516,43 @@ class SearchUsersTableViewController: UITableViewController {
                     })
             })
         }
+    }
+}
+
+extension SearchUsersTableViewController {
+    
+    // MARK: NSNotifications
+    
+    func recommendUserNotification(_ notification: NSNotification) {
+        guard let recommendingId = notification.userInfo?["recommendingId"] as? String else {
+            return
+        }
+        let users = self.isShowingPopularUsers ? self.popularUsers : self.regularUsers
+        guard let user = users.first(where: { $0.userId == recommendingId }) else {
+            return
+        }
+        if let numberOfRecommendations = user.numberOfRecommendations {
+            user.numberOfRecommendations = NSNumber(value: numberOfRecommendations.intValue + 1)
+        } else {
+            user.numberOfRecommendations = NSNumber(value: 1)
+        }
+        self.sortUsers()
+    }
+    
+    func unrecommendUserNotification(_ notification: NSNotification) {
+        guard let recommendingId = notification.userInfo?["recommendingId"] as? String else {
+            return
+        }
+        let users = self.isShowingPopularUsers ? self.popularUsers : self.regularUsers
+        guard let user = users.first(where: { $0.userId == recommendingId }) else {
+            return
+        }
+        if let numberOfRecommendations = user.numberOfRecommendations, numberOfRecommendations.intValue > 0 {
+            user.numberOfRecommendations = NSNumber(value: numberOfRecommendations.intValue - 1)
+        } else {
+            user.numberOfRecommendations = NSNumber(value: 0)
+        }
+        self.sortUsers()
     }
 }
 

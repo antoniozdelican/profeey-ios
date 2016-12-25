@@ -312,7 +312,7 @@ class DiscoverPeopleTableViewController: UITableViewController {
 
 extension DiscoverPeopleTableViewController {
     
-    // MARK: NotificationCenterActions
+    // MARK: NSNotifications
     
     func followingUserNotification(_ notification: NSNotification) {
         guard let followingId = notification.userInfo?["followingId"] as? String else {

@@ -19,7 +19,7 @@
                     <rect key="frame" x="0.0" y="0.0" width="375" height="32"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="HEADER TITLE" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="enw-mZ-bcO">
-                            <rect key="frame" x="16" y="9" width="84" height="14.5"/>
+                            <rect key="frame" x="12" y="9" width="84" height="14.5"/>
                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
                             <color key="textColor" red="0.4941176471" green="0.4941176471" blue="0.4941176471" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
@@ -40,7 +40,7 @@
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
-                        <constraint firstItem="enw-mZ-bcO" firstAttribute="leading" secondItem="hjW-oI-Vtz" secondAttribute="leading" constant="16" id="C1u-Il-hc9"/>
+                        <constraint firstItem="enw-mZ-bcO" firstAttribute="leading" secondItem="hjW-oI-Vtz" secondAttribute="leading" constant="12" id="C1u-Il-hc9"/>
                         <constraint firstAttribute="trailing" secondItem="uUx-aJ-gfj" secondAttribute="trailing" id="Sn8-tk-RYq"/>
                         <constraint firstItem="enw-mZ-bcO" firstAttribute="centerY" secondItem="hjW-oI-Vtz" secondAttribute="centerY" id="YOv-qQ-2xj"/>
                         <constraint firstAttribute="bottom" secondItem="uUx-aJ-gfj" secondAttribute="bottom" id="auq-Gn-1GQ"/>

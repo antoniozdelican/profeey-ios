@@ -172,7 +172,7 @@ class SearchProfessionsTableViewController: UITableViewController {
             if self.popularProfessions.count == 0 {
                 return 64.0
             }
-            return 72.0
+            return 64.0
         case 1:
             if self.isSearchingRegularProfessions {
                 return 64.0
@@ -180,7 +180,7 @@ class SearchProfessionsTableViewController: UITableViewController {
             if self.regularProfessions.count == 0 {
                 return 64.0
             }
-            return 72.0
+            return 64.0
         default:
             return 0.0
         }

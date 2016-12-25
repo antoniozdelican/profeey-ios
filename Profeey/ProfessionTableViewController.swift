@@ -32,6 +32,10 @@ class ProfessionTableViewController: UITableViewController {
 //            self.getAllUsersWithProfession(professionName, locationId: self.location?.locationId)
             self.queryProfessionUsers(professionName, locationId: self.location?.locationId)
         }
+        
+        // Add observers.
+        NotificationCenter.default.addObserver(self, selector: #selector(self.recommendUserNotification(_:)), name: NSNotification.Name(RecommendUserNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.unrecommendUserNotification(_:)), name: NSNotification.Name(UnrecommendUserNotificationKey), object: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -81,6 +85,8 @@ class ProfessionTableViewController: UITableViewController {
         cell.professionNameLabel.text = user.professionName
         cell.locationNameLabel.text = user.locationName
         cell.locationStackView.isHidden = user.locationName != nil ? false : true
+        cell.numberOfRecommendationsLabel.text = user.numberOfRecommendationsInt.numberToString()
+        cell.numberOfRecommendationsStackView.isHidden = user.numberOfRecommendationsInt > 0 ? false : true
         return cell
     }
     
@@ -137,11 +143,12 @@ class ProfessionTableViewController: UITableViewController {
     
     // MARK: Helpers
     
-    fileprivate func sortUsers(_ users: [User]) -> [User] {
-        return users.sorted(by: {
+    fileprivate func sortUsers() {
+        self.users = self.users.sorted(by: {
             (user1, user2) in
             return user1.numberOfRecommendationsInt > user2.numberOfRecommendationsInt
         })
+        self.tableView.reloadData()
     }
     
     // MARK: AWS
@@ -168,8 +175,7 @@ class ProfessionTableViewController: UITableViewController {
                         }
                         self.users.append(user)
                     }
-                    self.users = self.sortUsers(self.users)
-                    self.tableView.reloadData()
+                    self.sortUsers()
                     
                     for user in self.users {
                         if let profilePicUrl = user.profilePicUrl {
@@ -263,5 +269,40 @@ class ProfessionTableViewController: UITableViewController {
                     })
             })
         }
+    }
+}
+
+extension ProfessionTableViewController {
+    
+    // MARK: NSNotifications
+    
+    func recommendUserNotification(_ notification: NSNotification) {
+        guard let recommendingId = notification.userInfo?["recommendingId"] as? String else {
+            return
+        }
+        guard let user = self.users.first(where: { $0.userId == recommendingId }) else {
+            return
+        }
+        if let numberOfRecommendations = user.numberOfRecommendations {
+            user.numberOfRecommendations = NSNumber(value: numberOfRecommendations.intValue + 1)
+        } else {
+            user.numberOfRecommendations = NSNumber(value: 1)
+        }
+        self.sortUsers()
+    }
+    
+    func unrecommendUserNotification(_ notification: NSNotification) {
+        guard let recommendingId = notification.userInfo?["recommendingId"] as? String else {
+            return
+        }
+        guard let user = self.users.first(where: { $0.userId == recommendingId }) else {
+            return
+        }
+        if let numberOfRecommendations = user.numberOfRecommendations, numberOfRecommendations.intValue > 0 {
+            user.numberOfRecommendations = NSNumber(value: numberOfRecommendations.intValue - 1)
+        } else {
+            user.numberOfRecommendations = NSNumber(value: 0)
+        }
+        self.sortUsers()
     }
 }

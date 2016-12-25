@@ -170,7 +170,7 @@
                                 <action selector="cancelButtonTapped:" destination="47p-Og-t38" id="5rZ-ZF-286"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" style="plain" id="bE0-m7-21Y">
+                        <barButtonItem key="rightBarButtonItem" id="bE0-m7-21Y">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Byk-R9-IPo">
                                 <rect key="frame" x="322" y="5" width="37" height="33"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>

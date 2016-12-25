@@ -225,7 +225,7 @@
                                 <action selector="cancelButtonTapped:" destination="l91-fs-VTM" id="GVD-2z-U6Q"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" style="plain" id="elX-cY-wNn">
+                        <barButtonItem key="rightBarButtonItem" id="elX-cY-wNn">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="83y-hI-AKT">
                                 <rect key="frame" x="322" y="5" width="37" height="33"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>

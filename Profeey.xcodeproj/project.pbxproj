@@ -645,7 +645,7 @@
 			children = (
 				A9C6CB7D1D29296B00863816 /* Extensions */,
 				A9EAD3481D1E8F3500994292 /* AWS */,
-				A9A503971D2FA7DB0030A472 /* Local */,
+				A9A503971D2FA7DB0030A472 /* PRFY */,
 				A903EB4F1D16A35400B33025 /* Camera */,
 				A9E53B671D10661700CD1D6C /* Side */,
 				A9E53B611D10657400CD1D6C /* Main */,
@@ -896,7 +896,7 @@
 			name = Settings;
 			sourceTree = "<group>";
 		};
-		A9A503971D2FA7DB0030A472 /* Local */ = {
+		A9A503971D2FA7DB0030A472 /* PRFY */ = {
 			isa = PBXGroup;
 			children = (
 				A9A503981D2FA9180030A472 /* LocalService.swift */,
@@ -913,7 +913,7 @@
 				A915F8741DC0D9CB0031C45F /* Location.swift */,
 				A91C1CD81DEDA8C2006FBDD4 /* PRFYNotification.swift */,
 			);
-			name = Local;
+			name = PRFY;
 			sourceTree = "<group>";
 		};
 		A9A57B281DD1CB01004F0177 /* Discover People */ = {

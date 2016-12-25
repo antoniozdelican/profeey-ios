@@ -73,6 +73,8 @@ class ProfileTableViewController: UITableViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNumberOfCommentsNotification(_:)), name: NSNotification.Name(UpdatePostNumberOfCommentsNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.deletePostNotification(_:)), name: NSNotification.Name(DeletePostNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.followingUserNotification(_:)), name: NSNotification.Name(FollowingUserNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.recommendUserNotification(_:)), name: NSNotification.Name(RecommendUserNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.unrecommendUserNotification(_:)), name: NSNotification.Name(UnrecommendUserNotificationKey), object: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -132,7 +134,6 @@ class ProfileTableViewController: UITableViewController {
             let childViewController = destinationViewController.childViewControllers[0] as? AddRecommendationTableViewController {
             // TODO: refactor
             childViewController.user = self.user
-            childViewController.addRecommendationTableViewControllerDelegate = self
         }
         if let destinationViewController = segue.destination as? RecommendationsTableViewController {
             // TODO: refactor ? or just send userId
@@ -1080,6 +1081,38 @@ extension ProfileTableViewController {
         }
         self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.none)
     }
+    
+    func recommendUserNotification(_ notification: NSNotification) {
+        guard let recommendingId = notification.userInfo?["recommendingId"] as? String else {
+            return
+        }
+        guard self.user?.userId == recommendingId, self.hasRecommendationLoaded, !self.isRecommending else {
+            return
+        }
+        self.isRecommending = true
+        if let numberOfRecommendations = self.user?.numberOfRecommendations {
+            self.user?.numberOfRecommendations = NSNumber(value: numberOfRecommendations.intValue + 1)
+        } else {
+            self.user?.numberOfRecommendations = NSNumber(value: 1)
+        }
+        self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.none)
+    }
+    
+    func unrecommendUserNotification(_ notification: NSNotification) {
+        guard let recommendingId = notification.userInfo?["recommendingId"] as? String else {
+            return
+        }
+        guard self.user?.userId == recommendingId, self.hasRecommendationLoaded, self.isRecommending else {
+            return
+        }
+        self.isRecommending = false
+        if let numberOfRecommendations = self.user?.numberOfRecommendations, numberOfRecommendations.intValue > 0 {
+            self.user?.numberOfRecommendations = NSNumber(value: numberOfRecommendations.intValue - 1)
+        } else {
+            self.user?.numberOfRecommendations = NSNumber(value: 0)
+        }
+        self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.none)
+    }
 }
 
 extension ProfileTableViewController: ProfileMainTableViewCellDelegate {
@@ -1128,21 +1161,15 @@ extension ProfileTableViewController: ProfileMainTableViewCellDelegate {
     
     func recommendButtonTapped() {
         if !self.isCurrentUser, self.hasRecommendationLoaded {
-            if self.isRecommending, let recommedingId = self.user?.userId {
+            if self.isRecommending, let recommendingId = self.user?.userId {
                 let message = ["Unrecommend", self.user?.preferredUsername].flatMap({ $0 }).joined(separator: " ") + "?"
                 let alertController = UIAlertController(title: nil, message: message, preferredStyle: UIAlertControllerStyle.actionSheet)
                 // DELETE
                 let deleteAction = UIAlertAction(title: "Unrecommend", style: UIAlertActionStyle.destructive, handler: {
                     (alert: UIAlertAction) in
-                    if let numberOfRecommendations = self.user?.numberOfRecommendations, numberOfRecommendations.intValue > 0 {
-                        self.user?.numberOfRecommendations = NSNumber(value: numberOfRecommendations.intValue - 1)
-                    } else {
-                        self.user?.numberOfRecommendations = NSNumber(value: 0)
-                    }
-                    self.isRecommending = false
-                    self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.none)
-                    // In background.
-                    self.removeRecommendation(recommedingId)
+                    // DynamoDB and Notify observers (self also).
+                    self.removeRecommendation(recommendingId)
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: UnrecommendUserNotificationKey), object: self, userInfo: ["recommendingId": recommendingId])
                 })
                 alertController.addAction(deleteAction)
                 // CANCEL
@@ -1233,19 +1260,5 @@ extension ProfileTableViewController: EducationTableViewCellDelegate {
                 self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
             }
         }
-    }
-}
-
-// TODO: refactor
-extension ProfileTableViewController: AddRecommendationTableViewControllerDelegate {
-    
-    func recommendationAdded() {
-        if let numberOfRecommendations = self.user?.numberOfRecommendations {
-            self.user?.numberOfRecommendations = NSNumber(value: numberOfRecommendations.intValue + 1)
-        } else {
-            self.user?.numberOfRecommendations = NSNumber(value: 1)
-        }
-        self.isRecommending = true
-        self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.none)
     }
 }

@@ -302,7 +302,7 @@
                                 <action selector="cancelButtonTapped:" destination="hBJ-e4-Y2L" id="FFY-iP-0oz"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" style="plain" id="bMn-Db-T1l">
+                        <barButtonItem key="rightBarButtonItem" id="bMn-Db-T1l">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="HYU-lT-mQG">
                                 <rect key="frame" x="322" y="5" width="37" height="33"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>

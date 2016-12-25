@@ -9,10 +9,6 @@
 import UIKit
 import AWSMobileHubHelper
 
-protocol AddRecommendationTableViewControllerDelegate {
-    func recommendationAdded()
-}
-
 class AddRecommendationTableViewController: UITableViewController {
 
     @IBOutlet weak var postButton: UIBarButtonItem!
@@ -21,7 +17,6 @@ class AddRecommendationTableViewController: UITableViewController {
     @IBOutlet weak var recommendationFakePlaceholderLabel: UILabel!
     
     var user: User?
-    var addRecommendationTableViewControllerDelegate: AddRecommendationTableViewControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -96,7 +91,7 @@ class AddRecommendationTableViewController: UITableViewController {
                     let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.localizedDescription, cancelButtonTitle: "Ok")
                     self.present(alertController, animated: true, completion: nil)
                 } else {
-                    self.addRecommendationTableViewControllerDelegate?.recommendationAdded()
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: RecommendUserNotificationKey), object: self, userInfo: ["recommendingId": recommendingId])
                     self.dismiss(animated: true, completion: nil)
                 }
             })

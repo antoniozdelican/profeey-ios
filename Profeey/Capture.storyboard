@@ -320,7 +320,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Create Post" id="NUf-jD-zmH">
-                        <barButtonItem key="rightBarButtonItem" style="plain" id="FgV-Fd-LkN">
+                        <barButtonItem key="rightBarButtonItem" id="FgV-Fd-LkN">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="aan-i8-wiU">
                                 <rect key="frame" x="324" y="5" width="35" height="33"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
