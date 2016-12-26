@@ -158,8 +158,8 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
     
     func queryFollowersDynamoDB(_ followingId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         print("queryFollowersDynamoDB:")
-        let awsRelationshipsFollowersIndex = AWSRelationshipsFollowersIndex()
-        awsRelationshipsFollowersIndex.queryFollowers(followingId, completionHandler: completionHandler)
+        let awsRelationshipsFollowingIdIndex = AWSRelationshipsFollowingIdIndex()
+        awsRelationshipsFollowingIdIndex.queryFollowers(followingId, completionHandler: completionHandler)
     }
     
     func queryFollowingDynamoDB(_ userId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {

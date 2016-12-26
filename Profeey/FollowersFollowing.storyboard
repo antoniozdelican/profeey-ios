@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="7tK-id-wui">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Followers Following View Controller-->
+        <scene sceneID="uVP-Wf-w1q">
+            <objects>
+                <viewController id="7tK-id-wui" customClass="FollowersFollowingViewController" customModule="Profeey" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="qrC-SF-SKi"/>
+                        <viewControllerLayoutGuide type="bottom" id="aZ1-va-cAN"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="0gA-BH-Hb9">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CnK-Jf-J5V">
+                                <rect key="frame" x="0.0" y="64" width="375" height="40"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sN5-mC-pCb" userLabel="Separator View">
+                                        <rect key="frame" x="0.0" y="39" width="375" height="1"/>
+                                        <color key="backgroundColor" red="0.86274509799999999" green="0.86274509799999999" blue="0.86274509799999999" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="1" id="Xlf-qO-c8o">
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="constant">
+                                                        <real key="value" value="0.5"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                            </constraint>
+                                        </constraints>
+                                    </view>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YhE-RF-uNn">
+                                        <rect key="frame" x="0.0" y="0.0" width="187.5" height="39"/>
+                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
+                                        <state key="normal" title="Followers">
+                                            <color key="titleColor" red="0.41868340970000001" green="0.41867089270000002" blue="0.41867792609999999" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="followersButtonTapped:" destination="7tK-id-wui" eventType="touchUpInside" id="lVB-V6-h6t"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vbz-tq-BGz">
+                                        <rect key="frame" x="187.5" y="0.0" width="187.5" height="39"/>
+                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
+                                        <state key="normal" title="Following">
+                                            <color key="titleColor" red="0.41868340970000001" green="0.41867089270000002" blue="0.41867792609999999" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="followingButtonTapped:" destination="7tK-id-wui" eventType="touchUpInside" id="drG-0N-uc9"/>
+                                        </connections>
+                                    </button>
+                                    <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dWL-ae-pP8">
+                                        <rect key="frame" x="0.0" y="39" width="375" height="1"/>
+                                        <subviews>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GI7-Sk-QXR">
+                                                <rect key="frame" x="0.0" y="0.0" width="187.5" height="1"/>
+                                                <color key="backgroundColor" red="0.14748379589999999" green="0.1474793851" blue="0.14748191829999999" alpha="1" colorSpace="calibratedRGB"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="1" id="XWX-yP-eeg"/>
+                                                </constraints>
+                                            </view>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstItem="GI7-Sk-QXR" firstAttribute="leading" secondItem="dWL-ae-pP8" secondAttribute="leading" id="BjG-CS-Z2s"/>
+                                            <constraint firstItem="GI7-Sk-QXR" firstAttribute="top" secondItem="dWL-ae-pP8" secondAttribute="top" id="D7G-XD-vX6"/>
+                                            <constraint firstAttribute="trailing" secondItem="GI7-Sk-QXR" secondAttribute="trailing" id="DF1-gI-f5Q"/>
+                                            <constraint firstAttribute="bottom" secondItem="GI7-Sk-QXR" secondAttribute="bottom" id="MAX-E0-dW9"/>
+                                            <constraint firstAttribute="height" constant="1" id="P4s-Xz-FaM"/>
+                                        </constraints>
+                                    </scrollView>
+                                </subviews>
+                                <color key="backgroundColor" red="0.97530043129999999" green="0.97527122499999996" blue="0.97528779509999997" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstItem="GI7-Sk-QXR" firstAttribute="width" secondItem="YhE-RF-uNn" secondAttribute="width" id="3a8-0s-zVf"/>
+                                    <constraint firstAttribute="height" constant="40" id="6Dt-gX-m4B"/>
+                                    <constraint firstAttribute="bottom" secondItem="dWL-ae-pP8" secondAttribute="bottom" id="7T9-Xk-qak"/>
+                                    <constraint firstItem="YhE-RF-uNn" firstAttribute="top" secondItem="CnK-Jf-J5V" secondAttribute="top" id="8AS-Bo-Jeh"/>
+                                    <constraint firstAttribute="bottom" secondItem="sN5-mC-pCb" secondAttribute="bottom" id="PQi-RQ-sV2"/>
+                                    <constraint firstItem="dWL-ae-pP8" firstAttribute="top" secondItem="Vbz-tq-BGz" secondAttribute="bottom" id="Qvr-AZ-RsZ"/>
+                                    <constraint firstItem="Vbz-tq-BGz" firstAttribute="leading" secondItem="YhE-RF-uNn" secondAttribute="trailing" id="TS3-Ie-pyy"/>
+                                    <constraint firstItem="dWL-ae-pP8" firstAttribute="top" secondItem="YhE-RF-uNn" secondAttribute="bottom" id="Unc-r2-AGM"/>
+                                    <constraint firstItem="dWL-ae-pP8" firstAttribute="leading" secondItem="CnK-Jf-J5V" secondAttribute="leading" id="ZJ9-S9-GYJ"/>
+                                    <constraint firstAttribute="trailing" secondItem="Vbz-tq-BGz" secondAttribute="trailing" id="cxb-Qj-DrF"/>
+                                    <constraint firstItem="sN5-mC-pCb" firstAttribute="leading" secondItem="CnK-Jf-J5V" secondAttribute="leading" id="fKA-2u-s2e"/>
+                                    <constraint firstItem="YhE-RF-uNn" firstAttribute="width" secondItem="Vbz-tq-BGz" secondAttribute="width" id="fxd-x4-DK7"/>
+                                    <constraint firstItem="YhE-RF-uNn" firstAttribute="leading" secondItem="CnK-Jf-J5V" secondAttribute="leading" id="ggL-YD-zEK"/>
+                                    <constraint firstAttribute="trailing" secondItem="sN5-mC-pCb" secondAttribute="trailing" id="iYo-D5-9tL"/>
+                                    <constraint firstAttribute="trailing" secondItem="dWL-ae-pP8" secondAttribute="trailing" id="vQH-8g-G2s"/>
+                                    <constraint firstItem="Vbz-tq-BGz" firstAttribute="top" secondItem="CnK-Jf-J5V" secondAttribute="top" id="w0J-b2-8kV"/>
+                                </constraints>
+                            </view>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OXr-eT-w9F">
+                                <rect key="frame" x="0.0" y="104" width="375" height="514"/>
+                                <subviews>
+                                    <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QqE-TY-awn">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="514"/>
+                                        <connections>
+                                            <segue destination="GTy-fi-881" kind="embed" identifier="segueToFollowersVc" id="Wcd-fc-lfj"/>
+                                        </connections>
+                                    </containerView>
+                                    <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2vc-qn-53U">
+                                        <rect key="frame" x="375" y="0.0" width="375" height="514"/>
+                                        <connections>
+                                            <segue destination="GTy-fi-881" kind="embed" identifier="segueToFollowingVc" id="pbv-fI-u6v"/>
+                                        </connections>
+                                    </containerView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="QqE-TY-awn" firstAttribute="leading" secondItem="OXr-eT-w9F" secondAttribute="leading" id="0d2-bs-SNJ"/>
+                                    <constraint firstAttribute="trailing" secondItem="2vc-qn-53U" secondAttribute="trailing" id="5yN-IM-iRe"/>
+                                    <constraint firstAttribute="bottom" secondItem="QqE-TY-awn" secondAttribute="bottom" id="9uh-Dm-FdM"/>
+                                    <constraint firstItem="2vc-qn-53U" firstAttribute="leading" secondItem="QqE-TY-awn" secondAttribute="trailing" id="J1q-3U-ahg"/>
+                                    <constraint firstAttribute="bottom" secondItem="2vc-qn-53U" secondAttribute="bottom" id="KZs-em-Bx8"/>
+                                    <constraint firstItem="2vc-qn-53U" firstAttribute="top" secondItem="OXr-eT-w9F" secondAttribute="top" id="ZBV-vA-SFx"/>
+                                    <constraint firstItem="QqE-TY-awn" firstAttribute="top" secondItem="OXr-eT-w9F" secondAttribute="top" id="dKK-om-pLk"/>
+                                    <constraint firstItem="2vc-qn-53U" firstAttribute="height" secondItem="OXr-eT-w9F" secondAttribute="height" id="hck-UG-Co5"/>
+                                    <constraint firstItem="QqE-TY-awn" firstAttribute="height" secondItem="OXr-eT-w9F" secondAttribute="height" id="pMa-Px-u6N"/>
+                                </constraints>
+                            </scrollView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="QqE-TY-awn" firstAttribute="width" secondItem="0gA-BH-Hb9" secondAttribute="width" id="91a-QB-GOK"/>
+                            <constraint firstAttribute="trailing" secondItem="OXr-eT-w9F" secondAttribute="trailing" id="9ku-xV-Fb6"/>
+                            <constraint firstItem="aZ1-va-cAN" firstAttribute="top" secondItem="OXr-eT-w9F" secondAttribute="bottom" id="IhK-oJ-JZf"/>
+                            <constraint firstItem="CnK-Jf-J5V" firstAttribute="leading" secondItem="0gA-BH-Hb9" secondAttribute="leading" id="P2b-SB-K5x"/>
+                            <constraint firstItem="OXr-eT-w9F" firstAttribute="top" secondItem="CnK-Jf-J5V" secondAttribute="bottom" id="S5E-ff-qaM"/>
+                            <constraint firstAttribute="trailing" secondItem="CnK-Jf-J5V" secondAttribute="trailing" id="VjG-1j-mT2"/>
+                            <constraint firstItem="CnK-Jf-J5V" firstAttribute="top" secondItem="qrC-SF-SKi" secondAttribute="bottom" id="af1-lw-eKa"/>
+                            <constraint firstItem="OXr-eT-w9F" firstAttribute="leading" secondItem="0gA-BH-Hb9" secondAttribute="leading" id="o0t-hE-eXD"/>
+                            <constraint firstItem="2vc-qn-53U" firstAttribute="width" secondItem="0gA-BH-Hb9" secondAttribute="width" id="yOS-0p-1yM"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="kPW-ns-ajE"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="followersButton" destination="YhE-RF-uNn" id="w9s-4N-MXh"/>
+                        <outlet property="followingButton" destination="Vbz-tq-BGz" id="3j6-xZ-Uzv"/>
+                        <outlet property="indicatorScrollView" destination="dWL-ae-pP8" id="bLq-4a-XYU"/>
+                        <outlet property="mainScrollView" destination="OXr-eT-w9F" id="Rfy-8L-RER"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="9R9-YG-6SW" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="75" y="-239"/>
+        </scene>
+        <!--Users-->
+        <scene sceneID="jZ6-zS-frK">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Users" id="GTy-fi-881" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="z1n-HU-72k" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="74" y="207"/>
+        </scene>
+    </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="pbv-fI-u6v"/>
+    </inferredMetricsTieBreakers>
+</document>

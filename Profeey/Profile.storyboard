@@ -191,9 +191,9 @@
                                         </stackView>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstAttribute="bottom" secondItem="A3e-qg-cXn" secondAttribute="bottom" priority="750" constant="12" id="6eO-cP-mUB"/>
                                         <constraint firstAttribute="trailing" secondItem="A3e-qg-cXn" secondAttribute="trailing" constant="12" id="U9k-2P-pa3"/>
                                         <constraint firstItem="A3e-qg-cXn" firstAttribute="leading" secondItem="36E-9I-Jlo" secondAttribute="leading" constant="12" id="iAo-qy-3C4"/>
+                                        <constraint firstAttribute="bottom" secondItem="A3e-qg-cXn" secondAttribute="bottom" priority="750" constant="12.5" id="no9-Gg-KUh"/>
                                         <constraint firstItem="A3e-qg-cXn" firstAttribute="top" secondItem="36E-9I-Jlo" secondAttribute="top" constant="12" id="rxS-LH-EdL"/>
                                     </constraints>
                                 </tableViewCellContentView>
@@ -226,7 +226,7 @@
                                             </constraints>
                                         </view>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OBx-8U-91P">
-                                            <rect key="frame" x="0.0" y="1" width="125" height="44"/>
+                                            <rect key="frame" x="0.0" y="1" width="124.5" height="44"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="44" id="wCw-js-cmK"/>
                                             </constraints>
@@ -239,7 +239,7 @@
                                             </connections>
                                         </button>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Uan-f2-SAh">
-                                            <rect key="frame" x="125" y="1" width="125.5" height="44"/>
+                                            <rect key="frame" x="124.5" y="1" width="125.5" height="44"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="44" id="R0N-OV-YS3"/>
                                             </constraints>
@@ -252,7 +252,7 @@
                                             </connections>
                                         </button>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wop-5y-bkV">
-                                            <rect key="frame" x="250.5" y="1" width="124.5" height="44"/>
+                                            <rect key="frame" x="250" y="1" width="125" height="44"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="44" id="T3H-bz-jyl"/>
                                             </constraints>
@@ -278,21 +278,21 @@
                                             </constraints>
                                         </view>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vYp-sU-iiT">
-                                            <rect key="frame" x="0.0" y="45" width="125" height="1"/>
+                                            <rect key="frame" x="0.0" y="45" width="124.5" height="1"/>
                                             <color key="backgroundColor" red="0.1960784314" green="0.1960784314" blue="0.1960784314" alpha="1" colorSpace="calibratedRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="1" id="Yyt-SV-1Gl"/>
                                             </constraints>
                                         </view>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="e9b-Q2-XJt">
-                                            <rect key="frame" x="125" y="45" width="125.5" height="1"/>
+                                            <rect key="frame" x="124.5" y="45" width="125.5" height="1"/>
                                             <color key="backgroundColor" red="0.1960784314" green="0.1960784314" blue="0.1960784314" alpha="1" colorSpace="calibratedRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="1" id="jzx-AW-s8T"/>
                                             </constraints>
                                         </view>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="437-mZ-rQb">
-                                            <rect key="frame" x="250.5" y="45" width="124.5" height="1"/>
+                                            <rect key="frame" x="250" y="45" width="125" height="1"/>
                                             <color key="backgroundColor" red="0.1960784314" green="0.1960784314" blue="0.1960784314" alpha="1" colorSpace="calibratedRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="1" id="g9J-0W-k8t"/>
@@ -729,7 +729,7 @@
                     <connections>
                         <outlet property="settingsButton" destination="aOx-nU-WBU" id="0cv-Zt-l9B"/>
                         <segue destination="riP-oj-LLI" kind="presentation" identifier="segueToEditProfileVc" id="WTS-6i-LAu"/>
-                        <segue destination="Chq-Oe-cUt" kind="show" identifier="segueToUsersVc" id="h6M-ye-y83"/>
+                        <segue destination="Chq-Oe-cUt" kind="show" identifier="segueToFollowersFollowingVc" id="h6M-ye-y83"/>
                         <segue destination="XYQ-tl-NIV" kind="show" identifier="segueToExperiencesVc" id="dhw-SZ-Iqm"/>
                         <segue destination="PJf-uH-Uhs" kind="show" identifier="segueToPostDetailsVc" id="gLq-A9-d4l"/>
                         <segue destination="fRr-CF-EQJ" kind="show" identifier="segueToUserCategoryVc" id="kpB-5t-Lgj"/>
@@ -743,13 +743,13 @@
             </objects>
             <point key="canvasLocation" x="599.20000000000005" y="-1570.1649175412294"/>
         </scene>
-        <!--Users-->
+        <!--FollowersFollowing-->
         <scene sceneID="2pZ-oF-IU2">
             <objects>
-                <viewControllerPlaceholder storyboardName="Users" id="Chq-Oe-cUt" sceneMemberID="viewController"/>
+                <viewControllerPlaceholder storyboardName="FollowersFollowing" id="Chq-Oe-cUt" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VvI-ci-M4k" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1270" y="-1816"/>
+            <point key="canvasLocation" x="1320" y="-1816"/>
         </scene>
         <!--EditProfile-->
         <scene sceneID="R9U-uy-6W5">

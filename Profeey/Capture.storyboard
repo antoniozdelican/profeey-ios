@@ -163,7 +163,7 @@
                     </view>
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" title="Edit Photo" id="fGv-od-DV5">
-                        <barButtonItem key="rightBarButtonItem" style="plain" id="Jru-wq-oyC">
+                        <barButtonItem key="rightBarButtonItem" id="Jru-wq-oyC">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="8fA-Wc-xIC">
                                 <rect key="frame" x="323" y="5" width="36" height="33"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>

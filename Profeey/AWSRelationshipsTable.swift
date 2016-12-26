@@ -38,7 +38,7 @@ class AWSRelationshipsTable: NSObject, Table {
             
             AWSRelationshipsPrimaryIndex(),
             
-            AWSRelationshipsFollowersIndex(),
+            AWSRelationshipsFollowingIdIndex(),
             
         ]
         //sortKeyName = model.classForCoder.rangeKeyAttribute!()
@@ -96,11 +96,11 @@ class AWSRelationshipsPrimaryIndex: NSObject, Index {
 }
 
 // Query followers of the user.
-class AWSRelationshipsFollowersIndex: NSObject, Index {
+class AWSRelationshipsFollowingIdIndex: NSObject, Index {
     
     var indexName: String? {
         
-        return "FollowersIndex"
+        return "FollowingIdIndex"
     }
     
     func supportedOperations() -> [String] {
@@ -115,7 +115,7 @@ class AWSRelationshipsFollowersIndex: NSObject, Index {
     func queryFollowers(_ followingId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
         let queryExpression = AWSDynamoDBQueryExpression()
-        queryExpression.indexName = "FollowersIndex"
+        queryExpression.indexName = "FollowingIdIndex"
         queryExpression.keyConditionExpression = "#followingId = :followingId"
         queryExpression.expressionAttributeNames = ["#followingId": "followingId",]
         queryExpression.expressionAttributeValues = [":followingId": followingId,]

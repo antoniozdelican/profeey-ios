@@ -13,6 +13,7 @@ import AWSDynamoDB
 enum UsersType {
     case likers
     case followers
+    case following
 }
 
 class UsersTableViewController: UITableViewController {
@@ -20,7 +21,7 @@ class UsersTableViewController: UITableViewController {
     var usersType: UsersType?
     // In case of likes.
     var postId: String?
-    // In case of followers.
+    // In case of followers/following.
     var userId: String?
     
     fileprivate var users: [User] = []
@@ -42,11 +43,19 @@ class UsersTableViewController: UITableViewController {
                     self.queryPostLikes(postId)
                 }
             case .followers:
-                self.navigationItem.title = "Followers"
+                //self.navigationItem.title = "Followers"
                 if let followingId = self.userId {
                     self.isLoadingUsers = true
                     self.queryFollowers(followingId)
                 }
+            case .following:
+                return
+                //self.navigationItem.title = "Followers"
+                // TODO
+//                if let followingId = self.userId {
+//                    self.isLoadingUsers = true
+//                    self.queryFollowers(followingId)
+//                }
             }
             if let currentUserId = AWSIdentityManager.defaultIdentityManager().identityId {
                 // Get followings.
@@ -157,6 +166,15 @@ class UsersTableViewController: UITableViewController {
             }
             self.users = []
             self.queryFollowers(followingId)
+        case .following:
+            //TODO
+            return
+//            guard let followingId = self.userId else {
+//                self.refreshControl?.endRefreshing()
+//                return
+//            }
+//            self.users = []
+//            self.queryFollowers(followingId)
         }
     }
     

@@ -110,10 +110,14 @@ class ProfileTableViewController: UITableViewController {
             let childViewController = destinationViewController.childViewControllers[0] as? EditProfileTableViewController {
             childViewController.user = self.user?.copyEditUser()
         }
-        if let destinationViewController = segue.destination as? UsersTableViewController {
-            destinationViewController.usersType = UsersType.followers
+        if let destinationViewController = segue.destination as? FollowersFollowingViewController {
+//            destinationViewController.usersType = UsersType.followers
             destinationViewController.userId = self.user?.userId
         }
+//        if let destinationViewController = segue.destination as? UsersTableViewController {
+//            destinationViewController.usersType = UsersType.followers
+//            destinationViewController.userId = self.user?.userId
+//        }
         if let destinationViewController = segue.destination as? ExperiencesTableViewController {
             destinationViewController.workExperiences = self.workExperiences.map( { $0.copy() as! WorkExperience })
             destinationViewController.educations = self.educations.map( { $0.copy() as! Education })
@@ -1124,7 +1128,7 @@ extension ProfileTableViewController: ProfileMainTableViewCellDelegate {
     }
     
     func numberOfFollowersButtonTapped() {
-        self.performSegue(withIdentifier: "segueToUsersVc", sender: self)
+        self.performSegue(withIdentifier: "segueToFollowersFollowingVc", sender: self)
     }
     
     func numberOfRecommendationsButtonTapped() {
