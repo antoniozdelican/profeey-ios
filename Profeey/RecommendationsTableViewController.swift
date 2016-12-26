@@ -74,7 +74,7 @@ class RecommendationsTableViewController: UITableViewController {
         let recommendation = self.recommendations[indexPath.row]
         let user = recommendation.user
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellRecommendation", for: indexPath) as! RecommendationTableViewCell
-        cell.profilePicImageView.image = user?.profilePic
+        cell.profilePicImageView.image = user?.profilePicUrl != nil ? user?.profilePic : UIImage(named: "ic_no_profile_pic_feed")
         cell.preferredUsernameLabel.text = user?.preferredUsername
         cell.professionNameLabel.text = user?.professionName
         cell.timeLabel.text = recommendation.creationDateString

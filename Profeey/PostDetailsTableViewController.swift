@@ -87,7 +87,7 @@ class PostDetailsTableViewController: UITableViewController {
         switch indexPath.row {
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostUser", for: indexPath) as! PostUserTableViewCell
-            cell.profilePicImageView.image = user?.profilePic
+            cell.profilePicImageView.image = user?.profilePicUrl != nil ? user?.profilePic : UIImage(named: "ic_no_profile_pic_feed")
             cell.preferredUsernameLabel.text = user?.preferredUsername
             cell.professionNameLabel.text = user?.professionName
             cell.postUserTableViewCellDelegate = self

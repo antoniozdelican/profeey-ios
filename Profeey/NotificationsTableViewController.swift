@@ -71,7 +71,7 @@ class NotificationsTableViewController: UITableViewController {
         }
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellNotification", for: indexPath) as! NotificationTableViewCell
         let notification = self.notifications[indexPath.row]
-        cell.profilePicImageView.image = notification.user?.profilePic
+        cell.profilePicImageView.image = notification.user?.profilePicUrl != nil ? notification.user?.profilePic : UIImage(named: "ic_no_profile_pic_feed")
         cell.messageLabel.attributedText = self.constructNotificationMessage(notification.user?.preferredUsername, notificationMessage: notification.notificationMessage)
         cell.timeLabel.text = notification.creationDateString
         return cell

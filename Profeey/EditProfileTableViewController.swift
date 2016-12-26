@@ -66,7 +66,7 @@ class EditProfileTableViewController: UITableViewController {
         switch indexPath.row {
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellEditProfilePic", for: indexPath) as! EditProfilePicTableViewCell
-            cell.profilePicImageView.image = self.user?.profilePic
+            cell.profilePicImageView.image = self.user?.profilePic != nil ? self.user?.profilePic : UIImage(named: "ic_no_profile_pic_profile")
             return cell
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellEditFirstName", for: indexPath) as! EditFirstNameTableViewCell
@@ -207,7 +207,8 @@ class EditProfileTableViewController: UITableViewController {
                 self.profilePicUrlToRemove = self.user?.profilePicUrl
                 self.user?.profilePicUrl = nil
             }
-            self.user?.profilePic = nil
+            //self.user?.profilePic = nil
+            self.user?.profilePic = UIImage(named: "ic_no_profile_pic_profile")
             self.tableView.reloadData()
         })
         alertController.addAction(removePhotoAction)

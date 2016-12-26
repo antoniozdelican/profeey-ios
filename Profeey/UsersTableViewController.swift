@@ -93,7 +93,7 @@ class UsersTableViewController: UITableViewController {
         }
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellUser", for: indexPath) as! UserTableViewCell
         let user = self.users[indexPath.row]
-        cell.profilePicImageView.image = user.profilePic
+        cell.profilePicImageView.image = user.profilePicUrl != nil ? user.profilePic : UIImage(named: "ic_no_profile_pic_feed")
         cell.preferredUsernameLabel.text = user.preferredUsername
         cell.professionNameLabel.text = user.professionName
         if !self.isLoadingFollowingIds, let userId = user.userId {

@@ -105,7 +105,7 @@ class SearchUsersTableViewController: UITableViewController {
             }
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellSearchUser", for: indexPath) as! SearchUserTableViewCell
             let user = self.popularUsers[indexPath.row]
-            cell.profilePicImageView.image = user.profilePic
+            cell.profilePicImageView.image = user.profilePicUrl != nil ? user.profilePic : UIImage(named: "ic_no_profile_pic_feed")
             cell.fullNameLabel.text = user.fullName
             cell.preferredUsernameLabel.text = user.preferredUsername
             cell.professionNameLabel.text = user.professionName
@@ -316,9 +316,6 @@ class SearchUsersTableViewController: UITableViewController {
                     }
                     for awsUser in awsUsers {
                         let user = LocationUser(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationId: awsUser._locationId, locationName: awsUser._locationName, numberOfRecommendations: awsUser._numberOfRecommendations)
-                        if user.profilePicUrl == nil {
-                            user.profilePic = UIImage(named: "ic_no_profile_pic_feed")
-                        }
                         self.popularUsers.append(user)
                     }
                     self.sortUsers()
@@ -350,9 +347,6 @@ class SearchUsersTableViewController: UITableViewController {
                     }
                     for awsUser in awsUsers {
                         let user = LocationUser(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationId: awsUser._locationId, locationName: awsUser._locationName, numberOfRecommendations: awsUser._numberOfRecommendations)
-                        if user.profilePicUrl == nil {
-                            user.profilePic = UIImage(named: "ic_no_profile_pic_feed")
-                        }
                         self.popularUsers.append(user)
                     }
                     self.sortUsers()

@@ -79,7 +79,7 @@ class DiscoverPeopleTableViewController: UITableViewController {
         }
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellDiscoverUser", for: indexPath) as! DiscoverUserTableViewCell
         let user = self.users[indexPath.row]
-        cell.profilePicImageView.image = user.profilePic
+        cell.profilePicImageView.image = user.profilePicUrl != nil ? user.profilePic : UIImage(named: "ic_no_profile_pic_feed")
         cell.fullNameLabel.text = user.fullName
         cell.preferredUsernameLabel.text = user.preferredUsername
         cell.professionNameLabel.text = user.professionName

@@ -68,7 +68,7 @@ class CommentsTableViewController: UITableViewController {
         let comment = self.comments[indexPath.row]
         let user = comment.user
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellComment", for: indexPath) as! CommentTableViewCell
-        cell.profilePicImageView.image = user?.profilePic
+        cell.profilePicImageView.image = user?.profilePicUrl != nil ? user?.profilePic : UIImage(named: "ic_no_profile_pic_feed")
         cell.preferredUsernameLabel.text = user?.preferredUsername
         cell.professionNameLabel.text = user?.professionName
         cell.timeLabel.text = comment.creationDateString
