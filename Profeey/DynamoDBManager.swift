@@ -34,10 +34,11 @@ protocol DynamoDBManager {
     // MARK: Relationships
     
     func getRelationshipDynamoDB(_ followingId: String, completionHandler: @escaping AWSContinuationBlock)
-    func createRelationshipDynamoDB(_ followingId: String, completionHandler: @escaping AWSContinuationBlock)
+    func createRelationshipDynamoDB(_ followingId: String, followingFirstName: String?, followingLastName: String?, followingPreferredUsername: String?, followingProfessionName: String?, followingProfilePicUrl: String?, completionHandler: @escaping AWSContinuationBlock)
     func removeRelationshipDynamoDB(_ followingId: String, completionHandler: @escaping AWSContinuationBlock)
     func queryFollowersDynamoDB(_ followingId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
     func queryFollowingDynamoDB(_ userId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
+    func queryFollowingIdsDynamoDB(_ userId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
     
     // MARK: Recommendations
     

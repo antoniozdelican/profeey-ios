@@ -131,16 +131,16 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         awsRelationshipsTable.getRelationship(identityId, followingId: followingId, completionHandler: completionHandler)
     }
     
-    func createRelationshipDynamoDB(_ followingId: String, completionHandler: @escaping AWSContinuationBlock) {
+    func createRelationshipDynamoDB(_ followingId: String, followingFirstName: String?, followingLastName: String?, followingPreferredUsername: String?, followingProfessionName: String?, followingProfilePicUrl: String?, completionHandler: @escaping AWSContinuationBlock) {
         guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
             print("createRelationshipDynamoDB no identityId!")
             AWSTask().continue(completionHandler)
             return
         }
         print("createRelationshipDynamoDB:")
-        let creationDate = NSNumber(value: Date().timeIntervalSince1970 as Double)
+        let created = NSNumber(value: Date().timeIntervalSince1970 as Double)
         let awsRelationshipsTable = AWSRelationshipsTable()
-        let awsRelationship = AWSRelationship(_userId: identityId, _followingId: followingId, _creationDate: creationDate, _firstName: self.currentUserDynamoDB?.firstName, _lastName: self.currentUserDynamoDB?.lastName, _preferredUsername: self.currentUserDynamoDB?.preferredUsername, _professionName: self.currentUserDynamoDB?.professionName, _profilePicUrl: self.currentUserDynamoDB?.profilePicUrl)
+        let awsRelationship = AWSRelationship(_userId: identityId, _followingId: followingId, _created: created, _firstName: self.currentUserDynamoDB?.firstName, _lastName: self.currentUserDynamoDB?.lastName, _preferredUsername: self.currentUserDynamoDB?.preferredUsername, _professionName: self.currentUserDynamoDB?.professionName, _profilePicUrl: self.currentUserDynamoDB?.profilePicUrl, _followingFirstName: followingFirstName, _followingLastName: followingLastName, _followingPreferredUsername: followingPreferredUsername, _followingProfessionName: followingProfessionName, _followingProfilePicUrl: followingProfilePicUrl)
         awsRelationshipsTable.createRelationship(awsRelationship, completionHandler: completionHandler)
     }
     
@@ -166,6 +166,12 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         print("queryFollowingDynamoDB:")
         let awsRelationshipsPrimaryIndex = AWSRelationshipsPrimaryIndex()
         awsRelationshipsPrimaryIndex.queryFollowing(userId, completionHandler: completionHandler)
+    }
+    
+    func queryFollowingIdsDynamoDB(_ userId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+        print("queryFollowingIdsDynamoDB:")
+        let awsRelationshipsPrimaryIndex = AWSRelationshipsPrimaryIndex()
+        awsRelationshipsPrimaryIndex.queryFollowingIds(userId, completionHandler: completionHandler)
     }
     
     // MARK: Recommendations

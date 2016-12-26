@@ -34,35 +34,7 @@ class UsersTableViewController: UITableViewController {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         
-        if let usersType = self.usersType {
-            switch usersType {
-            case .likers:
-                self.navigationItem.title = "Likes"
-                if let postId = self.postId {
-                    self.isLoadingUsers = true
-                    self.queryPostLikes(postId)
-                }
-            case .followers:
-                //self.navigationItem.title = "Followers"
-                if let followingId = self.userId {
-                    self.isLoadingUsers = true
-                    self.queryFollowers(followingId)
-                }
-            case .following:
-                return
-                //self.navigationItem.title = "Followers"
-                // TODO
-//                if let followingId = self.userId {
-//                    self.isLoadingUsers = true
-//                    self.queryFollowers(followingId)
-//                }
-            }
-            if let currentUserId = AWSIdentityManager.defaultIdentityManager().identityId {
-                // Get followings.
-                self.isLoadingFollowingIds = true
-                self.queryFollowing(currentUserId)
-            }
-        }
+        self.prepareForQueries()
         
         // Add observers.
         NotificationCenter.default.addObserver(self, selector: #selector(self.followingUserNotification(_:)), name: NSNotification.Name(FollowingUserNotificationKey), object: nil)
@@ -147,6 +119,12 @@ class UsersTableViewController: UITableViewController {
     // MARK: IBActions
     
     @IBAction func refreshControlChanged(_ sender: AnyObject) {
+        self.prepareForQueries()
+    }
+    
+    // MARK: Helpers
+    
+    fileprivate func prepareForQueries() {
         guard let usersType = self.usersType else {
             self.refreshControl?.endRefreshing()
             return
@@ -158,6 +136,7 @@ class UsersTableViewController: UITableViewController {
                 return
             }
             self.users = []
+            self.isLoadingUsers = true
             self.queryPostLikes(postId)
         case .followers:
             guard let followingId = self.userId else {
@@ -165,16 +144,20 @@ class UsersTableViewController: UITableViewController {
                 return
             }
             self.users = []
+            self.isLoadingUsers = true
             self.queryFollowers(followingId)
         case .following:
-            //TODO
-            return
-//            guard let followingId = self.userId else {
-//                self.refreshControl?.endRefreshing()
-//                return
-//            }
-//            self.users = []
-//            self.queryFollowers(followingId)
+            guard let userId = self.userId else {
+                self.refreshControl?.endRefreshing()
+                return
+            }
+            self.users = []
+            self.isLoadingUsers = true
+            self.queryFollowing(userId)
+        }
+        if let currentUserId = AWSIdentityManager.defaultIdentityManager().identityId {
+            self.isLoadingFollowingIds = true
+            self.queryFollowingIds(currentUserId)
         }
     }
     
@@ -251,13 +234,45 @@ class UsersTableViewController: UITableViewController {
             (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                self.isLoadingFollowingIds = false
+                self.isLoadingUsers = false
+                self.refreshControl?.endRefreshing()
                 if let error = error {
                     print("queryFollowing error: \(error)")
                     self.tableView.reloadData()
                 } else {
                     guard let awsRelationships = response?.items as? [AWSRelationship] else {
-                        print("queryFollowing no relationship objects")
+                        self.tableView.reloadData()
+                        return
+                    }
+                    for awsRelationship in awsRelationships {
+                        let user = User(userId: awsRelationship._followingId, firstName: awsRelationship._followingFirstName, lastName: awsRelationship._followingLastName, preferredUsername: awsRelationship._followingPreferredUsername, professionName: awsRelationship._followingProfessionName, profilePicUrl: awsRelationship._followingProfilePicUrl)
+                        self.users.append(user)
+                    }
+                    self.tableView.reloadData()
+                    for (index, user) in self.users.enumerated() {
+                        if let profilePicUrl = user.profilePicUrl {
+                            let indexPath = IndexPath(row: index, section: 0)
+                            self.downloadImage(profilePicUrl, imageType: .userProfilePic, indexPath: indexPath)
+                        }
+                    }
+                }
+            })
+        })
+    }
+    
+    // Only to check if user already follows some users.
+    fileprivate func queryFollowingIds(_ userId: String) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().queryFollowingIdsDynamoDB(userId, completionHandler: {
+            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                self.isLoadingFollowingIds = false
+                if let error = error {
+                    print("queryFollowingIds error: \(error)")
+                    self.tableView.reloadData()
+                } else {
+                    guard let awsRelationships = response?.items as? [AWSRelationship] else {
                         self.tableView.reloadData()
                         return
                     }
@@ -273,9 +288,9 @@ class UsersTableViewController: UITableViewController {
     }
     
     // In background.
-    fileprivate func followUser(_ followingId: String) {
+    fileprivate func followUser(_ followingId: String, followingFirstName: String?, followingLastName: String?, followingPreferredUsername: String?, followingProfessionName: String?, followingProfilePicUrl: String?) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().createRelationshipDynamoDB(followingId, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().createRelationshipDynamoDB(followingId, followingFirstName: followingFirstName, followingLastName: followingLastName, followingPreferredUsername: followingPreferredUsername, followingProfessionName: followingProfessionName, followingProfilePicUrl: followingProfilePicUrl, completionHandler: {
             (task: AWSTask) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
@@ -286,6 +301,19 @@ class UsersTableViewController: UITableViewController {
             return nil
         })
     }
+//    fileprivate func followUser(_ followingId: String) {
+//        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+//        PRFYDynamoDBManager.defaultDynamoDBManager().createRelationshipDynamoDB(followingId, completionHandler: {
+//            (task: AWSTask) in
+//            DispatchQueue.main.async(execute: {
+//                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+//                if let error = task.error {
+//                    print("followUser error: \(error)")
+//                }
+//            })
+//            return nil
+//        })
+//    }
     
     // In background.
     fileprivate func unfollowUser(_ followingId: String) {
@@ -385,7 +413,8 @@ extension UsersTableViewController: UserTableViewCellDelegate {
         if self.followingIds.contains(userId) {
             self.unfollowUser(userId)
         } else {
-            self.followUser(userId)
+            let followingUser = self.users[indexPath.row]
+            self.followUser(userId, followingFirstName: followingUser.firstName, followingLastName: followingUser.lastName, followingPreferredUsername: followingUser.preferredUsername, followingProfessionName: followingUser.professionName, followingProfilePicUrl: followingUser.profilePicUrl)
         }
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: FollowingUserNotificationKey), object: self, userInfo: ["followingId": userId])
     }

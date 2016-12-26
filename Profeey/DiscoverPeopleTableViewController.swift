@@ -30,7 +30,7 @@ class DiscoverPeopleTableViewController: UITableViewController {
             self.isSearchingUsers = true
             self.scanUsers()
             self.isLoadingFollowingIds = true
-            self.queryFollowing(currentUserId)
+            self.queryFollowingIds(currentUserId)
         }
         
         // Add observers.
@@ -199,19 +199,19 @@ class DiscoverPeopleTableViewController: UITableViewController {
         })
     }
     
-    fileprivate func queryFollowing(_ userId: String) {
+    fileprivate func queryFollowingIds(_ userId: String) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().queryFollowingDynamoDB(userId, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().queryFollowingIdsDynamoDB(userId, completionHandler: {
             (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 self.isLoadingFollowingIds = false
                 if let error = error {
-                    print("queryFollowing error: \(error)")
+                    print("queryFollowingIds error: \(error)")
                     self.tableView.reloadData()
                 } else {
                     guard let awsRelationships = response?.items as? [AWSRelationship] else {
-                        print("queryFollowing no relationship objects")
+                        print("queryFollowingIds no relationship objects")
                         self.tableView.reloadData()
                         return
                     }
@@ -281,9 +281,9 @@ class DiscoverPeopleTableViewController: UITableViewController {
     }
     
     // Followings are done in background.
-    fileprivate func followUser(_ followingId: String) {
+    fileprivate func followUser(_ followingId: String, followingFirstName: String?, followingLastName: String?, followingPreferredUsername: String?, followingProfessionName: String?, followingProfilePicUrl: String?) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().createRelationshipDynamoDB(followingId, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().createRelationshipDynamoDB(followingId, followingFirstName: followingFirstName, followingLastName: followingLastName, followingPreferredUsername: followingPreferredUsername, followingProfessionName: followingProfessionName, followingProfilePicUrl: followingProfilePicUrl, completionHandler: {
             (task: AWSTask) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
@@ -342,7 +342,8 @@ extension DiscoverPeopleTableViewController: DiscoverUserTableViewCellDelegate {
         if self.followingIds.contains(userId) {
             self.unfollowUser(userId)
         } else {
-            self.followUser(userId)
+            let followingUser = self.users[indexPath.row]
+            self.followUser(userId, followingFirstName: followingUser.firstName, followingLastName: followingUser.lastName, followingPreferredUsername: followingUser.preferredUsername, followingProfessionName: followingUser.professionName, followingProfilePicUrl: followingUser.profilePicUrl)
         }
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: FollowingUserNotificationKey), object: self, userInfo: ["followingId": userId])
     }

@@ -834,9 +834,9 @@ class ProfileTableViewController: UITableViewController {
     }
     
     // In background.
-    fileprivate func followUser(_ followingId: String) {
+    fileprivate func followUser(_ followingId: String, followingFirstName: String?, followingLastName: String?, followingPreferredUsername: String?, followingProfessionName: String?, followingProfilePicUrl: String?) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().createRelationshipDynamoDB(followingId, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().createRelationshipDynamoDB(followingId, followingFirstName: followingFirstName, followingLastName: followingLastName, followingPreferredUsername: followingPreferredUsername, followingProfessionName: followingProfessionName, followingProfilePicUrl: followingProfilePicUrl, completionHandler: {
             (task: AWSTask) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
@@ -1156,7 +1156,8 @@ extension ProfileTableViewController: ProfileMainTableViewCellDelegate {
                     alertController.addAction(cancelAction)
                     self.present(alertController, animated: true, completion: nil)
                 } else {
-                    self.followUser(followingId)
+                    let followingUser = self.user
+                    self.followUser(followingId, followingFirstName: followingUser?.firstName, followingLastName: followingUser?.lastName, followingPreferredUsername: followingUser?.preferredUsername, followingProfessionName: followingUser?.professionName, followingProfilePicUrl: followingUser?.profilePicUrl)
                     NotificationCenter.default.post(name: NSNotification.Name(rawValue: FollowingUserNotificationKey), object: self, userInfo: ["followingId": followingId])
                 }
             }

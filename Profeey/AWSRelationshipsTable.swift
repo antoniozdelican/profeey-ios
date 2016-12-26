@@ -68,7 +68,6 @@ class AWSRelationshipsTable: NSObject, Table {
     }
 }
 
-// Query following users from the user.
 class AWSRelationshipsPrimaryIndex: NSObject, Index {
     
     var indexName: String? {
@@ -83,7 +82,7 @@ class AWSRelationshipsPrimaryIndex: NSObject, Index {
     
     // Mark: QueryWithPartitionKey
     
-    // Find all following users.
+    // Find all followings of the user with userId.
     func queryFollowing(_ userId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
         let queryExpression = AWSDynamoDBQueryExpression()
@@ -91,11 +90,31 @@ class AWSRelationshipsPrimaryIndex: NSObject, Index {
         queryExpression.expressionAttributeNames = ["#userId": "userId",]
         queryExpression.expressionAttributeValues = [":userId": userId,]
         
+        // TODO query only needed attributes.
+        
+        objectMapper.query(AWSRelationship.self, expression: queryExpression, completionHandler: completionHandler)
+    }
+    
+    // Query only ids of followings (for checking if user is already following other users).
+    func queryFollowingIds(_ userId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+        let objectMapper = AWSDynamoDBObjectMapper.default()
+        let queryExpression = AWSDynamoDBQueryExpression()
+        queryExpression.projectionExpression = "#userId, #followingId"
+        queryExpression.keyConditionExpression = "#userId = :userId"
+        queryExpression.expressionAttributeNames = [
+            "#userId": "userId",
+            "#followingId": "followingId",
+        ]
+        queryExpression.expressionAttributeValues = [
+            ":userId": userId,
+        ]
+        
+        // TODO query only needed attributes.
+        
         objectMapper.query(AWSRelationship.self, expression: queryExpression, completionHandler: completionHandler)
     }
 }
 
-// Query followers of the user.
 class AWSRelationshipsFollowingIdIndex: NSObject, Index {
     
     var indexName: String? {
@@ -111,7 +130,7 @@ class AWSRelationshipsFollowingIdIndex: NSObject, Index {
     
     // MARK: QueryWithPartitionKey
     
-    // Find all items with followingId.
+    // Find all followers of the user with followingId (userId).
     func queryFollowers(_ followingId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
         let queryExpression = AWSDynamoDBQueryExpression()
@@ -119,6 +138,8 @@ class AWSRelationshipsFollowingIdIndex: NSObject, Index {
         queryExpression.keyConditionExpression = "#followingId = :followingId"
         queryExpression.expressionAttributeNames = ["#followingId": "followingId",]
         queryExpression.expressionAttributeValues = [":followingId": followingId,]
+        
+        // TODO query only needed attributes.
         
         objectMapper.query(AWSRelationship.self, expression: queryExpression, completionHandler: completionHandler)
     }

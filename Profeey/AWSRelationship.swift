@@ -13,7 +13,7 @@ class AWSRelationship: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     
     var _userId: String?
     var _followingId: String?
-    var _creationDate: NSNumber?
+    var _created: NSNumber?
     
     // Follower data.
     var _firstName: String?
@@ -22,16 +22,28 @@ class AWSRelationship: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     var _professionName: String?
     var _profilePicUrl: String?
     
-    convenience init(_userId: String?, _followingId: String?, _creationDate: NSNumber?, _firstName: String?, _lastName: String?, _preferredUsername: String?, _professionName: String?, _profilePicUrl: String?) {
+    // Followging data.
+    var _followingFirstName: String?
+    var _followingLastName: String?
+    var _followingPreferredUsername: String?
+    var _followingProfessionName: String?
+    var _followingProfilePicUrl: String?
+    
+    convenience init(_userId: String?, _followingId: String?, _created: NSNumber?, _firstName: String?, _lastName: String?, _preferredUsername: String?, _professionName: String?, _profilePicUrl: String?, _followingFirstName: String?, _followingLastName: String?, _followingPreferredUsername: String?, _followingProfessionName: String?, _followingProfilePicUrl: String?) {
         self.init()
         self._userId = _userId
         self._followingId = _followingId
-        self._creationDate = _creationDate
+        self._created = _created
         self._firstName = _firstName
         self._lastName = _lastName
         self._preferredUsername = _preferredUsername
         self._professionName = _professionName
         self._profilePicUrl = _profilePicUrl
+        self._followingFirstName = _followingFirstName
+        self._followingLastName = _followingLastName
+        self._followingPreferredUsername = _followingPreferredUsername
+        self._followingProfessionName = _followingProfessionName
+        self._followingProfilePicUrl = _followingProfilePicUrl
     }
     
     // To remove Like.
@@ -59,13 +71,18 @@ class AWSRelationship: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     override class func jsonKeyPathsByPropertyKey() -> [AnyHashable: Any] {
         return [
             "_userId" : "userId",
-            "_creationDate" : "creationDate",
+            "_created" : "created",
             "_followingId" : "followingId",
             "_firstName" : "firstName",
             "_lastName" : "lastName",
             "_preferredUsername" : "preferredUsername",
             "_professionName" : "professionName",
             "_profilePicUrl" : "profilePicUrl",
+            "_followingFirstName" : "followingFirstName",
+            "_followingLastName" : "followingLastName",
+            "_followingPreferredUsername" : "followingPreferredUsername",
+            "_followingProfessionName" : "followingProfessionName",
+            "_followingProfilePicUrl" : "followingProfilePicUrl",
         ]
     }
 }
