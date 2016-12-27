@@ -125,8 +125,7 @@ class HomeTableViewController: UITableViewController {
             let cell = sender as? PostUserTableViewCell,
             let indexPath = self.tableView.indexPath(for: cell) {
             let post = self.posts[indexPath.section]
-            // TODO: use copy.
-            childViewController.editPost = EditPost(userId: post.userId, postId: post.postId, caption: post.caption, categoryName: post.categoryName, imageWidth: post.imageWidth, imageHeight: post.imageHeight, image: post.image)
+            childViewController.editPost = post.copyEditPost()
         }
     }
 

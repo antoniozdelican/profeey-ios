@@ -90,4 +90,9 @@ class Post: NSObject {
         post.image = image
         return post
     }
+    
+    func copyEditPost() -> EditPost {
+        let editPost = EditPost(userId: userId, postId: postId, caption: caption, categoryName: categoryName, imageWidth: imageWidth, imageHeight: imageHeight, image: image)
+        return editPost
+    }
 }

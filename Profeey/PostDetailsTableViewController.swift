@@ -53,6 +53,7 @@ class PostDetailsTableViewController: UITableViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destinationViewController = segue.destination as? ProfileTableViewController {
+            // TODO: refactor
             destinationViewController.user = self.post?.user
         }
         if let destinationViewController = segue.destination as? UsersTableViewController {
@@ -65,7 +66,7 @@ class PostDetailsTableViewController: UITableViewController {
         }
         if let navigationController = segue.destination as? UINavigationController,
             let childViewController =  navigationController.childViewControllers[0] as? EditPostViewController {
-            childViewController.editPost = EditPost(userId: self.post?.userId, postId: self.post?.postId, caption: self.post?.caption, categoryName: self.post?.categoryName, imageWidth: self.post?.imageWidth, imageHeight: self.post?.imageHeight, image: self.post?.image)
+            childViewController.editPost = self.post?.copyEditPost()
         }
     }
 
