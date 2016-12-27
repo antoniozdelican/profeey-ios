@@ -14,7 +14,7 @@ class EditUser: User {
         super.init()
     }
     
-    convenience init(userId: String?, firstName: String?, lastName: String?, preferredUsername: String?, professionName: String?, profilePicUrl: String?, locationId: String?, locationName: String?, about: String?) {
+    convenience init(userId: String?, firstName: String?, lastName: String?, preferredUsername: String?, professionName: String?, profilePicUrl: String?, locationId: String?, locationName: String?, website: String?, about: String?) {
         self.init()
         self.userId = userId
         self.firstName = firstName
@@ -24,6 +24,7 @@ class EditUser: User {
         self.profilePicUrl = profilePicUrl
         self.locationId = locationId
         self.locationName = locationName
+        self.website = website
         self.about = about
     }
 }

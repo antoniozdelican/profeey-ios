@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol ProfileInfoTableViewCellDelegate {
+    func websiteButtonTapped()
+}
+
 class ProfileInfoTableViewCell: UITableViewCell {
 
     @IBOutlet weak var fullNameLabel: UILabel!
@@ -15,6 +19,10 @@ class ProfileInfoTableViewCell: UITableViewCell {
     @IBOutlet weak var locationNameLabel: UILabel!
     @IBOutlet weak var locationStackView: UIStackView!
     @IBOutlet weak var aboutLabel: UILabel!
+    @IBOutlet weak var websiteButton: UIButton!
+    @IBOutlet weak var websiteButtonHeightConstraint: NSLayoutConstraint!
+    
+    var profileInfoTableViewCellDelegate: ProfileInfoTableViewCellDelegate?
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -23,5 +31,10 @@ class ProfileInfoTableViewCell: UITableViewCell {
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
-
+    
+    // MARK: IBActions
+    
+    @IBAction func websiteButtonTapped(_ sender: Any) {
+        self.profileInfoTableViewCellDelegate?.websiteButtonTapped()
+    }
 }

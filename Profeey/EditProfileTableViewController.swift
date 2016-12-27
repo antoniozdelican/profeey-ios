@@ -59,7 +59,7 @@ class EditProfileTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 6
+        return 7
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -67,6 +67,7 @@ class EditProfileTableViewController: UITableViewController {
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellEditProfilePic", for: indexPath) as! EditProfilePicTableViewCell
             cell.profilePicImageView.image = self.user?.profilePic != nil ? self.user?.profilePic : UIImage(named: "ic_no_profile_pic_profile")
+            cell.editProfilePicTableViewCellDelegate = self
             return cell
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellEditFirstName", for: indexPath) as! EditFirstNameTableViewCell
@@ -90,20 +91,31 @@ class EditProfileTableViewController: UITableViewController {
             if let locationName = self.user?.locationName {
                 cell.locationNameLabel.text = locationName
                 cell.locationNameLabel.textColor = Colors.black
+                cell.clearLocationButton.isHidden = false
             } else {
-                cell.locationNameLabel.text = "Add city"
+                cell.locationNameLabel.text = "Add City"
                 cell.locationNameLabel.textColor = Colors.disabled
+                cell.clearLocationButton.isHidden = true
             }
+            cell.editLocationTableViewCellDelegate = self
             return cell
         case 5:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellEditProfession", for: indexPath) as! EditProfessionTableViewCell
             if let professionName = self.user?.professionName {
                 cell.professionNameLabel.text = professionName
                 cell.professionNameLabel.textColor = Colors.black
+                cell.clearProfessionButton.isHidden = false
             } else {
-                cell.professionNameLabel.text = "Add profession"
+                cell.professionNameLabel.text = "Add Profession"
                 cell.professionNameLabel.textColor = Colors.disabled
+                cell.clearProfessionButton.isHidden = true
             }
+            cell.editProfessionTableViewCellDelegate = self
+            return cell
+        case 6:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellEditWebsite", for: indexPath) as! EditWebsiteTableViewCell
+            cell.websiteTextField.text = self.user?.website
+            cell.editWebsiteTableViewCellDelegate = self
             return cell
         default:
             return UITableViewCell()
@@ -133,7 +145,7 @@ class EditProfileTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.row {
         case 0:
-            return 112.0
+            return 134.0
         default:
             return 52.0
         }
@@ -142,7 +154,7 @@ class EditProfileTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.row {
         case 0:
-            return 112.0
+            return 134.0
         case 3:
             return UITableViewAutomaticDimension
         default:
@@ -192,7 +204,7 @@ class EditProfileTableViewController: UITableViewController {
                 self.user?.profilePicUrl = nil
             }
             self.user?.profilePic = finalImage
-            self.tableView.reloadData()
+            self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.none)
         }
     }
     
@@ -207,9 +219,8 @@ class EditProfileTableViewController: UITableViewController {
                 self.profilePicUrlToRemove = self.user?.profilePicUrl
                 self.user?.profilePicUrl = nil
             }
-            //self.user?.profilePic = nil
             self.user?.profilePic = UIImage(named: "ic_no_profile_pic_profile")
-            self.tableView.reloadData()
+            self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.none)
         })
         alertController.addAction(removePhotoAction)
         let changePhotoAction = UIAlertAction(title: "Change Photo", style: UIAlertActionStyle.default, handler: {
@@ -229,7 +240,7 @@ class EditProfileTableViewController: UITableViewController {
             return
         }
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().updateUserDynamoDB(user.firstName, lastName: user.lastName, professionName: user.professionName, profilePicUrl: user.profilePicUrl, about: user.about, locationId: user.locationId, locationName: user.locationName, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().updateUserDynamoDB(user.firstName, lastName: user.lastName, professionName: user.professionName, profilePicUrl: user.profilePicUrl, about: user.about, locationId: user.locationId, locationName: user.locationName, website: user.website, completionHandler: {
             (task: AWSTask) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
@@ -284,6 +295,13 @@ class EditProfileTableViewController: UITableViewController {
     }
 }
 
+extension EditProfileTableViewController: EditProfilePicTableViewCellDelegate {
+    
+    func editButtonTapped() {
+        self.editProfilePicCellTapped()
+    }
+}
+
 extension EditProfileTableViewController: EditFirstNameTableViewCellDelegate {
     
     func firstNameTextFieldChanged(_ text: String) {
@@ -295,6 +313,30 @@ extension EditProfileTableViewController: EditLastNameTableViewCellDelegate {
     
     func lastNameTextFieldChanged(_ text: String) {
         self.user?.lastName = text.trimm().isEmpty ? nil : text.trimm()
+    }
+}
+
+extension EditProfileTableViewController: EditLocationTableViewCellDelegate {
+    
+    func clearLocationButtonTapped() {
+        self.user?.locationId = nil
+        self.user?.locationName = nil
+        self.tableView.reloadRows(at: [IndexPath(row: 4, section: 0)], with: UITableViewRowAnimation.none)
+    }
+}
+
+extension EditProfileTableViewController: EditProfessionTableViewCellDelegate {
+    
+    func clearProfessionButtonTapped() {
+        self.user?.professionName = nil
+        self.tableView.reloadRows(at: [IndexPath(row: 5, section: 0)], with: UITableViewRowAnimation.none)
+    }
+}
+
+extension EditProfileTableViewController: EditWebsiteTableViewCellDelegate {
+    
+    func websiteTextFieldChanged(_ text: String) {
+        self.user?.website = text.trimm().isEmpty ? nil : text.trimm()
     }
 }
 
@@ -317,7 +359,7 @@ extension EditProfileTableViewController: LocationsTableViewControllerDelegate {
     func didSelectLocation(_ location: Location) {
         self.user?.locationId = location.locationId
         self.user?.locationName = location.locationName
-        self.tableView.reloadData()
+        self.tableView.reloadRows(at: [IndexPath(row: 4, section: 0)], with: UITableViewRowAnimation.none)
     }
 }
 
@@ -325,6 +367,6 @@ extension EditProfileTableViewController: ProfessionsTableViewControllerDelegate
 
     func didSelectProfession(_ professionName: String?) {
         self.user?.professionName = professionName
-        self.tableView.reloadData()
+        self.tableView.reloadRows(at: [IndexPath(row: 5, section: 0)], with: UITableViewRowAnimation.none)
     }
 }

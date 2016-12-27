@@ -14,8 +14,6 @@ class AddInfoTableViewController: UITableViewController {
     
     var post: Post?
     var photo: UIImage?
-    
-    fileprivate var bottomIndexPath: IndexPath = IndexPath(row: 2, section: 0)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,6 +43,7 @@ class AddInfoTableViewController: UITableViewController {
         if let navigationController = segue.destination as? UINavigationController,
             let childViewController = navigationController.childViewControllers[0] as? CategoriesTableViewController {
             childViewController.categoriesTableViewControllerDelegate = self
+            childViewController.categoryName = self.post?.categoryName
             childViewController.isStatusBarHidden = true
         }
     }
@@ -73,12 +72,18 @@ class AddInfoTableViewController: UITableViewController {
             return cell
         case 2:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellEditPostCategory", for: indexPath) as! EditPostCategoryTableViewCell
-            cell.editPostCategoryTableViewCellDelegate = self
             if let categoryName = self.post?.categoryName {
-                cell.categoryAdded(categoryName: categoryName)
+                cell.categoryNameLabel.text = categoryName
+                cell.categoryNameLabel.textColor = Colors.black
+                cell.clearCategoryButton.isHidden = false
+                cell.categoryImageView.image = UIImage(named: "ic_skills_active")
             } else {
-                cell.categoryRemoved()
+                cell.categoryNameLabel.text = "Add Skill"
+                cell.categoryNameLabel.textColor = Colors.disabled
+                cell.clearCategoryButton.isHidden = true
+                cell.categoryImageView.image = UIImage(named: "ic_skills")
             }
+            cell.editPostCategoryTableViewCellDelegate = self
             return cell
         default:
             return UITableViewCell()
@@ -89,7 +94,7 @@ class AddInfoTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.layoutMargins = UIEdgeInsets.zero
         if indexPath.row == 0 {
-            cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
+            cell.separatorInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0)
         }
     }
     
@@ -104,11 +109,11 @@ class AddInfoTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.row {
         case 0:
-            return 124.0
+            return 132.0
         case 1:
-            return 68.0
+            return 52.0
         case 2:
-            return 68.0
+            return 52.0
         default:
             return 0.0
         }
@@ -117,11 +122,11 @@ class AddInfoTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.row {
         case 0:
-            return 124.0
+            return 132.0
         case 1:
             return UITableViewAutomaticDimension
         case 2:
-            return UITableViewAutomaticDimension
+            return 52.0
         default:
             return 0.0
         }
@@ -159,9 +164,9 @@ extension AddInfoTableViewController: EditPostDescriptionTableViewCellDelegate {
 
 extension AddInfoTableViewController: EditPostCategoryTableViewCellDelegate {
     
-    func removeButtonTapped() {
+    func clearCategoryButtonTapped() {
         self.post?.categoryName = nil
-        self.tableView.reloadRows(at: [self.bottomIndexPath], with: UITableViewRowAnimation.none)
+        self.tableView.reloadRows(at: [IndexPath(row: 2, section: 0)], with: UITableViewRowAnimation.none)
     }
 }
 
@@ -169,6 +174,6 @@ extension AddInfoTableViewController: CategoriesTableViewControllerDelegate {
     
     func didSelectCategory(_ categoryName: String?) {
         self.post?.categoryName = categoryName
-        self.tableView.reloadRows(at: [self.bottomIndexPath], with: UITableViewRowAnimation.none)
+        self.tableView.reloadRows(at: [IndexPath(row: 2, section: 0)], with: UITableViewRowAnimation.none)
     }
 }

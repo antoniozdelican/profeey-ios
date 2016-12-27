@@ -25,7 +25,7 @@
             </objects>
             <point key="canvasLocation" x="-826" y="-9"/>
         </scene>
-        <!--Location-->
+        <!--Choose a city-->
         <scene sceneID="xuW-VA-JCB">
             <objects>
                 <tableViewController id="OOJ-SG-eKd" customClass="LocationsTableViewController" customModule="Profeey" customModuleProvider="target" sceneMemberID="viewController">
@@ -151,7 +151,7 @@
                             <outlet property="delegate" destination="OOJ-SG-eKd" id="M83-yb-gMD"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Location" id="rhR-NJ-9Ha">
+                    <navigationItem key="navigationItem" title="Choose a city" id="rhR-NJ-9Ha">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="e7N-vc-xSS">
                             <connections>
                                 <action selector="cancelButtonTapped:" destination="OOJ-SG-eKd" id="rUX-Yl-d5i"/>

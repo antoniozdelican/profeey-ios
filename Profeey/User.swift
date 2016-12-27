@@ -22,6 +22,7 @@ class User: NSObject {
     var about: String?
     var locationId: String?
     var locationName: String?
+    var website: String?
     var numberOfFollowers: NSNumber?
     var numberOfPosts: NSNumber?
     var numberOfRecommendations: NSNumber?
@@ -91,7 +92,7 @@ class User: NSObject {
     // MARK: Custom copying.
     
     func copyEditUser() -> EditUser {
-        let editUser = EditUser(userId: userId, firstName: firstName, lastName: lastName, preferredUsername: preferredUsername, professionName: professionName, profilePicUrl: profilePicUrl, locationId: locationId, locationName: locationName, about: about)
+        let editUser = EditUser(userId: userId, firstName: firstName, lastName: lastName, preferredUsername: preferredUsername, professionName: professionName, profilePicUrl: profilePicUrl, locationId: locationId, locationName: locationName, website: website, about: about)
         editUser.profilePic = self.profilePic
         return editUser
     }

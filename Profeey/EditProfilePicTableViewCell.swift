@@ -8,9 +8,15 @@
 
 import UIKit
 
+protocol EditProfilePicTableViewCellDelegate {
+    func editButtonTapped()
+}
+
 class EditProfilePicTableViewCell: UITableViewCell {
     
     @IBOutlet weak var profilePicImageView: UIImageView!
+    
+    var editProfilePicTableViewCellDelegate: EditProfilePicTableViewCellDelegate?
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -20,6 +26,12 @@ class EditProfilePicTableViewCell: UITableViewCell {
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
+    }
+    
+    // MARK: IBActions
+    
+    @IBAction func editButtonTapped(_ sender: Any) {
+        self.editProfilePicTableViewCellDelegate?.editButtonTapped()
     }
 
 }

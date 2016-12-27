@@ -9,14 +9,14 @@
 import UIKit
 
 protocol EditPostCategoryTableViewCellDelegate {
-    func removeButtonTapped()
+    func clearCategoryButtonTapped()
 }
 
 class EditPostCategoryTableViewCell: UITableViewCell {
 
     @IBOutlet weak var categoryImageView: UIImageView!
-    @IBOutlet weak var categoryLabel: UILabel!
-    @IBOutlet weak var removeButton: UIButton!
+    @IBOutlet weak var categoryNameLabel: UILabel!
+    @IBOutlet weak var clearCategoryButton: UIButton!
     
     var editPostCategoryTableViewCellDelegate: EditPostCategoryTableViewCellDelegate?
     
@@ -28,24 +28,8 @@ class EditPostCategoryTableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
     }
     
-    @IBAction func removeButtonTapped(_ sender: AnyObject) {
-        self.editPostCategoryTableViewCellDelegate?.removeButtonTapped()
-    }
-    
-    
-    func categoryRemoved() {
-        self.categoryImageView.image = UIImage(named: "ic_skills")
-        self.categoryLabel.textColor = Colors.disabled
-        self.categoryLabel.text = "Add Skill"
-        self.removeButton.isHidden = true
-        
-    }
-    
-    func categoryAdded(categoryName: String) {
-        self.categoryImageView.image = UIImage(named: "ic_skills_active")
-        self.categoryLabel.textColor = Colors.black
-        self.categoryLabel.text = categoryName
-        self.removeButton.isHidden = false
+    @IBAction func clearCategoryButtonTapped(_ sender: Any) {
+        self.editPostCategoryTableViewCellDelegate?.clearCategoryButtonTapped()
     }
 
 }

@@ -23,6 +23,7 @@ class AWSUser: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     var _email: String?
     var _locationId: String?
     var _locationName: String?
+    var _website: String?
     
     var _numberOfFollowers: NSNumber?
     var _numberOfPosts: NSNumber?
@@ -54,7 +55,7 @@ class AWSUser: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     }
     
     // To update user on EditVc. Use AWSUserUpdate!
-    convenience init(_userId: String?, _firstName: String?, _lastName: String?, _professionName: String?, _profilePicUrl: String?, _about: String?, _locationId: String?, _locationName: String?) {
+    convenience init(_userId: String?, _firstName: String?, _lastName: String?, _professionName: String?, _profilePicUrl: String?, _about: String?, _locationId: String?, _locationName: String?, _website: String?) {
         self.init()
         self._userId = _userId
         self._firstName = _firstName
@@ -64,6 +65,7 @@ class AWSUser: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
         self._about = _about
         self._locationId = _locationId
         self._locationName = _locationName
+        self._website = _website
     }
     
     class func dynamoDBTableName() -> String {
@@ -89,6 +91,7 @@ class AWSUser: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
             "_email" : "email",
             "_locationId" : "locationId",
             "_locationName" : "locationName",
+            "_website" : "website",
             "_numberOfFollowers" : "numberOfFollowers",
             "_numberOfPosts" : "numberOfPosts",
             "_numberOfRecommendations" : "numberOfRecommendations",

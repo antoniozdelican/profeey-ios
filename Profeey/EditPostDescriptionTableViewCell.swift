@@ -14,6 +14,7 @@ protocol EditPostDescriptionTableViewCellDelegate {
 
 class EditPostDescriptionTableViewCell: UITableViewCell {
 
+    @IBOutlet weak var descriptionImageView: UIImageView?
     @IBOutlet weak var descriptionTextView: UITextView!
     @IBOutlet weak var descriptionPlaceholderLabel: UILabel!
     
@@ -33,6 +34,7 @@ extension EditPostDescriptionTableViewCell: UITextViewDelegate {
     
     func textViewDidChange(_ textView: UITextView) {
         self.descriptionPlaceholderLabel.isHidden = !textView.text.isEmpty
+        self.descriptionImageView?.image = !textView.text.isEmpty ? UIImage(named: "ic_write_description_active") : UIImage(named: "ic_write_description")
         self.editPostDescriptionTableViewCellDelegate?.textViewDidChange(textView)
     }
 }

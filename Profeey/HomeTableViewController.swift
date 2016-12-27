@@ -125,6 +125,7 @@ class HomeTableViewController: UITableViewController {
             let cell = sender as? PostUserTableViewCell,
             let indexPath = self.tableView.indexPath(for: cell) {
             let post = self.posts[indexPath.section]
+            // TODO: use copy.
             childViewController.editPost = EditPost(userId: post.userId, postId: post.postId, caption: post.caption, categoryName: post.categoryName, imageWidth: post.imageWidth, imageHeight: post.imageHeight, image: post.image)
         }
     }
@@ -504,7 +505,7 @@ class HomeTableViewController: UITableViewController {
                             self.tableView.reloadSections(IndexSet(integer: 0), with: UITableViewRowAnimation.none)
                         }
                         // Notifiy observers (ProfileVc)
-                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: CreatePostNotificationKey), object: self, userInfo: ["post": post.copy() as! Post])
+                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: CreatePostNotificationKey), object: self, userInfo: ["post": post.copyPost()])
                     }
                 }
             })

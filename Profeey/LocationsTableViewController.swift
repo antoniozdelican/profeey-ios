@@ -28,7 +28,7 @@ class LocationsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.register(UINib(nibName: "SearchTableSectionHeader", bundle: nil), forHeaderFooterViewReuseIdentifier: "searchTableSectionHeader")
-        self.navigationItem.title = "Choose city"
+        self.navigationItem.title = "Choose a city"
         
         self.isShowingPopularLocations = true
         self.isSearchingPopularLocations = true

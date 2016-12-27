@@ -8,9 +8,16 @@
 
 import UIKit
 
+protocol EditLocationTableViewCellDelegate {
+    func clearLocationButtonTapped()
+}
+
 class EditLocationTableViewCell: UITableViewCell {
     
     @IBOutlet weak var locationNameLabel: UILabel!
+    @IBOutlet weak var clearLocationButton: UIButton!
+    
+    var editLocationTableViewCellDelegate: EditLocationTableViewCellDelegate?
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -19,5 +26,10 @@ class EditLocationTableViewCell: UITableViewCell {
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
+    
+    // MARK: IBActions
 
+    @IBAction func clearLocationButtonTapped(_ sender: Any) {
+        self.editLocationTableViewCellDelegate?.clearLocationButtonTapped()
+    }
 }

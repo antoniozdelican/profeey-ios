@@ -111,13 +111,8 @@ class ProfileTableViewController: UITableViewController {
             childViewController.user = self.user?.copyEditUser()
         }
         if let destinationViewController = segue.destination as? FollowersFollowingViewController {
-//            destinationViewController.usersType = UsersType.followers
             destinationViewController.userId = self.user?.userId
         }
-//        if let destinationViewController = segue.destination as? UsersTableViewController {
-//            destinationViewController.usersType = UsersType.followers
-//            destinationViewController.userId = self.user?.userId
-//        }
         if let destinationViewController = segue.destination as? ExperiencesTableViewController {
             destinationViewController.workExperiences = self.workExperiences.map( { $0.copy() as! WorkExperience })
             destinationViewController.educations = self.educations.map( { $0.copy() as! Education })
@@ -222,6 +217,10 @@ class ProfileTableViewController: UITableViewController {
                 cell.locationNameLabel.text = self.user?.locationName
                 cell.locationStackView.isHidden = self.user?.locationName != nil ? false : true
                 cell.aboutLabel.text = self.user?.about
+                
+                cell.websiteButton.setTitle(self.user?.website, for: UIControlState.normal)
+                cell.websiteButton.isHidden = self.user?.website != nil ? false : true
+                cell.profileInfoTableViewCellDelegate = self
                 return cell
             case 2:
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellProfileSegmentedControl", for: indexPath) as! ProfileSegmentedControlTableViewCell
@@ -555,7 +554,7 @@ class ProfileTableViewController: UITableViewController {
                         self.refreshControl?.endRefreshing()
                         return
                     }
-                    let user = FullUser(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationId: awsUser._locationId, locationName: awsUser._locationName, about: awsUser._about, numberOfFollowers: awsUser._numberOfFollowers, numberOfPosts: awsUser._numberOfPosts, numberOfRecommendations: awsUser._numberOfRecommendations)
+                    let user = FullUser(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationId: awsUser._locationId, locationName: awsUser._locationName, website: awsUser._website, about: awsUser._about, numberOfFollowers: awsUser._numberOfFollowers, numberOfPosts: awsUser._numberOfPosts, numberOfRecommendations: awsUser._numberOfRecommendations)
                     self.user = user
                     self.hasUserLoaded = true
                     
@@ -916,6 +915,7 @@ extension ProfileTableViewController {
         self.user?.locationId = editUser.locationId
         self.user?.locationName = editUser.locationName
         self.user?.about = editUser.about
+        self.user?.website = editUser.website
         self.user?.profilePic = editUser.profilePic
         self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0), IndexPath(row: 1, section: 0)], with: UITableViewRowAnimation.none)
         // Remove old profilePic in background.
@@ -1185,6 +1185,13 @@ extension ProfileTableViewController: ProfileMainTableViewCellDelegate {
                 self.performSegue(withIdentifier: "segueToAddRecommendationVc", sender: self)
             }
         }
+    }
+}
+
+extension ProfileTableViewController: ProfileInfoTableViewCellDelegate {
+    
+    func websiteButtonTapped() {
+        // TODO
     }
 }
 

@@ -46,6 +46,7 @@ class EditPostViewController: UIViewController {
         if let navigationController = segue.destination as? UINavigationController,
             let childViewController = navigationController.childViewControllers[0] as? CategoriesTableViewController {
             childViewController.categoriesTableViewControllerDelegate = self
+            childViewController.categoryName = self.editPost?.categoryName
         }
     }
     
@@ -157,12 +158,18 @@ extension EditPostViewController: UITableViewDataSource, UITableViewDelegate {
             return cell
         case 2:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellEditPostCategory", for: indexPath) as! EditPostCategoryTableViewCell
-            cell.editPostCategoryTableViewCellDelegate = self
             if let categoryName = self.editPost?.categoryName {
-                cell.categoryAdded(categoryName: categoryName)
+                cell.categoryNameLabel.text = categoryName
+                cell.categoryNameLabel.textColor = Colors.black
+                cell.clearCategoryButton.isHidden = false
+                cell.categoryImageView.image = UIImage(named: "ic_skills_active")
             } else {
-                cell.categoryRemoved()
+                cell.categoryNameLabel.text = "Add Skill"
+                cell.categoryNameLabel.textColor = Colors.disabled
+                cell.clearCategoryButton.isHidden = true
+                cell.categoryImageView.image = UIImage(named: "ic_skills")
             }
+            cell.editPostCategoryTableViewCellDelegate = self
             return cell
         default:
             return UITableViewCell()
@@ -191,9 +198,9 @@ extension EditPostViewController: UITableViewDataSource, UITableViewDelegate {
         case 0:
             return 500.0
         case 1:
-            return 54.0
+            return 52.0
         case 2:
-            return 54.0
+            return 52.0
         default:
             return 0.0
         }
@@ -206,7 +213,7 @@ extension EditPostViewController: UITableViewDataSource, UITableViewDelegate {
         case 1:
             return UITableViewAutomaticDimension
         case 2:
-            return UITableViewAutomaticDimension
+            return 52.0
         default:
             return 0.0
         }
@@ -232,7 +239,7 @@ extension EditPostViewController: EditPostDescriptionTableViewCellDelegate {
 
 extension EditPostViewController: EditPostCategoryTableViewCellDelegate {
     
-    func removeButtonTapped() {
+    func clearCategoryButtonTapped() {
         self.editPost?.categoryName = nil
         self.tableView.reloadRows(at: [self.bottomIndexPath], with: UITableViewRowAnimation.none)
     }

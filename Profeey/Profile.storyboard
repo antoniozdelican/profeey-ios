@@ -145,23 +145,23 @@
                                     <outlet property="recommendButton" destination="C6H-Ma-A3h" id="dp1-4F-H3d"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellProfileInfo" rowHeight="107" id="3RL-vw-8YT" customClass="ProfileInfoTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="120" width="375" height="107"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellProfileInfo" rowHeight="128" id="3RL-vw-8YT" customClass="ProfileInfoTableViewCell" customModule="Profeey" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="120" width="375" height="128"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="3RL-vw-8YT" id="36E-9I-Jlo">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="107"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="128"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="A3e-qg-cXn">
-                                            <rect key="frame" x="12" y="12" width="351" height="82.5"/>
+                                            <rect key="frame" x="12" y="12" width="351" height="103.5"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Full Name" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="72m-9Q-520">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Full Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="72m-9Q-520">
                                                     <rect key="frame" x="0.0" y="0.0" width="351" height="19.5"/>
                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
                                                     <color key="textColor" red="0.14748379589999999" green="0.1474793851" blue="0.14748191829999999" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Profession Name" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VXx-CT-nJq">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Profession Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VXx-CT-nJq">
                                                     <rect key="frame" x="0.0" y="23.5" width="351" height="17"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <color key="textColor" red="0.41868340970000001" green="0.41867089270000002" blue="0.41867792609999999" alpha="1" colorSpace="calibratedRGB"/>
@@ -187,14 +187,27 @@
                                                     <color key="textColor" red="0.14748379589999999" green="0.1474793851" blue="0.14748191829999999" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <button opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="749" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="84O-RS-qM1">
+                                                    <rect key="frame" x="0.0" y="86.5" width="351" height="17"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" priority="750" constant="17" id="OZO-TQ-6uS"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <state key="normal" title="Website">
+                                                        <color key="titleColor" red="0.080254554749999998" green="0.61858558649999995" blue="0.93965935710000004" alpha="1" colorSpace="calibratedRGB"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="websiteButtonTapped:" destination="3RL-vw-8YT" eventType="touchUpInside" id="1AG-30-Vhj"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                         </stackView>
                                     </subviews>
                                     <constraints>
                                         <constraint firstAttribute="trailing" secondItem="A3e-qg-cXn" secondAttribute="trailing" constant="12" id="U9k-2P-pa3"/>
                                         <constraint firstItem="A3e-qg-cXn" firstAttribute="leading" secondItem="36E-9I-Jlo" secondAttribute="leading" constant="12" id="iAo-qy-3C4"/>
-                                        <constraint firstAttribute="bottom" secondItem="A3e-qg-cXn" secondAttribute="bottom" priority="750" constant="12.5" id="no9-Gg-KUh"/>
                                         <constraint firstItem="A3e-qg-cXn" firstAttribute="top" secondItem="36E-9I-Jlo" secondAttribute="top" constant="12" id="rxS-LH-EdL"/>
+                                        <constraint firstAttribute="bottom" secondItem="A3e-qg-cXn" secondAttribute="bottom" priority="999" constant="12.5" id="yHL-Q9-yAH"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
@@ -203,10 +216,12 @@
                                     <outlet property="locationNameLabel" destination="5Ro-oH-JcV" id="Ptq-Py-y6A"/>
                                     <outlet property="locationStackView" destination="H5i-Ve-8wx" id="bOf-wD-VBl"/>
                                     <outlet property="professionNameLabel" destination="VXx-CT-nJq" id="1nb-mN-cS2"/>
+                                    <outlet property="websiteButton" destination="84O-RS-qM1" id="YNq-Bj-qUY"/>
+                                    <outlet property="websiteButtonHeightConstraint" destination="OZO-TQ-6uS" id="3Fo-ry-QLx"/>
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellProfileSegmentedControl" rowHeight="46" id="mn0-31-00O" customClass="ProfileSegmentedControlTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="227" width="375" height="46"/>
+                                <rect key="frame" x="0.0" y="248" width="375" height="46"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="mn0-31-00O" id="xt8-7C-rHo">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="46"/>
@@ -226,7 +241,7 @@
                                             </constraints>
                                         </view>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OBx-8U-91P">
-                                            <rect key="frame" x="0.0" y="1" width="124.5" height="44"/>
+                                            <rect key="frame" x="0.0" y="1" width="125" height="44"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="44" id="wCw-js-cmK"/>
                                             </constraints>
@@ -239,7 +254,7 @@
                                             </connections>
                                         </button>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Uan-f2-SAh">
-                                            <rect key="frame" x="124.5" y="1" width="125.5" height="44"/>
+                                            <rect key="frame" x="125" y="1" width="125.5" height="44"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="44" id="R0N-OV-YS3"/>
                                             </constraints>
@@ -252,7 +267,7 @@
                                             </connections>
                                         </button>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wop-5y-bkV">
-                                            <rect key="frame" x="250" y="1" width="125" height="44"/>
+                                            <rect key="frame" x="250.5" y="1" width="124.5" height="44"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="44" id="T3H-bz-jyl"/>
                                             </constraints>
@@ -278,21 +293,21 @@
                                             </constraints>
                                         </view>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vYp-sU-iiT">
-                                            <rect key="frame" x="0.0" y="45" width="124.5" height="1"/>
+                                            <rect key="frame" x="0.0" y="45" width="125" height="1"/>
                                             <color key="backgroundColor" red="0.1960784314" green="0.1960784314" blue="0.1960784314" alpha="1" colorSpace="calibratedRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="1" id="Yyt-SV-1Gl"/>
                                             </constraints>
                                         </view>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="e9b-Q2-XJt">
-                                            <rect key="frame" x="124.5" y="45" width="125.5" height="1"/>
+                                            <rect key="frame" x="125" y="45" width="125.5" height="1"/>
                                             <color key="backgroundColor" red="0.1960784314" green="0.1960784314" blue="0.1960784314" alpha="1" colorSpace="calibratedRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="1" id="jzx-AW-s8T"/>
                                             </constraints>
                                         </view>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="437-mZ-rQb">
-                                            <rect key="frame" x="250" y="45" width="125" height="1"/>
+                                            <rect key="frame" x="250.5" y="45" width="124.5" height="1"/>
                                             <color key="backgroundColor" red="0.1960784314" green="0.1960784314" blue="0.1960784314" alpha="1" colorSpace="calibratedRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="1" id="g9J-0W-k8t"/>
@@ -337,7 +352,7 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellLoading" rowHeight="112" id="nKQ-vW-c0I" customClass="LoadingTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="273" width="375" height="112"/>
+                                <rect key="frame" x="0.0" y="294" width="375" height="112"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="nKQ-vW-c0I" id="Zhy-uC-Lgh">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="112"/>
@@ -357,7 +372,7 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellProfileEmpty" rowHeight="112" id="XOz-ce-GIx" customClass="ProfileEmptyTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="385" width="375" height="112"/>
+                                <rect key="frame" x="0.0" y="406" width="375" height="112"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="XOz-ce-GIx" id="nAd-We-qJd">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="112"/>
@@ -404,7 +419,7 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellPostSmall" rowHeight="112" id="lbp-3Q-qvf" customClass="PostSmallTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="497" width="375" height="112"/>
+                                <rect key="frame" x="0.0" y="518" width="375" height="112"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="lbp-3Q-qvf" id="hEv-IB-M1D">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="112"/>
@@ -488,7 +503,7 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellWorkExperience" rowHeight="105" id="Pi3-Qj-WlN" customClass="WorkExperienceTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="609" width="375" height="105"/>
+                                <rect key="frame" x="0.0" y="630" width="375" height="105"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Pi3-Qj-WlN" id="puB-NM-qLU">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="105"/>
@@ -570,7 +585,7 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellEducation" rowHeight="105" id="FIs-BE-8n8" customClass="EducationTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="714" width="375" height="105"/>
+                                <rect key="frame" x="0.0" y="735" width="375" height="105"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="FIs-BE-8n8" id="oWb-vg-tW6">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="105"/>
@@ -652,7 +667,7 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellUserCategory" rowHeight="50" id="5zr-rg-Zlj" customClass="UserCategoryTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="819" width="375" height="50"/>
+                                <rect key="frame" x="0.0" y="840" width="375" height="50"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="5zr-rg-Zlj" id="6HM-67-ltc">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="50"/>

@@ -237,6 +237,7 @@
 		A9EAD3401D1E8E0C00994292 /* NoSQLModelHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9EAD33F1D1E8E0C00994292 /* NoSQLModelHelpers.swift */; };
 		A9EAEC071DA6A38600DA6A4D /* AWSPostUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9EAEC061DA6A38600DA6A4D /* AWSPostUpdate.swift */; };
 		A9EC9E391E086EAD00A5F619 /* EditPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9EC9E381E086EAD00A5F619 /* EditPost.swift */; };
+		A9EEEE2A1E125EC100A20755 /* EditWebsiteTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9EEEE291E125EC100A20755 /* EditWebsiteTableViewCell.swift */; };
 		A9F2E7881DE89FF7001A25EC /* TTTAttributedLabel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9F2E7871DE89FF7001A25EC /* TTTAttributedLabel.framework */; };
 		A9F2E78A1DE8A003001A25EC /* TTTAttributedLabel.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A9F2E7871DE89FF7001A25EC /* TTTAttributedLabel.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A9F345911DE0C80D00A5D368 /* PRFYCloudSearchProfessionsResultItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F345901DE0C80D00A5D368 /* PRFYCloudSearchProfessionsResultItem.swift */; };
@@ -500,6 +501,7 @@
 		A9EAD33F1D1E8E0C00994292 /* NoSQLModelHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoSQLModelHelpers.swift; sourceTree = "<group>"; };
 		A9EAEC061DA6A38600DA6A4D /* AWSPostUpdate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSPostUpdate.swift; sourceTree = "<group>"; };
 		A9EC9E381E086EAD00A5F619 /* EditPost.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditPost.swift; sourceTree = "<group>"; };
+		A9EEEE291E125EC100A20755 /* EditWebsiteTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditWebsiteTableViewCell.swift; sourceTree = "<group>"; };
 		A9F2E7871DE89FF7001A25EC /* TTTAttributedLabel.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TTTAttributedLabel.framework; path = Profeey/TTTAttributedLabel.framework; sourceTree = "<group>"; };
 		A9F345901DE0C80D00A5D368 /* PRFYCloudSearchProfessionsResultItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PRFYCloudSearchProfessionsResultItem.swift; sourceTree = "<group>"; };
 		A9F345921DE0C81800A5D368 /* PRFYCloudSearchProfessionsResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PRFYCloudSearchProfessionsResult.swift; sourceTree = "<group>"; };
@@ -737,6 +739,7 @@
 				A9C8081B1D916C660018109C /* EditAboutTableViewCell.swift */,
 				A9C8081D1D916C720018109C /* EditLocationTableViewCell.swift */,
 				A9C8081F1D916C7D0018109C /* EditProfessionTableViewCell.swift */,
+				A9EEEE291E125EC100A20755 /* EditWebsiteTableViewCell.swift */,
 			);
 			name = "Edit Profile";
 			sourceTree = "<group>";
@@ -905,8 +908,7 @@
 			children = (
 				A9A503981D2FA9180030A472 /* LocalService.swift */,
 				A9D100611E0C4294006590F8 /* User */,
-				A9C0ED391D3C21C30036F791 /* Post.swift */,
-				A9EC9E381E086EAD00A5F619 /* EditPost.swift */,
+				A9EEEE2B1E12613F00A20755 /* Post */,
 				A9BCBDC41DDAFA0F00265AFA /* Recommendation.swift */,
 				A9E4507F1D5A09F100D14553 /* Comment.swift */,
 				A9B7A2431D65A562009DA340 /* Category.swift */,
@@ -1258,6 +1260,15 @@
 			name = AWS;
 			sourceTree = "<group>";
 		};
+		A9EEEE2B1E12613F00A20755 /* Post */ = {
+			isa = PBXGroup;
+			children = (
+				A9C0ED391D3C21C30036F791 /* Post.swift */,
+				A9EC9E381E086EAD00A5F619 /* EditPost.swift */,
+			);
+			name = Post;
+			sourceTree = "<group>";
+		};
 		A9F345881DE0AA9700A5D368 /* CloudSearchProxyClient */ = {
 			isa = PBXGroup;
 			children = (
@@ -1491,6 +1502,7 @@
 				A91A103C1DA836050042B4CA /* AddInfoImageTableViewCell.swift in Sources */,
 				A9D185D91D71927E0073E65F /* AWSLike.swift in Sources */,
 				A9D450631DCA247B000967E2 /* AWSCommentsTable.swift in Sources */,
+				A9EEEE2A1E125EC100A20755 /* EditWebsiteTableViewCell.swift in Sources */,
 				A9BCBDC51DDAFA0F00265AFA /* Recommendation.swift in Sources */,
 				A9B6F0B61DDA23B40031FA2F /* AWSRecommendationsTable.swift in Sources */,
 				A915F86E1DC0D49C0031C45F /* LocationsTableViewController.swift in Sources */,
