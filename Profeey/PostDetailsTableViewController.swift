@@ -40,9 +40,10 @@ class PostDetailsTableViewController: UITableViewController {
         
         // Add observers.
         NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNotification(_:)), name: NSNotification.Name(UpdatePostNotificationKey), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNumberOfLikesNotification(_:)), name: NSNotification.Name(UpdatePostNumberOfLikesNotificationKey), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNumberOfCommentsNotification(_:)), name: NSNotification.Name(UpdatePostNumberOfCommentsNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.deletePostNotification(_:)), name: NSNotification.Name(DeletePostNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNumberOfLikesNotification(_:)), name: NSNotification.Name(UpdatePostNumberOfLikesNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.createCommentNotification(_:)), name: NSNotification.Name(CreateCommentNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.deleteCommentNotification(_:)), name: NSNotification.Name(DeleteCommentNotificationKey), object: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -387,6 +388,17 @@ extension PostDetailsTableViewController {
         }
     }
     
+    func deletePostNotification(_ notification: NSNotification) {
+        guard let postId = notification.userInfo?["postId"] as? String else {
+            return
+        }
+        guard let post = self.post, post.postId == postId else {
+            return
+        }
+        // Just unwind to ProfileVc in case deletion was on HomeVc.
+        self.performSegue(withIdentifier: "segueUnwindToProfileVc", sender: self)
+    }
+    
     func updatePostNumberOfLikesNotification(_ notification: NSNotification) {
         guard let postId = notification.userInfo?["postId"] as? String, let numberOfLikes = notification.userInfo?["numberOfLikes"] as? NSNumber else {
             return
@@ -401,28 +413,30 @@ extension PostDetailsTableViewController {
         }
     }
     
-    func updatePostNumberOfCommentsNotification(_ notification: NSNotification) {
-        guard let postId = notification.userInfo?["postId"] as? String, let numberOfComments = notification.userInfo?["numberOfComments"] as? NSNumber else {
+    func createCommentNotification(_ notification: NSNotification) {
+        guard let comment = notification.userInfo?["comment"] as? Comment else {
             return
         }
-        guard let post = self.post, post.postId == postId else {
+        guard let post = self.post, post.postId == comment.postId else {
             return
         }
-        post.numberOfComments = numberOfComments
+        post.numberOfComments = NSNumber(value: post.numberOfCommentsInt + 1)
         UIView.performWithoutAnimation {
             self.tableView.reloadRows(at: [IndexPath(row: 4, section: 0)], with: UITableViewRowAnimation.none)
         }
     }
     
-    func deletePostNotification(_ notification: NSNotification) {
+    func deleteCommentNotification(_ notification: NSNotification) {
         guard let postId = notification.userInfo?["postId"] as? String else {
             return
         }
         guard let post = self.post, post.postId == postId else {
             return
         }
-        // Just unwind to ProfileVc in case deletion was on HomeVc.
-        self.performSegue(withIdentifier: "segueUnwindToProfileVc", sender: self)
+        post.numberOfComments = NSNumber(value: post.numberOfCommentsInt - 1)
+        UIView.performWithoutAnimation {
+            self.tableView.reloadRows(at: [IndexPath(row: 4, section: 0)], with: UITableViewRowAnimation.none)
+        }
     }
 }
 

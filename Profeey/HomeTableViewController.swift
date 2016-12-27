@@ -58,9 +58,10 @@ class HomeTableViewController: UITableViewController {
         
         // Add observers, don't need deinit removeObserver.
         NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNotification(_:)), name: NSNotification.Name(UpdatePostNotificationKey), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNumberOfLikesNotification(_:)), name: NSNotification.Name(UpdatePostNumberOfLikesNotificationKey), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNumberOfCommentsNotification(_:)), name: NSNotification.Name(UpdatePostNumberOfCommentsNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.deletePostNotification(_:)), name: NSNotification.Name(DeletePostNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNumberOfLikesNotification(_:)), name: NSNotification.Name(UpdatePostNumberOfLikesNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.createCommentNotification(_:)), name: NSNotification.Name(CreateCommentNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.deleteCommentNotification(_:)), name: NSNotification.Name(DeleteCommentNotificationKey), object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -605,6 +606,23 @@ extension HomeTableViewController {
         }
     }
     
+    func deletePostNotification(_ notification: NSNotification) {
+        guard let postId = notification.userInfo?["postId"] as? String else {
+            return
+        }
+        guard let postIndex = self.posts.index(where: { $0.postId == postId }) else {
+            return
+        }
+        self.posts.remove(at: postIndex)
+        if self.posts.count == 0 {
+            // Add HomeEmptyFeedView if there's no followed posts.
+            self.tableView.backgroundView = self.homeEmptyFeedView
+            self.tableView.reloadData()
+        } else {
+            self.tableView.deleteSections(IndexSet(integer: postIndex), with: UITableViewRowAnimation.top)
+        }
+    }
+    
     func updatePostNumberOfLikesNotification(_ notification: NSNotification) {
         guard let postId = notification.userInfo?["postId"] as? String, let numberOfLikes = notification.userInfo?["numberOfLikes"] as? NSNumber else {
             return
@@ -620,34 +638,31 @@ extension HomeTableViewController {
         }
     }
     
-    func updatePostNumberOfCommentsNotification(_ notification: NSNotification) {
-        guard let postId = notification.userInfo?["postId"] as? String, let numberOfComments = notification.userInfo?["numberOfComments"] as? NSNumber else {
+    func createCommentNotification(_ notification: NSNotification) {
+        guard let comment = notification.userInfo?["comment"] as? Comment else {
             return
         }
-        guard let postIndex = self.posts.index(where: { $0.postId == postId }) else {
+        guard let postIndex = self.posts.index(where: { $0.postId == comment.postId }) else {
             return
         }
         let post = self.posts[postIndex]
-        post.numberOfComments = numberOfComments
+        post.numberOfComments = NSNumber(value: post.numberOfCommentsInt + 1)
         UIView.performWithoutAnimation {
             self.tableView.reloadRows(at: [IndexPath(row: 4, section: postIndex)], with: UITableViewRowAnimation.none)
         }
     }
     
-    func deletePostNotification(_ notification: NSNotification) {
+    func deleteCommentNotification(_ notification: NSNotification) {
         guard let postId = notification.userInfo?["postId"] as? String else {
             return
         }
         guard let postIndex = self.posts.index(where: { $0.postId == postId }) else {
             return
         }
-        self.posts.remove(at: postIndex)
-        if self.posts.count == 0 {
-            // Add HomeEmptyFeedView if there's no followed posts.
-            self.tableView.backgroundView = self.homeEmptyFeedView
-            self.tableView.reloadData()
-        } else {
-            self.tableView.deleteSections(IndexSet(integer: postIndex), with: UITableViewRowAnimation.top)
+        let post = self.posts[postIndex]
+        post.numberOfComments = NSNumber(value: post.numberOfCommentsInt - 1)
+        UIView.performWithoutAnimation {
+            self.tableView.reloadRows(at: [IndexPath(row: 4, section: postIndex)], with: UITableViewRowAnimation.none)
         }
     }
 }

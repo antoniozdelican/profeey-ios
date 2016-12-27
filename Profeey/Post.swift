@@ -43,6 +43,20 @@ class Post: NSObject {
         }
         return numberOfLikesInt.numberToString()
     }
+    var numberOfLikesSmallString: String? {
+        guard let numberOfLikes = self.numberOfLikes else {
+            return "0"
+        }
+        let numberOfLikesInt = numberOfLikes.intValue
+        return numberOfLikesInt.numberToString()
+    }
+    
+    var numberOfCommentsInt: Int {
+        guard let numberOfComments = self.numberOfComments else {
+            return 0
+        }
+        return numberOfComments.intValue
+    }
     var numberOfCommentsString: String? {
         guard let numberOfComments = self.numberOfComments else {
             return nil
@@ -52,13 +66,6 @@ class Post: NSObject {
             return nil
         }
         return numberOfCommentsInt.numberToString()
-    }
-    var numberOfLikesSmallString: String? {
-        guard let numberOfLikes = self.numberOfLikes else {
-            return "0"
-        }
-        let numberOfLikesInt = numberOfLikes.intValue
-        return numberOfLikesInt.numberToString()
     }
     
     var isLikedByCurrentUser: Bool = false

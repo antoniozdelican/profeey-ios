@@ -13,12 +13,13 @@ class AWSActivity: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     
     var _userId: String?
     var _activityId: String?
-//    var _postId: String?
-//    var _postUserId: String?
+    var _postUserId: String?
+    var _postId: String?
+    
     var _caption: String?
     var _categoryName: String?
     var _creationDate: NSNumber?
-    // Used to get fast aspect ratio.
+    
     var _imageWidth: NSNumber?
     var _imageHeight: NSNumber?
     var _imageUrl: String?
@@ -32,19 +33,21 @@ class AWSActivity: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     var _profilePicUrl: String?
     
     // Generated.
+    // TODO: refactor
+    
     // activityId is stored in form of {postUserId}+activity+{postId}
-    var _postUserId: String? {
-        guard let _activityId = self._activityId else {
-            return nil
-        }
-        return _activityId.components(separatedBy: "+activity+").first
-    }
-    var _postId: String? {
-        guard let _activityId = self._activityId else {
-            return nil
-        }
-        return _activityId.components(separatedBy: "+activity+").last
-    }
+//    var _postUserId: String? {
+//        guard let _activityId = self._activityId else {
+//            return nil
+//        }
+//        return _activityId.components(separatedBy: "+activity+").first
+//    }
+//    var _postId: String? {
+//        guard let _activityId = self._activityId else {
+//            return nil
+//        }
+//        return _activityId.components(separatedBy: "+activity+").last
+//    }
     
     class func dynamoDBTableName() -> String {
         
@@ -65,6 +68,8 @@ class AWSActivity: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
         return [
             "_userId" : "userId",
             "_activityId" : "activityId",
+            "_postUserId" : "postUserId",
+            "_postId" : "postId",
             "_caption" : "caption",
             "_categoryName" : "categoryName",
             "_creationDate" : "creationDate",

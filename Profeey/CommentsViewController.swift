@@ -10,12 +10,9 @@ import UIKit
 import AWSMobileHubHelper
 import AWSDynamoDB
 
-protocol CommentsViewControllerDelegate {
-    func commentPosted(_ comment: Comment)
-    func commentRemoved(_ commentId: String)
-    func showComments(_ comments: [Comment])
-    func isLoadingComments(_ isLoading: Bool)
-}
+//protocol CommentsViewControllerDelegate {
+//    func commentPosted(_ comment: Comment)
+//}
 
 class CommentsViewController: UIViewController {
 
@@ -28,8 +25,7 @@ class CommentsViewController: UIViewController {
     var postId: String?
     var postUserId: String?
     var isCommentButton: Bool = false
-    fileprivate var comments: [Comment] = []
-    fileprivate var commentsViewControllerDelegate: CommentsViewControllerDelegate?
+    //fileprivate var commentsViewControllerDelegate: CommentsViewControllerDelegate?
     
     fileprivate var COMMENT_BAR_BOTTOM_CONSTRAINT_CONSTANT: CGFloat = 0.0
     fileprivate var COMMENT_BAR_HEIGHT: CGFloat = 49.0
@@ -39,16 +35,11 @@ class CommentsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.plain, target:nil, action:nil)
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         self.configureConstants()
         self.registerForKeyboardNotifications()
         self.commentTextView.delegate = self
         self.sendButton.isEnabled = false
-        
-        if let postId = self.postId {
-            self.commentsViewControllerDelegate?.isLoadingComments(true)
-            self.queryPostCommentsDateSorted(postId)
-        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -81,8 +72,9 @@ class CommentsViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destinationViewController = segue.destination as? CommentsTableViewController {
-            destinationViewController.commentsTableViewControllerDelegate = self
-            self.commentsViewControllerDelegate = destinationViewController
+            destinationViewController.postId = self.postId
+//            destinationViewController.commentsTableViewControllerDelegate = self
+            //self.commentsViewControllerDelegate = destinationViewController
         }
     }
     
@@ -130,32 +122,6 @@ class CommentsViewController: UIViewController {
     
     // MARK: AWS
     
-    fileprivate func queryPostCommentsDateSorted(_ postId: String) {
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().queryPostCommentsDateSortedDynamoDB(postId, completionHandler: {
-            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
-            DispatchQueue.main.async(execute: {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                self.commentsViewControllerDelegate?.isLoadingComments(false)
-                if let error = error {
-                    print("queryPostCommentsDateSorted error: \(error)")
-                    self.commentsViewControllerDelegate?.showComments(self.comments)
-                } else {
-                    guard let awsComments = response?.items as? [AWSComment] else {
-                        self.commentsViewControllerDelegate?.showComments(self.comments)
-                        return
-                    }
-                    for awsComment in awsComments {
-                        let user = User(userId: awsComment._userId, firstName: awsComment._firstName, lastName: awsComment._lastName, preferredUsername: awsComment._preferredUsername, professionName: awsComment._professionName, profilePicUrl: awsComment._profilePicUrl)
-                        let comment = Comment(userId: awsComment._userId, commentId: awsComment._commentId, commentText: awsComment._commentText, creationDate: awsComment._creationDate, user: user)
-                        self.comments.append(comment)
-                    }
-                    self.commentsViewControllerDelegate?.showComments(self.comments)
-                }
-            })
-        })
-    }
-    
     fileprivate func createComment(_ commentText: String) {
         guard let postId = self.postId, let postUserId = self.postUserId else {
             return
@@ -174,27 +140,10 @@ class CommentsViewController: UIViewController {
                     guard let awsComment = task.result as? AWSComment else {
                         return
                     }
-                    let comment = Comment(userId: awsComment._userId, commentId: awsComment._commentId, commentText: awsComment._commentText, creationDate: awsComment._creationDate, user: PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB)
-                    self.comments.append(comment)
-                    self.commentsViewControllerDelegate?.commentPosted(comment)
+                    let comment = Comment(userId: awsComment._userId, commentId: awsComment._commentId, created: awsComment._created, commentText: awsComment._commentText, postId: awsComment._postId, postUserId: awsComment._postUserId, user: PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB)
                     // Notify observers.
-                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: UpdatePostNumberOfCommentsNotificationKey), object: self, userInfo: ["postId": postId, "numberOfComments": self.comments.count])
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: CreateCommentNotificationKey), object: self, userInfo: ["comment": comment.copyComment()])
                     self.resetCommentBox()
-                }
-            })
-            return nil
-        })
-    }
-    
-    // In background
-    fileprivate func removeComment(_ commentId: String) {
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().removeCommentDynamoDB(commentId, completionHandler: {
-            (task: AWSTask) in
-            DispatchQueue.main.async(execute: {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                if let error = task.error {
-                    print("removeComment error: \(error)")
                 }
             })
             return nil
@@ -208,46 +157,6 @@ class CommentsViewController: UIViewController {
         self.commentFakePlaceholderLabel.isHidden = false
         self.sendButton.isEnabled = false
         self.commentBarHeightConstraint.constant = self.COMMENT_BAR_HEIGHT
-    }
-    
-    // MARK: Helpers
-    
-    fileprivate func rowTapped(_ indexPath: IndexPath) {
-        guard let userId = self.comments[indexPath.row].userId,
-            let commentId = self.comments[indexPath.row].commentId,
-            let postId = self.postId else {
-            return
-        }
-        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
-        if userId == AWSIdentityManager.defaultIdentityManager().identityId {
-            // DELETE
-            let deleteAction = UIAlertAction(title: "Delete", style: UIAlertActionStyle.destructive, handler: {
-                (alert: UIAlertAction) in
-                let alertController = UIAlertController(title: "Delete Comment?", message: nil, preferredStyle: UIAlertControllerStyle.alert)
-                let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil)
-                alertController.addAction(cancelAction)
-                let deleteConfirmAction = UIAlertAction(title: "Delete", style: UIAlertActionStyle.default, handler: {
-                    (alert: UIAlertAction) in
-                    self.comments.remove(at: indexPath.row)
-                    self.commentsViewControllerDelegate?.commentRemoved(commentId)
-                    // Notify observers.
-                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: UpdatePostNumberOfCommentsNotificationKey), object: self, userInfo: ["postId": postId, "numberOfComments": self.comments.count])
-                    // In background
-                    self.removeComment(commentId)
-                })
-                alertController.addAction(deleteConfirmAction)
-                self.present(alertController, animated: true, completion: nil)
-            })
-            alertController.addAction(deleteAction)
-        } else {
-            // REPORT
-            let reportAction = UIAlertAction(title: "Report", style: UIAlertActionStyle.destructive, handler: nil)
-            alertController.addAction(reportAction)
-        }
-        // CANCEL
-        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil)
-        alertController.addAction(cancelAction)
-        self.present(alertController, animated: true, completion: nil)
     }
 }
 
@@ -277,9 +186,5 @@ extension CommentsViewController: CommentsTableViewControllerDelegate {
     
     func scrollViewWillBeginDragging() {
         self.view.endEditing(true)
-    }
-    
-    func didSelectRow(_ indexPath: IndexPath) {
-        self.rowTapped(indexPath)
     }
 }

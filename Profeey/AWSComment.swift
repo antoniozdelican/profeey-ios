@@ -14,10 +14,9 @@ class AWSComment: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     
     var _userId: String?
     var _commentId: String?
-    var _postId: String?
-    var _creationDate: NSNumber?
+    var _created: NSNumber?
     var _commentText: String?
-    // Need to update Post numberOfComments upon Comment create/delete
+    var _postId: String?
     var _postUserId: String?
     
     // Commenter data.
@@ -27,14 +26,14 @@ class AWSComment: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     var _professionName: String?
     var _profilePicUrl: String?
     
-    convenience init(_userId: String?, _commentId: String?, _creationDate: NSNumber?, _postId: String?, _postUserId: String?, _commentText: String?, _firstName: String?, _lastName: String?, _preferredUsername: String?, _professionName: String?, _profilePicUrl: String?) {
+    convenience init(_userId: String?, _commentId: String?, _created: NSNumber?, _commentText: String?, _postId: String?, _postUserId: String?, _firstName: String?, _lastName: String?, _preferredUsername: String?, _professionName: String?, _profilePicUrl: String?) {
         self.init()
         self._userId = _userId
         self._commentId = _commentId
-        self._creationDate = _creationDate
+        self._created = _created
+        self._commentText = _commentText
         self._postId = _postId
         self._postUserId = _postUserId
-        self._commentText = _commentText
         self._firstName = _firstName
         self._lastName = _lastName
         self._preferredUsername = _preferredUsername
@@ -76,9 +75,9 @@ class AWSComment: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
         return [
             "_userId" : "userId",
             "_commentId" : "commentId",
+            "_created" : "created",
             "_postId" : "postId",
             "_postUserId" : "postUserId",
-            "_creationDate" : "creationDate",
             "_commentText" : "commentText",
             "_firstName" : "firstName",
             "_lastName" : "lastName",

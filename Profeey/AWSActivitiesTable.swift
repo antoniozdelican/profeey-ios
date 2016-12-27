@@ -38,8 +38,6 @@ class AWSActivitiesTable: NSObject, Table {
         partitionKeyType = "String"
         indexes = [
             
-//            AWSActivitiesPrimaryIndex(),
-            
             AWSActivitiesDateSortedIndex(),
             
         ]
@@ -78,14 +76,10 @@ class AWSActivitiesDateSortedIndex: NSObject, Index {
             "#userId": "userId",
             "#creationDate": "creationDate",
         ]
-        
-        let currentDateNumber = NSNumber(value: Date().timeIntervalSince1970 as Double)
-        
         queryExpression.expressionAttributeValues = [
             ":userId": userId,
-            ":creationDate": currentDateNumber,
+            ":creationDate": NSNumber(value: Date().timeIntervalSince1970 as Double),
         ]
-        
         // Set desc ordering.
         queryExpression.scanIndexForward = false
         

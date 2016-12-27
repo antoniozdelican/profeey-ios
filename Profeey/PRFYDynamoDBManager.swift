@@ -272,9 +272,9 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         }
         print("createCommentDynamoDB:")
         let commentId = NSUUID().uuidString.lowercased()
-        let creationDate = NSNumber(value: Date().timeIntervalSince1970 as Double)
+        let created = NSNumber(value: Date().timeIntervalSince1970 as Double)
         let awsCommentsTable = AWSCommentsTable()
-        let awsComment = AWSComment(_userId: identityId, _commentId: commentId, _creationDate: creationDate, _postId: postId, _postUserId: postUserId, _commentText: commentText, _firstName: self.currentUserDynamoDB?.firstName, _lastName: self.currentUserDynamoDB?.lastName, _preferredUsername: self.currentUserDynamoDB?.preferredUsername, _professionName: self.currentUserDynamoDB?.professionName, _profilePicUrl: self.currentUserDynamoDB?.profilePicUrl)
+        let awsComment = AWSComment(_userId: identityId, _commentId: commentId, _created: created, _commentText: commentText, _postId: postId, _postUserId: postUserId, _firstName: self.currentUserDynamoDB?.firstName, _lastName: self.currentUserDynamoDB?.lastName, _preferredUsername: self.currentUserDynamoDB?.preferredUsername, _professionName: self.currentUserDynamoDB?.professionName, _profilePicUrl: self.currentUserDynamoDB?.profilePicUrl)
         awsCommentsTable.createComment(awsComment, completionHandler: {
             (task: AWSTask) in
             if let error = task.error {

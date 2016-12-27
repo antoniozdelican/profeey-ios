@@ -12,9 +12,12 @@ let UpdateUserNotificationKey: String = "UpdateUserNotificationKey"
 
 let CreatePostNotificationKey: String = "CreatePostNotificationKey"
 let UpdatePostNotificationKey: String = "UpdatePostNotificationKey"
-let UpdatePostNumberOfLikesNotificationKey: String = "UpdatePostNumberOfLikesNotificationKey"
-let UpdatePostNumberOfCommentsNotificationKey: String = "UpdatePostNumberOfCommentsNotificationKey"
 let DeletePostNotificationKey: String = "DeletePostNotificationKey"
+
+let UpdatePostNumberOfLikesNotificationKey: String = "UpdatePostNumberOfLikesNotificationKey"
+
+let CreateCommentNotificationKey: String = "CreateCommentNotificationKey"
+let DeleteCommentNotificationKey: String = "DeleteCommentNotificationKey"
 
 let FollowingUserNotificationKey: String = "FollowingUserNotificationKey"
 let RecommendUserNotificationKey: String = "RecommendUserNotificationKey"

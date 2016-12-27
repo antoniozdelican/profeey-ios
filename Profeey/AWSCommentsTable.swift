@@ -82,20 +82,16 @@ class AWSCommentsPostIndex: NSObject, Index {
     func queryPostCommentsDateSorted(_ postId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
         let queryExpression = AWSDynamoDBQueryExpression()
-        
-        let currentDateNumber = NSNumber(value: Date().timeIntervalSince1970 as Double)
-        
         queryExpression.indexName = "PostIndex"
-        queryExpression.keyConditionExpression = "#postId = :postId AND #creationDate <= :creationDate"
+        queryExpression.keyConditionExpression = "#postId = :postId AND #created <= :created"
         queryExpression.expressionAttributeNames = [
             "#postId": "postId",
-            "#creationDate": "creationDate",
+            "#created": "created",
         ]
         queryExpression.expressionAttributeValues = [
             ":postId": postId,
-            ":creationDate": currentDateNumber
+            ":created": NSNumber(value: Date().timeIntervalSince1970 as Double)
         ]
-        
         objectMapper.query(AWSComment.self, expression: queryExpression, completionHandler: completionHandler)
     }
 }

@@ -31,6 +31,9 @@ class MainTabBarController: UITabBarController {
         if AWSIdentityManager.defaultIdentityManager().isLoggedIn && PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB == nil {
             self.getCurrentUser()
         }
+        
+        // Add observers.
+        NotificationCenter.default.addObserver(self, selector: #selector(self.updateUserNotification(_:)), name: NSNotification.Name(UpdateUserNotificationKey), object: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -182,6 +185,29 @@ class MainTabBarController: UITabBarController {
     // Public method to open NotificationsVc as response to user tapping push notification.
     func selectMainChildViewController(_ mainChildController: MainChildController) {
         self.selectedIndex = mainChildController.rawValue
+    }
+}
+
+extension MainTabBarController {
+    
+    // MARK: NotificationCenterActions
+    
+    // Update currentUserDynamoDB.
+    func updateUserNotification(_ notification: NSNotification) {
+        guard let editUser = notification.userInfo?["user"] as? EditUser else {
+            return
+        }
+        guard PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB?.userId == editUser.userId else {
+            return
+        }
+        PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB?.firstName = editUser.firstName
+        PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB?.lastName = editUser.lastName
+        PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB?.preferredUsername = editUser.preferredUsername
+        PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB?.professionName = editUser.professionName
+        PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB?.profilePicUrl = editUser.profilePicUrl
+        PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB?.locationId = editUser.locationId
+        PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB?.locationName = editUser.locationName
+        PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB?.profilePic = editUser.profilePic
     }
 }
 

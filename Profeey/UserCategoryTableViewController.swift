@@ -30,9 +30,11 @@ class UserCategoryTableViewController: UITableViewController {
         // Add observers.
         NotificationCenter.default.addObserver(self, selector: #selector(self.createPostNotification(_:)), name: NSNotification.Name(CreatePostNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNotification(_:)), name: NSNotification.Name(UpdatePostNotificationKey), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNumberOfLikesNotification(_:)), name: NSNotification.Name(UpdatePostNumberOfLikesNotificationKey), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNumberOfCommentsNotification(_:)), name: NSNotification.Name(UpdatePostNumberOfCommentsNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.deletePostNotification(_:)), name: NSNotification.Name(DeletePostNotificationKey), object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNumberOfLikesNotification(_:)), name: NSNotification.Name(UpdatePostNumberOfLikesNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.createCommentNotification(_:)), name: NSNotification.Name(CreateCommentNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.deleteCommentNotification(_:)), name: NSNotification.Name(DeleteCommentNotificationKey), object: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -265,31 +267,6 @@ extension UserCategoryTableViewController {
         }
     }
     
-    func updatePostNumberOfLikesNotification(_ notification: NSNotification) {
-        guard let postId = notification.userInfo?["postId"] as? String, let numberOfLikes = notification.userInfo?["numberOfLikes"] as? NSNumber else {
-            return
-        }
-        guard let postIndex = self.posts.index(where: { $0.postId == postId }) else {
-            return
-        }
-        let post = self.posts[postIndex]
-        post.numberOfLikes = numberOfLikes
-        post.isLikedByCurrentUser = !post.isLikedByCurrentUser
-        self.tableView.reloadRows(at: [IndexPath(row: postIndex, section: 0)], with: UITableViewRowAnimation.none)
-    }
-    
-    func updatePostNumberOfCommentsNotification(_ notification: NSNotification) {
-        guard let postId = notification.userInfo?["postId"] as? String, let numberOfComments = notification.userInfo?["numberOfComments"] as? NSNumber else {
-            return
-        }
-        guard let postIndex = self.posts.index(where: { $0.postId == postId }) else {
-            return
-        }
-        let post = self.posts[postIndex]
-        post.numberOfComments = numberOfComments
-        self.tableView.reloadRows(at: [IndexPath(row: postIndex, section: 0)], with: UITableViewRowAnimation.none)
-    }
-    
     func deletePostNotification(_ notification: NSNotification) {
         guard let postId = notification.userInfo?["postId"] as? String else {
             return
@@ -303,5 +280,42 @@ extension UserCategoryTableViewController {
         } else {
             self.tableView.deleteRows(at: [IndexPath(row: postIndex, section: 0)], with: UITableViewRowAnimation.fade)
         }
+    }
+    
+    func updatePostNumberOfLikesNotification(_ notification: NSNotification) {
+        guard let postId = notification.userInfo?["postId"] as? String, let numberOfLikes = notification.userInfo?["numberOfLikes"] as? NSNumber else {
+            return
+        }
+        guard let postIndex = self.posts.index(where: { $0.postId == postId }) else {
+            return
+        }
+        let post = self.posts[postIndex]
+        post.numberOfLikes = numberOfLikes
+        post.isLikedByCurrentUser = !post.isLikedByCurrentUser
+        self.tableView.reloadRows(at: [IndexPath(row: postIndex, section: 0)], with: UITableViewRowAnimation.none)
+    }
+    
+    func createCommentNotification(_ notification: NSNotification) {
+        guard let comment = notification.userInfo?["comment"] as? Comment else {
+            return
+        }
+        guard let postIndex = self.posts.index(where: { $0.postId == comment.postId }) else {
+            return
+        }
+        let post = self.posts[postIndex]
+        post.numberOfComments = NSNumber(value: post.numberOfCommentsInt + 1)
+        self.tableView.reloadRows(at: [IndexPath(row: postIndex, section: 0)], with: UITableViewRowAnimation.none)
+    }
+    
+    func deleteCommentNotification(_ notification: NSNotification) {
+        guard let postId = notification.userInfo?["postId"] as? String  else {
+            return
+        }
+        guard let postIndex = self.posts.index(where: { $0.postId == postId }) else {
+            return
+        }
+        let post = self.posts[postIndex]
+        post.numberOfComments = NSNumber(value: post.numberOfCommentsInt - 1)
+        self.tableView.reloadRows(at: [IndexPath(row: postIndex, section: 0)], with: UITableViewRowAnimation.none)
     }
 }
