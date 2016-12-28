@@ -19,7 +19,9 @@ let UpdatePostNumberOfLikesNotificationKey: String = "UpdatePostNumberOfLikesNot
 let CreateCommentNotificationKey: String = "CreateCommentNotificationKey"
 let DeleteCommentNotificationKey: String = "DeleteCommentNotificationKey"
 
-let FollowingUserNotificationKey: String = "FollowingUserNotificationKey"
+let FollowUserNotificationKey: String = "FollowUserNotificationKey"
+let UnfollowUserNotificationKey: String = "UnfollowUserNotificationKey"
+
 let RecommendUserNotificationKey: String = "RecommendUserNotificationKey"
 let UnrecommendUserNotificationKey: String = "UnrecommendUserNotificationKey"
 

@@ -37,7 +37,8 @@ class UsersTableViewController: UITableViewController {
         self.prepareForQueries()
         
         // Add observers.
-        NotificationCenter.default.addObserver(self, selector: #selector(self.followingUserNotification(_:)), name: NSNotification.Name(FollowingUserNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.followUserNotification(_:)), name: NSNotification.Name(FollowUserNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.unfollowUserNotification(_:)), name: NSNotification.Name(UnfollowUserNotificationKey), object: nil)
     }
     
     override func didReceiveMemoryWarning() {
@@ -385,18 +386,31 @@ extension UsersTableViewController {
     
     // MARK: NotificationCenterActions
     
-    func followingUserNotification(_ notification: NSNotification) {
+    func followUserNotification(_ notification: NSNotification) {
         guard let followingId = notification.userInfo?["followingId"] as? String else {
             return
         }
         guard let userIndex = self.users.index(where: { $0.userId == followingId }) else {
             return
         }
-        if let followingIdIndex = self.followingIds.index(of: followingId) {
-            self.followingIds.remove(at: followingIdIndex)
-        } else {
-            self.followingIds.append(followingId)
+        guard !self.followingIds.contains(followingId) else {
+            return
         }
+        self.followingIds.append(followingId)
+        self.tableView.reloadRows(at: [IndexPath(row: userIndex, section: 0)], with: UITableViewRowAnimation.none)
+    }
+    
+    func unfollowUserNotification(_ notification: NSNotification) {
+        guard let followingId = notification.userInfo?["followingId"] as? String else {
+            return
+        }
+        guard let userIndex = self.users.index(where: { $0.userId == followingId }) else {
+            return
+        }
+        guard let followingIdIndex = self.followingIds.index(of: followingId) else {
+            return
+        }
+        self.followingIds.remove(at: followingIdIndex)
         self.tableView.reloadRows(at: [IndexPath(row: userIndex, section: 0)], with: UITableViewRowAnimation.none)
     }
 }
@@ -411,11 +425,14 @@ extension UsersTableViewController: UserTableViewCellDelegate {
             return
         }
         if self.followingIds.contains(userId) {
+            // In background.
             self.unfollowUser(userId)
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: UnfollowUserNotificationKey), object: self, userInfo: ["followingId": userId])
         } else {
             let followingUser = self.users[indexPath.row]
+            // In background.
             self.followUser(userId, followingFirstName: followingUser.firstName, followingLastName: followingUser.lastName, followingPreferredUsername: followingUser.preferredUsername, followingProfessionName: followingUser.professionName, followingProfilePicUrl: followingUser.profilePicUrl)
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: FollowUserNotificationKey), object: self, userInfo: ["followingId": userId])
         }
-        NotificationCenter.default.post(name: NSNotification.Name(rawValue: FollowingUserNotificationKey), object: self, userInfo: ["followingId": userId])
     }
 }

@@ -76,7 +76,8 @@ class ProfileTableViewController: UITableViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(self.createCommentNotification(_:)), name: NSNotification.Name(CreateCommentNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.deleteCommentNotification(_:)), name: NSNotification.Name(DeleteCommentNotificationKey), object: nil)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(self.followingUserNotification(_:)), name: NSNotification.Name(FollowingUserNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.followUserNotification(_:)), name: NSNotification.Name(FollowUserNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.unfollowUserNotification(_:)), name: NSNotification.Name(UnfollowUserNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.recommendUserNotification(_:)), name: NSNotification.Name(RecommendUserNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.unrecommendUserNotification(_:)), name: NSNotification.Name(UnrecommendUserNotificationKey), object: nil)
     }
@@ -1074,32 +1075,40 @@ extension ProfileTableViewController {
         }
     }
     
-    func followingUserNotification(_ notification: NSNotification) {
+    func followUserNotification(_ notification: NSNotification) {
         guard let followingId = notification.userInfo?["followingId"] as? String else {
             return
         }
         guard self.user?.userId == followingId else {
             return
         }
-        guard self.hasRelationshipLoaded else {
+        guard self.hasRelationshipLoaded, !self.isFollowing else {
             return
         }
-        if self.isFollowing {
-            // Unfollow.
-            self.isFollowing = false
-            if let numberOfFollowers = self.user?.numberOfFollowers, numberOfFollowers.intValue > 0 {
-                self.user?.numberOfFollowers = NSNumber(value: numberOfFollowers.intValue - 1)
-            } else {
-                self.user?.numberOfFollowers = NSNumber(value: 0)
-            }
+        self.isFollowing = true
+        if let numberOfFollowers = self.user?.numberOfFollowers {
+            self.user?.numberOfFollowers = NSNumber(value: numberOfFollowers.intValue + 1)
         } else {
-            // Follow.
-            self.isFollowing = true
-            if let numberOfFollowers = self.user?.numberOfFollowers {
-                self.user?.numberOfFollowers = NSNumber(value: numberOfFollowers.intValue + 1)
-            } else {
-                self.user?.numberOfFollowers = NSNumber(value: 1)
-            }
+            self.user?.numberOfFollowers = NSNumber(value: 1)
+        }
+        self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.none)
+    }
+    
+    func unfollowUserNotification(_ notification: NSNotification) {
+        guard let followingId = notification.userInfo?["followingId"] as? String else {
+            return
+        }
+        guard self.user?.userId == followingId else {
+            return
+        }
+        guard self.hasRelationshipLoaded, self.isFollowing else {
+            return
+        }
+        self.isFollowing = false
+        if let numberOfFollowers = self.user?.numberOfFollowers, numberOfFollowers.intValue > 0 {
+            self.user?.numberOfFollowers = NSNumber(value: numberOfFollowers.intValue - 1)
+        } else {
+            self.user?.numberOfFollowers = NSNumber(value: 0)
         }
         self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.none)
     }
@@ -1166,7 +1175,7 @@ extension ProfileTableViewController: ProfileMainTableViewCellDelegate {
                         (alert: UIAlertAction) in
                         // DynamoDB and Notify observers (self also).
                         self.unfollowUser(followingId)
-                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: FollowingUserNotificationKey), object: self, userInfo: ["followingId": followingId])
+                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: UnfollowUserNotificationKey), object: self, userInfo: ["followingId": followingId])
                     })
                     alertController.addAction(deleteAction)
                     // CANCEL
@@ -1176,7 +1185,7 @@ extension ProfileTableViewController: ProfileMainTableViewCellDelegate {
                 } else {
                     let followingUser = self.user
                     self.followUser(followingId, followingFirstName: followingUser?.firstName, followingLastName: followingUser?.lastName, followingPreferredUsername: followingUser?.preferredUsername, followingProfessionName: followingUser?.professionName, followingProfilePicUrl: followingUser?.profilePicUrl)
-                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: FollowingUserNotificationKey), object: self, userInfo: ["followingId": followingId])
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: FollowUserNotificationKey), object: self, userInfo: ["followingId": followingId])
                 }
             }
         }
