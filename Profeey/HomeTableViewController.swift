@@ -21,12 +21,23 @@ class HomeTableViewController: UITableViewController {
     @IBOutlet var homeEmptyFeedView: HomeEmptyFeedView!
     
     fileprivate var posts: [Post] = []
+    
     // Before any post is loaded.
     fileprivate var isLoadingPosts: Bool = false
     fileprivate var activityIndicatorView: UIActivityIndicatorView?
+    
+    /*
+     Special case, when new user doesn't have any posts (activities) on the feed and starts following 
+     users in DiscoverVc or UsersVc or ProfileVc.
+     NSNotification notifies HomeVc to start querying as soons as viewWillAppear.
+     This should happen only first time and then set this flag back to false.
+    */
+    fileprivate var hasDiscoveredAndFollowedUsers: Bool = false
+    
     // When uploading new post.
     fileprivate var isUploading: Bool = false
     fileprivate var newPostProgress: Progress?
+    
     // Different behaviour depending on segue or tabBarSwitch.
     fileprivate var isNavigationBarHidden: Bool = false
     var isTabBarSwitch: Bool = false
@@ -50,6 +61,7 @@ class HomeTableViewController: UITableViewController {
             navigationController.view.insertSubview(statusBarBackgroundView, belowSubview: navigationController.navigationBar)
         }
         
+        // Start querying activities.
         if AWSIdentityManager.defaultIdentityManager().isLoggedIn {
             self.isLoadingPosts = true
             self.activityIndicatorView?.startAnimating()
@@ -59,15 +71,28 @@ class HomeTableViewController: UITableViewController {
         // Add observers, don't need deinit removeObserver.
         NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNotification(_:)), name: NSNotification.Name(UpdatePostNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.deletePostNotification(_:)), name: NSNotification.Name(DeletePostNotificationKey), object: nil)
+        
         NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNumberOfLikesNotification(_:)), name: NSNotification.Name(UpdatePostNumberOfLikesNotificationKey), object: nil)
+        
         NotificationCenter.default.addObserver(self, selector: #selector(self.createCommentNotification(_:)), name: NSNotification.Name(CreateCommentNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.deleteCommentNotification(_:)), name: NSNotification.Name(DeleteCommentNotificationKey), object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.followUserNotification(_:)), name: NSNotification.Name(FollowUserNotificationKey), object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if self.isNavigationBarHidden {
             self.navigationController?.setNavigationBarHidden(true, animated: !self.isTabBarSwitch)
+        }
+        // Special case.
+        if self.hasDiscoveredAndFollowedUsers {
+            self.isLoadingPosts = true
+            self.tableView.backgroundView = self.activityIndicatorView
+            self.activityIndicatorView?.startAnimating()
+            self.queryUserActivitiesDateSorted()
+            // Set back to false.
+            self.hasDiscoveredAndFollowedUsers = false
         }
     }
     
@@ -354,6 +379,8 @@ class HomeTableViewController: UITableViewController {
                     guard let awsActivities = response?.items as? [AWSActivity], awsActivities.count > 0 else {
                         // Set the homeEmptyFeedView.
                         self.tableView.backgroundView = self.homeEmptyFeedView
+                        // Reset posts anyways.
+                        self.posts = []
                         self.tableView.reloadData()
                         return
                     }
@@ -664,6 +691,17 @@ extension HomeTableViewController {
         UIView.performWithoutAnimation {
             self.tableView.reloadRows(at: [IndexPath(row: 4, section: postIndex)], with: UITableViewRowAnimation.none)
         }
+    }
+    
+    // Special case used only when there's no posts(activities) for a new user.
+    func followUserNotification(_ notification: NSNotification) {
+        guard let _ = notification.userInfo?["followingId"] as? String else {
+            return
+        }
+        guard self.posts.count == 0, self.hasDiscoveredAndFollowedUsers == false else {
+            return
+        }
+        self.hasDiscoveredAndFollowedUsers = true
     }
 }
 
