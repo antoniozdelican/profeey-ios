@@ -454,7 +454,7 @@ class HomeTableViewController: UITableViewController {
         print("uploadImageS3:")
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         localContent.uploadWithPin(
-            onCompletion: false,
+            onCompletion: true,
             progressBlock: {
                 (content: AWSLocalContent?, progress: Progress?) -> Void in
                 DispatchQueue.main.async(execute: {

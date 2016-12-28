@@ -275,10 +275,10 @@ class EditProfileTableViewController: UITableViewController {
         print("uploadImageS3:")
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         localContent.uploadWithPin(
-            onCompletion: false,
+            onCompletion: true,
             progressBlock: {
                 (content: AWSLocalContent?, progress: Progress?) -> Void in
-                // TODO
+                // Do nothing.
             }, completionHandler: {
                 (content: AWSLocalContent?, error: Error?) -> Void in
                 DispatchQueue.main.async(execute: {
@@ -289,7 +289,6 @@ class EditProfileTableViewController: UITableViewController {
                         let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.localizedDescription, cancelButtonTitle: "Ok")
                         self.present(alertController, animated: true, completion: nil)
                     } else {
-                        print("uploadImageS3 success!")
                         self.user?.profilePicUrl = imageKey
                         self.updateUser()
                     }
