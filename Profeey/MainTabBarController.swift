@@ -28,12 +28,13 @@ class MainTabBarController: UITabBarController {
         self.configureView()
         
         // Get currentUser from DynamoDB upon initialization of this rootVc.
-        if AWSIdentityManager.defaultIdentityManager().isLoggedIn && PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB == nil {
+//        if AWSIdentityManager.defaultIdentityManager().isLoggedIn && PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB == nil {
+//            self.getCurrentUser()
+//        }
+        
+        if AWSIdentityManager.defaultIdentityManager().isLoggedIn {
             self.getCurrentUser()
         }
-        
-        // Add observers.
-        NotificationCenter.default.addObserver(self, selector: #selector(self.updateUserNotification(_:)), name: NSNotification.Name(UpdateUserNotificationKey), object: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -51,7 +52,6 @@ class MainTabBarController: UITabBarController {
                     return
                 }
                 tabBarItem?.image = image.withRenderingMode(UIImageRenderingMode.alwaysOriginal)
-                // Because of different selected color.
                 tabBarItem?.selectedImage = selectedImage.withRenderingMode(UIImageRenderingMode.alwaysOriginal)
             }
             if tabBarItem?.tag == 1 {
@@ -90,6 +90,20 @@ class MainTabBarController: UITabBarController {
         }
     }
     
+    // MARK: Helpers
+    
+    fileprivate func showMissingUsernameFlow() {
+        let navigationController = UIStoryboard(name: "Onboarding", bundle: nil).instantiateViewController(withIdentifier: "missingUsernameNavigationController")
+        self.present(navigationController, animated: true, completion: nil)
+    }
+    
+    // MARK: Public
+    
+    // Public method to open NotificationsVc as response to user tapping push notification.
+    func selectMainChildViewController(_ mainChildController: MainChildController) {
+        self.selectedIndex = mainChildController.rawValue
+    }
+    
     // MARK: AWS
     
     // Gets currentUser and creates currentUserDynamoDB on PRFYDynamoDBManager singleton.
@@ -111,9 +125,8 @@ class MainTabBarController: UITabBarController {
                         self.showMissingUsernameFlow()
                         return
                     }
-                    let currentUser = CurrentUser(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationId: awsUser._locationId, locationName: awsUser._locationName)
-                    // Store properties.
-                    PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB = currentUser
+                    // Update locally.
+                    PRFYDynamoDBManager.defaultDynamoDBManager().updateCurrentUserLocal(awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationId: awsUser._locationId, locationName: awsUser._locationName, profilePic: nil)
                     // Get profilePic.
                     if let profilePicUrl = awsUser._profilePicUrl {
                         self.downloadImage(profilePicUrl, imageType: .currentUserProfilePic)
@@ -171,43 +184,6 @@ class MainTabBarController: UITabBarController {
                     })
             })
         }
-    }
-    
-    // MARK: Helpers
-    
-    fileprivate func showMissingUsernameFlow() {
-        let navigationController = UIStoryboard(name: "Onboarding", bundle: nil).instantiateViewController(withIdentifier: "missingUsernameNavigationController")
-        self.present(navigationController, animated: true, completion: nil)
-    }
-    
-    // MARK: Public
-    
-    // Public method to open NotificationsVc as response to user tapping push notification.
-    func selectMainChildViewController(_ mainChildController: MainChildController) {
-        self.selectedIndex = mainChildController.rawValue
-    }
-}
-
-extension MainTabBarController {
-    
-    // MARK: NotificationCenterActions
-    
-    // Update currentUserDynamoDB.
-    func updateUserNotification(_ notification: NSNotification) {
-        guard let editUser = notification.userInfo?["user"] as? EditUser else {
-            return
-        }
-        guard PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB?.userId == editUser.userId else {
-            return
-        }
-        PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB?.firstName = editUser.firstName
-        PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB?.lastName = editUser.lastName
-        PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB?.preferredUsername = editUser.preferredUsername
-        PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB?.professionName = editUser.professionName
-        PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB?.profilePicUrl = editUser.profilePicUrl
-        PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB?.locationId = editUser.locationId
-        PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB?.locationName = editUser.locationName
-        PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB?.profilePic = editUser.profilePic
     }
 }
 

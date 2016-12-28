@@ -906,7 +906,6 @@
 		A9A503971D2FA7DB0030A472 /* PRFY */ = {
 			isa = PBXGroup;
 			children = (
-				A9A503981D2FA9180030A472 /* LocalService.swift */,
 				A9D100611E0C4294006590F8 /* User */,
 				A9EEEE2B1E12613F00A20755 /* Post */,
 				A9BCBDC41DDAFA0F00265AFA /* Recommendation.swift */,
@@ -918,6 +917,7 @@
 				A9D49EDF1DD5C834000F90A8 /* UserCategory.swift */,
 				A915F8741DC0D9CB0031C45F /* Location.swift */,
 				A91C1CD81DEDA8C2006FBDD4 /* PRFYNotification.swift */,
+				A9A503981D2FA9180030A472 /* LocalService.swift */,
 			);
 			name = PRFY;
 			sourceTree = "<group>";

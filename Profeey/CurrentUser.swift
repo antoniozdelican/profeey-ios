@@ -14,6 +14,12 @@ class CurrentUser: User {
         super.init()
     }
     
+    // To initialize just with identityId.
+    convenience init(userId: String?) {
+        self.init()
+        self.userId = userId
+    }
+    
     convenience init(userId: String?, firstName: String?, lastName: String?, preferredUsername: String?, professionName: String?, profilePicUrl: String?, locationId: String?, locationName: String?) {
         self.init()
         self.userId = userId

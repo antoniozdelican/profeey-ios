@@ -256,7 +256,10 @@ class EditProfileTableViewController: UITableViewController {
                     if let profilePicUrlToRemove = self.profilePicUrlToRemove {
                         userInfo["profilePicUrlToRemove"] = profilePicUrlToRemove
                     }
+                    // Notifiy observers.
                     NotificationCenter.default.post(name: NSNotification.Name(rawValue: UpdateUserNotificationKey), object: self, userInfo: userInfo)
+                    // Update locally.
+                    PRFYDynamoDBManager.defaultDynamoDBManager().updateCurrentUserLocal(user.firstName, lastName: user.lastName, preferredUsername: user.preferredUsername, professionName: user.professionName, profilePicUrl: user.profilePicUrl, locationId: user.locationId, locationName: user.locationName, profilePic: user.profilePic)
                     self.dismiss(animated: true, completion: nil)
                 }
             })

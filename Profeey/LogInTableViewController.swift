@@ -111,6 +111,7 @@ class LogInTableViewController: UITableViewController {
             (result: Any?, error: Error?) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                // TODO
                 FullScreenIndicator.hide()
                 if let error = error as? NSError {
                     let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.userInfo["message"] as? String, cancelButtonTitle: "Try Again")

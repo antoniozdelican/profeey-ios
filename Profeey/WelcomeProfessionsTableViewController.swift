@@ -64,6 +64,14 @@ class WelcomeProfessionsTableViewController: UITableViewController {
         // Fix alignment for custom rightBarButtonItem.
         self.nextButton.contentEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, 0.0, -8.0)
     }
+    
+    // MARK: Navigation
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let destinationViewController = segue.destination as? DiscoverPeopleTableViewController {
+            destinationViewController.isOnboardingFlow = true
+        }
+    }
 
     // MARK: UITableViewDataSource
 
@@ -216,7 +224,7 @@ class WelcomeProfessionsTableViewController: UITableViewController {
             let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil)
             let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: {
                 (alertAction: UIAlertAction) in
-                self.redirectToMain()
+                self.performSegue(withIdentifier: "segueToDiscoverPeopleVc", sender: self)
             })
             alertController.addAction(cancelAction)
             alertController.addAction(okAction)
@@ -225,14 +233,6 @@ class WelcomeProfessionsTableViewController: UITableViewController {
     }
     
     // MARK: Helpers
-    
-    fileprivate func redirectToMain() {
-        guard let window = UIApplication.shared.keyWindow,
-            let initialViewController = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController() else {
-                return
-        }
-        window.rootViewController = initialViewController
-    }
     
     fileprivate func filterProfessions(_ namePrefix: String) {
         // Clear old.
@@ -374,7 +374,7 @@ class WelcomeProfessionsTableViewController: UITableViewController {
                     alertController.addAction(okAction)
                     self.present(alertController, animated: true, completion: nil)
                 } else {
-                    self.redirectToMain()
+                    self.performSegue(withIdentifier: "segueToDiscoverPeopleVc", sender: self)
                 }
             })
             return nil

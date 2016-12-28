@@ -999,11 +999,20 @@
                     </navigationItem>
                     <connections>
                         <outlet property="nextButton" destination="1Kp-px-S8S" id="vA7-ci-ZLA"/>
+                        <segue destination="H5m-l2-Tl9" kind="show" identifier="segueToDiscoverPeopleVc" id="cTE-CR-Gxy"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ds4-FH-5bX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="4342" y="-674"/>
+        </scene>
+        <!--DiscoverPeople-->
+        <scene sceneID="peN-g3-QeJ">
+            <objects>
+                <viewControllerPlaceholder storyboardName="DiscoverPeople" id="H5m-l2-Tl9" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Hdx-42-UOC" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="5010" y="-675"/>
         </scene>
         <!--Capture-->
         <scene sceneID="X5B-Z5-qqR">

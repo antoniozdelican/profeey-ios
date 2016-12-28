@@ -15,6 +15,10 @@ typealias AWSDynamoDBContinuationBlock = (AWSTask<AWSDynamoDBPaginatedOutput>) -
 
 protocol DynamoDBManager {
     
+    // MARK: CurrentUser
+    
+    func updateCurrentUserLocal(_ firstName: String?, lastName: String?, preferredUsername: String?, professionName: String?, profilePicUrl: String?, locationId: String?, locationName: String?, profilePic: UIImage?)
+    
     // MARK: Users
     
     func getCurrentUserDynamoDB(_ completionHandler: @escaping AWSContinuationBlock)

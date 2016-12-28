@@ -22,8 +22,27 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
     }
     
     // Stores currentUser attributes from DynamoDB during the session.
-    // Need it for saving likes, following and post in NoSQL tables.
     var currentUserDynamoDB: CurrentUser?
+    
+    // MARK: CurrentUser
+    
+    func updateCurrentUserLocal(_ firstName: String?, lastName: String?, preferredUsername: String?, professionName: String?, profilePicUrl: String?, locationId: String?, locationName: String?, profilePic: UIImage?) {
+        guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
+            print("updateCurrentUserLocal no identityId!")
+            return
+        }
+        if self.currentUserDynamoDB == nil {
+            self.currentUserDynamoDB = CurrentUser(userId: identityId)
+        }
+        self.currentUserDynamoDB?.firstName = firstName
+        self.currentUserDynamoDB?.lastName = lastName
+        self.currentUserDynamoDB?.preferredUsername = preferredUsername
+        self.currentUserDynamoDB?.professionName = professionName
+        self.currentUserDynamoDB?.profilePicUrl = profilePicUrl
+        self.currentUserDynamoDB?.locationId = locationId
+        self.currentUserDynamoDB?.locationName = locationName
+        self.currentUserDynamoDB?.profilePic = profilePic
+    }
     
     // MARK: Users
     
@@ -44,7 +63,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         usersTable.getUser(userId, completionHandler: completionHandler)
     }
     
-    // Creates a user on landing.
+    // Creates user on landing.
     func createUserDynamoDB(_ email: String, firstName: String, lastName: String, completionHandler: @escaping AWSContinuationBlock) {
         guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
             print("getRelationshipDynamoDB no identityId!")
@@ -55,7 +74,19 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         let creationDate = NSNumber(value: Date().timeIntervalSince1970 as Double)
         let awsUsersTable = AWSUsersTable()
         let awsUser = AWSUser(_userId: identityId, _creationDate: creationDate, _firstName: firstName, _lastName: lastName, _email: email)
-        awsUsersTable.saveUserSkipNull(awsUser, completionHandler: completionHandler)
+        awsUsersTable.saveUserSkipNull(awsUser, completionHandler: {
+            (task: AWSTask) in
+            if let error = task.error {
+                AWSTask(error: error).continue(completionHandler)
+            } else {
+                // Set currentUser (init).
+                self.currentUserDynamoDB = CurrentUser(userId: identityId)
+                self.currentUserDynamoDB?.firstName = firstName
+                self.currentUserDynamoDB?.lastName = lastName
+                AWSTask(result: awsUser).continue(completionHandler)
+            }
+            return nil
+        })
     }
     
     // Updates user on landing.
@@ -68,7 +99,18 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         print("saveUserPreferredUsernameAndProfilePicDynamoDB:")
         let awsUsersTable = AWSUsersTable()
         let awsUser = AWSUser(_userId: identityId, _preferredUsername: preferredUsername, _profilePicUrl: profilePicUrl)
-        awsUsersTable.saveUserSkipNull(awsUser, completionHandler: completionHandler)
+        awsUsersTable.saveUserSkipNull(awsUser, completionHandler: {
+            (task: AWSTask) in
+            if let error = task.error {
+                AWSTask(error: error).continue(completionHandler)
+            } else {
+                // Set currentUser.
+                self.currentUserDynamoDB?.preferredUsername = preferredUsername
+                self.currentUserDynamoDB?.profilePicUrl = profilePicUrl
+                AWSTask(result: awsUser).continue(completionHandler)
+            }
+            return nil
+        })
     }
     
     // Updates user on landing.
@@ -81,7 +123,17 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         print("saveUserProfessionDynamoDB:")
         let awsUsersTable = AWSUsersTable()
         let awsUser = AWSUser(_userId: identityId, _professionName: professionName)
-        awsUsersTable.saveUserSkipNull(awsUser, completionHandler: completionHandler)
+        awsUsersTable.saveUserSkipNull(awsUser, completionHandler: {
+            (task: AWSTask) in
+            if let error = task.error {
+                AWSTask(error: error).continue(completionHandler)
+            } else {
+                // Set currentUser.
+                self.currentUserDynamoDB?.professionName = professionName
+                AWSTask(result: awsUser).continue(completionHandler)
+            }
+            return nil
+        })
     }
     
     func updateUserDynamoDB(_ firstName: String?, lastName: String?, professionName: String?, profilePicUrl: String?, about: String?, locationId: String?, locationName: String?, website: String?, completionHandler: @escaping AWSContinuationBlock) {

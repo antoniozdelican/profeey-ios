@@ -12,7 +12,9 @@ import AWSDynamoDB
 
 class DiscoverPeopleTableViewController: UITableViewController {
     
-    var isWelcomeFlow: Bool = false
+    @IBOutlet weak var nextButton: UIButton?
+    
+    var isOnboardingFlow: Bool = false
     
     fileprivate var users: [User] = []
     fileprivate var isSearchingUsers: Bool = false
@@ -23,7 +25,14 @@ class DiscoverPeopleTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        if self.isOnboardingFlow {
+            self.navigationItem.hidesBackButton = true
+            self.nextButton?.contentEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, 0.0, -8.0)
+        } else {
+            self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+            // Remove Next button.
+            self.navigationItem.rightBarButtonItem = nil
+        }
         
         if let currentUserId = AWSIdentityManager.defaultIdentityManager().identityId {
             self.currentUserId = currentUserId
@@ -105,7 +114,7 @@ class DiscoverPeopleTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let cell = tableView.cellForRow(at: indexPath)
-        if cell is DiscoverUserTableViewCell && !self.isWelcomeFlow {
+        if cell is DiscoverUserTableViewCell {
             self.performSegue(withIdentifier: "segueToProfileVc", sender: cell)
         }
     }
@@ -128,6 +137,25 @@ class DiscoverPeopleTableViewController: UITableViewController {
             return 64.0
         }
         return UITableViewAutomaticDimension
+    }
+    
+    // MARK: Helpers
+    
+    fileprivate func redirectToMain() {
+        guard let window = UIApplication.shared.keyWindow,
+            let initialViewController = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController() else {
+                return
+        }
+        window.rootViewController = initialViewController
+    }
+    
+    // MARK: IBActions
+    
+    @IBAction func nextButtonTapped(_ sender: Any) {
+        guard self.isOnboardingFlow else {
+            return
+        }
+        self.redirectToMain()
     }
     
     // MARK: AWS
