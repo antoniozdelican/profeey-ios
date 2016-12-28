@@ -65,7 +65,6 @@ class CameraViewController: UIViewController {
             self.imagePickerController.didMove(toParentViewController: self)
         } else {
             // Disable buttons.
-//            self.flashButton.isEnabled = false
             self.cameraViewControllerDelegate?.toggleFlashBarButton(false)
             self.cameraSwitchButton.isEnabled = false
             self.captureButton.isEnabled = false
@@ -105,25 +104,10 @@ class CameraViewController: UIViewController {
     @IBAction func cameraSwitchButtonTapped(_ sender: AnyObject) {
         if self.imagePickerController.cameraDevice == UIImagePickerControllerCameraDevice.rear {
             self.imagePickerController.cameraDevice = UIImagePickerControllerCameraDevice.front
-            self.cameraViewControllerDelegate?.toggleFlashBarButton(false)
-//            UIView.animate(
-//                withDuration: 0.0,
-//                delay: 0.5,
-//                options: [],
-//                animations: {
-//                    //self.flashButton.alpha = 0.0
-//                }, completion: nil)
+            //self.cameraViewControllerDelegate?.toggleFlashBarButton(false)
         } else {
             self.imagePickerController.cameraDevice = UIImagePickerControllerCameraDevice.rear
-            self.cameraViewControllerDelegate?.toggleFlashBarButton(true)
-            
-//            UIView.animate(
-//                withDuration: 0.0,
-//                delay: 0.5,
-//                options: [],
-//                animations: {
-//                    //self.flashButton.alpha = 1.0
-//                }, completion: nil)
+            //self.cameraViewControllerDelegate?.toggleFlashBarButton(true)
         }
     }
     
@@ -159,9 +143,9 @@ extension CameraViewController: UINavigationControllerDelegate, UIImagePickerCon
 extension CameraViewController: FlashSwitchDelegate {
     
     func flashBarButtonTapped() {
-        guard self.imagePickerController.cameraDevice == UIImagePickerControllerCameraDevice.rear else {
-            return
-        }
+//        guard self.imagePickerController.cameraDevice == UIImagePickerControllerCameraDevice.rear else {
+//            return
+//        }
         switch self.imagePickerController.cameraFlashMode {
         case UIImagePickerControllerCameraFlashMode.auto:
             self.imagePickerController.cameraFlashMode = UIImagePickerControllerCameraFlashMode.on
