@@ -119,8 +119,8 @@ class ProfileTableViewController: UITableViewController {
             destinationViewController.userId = self.user?.userId
         }
         if let destinationViewController = segue.destination as? ExperiencesTableViewController {
-            destinationViewController.workExperiences = self.workExperiences.map( { $0.copy() as! WorkExperience })
-            destinationViewController.educations = self.educations.map( { $0.copy() as! Education })
+            destinationViewController.workExperiences = self.workExperiences.map( { $0.copyWorkExperience() })
+            destinationViewController.educations = self.educations.map( { $0.copyEducation() })
             destinationViewController.experiencesTableViewControllerDelegate = self
         }
         if let destinationViewController = segue.destination as? PostDetailsTableViewController,
@@ -130,18 +130,15 @@ class ProfileTableViewController: UITableViewController {
         if let destinationViewController = segue.destination as? UserCategoryTableViewController,
             let cell = sender as? UserCategoryTableViewCell,
             let indexPath = self.tableView.indexPath(for: cell) {
-            // TODO: refactor
-            destinationViewController.user = self.user
+            destinationViewController.user = self.user?.copyUser()
             destinationViewController.userCategory = self.userCategories[indexPath.row]
         }
         if let destinationViewController = segue.destination as? UINavigationController,
             let childViewController = destinationViewController.childViewControllers[0] as? AddRecommendationTableViewController {
-            // TODO: refactor
-            childViewController.user = self.user
+            childViewController.user = self.user?.copyUser()
         }
         if let destinationViewController = segue.destination as? RecommendationsTableViewController {
-            // TODO: refactor ? or just send userId
-            destinationViewController.user = self.user
+            destinationViewController.userId = self.user?.userId
         }
     }
 

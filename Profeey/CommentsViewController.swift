@@ -10,9 +10,6 @@ import UIKit
 import AWSMobileHubHelper
 import AWSDynamoDB
 
-//protocol CommentsViewControllerDelegate {
-//    func commentPosted(_ comment: Comment)
-//}
 
 class CommentsViewController: UIViewController {
 
@@ -25,7 +22,6 @@ class CommentsViewController: UIViewController {
     var postId: String?
     var postUserId: String?
     var isCommentButton: Bool = false
-    //fileprivate var commentsViewControllerDelegate: CommentsViewControllerDelegate?
     
     fileprivate var COMMENT_BAR_BOTTOM_CONSTRAINT_CONSTANT: CGFloat = 0.0
     fileprivate var COMMENT_BAR_HEIGHT: CGFloat = 49.0
@@ -73,8 +69,6 @@ class CommentsViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destinationViewController = segue.destination as? CommentsTableViewController {
             destinationViewController.postId = self.postId
-//            destinationViewController.commentsTableViewControllerDelegate = self
-            //self.commentsViewControllerDelegate = destinationViewController
         }
     }
     

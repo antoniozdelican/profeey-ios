@@ -53,7 +53,7 @@ class ExperiencesTableViewController: UITableViewController {
             let childViewController = navigationViewController.childViewControllers[0] as? EditWorkExperienceTableViewController {
             if let cell = sender as? WorkExperienceTableViewCell,
                 let indexPath = self.tableView.indexPath(for: cell) {
-                childViewController.workExperience = self.workExperiences[indexPath.row].copy() as? WorkExperience
+                childViewController.workExperience = self.workExperiences[indexPath.row].copyWorkExperience()
                 childViewController.isNewWorkExperience = false
             } else {
                 childViewController.isNewWorkExperience = true
@@ -63,7 +63,7 @@ class ExperiencesTableViewController: UITableViewController {
             let childViewController = navigationViewController.childViewControllers[0] as? EditEducationTableViewController {
             if let cell = sender as? EducationTableViewCell,
                 let indexPath = self.tableView.indexPath(for: cell) {
-                childViewController.education = self.educations[indexPath.row].copy() as? Education
+                childViewController.education = self.educations[indexPath.row].copyEducation()
                 childViewController.isNewEducation = false
             } else {
                 childViewController.isNewEducation = true

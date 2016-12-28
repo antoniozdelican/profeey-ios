@@ -54,8 +54,7 @@ class PostDetailsTableViewController: UITableViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destinationViewController = segue.destination as? ProfileTableViewController {
-            // TODO: refactor
-            destinationViewController.user = self.post?.user
+            destinationViewController.user = self.post?.user?.copyUser()
         }
         if let destinationViewController = segue.destination as? UsersTableViewController {
             destinationViewController.usersType = UsersType.likers

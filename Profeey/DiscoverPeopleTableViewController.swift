@@ -57,7 +57,7 @@ class DiscoverPeopleTableViewController: UITableViewController {
         if let destinationViewController = segue.destination as? ProfileTableViewController,
             let cell = sender as? DiscoverUserTableViewCell,
             let indexPath = self.tableView.indexPath(for: cell) {
-            destinationViewController.user = self.users[indexPath.row]
+            destinationViewController.user = self.users[indexPath.row].copyUser()
         }
     }
 

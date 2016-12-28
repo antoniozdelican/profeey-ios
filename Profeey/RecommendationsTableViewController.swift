@@ -12,7 +12,7 @@ import AWSDynamoDB
 
 class RecommendationsTableViewController: UITableViewController {
     
-    var user: User?
+    var userId: String?
     
     fileprivate var recommendations: [Recommendation] = []
     fileprivate var isLoadingRecommendations: Bool = false
@@ -21,7 +21,7 @@ class RecommendationsTableViewController: UITableViewController {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         
-        if let recommendingId = self.user?.userId {
+        if let recommendingId = self.userId {
             self.isLoadingRecommendations = true
             self.queryRecommendationsDateSorted(recommendingId)
         }
@@ -37,9 +37,7 @@ class RecommendationsTableViewController: UITableViewController {
         if let destinationViewController = segue.destination as? ProfileTableViewController,
             let cell = sender as? RecommendationTableViewCell,
             let indexPath = self.tableView.indexPath(for: cell) {
-            
-            // TODO: refactor copy
-            destinationViewController.user = self.recommendations[indexPath.row].user
+            destinationViewController.user = self.recommendations[indexPath.row].user?.copyUser()
         }
     }
     

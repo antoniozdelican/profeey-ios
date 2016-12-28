@@ -130,9 +130,7 @@ class HomeTableViewController: UITableViewController {
         if let destinationViewController = segue.destination as? ProfileTableViewController,
             let cell = sender as? PostUserTableViewCell,
             let indexPath = self.tableView.indexPath(for: cell) {
-            
-            // TODO : Copy user?
-            destinationViewController.user = self.posts[indexPath.section].user
+            destinationViewController.user = self.posts[indexPath.section].user?.copyUser()
         }
         if let destinationViewController = segue.destination as? UsersTableViewController,
             let cell = sender as? PostButtonsTableViewCell,
@@ -150,8 +148,7 @@ class HomeTableViewController: UITableViewController {
             let childViewController =  navigationController.childViewControllers[0] as? EditPostViewController,
             let cell = sender as? PostUserTableViewCell,
             let indexPath = self.tableView.indexPath(for: cell) {
-            let post = self.posts[indexPath.section]
-            childViewController.editPost = post.copyEditPost()
+            childViewController.editPost = self.posts[indexPath.section].copyEditPost()
         }
     }
 

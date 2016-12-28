@@ -51,7 +51,7 @@ class SearchUsersTableViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destinationViewController = segue.destination as? ProfileTableViewController,
             let indexPath = sender as? IndexPath {
-            destinationViewController.user = self.isShowingPopularUsers ? self.popularUsers[indexPath.row] : self.regularUsers[indexPath.row]
+            destinationViewController.user = self.isShowingPopularUsers ? self.popularUsers[indexPath.row].copyUser() : self.regularUsers[indexPath.row].copyUser()
         }
     }
 

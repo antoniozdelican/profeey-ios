@@ -47,7 +47,7 @@ class ProfessionTableViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destinationViewController = segue.destination as? ProfileTableViewController,
             let indexPath = sender as? IndexPath {
-            destinationViewController.user = self.users[indexPath.row]
+            destinationViewController.user = self.users[indexPath.row].copyUser()
         }
     }
 

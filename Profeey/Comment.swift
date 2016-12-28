@@ -45,7 +45,7 @@ class Comment: NSObject {
         self.user = user
     }
     
-    // MARK: Custom copying.
+    // MARK: Custom copying
     
     func copyComment() -> Comment {
         let comment = Comment(userId: userId, commentId: commentId, created: created, commentText: commentText, postId: postId, postUserId: postUserId, user: user)

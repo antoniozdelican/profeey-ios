@@ -33,7 +33,7 @@ class NotificationsTableViewController: UITableViewController {
         if let destinationViewController = segue.destination as? ProfileTableViewController,
             let cell = sender as? NotificationTableViewCell,
             let indexPath = self.tableView.indexPath(for: cell) {
-            destinationViewController.user = self.notifications[indexPath.row].user
+            destinationViewController.user = self.notifications[indexPath.row].user?.copyUser()
         }
         if let destinationViewController = segue.destination as? PostDetailsTableViewController,
             let cell = sender as? NotificationTableViewCell,

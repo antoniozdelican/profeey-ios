@@ -44,7 +44,7 @@ class CommentsTableViewController: UITableViewController {
         if let destinationViewController = segue.destination as? ProfileTableViewController,
             let cell = sender as? CommentTableViewCell,
             let indexPath = self.tableView.indexPath(for: cell) {
-            destinationViewController.user = self.comments[indexPath.row].user
+            destinationViewController.user = self.comments[indexPath.row].user?.copyUser()
         }
     }
 

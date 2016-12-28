@@ -90,7 +90,7 @@ class Post: NSObject {
         self.user = user
     }
     
-    // MARK: Custom copying.
+    // MARK: Custom copying
     
     func copyPost() -> Post {
         let post = Post(userId: userId, postId: postId, creationDate: creationDate, caption: caption, categoryName: categoryName, imageUrl: imageUrl, imageWidth: imageWidth, imageHeight: imageHeight, numberOfLikes: numberOfLikes, numberOfComments: numberOfComments, user: user)
