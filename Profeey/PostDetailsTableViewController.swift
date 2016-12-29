@@ -44,6 +44,7 @@ class PostDetailsTableViewController: UITableViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNumberOfLikesNotification(_:)), name: NSNotification.Name(UpdatePostNumberOfLikesNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.createCommentNotification(_:)), name: NSNotification.Name(CreateCommentNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.deleteCommentNotification(_:)), name: NSNotification.Name(DeleteCommentNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.downloadImageNotification(_:)), name: NSNotification.Name(DownloadImageNotificationKey), object: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -195,8 +196,6 @@ class PostDetailsTableViewController: UITableViewController {
             UIView.performWithoutAnimation {
                 self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
             }
-        default:
-            return
         }
     }
     
@@ -222,14 +221,11 @@ class PostDetailsTableViewController: UITableViewController {
                     let post = Post(userId: awsPost._userId, postId: awsPost._postId, creationDate: awsPost._creationDate, caption: awsPost._caption, categoryName: awsPost._categoryName, imageUrl: awsPost._imageUrl, imageWidth: awsPost._imageWidth, imageHeight: awsPost._imageHeight, numberOfLikes: awsPost._numberOfLikes, numberOfComments: awsPost._numberOfComments, user: user)
                     self.post = post
                     self.tableView.reloadData()
-                    
                     if let profilePicUrl = post.user?.profilePicUrl {
-                        let indexPath = IndexPath(row: 0, section: 0)
-                        self.downloadImage(profilePicUrl, imageType: .userProfilePic, indexPath: indexPath)
+                        PRFYS3Manager.defaultS3Manager().downloadImageS3(profilePicUrl, imageType: .userProfilePic)
                     }
                     if let imageUrl = post.imageUrl {
-                        let indexPath = IndexPath(row: 1, section: 0)
-                        self.downloadImage(imageUrl, imageType: .postPic, indexPath: indexPath)
+                        PRFYS3Manager.defaultS3Manager().downloadImageS3(imageUrl, imageType: .postPic)
                     }
                     if let postId = post.postId {
                         self.getLike(postId)
@@ -238,44 +234,6 @@ class PostDetailsTableViewController: UITableViewController {
             })
             return nil
         })
-    }
-    
-    fileprivate func downloadImage(_ imageKey: String, imageType: ImageType, indexPath: IndexPath) {
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        let content = AWSUserFileManager.defaultUserFileManager().content(withKey: imageKey)
-        // TODO check if content.isImage()
-        // TODO check content.status for duplicate content downloads.
-        if content.isCached {
-            print("Content cached:")
-            DispatchQueue.main.async(execute: {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                if let image = UIImage(data: content.cachedData) {
-                    self.setDownloadedImages(image, imageType: imageType, indexPath: indexPath)
-                }
-            })
-        } else {
-            print("Download content:")
-            content.download(
-                with: AWSContentDownloadType.ifNewerExists,
-                pinOnCompletion: false,
-                progressBlock: {
-                    (content: AWSContent?, progress: Progress?) -> Void in
-                    // TODO
-            },
-                completionHandler: {
-                    (content: AWSContent?, data: Data?, error:  Error?) in
-                    DispatchQueue.main.async(execute: {
-                        UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                        if let error = error {
-                            print("downloadImage error: \(error)")
-                        } else {
-                            if let imageData = data, let image = UIImage(data: imageData) {
-                                self.setDownloadedImages(image, imageType: imageType, indexPath: indexPath)
-                            }
-                        }
-                    })
-            })
-        }
     }
     
     fileprivate func removePost(_ postId: String, imageKey: String) {
@@ -296,6 +254,7 @@ class PostDetailsTableViewController: UITableViewController {
         })
     }
     
+    // TODO: refactor in S3 and reverse with removePost
     fileprivate func removeImage(_ postId: String, imageKey: String) {
         let content = AWSUserFileManager.defaultUserFileManager().content(withKey: imageKey)
         print("removeImageS3:")
@@ -435,6 +394,26 @@ extension PostDetailsTableViewController {
         post.numberOfComments = NSNumber(value: post.numberOfCommentsInt - 1)
         UIView.performWithoutAnimation {
             self.tableView.reloadRows(at: [IndexPath(row: 4, section: 0)], with: UITableViewRowAnimation.none)
+        }
+    }
+    
+    func downloadImageNotification(_ notification: NSNotification) {
+        guard let imageKey = notification.userInfo?["imageKey"] as? String, let imageType = notification.userInfo?["imageType"] as? ImageType, let imageData = notification.userInfo?["imageData"] as? Data else {
+            return
+        }
+        switch imageType {
+        case .userProfilePic:
+            guard self.post?.user?.profilePicUrl == imageKey else {
+                return
+            }
+            self.post?.user?.profilePic = UIImage(data: imageData)
+            self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.none)
+        case .postPic:
+            guard self.post?.imageUrl == imageKey else {
+                return
+            }
+            self.post?.image = UIImage(data: imageData)
+            self.tableView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: UITableViewRowAnimation.none)
         }
     }
 }

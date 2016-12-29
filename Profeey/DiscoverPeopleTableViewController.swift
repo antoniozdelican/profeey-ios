@@ -45,6 +45,7 @@ class DiscoverPeopleTableViewController: UITableViewController {
         // Add observers.
         NotificationCenter.default.addObserver(self, selector: #selector(self.followUserNotification(_:)), name: NSNotification.Name(FollowUserNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.unfollowUserNotification(_:)), name: NSNotification.Name(UnfollowUserNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.downloadImageNotification(_:)), name: NSNotification.Name(DownloadImageNotificationKey), object: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -160,41 +161,6 @@ class DiscoverPeopleTableViewController: UITableViewController {
     
     // MARK: AWS
     
-//    fileprivate func scanUsers() {
-//        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-//        PRFYDynamoDBManager.defaultDynamoDBManager().scanUsersDynamoDB({
-//            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
-//            DispatchQueue.main.async(execute: {
-//                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-//                self.isSearchingPopularUsers = false
-//                if let error = error {
-//                    print("scanUsers error: \(error)")
-//                    self.tableView.reloadData()
-//                } else {
-//                    guard let awsUsers = response?.items as? [AWSUser] else {
-//                        self.tableView.reloadData()
-//                        return
-//                    }
-//                    for awsUser in awsUsers {
-//                        let user = User(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationName: awsUser._locationName, numberOfRecommendations: awsUser._numberOfRecommendations)
-//                        if user.profilePicUrl == nil {
-//                            user.profilePic = UIImage(named: "ic_no_profile_pic_feed")
-//                        }
-//                        self.popularUsers.append(user)
-//                    }
-//                    self.popularUsers = self.sortUsers(self.popularUsers)
-//                    self.tableView.reloadData()
-//                    
-//                    for user in self.popularUsers {
-//                        if let profilePicUrl = user.profilePicUrl {
-//                            self.downloadProfilePic(profilePicUrl, isPopularUser: true)
-//                        }
-//                    }
-//                }
-//            })
-//        })
-//    }
-    
     fileprivate func scanUsers() {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         PRFYDynamoDBManager.defaultDynamoDBManager().scanUsersDynamoDB({
@@ -217,10 +183,9 @@ class DiscoverPeopleTableViewController: UITableViewController {
                         }
                     }
                     self.tableView.reloadData()
-                    for (index, user) in self.users.enumerated() {
+                    for user in self.users {
                         if let profilePicUrl = user.profilePicUrl {
-                            let indexPath = IndexPath(row: index, section: 0)
-                            self.downloadImage(profilePicUrl, imageType: ImageType.userProfilePic, indexPath: indexPath)
+                            PRFYS3Manager.defaultS3Manager().downloadImageS3(profilePicUrl, imageType: .userProfilePic)
                         }
                     }
                 }
@@ -253,60 +218,6 @@ class DiscoverPeopleTableViewController: UITableViewController {
                 }
             })
         })
-    }
-    
-    fileprivate func downloadImage(_ imageKey: String, imageType: ImageType, indexPath: IndexPath) {
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        let content = AWSUserFileManager.defaultUserFileManager().content(withKey: imageKey)
-        // TODO check if content.isImage()
-        if content.isCached {
-            print("Content cached:")
-            DispatchQueue.main.async(execute: {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-            })
-            let image = UIImage(data: content.cachedData)
-            switch imageType {
-            case .userProfilePic:
-                self.users[indexPath.row].profilePic = image
-                UIView.performWithoutAnimation {
-                    self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
-                }
-            default:
-                return
-            }
-        } else {
-            print("Download content:")
-            content.download(
-                with: AWSContentDownloadType.ifNewerExists,
-                pinOnCompletion: false,
-                progressBlock: {
-                    (content: AWSContent?, progress: Progress?) -> Void in
-                    // TODO
-                },
-                completionHandler: {
-                    (content: AWSContent?, data: Data?, error: Error?) in
-                    DispatchQueue.main.async(execute: {
-                        UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                        if let error = error {
-                            print("downloadImage error: \(error)")
-                        } else {
-                            guard let imageData = data else {
-                                return
-                            }
-                            let image = UIImage(data: imageData)
-                            switch imageType {
-                            case .userProfilePic:
-                                self.users[indexPath.row].profilePic = image
-                                UIView.performWithoutAnimation {
-                                    self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
-                                }
-                            default:
-                                return
-                            }
-                        }
-                    })
-            })
-        }
     }
     
     // Followings are done in background.
@@ -369,6 +280,22 @@ extension DiscoverPeopleTableViewController {
         }
         self.followingIds.remove(at: followingIdIndex)
         self.tableView.reloadRows(at: [IndexPath(row: userIndex, section: 0)], with: UITableViewRowAnimation.none)
+    }
+    
+    func downloadImageNotification(_ notification: NSNotification) {
+        guard let imageKey = notification.userInfo?["imageKey"] as? String, let imageType = notification.userInfo?["imageType"] as? ImageType, let imageData = notification.userInfo?["imageData"] as? Data else {
+            return
+        }
+        guard imageType == .userProfilePic else {
+            return
+        }
+        for user in self.users.filter( { $0.profilePicUrl == imageKey } ) {
+            guard let userIndex = self.users.index(of: user) else {
+                continue
+            }
+            self.users[userIndex].profilePic = UIImage(data: imageData)
+            self.tableView.reloadRows(at: [IndexPath(row: userIndex, section: 0)], with: UITableViewRowAnimation.none)
+        }
     }
 }
 

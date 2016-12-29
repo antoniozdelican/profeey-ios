@@ -25,6 +25,9 @@ class RecommendationsTableViewController: UITableViewController {
             self.isLoadingRecommendations = true
             self.queryRecommendationsDateSorted(recommendingId)
         }
+        
+        // Add observers.
+        NotificationCenter.default.addObserver(self, selector: #selector(self.downloadImageNotification(_:)), name: NSNotification.Name(DownloadImageNotificationKey), object: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -132,64 +135,34 @@ class RecommendationsTableViewController: UITableViewController {
                         self.recommendations.append(recommendation)
                     }
                     self.tableView.reloadData()
-                    for (index, recommendation) in self.recommendations.enumerated() {
+                    for recommendation in self.recommendations {
                         if let profilePicUrl = recommendation.user?.profilePicUrl {
-                            let indexPath = IndexPath(row: index, section: 0)
-                            self.downloadImage(profilePicUrl, imageType: .userProfilePic, indexPath: indexPath)
+                            PRFYS3Manager.defaultS3Manager().downloadImageS3(profilePicUrl, imageType: .userProfilePic)
                         }
                     }
                 }
             })
         })
     }
+}
+
+extension RecommendationsTableViewController {
     
-    fileprivate func downloadImage(_ imageKey: String, imageType: ImageType, indexPath: IndexPath) {
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        let content = AWSUserFileManager.defaultUserFileManager().content(withKey: imageKey)
-        // TODO check if content.isImage()
-        if content.isCached {
-            print("Content cached:")
-            DispatchQueue.main.async(execute: {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-            })
-            let image = UIImage(data: content.cachedData)
-            switch imageType {
-            case .userProfilePic:
-                self.recommendations[indexPath.row].user?.profilePic = image
-                self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
-            default:
-                return
+    // MARK: NotificationCenterActions
+    
+    func downloadImageNotification(_ notification: NSNotification) {
+        guard let imageKey = notification.userInfo?["imageKey"] as? String, let imageType = notification.userInfo?["imageType"] as? ImageType, let imageData = notification.userInfo?["imageData"] as? Data else {
+            return
+        }
+        guard imageType == .userProfilePic else {
+            return
+        }
+        for recommendation in self.recommendations.filter( { $0.user?.profilePicUrl == imageKey } ) {
+            guard let recommendationIndex = self.recommendations.index(of: recommendation) else {
+                continue
             }
-        } else {
-            print("Download content:")
-            content.download(
-                with: AWSContentDownloadType.ifNewerExists,
-                pinOnCompletion: false,
-                progressBlock: {
-                    (content: AWSContent?, progress: Progress?) -> Void in
-                    // TODO
-                },
-                completionHandler: {
-                    (content: AWSContent?, data: Data?, error: Error?) in
-                    DispatchQueue.main.async(execute: {
-                        UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                        if let error = error {
-                            print("downloadImage error: \(error)")
-                        } else {
-                            guard let imageData = data else {
-                                return
-                            }
-                            let image = UIImage(data: imageData)
-                            switch imageType {
-                            case .userProfilePic:
-                                self.recommendations[indexPath.row].user?.profilePic = image
-                                self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
-                            default:
-                                return
-                            }
-                        }
-                    })
-            })
+            self.recommendations[recommendationIndex].user?.profilePic = UIImage(data: imageData)
+            self.tableView.reloadRows(at: [IndexPath(row: recommendationIndex, section: 0)], with: UITableViewRowAnimation.none)
         }
     }
 }

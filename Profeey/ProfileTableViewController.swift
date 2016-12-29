@@ -73,13 +73,17 @@ class ProfileTableViewController: UITableViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(self.deletePostNotification(_:)), name: NSNotification.Name(DeletePostNotificationKey), object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNumberOfLikesNotification(_:)), name: NSNotification.Name(UpdatePostNumberOfLikesNotificationKey), object: nil)
+        
         NotificationCenter.default.addObserver(self, selector: #selector(self.createCommentNotification(_:)), name: NSNotification.Name(CreateCommentNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.deleteCommentNotification(_:)), name: NSNotification.Name(DeleteCommentNotificationKey), object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.followUserNotification(_:)), name: NSNotification.Name(FollowUserNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.unfollowUserNotification(_:)), name: NSNotification.Name(UnfollowUserNotificationKey), object: nil)
+        
         NotificationCenter.default.addObserver(self, selector: #selector(self.recommendUserNotification(_:)), name: NSNotification.Name(RecommendUserNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.unrecommendUserNotification(_:)), name: NSNotification.Name(UnrecommendUserNotificationKey), object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.downloadImageNotification(_:)), name: NSNotification.Name(DownloadImageNotificationKey), object: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -557,13 +561,15 @@ class ProfileTableViewController: UITableViewController {
                         return
                     }
                     let user = FullUser(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationId: awsUser._locationId, locationName: awsUser._locationName, website: awsUser._website, about: awsUser._about, numberOfFollowers: awsUser._numberOfFollowers, numberOfPosts: awsUser._numberOfPosts, numberOfRecommendations: awsUser._numberOfRecommendations)
+                    // TODO: refactor better
+                    user.profilePic = self.user?.profilePic
                     self.user = user
                     self.hasUserLoaded = true
-                    
                     self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0), IndexPath(row: 1, section: 0)], with: UITableViewRowAnimation.none)
                     self.navigationItem.title = self.user?.preferredUsername
-                    if let profilePicUrl = awsUser._profilePicUrl {
-                        self.downloadImage(profilePicUrl, imageType: .userProfilePic, indexPath: IndexPath(row: 0, section: 0))
+                    
+                    if user.profilePic == nil, let profilePicUrl = awsUser._profilePicUrl {
+                        PRFYS3Manager.defaultS3Manager().downloadImageS3(profilePicUrl, imageType: .userProfilePic)
                     }
                     if let userId = awsUser._userId {
                         if !self.isCurrentUser {
@@ -606,18 +612,19 @@ class ProfileTableViewController: UITableViewController {
                         }
                         return
                     }
-                    // Reset posts.
                     self.posts = []
-                    for (index, awsPost) in awsPosts.enumerated() {
+                    for awsPost in awsPosts {
                         let post = Post(userId: awsPost._userId, postId: awsPost._postId, creationDate: awsPost._creationDate, caption: awsPost._caption, categoryName: awsPost._categoryName, imageUrl: awsPost._imageUrl, imageWidth: awsPost._imageWidth, imageHeight: awsPost._imageHeight, numberOfLikes: awsPost._numberOfLikes, numberOfComments: awsPost._numberOfComments, user: self.user)
                         self.posts.append(post)
-                        if self.selectedProfileSegment == ProfileSegment.posts {
-                            UIView.performWithoutAnimation {
-                                self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
-                            }
+                    }
+                    if self.selectedProfileSegment == ProfileSegment.posts {
+                        UIView.performWithoutAnimation {
+                            self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
                         }
-                        if let imageUrl = awsPost._imageUrl {
-                            self.downloadImage(imageUrl, imageType: .postPic, indexPath: IndexPath(row: index, section: 1))
+                    }
+                    for post in self.posts {
+                        if let imageUrl = post.imageUrl {
+                            PRFYS3Manager.defaultS3Manager().downloadImageS3(imageUrl, imageType: .postPic)
                         }
                     }
                 }
@@ -737,66 +744,7 @@ class ProfileTableViewController: UITableViewController {
         })
     }
     
-    fileprivate func downloadImage(_ imageKey: String, imageType: ImageType, indexPath: IndexPath) {
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        let content = AWSUserFileManager.defaultUserFileManager().content(withKey: imageKey)
-        // TODO check if content.isImage()
-        if content.isCached {
-            print("Content cached:")
-            DispatchQueue.main.async(execute: {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-            })
-            let image = UIImage(data: content.cachedData)
-            switch imageType {
-            case .userProfilePic:
-                self.user?.profilePic = image
-                self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
-            case .postPic:
-                self.posts[indexPath.row].image = image
-                if self.selectedProfileSegment == ProfileSegment.posts {
-                    self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
-                }
-            default:
-                return
-            }
-        } else {
-            print("Download content:")
-            content.download(
-                with: AWSContentDownloadType.ifNewerExists,
-                pinOnCompletion: false,
-                progressBlock: {
-                    (content: AWSContent?, progress: Progress?) -> Void in
-                    // TODO
-                },
-                completionHandler: {
-                    (content: AWSContent?, data: Data?, error: Error?) in
-                    DispatchQueue.main.async(execute: {
-                        UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                        if let error = error {
-                            print("downloadImage error: \(error)")
-                        } else {
-                            guard let imageData = data else {
-                                return
-                            }
-                            let image = UIImage(data: imageData)
-                            switch imageType {
-                            case .userProfilePic:
-                                self.user?.profilePic = image
-                                self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
-                            case .postPic:
-                                self.posts[indexPath.row].image = image
-                                if self.selectedProfileSegment == ProfileSegment.posts {
-                                    self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
-                                }
-                            default:
-                                return
-                            }
-                        }
-                    })
-            })
-        }
-    }
-    
+    // TODO: refactor in S3
     // In background when user deletes/changes profilePic.
     fileprivate func removeImage(_ imageKey: String) {
         let content = AWSUserFileManager.defaultUserFileManager().content(withKey: imageKey)
@@ -1140,6 +1088,30 @@ extension ProfileTableViewController {
             self.user?.numberOfRecommendations = NSNumber(value: 0)
         }
         self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.none)
+    }
+    
+    func downloadImageNotification(_ notification: NSNotification) {
+        guard let imageKey = notification.userInfo?["imageKey"] as? String, let imageType = notification.userInfo?["imageType"] as? ImageType, let imageData = notification.userInfo?["imageData"] as? Data else {
+            return
+        }
+        switch imageType {
+        case .userProfilePic:
+            guard self.user?.profilePicUrl == imageKey else {
+                return
+            }
+            self.user?.profilePic = UIImage(data: imageData)
+            self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.none)
+        case .postPic:
+            for post in self.posts.filter( { $0.imageUrl == imageKey }) {
+                guard let postIndex = self.posts.index(of: post) else {
+                    continue
+                }
+                self.posts[postIndex].image = UIImage(data: imageData)
+                if self.selectedProfileSegment == ProfileSegment.posts {
+                    self.tableView.reloadRows(at: [IndexPath(row: postIndex, section: 1)], with: UITableViewRowAnimation.none)
+                }
+            }
+        }
     }
 }
 

@@ -29,3 +29,5 @@ let CreateWorkExperienceNotificationKey: String = "CreateWorkExperienceNotificat
 let UpdateWorkExperienceNotificationKey: String = "UpdateWorkExperienceNotificationKey"
 let CreateEducationNotificationKey: String = "CreateEducationNotificationKey"
 let UpdateEducationNotificationKey: String = "UpdateEducationNotificationKey"
+
+let DownloadImageNotificationKey: String = "DownloadImageNotificationKey"

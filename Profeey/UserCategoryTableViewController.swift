@@ -35,6 +35,7 @@ class UserCategoryTableViewController: UITableViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNumberOfLikesNotification(_:)), name: NSNotification.Name(UpdatePostNumberOfLikesNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.createCommentNotification(_:)), name: NSNotification.Name(CreateCommentNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.deleteCommentNotification(_:)), name: NSNotification.Name(DeleteCommentNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.downloadImageNotification(_:)), name: NSNotification.Name(DownloadImageNotificationKey), object: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -143,14 +144,10 @@ class UserCategoryTableViewController: UITableViewController {
                 self.refreshControl?.endRefreshing()
                 if let error = error {
                     print("queryUserPostsDateSortedWithCategory error: \(error)")
-                    UIView.performWithoutAnimation {
-                        self.tableView.reloadSections(IndexSet([0]), with: UITableViewRowAnimation.none)
-                    }
+                    self.tableView.reloadData()
                 } else {
                     guard let awsPosts = response?.items as? [AWSPost], awsPosts.count > 0 else {
-                        UIView.performWithoutAnimation {
-                            self.tableView.reloadSections(IndexSet([0]), with: UITableViewRowAnimation.none)
-                        }
+                        self.tableView.reloadData()
                         return
                     }
                     self.posts = []
@@ -158,67 +155,15 @@ class UserCategoryTableViewController: UITableViewController {
                         let post = Post(userId: awsPost._userId, postId: awsPost._postId, creationDate: awsPost._creationDate, caption: awsPost._caption, categoryName: awsPost._categoryName, imageUrl: awsPost._imageUrl, imageWidth: awsPost._imageWidth, imageHeight: awsPost._imageHeight, numberOfLikes: awsPost._numberOfLikes, numberOfComments: awsPost._numberOfComments, user: self.user)
                         self.posts.append(post)
                     }
-                    UIView.performWithoutAnimation {
-                        self.tableView.reloadSections(IndexSet([0]), with: UITableViewRowAnimation.none)
-                    }
-                    for (index, awsPost) in self.posts.enumerated() {
+                    self.tableView.reloadData()
+                    for awsPost in self.posts {
                         if let imageUrl = awsPost.imageUrl {
-                            self.downloadImage(imageUrl, imageType: .postPic, indexPath: IndexPath(row: index, section: 0))
+                            PRFYS3Manager.defaultS3Manager().downloadImageS3(imageUrl, imageType: .postPic)
                         }
                     }
                 }
             })
         })
-    }
-    
-    fileprivate func downloadImage(_ imageKey: String, imageType: ImageType, indexPath: IndexPath) {
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        let content = AWSUserFileManager.defaultUserFileManager().content(withKey: imageKey)
-        // TODO check if content.isImage()
-        if content.isCached {
-            print("Content cached:")
-            DispatchQueue.main.async(execute: {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-            })
-            let image = UIImage(data: content.cachedData)
-            switch imageType {
-            case .postPic:
-                self.posts[indexPath.row].image = image
-                self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
-            default:
-                return
-            }
-        } else {
-            print("Download content:")
-            content.download(
-                with: AWSContentDownloadType.ifNewerExists,
-                pinOnCompletion: false,
-                progressBlock: {
-                    (content: AWSContent?, progress: Progress?) -> Void in
-                    // TODO
-                },
-                completionHandler: {
-                    (content: AWSContent?, data: Data?, error: Error?) in
-                    DispatchQueue.main.async(execute: {
-                        UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                        if let error = error {
-                            print("downloadImage error: \(error)")
-                        } else {
-                            guard let imageData = data else {
-                                return
-                            }
-                            let image = UIImage(data: imageData)
-                            switch imageType {
-                            case .postPic:
-                                self.posts[indexPath.row].image = image
-                                self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
-                            default:
-                                return
-                            }
-                        }
-                    })
-            })
-        }
     }
 }
 
@@ -316,5 +261,21 @@ extension UserCategoryTableViewController {
         let post = self.posts[postIndex]
         post.numberOfComments = NSNumber(value: post.numberOfCommentsInt - 1)
         self.tableView.reloadRows(at: [IndexPath(row: postIndex, section: 0)], with: UITableViewRowAnimation.none)
+    }
+    
+    func downloadImageNotification(_ notification: NSNotification) {
+        guard let imageKey = notification.userInfo?["imageKey"] as? String, let imageType = notification.userInfo?["imageType"] as? ImageType, let imageData = notification.userInfo?["imageData"] as? Data else {
+            return
+        }
+        guard imageType == .postPic else {
+            return
+        }
+        for post in self.posts.filter( { $0.imageUrl == imageKey }) {
+            guard let postIndex = self.posts.index(of: post) else {
+                continue
+            }
+            self.posts[postIndex].image = UIImage(data: imageData)
+            self.tableView.reloadRows(at: [IndexPath(row: postIndex, section: 0)], with: UITableViewRowAnimation.none)
+        }
     }
 }

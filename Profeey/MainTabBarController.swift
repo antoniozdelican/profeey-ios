@@ -28,13 +28,12 @@ class MainTabBarController: UITabBarController {
         self.configureView()
         
         // Get currentUser from DynamoDB upon initialization of this rootVc.
-//        if AWSIdentityManager.defaultIdentityManager().isLoggedIn && PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB == nil {
-//            self.getCurrentUser()
-//        }
-        
         if AWSIdentityManager.defaultIdentityManager().isLoggedIn {
             self.getCurrentUser()
         }
+        
+        // Add observers.
+        NotificationCenter.default.addObserver(self, selector: #selector(self.downloadImageNotification(_:)), name: NSNotification.Name(DownloadImageNotificationKey), object: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -129,61 +128,28 @@ class MainTabBarController: UITabBarController {
                     PRFYDynamoDBManager.defaultDynamoDBManager().updateCurrentUserLocal(awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationId: awsUser._locationId, locationName: awsUser._locationName, profilePic: nil)
                     // Get profilePic.
                     if let profilePicUrl = awsUser._profilePicUrl {
-                        self.downloadImage(profilePicUrl, imageType: .currentUserProfilePic)
+                        PRFYS3Manager.defaultS3Manager().downloadImageS3(profilePicUrl, imageType: ImageType.userProfilePic)
                     }
                 }
             })
             return nil
         })
     }
+}
+
+extension MainTabBarController {
     
-    fileprivate func downloadImage(_ imageKey: String, imageType: ImageType) {
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        let content = AWSUserFileManager.defaultUserFileManager().content(withKey: imageKey)
-        // TODO check if content.isImage()
-        if content.isCached {
-            print("Content cached:")
-            DispatchQueue.main.async(execute: {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-            })
-            let image = UIImage(data: content.cachedData)
-            switch imageType {
-            case .currentUserProfilePic:
-                // Store profilePic.
-                PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB?.profilePic = image
-            default:
-                return
-            }
-        } else {
-            print("Download content:")
-            content.download(
-                with: AWSContentDownloadType.ifNewerExists,
-                pinOnCompletion: false,
-                progressBlock: {
-                    (content: AWSContent?, progress: Progress?) -> Void in
-                    // TODO
-            },
-                completionHandler: {
-                    (content: AWSContent?, data: Data?, error:  Error?) in
-                    DispatchQueue.main.async(execute: {
-                        UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                        if let error = error {
-                            print("downloadImage error: \(error)")
-                        } else {
-                            if let imageData = data {
-                                let image = UIImage(data: imageData)
-                                switch imageType {
-                                case .currentUserProfilePic:
-                                    // Store profilePic.
-                                    PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB?.profilePic = image
-                                default:
-                                    return
-                                }
-                            }
-                        }
-                    })
-            })
+    // MARK: NotificationCenterActions
+    
+    func downloadImageNotification(_ notification: NSNotification) {
+        guard let imageKey = notification.userInfo?["imageKey"] as? String, let imageType = notification.userInfo?["imageType"] as? ImageType, let imageData = notification.userInfo?["imageData"] as? Data else {
+            return
         }
+        guard imageType == ImageType.userProfilePic, imageKey == PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB?.profilePicUrl else {
+            return
+        }
+        // Store profilePic.
+        PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB?.profilePic = UIImage(data: imageData)
     }
 }
 

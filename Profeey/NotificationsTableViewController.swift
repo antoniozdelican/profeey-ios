@@ -21,6 +21,9 @@ class NotificationsTableViewController: UITableViewController {
         
         self.isLoadingNotifications = true
         self.queryUserNotificationsDateSorted()
+        
+        // Add observers.
+        NotificationCenter.default.addObserver(self, selector: #selector(self.downloadImageNotification(_:)), name: NSNotification.Name(DownloadImageNotificationKey), object: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -167,67 +170,34 @@ class NotificationsTableViewController: UITableViewController {
                         self.notifications.append(notification)
                     }
                     self.tableView.reloadData()
-                    
-                    for (index, notification) in self.notifications.enumerated() {
+                    for notification in self.notifications {
                         if let profilePicUrl = notification.user?.profilePicUrl {
-                            let indexPath = IndexPath(row: index, section: 0)
-                            self.downloadImage(profilePicUrl, imageType: .userProfilePic, indexPath: indexPath)
+                            PRFYS3Manager.defaultS3Manager().downloadImageS3(profilePicUrl, imageType: .userProfilePic)
                         }
                     }
                 }
             })
         })
     }
+}
+
+extension NotificationsTableViewController {
     
-    fileprivate func downloadImage(_ imageKey: String, imageType: ImageType, indexPath: IndexPath) {
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        let content = AWSUserFileManager.defaultUserFileManager().content(withKey: imageKey)
-        // TODO check if content.isImage()
-        if content.isCached {
-            print("Content cached:")
-            DispatchQueue.main.async(execute: {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-            })
-            let image = UIImage(data: content.cachedData)
-            switch imageType {
-            case .userProfilePic:
-                self.notifications[indexPath.row].user?.profilePic = image
-                UIView.performWithoutAnimation {
-                    self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
-                }
-            default:
-                return
+    // MARK: NotificationCenterActions
+    
+    func downloadImageNotification(_ notification: NSNotification) {
+        guard let imageKey = notification.userInfo?["imageKey"] as? String, let imageType = notification.userInfo?["imageType"] as? ImageType, let imageData = notification.userInfo?["imageData"] as? Data else {
+            return
+        }
+        guard imageType == .userProfilePic else {
+            return
+        }
+        for notification in self.notifications.filter( { $0.user?.profilePicUrl == imageKey } ) {
+            guard let notificationIndex = self.notifications.index(of: notification) else {
+                continue
             }
-        } else {
-            print("Download content:")
-            content.download(with: AWSContentDownloadType.ifNewerExists, pinOnCompletion: false,
-                progressBlock: {
-                    (content: AWSContent?, progress: Progress?) -> Void in
-                    // TODO
-            },
-                completionHandler: {
-                    (content: AWSContent?, data: Data?, error: Error?) in
-                    DispatchQueue.main.async(execute: {
-                        UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                        if let error = error {
-                            print("downloadImage error: \(error)")
-                        } else {
-                            guard let imageData = data else {
-                                return
-                            }
-                            let image = UIImage(data: imageData)
-                            switch imageType {
-                            case .userProfilePic:
-                                self.notifications[indexPath.row].user?.profilePic = image
-                                UIView.performWithoutAnimation {
-                                    self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
-                                }
-                            default:
-                                return
-                            }
-                        }
-                    })
-            })
+            self.notifications[notificationIndex].user?.profilePic = UIImage(data: imageData)
+            self.tableView.reloadRows(at: [IndexPath(row: notificationIndex, section: 0)], with: UITableViewRowAnimation.none)
         }
     }
 }

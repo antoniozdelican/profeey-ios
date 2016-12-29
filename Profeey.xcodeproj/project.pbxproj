@@ -157,6 +157,8 @@
 		A9B7A2441D65A562009DA340 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B7A2431D65A562009DA340 /* Category.swift */; };
 		A9B7A24A1D65D8C0009DA340 /* HomeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B7A2491D65D8C0009DA340 /* HomeTableViewController.swift */; };
 		A9B934B01D1BD9BB00ACC2B8 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B934AF1D1BD9BB00ACC2B8 /* OnboardingViewController.swift */; };
+		A9BA21D11E1506B200D9A035 /* PRFYS3Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9BA21D01E1506B200D9A035 /* PRFYS3Manager.swift */; };
+		A9BA21D31E1506C200D9A035 /* S3Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9BA21D21E1506C200D9A035 /* S3Manager.swift */; };
 		A9BB32211DF34228005233F3 /* PRFYCloudSearchUsersResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9BB32201DF34228005233F3 /* PRFYCloudSearchUsersResult.swift */; };
 		A9BCBDC11DDAF95F00265AFA /* RecommendationsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9BCBDC01DDAF95F00265AFA /* RecommendationsTableViewController.swift */; };
 		A9BCBDC51DDAFA0F00265AFA /* Recommendation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9BCBDC41DDAFA0F00265AFA /* Recommendation.swift */; };
@@ -421,6 +423,8 @@
 		A9B7A2491D65D8C0009DA340 /* HomeTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeTableViewController.swift; sourceTree = "<group>"; };
 		A9B934AF1D1BD9BB00ACC2B8 /* OnboardingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		A9B977281DE3750B00D37E5B /* Profeey.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Profeey.entitlements; sourceTree = "<group>"; };
+		A9BA21D01E1506B200D9A035 /* PRFYS3Manager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PRFYS3Manager.swift; sourceTree = "<group>"; };
+		A9BA21D21E1506C200D9A035 /* S3Manager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = S3Manager.swift; sourceTree = "<group>"; };
 		A9BB32201DF34228005233F3 /* PRFYCloudSearchUsersResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PRFYCloudSearchUsersResult.swift; sourceTree = "<group>"; };
 		A9BCBDC01DDAF95F00265AFA /* RecommendationsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecommendationsTableViewController.swift; sourceTree = "<group>"; };
 		A9BCBDC41DDAFA0F00265AFA /* Recommendation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Recommendation.swift; sourceTree = "<group>"; };
@@ -1014,6 +1018,15 @@
 			name = AWSActivities;
 			sourceTree = "<group>";
 		};
+		A9BA21CF1E15068300D9A035 /* S3 */ = {
+			isa = PBXGroup;
+			children = (
+				A9BA21D01E1506B200D9A035 /* PRFYS3Manager.swift */,
+				A9BA21D21E1506C200D9A035 /* S3Manager.swift */,
+			);
+			name = S3;
+			sourceTree = "<group>";
+		};
 		A9C6CB7D1D29296B00863816 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -1256,6 +1269,7 @@
 				A9D688801E0AE01100A07D86 /* TempSearch */,
 				A9F345881DE0AA9700A5D368 /* CloudSearchProxyClient */,
 				A9CC71A81DEB44DE0054DA93 /* DynamoDB */,
+				A9BA21CF1E15068300D9A035 /* S3 */,
 			);
 			name = AWS;
 			sourceTree = "<group>";
@@ -1452,6 +1466,7 @@
 				A9D688901E0AF3CE00A07D86 /* AWSLocationsTable.swift in Sources */,
 				A915F8751DC0D9CB0031C45F /* Location.swift in Sources */,
 				A9EAD3401D1E8E0C00994292 /* NoSQLModelHelpers.swift in Sources */,
+				A9BA21D31E1506C200D9A035 /* S3Manager.swift in Sources */,
 				A9543CAF1DA3C4DB002BF372 /* EditPostImageTableViewCell.swift in Sources */,
 				A9D227011DE99B9700B2E894 /* AWSConfiguration.swift in Sources */,
 				A9A5039F1D2FE0810030A472 /* AWSUser.swift in Sources */,
@@ -1554,6 +1569,7 @@
 				A9CBBC661DB669EA009C8EC7 /* EditEducationDescriptionTableViewCell.swift in Sources */,
 				A9EAEC071DA6A38600DA6A4D /* AWSPostUpdate.swift in Sources */,
 				A9A21DB51D95397A0093F162 /* UsernameTableViewController.swift in Sources */,
+				A9BA21D11E1506B200D9A035 /* PRFYS3Manager.swift in Sources */,
 				A99FD1A31DCA657400BD2CC5 /* AWSCommentUpdate.swift in Sources */,
 				A9C0ED3A1D3C21C30036F791 /* Post.swift in Sources */,
 				A9AFFB0F1D8AFF1800219627 /* CategoryTableViewCell.swift in Sources */,

@@ -11,7 +11,6 @@ import AWSMobileHubHelper
 import AWSDynamoDB
 
 enum ImageType {
-    case currentUserProfilePic
     case userProfilePic
     case postPic
 }
@@ -71,13 +70,11 @@ class HomeTableViewController: UITableViewController {
         // Add observers, don't need deinit removeObserver.
         NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNotification(_:)), name: NSNotification.Name(UpdatePostNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.deletePostNotification(_:)), name: NSNotification.Name(DeletePostNotificationKey), object: nil)
-        
         NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNumberOfLikesNotification(_:)), name: NSNotification.Name(UpdatePostNumberOfLikesNotificationKey), object: nil)
-        
         NotificationCenter.default.addObserver(self, selector: #selector(self.createCommentNotification(_:)), name: NSNotification.Name(CreateCommentNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.deleteCommentNotification(_:)), name: NSNotification.Name(DeleteCommentNotificationKey), object: nil)
-        
         NotificationCenter.default.addObserver(self, selector: #selector(self.followUserNotification(_:)), name: NSNotification.Name(FollowUserNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.downloadImageNotification(_:)), name: NSNotification.Name(DownloadImageNotificationKey), object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -338,28 +335,8 @@ class HomeTableViewController: UITableViewController {
         }
     }
     
-    // MARK: Helpers
-    
-    fileprivate func setDownloadedImages(_ image: UIImage, imageType: ImageType, indexPath: IndexPath) {
-        switch imageType {
-        case .userProfilePic:
-            self.posts[indexPath.section].user?.profilePic = image
-            UIView.performWithoutAnimation {
-                self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
-            }
-        case .postPic:
-            self.posts[indexPath.section].image = image
-            UIView.performWithoutAnimation {
-                self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
-            }
-        default:
-            return
-        }
-    }
-    
     // MARK: AWS
     
-    // Query the feed.
     fileprivate func queryUserActivitiesDateSorted() {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         PRFYDynamoDBManager.defaultDynamoDBManager().queryUserActivitiesDateSortedDynamoDB({
@@ -391,12 +368,10 @@ class HomeTableViewController: UITableViewController {
                     
                     for (index, post) in self.posts.enumerated() {
                         if let profilePicUrl = post.user?.profilePicUrl {
-                            let indexPath = IndexPath(row: 0, section: index)
-                            self.downloadImage(profilePicUrl, imageType: .userProfilePic, indexPath: indexPath)
+                            PRFYS3Manager.defaultS3Manager().downloadImageS3(profilePicUrl, imageType: .userProfilePic)
                         }
                         if let imageUrl = post.imageUrl {
-                            let indexPath = IndexPath(row: 1, section: index)
-                            self.downloadImage(imageUrl, imageType: .postPic, indexPath: indexPath)
+                            PRFYS3Manager.defaultS3Manager().downloadImageS3(imageUrl, imageType: .postPic)
                         }
                         // TODO this should be changed to query more likes at the time not one by one.
                         if let postId = post.postId {
@@ -409,43 +384,6 @@ class HomeTableViewController: UITableViewController {
         })
     }
     
-    fileprivate func downloadImage(_ imageKey: String, imageType: ImageType, indexPath: IndexPath) {
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        let content = AWSUserFileManager.defaultUserFileManager().content(withKey: imageKey)
-        // TODO check if content.isImage()
-        // TODO check content.status for duplicate content downloads.
-        if content.isCached {
-            print("Content cached:")
-            DispatchQueue.main.async(execute: {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                if let image = UIImage(data: content.cachedData) {
-                    self.setDownloadedImages(image, imageType: imageType, indexPath: indexPath)
-                }
-            })
-        } else {
-            print("Download content:")
-            content.download(
-                with: AWSContentDownloadType.ifNewerExists,
-                pinOnCompletion: false,
-                progressBlock: {
-                    (content: AWSContent?, progress: Progress?) -> Void in
-                    // TODO
-            },
-                completionHandler: {
-                    (content: AWSContent?, data: Data?, error:  Error?) in
-                    DispatchQueue.main.async(execute: {
-                        UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                        if let error = error {
-                            print("downloadImage error: \(error)")
-                        } else {
-                            if let imageData = data, let image = UIImage(data: imageData) {
-                                self.setDownloadedImages(image, imageType: imageType, indexPath: indexPath)
-                            }
-                        }
-                    })
-            })
-        }
-    }
     fileprivate func uploadImage(_ imageData: Data, imageWidth: NSNumber, imageHeight: NSNumber, caption: String?, categoryName: String?) {
         let uniqueImageName = NSUUID().uuidString.lowercased().replacingOccurrences(of: "-", with: "")
         let imageKey = "public/\(uniqueImageName).jpg"
@@ -482,6 +420,7 @@ class HomeTableViewController: UITableViewController {
         })
     }
     
+    // TODO: refactor in PRFYS3
     fileprivate func removeImage(_ postId: String, imageKey: String) {
         let content = AWSUserFileManager.defaultUserFileManager().content(withKey: imageKey)
         print("removeImageS3:")
@@ -699,6 +638,28 @@ extension HomeTableViewController {
             return
         }
         self.hasDiscoveredAndFollowedUsers = true
+    }
+    
+    func downloadImageNotification(_ notification: NSNotification) {
+        guard let imageKey = notification.userInfo?["imageKey"] as? String, let imageType = notification.userInfo?["imageType"] as? ImageType, let imageData = notification.userInfo?["imageData"] as? Data else {
+            return
+        }
+        switch imageType {
+        case .userProfilePic:
+            for post in self.posts.filter( { $0.user?.profilePicUrl == imageKey }) {
+                if let postIndex = self.posts.index(of: post) {
+                    self.posts[postIndex].user?.profilePic = UIImage(data: imageData)
+                    self.tableView.reloadRows(at: [IndexPath(row: 0, section: postIndex)], with: UITableViewRowAnimation.automatic)
+                }
+            }
+        case .postPic:
+            for post in self.posts.filter( { $0.imageUrl == imageKey }) {
+                if let postIndex = self.posts.index(of: post) {
+                    self.posts[postIndex].image = UIImage(data: imageData)
+                    self.tableView.reloadRows(at: [IndexPath(row: 1, section: postIndex)], with: UITableViewRowAnimation.automatic)
+                }
+            }
+        }
     }
 }
 
