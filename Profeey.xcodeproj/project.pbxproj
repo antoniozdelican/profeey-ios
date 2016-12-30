@@ -234,6 +234,9 @@
 		A9E53B711D10668400CD1D6C /* Profile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9E53B701D10668400CD1D6C /* Profile.storyboard */; };
 		A9E53B731D1067E800CD1D6C /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E53B721D1067E800CD1D6C /* MainTabBarController.swift */; };
 		A9E9B5611E0A88B3004E2D0B /* RecommendationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E9B5601E0A88B3004E2D0B /* RecommendationTableViewCell.swift */; };
+		A9E9DC5B1E16C95B00FE7C3B /* PreviewViewController2.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E9DC5A1E16C95B00FE7C3B /* PreviewViewController2.swift */; };
+		A9E9DC5F1E16DB2A00FE7C3B /* GridView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9E9DC5E1E16DB2A00FE7C3B /* GridView.xib */; };
+		A9E9DC611E16DB3B00FE7C3B /* GridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E9DC601E16DB3B00FE7C3B /* GridView.swift */; };
 		A9E9EDAA1DFAC3B300BC2253 /* PRFYCloudSearchLocationsResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E9EDA91DFAC3B300BC2253 /* PRFYCloudSearchLocationsResult.swift */; };
 		A9E9EDAC1DFAC3C600BC2253 /* PRFYCloudSearchLocationsResultItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E9EDAB1DFAC3C600BC2253 /* PRFYCloudSearchLocationsResultItem.swift */; };
 		A9EAD3401D1E8E0C00994292 /* NoSQLModelHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9EAD33F1D1E8E0C00994292 /* NoSQLModelHelpers.swift */; };
@@ -500,6 +503,9 @@
 		A9E53B701D10668400CD1D6C /* Profile.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Profile.storyboard; sourceTree = "<group>"; };
 		A9E53B721D1067E800CD1D6C /* MainTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		A9E9B5601E0A88B3004E2D0B /* RecommendationTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecommendationTableViewCell.swift; sourceTree = "<group>"; };
+		A9E9DC5A1E16C95B00FE7C3B /* PreviewViewController2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreviewViewController2.swift; sourceTree = "<group>"; };
+		A9E9DC5E1E16DB2A00FE7C3B /* GridView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GridView.xib; sourceTree = "<group>"; };
+		A9E9DC601E16DB3B00FE7C3B /* GridView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridView.swift; sourceTree = "<group>"; };
 		A9E9EDA91DFAC3B300BC2253 /* PRFYCloudSearchLocationsResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PRFYCloudSearchLocationsResult.swift; sourceTree = "<group>"; };
 		A9E9EDAB1DFAC3C600BC2253 /* PRFYCloudSearchLocationsResultItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PRFYCloudSearchLocationsResultItem.swift; sourceTree = "<group>"; };
 		A9EAD33F1D1E8E0C00994292 /* NoSQLModelHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoSQLModelHelpers.swift; sourceTree = "<group>"; };
@@ -953,6 +959,9 @@
 			isa = PBXGroup;
 			children = (
 				A975529B1D4F4D0300F773FF /* PreviewViewController.swift */,
+				A9E9DC5A1E16C95B00FE7C3B /* PreviewViewController2.swift */,
+				A9E9DC5E1E16DB2A00FE7C3B /* GridView.xib */,
+				A9E9DC601E16DB3B00FE7C3B /* GridView.swift */,
 			);
 			name = Preview;
 			sourceTree = "<group>";
@@ -1379,6 +1388,7 @@
 			files = (
 				A94597401DA7EA64006A4C9B /* CameraOverlayView.xib in Resources */,
 				A9A1961B1DDC643D008D6494 /* Settings.storyboard in Resources */,
+				A9E9DC5F1E16DB2A00FE7C3B /* GridView.xib in Resources */,
 				A930BC861D0DD43F004D49F7 /* LaunchScreen.storyboard in Resources */,
 				A945973E1DA7E463006A4C9B /* AlbumButton.xib in Resources */,
 				A9707D251E02AC76005D729D /* ForgotPassword.storyboard in Resources */,
@@ -1489,6 +1499,7 @@
 				A91C1CD51DED9D85006FBDD4 /* AWSNotificationsTable.swift in Sources */,
 				A99ADD261DB361BE00A34C8D /* CurrentUser.swift in Sources */,
 				A9ACA7451DB508540004B8DE /* AWSWorkExperiencesTable.swift in Sources */,
+				A9E9DC611E16DB3B00FE7C3B /* GridView.swift in Sources */,
 				A91A35241D1C26E6006F22B2 /* FullScreenIndicator.swift in Sources */,
 				A99984DF1DB6B65B00842E51 /* AddTableViewCell.swift in Sources */,
 				A9D6888E1E0AF3BF00A07D86 /* AWSLocation.swift in Sources */,
@@ -1543,6 +1554,7 @@
 				A975529C1D4F4D0300F773FF /* PreviewViewController.swift in Sources */,
 				A9ACA7471DB508BB0004B8DE /* AWSWorkExperienceUpdate.swift in Sources */,
 				A9F345911DE0C80D00A5D368 /* PRFYCloudSearchProfessionsResultItem.swift in Sources */,
+				A9E9DC5B1E16C95B00FE7C3B /* PreviewViewController2.swift in Sources */,
 				A9E9EDAA1DFAC3B300BC2253 /* PRFYCloudSearchLocationsResult.swift in Sources */,
 				A9E4507A1D59E6C500D14553 /* CommentTableViewCell.swift in Sources */,
 				A9BF16491D6514C900060A9E /* NoResultsTableViewCell.swift in Sources */,
