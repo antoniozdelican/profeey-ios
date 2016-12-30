@@ -404,6 +404,9 @@ class HomeTableViewController: UITableViewController {
                 (content: AWSLocalContent?, error: Error?) -> Void in
                 DispatchQueue.main.async(execute: {
                     UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                    
+                    // TODO: refactor instead of dummy post put real post.
+                    
                     if let error = error {
                         print("uploadImageS3 error: \(error)")
                         self.isUploading = false

@@ -55,10 +55,12 @@ class CameraViewController: UIViewController {
             self.imagePickerController.showsCameraControls = false
             self.imagePickerController.cameraFlashMode = UIImagePickerControllerCameraFlashMode.auto
             
+            // Setting cameraOverlay.
             self.cameraOverlayView.frame = self.imagePickerController.cameraOverlayView!.frame
             self.imagePickerController.cameraOverlayView = self.cameraOverlayView
             self.cameraOverlayView = nil
             
+            // Setting child-parent relationship.
             self.addChildViewController(self.imagePickerController)
             self.imagePickerController.view.frame = CGRect(x: 0.0, y: 0.0, width: self.view.bounds.width, height: self.view.bounds.height)
             self.view.insertSubview(self.imagePickerController.view, at: 0)
@@ -88,7 +90,6 @@ class CameraViewController: UIViewController {
             multiplier: 1.0,
             constant: 0.0)
         squareConstraint.isActive = true
-        
     }
     
     // MARK: IBActions
@@ -143,9 +144,6 @@ extension CameraViewController: UINavigationControllerDelegate, UIImagePickerCon
 extension CameraViewController: FlashSwitchDelegate {
     
     func flashBarButtonTapped() {
-//        guard self.imagePickerController.cameraDevice == UIImagePickerControllerCameraDevice.rear else {
-//            return
-//        }
         switch self.imagePickerController.cameraFlashMode {
         case UIImagePickerControllerCameraFlashMode.auto:
             self.imagePickerController.cameraFlashMode = UIImagePickerControllerCameraFlashMode.on

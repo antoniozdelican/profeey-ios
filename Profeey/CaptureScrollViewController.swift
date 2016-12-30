@@ -76,12 +76,14 @@ class CaptureScrollViewController: UIViewController {
         self.albumButton?.imageEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, 0.0, 4.0)
         self.albumButton?.addTarget(self, action: #selector(self.albumButtonTapped(_:)), for: UIControlEvents.touchUpInside)
         self.flashBarButtonItem = UIBarButtonItem(image: UIImage(named: "ic_flash_auto"), style: UIBarButtonItemStyle.plain, target: self, action: #selector(self.flashBarButtonTapped(_:)))
-        self.navigationItem.title = "Camera"
-        self.navigationItem.rightBarButtonItem = self.flashBarButtonItem
+        // Show gallery first.
+        self.navigationItem.titleView = self.albumButton
+        self.navigationItem.title = nil
+        self.navigationItem.rightBarButtonItem = nil
     }
     
     fileprivate func configureScrollView() {
-        // Show camera first.
+        // Show gallery first.
         self.scrollView.layoutIfNeeded()
         self.scrollView.contentOffset = CGPoint(x: self.view.bounds.width, y: 0.0)
         self.scrollView.delegate = self
@@ -137,13 +139,13 @@ extension CaptureScrollViewController: UIScrollViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if scrollView.contentOffset.x == 0 {
-            self.navigationItem.titleView = self.albumButton
-            self.navigationItem.title = nil
-            self.navigationItem.rightBarButtonItem = nil
-        } else if scrollView.contentOffset.x == self.view.bounds.width {
             self.navigationItem.titleView = nil
             self.navigationItem.title = "Camera"
             self.navigationItem.rightBarButtonItem = self.flashBarButtonItem
+        } else if scrollView.contentOffset.x == self.view.bounds.width {
+            self.navigationItem.titleView = self.albumButton
+            self.navigationItem.title = nil
+            self.navigationItem.rightBarButtonItem = nil
         }
     }
 }
@@ -152,7 +154,7 @@ extension CaptureScrollViewController: CameraViewControllerDelegate {
     
     func galleryButtonTapped() {
         // Scroll to gallery.
-        self.scrollView.setContentOffset(CGPoint(x: 0.0, y: 0.0), animated: true)
+        self.scrollView.setContentOffset(CGPoint(x: self.view.bounds.width, y: 0.0), animated: true)
     }
     
     func flashTypeChangedInto(_ flashType: FlashType) {
@@ -175,7 +177,7 @@ extension CaptureScrollViewController: GalleryViewControllerDelegate {
     
     func cameraButtonTapped() {
         // Scroll to camera.
-        self.scrollView.setContentOffset(CGPoint(x: self.view.bounds.width, y: 0.0), animated: true)
+        self.scrollView.setContentOffset(CGPoint(x: 0.0, y: 0.0), animated: true)
     }
     
     func didSelectPhoto(photo: UIImage) {

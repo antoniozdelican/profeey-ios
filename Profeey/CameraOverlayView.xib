@@ -46,7 +46,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fFs-Wg-Bps">
-                            <rect key="frame" x="37" y="57" width="54" height="54"/>
+                            <rect key="frame" x="284" y="57" width="54" height="54"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="54" id="Tp8-nZ-48M"/>
                                 <constraint firstAttribute="width" constant="54" id="k29-gE-7sf"/>
@@ -57,7 +57,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l1g-gN-rKx">
-                            <rect key="frame" x="284" y="56.5" width="54" height="54"/>
+                            <rect key="frame" x="37" y="57" width="54" height="54"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="54" id="bxP-kZ-xHc"/>
                                 <constraint firstAttribute="width" constant="54" id="cOn-s0-655"/>
@@ -71,10 +71,10 @@
                     <color key="backgroundColor" red="0.98039215690000003" green="0.98039215690000003" blue="0.98039215690000003" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstItem="t3y-qN-lOP" firstAttribute="centerY" secondItem="YsY-1L-UNe" secondAttribute="centerY" id="1GN-Z8-sZr"/>
-                        <constraint firstItem="fFs-Wg-Bps" firstAttribute="leading" secondItem="YsY-1L-UNe" secondAttribute="leading" constant="37" id="LIM-Jw-S6H"/>
                         <constraint firstItem="l1g-gN-rKx" firstAttribute="centerY" secondItem="YsY-1L-UNe" secondAttribute="centerY" id="V9X-i5-wFc"/>
+                        <constraint firstItem="l1g-gN-rKx" firstAttribute="leading" secondItem="YsY-1L-UNe" secondAttribute="leading" constant="37" id="WV1-Bl-hVU"/>
                         <constraint firstItem="fFs-Wg-Bps" firstAttribute="centerY" secondItem="YsY-1L-UNe" secondAttribute="centerY" id="XLL-Tp-lgM"/>
-                        <constraint firstAttribute="trailing" secondItem="l1g-gN-rKx" secondAttribute="trailing" constant="37" id="dDf-ho-McO"/>
+                        <constraint firstAttribute="trailing" secondItem="fFs-Wg-Bps" secondAttribute="trailing" constant="37" id="cEu-rV-g5J"/>
                         <constraint firstItem="t3y-qN-lOP" firstAttribute="centerX" secondItem="YsY-1L-UNe" secondAttribute="centerX" id="e5S-Ww-odP"/>
                     </constraints>
                 </view>

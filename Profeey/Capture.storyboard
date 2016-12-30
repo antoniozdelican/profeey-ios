@@ -24,7 +24,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fE4-rs-jVo" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="84" y="-1478"/>
+            <point key="canvasLocation" x="-233" y="-1478"/>
         </scene>
         <!--Title-->
         <scene sceneID="Epu-UC-CjK">
@@ -41,16 +41,16 @@
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HfD-oc-6uE">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
                                 <subviews>
-                                    <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="g59-Un-aAZ">
-                                        <rect key="frame" x="375" y="0.0" width="375" height="603"/>
-                                        <connections>
-                                            <segue destination="83r-lP-ybv" kind="embed" id="4bk-oB-5u6"/>
-                                        </connections>
-                                    </containerView>
                                     <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kJY-pu-Tvv">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
                                         <connections>
-                                            <segue destination="aXZ-IE-610" kind="embed" id="g7L-pO-oOR"/>
+                                            <segue destination="83r-lP-ybv" kind="embed" id="MeM-wn-p8j"/>
+                                        </connections>
+                                    </containerView>
+                                    <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="g59-Un-aAZ">
+                                        <rect key="frame" x="375" y="0.0" width="375" height="603"/>
+                                        <connections>
+                                            <segue destination="aXZ-IE-610" kind="embed" id="yJj-cv-uw0"/>
                                         </connections>
                                     </containerView>
                                 </subviews>
@@ -192,7 +192,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hmz-0J-Rk9" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="szi-DL-yT2" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="2504.8000000000002" y="-1478.4107946026988"/>
+            <point key="canvasLocation" x="2554" y="-1478"/>
         </scene>
         <!--Create Post-->
         <scene sceneID="m9u-Jx-quX">
@@ -352,7 +352,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IKW-s6-4Aw" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="iKd-2b-WgM" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="3584.8000000000002" y="-1478.4107946026988"/>
+            <point key="canvasLocation" x="3634" y="-1478"/>
         </scene>
         <!--Categories-->
         <scene sceneID="mmn-ub-p55">
@@ -360,7 +360,7 @@
                 <viewControllerPlaceholder storyboardName="Categories" id="G2u-io-Bjn" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UAW-SQ-yec" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4261" y="-1479"/>
+            <point key="canvasLocation" x="4310" y="-1481"/>
         </scene>
         <!--Gallery View Controller-->
         <scene sceneID="mUs-8k-E6v">
@@ -396,7 +396,7 @@
                                                 </imageView>
                                             </subviews>
                                         </view>
-                                        <color key="backgroundColor" red="0.90980392160000001" green="0.90980392160000001" blue="0.90980392160000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="backgroundColor" red="0.88766813280000001" green="0.88764166830000002" blue="0.88765668870000003" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstItem="pTR-jx-2CD" firstAttribute="leading" secondItem="rDk-09-ZHZ" secondAttribute="leading" id="AX6-rC-t3U"/>
                                             <constraint firstItem="pTR-jx-2CD" firstAttribute="top" secondItem="rDk-09-ZHZ" secondAttribute="top" id="CSE-GJ-iZf"/>
@@ -409,47 +409,12 @@
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cdK-2l-nqj">
-                                <rect key="frame" x="0.0" y="559" width="375" height="44"/>
-                                <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="J3Y-fl-9Fn" userLabel="Separator View">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="1"/>
-                                        <color key="backgroundColor" red="0.86274509799999999" green="0.86274509799999999" blue="0.86274509799999999" alpha="1" colorSpace="calibratedRGB"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="1" id="Dzi-Pn-Kdy"/>
-                                        </constraints>
-                                    </view>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7hA-Bo-sBB">
-                                        <rect key="frame" x="321" y="0.0" width="54" height="44"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="54" id="MSG-bo-8l5"/>
-                                            <constraint firstAttribute="height" constant="44" id="kT4-yv-kYz"/>
-                                        </constraints>
-                                        <state key="normal" image="ic_camera_gallery"/>
-                                        <connections>
-                                            <action selector="cameraButtonTapped:" destination="aXZ-IE-610" eventType="touchUpInside" id="HIl-la-SEo"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
-                                <color key="backgroundColor" red="0.98039215690000003" green="0.98039215690000003" blue="0.98039215690000003" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="BEv-r4-qM0"/>
-                                    <constraint firstItem="J3Y-fl-9Fn" firstAttribute="top" secondItem="cdK-2l-nqj" secondAttribute="top" id="LYU-Rs-9vn"/>
-                                    <constraint firstAttribute="trailing" secondItem="J3Y-fl-9Fn" secondAttribute="trailing" id="OEP-oM-6mi"/>
-                                    <constraint firstItem="J3Y-fl-9Fn" firstAttribute="leading" secondItem="cdK-2l-nqj" secondAttribute="leading" id="OxG-Dt-o33"/>
-                                    <constraint firstItem="7hA-Bo-sBB" firstAttribute="centerY" secondItem="cdK-2l-nqj" secondAttribute="centerY" id="a0T-1m-ktZ"/>
-                                    <constraint firstAttribute="trailing" secondItem="7hA-Bo-sBB" secondAttribute="trailing" id="viV-ah-4ME"/>
-                                </constraints>
-                            </view>
                         </subviews>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="cdK-2l-nqj" secondAttribute="trailing" id="Bxu-rC-oCA"/>
-                            <constraint firstItem="cdK-2l-nqj" firstAttribute="leading" secondItem="t1f-Sd-bD0" secondAttribute="leading" id="F9R-8R-zbq"/>
                             <constraint firstItem="W8t-en-OvH" firstAttribute="top" secondItem="EI6-vo-bQR" secondAttribute="bottom" id="QUG-Zx-3wu"/>
                             <constraint firstItem="EI6-vo-bQR" firstAttribute="leading" secondItem="t1f-Sd-bD0" secondAttribute="leading" id="Qhw-x1-Z17"/>
                             <constraint firstItem="EI6-vo-bQR" firstAttribute="top" secondItem="B5a-f8-gB6" secondAttribute="bottom" id="Trm-kd-v29"/>
                             <constraint firstAttribute="trailing" secondItem="EI6-vo-bQR" secondAttribute="trailing" id="Zha-HE-oLL"/>
-                            <constraint firstItem="W8t-en-OvH" firstAttribute="top" secondItem="cdK-2l-nqj" secondAttribute="bottom" id="yH1-Gr-LlM"/>
                         </constraints>
                     </view>
                     <connections>
@@ -458,7 +423,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xY8-Ba-PYh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="561" y="-767"/>
+            <point key="canvasLocation" x="1650" y="-742"/>
         </scene>
         <!--Camera View Controller-->
         <scene sceneID="5zi-z1-fBj">
@@ -476,7 +441,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OS0-7w-zRq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1770" y="-766"/>
+            <point key="canvasLocation" x="574" y="-743"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="UVV-8x-xff">
@@ -558,7 +523,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="ic_camera_gallery" width="25" height="25"/>
         <image name="ic_remove_grey" width="14" height="14"/>
         <image name="ic_skills" width="30" height="30"/>
         <image name="ic_write_description" width="30" height="30"/>

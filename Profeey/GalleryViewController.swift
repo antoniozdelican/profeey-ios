@@ -52,12 +52,6 @@ class GalleryViewController: UIViewController {
         super.didReceiveMemoryWarning()
     }
     
-    // MARK: IBActions
-    
-    @IBAction func cameraButtonTapped(_ sender: AnyObject) {
-        self.galleryViewControllerDelegate?.cameraButtonTapped()
-    }
-    
     // MARK: Asset Caching
     
     fileprivate func resetCachedAssets() {
@@ -170,17 +164,21 @@ extension GalleryViewController: UICollectionViewDataSource, UICollectionViewDel
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if let album = self.album {
-            return album.count
-        } else {
+        guard let album = self.album else {
             return 0
         }
+        // Number of photos (videos) and camera button.
+        return album.count + 1
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        if indexPath.item == 0 {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellGallery", for: indexPath) as! GalleryCollectionViewCell
+            return cell
+        }
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellGallery", for: indexPath) as! GalleryCollectionViewCell
         let asset = self.album![indexPath.item]
-        cell.representedAssetIdentifier = asset.localIdentifier as NSString!;
+        cell.representedAssetIdentifier = asset.localIdentifier as NSString!
         
         // Request an image for the asset from the PHCachingImageManager
         self.imageManager?.requestImage(
@@ -200,10 +198,15 @@ extension GalleryViewController: UICollectionViewDataSource, UICollectionViewDel
     // MARK: UICollectionViewDelegate
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let asset = self.album?[indexPath.row] else {
-            return
+        if indexPath.item == 0 {
+            // Scroll to camera.
+            self.galleryViewControllerDelegate?.cameraButtonTapped()
+        } else {
+            guard let asset = self.album?[indexPath.item] else {
+                return
+            }
+            self.galleryViewControllerDelegate?.didSelectAsset(asset: asset)
         }
-        self.galleryViewControllerDelegate?.didSelectAsset(asset: asset)
     }
     
     //MARK: UIScrollViewDelegate
