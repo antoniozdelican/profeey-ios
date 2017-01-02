@@ -23,11 +23,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let didFinishLaunching = AWSMobileClient.sharedInstance.didFinishLaunching(application, withOptions: launchOptions)
         
         // Check if user is logged in.
-        if !AWSIdentityManager.defaultIdentityManager().isLoggedIn {
-            let storyboard = UIStoryboard(name: "Onboarding", bundle: nil)
-            let rootViewController = storyboard.instantiateInitialViewController()
-            self.window?.rootViewController = rootViewController
-        }
+//        if !AWSIdentityManager.defaultIdentityManager().isLoggedIn {
+//            let storyboard = UIStoryboard(name: "Onboarding", bundle: nil)
+//            let rootViewController = storyboard.instantiateInitialViewController()
+//            self.window?.rootViewController = rootViewController
+//        }
         
         // TODO
 //        if let endpointARN = AWSPushManager.defaultPushManager().endpointARN {

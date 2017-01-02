@@ -107,18 +107,6 @@ class CaptureScrollViewController: UIViewController {
         }
         if let destinationViewController = segue.destination as? PreviewViewController {
             if self.isPhoto {
-                destinationViewController.capturedPhoto = self.photo
-                self.photo = nil
-            } else {
-                destinationViewController.asset = self.asset
-            }
-            destinationViewController.isPhoto = self.isPhoto
-            destinationViewController.isProfilePic = self.isProfilePic
-            destinationViewController.profilePicUnwind = self.profilePicUnwind
-        }
-        // TEST
-        if let destinationViewController = segue.destination as? PreviewViewController2 {
-            if self.isPhoto {
                 destinationViewController.photo = self.photo
                 self.photo = nil
             } else {

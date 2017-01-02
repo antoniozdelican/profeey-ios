@@ -9,7 +9,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PreviewViewController2" customModule="Profeey" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PreviewViewController" customModule="Profeey" customModuleProvider="target">
             <connections>
                 <outlet property="gridView" destination="H4R-3N-Gdb" id="Bri-FN-LYr"/>
             </connections>
@@ -20,61 +20,61 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JR7-lo-BVC" userLabel="Vertical Spacer View">
-                    <rect key="frame" x="0.0" y="333.5" width="124.5" height="0.0"/>
+                    <rect key="frame" x="0.0" y="334" width="125" height="0.0"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="height" id="Sgu-To-qmM"/>
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hg0-NN-XxO" userLabel="Vertical Line View">
-                    <rect key="frame" x="124.5" y="0.0" width="1" height="667"/>
+                    <rect key="frame" x="125" y="0.0" width="1" height="667"/>
                     <color key="backgroundColor" red="0.97530043129999999" green="0.97527122499999996" blue="0.97528779509999997" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="1" id="4PL-c6-WlO"/>
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aMj-fz-eau" userLabel="Vertical Spacer View">
-                    <rect key="frame" x="125.5" y="333.5" width="124" height="0.0"/>
+                    <rect key="frame" x="126" y="334" width="124" height="0.0"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CjG-bh-tpb" userLabel="Vertical Line View">
-                    <rect key="frame" x="249.5" y="0.0" width="1" height="667"/>
+                    <rect key="frame" x="250" y="0.0" width="1" height="667"/>
                     <color key="backgroundColor" red="0.97530043129999999" green="0.97527122499999996" blue="0.97528779509999997" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="1" id="dbB-22-0s0"/>
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CON-VU-MBS" userLabel="Vertical Spacer View">
-                    <rect key="frame" x="250.5" y="333.5" width="124.5" height="0.0"/>
+                    <rect key="frame" x="251" y="334" width="124" height="0.0"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eSs-pS-vJ5" userLabel="Horizontal Spacer View">
-                    <rect key="frame" x="187.5" y="0.0" width="0.0" height="221.5"/>
+                    <rect key="frame" x="188" y="0.0" width="0.0" height="222"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="width" id="HWN-xz-8Xs"/>
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="USG-DW-nba" userLabel="Horizontal Line View">
-                    <rect key="frame" x="0.0" y="221.5" width="375" height="1"/>
+                    <rect key="frame" x="0.0" y="222" width="375" height="1"/>
                     <color key="backgroundColor" red="0.97530043129999999" green="0.97527122499999996" blue="0.97528779509999997" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="1" id="Ysc-5a-dtM"/>
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nGf-C8-fAT" userLabel="Horizontal Spacer View">
-                    <rect key="frame" x="187.5" y="222.5" width="0.0" height="222"/>
+                    <rect key="frame" x="188" y="223" width="0.0" height="222"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eFH-G3-8nK" userLabel="Horizontal Line View">
-                    <rect key="frame" x="0.0" y="444.5" width="375" height="1"/>
+                    <rect key="frame" x="0.0" y="445" width="375" height="1"/>
                     <color key="backgroundColor" red="0.97530043129999999" green="0.97527122499999996" blue="0.97528779509999997" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="1" id="iTl-25-sDV"/>
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="goi-of-B83" userLabel="Horizontal Spacer View">
-                    <rect key="frame" x="187.5" y="445.5" width="0.0" height="221.5"/>
+                    <rect key="frame" x="188" y="446" width="0.0" height="221"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </view>
             </subviews>
