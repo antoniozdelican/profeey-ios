@@ -438,14 +438,14 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
     
     // MARK: Activities
     
-    func queryUserActivitiesDateSortedDynamoDB(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+    func queryUserActivitiesDateSortedDynamoDB(_ lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
             print("queryUserActivitiesDateSortedDynamoDB no identityId!")
             return
         }
         print("queryUserActivitiesDateSortedDynamoDB:")
         let awsActivitiesDateSortedIndex = AWSActivitiesDateSortedIndex()
-        awsActivitiesDateSortedIndex.queryUserActivitiesDateSorted(identityId, completionHandler: completionHandler)
+        awsActivitiesDateSortedIndex.queryUserActivitiesDateSorted(identityId, lastEvaluatedKey: lastEvaluatedKey, completionHandler: completionHandler)
     }
     
     // MARK: Notifications

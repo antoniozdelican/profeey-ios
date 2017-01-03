@@ -178,9 +178,11 @@ extension MainTabBarController: UITabBarControllerDelegate {
 
         if let childViewController = navigationController.childViewControllers[0] as? HomeTableViewController {
             if self.previousViewController == childViewController || self.previousViewController == nil {
-                childViewController.navigationController?.setNavigationBarHidden(false, animated: true)
+                childViewController.homeTabBarButtonTapped()
+                
+                // childViewController.navigationController?.setNavigationBarHidden(false, animated: true)
                 // Offset is 1.0 on y due to the inset of -1.0 and upper separator.
-                childViewController.tableView.setContentOffset(CGPoint(x: 0.0, y: 1.0), animated: true)
+                //childViewController.tableView.setContentOffset(CGPoint(x: 0.0, y: 1.0), animated: true)
             }
             self.previousViewController = childViewController
         }

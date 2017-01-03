@@ -66,8 +66,8 @@ class AWSActivitiesDateSortedIndex: NSObject, Index {
     
     // MARK: QueryWithPartitionKeyAndSortKey
     
-    // Query all activities with userId and creationDate <= currentDate.
-    func queryUserActivitiesDateSorted(_ userId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+    // Query paginated activities with userId and creationDate <= currentDate.
+    func queryUserActivitiesDateSorted(_ userId: String, lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
         let queryExpression = AWSDynamoDBQueryExpression()
         queryExpression.indexName = "DateSortedIndex"
@@ -80,8 +80,11 @@ class AWSActivitiesDateSortedIndex: NSObject, Index {
             ":userId": userId,
             ":creationDate": NSNumber(value: Date().timeIntervalSince1970 as Double),
         ]
-        // Set desc ordering.
+        
         queryExpression.scanIndexForward = false
+        queryExpression.limit = 5
+        // TEST
+        queryExpression.exclusiveStartKey = lastEvaluatedKey
         
         objectMapper.query(AWSActivity.self, expression: queryExpression, completionHandler: completionHandler)
     }

@@ -20,9 +20,12 @@ class HomeTableViewController: UITableViewController {
     @IBOutlet var homeEmptyFeedView: HomeEmptyFeedView!
     
     fileprivate var posts: [Post] = []
+    fileprivate var lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?
+    fileprivate var isRefreshingPosts: Bool = false
+    fileprivate var isLoadingNextPosts: Bool = false
     
     // Before any post is loaded.
-    fileprivate var isLoadingPosts: Bool = false
+    fileprivate var isLoadingInitialPosts: Bool = false
     fileprivate var activityIndicatorView: UIActivityIndicatorView?
     
     /*
@@ -62,9 +65,9 @@ class HomeTableViewController: UITableViewController {
         
         // Start querying activities.
         if AWSIdentityManager.defaultIdentityManager().isLoggedIn {
-            self.isLoadingPosts = true
+            self.isLoadingInitialPosts = true
             self.activityIndicatorView?.startAnimating()
-            self.queryUserActivitiesDateSorted()
+            self.queryUserActivitiesDateSorted(true)
         }
         
         // Add observers, don't need deinit removeObserver.
@@ -84,10 +87,10 @@ class HomeTableViewController: UITableViewController {
         }
         // Special case.
         if self.hasDiscoveredAndFollowedUsers {
-            self.isLoadingPosts = true
+            self.isLoadingInitialPosts = true
             self.tableView.backgroundView = self.activityIndicatorView
             self.activityIndicatorView?.startAnimating()
-            self.queryUserActivitiesDateSorted()
+            self.queryUserActivitiesDateSorted(true)
             // Set back to false.
             self.hasDiscoveredAndFollowedUsers = false
         }
@@ -152,14 +155,14 @@ class HomeTableViewController: UITableViewController {
     // MARK: UITableViewDataSource
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        if self.isLoadingPosts {
+        if self.isLoadingInitialPosts {
             return 0
         }
         return self.posts.count
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if self.isLoadingPosts {
+        if self.isLoadingInitialPosts {
             return 0
         }
         if section == 0 && self.isUploading {
@@ -169,26 +172,6 @@ class HomeTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.section == 0 && self.isUploading {
-            // Dummy post user.
-            let user = self.posts[indexPath.section].user
-            switch indexPath.row {
-            case 0:
-                let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostUser", for: indexPath) as! PostUserTableViewCell
-                cell.profilePicImageView.image = user?.profilePicUrl != nil ? user?.profilePic : UIImage(named: "ic_no_profile_pic_feed")
-                cell.preferredUsernameLabel.text = user?.preferredUsername
-                cell.professionNameLabel.text = user?.professionName
-                return cell
-            case 1:
-                let cell = tableView.dequeueReusableCell(withIdentifier: "cellUploading", for: indexPath) as! UploadingTableViewCell
-                if let progress = self.newPostProgress {
-                    cell.progressView.progress = Float(progress.fractionCompleted)
-                }
-                return cell
-            default:
-                return UITableViewCell()
-            }
-        }
         let post = self.posts[indexPath.section]
         let user = post.user
         switch indexPath.row {
@@ -200,13 +183,21 @@ class HomeTableViewController: UITableViewController {
             cell.postUserTableViewCellDelegate = self
             return cell
         case 1:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostImage", for: indexPath) as! PostImageTableViewCell
-            cell.postImageView.image = post.image
-            if let imageWidth = post.imageWidth?.floatValue, let imageHeight = post.imageHeight?.floatValue {
-                let aspectRatio = CGFloat(imageWidth / imageHeight)
-                cell.postImageViewHeightConstraint.constant = ceil(tableView.bounds.width / aspectRatio)
+            if indexPath.section == 0 && self.isUploading {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellUploading", for: indexPath) as! UploadingTableViewCell
+                if let progress = self.newPostProgress {
+                    cell.progressView.progress = Float(progress.fractionCompleted)
+                }
+                return cell
+            } else {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostImage", for: indexPath) as! PostImageTableViewCell
+                cell.postImageView.image = post.image
+                if let imageWidth = post.imageWidth?.floatValue, let imageHeight = post.imageHeight?.floatValue {
+                    let aspectRatio = CGFloat(imageWidth / imageHeight)
+                    cell.postImageViewHeightConstraint.constant = ceil(tableView.bounds.width / aspectRatio)
+                }
+                return cell
             }
-            return cell
         case 2:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostInfo", for: indexPath) as! PostInfoTableViewCell
             cell.captionLabel.text = post.caption
@@ -247,6 +238,16 @@ class HomeTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.layoutMargins = UIEdgeInsets.zero
         cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
+        
+        guard !self.isLoadingInitialPosts && !self.isRefreshingPosts else {
+            return
+        }
+        guard indexPath.section == self.posts.count - 1 && !self.isLoadingNextPosts && self.lastEvaluatedKey != nil else {
+            return
+        }
+        // Load next posts.
+        self.isLoadingNextPosts = true
+        self.queryUserActivitiesDateSorted(false)
     }
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -257,7 +258,11 @@ class HomeTableViewController: UITableViewController {
             if indexPath.section == 0 && self.isUploading {
                 return 40.0
             }
-            return 400.0
+            if let imageWidth = self.posts[indexPath.section].imageWidth?.floatValue, let imageHeight = self.posts[indexPath.section].imageHeight?.floatValue {
+                let aspectRatio = CGFloat(imageWidth / imageHeight)
+                return ceil(tableView.bounds.width / aspectRatio)
+            }
+            return 0.0
         case 2:
             return 30.0
         case 3:
@@ -277,11 +282,15 @@ class HomeTableViewController: UITableViewController {
             if indexPath.section == 0 && self.isUploading {
                 return 40.0
             }
-            return UITableViewAutomaticDimension
+            if let imageWidth = self.posts[indexPath.section].imageWidth?.floatValue, let imageHeight = self.posts[indexPath.section].imageHeight?.floatValue {
+                let aspectRatio = CGFloat(imageWidth / imageHeight)
+                return ceil(tableView.bounds.width / aspectRatio)
+            }
+            return 0.0
         case 2:
             return UITableViewAutomaticDimension
         case 3:
-            return UITableViewAutomaticDimension
+            return 26.0
         case 4:
             return 52.0
         default:
@@ -299,7 +308,12 @@ class HomeTableViewController: UITableViewController {
     // MARK: IBActions
     
     @IBAction func refreshControlChanged(_ sender: AnyObject) {
-        self.queryUserActivitiesDateSorted()
+        guard !self.isRefreshingPosts && !self.isLoadingInitialPosts else {
+            self.refreshControl?.endRefreshing()
+            return
+        }
+        self.isRefreshingPosts = true
+        self.queryUserActivitiesDateSorted(true)
     }
     
     @IBAction func discoverPeopleButtonTapped(_ sender: Any) {
@@ -315,18 +329,16 @@ class HomeTableViewController: UITableViewController {
                 let imageData = UIImageJPEGRepresentation(image, 0.6) else {
                 return
             }
+            let newPost = Post()
+            newPost.user = PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB
+            
+            // Prepare for uploading.
             self.isUploading = true
-            // Add dummy post for uploading.
-            let dummyPost = Post()
-            dummyPost.user = PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB
-            self.posts.insert(dummyPost, at: 0)
-            // Adjust tableView and other views.
+            self.posts.insert(newPost, at: 0)
             self.tableView.beginUpdates()
             self.tableView.insertSections(IndexSet(integer: 0), with: UITableViewRowAnimation.none)
-            if let _ = self.tableView.backgroundView as? HomeEmptyFeedView {
-                self.tableView.backgroundView = nil
-            }
             self.tableView.endUpdates()
+            self.tableView.backgroundView = nil
             self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: UITableViewScrollPosition.top, animated: false)
             self.navigationController?.setNavigationBarHidden(false, animated: true)
             self.isNavigationBarHidden = false
@@ -337,49 +349,77 @@ class HomeTableViewController: UITableViewController {
     
     // MARK: AWS
     
-    fileprivate func queryUserActivitiesDateSorted() {
+    fileprivate func queryUserActivitiesDateSorted(_ startFromBeginning: Bool) {
+        if startFromBeginning {
+            self.lastEvaluatedKey = nil
+        }
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().queryUserActivitiesDateSortedDynamoDB({
+        PRFYDynamoDBManager.defaultDynamoDBManager().queryUserActivitiesDateSortedDynamoDB(self.lastEvaluatedKey, completionHandler: {
             (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
             DispatchQueue.main.async(execute: {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                self.isLoadingPosts = false
-                self.activityIndicatorView?.stopAnimating()
-                self.refreshControl?.endRefreshing()
                 if let error = error {
-                    print("queryUserActivitiesDateSorted error: \(error)")
-                    self.tableView.reloadData()
-                } else {
-                    guard let awsActivities = response?.items as? [AWSActivity], awsActivities.count > 0 else {
-                        // Set the homeEmptyFeedView.
-                        self.tableView.backgroundView = self.homeEmptyFeedView
-                        // Reset posts anyways.
-                        self.posts = []
-                        self.tableView.reloadData()
-                        return
-                    }
+                   print("queryUserActivitiesDateSorted error: \(error)")
+                }
+                if startFromBeginning {
                     self.posts = []
+                }
+                var numberOfNewPosts = 0
+                if let awsActivities = response?.items as? [AWSActivity] {
                     for awsActivity in awsActivities {
                         let user = User(userId: awsActivity._postUserId, firstName: awsActivity._firstName, lastName: awsActivity._lastName, preferredUsername: awsActivity._preferredUsername, professionName: awsActivity._professionName, profilePicUrl: awsActivity._profilePicUrl)
                         let post = Post(userId: awsActivity._postUserId, postId: awsActivity._postId, creationDate: awsActivity._creationDate, caption: awsActivity._caption, categoryName: awsActivity._categoryName, imageUrl: awsActivity._imageUrl, imageWidth: awsActivity._imageWidth, imageHeight: awsActivity._imageHeight, numberOfLikes: awsActivity._numberOfLikes, numberOfComments: awsActivity._numberOfComments, user: user)
                         self.posts.append(post)
+                        numberOfNewPosts += 1
                     }
+                }
+                // Reset flags and animations that were initiated.
+                if self.isLoadingInitialPosts {
+                    self.isLoadingInitialPosts = false
+                    self.activityIndicatorView?.stopAnimating()
+                }
+                if self.isRefreshingPosts {
+                    self.isRefreshingPosts = false
+                    self.refreshControl?.endRefreshing()
+                }
+                if self.isLoadingNextPosts {
+                    self.isLoadingNextPosts = false
+                }
+                if self.posts.count == 0 {
+                    self.tableView.backgroundView = self.homeEmptyFeedView
+                }
+                self.lastEvaluatedKey = response?.lastEvaluatedKey
+                
+                // Reload tableView with downloaded posts.
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                if startFromBeginning {
                     self.tableView.reloadData()
-                    
-                    for (index, post) in self.posts.enumerated() {
-                        if let profilePicUrl = post.user?.profilePicUrl {
+                } else if numberOfNewPosts > 0 {
+//                    UIView.performWithoutAnimation {
+//                        self.tableView.beginUpdates()
+//                        self.tableView.insertSections(IndexSet(integersIn: 0...numberOfNewPosts - 1), with: UITableViewRowAnimation.none)
+//                        self.tableView.endUpdates()
+//                    }
+                    self.tableView.reloadData()
+                }
+                
+                // Load other post data.
+                if let awsActivities = response?.items as? [AWSActivity] {
+                    for awsActivity in awsActivities {
+                        if let profilePicUrl = awsActivity._profilePicUrl {
                             PRFYS3Manager.defaultS3Manager().downloadImageS3(profilePicUrl, imageType: .userProfilePic)
                         }
-                        if let imageUrl = post.imageUrl {
+                        if let imageUrl = awsActivity._imageUrl {
                             PRFYS3Manager.defaultS3Manager().downloadImageS3(imageUrl, imageType: .postPic)
-                        }
-                        // TODO this should be changed to query more likes at the time not one by one.
-                        if let postId = post.postId {
-                            let indexPath = IndexPath(row: 4, section: index)
-                            self.getLike(postId, indexPath: indexPath)
                         }
                     }
                 }
+                
+                // TODO: queryLikes
+//                // TODO this should be changed to query more likes at the time not one by one.
+//                if let postId = post.postId {
+//                    let indexPath = IndexPath(row: 4, section: index)
+//                    self.getLike(postId, indexPath: indexPath)
+//                }
             })
         })
     }
@@ -389,7 +429,6 @@ class HomeTableViewController: UITableViewController {
         let imageKey = "public/\(uniqueImageName).jpg"
         let localContent = AWSUserFileManager.defaultUserFileManager().localContent(with: imageData, key: imageKey)
         
-        print("uploadImageS3:")
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         localContent.uploadWithPin(
             onCompletion: true,
@@ -397,22 +436,21 @@ class HomeTableViewController: UITableViewController {
                 (content: AWSLocalContent?, progress: Progress?) -> Void in
                 DispatchQueue.main.async(execute: {
                     self.newPostProgress = progress
-                    let indexPath = IndexPath(row: 1, section: 0)
-                    self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
+                    self.tableView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: UITableViewRowAnimation.none)
                 })
             }, completionHandler: {
                 (content: AWSLocalContent?, error: Error?) -> Void in
                 DispatchQueue.main.async(execute: {
                     UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                    
-                    // TODO: refactor instead of dummy post put real post.
-                    
                     if let error = error {
                         print("uploadImageS3 error: \(error)")
                         self.isUploading = false
-                        // Remove dummy post.
+                        // Handle error.
                         self.posts.remove(at: 0)
-                        self.tableView.reloadData()
+                        self.tableView.beginUpdates()
+                        self.tableView.deleteSections(IndexSet(integer: 0), with: UITableViewRowAnimation.none)
+                        self.tableView.endUpdates()
+                        self.tableView.backgroundView = self.posts.count == 0 ? self.homeEmptyFeedView: nil
                         let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.localizedDescription, cancelButtonTitle: "Ok")
                         self.present(alertController, animated: true, completion: nil)
                     } else {
@@ -420,25 +458,6 @@ class HomeTableViewController: UITableViewController {
                         self.createPost(imageData, imageUrl: imageKey, imageWidth: imageWidth, imageHeight: imageHeight, caption: caption, categoryName: categoryName)
                     }
                 })
-        })
-    }
-    
-    // TODO: refactor in PRFYS3
-    fileprivate func removeImage(_ postId: String, imageKey: String) {
-        let content = AWSUserFileManager.defaultUserFileManager().content(withKey: imageKey)
-        print("removeImageS3:")
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        content.removeRemoteContent(completionHandler: {
-            (content: AWSContent?, error: Error?) -> Void in
-            DispatchQueue.main.async(execute: {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                if let error = error {
-                    print("removeImageS3 error: \(error)")
-                } else {
-                    print("removeImageS3 success")
-                    content?.removeLocal()
-                }
-            })
         })
     }
     
@@ -451,31 +470,50 @@ class HomeTableViewController: UITableViewController {
                 self.isUploading = false
                 if let error = task.error {
                     print("savePost error: \(error)")
-                    // Remove dummy post.
+                    // Handle error.
                     self.posts.remove(at: 0)
-                    if self.posts.count == 0 {
-                        self.tableView.backgroundView = self.homeEmptyFeedView
-                        self.tableView.reloadData()
-                    } else {
-                        self.tableView.deleteSections(IndexSet(integer: 0), with: UITableViewRowAnimation.none)
-                    }
+                    self.tableView.beginUpdates()
+                    self.tableView.deleteSections(IndexSet(integer: 0), with: UITableViewRowAnimation.none)
+                    self.tableView.endUpdates()
+                    self.tableView.backgroundView = self.posts.count == 0 ? self.homeEmptyFeedView: nil
+                    let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.localizedDescription, cancelButtonTitle: "Ok")
+                    self.present(alertController, animated: true, completion: nil)
                 } else {
                     if let awsPost = task.result as? AWSPost {
-                        let post = Post(userId: awsPost._userId, postId: awsPost._postId, creationDate: awsPost._creationDate, caption: awsPost._caption, categoryName: awsPost._categoryName, imageUrl: awsPost._imageUrl, imageWidth: awsPost._imageWidth, imageHeight: awsPost._imageHeight, numberOfLikes: awsPost._numberOfLikes, numberOfComments: awsPost._numberOfComments, user: PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB)
-                        post.image = UIImage(data: imageData)
-                        
-                        // Remove dummy post and insert new.
-                        self.posts.remove(at: 0)
-                        self.posts.insert(post, at: 0)
+                        let newPost = Post(userId: awsPost._userId, postId: awsPost._postId, creationDate: awsPost._creationDate, caption: awsPost._caption, categoryName: awsPost._categoryName, imageUrl: awsPost._imageUrl, imageWidth: awsPost._imageWidth, imageHeight: awsPost._imageHeight, numberOfLikes: awsPost._numberOfLikes, numberOfComments: awsPost._numberOfComments, user: PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB)
+                        newPost.image = UIImage(data: imageData)
+                        // Update new post.
+                        self.posts[0] = newPost
                         UIView.performWithoutAnimation {
+                            self.tableView.beginUpdates()
                             self.tableView.reloadSections(IndexSet(integer: 0), with: UITableViewRowAnimation.none)
+                            self.tableView.endUpdates()
                         }
-                        // Notifiy observers (ProfileVc)
-                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: CreatePostNotificationKey), object: self, userInfo: ["post": post.copyPost()])
+                        // Notifiy observers.
+                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: CreatePostNotificationKey), object: self, userInfo: ["post": newPost.copyPost()])
                     }
                 }
             })
             return nil
+        })
+    }
+    
+    // TODO: refactor in PRFYS3
+    // In background.
+    fileprivate func removeImage(_ postId: String, imageKey: String) {
+        let content = AWSUserFileManager.defaultUserFileManager().content(withKey: imageKey)
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        content.removeRemoteContent(completionHandler: {
+            (content: AWSContent?, error: Error?) -> Void in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                if let error = error {
+                    print("removeImageS3 error: \(error)")
+                } else {
+                    print("removeImageS3 success")
+                    content?.removeLocal()
+                }
+            })
         })
     }
     
@@ -580,13 +618,10 @@ extension HomeTableViewController {
             return
         }
         self.posts.remove(at: postIndex)
-        if self.posts.count == 0 {
-            // Add HomeEmptyFeedView if there's no followed posts.
-            self.tableView.backgroundView = self.homeEmptyFeedView
-            self.tableView.reloadData()
-        } else {
-            self.tableView.deleteSections(IndexSet(integer: postIndex), with: UITableViewRowAnimation.top)
-        }
+        self.tableView.beginUpdates()
+        self.tableView.deleteSections(IndexSet(integer: postIndex), with: UITableViewRowAnimation.top)
+        self.tableView.endUpdates()
+        self.tableView.backgroundView = self.posts.count == 0 ? self.homeEmptyFeedView: nil
     }
     
     func updatePostNumberOfLikesNotification(_ notification: NSNotification) {
@@ -650,18 +685,44 @@ extension HomeTableViewController {
         switch imageType {
         case .userProfilePic:
             for post in self.posts.filter( { $0.user?.profilePicUrl == imageKey }) {
-                if let postIndex = self.posts.index(of: post) {
-                    self.posts[postIndex].user?.profilePic = UIImage(data: imageData)
-                    self.tableView.reloadRows(at: [IndexPath(row: 0, section: postIndex)], with: UITableViewRowAnimation.automatic)
+                guard let postIndex = self.posts.index(of: post) else {
+                    continue
+                }
+                self.posts[postIndex].user?.profilePic = UIImage(data: imageData)
+                guard let indexPathsForVisibleRows = self.tableView.indexPathsForVisibleRows, indexPathsForVisibleRows.contains(where: { $0.section == postIndex }) else {
+                    continue
+                }
+                UIView.performWithoutAnimation {
+                    self.tableView.beginUpdates()
+                    self.tableView.reloadRows(at: [IndexPath(row: 0, section: postIndex)], with: UITableViewRowAnimation.none)
+                    self.tableView.endUpdates()
                 }
             }
         case .postPic:
             for post in self.posts.filter( { $0.imageUrl == imageKey }) {
-                if let postIndex = self.posts.index(of: post) {
-                    self.posts[postIndex].image = UIImage(data: imageData)
-                    self.tableView.reloadRows(at: [IndexPath(row: 1, section: postIndex)], with: UITableViewRowAnimation.automatic)
+                guard let postIndex = self.posts.index(of: post) else {
+                    continue
+                }
+                self.posts[postIndex].image = UIImage(data: imageData)
+                // Reload only if visible.
+                guard let indexPathsForVisibleRows = self.tableView.indexPathsForVisibleRows, indexPathsForVisibleRows.contains(where: { $0.section == postIndex }) else {
+                    continue
+                }
+                UIView.performWithoutAnimation {
+                    self.tableView.beginUpdates()
+                    self.tableView.reloadRows(at: [IndexPath(row: 1, section: postIndex)], with: UITableViewRowAnimation.none)
+                    self.tableView.endUpdates()
                 }
             }
+        }
+    }
+    
+    // MARK: Public
+    
+    func homeTabBarButtonTapped() {
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
+        if self.posts.count > 0 {
+            self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: UITableViewScrollPosition.top, animated: true)
         }
     }
 }
