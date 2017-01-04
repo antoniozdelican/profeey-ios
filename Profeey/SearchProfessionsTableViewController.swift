@@ -81,7 +81,7 @@ class SearchProfessionsTableViewController: UITableViewController {
             return cell
         }
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellSearchProfession", for: indexPath) as! SearchProfessionTableViewCell
-        let profession = self.popularProfessions[indexPath.row]
+        let profession = self.professions[indexPath.row]
         cell.professionNameLabel.text = profession.professionName
         cell.numberOfUsersLabel.text = profession.numberOfUsersString
         return cell
@@ -258,7 +258,6 @@ extension SearchProfessionsTableViewController: SearchProfessionsDelegate {
             self.tableView.reloadData()
         } else {
             self.isShowingPopularProfessions = false
-            self.tableView.reloadData()
             self.filterProfessions(professionName)
         }
     }
