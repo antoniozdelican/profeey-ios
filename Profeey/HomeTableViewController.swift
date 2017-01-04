@@ -20,13 +20,14 @@ class HomeTableViewController: UITableViewController {
     @IBOutlet var homeEmptyFeedView: HomeEmptyFeedView!
     
     fileprivate var posts: [Post] = []
-    fileprivate var lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?
-    fileprivate var isRefreshingPosts: Bool = false
-    fileprivate var isLoadingNextPosts: Bool = false
     
     // Before any post is loaded.
     fileprivate var isLoadingInitialPosts: Bool = false
     fileprivate var activityIndicatorView: UIActivityIndicatorView?
+    
+    fileprivate var isLoadingNextPosts: Bool = false
+    fileprivate var isRefreshingPosts: Bool = false
+    fileprivate var lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?
     
     /*
      Special case, when new user doesn't have any posts (activities) on the feed and starts following 
@@ -239,13 +240,13 @@ class HomeTableViewController: UITableViewController {
         cell.layoutMargins = UIEdgeInsets.zero
         cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
         
+        // Load next posts.
         guard !self.isLoadingInitialPosts && !self.isRefreshingPosts else {
             return
         }
         guard indexPath.section == self.posts.count - 1 && !self.isLoadingNextPosts && self.lastEvaluatedKey != nil else {
             return
         }
-        // Load next posts.
         self.isLoadingNextPosts = true
         self.queryUserActivitiesDateSorted(false)
     }
@@ -370,7 +371,7 @@ class HomeTableViewController: UITableViewController {
                         let post = Post(userId: awsActivity._postUserId, postId: awsActivity._postId, creationDate: awsActivity._creationDate, caption: awsActivity._caption, categoryName: awsActivity._categoryName, imageUrl: awsActivity._imageUrl, imageWidth: awsActivity._imageWidth, imageHeight: awsActivity._imageHeight, numberOfLikes: awsActivity._numberOfLikes, numberOfComments: awsActivity._numberOfComments, user: user)
                         self.posts.append(post)
                         numberOfNewPosts += 1
-                        // Immediately getLike, and don't show post until it's done.
+                        // Immediately getLike.
                         if let postId = awsActivity._postId {
                             self.getLike(postId)
                         }
@@ -392,9 +393,9 @@ class HomeTableViewController: UITableViewController {
                     self.tableView.backgroundView = self.homeEmptyFeedView
                 }
                 self.lastEvaluatedKey = response?.lastEvaluatedKey
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 
                 // Reload tableView with downloaded posts.
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 if startFromBeginning {
                     self.tableView.reloadData()
                 } else if numberOfNewPosts > 0 {

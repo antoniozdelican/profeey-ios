@@ -109,8 +109,8 @@ class AWSPostsDateSortedIndex: NSObject, Index {
     
     // MARK: QueryWithPartitionKeyAndSortKey
     
-    // Find all posts with userId and creationDate <= currentDate.
-    func queryUserPostsDateSorted(_ userId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+    // Query paginated posts with userId and creationDate <= currentDate.
+    func queryUserPostsDateSorted(_ userId: String, lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
         let queryExpression = AWSDynamoDBQueryExpression()
         queryExpression.indexName = "DateSortedIndex"
@@ -119,19 +119,18 @@ class AWSPostsDateSortedIndex: NSObject, Index {
             "#userId": "userId",
             "#creationDate": "creationDate",
         ]
-        
-        let currentDateNumber = NSNumber(value: Date().timeIntervalSince1970 as Double)
-        
         queryExpression.expressionAttributeValues = [
             ":userId": userId,
-            ":creationDate": currentDateNumber,
+            ":creationDate": NSNumber(value: Date().timeIntervalSince1970 as Double),
         ]
-        // Set desc ordering.
         queryExpression.scanIndexForward = false
+        queryExpression.limit = 3
+        queryExpression.exclusiveStartKey = lastEvaluatedKey
         
         objectMapper.query(AWSPost.self, expression: queryExpression, completionHandler: completionHandler)
     }
     
+    // TODO: refactor
     func queryUserPostsDateSortedWithCategoryName(_ userId: String, categoryName: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
         let queryExpression = AWSDynamoDBQueryExpression()

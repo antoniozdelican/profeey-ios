@@ -34,6 +34,10 @@ class UsersTableViewController: UITableViewController {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         
+        if let usersType = self.usersType, usersType == .likers {
+            self.navigationItem.title = "Likes"
+        }
+        
         self.prepareForQueries()
         
         // Add observers.

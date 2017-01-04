@@ -33,8 +33,11 @@ class ProfileTableViewController: UITableViewController {
     
     fileprivate var selectedProfileSegment: ProfileSegment = ProfileSegment.posts
     
-    fileprivate var isLoadingPosts: Bool = true
     fileprivate var posts: [Post] = []
+    fileprivate var isLoadingInitialPosts: Bool = false
+    fileprivate var isLoadingNextPosts: Bool = false
+    fileprivate var lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?
+    //fileprivate var isRefreshingPosts: Bool = false
     
     fileprivate var isLoadingWorkExperiences: Bool = true
     fileprivate var workExperiences: [WorkExperience] = []
@@ -59,11 +62,7 @@ class ProfileTableViewController: UITableViewController {
         self.tableView.register(UINib(nibName: "ProfileTableSectionHeader", bundle: nil), forHeaderFooterViewReuseIdentifier: "profileTableSectionHeader")
         
         self.configureUser()
-        if self.isCurrentUser {
-            self.settingsButton.image = UIImage(named: "ic_settings")
-        } else {
-            self.settingsButton.image = UIImage(named: "ic_mail")
-        }
+        self.settingsButton.image = self.isCurrentUser ? UIImage(named: "ic_settings") : UIImage(named: "ic_mail")
         
         // Add observers.
         NotificationCenter.default.addObserver(self, selector: #selector(self.updateUserNotification(_:)), name: NSNotification.Name(UpdateUserNotificationKey), object: nil)
@@ -100,6 +99,7 @@ class ProfileTableViewController: UITableViewController {
         if self.isCurrentUser {
             // Comes from MainTabBarVc.
             self.user = PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB
+            self.isLoadingInitialPosts = true
             self.getUser(currentUserId)
         } else {
             // Comes from other Vc-s.
@@ -108,6 +108,7 @@ class ProfileTableViewController: UITableViewController {
                 return
             }
             self.isCurrentUser = (userId == currentUserId)
+            self.isLoadingInitialPosts = true
             self.getUser(userId)
         }
     }
@@ -160,7 +161,7 @@ class ProfileTableViewController: UITableViewController {
             guard self.selectedProfileSegment == ProfileSegment.posts else {
                 return 0
             }
-            if self.isLoadingPosts || self.posts.count == 0 {
+            if self.isLoadingInitialPosts || self.posts.count == 0 {
                 return 1
             }
             return self.posts.count
@@ -236,7 +237,7 @@ class ProfileTableViewController: UITableViewController {
                 return UITableViewCell()
             }
         case 1:
-            if self.isLoadingPosts {
+            if self.isLoadingInitialPosts {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellLoading", for: indexPath) as! LoadingTableViewCell
                 cell.activityIndicator?.startAnimating()
                 return cell
@@ -343,6 +344,22 @@ class ProfileTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.layoutMargins = UIEdgeInsets.zero
+        
+        // Load next posts.
+        guard !self.isLoadingInitialPosts else {
+            return
+        }
+        guard indexPath.section == 1 else {
+            return
+        }
+        guard indexPath.row == self.posts.count - 1 && !self.isLoadingNextPosts && self.lastEvaluatedKey != nil else {
+            return
+        }
+        guard let userId = self.user?.userId else {
+            return
+        }
+        self.isLoadingNextPosts = true
+        self.queryUserPostsDateSorted(userId, startFromBeginning: false)
     }
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -359,7 +376,7 @@ class ProfileTableViewController: UITableViewController {
                 return 0.0
             }
         case 1:
-            if self.isLoadingPosts || self.posts.count == 0 {
+            if self.isLoadingInitialPosts || self.posts.count == 0 {
                 return 112.0
             }
             return 112.0
@@ -391,7 +408,7 @@ class ProfileTableViewController: UITableViewController {
                 return 0.0
             }
         case 1:
-            if self.isLoadingPosts || self.posts.count == 0 {
+            if self.isLoadingInitialPosts || self.posts.count == 0 {
                 return 112.0
             }
             return 112.0
@@ -561,69 +578,87 @@ class ProfileTableViewController: UITableViewController {
                         return
                     }
                     let user = FullUser(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationId: awsUser._locationId, locationName: awsUser._locationName, website: awsUser._website, about: awsUser._about, numberOfFollowers: awsUser._numberOfFollowers, numberOfPosts: awsUser._numberOfPosts, numberOfRecommendations: awsUser._numberOfRecommendations)
-                    // TODO: refactor better
-                    user.profilePic = self.user?.profilePic
                     self.user = user
-                    self.hasUserLoaded = true
-                    self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0), IndexPath(row: 1, section: 0)], with: UITableViewRowAnimation.none)
-                    self.navigationItem.title = self.user?.preferredUsername
                     
-                    if user.profilePic == nil, let profilePicUrl = awsUser._profilePicUrl {
+                    // Reset flags and animations that were initiated.
+                    self.hasUserLoaded = true
+                    self.navigationItem.title = self.user?.preferredUsername
+                    self.refreshControl?.endRefreshing()
+                    
+                    // Reload tableView with downloaded user.
+                    UIView.performWithoutAnimation {
+                        self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0), IndexPath(row: 1, section: 0)], with: UITableViewRowAnimation.none)
+                    }
+                    
+                    // Load profilePic.
+                    if let profilePicUrl = awsUser._profilePicUrl {
                         PRFYS3Manager.defaultS3Manager().downloadImageS3(profilePicUrl, imageType: .userProfilePic)
                     }
+                    
+                    // Load other data.
                     if let userId = awsUser._userId {
                         if !self.isCurrentUser {
                             self.getRelationship(userId)
                             self.getRecommendation(userId)
                         }
-                        self.queryUserPostsDateSorted(userId)
+                        self.queryUserPostsDateSorted(userId, startFromBeginning: true)
                         self.queryWorkExperiences(userId)
                         self.queryEducations(userId)
                         self.queryUserCategoriesNumberOfPostsSorted(userId)
                     }
-                    // For now
-                    self.refreshControl?.endRefreshing()
                 }
             })
             return nil
         })
     }
     
-    fileprivate func queryUserPostsDateSorted(_ userId: String) {
+    fileprivate func queryUserPostsDateSorted(_ userId: String, startFromBeginning: Bool) {
+        if startFromBeginning {
+            self.lastEvaluatedKey = nil
+        }
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().queryUserPostsDateSortedDynamoDB(userId, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().queryUserPostsDateSortedDynamoDB(userId, lastEvaluatedKey: self.lastEvaluatedKey, completionHandler: {
             (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
             DispatchQueue.main.async(execute: {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                self.isLoadingPosts = false
                 if let error = error {
                     print("queryUserPostsDateSorted error: \(error)")
-                    if self.selectedProfileSegment == ProfileSegment.posts {
-                        UIView.performWithoutAnimation {
-                            self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
-                        }
-                    }
-                } else {
-                    guard let awsPosts = response?.items as? [AWSPost], awsPosts.count > 0 else {
-                        if self.selectedProfileSegment == ProfileSegment.posts {
-                            UIView.performWithoutAnimation {
-                                self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
-                            }
-                        }
-                        return
-                    }
+                }
+                if startFromBeginning {
                     self.posts = []
+                }
+                var numberOfNewPosts = 0
+                if let awsPosts = response?.items as? [AWSPost] {
                     for awsPost in awsPosts {
                         let post = Post(userId: awsPost._userId, postId: awsPost._postId, creationDate: awsPost._creationDate, caption: awsPost._caption, categoryName: awsPost._categoryName, imageUrl: awsPost._imageUrl, imageWidth: awsPost._imageWidth, imageHeight: awsPost._imageHeight, numberOfLikes: awsPost._numberOfLikes, numberOfComments: awsPost._numberOfComments, user: self.user)
                         self.posts.append(post)
+                        numberOfNewPosts += 1
+                        // Immediately getLike.
+                        // TODO
                     }
-                    if self.selectedProfileSegment == ProfileSegment.posts {
-                        UIView.performWithoutAnimation {
-                            self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
-                        }
+                }
+                // Reset flags and animations that were initiated.
+                if self.isLoadingInitialPosts {
+                    self.isLoadingInitialPosts = false
+                }
+                if self.isLoadingNextPosts {
+                    self.isLoadingNextPosts = false
+                }
+                self.lastEvaluatedKey = response?.lastEvaluatedKey
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                
+                // Reload tableView with downloaded posts.
+                if self.selectedProfileSegment == ProfileSegment.posts {
+                    if startFromBeginning {
+                        self.tableView.reloadData()
+                    } else if numberOfNewPosts > 0 {
+                        self.tableView.reloadData()
                     }
-                    for post in self.posts {
-                        if let imageUrl = post.imageUrl {
+                }
+                
+                // Load posts images.
+                if let awsPosts = response?.items as? [AWSPost] {
+                    for awsPost in awsPosts {
+                        if let imageUrl = awsPost._imageUrl {
                             PRFYS3Manager.defaultS3Manager().downloadImageS3(imageUrl, imageType: .postPic)
                         }
                     }
@@ -637,34 +672,26 @@ class ProfileTableViewController: UITableViewController {
         PRFYDynamoDBManager.defaultDynamoDBManager().queryWorkExperiencesDynamoDB(userId, completionHandler: {
             (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
             DispatchQueue.main.async(execute: {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                self.isLoadingWorkExperiences = false
                 if let error = error {
                     print("queryWorkExperiences error: \(error)")
-                    if self.selectedProfileSegment == ProfileSegment.experience {
-                        UIView.performWithoutAnimation {
-                            self.tableView.reloadSections(IndexSet([2, 3]), with: UITableViewRowAnimation.none)
-                        }
-                    }
-                } else {
-                    guard let awsWorkExperiences = response?.items as? [AWSWorkExperience], awsWorkExperiences.count > 0 else {
-                        if self.selectedProfileSegment == ProfileSegment.experience {
-                            UIView.performWithoutAnimation {
-                                self.tableView.reloadSections(IndexSet([2, 3]), with: UITableViewRowAnimation.none)
-                            }
-                        }
-                        return
-                    }
-                    self.workExperiences = []
+                }
+                self.workExperiences = []
+                if let awsWorkExperiences = response?.items as? [AWSWorkExperience] {
                     for awsWorkExperience in awsWorkExperiences {
                         let workExperience = WorkExperience(userId: awsWorkExperience._userId, workExperienceId: awsWorkExperience._workExperienceId, title: awsWorkExperience._title, organization: awsWorkExperience._organization, workDescription: awsWorkExperience._workDescription, fromMonth: awsWorkExperience._fromMonth, fromYear: awsWorkExperience._fromYear, toMonth: awsWorkExperience._toMonth, toYear: awsWorkExperience._toYear)
                         self.workExperiences.append(workExperience)
                     }
                     self.sortWorkExperiencesByToDate()
-                    if self.selectedProfileSegment == ProfileSegment.experience {
-                        UIView.performWithoutAnimation {
-                            self.tableView.reloadSections(IndexSet([2, 3]), with: UITableViewRowAnimation.none)
-                        }
+                }
+                
+                // Reset flags and animations that were initiated.
+                self.isLoadingWorkExperiences = false
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                
+                // Reload tableView with downloaded workExperiences.
+                if self.selectedProfileSegment == ProfileSegment.experience {
+                    UIView.performWithoutAnimation {
+                        self.tableView.reloadSections(IndexSet([2, 3]), with: UITableViewRowAnimation.none)
                     }
                 }
             })
@@ -676,34 +703,26 @@ class ProfileTableViewController: UITableViewController {
         PRFYDynamoDBManager.defaultDynamoDBManager().queryEducationsDynamoDB(userId, completionHandler: {
             (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
             DispatchQueue.main.async(execute: {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                self.isLoadingEducations = false
                 if let error = error {
                     print("queryEducations error: \(error)")
-                    if self.selectedProfileSegment == ProfileSegment.experience {
-                        UIView.performWithoutAnimation {
-                            self.tableView.reloadSections(IndexSet([2, 3]), with: UITableViewRowAnimation.none)
-                        }
-                    }
-                } else {
-                    guard let awsEducations = response?.items as? [AWSEducation], awsEducations.count > 0 else {
-                        if self.selectedProfileSegment == ProfileSegment.experience {
-                            UIView.performWithoutAnimation {
-                                self.tableView.reloadSections(IndexSet([2, 3]), with: UITableViewRowAnimation.none)
-                            }
-                        }
-                        return
-                    }
-                    self.educations = []
+                }
+                self.educations = []
+                if let awsEducations = response?.items as? [AWSEducation] {
                     for awsEducation in awsEducations {
                         let education = Education(userId: awsEducation._userId, educationId: awsEducation._educationId, school: awsEducation._school, fieldOfStudy: awsEducation._fieldOfStudy, educationDescription: awsEducation._educationDescription, fromMonth: awsEducation._fromMonth, fromYear: awsEducation._fromYear, toMonth: awsEducation._toMonth, toYear: awsEducation._toYear)
                         self.educations.append(education)
                     }
                     self.sortEducationsByToDate()
-                    if self.selectedProfileSegment == ProfileSegment.experience {
-                        UIView.performWithoutAnimation {
-                            self.tableView.reloadSections(IndexSet([2, 3]), with: UITableViewRowAnimation.none)
-                        }
+                }
+                
+                // Reset flags and animations that were initiated.
+                self.isLoadingEducations = false
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                
+                // Reload tableView with downloaded educations.
+                if self.selectedProfileSegment == ProfileSegment.experience {
+                    UIView.performWithoutAnimation {
+                        self.tableView.reloadSections(IndexSet([2, 3]), with: UITableViewRowAnimation.none)
                     }
                 }
             })
@@ -715,30 +734,27 @@ class ProfileTableViewController: UITableViewController {
         PRFYDynamoDBManager.defaultDynamoDBManager().queryUserCategoriesNumberOfPostsSortedDynamoDB(userId, completionHandler: {
             (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
             DispatchQueue.main.async(execute: {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                self.isLoadingUserCategories = false
                 if let error = error {
                     print("queryUserCategoriesNumberOfPostsSorted error: \(error)")
-                    if self.selectedProfileSegment == ProfileSegment.skills {
-                        UIView.performWithoutAnimation {
-                            self.tableView.reloadSections(IndexSet([4]), with: UITableViewRowAnimation.none)
-                        }
-                    }
-                } else {
-                    guard let awsUserCategories = response?.items as? [AWSUserCategory], awsUserCategories.count > 0 else {
-                        if self.selectedProfileSegment == ProfileSegment.skills {
-                            UIView.performWithoutAnimation {
-                                self.tableView.reloadSections(IndexSet([4]), with: UITableViewRowAnimation.none)
-                            }
-                        }
-                        return
-                    }
-                    self.userCategories = []
+                }
+                self.userCategories = []
+                if let awsUserCategories = response?.items as? [AWSUserCategory] {
                     for awsUserCategory in awsUserCategories {
                         let userCategory = UserCategory(userId: awsUserCategory._userId, categoryName: awsUserCategory._categoryName, numberOfPosts: awsUserCategory._numberOfPosts)
                         self.userCategories.append(userCategory)
                     }
                     self.sortUserCategories()
+                }
+                
+                // Reset flags and animations that were initiated.
+                self.isLoadingUserCategories = false
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                
+                // Reload tableView with downloaded userCategories.
+                if self.selectedProfileSegment == ProfileSegment.skills {
+                    UIView.performWithoutAnimation {
+                        self.tableView.reloadSections(IndexSet([4]), with: UITableViewRowAnimation.none)
+                    }
                 }
             })
         })
@@ -813,7 +829,6 @@ class ProfileTableViewController: UITableViewController {
     }
     
     fileprivate func getRecommendation(_ recommendingId: String) {
-        print("HERE getRecommendation")
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         PRFYDynamoDBManager.defaultDynamoDBManager().getRecommendationDynamoDB(recommendingId, completionHandler: {
             (task: AWSTask) in
@@ -1100,16 +1115,23 @@ extension ProfileTableViewController {
                 return
             }
             self.user?.profilePic = UIImage(data: imageData)
-            self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.none)
+            UIView.performWithoutAnimation {
+                self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.none)
+            }
         case .postPic:
-            for post in self.posts.filter( { $0.imageUrl == imageKey }) {
-                guard let postIndex = self.posts.index(of: post) else {
-                    continue
-                }
-                self.posts[postIndex].image = UIImage(data: imageData)
-                if self.selectedProfileSegment == ProfileSegment.posts {
-                    self.tableView.reloadRows(at: [IndexPath(row: postIndex, section: 1)], with: UITableViewRowAnimation.none)
-                }
+            guard let postIndex = self.posts.index(where: { $0.imageUrl == imageKey }) else {
+                return
+            }
+            self.posts[postIndex].image = UIImage(data: imageData)
+            // Reload if visible.
+            guard self.selectedProfileSegment == ProfileSegment.posts else {
+                return
+            }
+            guard let indexPathsForVisibleRows = self.tableView.indexPathsForVisibleRows, indexPathsForVisibleRows.contains(where: { $0 == IndexPath(row: postIndex, section: 1) }) else {
+                return
+            }
+            UIView.performWithoutAnimation {
+                self.tableView.reloadRows(at: [IndexPath(row: postIndex, section: 1)], with: UITableViewRowAnimation.none)
             }
         }
     }
