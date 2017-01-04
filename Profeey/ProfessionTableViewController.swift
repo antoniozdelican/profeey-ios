@@ -17,8 +17,6 @@ class ProfessionTableViewController: UITableViewController {
     var location: Location?
     
     fileprivate var users: [User] = []
-    fileprivate var allUsers: [User] = []
-    fileprivate var locationUsers: [User] = []
     fileprivate var isSearchingUsers: Bool = false
 
     override func viewDidLoad() {
@@ -36,6 +34,7 @@ class ProfessionTableViewController: UITableViewController {
         // Add observers.
         NotificationCenter.default.addObserver(self, selector: #selector(self.recommendUserNotification(_:)), name: NSNotification.Name(RecommendUserNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.unrecommendUserNotification(_:)), name: NSNotification.Name(UnrecommendUserNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.downloadImageNotification(_:)), name: NSNotification.Name(DownloadImageNotificationKey), object: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -179,7 +178,7 @@ class ProfessionTableViewController: UITableViewController {
                     
                     for user in self.users {
                         if let profilePicUrl = user.profilePicUrl {
-                            self.downloadProfilePic(profilePicUrl)
+                            PRFYS3Manager.defaultS3Manager().downloadImageS3(profilePicUrl, imageType: .userProfilePic)
                         }
                     }
                 }
@@ -220,56 +219,6 @@ class ProfessionTableViewController: UITableViewController {
 //            return nil
 //        })
 //    }
-    
-    fileprivate func downloadProfilePic(_ profilePicUrl: String) {
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        let content = AWSUserFileManager.defaultUserFileManager().content(withKey: profilePicUrl)
-        // TODO check if content.isImage()
-        if content.isCached {
-            print("Content cached:")
-            DispatchQueue.main.async(execute: {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-            })
-            let image = UIImage(data: content.cachedData)
-            guard let userIndex = self.users.index(where: { $0.profilePicUrl == profilePicUrl }) else {
-                return
-            }
-            self.users[userIndex].profilePic = image
-            UIView.performWithoutAnimation {
-                self.tableView.reloadRows(at: [IndexPath(row: userIndex, section: 0)], with: UITableViewRowAnimation.none)
-            }
-        } else {
-            print("Download content:")
-            content.download(
-                with: AWSContentDownloadType.ifNewerExists,
-                pinOnCompletion: false,
-                progressBlock: {
-                    (content: AWSContent?, progress: Progress?) -> Void in
-                    // Do nothing.
-            },
-                completionHandler: {
-                    (content: AWSContent?, data: Data?, error: Error?) in
-                    DispatchQueue.main.async(execute: {
-                        UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                        if let error = error {
-                            print("downloadImage error: \(error)")
-                        } else {
-                            guard let imageData = data else {
-                                return
-                            }
-                            let image = UIImage(data: imageData)
-                            guard let userIndex = self.users.index(where: { $0.profilePicUrl == profilePicUrl }) else {
-                                return
-                            }
-                            self.users[userIndex].profilePic = image
-                            UIView.performWithoutAnimation {
-                                self.tableView.reloadRows(at: [IndexPath(row: userIndex, section: 0)], with: UITableViewRowAnimation.none)
-                            }
-                        }
-                    })
-            })
-        }
-    }
 }
 
 extension ProfessionTableViewController {
@@ -304,5 +253,24 @@ extension ProfessionTableViewController {
             user.numberOfRecommendations = NSNumber(value: 0)
         }
         self.sortUsers()
+    }
+    
+    func downloadImageNotification(_ notification: NSNotification) {
+        guard let imageKey = notification.userInfo?["imageKey"] as? String, let imageType = notification.userInfo?["imageType"] as? ImageType, let imageData = notification.userInfo?["imageData"] as? Data else {
+            return
+        }
+        guard imageType == .userProfilePic else {
+            return
+        }
+        guard let userIndex = self.users.index(where: { $0.profilePicUrl == imageKey }) else {
+            return
+        }
+        self.users[userIndex].profilePic = UIImage(data: imageData)
+        guard let indexPathsForVisibleRows = self.tableView.indexPathsForVisibleRows, indexPathsForVisibleRows.contains(where: { $0.row == userIndex }) else {
+            return
+        }
+        UIView.performWithoutAnimation {
+            self.tableView.reloadRows(at: [IndexPath(row: userIndex, section: 0)], with: UITableViewRowAnimation.none)
+        }
     }
 }
