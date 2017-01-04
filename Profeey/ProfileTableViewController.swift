@@ -1138,6 +1138,12 @@ extension ProfileTableViewController {
             }
         }
     }
+    
+    // MARK: Public
+    
+    func profileTabBarButtonTapped() {
+        self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: UITableViewScrollPosition.top, animated: true)
+    }
 }
 
 extension ProfileTableViewController: ProfileMainTableViewCellDelegate {

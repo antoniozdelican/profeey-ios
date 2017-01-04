@@ -179,10 +179,6 @@ extension MainTabBarController: UITabBarControllerDelegate {
         if let childViewController = navigationController.childViewControllers[0] as? HomeTableViewController {
             if self.previousViewController == childViewController || self.previousViewController == nil {
                 childViewController.homeTabBarButtonTapped()
-                
-                // childViewController.navigationController?.setNavigationBarHidden(false, animated: true)
-                // Offset is 1.0 on y due to the inset of -1.0 and upper separator.
-                //childViewController.tableView.setContentOffset(CGPoint(x: 0.0, y: 1.0), animated: true)
             }
             self.previousViewController = childViewController
         }
@@ -194,13 +190,13 @@ extension MainTabBarController: UITabBarControllerDelegate {
         }
         if let childViewController = navigationController.childViewControllers[0] as? NotificationsTableViewController {
             if self.previousViewController == childViewController {
-                childViewController.tableView.setContentOffset(CGPoint.zero, animated: true)
+                childViewController.notificationsTabBarButtonTapped()
             }
             self.previousViewController = childViewController
         }
         if let childViewController = navigationController.childViewControllers[0] as? ProfileTableViewController {
             if self.previousViewController == childViewController {
-                childViewController.tableView.setContentOffset(CGPoint.zero, animated: true)
+                childViewController.profileTabBarButtonTapped()
             }
             self.previousViewController = childViewController
         }

@@ -200,4 +200,13 @@ extension NotificationsTableViewController {
             self.tableView.reloadRows(at: [IndexPath(row: notificationIndex, section: 0)], with: UITableViewRowAnimation.none)
         }
     }
+    
+    // MARK: Public
+    
+    func notificationsTabBarButtonTapped() {
+        guard self.notifications.count > 0 else {
+            return
+        }
+        self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: UITableViewScrollPosition.top, animated: true)
+    }
 }

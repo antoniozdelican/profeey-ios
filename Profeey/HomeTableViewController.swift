@@ -717,9 +717,10 @@ extension HomeTableViewController {
     
     func homeTabBarButtonTapped() {
         self.navigationController?.setNavigationBarHidden(false, animated: true)
-        if self.posts.count > 0 {
-            self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: UITableViewScrollPosition.top, animated: true)
+        guard self.posts.count > 0 else {
+            return
         }
+        self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: UITableViewScrollPosition.top, animated: true)
     }
 }
 
