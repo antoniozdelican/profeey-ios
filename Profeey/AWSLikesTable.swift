@@ -46,7 +46,6 @@ class AWSLikesTable: NSObject, Table {
         return AWSLike.jsonKeyPathsByPropertyKey()[dataObjectAttributeName] as! String
     }
     
-    // Get Like with userId (likerId) and postId.
     func getLike(_ userId: String, postId: String, completionHandler: @escaping AWSContinuationBlock) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
         objectMapper.load(AWSLike.self, hashKey: userId, rangeKey: postId).continue(completionHandler)

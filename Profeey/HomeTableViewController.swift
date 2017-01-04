@@ -370,6 +370,10 @@ class HomeTableViewController: UITableViewController {
                         let post = Post(userId: awsActivity._postUserId, postId: awsActivity._postId, creationDate: awsActivity._creationDate, caption: awsActivity._caption, categoryName: awsActivity._categoryName, imageUrl: awsActivity._imageUrl, imageWidth: awsActivity._imageWidth, imageHeight: awsActivity._imageHeight, numberOfLikes: awsActivity._numberOfLikes, numberOfComments: awsActivity._numberOfComments, user: user)
                         self.posts.append(post)
                         numberOfNewPosts += 1
+                        // Immediately getLike, and don't show post until it's done.
+                        if let postId = awsActivity._postId {
+                            self.getLike(postId)
+                        }
                     }
                 }
                 // Reset flags and animations that were initiated.
@@ -394,15 +398,10 @@ class HomeTableViewController: UITableViewController {
                 if startFromBeginning {
                     self.tableView.reloadData()
                 } else if numberOfNewPosts > 0 {
-//                    UIView.performWithoutAnimation {
-//                        self.tableView.beginUpdates()
-//                        self.tableView.insertSections(IndexSet(integersIn: 0...numberOfNewPosts - 1), with: UITableViewRowAnimation.none)
-//                        self.tableView.endUpdates()
-//                    }
                     self.tableView.reloadData()
                 }
                 
-                // Load other post data.
+                // Load posts (activities) images.
                 if let awsActivities = response?.items as? [AWSActivity] {
                     for awsActivity in awsActivities {
                         if let profilePicUrl = awsActivity._profilePicUrl {
@@ -413,13 +412,6 @@ class HomeTableViewController: UITableViewController {
                         }
                     }
                 }
-                
-                // TODO: queryLikes
-//                // TODO this should be changed to query more likes at the time not one by one.
-//                if let postId = post.postId {
-//                    let indexPath = IndexPath(row: 4, section: index)
-//                    self.getLike(postId, indexPath: indexPath)
-//                }
             })
         })
     }
@@ -535,7 +527,7 @@ class HomeTableViewController: UITableViewController {
     }
     
     // Check if currentUser liked a post.
-    fileprivate func getLike(_ postId: String, indexPath: IndexPath) {
+    fileprivate func getLike(_ postId: String) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         PRFYDynamoDBManager.defaultDynamoDBManager().getLikeDynamoDB(postId, completionHandler: {
             (task: AWSTask) in
@@ -544,11 +536,15 @@ class HomeTableViewController: UITableViewController {
                 if let error = task.error {
                     print("getLike error: \(error)")
                 } else {
-                    if task.result != nil {
-                        self.posts[indexPath.section].isLikedByCurrentUser = true
-                        UIView.performWithoutAnimation {
-                            self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
-                        }
+                    guard task.result != nil, let postIndex = self.posts.index(where: { $0.postId == postId }) else {
+                        return
+                    }
+                    self.posts[postIndex].isLikedByCurrentUser = true
+                    guard let indexPathsForVisibleRows = self.tableView.indexPathsForVisibleRows, indexPathsForVisibleRows.contains(where: { $0.section == postIndex }) else {
+                        return
+                    }
+                    UIView.performWithoutAnimation {
+                        self.tableView.reloadRows(at: [IndexPath(row: 4, section: postIndex)], with: UITableViewRowAnimation.none)
                     }
                 }
             })
