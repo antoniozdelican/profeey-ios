@@ -344,7 +344,6 @@ class ProfileTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.layoutMargins = UIEdgeInsets.zero
-        
         // Load next posts.
         guard !self.isLoadingInitialPosts else {
             return
@@ -519,6 +518,10 @@ class ProfileTableViewController: UITableViewController {
     }
     
     @IBAction func refreshControlChanged(_ sender: AnyObject) {
+        guard self.hasUserLoaded else {
+            self.refreshControl?.endRefreshing()
+            return
+        }
         guard let userId = self.user?.userId else {
             self.refreshControl?.endRefreshing()
             return

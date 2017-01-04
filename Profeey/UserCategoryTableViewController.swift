@@ -14,8 +14,12 @@ class UserCategoryTableViewController: UITableViewController {
     
     var user: User?
     var userCategory: UserCategory?
-    fileprivate var isLoadingPosts: Bool = false
+    
     fileprivate var posts: [Post] = []
+    fileprivate var isLoadingInitialPosts: Bool = false
+    fileprivate var isLoadingNextPosts: Bool = false
+    fileprivate var lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?
+    //fileprivate var isRefreshingPosts: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,8 +27,8 @@ class UserCategoryTableViewController: UITableViewController {
         self.navigationItem.title = self.userCategory?.categoryName
         
         if let userId = self.userCategory?.userId, let categoryName = self.userCategory?.categoryName {
-            self.isLoadingPosts = true
-            self.queryUserPostsDateSortedWithCategory(userId, categoryName: categoryName)
+            self.isLoadingInitialPosts = true
+            self.queryUserPostsDateSortedWithCategory(userId, categoryName: categoryName, startFromBeginning: true)
         }
         
         // Add observers.
@@ -59,14 +63,14 @@ class UserCategoryTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if self.isLoadingPosts || self.posts.count == 0 {
+        if self.isLoadingInitialPosts || self.posts.count == 0 {
             return 1
         }
         return self.posts.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if self.isLoadingPosts {
+        if self.isLoadingInitialPosts {
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellLoading", for: indexPath) as! LoadingTableViewCell
             cell.activityIndicator?.startAnimating()
             return cell
@@ -98,17 +102,29 @@ class UserCategoryTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.layoutMargins = UIEdgeInsets.zero
+        // Load next posts.
+        guard !self.isLoadingInitialPosts else {
+            return
+        }
+        guard indexPath.row == self.posts.count - 1 && !self.isLoadingNextPosts && self.lastEvaluatedKey != nil else {
+            return
+        }
+        guard let userId = self.user?.userId, let categoryName = self.userCategory?.categoryName else {
+            return
+        }
+        self.isLoadingNextPosts = true
+        self.queryUserPostsDateSortedWithCategory(userId, categoryName: categoryName, startFromBeginning: false)
     }
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        if self.isLoadingPosts || self.posts.count == 0 {
+        if self.isLoadingInitialPosts || self.posts.count == 0 {
             return 112.0
         }
         return 112.0
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if self.isLoadingPosts || self.posts.count == 0 {
+        if self.isLoadingInitialPosts || self.posts.count == 0 {
             return 112.0
         }
         return 112.0
@@ -125,39 +141,65 @@ class UserCategoryTableViewController: UITableViewController {
     // MARK: IBActions
     
     @IBAction func refreshControlChanged(_ sender: AnyObject) {
+        guard !self.isLoadingInitialPosts else {
+            self.refreshControl?.endRefreshing()
+            return
+        }
         guard let userId = self.userCategory?.userId, let categoryName = self.userCategory?.categoryName else {
             self.refreshControl?.endRefreshing()
             return
         }
-        self.queryUserPostsDateSortedWithCategory(userId, categoryName: categoryName)
+        self.queryUserPostsDateSortedWithCategory(userId, categoryName: categoryName, startFromBeginning: true)
     }
     
     // MARK: AWS
     
-    fileprivate func queryUserPostsDateSortedWithCategory(_ userId: String, categoryName: String) {
+    fileprivate func queryUserPostsDateSortedWithCategory(_ userId: String, categoryName: String, startFromBeginning: Bool) {
+        if startFromBeginning {
+            self.lastEvaluatedKey = nil
+        }
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().queryUserPostsDateSortedWithCategoryNameDynamoDB(userId, categoryName: categoryName, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().queryUserPostsDateSortedWithCategoryNameDynamoDB(userId, categoryName: categoryName, lastEvaluatedKey: self.lastEvaluatedKey, completionHandler: {
             (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
             DispatchQueue.main.async(execute: {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                self.isLoadingPosts = false
-                self.refreshControl?.endRefreshing()
                 if let error = error {
                     print("queryUserPostsDateSortedWithCategory error: \(error)")
-                    self.tableView.reloadData()
-                } else {
-                    guard let awsPosts = response?.items as? [AWSPost], awsPosts.count > 0 else {
-                        self.tableView.reloadData()
-                        return
-                    }
+                }
+                if startFromBeginning {
                     self.posts = []
+                }
+                var numberOfNewPosts = 0
+                if let awsPosts = response?.items as? [AWSPost] {
                     for awsPost in awsPosts {
                         let post = Post(userId: awsPost._userId, postId: awsPost._postId, creationDate: awsPost._creationDate, caption: awsPost._caption, categoryName: awsPost._categoryName, imageUrl: awsPost._imageUrl, imageWidth: awsPost._imageWidth, imageHeight: awsPost._imageHeight, numberOfLikes: awsPost._numberOfLikes, numberOfComments: awsPost._numberOfComments, user: self.user)
                         self.posts.append(post)
+                        numberOfNewPosts += 1
+                        // Immediately getLike.
+                        // TODO
                     }
+                }
+                // Reset flags and animations that were initiated.
+                if self.isLoadingInitialPosts {
+                    self.isLoadingInitialPosts = false
+                }
+                if self.isLoadingNextPosts {
+                    self.isLoadingNextPosts = false
+                }
+                self.refreshControl?.endRefreshing()
+                self.lastEvaluatedKey = response?.lastEvaluatedKey
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                
+                // Reload tableView with downloaded posts.
+                if startFromBeginning {
                     self.tableView.reloadData()
-                    for awsPost in self.posts {
-                        if let imageUrl = awsPost.imageUrl {
+                } else if numberOfNewPosts > 0 {
+                    self.tableView.reloadData()
+                }
+                
+                // Load posts images.
+                if let awsPosts = response?.items as? [AWSPost] {
+                    for awsPost in awsPosts {
+                        if let imageUrl = awsPost._imageUrl {
                             PRFYS3Manager.defaultS3Manager().downloadImageS3(imageUrl, imageType: .postPic)
                         }
                     }
@@ -270,11 +312,16 @@ extension UserCategoryTableViewController {
         guard imageType == .postPic else {
             return
         }
-        for post in self.posts.filter( { $0.imageUrl == imageKey }) {
-            guard let postIndex = self.posts.index(of: post) else {
-                continue
-            }
-            self.posts[postIndex].image = UIImage(data: imageData)
+        
+        guard let postIndex = self.posts.index(where: { $0.imageUrl == imageKey }) else {
+            return
+        }
+        self.posts[postIndex].image = UIImage(data: imageData)
+        // Reload if visible.
+        guard let indexPathsForVisibleRows = self.tableView.indexPathsForVisibleRows, indexPathsForVisibleRows.contains(where: { $0 == IndexPath(row: postIndex, section: 0) }) else {
+            return
+        }
+        UIView.performWithoutAnimation {
             self.tableView.reloadRows(at: [IndexPath(row: postIndex, section: 0)], with: UITableViewRowAnimation.none)
         }
     }

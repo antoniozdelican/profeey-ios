@@ -80,10 +80,8 @@ class AWSActivitiesDateSortedIndex: NSObject, Index {
             ":userId": userId,
             ":creationDate": NSNumber(value: Date().timeIntervalSince1970 as Double),
         ]
-        
         queryExpression.scanIndexForward = false
         queryExpression.limit = 5
-        // TEST
         queryExpression.exclusiveStartKey = lastEvaluatedKey
         
         objectMapper.query(AWSActivity.self, expression: queryExpression, completionHandler: completionHandler)

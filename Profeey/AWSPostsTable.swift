@@ -124,14 +124,13 @@ class AWSPostsDateSortedIndex: NSObject, Index {
             ":creationDate": NSNumber(value: Date().timeIntervalSince1970 as Double),
         ]
         queryExpression.scanIndexForward = false
-        queryExpression.limit = 3
+        queryExpression.limit = 5
         queryExpression.exclusiveStartKey = lastEvaluatedKey
         
         objectMapper.query(AWSPost.self, expression: queryExpression, completionHandler: completionHandler)
     }
     
-    // TODO: refactor
-    func queryUserPostsDateSortedWithCategoryName(_ userId: String, categoryName: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+    func queryUserPostsDateSortedWithCategoryName(_ userId: String, categoryName: String, lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
         let queryExpression = AWSDynamoDBQueryExpression()
         queryExpression.indexName = "DateSortedIndex"
@@ -142,13 +141,14 @@ class AWSPostsDateSortedIndex: NSObject, Index {
             "#creationDate": "creationDate",
             "#categoryName": "categoryName",
         ]
-        let currentDateNumber = NSNumber(value: Date().timeIntervalSince1970 as Double)
         queryExpression.expressionAttributeValues = [
             ":userId": userId,
-            ":creationDate": currentDateNumber,
+            ":creationDate": NSNumber(value: Date().timeIntervalSince1970 as Double),
             ":categoryName": categoryName,
         ]
         queryExpression.scanIndexForward = false
+        queryExpression.limit = 10
+        queryExpression.exclusiveStartKey = lastEvaluatedKey
         
         objectMapper.query(AWSPost.self, expression: queryExpression, completionHandler: completionHandler)
     }

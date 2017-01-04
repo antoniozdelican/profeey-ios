@@ -364,10 +364,10 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         awsPostsDateSortedIndex.queryUserPostsDateSorted(userId, lastEvaluatedKey: lastEvaluatedKey, completionHandler: completionHandler)
     }
     
-    func queryUserPostsDateSortedWithCategoryNameDynamoDB(_ userId: String, categoryName: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+    func queryUserPostsDateSortedWithCategoryNameDynamoDB(_ userId: String, categoryName: String, lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         print("queryUserPostsDateSortedWithCategoryNameDynamoDB:")
         let awsPostsDateSortedIndex = AWSPostsDateSortedIndex()
-        awsPostsDateSortedIndex.queryUserPostsDateSortedWithCategoryName(userId, categoryName: categoryName, completionHandler: completionHandler)
+        awsPostsDateSortedIndex.queryUserPostsDateSortedWithCategoryName(userId, categoryName: categoryName, lastEvaluatedKey: lastEvaluatedKey, completionHandler: completionHandler)
     }
     
     func getPostDynamoDB(_ postId: String, completionHandler: @escaping AWSContinuationBlock) {
