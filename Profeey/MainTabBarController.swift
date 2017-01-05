@@ -113,6 +113,7 @@ class MainTabBarController: UITabBarController {
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 if let error = task.error {
+                    print("I know it's here BLABLA")
                     print("getCurrentUser error: \(error)")
                 } else {
                     guard let awsUser = task.result as? AWSUser else {

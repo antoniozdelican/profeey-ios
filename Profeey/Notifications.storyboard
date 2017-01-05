@@ -53,12 +53,12 @@
                                         </stackView>
                                     </subviews>
                                     <constraints>
+                                        <constraint firstAttribute="bottom" secondItem="uTW-Qi-TYC" secondAttribute="bottom" constant="14.5" id="1rK-nH-sRy"/>
                                         <constraint firstItem="uTW-Qi-TYC" firstAttribute="top" secondItem="GIV-be-T01" secondAttribute="top" constant="15" id="4zI-06-h45"/>
                                         <constraint firstItem="g64-DK-Nbt" firstAttribute="top" secondItem="GIV-be-T01" secondAttribute="top" constant="12" id="8Qx-ue-wmt"/>
                                         <constraint firstAttribute="trailing" secondItem="uTW-Qi-TYC" secondAttribute="trailing" constant="12" id="Xgg-NP-xLM"/>
                                         <constraint firstItem="g64-DK-Nbt" firstAttribute="leading" secondItem="GIV-be-T01" secondAttribute="leading" constant="12" id="ac5-Zg-yRz"/>
                                         <constraint firstItem="uTW-Qi-TYC" firstAttribute="leading" secondItem="g64-DK-Nbt" secondAttribute="trailing" constant="12" id="cs8-IU-yUY"/>
-                                        <constraint firstAttribute="bottom" secondItem="uTW-Qi-TYC" secondAttribute="bottom" constant="14.5" id="dOX-q8-jrH"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
@@ -156,7 +156,7 @@
         <!--Navigation Controller-->
         <scene sceneID="LVl-tf-v3F">
             <objects>
-                <navigationController id="ngN-Xw-YX1" sceneMemberID="viewController">
+                <navigationController id="ngN-Xw-YX1" customClass="PRFYNavigationController" customModule="Profeey" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" tag="3" title="" image="ic_notifications" id="fpA-8k-wvf">
                         <inset key="imageInsets" minX="0.0" minY="6" maxX="0.0" maxY="-6"/>
                     </tabBarItem>

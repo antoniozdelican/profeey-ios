@@ -50,7 +50,7 @@ class HomeTableViewController: UITableViewController {
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         self.tableView.delaysContentTouches = false
         self.tableView.contentInset = UIEdgeInsetsMake(-1.0, 0.0, 0.0, 0.0)
-        
+
         // Set background views.
         self.activityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
         self.tableView.backgroundView = self.activityIndicatorView
@@ -357,8 +357,25 @@ class HomeTableViewController: UITableViewController {
         PRFYDynamoDBManager.defaultDynamoDBManager().queryUserActivitiesDateSortedDynamoDB(self.lastEvaluatedKey, completionHandler: {
             (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
             DispatchQueue.main.async(execute: {
-                if let error = error {
-                   print("queryUserActivitiesDateSorted error: \(error)")
+                guard error == nil else {
+                    print("queryUserActivitiesDateSorted error: \(error!)")
+                    // Reset flags and animations that were initiated.
+                    self.isLoadingInitialPosts = false
+                    self.activityIndicatorView?.stopAnimating()
+                    self.isRefreshingPosts = false
+                    self.refreshControl?.endRefreshing()
+                    self.isLoadingNextPosts = false
+                    UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                    // Reload tableView.
+                    self.tableView.reloadData()
+                    // Handle error and show banner.
+                    let nsError = error as! NSError
+                    let errorMessage = nsError.code == -1009 ? "No Internet Connection" : nsError.localizedDescription
+                    if nsError.code == -1009 {
+                        // TODO No internet connection tableBackgroundView.
+                    }
+                    (self.navigationController as? PRFYNavigationController)?.showBanner(errorMessage)
+                    return
                 }
                 if startFromBeginning {
                     self.posts = []
