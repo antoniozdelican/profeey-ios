@@ -36,6 +36,12 @@ class SettingsTableViewController: UITableViewController {
         if cell == self.logOutTableViewCell {
             self.logOutTableViewCellTapped()
         }
+        if cell == self.privacyPolicyTableViewCell {
+            self.privacyPolicyTableViewCellTapped()
+        }
+        if cell == self.termsAndConditionsTableViewCell {
+            self.termsAndConditionsTableViewCellTapped()
+        }
     }
     
     
@@ -51,6 +57,21 @@ class SettingsTableViewController: UITableViewController {
         })
         alertController.addAction(deleteConfirmAction)
         self.present(alertController, animated: true, completion: nil)
+    }
+    
+    fileprivate func privacyPolicyTableViewCellTapped() {
+        guard let privacyPolicyUrl = URL(string: PRFYPrivacyPolicyUrl) else {
+            return
+        }
+        UIApplication.shared.openURL(privacyPolicyUrl)
+        
+    }
+    
+    fileprivate func termsAndConditionsTableViewCellTapped() {
+        guard let termsUrl = URL(string: PRFYTermsUrl) else {
+            return
+        }
+        UIApplication.shared.openURL(termsUrl)
     }
     
     fileprivate func redirectToOnboarding() {

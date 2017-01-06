@@ -43,4 +43,21 @@ class OnboardingViewController: UIViewController {
         self.privacyPolicyButton.setAttributedTitle(NSAttributedString(string: "Privacy and Policy.", attributes: [NSUnderlineStyleAttributeName: NSUnderlineStyle.styleSingle.rawValue, NSForegroundColorAttributeName: UIColor.white]), for: UIControlState.normal)
         self.logInButton.setAttributedTitle(NSAttributedString(string: "Log in.", attributes: [NSUnderlineStyleAttributeName: NSUnderlineStyle.styleSingle.rawValue, NSForegroundColorAttributeName: UIColor.white]), for: UIControlState.normal)
     }
+    
+    // MARK: IBActions
+    
+    @IBAction func termsButtonTapped(_ sender: Any) {
+        guard let termsUrl = URL(string: PRFYTermsUrl) else {
+            return
+        }
+        UIApplication.shared.openURL(termsUrl)
+    }
+    
+    @IBAction func privacyPolicyButtonTapped(_ sender: Any) {
+        guard let privacyPolicyUrl = URL(string: PRFYPrivacyPolicyUrl) else {
+            return
+        }
+        UIApplication.shared.openURL(privacyPolicyUrl)
+    }
+    
 }
