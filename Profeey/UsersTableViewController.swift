@@ -70,12 +70,29 @@ class UsersTableViewController: UITableViewController {
         if self.isLoadingUsers {
             return 1
         }
+        if self.users.count == 0 {
+            return 1
+        }
         return self.users.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if self.isLoadingUsers {
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellLoading", for: indexPath) as! LoadingTableViewCell
+            return cell
+        }
+        if self.users.count == 0 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellEmpty", for: indexPath) as! EmptyTableViewCell
+            if let usersType = self.usersType {
+                switch usersType {
+                case .followers:
+                    cell.emptyMessageLabel.text = "No followers yet"
+                case .following:
+                    cell.emptyMessageLabel.text = "No followings yet"
+                case .likers:
+                    cell.emptyMessageLabel.text = "No likes yet"
+                }
+            }
             return cell
         }
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellUser", for: indexPath) as! UserTableViewCell
@@ -109,14 +126,14 @@ class UsersTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        if self.isLoadingUsers {
+        if self.isLoadingUsers || self.users.count == 0 {
             return 112.0
         }
         return 68.0
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if self.isLoadingUsers {
+        if self.isLoadingUsers || self.users.count == 0  {
             return 112.0
         }
         return 68.0

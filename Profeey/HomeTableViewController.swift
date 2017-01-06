@@ -40,6 +40,8 @@ class HomeTableViewController: UITableViewController {
     // When uploading new post.
     fileprivate var isUploading: Bool = false
     fileprivate var newPostProgress: Progress?
+
+    fileprivate var noNetworkConnection: Bool = false
     
     // Different behaviour depending on segue or tabBarSwitch.
     fileprivate var isNavigationBarHidden: Bool = false
@@ -247,6 +249,9 @@ class HomeTableViewController: UITableViewController {
         guard indexPath.section == self.posts.count - 1 && !self.isLoadingNextPosts && self.lastEvaluatedKey != nil else {
             return
         }
+        guard !self.noNetworkConnection else {
+            return
+        }
         self.isLoadingNextPosts = true
         self.queryUserActivitiesDateSorted(false)
     }
@@ -375,6 +380,7 @@ class HomeTableViewController: UITableViewController {
                     let nsError = error as! NSError
                     if nsError.code == -1009 {
                         (self.navigationController as? PRFYNavigationController)?.showBanner("No Internet Connection")
+                        self.noNetworkConnection = true
                         // TODO No internet connection tableBackgroundView.
                     }
                     return
@@ -409,6 +415,9 @@ class HomeTableViewController: UITableViewController {
                 }
                 if self.posts.count == 0 {
                     self.tableView.backgroundView = self.homeEmptyFeedView
+                }
+                if self.noNetworkConnection {
+                    self.noNetworkConnection = false
                 }
                 self.lastEvaluatedKey = response?.lastEvaluatedKey
                 

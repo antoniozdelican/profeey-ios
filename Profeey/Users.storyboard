@@ -100,6 +100,36 @@
                                     </constraints>
                                 </tableViewCellContentView>
                             </tableViewCell>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellEmpty" rowHeight="112" id="xli-dn-OBE" customClass="EmptyTableViewCell" customModule="Profeey" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="204" width="375" height="112"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="xli-dn-OBE" id="9mD-DT-CD3">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="111"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Empty message." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jSU-5h-j3s">
+                                            <rect key="frame" x="12" y="47.5" width="351" height="17"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <color key="textColor" red="0.14748379589999999" green="0.1474793851" blue="0.14748191829999999" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="jSU-5h-j3s" firstAttribute="centerY" secondItem="9mD-DT-CD3" secondAttribute="centerY" id="FWc-X3-b5N"/>
+                                        <constraint firstItem="jSU-5h-j3s" firstAttribute="leading" secondItem="9mD-DT-CD3" secondAttribute="leading" constant="12" id="HVc-Nt-wgT"/>
+                                        <constraint firstItem="jSU-5h-j3s" firstAttribute="centerX" secondItem="9mD-DT-CD3" secondAttribute="centerX" id="MSu-XW-r4l"/>
+                                        <constraint firstAttribute="trailing" secondItem="jSU-5h-j3s" secondAttribute="trailing" constant="12" id="gcW-sU-0iK"/>
+                                    </constraints>
+                                    <variation key="default">
+                                        <mask key="constraints">
+                                            <exclude reference="MSu-XW-r4l"/>
+                                        </mask>
+                                    </variation>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="emptyMessageLabel" destination="jSU-5h-j3s" id="L8k-2m-ozI"/>
+                                </connections>
+                            </tableViewCell>
                         </prototypes>
                         <connections>
                             <outlet property="dataSource" destination="xAh-FD-QMW" id="Vjc-sY-ftl"/>

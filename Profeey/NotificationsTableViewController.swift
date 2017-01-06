@@ -14,13 +14,18 @@ class NotificationsTableViewController: UITableViewController {
     
     fileprivate var notifications: [PRFYNotification] = []
     fileprivate var isLoadingInitialNotifications: Bool = false
+    fileprivate var isLoadingNextNotifications: Bool = false
+//    fileprivate var isRefreshingPosts: Bool = false
+    fileprivate var lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?
+    
+    fileprivate var noNetworkConnection: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         
         self.isLoadingInitialNotifications = true
-        self.queryUserNotificationsDateSorted()
+        self.queryUserNotificationsDateSorted(true)
         
         // Add observers.
         NotificationCenter.default.addObserver(self, selector: #selector(self.downloadImageNotification(_:)), name: NSNotification.Name(DownloadImageNotificationKey), object: nil)
@@ -100,6 +105,18 @@ class NotificationsTableViewController: UITableViewController {
         if !(cell is NotificationTableViewCell) {
             cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
         }
+        // Load next notifications.
+        guard !self.isLoadingInitialNotifications else {
+            return
+        }
+        guard indexPath.row == self.notifications.count - 1 && !self.isLoadingNextNotifications && self.lastEvaluatedKey != nil else {
+            return
+        }
+        guard !self.noNetworkConnection else {
+            return
+        }
+        self.isLoadingNextNotifications = true
+        self.queryUserNotificationsDateSorted(false)
     }
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -125,8 +142,11 @@ class NotificationsTableViewController: UITableViewController {
     // MARK: IBActions
     
     @IBAction func refreshControlChanged(_ sender: AnyObject) {
-        self.notifications = []
-        self.queryUserNotificationsDateSorted()
+        guard !self.isLoadingInitialNotifications else {
+            self.refreshControl?.endRefreshing()
+            return
+        }
+        self.queryUserNotificationsDateSorted(true)
     }
     
     // MARK: Helpers
@@ -147,46 +167,50 @@ class NotificationsTableViewController: UITableViewController {
     
     // MARK: AWS
     
-    fileprivate func queryUserNotificationsDateSorted() {
+    fileprivate func queryUserNotificationsDateSorted(_ startFromBeginning: Bool) {
+        if startFromBeginning {
+            self.lastEvaluatedKey = nil
+        }
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         PRFYDynamoDBManager.defaultDynamoDBManager().queryUserNotificationsDateSortedDynamoDB({
             (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
             DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 guard error == nil else {
                     print("queryUserNotificationsDateSorted error: \(error!)")
-                    // Reset flags and animations that were initiated.
                     self.isLoadingInitialNotifications = false
                     self.refreshControl?.endRefreshing()
-                    UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                    // Reload tableView.
                     self.tableView.reloadData()
-                    // Handle error and show banner.
                     let nsError = error as! NSError
-                    let errorMessage = nsError.code == -1009 ? "No Internet Connection" : nsError.localizedDescription
                     if nsError.code == -1009 {
+                        (self.navigationController as? PRFYNavigationController)?.showBanner("No Internet Connection")
+                        self.noNetworkConnection = true
                         // TODO No internet connection tableBackgroundView.
                     }
-                    (self.navigationController as? PRFYNavigationController)?.showBanner(errorMessage)
                     return
                 }
-                
-                // TODO: check if next.
-                self.notifications = []
+                if startFromBeginning {
+                    self.notifications = []
+                }
+                var numberOfNewNotifications = 0
                 if let awsNotifications = response?.items as? [AWSNotification] {
                     for awsNotification in awsNotifications {
                         let user = User(userId: awsNotification._notifierUserId, firstName: awsNotification._firstName, lastName: awsNotification._lastName, preferredUsername: awsNotification._preferredUsername, professionName: awsNotification._professionName, profilePicUrl: awsNotification._profilePicUrl)
                         let notification = PRFYNotification(userId: awsNotification._userId, notificationId: awsNotification._notificationId, creationDate: awsNotification._creationDate, notificationType: awsNotification._notificationType, postId: awsNotification._postId, user: user)
                         self.notifications.append(notification)
+                        numberOfNewNotifications += 1
                     }
                 }
                 
                 // Reset flags and animations that were initiated.
                 self.isLoadingInitialNotifications = false
                 self.refreshControl?.endRefreshing()
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                self.noNetworkConnection = false
                 
                 // Reload tableView.
-                self.tableView.reloadData()
+                if startFromBeginning || numberOfNewNotifications > 0 {
+                    self.tableView.reloadData()
+                }
                 
                 // Load profilePics.
                 if let awsNotifications = response?.items as? [AWSNotification] {
@@ -217,16 +241,15 @@ extension NotificationsTableViewController {
                 continue
             }
             self.notifications[notificationIndex].user?.profilePic = UIImage(data: imageData)
-            self.tableView.reloadRows(at: [IndexPath(row: notificationIndex, section: 0)], with: UITableViewRowAnimation.none)
+            self.tableView.reloadVisibleRow(IndexPath(row: notificationIndex, section: 0))
         }
     }
     
     // MARK: Public
     
     func notificationsTabBarButtonTapped() {
-        guard self.notifications.count > 0 else {
-            return
+        if self.notifications.count > 0 {
+            self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: UITableViewScrollPosition.top, animated: true)
         }
-        self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: UITableViewScrollPosition.top, animated: true)
     }
 }

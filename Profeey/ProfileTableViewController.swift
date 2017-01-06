@@ -53,6 +53,9 @@ class ProfileTableViewController: UITableViewController {
     fileprivate var isLoadingUserCategories: Bool = false
     fileprivate var userCategories: [UserCategory] = []
     
+    // TODO
+    fileprivate var noNetworkConnection: Bool = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
@@ -1154,7 +1157,6 @@ extension ProfileTableViewController {
                 return
             }
             self.posts[postIndex].image = UIImage(data: imageData)
-            // Reload if visible.
             self.tableView.reloadVisibleRow(IndexPath(row: postIndex, section: 1))
         }
     }
