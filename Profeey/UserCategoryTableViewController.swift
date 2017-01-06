@@ -35,8 +35,8 @@ class UserCategoryTableViewController: UITableViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(self.createPostNotification(_:)), name: NSNotification.Name(CreatePostNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNotification(_:)), name: NSNotification.Name(UpdatePostNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.deletePostNotification(_:)), name: NSNotification.Name(DeletePostNotificationKey), object: nil)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNumberOfLikesNotification(_:)), name: NSNotification.Name(UpdatePostNumberOfLikesNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.createLikeNotification(_:)), name: NSNotification.Name(CreateLikeNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.deleteLikeNotification(_:)), name: NSNotification.Name(DeleteLikeNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.createCommentNotification(_:)), name: NSNotification.Name(CreateCommentNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.deleteCommentNotification(_:)), name: NSNotification.Name(DeleteCommentNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.downloadImageNotification(_:)), name: NSNotification.Name(DownloadImageNotificationKey), object: nil)
@@ -268,17 +268,30 @@ extension UserCategoryTableViewController {
         }
     }
     
-    func updatePostNumberOfLikesNotification(_ notification: NSNotification) {
-        guard let postId = notification.userInfo?["postId"] as? String, let numberOfLikes = notification.userInfo?["numberOfLikes"] as? NSNumber else {
+    func createLikeNotification(_ notification: NSNotification) {
+        guard let postId = notification.userInfo?["postId"] as? String else {
             return
         }
         guard let postIndex = self.posts.index(where: { $0.postId == postId }) else {
             return
         }
         let post = self.posts[postIndex]
-        post.numberOfLikes = numberOfLikes
-        post.isLikedByCurrentUser = !post.isLikedByCurrentUser
-        self.tableView.reloadRows(at: [IndexPath(row: postIndex, section: 0)], with: UITableViewRowAnimation.none)
+        post.numberOfLikes = NSNumber(value: post.numberOfLikesInt + 1)
+        post.isLikedByCurrentUser = true
+        self.tableView.reloadVisibleRow(IndexPath(row: postIndex, section: 0))
+    }
+    
+    func deleteLikeNotification(_ notification: NSNotification) {
+        guard let postId = notification.userInfo?["postId"] as? String else {
+            return
+        }
+        guard let postIndex = self.posts.index(where: { $0.postId == postId }) else {
+            return
+        }
+        let post = self.posts[postIndex]
+        post.numberOfLikes = NSNumber(value: post.numberOfLikesInt - 1)
+        post.isLikedByCurrentUser = false
+        self.tableView.reloadVisibleRow(IndexPath(row: postIndex, section: 0))
     }
     
     func createCommentNotification(_ notification: NSNotification) {

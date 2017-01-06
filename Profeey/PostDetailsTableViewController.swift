@@ -41,7 +41,8 @@ class PostDetailsTableViewController: UITableViewController {
         // Add observers.
         NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNotification(_:)), name: NSNotification.Name(UpdatePostNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.deletePostNotification(_:)), name: NSNotification.Name(DeletePostNotificationKey), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNumberOfLikesNotification(_:)), name: NSNotification.Name(UpdatePostNumberOfLikesNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.createLikeNotification(_:)), name: NSNotification.Name(CreateLikeNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.deleteLikeNotification(_:)), name: NSNotification.Name(DeleteLikeNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.createCommentNotification(_:)), name: NSNotification.Name(CreateCommentNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.deleteCommentNotification(_:)), name: NSNotification.Name(DeleteCommentNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.downloadImageNotification(_:)), name: NSNotification.Name(DownloadImageNotificationKey), object: nil)
@@ -277,7 +278,7 @@ class PostDetailsTableViewController: UITableViewController {
         })
     }
     
-    // Check if currentUser liked a post.
+    // Check if currentUser liked a post.    
     fileprivate func getLike(_ postId: String) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         PRFYDynamoDBManager.defaultDynamoDBManager().getLikeDynamoDB(postId, completionHandler: {
@@ -287,10 +288,11 @@ class PostDetailsTableViewController: UITableViewController {
                 if let error = task.error {
                     print("getLike error: \(error)")
                 } else {
-                    if task.result != nil {
-                        self.post?.isLikedByCurrentUser = true
-                        self.tableView.reloadRows(at: [IndexPath(row: 4, section: 0)], with: UITableViewRowAnimation.none)
+                    guard task.result != nil else {
+                        return
                     }
+                    self.post?.isLikedByCurrentUser = true
+                    self.tableView.reloadVisibleRow(IndexPath(row: 4, section: 0))
                 }
             })
             return nil
@@ -306,6 +308,8 @@ class PostDetailsTableViewController: UITableViewController {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 if let error = task.error {
                     print("saveLike error: \(error)")
+                    // Undo UI.
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: DeleteLikeNotificationKey), object: self, userInfo: ["postId": postId])
                 }
             })
             return nil
@@ -321,6 +325,8 @@ class PostDetailsTableViewController: UITableViewController {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 if let error = task.error {
                     print("removeLike error: \(error)")
+                    // Undo UI.
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: CreateLikeNotificationKey), object: self, userInfo: ["postId": postId])
                 }
             })
             return nil
@@ -357,18 +363,28 @@ extension PostDetailsTableViewController {
         self.performSegue(withIdentifier: "segueUnwindToProfileVc", sender: self)
     }
     
-    func updatePostNumberOfLikesNotification(_ notification: NSNotification) {
-        guard let postId = notification.userInfo?["postId"] as? String, let numberOfLikes = notification.userInfo?["numberOfLikes"] as? NSNumber else {
+    func createLikeNotification(_ notification: NSNotification) {
+        guard let postId = notification.userInfo?["postId"] as? String else {
             return
         }
         guard let post = self.post, post.postId == postId else {
             return
         }
-        post.numberOfLikes = numberOfLikes
-        post.isLikedByCurrentUser = !post.isLikedByCurrentUser
-        UIView.performWithoutAnimation {
-            self.tableView.reloadRows(at: [IndexPath(row: 4, section: 0)], with: UITableViewRowAnimation.none)
+        post.numberOfLikes = NSNumber(value: post.numberOfLikesInt + 1)
+        post.isLikedByCurrentUser = true
+        self.tableView.reloadVisibleRow(IndexPath(row: 4, section: 0))
+    }
+    
+    func deleteLikeNotification(_ notification: NSNotification) {
+        guard let postId = notification.userInfo?["postId"] as? String else {
+            return
         }
+        guard let post = self.post, post.postId == postId else {
+            return
+        }
+        post.numberOfLikes = NSNumber(value: post.numberOfLikesInt - 1)
+        post.isLikedByCurrentUser = false
+        self.tableView.reloadVisibleRow(IndexPath(row: 4, section: 0))
     }
     
     func createCommentNotification(_ notification: NSNotification) {
@@ -379,9 +395,7 @@ extension PostDetailsTableViewController {
             return
         }
         post.numberOfComments = NSNumber(value: post.numberOfCommentsInt + 1)
-        UIView.performWithoutAnimation {
-            self.tableView.reloadRows(at: [IndexPath(row: 4, section: 0)], with: UITableViewRowAnimation.none)
-        }
+        self.tableView.reloadVisibleRow(IndexPath(row: 4, section: 0))
     }
     
     func deleteCommentNotification(_ notification: NSNotification) {
@@ -392,9 +406,7 @@ extension PostDetailsTableViewController {
             return
         }
         post.numberOfComments = NSNumber(value: post.numberOfCommentsInt - 1)
-        UIView.performWithoutAnimation {
-            self.tableView.reloadRows(at: [IndexPath(row: 4, section: 0)], with: UITableViewRowAnimation.none)
-        }
+        self.tableView.reloadVisibleRow(IndexPath(row: 4, section: 0))
     }
     
     func downloadImageNotification(_ notification: NSNotification) {
@@ -407,13 +419,13 @@ extension PostDetailsTableViewController {
                 return
             }
             self.post?.user?.profilePic = UIImage(data: imageData)
-            self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.none)
+            self.tableView.reloadVisibleRow(IndexPath(row: 0, section: 0))
         case .postPic:
             guard self.post?.imageUrl == imageKey else {
                 return
             }
             self.post?.image = UIImage(data: imageData)
-            self.tableView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: UITableViewRowAnimation.none)
+            self.tableView.reloadVisibleRow(IndexPath(row: 1, section: 0))
         }
     }
 }
@@ -463,15 +475,13 @@ extension PostDetailsTableViewController: PostButtonsTableViewCellDelegate {
         guard let post = self.post, let postId = post.postId, let postUserId = post.userId else {
             return
         }
-        var numberOfLikes = (post.numberOfLikes != nil) ? post.numberOfLikes! : 0
         if post.isLikedByCurrentUser {
-            numberOfLikes = NSNumber(value: numberOfLikes.intValue - 1)
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: DeleteLikeNotificationKey), object: self, userInfo: ["postId": postId])
             self.removeLike(postId)
         } else {
-            numberOfLikes = NSNumber(value: numberOfLikes.intValue + 1)
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: CreateLikeNotificationKey), object: self, userInfo: ["postId": postId])
             self.createLike(postId, postUserId: postUserId)
         }
-        NotificationCenter.default.post(name: NSNotification.Name(rawValue: UpdatePostNumberOfLikesNotificationKey), object: self, userInfo: ["postId": postId, "numberOfLikes": numberOfLikes])
     }
     
     func commentButtonTapped(_ cell: PostButtonsTableViewCell) {

@@ -71,7 +71,8 @@ class ProfileTableViewController: UITableViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNotification(_:)), name: NSNotification.Name(UpdatePostNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.deletePostNotification(_:)), name: NSNotification.Name(DeletePostNotificationKey), object: nil)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNumberOfLikesNotification(_:)), name: NSNotification.Name(UpdatePostNumberOfLikesNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.createLikeNotification(_:)), name: NSNotification.Name(CreateLikeNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.deleteLikeNotification(_:)), name: NSNotification.Name(DeleteLikeNotificationKey), object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.createCommentNotification(_:)), name: NSNotification.Name(CreateCommentNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.deleteCommentNotification(_:)), name: NSNotification.Name(DeleteCommentNotificationKey), object: nil)
@@ -995,19 +996,30 @@ extension ProfileTableViewController {
         }
     }
     
-    func updatePostNumberOfLikesNotification(_ notification: NSNotification) {
-        guard let postId = notification.userInfo?["postId"] as? String, let numberOfLikes = notification.userInfo?["numberOfLikes"] as? NSNumber else {
+    func createLikeNotification(_ notification: NSNotification) {
+        guard let postId = notification.userInfo?["postId"] as? String else {
             return
         }
         guard let postIndex = self.posts.index(where: { $0.postId == postId }) else {
             return
         }
         let post = self.posts[postIndex]
-        post.numberOfLikes = numberOfLikes
-        post.isLikedByCurrentUser = !post.isLikedByCurrentUser
-        if self.selectedProfileSegment == ProfileSegment.posts {
-            self.tableView.reloadRows(at: [IndexPath(row: postIndex, section: 1)], with: UITableViewRowAnimation.none)
+        post.numberOfLikes = NSNumber(value: post.numberOfLikesInt + 1)
+        post.isLikedByCurrentUser = true
+        self.tableView.reloadVisibleRow(IndexPath(row: postIndex, section: 1))
+    }
+    
+    func deleteLikeNotification(_ notification: NSNotification) {
+        guard let postId = notification.userInfo?["postId"] as? String else {
+            return
         }
+        guard let postIndex = self.posts.index(where: { $0.postId == postId }) else {
+            return
+        }
+        let post = self.posts[postIndex]
+        post.numberOfLikes = NSNumber(value: post.numberOfLikesInt - 1)
+        post.isLikedByCurrentUser = false
+        self.tableView.reloadVisibleRow(IndexPath(row: postIndex, section: 1))
     }
     
     func createCommentNotification(_ notification: NSNotification) {
@@ -1019,9 +1031,7 @@ extension ProfileTableViewController {
         }
         let post = self.posts[postIndex]
         post.numberOfComments = NSNumber(value: post.numberOfCommentsInt + 1)
-        if self.selectedProfileSegment == ProfileSegment.posts {
-            self.tableView.reloadRows(at: [IndexPath(row: postIndex, section: 1)], with: UITableViewRowAnimation.none)
-        }
+        self.tableView.reloadVisibleRow(IndexPath(row: postIndex, section: 1))
     }
     
     func deleteCommentNotification(_ notification: NSNotification) {
@@ -1033,9 +1043,7 @@ extension ProfileTableViewController {
         }
         let post = self.posts[postIndex]
         post.numberOfComments = NSNumber(value: post.numberOfCommentsInt - 1)
-        if self.selectedProfileSegment == ProfileSegment.posts {
-            self.tableView.reloadRows(at: [IndexPath(row: postIndex, section: 1)], with: UITableViewRowAnimation.none)
-        }
+        self.tableView.reloadVisibleRow(IndexPath(row: postIndex, section: 1))
     }
     
     func followUserNotification(_ notification: NSNotification) {
@@ -1127,15 +1135,7 @@ extension ProfileTableViewController {
             }
             self.posts[postIndex].image = UIImage(data: imageData)
             // Reload if visible.
-            guard self.selectedProfileSegment == ProfileSegment.posts else {
-                return
-            }
-            guard let indexPathsForVisibleRows = self.tableView.indexPathsForVisibleRows, indexPathsForVisibleRows.contains(where: { $0 == IndexPath(row: postIndex, section: 1) }) else {
-                return
-            }
-            UIView.performWithoutAnimation {
-                self.tableView.reloadRows(at: [IndexPath(row: postIndex, section: 1)], with: UITableViewRowAnimation.none)
-            }
+            self.tableView.reloadVisibleRow(IndexPath(row: postIndex, section: 1))
         }
     }
     

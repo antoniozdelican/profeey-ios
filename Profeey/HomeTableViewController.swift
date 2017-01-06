@@ -74,7 +74,8 @@ class HomeTableViewController: UITableViewController {
         // Add observers, don't need deinit removeObserver.
         NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNotification(_:)), name: NSNotification.Name(UpdatePostNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.deletePostNotification(_:)), name: NSNotification.Name(DeletePostNotificationKey), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNumberOfLikesNotification(_:)), name: NSNotification.Name(UpdatePostNumberOfLikesNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.createLikeNotification(_:)), name: NSNotification.Name(CreateLikeNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.deleteLikeNotification(_:)), name: NSNotification.Name(DeleteLikeNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.createCommentNotification(_:)), name: NSNotification.Name(CreateCommentNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.deleteCommentNotification(_:)), name: NSNotification.Name(DeleteCommentNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.followUserNotification(_:)), name: NSNotification.Name(FollowUserNotificationKey), object: nil)
@@ -312,6 +313,8 @@ class HomeTableViewController: UITableViewController {
             self.refreshControl?.endRefreshing()
             return
         }
+        // TODO fetch CurrentUserDynamoDB if it was no network.
+        
         self.isRefreshingPosts = true
         self.queryUserActivitiesDateSorted(true)
     }
@@ -357,6 +360,7 @@ class HomeTableViewController: UITableViewController {
         PRFYDynamoDBManager.defaultDynamoDBManager().queryUserActivitiesDateSortedDynamoDB(self.lastEvaluatedKey, completionHandler: {
             (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
             DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 guard error == nil else {
                     print("queryUserActivitiesDateSorted error: \(error!)")
                     // Reset flags and animations that were initiated.
@@ -365,16 +369,14 @@ class HomeTableViewController: UITableViewController {
                     self.isRefreshingPosts = false
                     self.refreshControl?.endRefreshing()
                     self.isLoadingNextPosts = false
-                    UIApplication.shared.isNetworkActivityIndicatorVisible = false
                     // Reload tableView.
                     self.tableView.reloadData()
                     // Handle error and show banner.
                     let nsError = error as! NSError
-                    let errorMessage = nsError.code == -1009 ? "No Internet Connection" : nsError.localizedDescription
                     if nsError.code == -1009 {
+                        (self.navigationController as? PRFYNavigationController)?.showBanner("No Internet Connection")
                         // TODO No internet connection tableBackgroundView.
                     }
-                    (self.navigationController as? PRFYNavigationController)?.showBanner(errorMessage)
                     return
                 }
                 if startFromBeginning {
@@ -409,12 +411,9 @@ class HomeTableViewController: UITableViewController {
                     self.tableView.backgroundView = self.homeEmptyFeedView
                 }
                 self.lastEvaluatedKey = response?.lastEvaluatedKey
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 
                 // Reload tableView with downloaded posts.
-                if startFromBeginning {
-                    self.tableView.reloadData()
-                } else if numberOfNewPosts > 0 {
+                if startFromBeginning || numberOfNewPosts > 0 {
                     self.tableView.reloadData()
                 }
                 
@@ -430,6 +429,62 @@ class HomeTableViewController: UITableViewController {
                     }
                 }
             })
+        })
+    }
+    
+    // Check if currentUser liked a post.
+    fileprivate func getLike(_ postId: String) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().getLikeDynamoDB(postId, completionHandler: {
+            (task: AWSTask) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                if let error = task.error {
+                    print("getLike error: \(error)")
+                } else {
+                    guard task.result != nil, let postIndex = self.posts.index(where: { $0.postId == postId }) else {
+                        return
+                    }
+                    let post = self.posts[postIndex]
+                    post.isLikedByCurrentUser = true
+                    self.tableView.reloadVisibleRow(IndexPath(row: 4, section: postIndex))
+                }
+            })
+            return nil
+        })
+    }
+    
+    // In background.
+    fileprivate func createLike(_ postId: String, postUserId: String) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().createLikeDynamoDB(postId, postUserId: postUserId, completionHandler: {
+            (task: AWSTask) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                if let error = task.error {
+                    print("saveLike error: \(error)")
+                    // Undo UI.
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: DeleteLikeNotificationKey), object: self, userInfo: ["postId": postId])
+                }
+            })
+            return nil
+        })
+    }
+    
+    // In background.
+    fileprivate func removeLike(_ postId: String) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().removeLikeDynamoDB(postId, completionHandler: {
+            (task: AWSTask) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                if let error = task.error {
+                    print("removeLike error: \(error)")
+                    // Undo UI.
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: CreateLikeNotificationKey), object: self, userInfo: ["postId": postId])
+                }
+            })
+            return nil
         })
     }
     
@@ -542,62 +597,6 @@ class HomeTableViewController: UITableViewController {
             return nil
         })
     }
-    
-    // Check if currentUser liked a post.
-    fileprivate func getLike(_ postId: String) {
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().getLikeDynamoDB(postId, completionHandler: {
-            (task: AWSTask) in
-            DispatchQueue.main.async(execute: {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                if let error = task.error {
-                    print("getLike error: \(error)")
-                } else {
-                    guard task.result != nil, let postIndex = self.posts.index(where: { $0.postId == postId }) else {
-                        return
-                    }
-                    self.posts[postIndex].isLikedByCurrentUser = true
-                    guard let indexPathsForVisibleRows = self.tableView.indexPathsForVisibleRows, indexPathsForVisibleRows.contains(where: { $0.section == postIndex }) else {
-                        return
-                    }
-                    UIView.performWithoutAnimation {
-                        self.tableView.reloadRows(at: [IndexPath(row: 4, section: postIndex)], with: UITableViewRowAnimation.none)
-                    }
-                }
-            })
-            return nil
-        })
-    }
-    
-    // In background.
-    fileprivate func createLike(_ postId: String, postUserId: String) {
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().createLikeDynamoDB(postId, postUserId: postUserId, completionHandler: {
-            (task: AWSTask) in
-            DispatchQueue.main.async(execute: {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                if let error = task.error {
-                    print("saveLike error: \(error)")
-                }
-            })
-            return nil
-        })
-    }
-    
-    // In background.
-    fileprivate func removeLike(_ postId: String) {
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().removeLikeDynamoDB(postId, completionHandler: {
-            (task: AWSTask) in
-            DispatchQueue.main.async(execute: {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                if let error = task.error {
-                    print("removeLike error: \(error)")
-                }
-            })
-            return nil
-        })
-    }
 }
 
 extension HomeTableViewController {
@@ -637,19 +636,30 @@ extension HomeTableViewController {
         self.tableView.backgroundView = self.posts.count == 0 ? self.homeEmptyFeedView: nil
     }
     
-    func updatePostNumberOfLikesNotification(_ notification: NSNotification) {
-        guard let postId = notification.userInfo?["postId"] as? String, let numberOfLikes = notification.userInfo?["numberOfLikes"] as? NSNumber else {
+    func createLikeNotification(_ notification: NSNotification) {
+        guard let postId = notification.userInfo?["postId"] as? String else {
             return
         }
         guard let postIndex = self.posts.index(where: { $0.postId == postId }) else {
             return
         }
         let post = self.posts[postIndex]
-        post.numberOfLikes = numberOfLikes
-        post.isLikedByCurrentUser = !post.isLikedByCurrentUser
-        UIView.performWithoutAnimation {
-            self.tableView.reloadRows(at: [IndexPath(row: 4, section: postIndex)], with: UITableViewRowAnimation.none)
+        post.numberOfLikes = NSNumber(value: post.numberOfLikesInt + 1)
+        post.isLikedByCurrentUser = true
+        self.tableView.reloadVisibleRow(IndexPath(row: 4, section: postIndex))
+    }
+    
+    func deleteLikeNotification(_ notification: NSNotification) {
+        guard let postId = notification.userInfo?["postId"] as? String else {
+            return
         }
+        guard let postIndex = self.posts.index(where: { $0.postId == postId }) else {
+            return
+        }
+        let post = self.posts[postIndex]
+        post.numberOfLikes = NSNumber(value: post.numberOfLikesInt - 1)
+        post.isLikedByCurrentUser = false
+        self.tableView.reloadVisibleRow(IndexPath(row: 4, section: postIndex))
     }
     
     func createCommentNotification(_ notification: NSNotification) {
@@ -661,9 +671,7 @@ extension HomeTableViewController {
         }
         let post = self.posts[postIndex]
         post.numberOfComments = NSNumber(value: post.numberOfCommentsInt + 1)
-        UIView.performWithoutAnimation {
-            self.tableView.reloadRows(at: [IndexPath(row: 4, section: postIndex)], with: UITableViewRowAnimation.none)
-        }
+        self.tableView.reloadVisibleRow(IndexPath(row: 4, section: postIndex))
     }
     
     func deleteCommentNotification(_ notification: NSNotification) {
@@ -675,9 +683,7 @@ extension HomeTableViewController {
         }
         let post = self.posts[postIndex]
         post.numberOfComments = NSNumber(value: post.numberOfCommentsInt - 1)
-        UIView.performWithoutAnimation {
-            self.tableView.reloadRows(at: [IndexPath(row: 4, section: postIndex)], with: UITableViewRowAnimation.none)
-        }
+        self.tableView.reloadVisibleRow(IndexPath(row: 4, section: postIndex))
     }
     
     // Special case used only when there's no posts(activities) for a new user.
@@ -702,14 +708,7 @@ extension HomeTableViewController {
                     continue
                 }
                 self.posts[postIndex].user?.profilePic = UIImage(data: imageData)
-                guard let indexPathsForVisibleRows = self.tableView.indexPathsForVisibleRows, indexPathsForVisibleRows.contains(where: { $0.section == postIndex }) else {
-                    continue
-                }
-                UIView.performWithoutAnimation {
-                    self.tableView.beginUpdates()
-                    self.tableView.reloadRows(at: [IndexPath(row: 0, section: postIndex)], with: UITableViewRowAnimation.none)
-                    self.tableView.endUpdates()
-                }
+                self.tableView.reloadVisibleRow(IndexPath(row: 0, section: postIndex))
             }
         case .postPic:
             for post in self.posts.filter( { $0.imageUrl == imageKey }) {
@@ -718,14 +717,7 @@ extension HomeTableViewController {
                 }
                 self.posts[postIndex].image = UIImage(data: imageData)
                 // Reload only if visible.
-                guard let indexPathsForVisibleRows = self.tableView.indexPathsForVisibleRows, indexPathsForVisibleRows.contains(where: { $0.section == postIndex }) else {
-                    continue
-                }
-                UIView.performWithoutAnimation {
-                    self.tableView.beginUpdates()
-                    self.tableView.reloadRows(at: [IndexPath(row: 1, section: postIndex)], with: UITableViewRowAnimation.none)
-                    self.tableView.endUpdates()
-                }
+                self.tableView.reloadVisibleRow(IndexPath(row: 1, section: postIndex))
             }
         }
     }
@@ -794,15 +786,13 @@ extension HomeTableViewController: PostButtonsTableViewCellDelegate {
         guard let postId = post.postId, let postUserId = post.userId else {
             return
         }
-        var numberOfLikes = (post.numberOfLikes != nil) ? post.numberOfLikes! : 0
         if post.isLikedByCurrentUser {
-            numberOfLikes = NSNumber(value: numberOfLikes.intValue - 1)
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: DeleteLikeNotificationKey), object: self, userInfo: ["postId": postId])
             self.removeLike(postId)
         } else {
-            numberOfLikes = NSNumber(value: numberOfLikes.intValue + 1)
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: CreateLikeNotificationKey), object: self, userInfo: ["postId": postId])
             self.createLike(postId, postUserId: postUserId)
         }
-        NotificationCenter.default.post(name: NSNotification.Name(rawValue: UpdatePostNumberOfLikesNotificationKey), object: self, userInfo: ["postId": postId, "numberOfLikes": numberOfLikes])
     }
     
     func commentButtonTapped(_ cell: PostButtonsTableViewCell) {

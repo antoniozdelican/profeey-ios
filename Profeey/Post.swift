@@ -25,13 +25,19 @@ class Post: NSObject {
     // Generated.
     var user: User?
     var image: UIImage?
-    
     var creationDateString: String? {
         guard let creationDate = self.creationDate else {
             return nil
         }
         let currentDate = Date()
         return currentDate.offsetFrom(Date(timeIntervalSince1970: TimeInterval(creationDate)))
+    }
+    //Likes
+    var numberOfLikesInt: Int {
+        guard let numberOfLikes = self.numberOfLikes else {
+            return 0
+        }
+        return numberOfLikes.intValue
     }
     var numberOfLikesString: String? {
         guard let numberOfLikes = self.numberOfLikes else {
@@ -50,7 +56,7 @@ class Post: NSObject {
         let numberOfLikesInt = numberOfLikes.intValue
         return numberOfLikesInt.numberToString()
     }
-    
+    // Comments.
     var numberOfCommentsInt: Int {
         guard let numberOfComments = self.numberOfComments else {
             return 0
@@ -67,7 +73,7 @@ class Post: NSObject {
         }
         return numberOfCommentsInt.numberToString()
     }
-    
+    // Other.
     var isLikedByCurrentUser: Bool = false
     var isExpandedCaption: Bool = false
 
