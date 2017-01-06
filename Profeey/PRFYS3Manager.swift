@@ -69,4 +69,26 @@ class PRFYS3Manager: NSObject, S3Manager {
                 })
         })
     }
+    
+    func removeImageS3(_ imageKey: String) {
+        let content = AWSUserFileManager.defaultUserFileManager().content(withKey: imageKey)
+        guard content.isImage() else {
+            print("removeImageS3 error: Content with imageKey \(imageKey) is not an image.")
+            return
+        }
+        print("removeImageS3:")
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        content.removeRemoteContent(completionHandler: {
+            (content: AWSContent?, error: Error?) -> Void in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                if let error = error {
+                    print("removeImageS3 error: \(error)")
+                } else {
+                    print("removeImageS3 success!")
+                    content?.removeLocal()
+                }
+            })
+        })
+    }
 }

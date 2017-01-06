@@ -764,26 +764,6 @@ class ProfileTableViewController: UITableViewController {
         })
     }
     
-    // TODO: refactor in S3
-    // In background when user deletes/changes profilePic.
-    fileprivate func removeImage(_ imageKey: String) {
-        let content = AWSUserFileManager.defaultUserFileManager().content(withKey: imageKey)
-        print("removeImageS3:")
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        content.removeRemoteContent(completionHandler: {
-            (content: AWSContent?, error: Error?) -> Void in
-            DispatchQueue.main.async(execute: {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                if let error = error {
-                    print("removeImageS3 error: \(error)")
-                } else {
-                    print("removeImageS3 success")
-                    content?.removeLocal()
-                }
-            })
-        })
-    }
-    
     fileprivate func getRelationship(_ followingId: String) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         PRFYDynamoDBManager.defaultDynamoDBManager().getRelationshipDynamoDB(followingId, completionHandler: {
@@ -889,7 +869,7 @@ extension ProfileTableViewController {
         self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0), IndexPath(row: 1, section: 0)], with: UITableViewRowAnimation.none)
         // Remove old profilePic in background.
         if let profilePicUrlToRemove = notification.userInfo?["profilePicUrlToRemove"] as? String {
-            self.removeImage(profilePicUrlToRemove)
+            PRFYS3Manager.defaultS3Manager().removeImageS3(profilePicUrlToRemove)
         }
     }
     

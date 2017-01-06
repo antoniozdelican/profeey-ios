@@ -244,37 +244,17 @@ class PostDetailsTableViewController: UITableViewController {
             (task: AWSTask) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                FullScreenIndicator.hide()
                 if let error = task.error {
-                    FullScreenIndicator.hide()
                     print("removePost error: \(error)")
                 } else {
-                    self.removeImage(postId, imageKey: imageKey)
-                }
-            })
-            return nil
-        })
-    }
-    
-    // TODO: refactor in S3 and reverse with removePost
-    fileprivate func removeImage(_ postId: String, imageKey: String) {
-        let content = AWSUserFileManager.defaultUserFileManager().content(withKey: imageKey)
-        print("removeImageS3:")
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        content.removeRemoteContent(completionHandler: {
-            (content: AWSContent?, error: Error?) -> Void in
-            DispatchQueue.main.async(execute: {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                FullScreenIndicator.hide()
-                if let error = error {
-                    print("removeImageS3 error: \(error)")
-                } else {
-                    content?.removeLocal()
+                    PRFYS3Manager.defaultS3Manager().removeImageS3(imageKey)
                     // Notifiy obervers.
                     NotificationCenter.default.post(name: NSNotification.Name(rawValue: DeletePostNotificationKey), object: self, userInfo: ["postId": postId])
                     self.performSegue(withIdentifier: "segueUnwindToProfileVc", sender: self)
-                    
                 }
             })
+            return nil
         })
     }
     
@@ -288,11 +268,10 @@ class PostDetailsTableViewController: UITableViewController {
                 if let error = task.error {
                     print("getLike error: \(error)")
                 } else {
-                    guard task.result != nil else {
-                        return
+                    if task.result != nil {
+                        self.post?.isLikedByCurrentUser = true
+                        self.tableView.reloadVisibleRow(IndexPath(row: 4, section: 0))
                     }
-                    self.post?.isLikedByCurrentUser = true
-                    self.tableView.reloadVisibleRow(IndexPath(row: 4, section: 0))
                 }
             })
             return nil

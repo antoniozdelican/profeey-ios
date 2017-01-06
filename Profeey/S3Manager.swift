@@ -14,4 +14,5 @@ protocol S3Manager {
     // MARK: Download
     
     func downloadImageS3(_ imageKey: String, imageType: ImageType)
+    func removeImageS3(_ imageKey: String)
 }

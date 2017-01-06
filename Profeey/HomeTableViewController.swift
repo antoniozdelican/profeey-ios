@@ -442,12 +442,11 @@ class HomeTableViewController: UITableViewController {
                 if let error = task.error {
                     print("getLike error: \(error)")
                 } else {
-                    guard task.result != nil, let postIndex = self.posts.index(where: { $0.postId == postId }) else {
-                        return
+                    if task.result != nil, let postIndex = self.posts.index(where: { $0.postId == postId }) {
+                        let post = self.posts[postIndex]
+                        post.isLikedByCurrentUser = true
+                        self.tableView.reloadVisibleRow(IndexPath(row: 4, section: postIndex))
                     }
-                    let post = self.posts[postIndex]
-                    post.isLikedByCurrentUser = true
-                    self.tableView.reloadVisibleRow(IndexPath(row: 4, section: postIndex))
                 }
             })
             return nil
@@ -562,25 +561,6 @@ class HomeTableViewController: UITableViewController {
         })
     }
     
-    // TODO: refactor in PRFYS3
-    // In background.
-    fileprivate func removeImage(_ postId: String, imageKey: String) {
-        let content = AWSUserFileManager.defaultUserFileManager().content(withKey: imageKey)
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        content.removeRemoteContent(completionHandler: {
-            (content: AWSContent?, error: Error?) -> Void in
-            DispatchQueue.main.async(execute: {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                if let error = error {
-                    print("removeImageS3 error: \(error)")
-                } else {
-                    print("removeImageS3 success")
-                    content?.removeLocal()
-                }
-            })
-        })
-    }
-    
     // In background.
     fileprivate func removePost(_ postId: String, imageKey: String) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
@@ -591,7 +571,7 @@ class HomeTableViewController: UITableViewController {
                 if let error = task.error {
                     print("removePost error: \(error)")
                 } else {
-                    self.removeImage(postId, imageKey: imageKey)
+                    PRFYS3Manager.defaultS3Manager().removeImageS3(imageKey)
                 }
             })
             return nil
