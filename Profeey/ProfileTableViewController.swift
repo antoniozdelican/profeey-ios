@@ -364,13 +364,13 @@ class ProfileTableViewController: UITableViewController {
         guard !self.isLoadingInitialPosts else {
             return
         }
-        guard indexPath.section == 1 else {
-            return
-        }
-        guard indexPath.row == self.posts.count - 1 && !self.isLoadingNextPosts && self.lastEvaluatedKey != nil else {
+        guard indexPath.section == 1 && indexPath.row == self.posts.count - 1 && !self.isLoadingNextPosts && self.lastEvaluatedKey != nil else {
             return
         }
         guard let userId = self.user?.userId else {
+            return
+        }
+        guard !self.noNetworkConnection else {
             return
         }
         self.isLoadingNextPosts = true
@@ -605,6 +605,7 @@ class ProfileTableViewController: UITableViewController {
                     let nsError = task.error as! NSError
                     if nsError.code == -1009 {
                         (self.navigationController as? PRFYNavigationController)?.showBanner("No Internet Connection")
+                        self.noNetworkConnection = true
                         // TODO No internet connection tableBackgroundView.
                     }
                     return
@@ -659,11 +660,12 @@ class ProfileTableViewController: UITableViewController {
                 guard error == nil else {
                     print("queryUserPostsDateSorted error: \(error)")
                     self.isLoadingInitialPosts = false
-                    self.isLoadingNextPosts = true // for bug
+                    self.isLoadingNextPosts = false
                     self.tableView.reloadData()
                     let nsError = error as! NSError
                     if nsError.code == -1009 {
                         (self.navigationController as? PRFYNavigationController)?.showBanner("No Internet Connection")
+                        self.noNetworkConnection = true
                         // TODO No internet connection tableBackgroundView.
                     }
                     return
@@ -684,6 +686,7 @@ class ProfileTableViewController: UITableViewController {
                 // Reset flags and animations that were initiated.
                 self.isLoadingInitialPosts = false
                 self.isLoadingNextPosts = false
+                self.noNetworkConnection = false
                 self.lastEvaluatedKey = response?.lastEvaluatedKey
                 
                 // Reload tableView with downloaded posts.
