@@ -68,7 +68,7 @@
         <!--Navigation Controller-->
         <scene sceneID="cb4-oG-6WN">
             <objects>
-                <navigationController id="PkX-gg-apD" sceneMemberID="viewController">
+                <navigationController id="PkX-gg-apD" customClass="PRFYNavigationController" customModule="Profeey" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" tag="4" title="" image="ic_profile" id="OwU-Yo-zab">
                         <inset key="imageInsets" minX="0.0" minY="6" maxX="0.0" maxY="-6"/>
                     </tabBarItem>

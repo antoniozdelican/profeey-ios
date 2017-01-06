@@ -23,7 +23,7 @@ class ProfileTableViewController: UITableViewController {
     var user: User?
     var isCurrentUser: Bool = false
     
-    fileprivate var hasUserLoaded = false
+    fileprivate var isLoadingUser = false
     
     fileprivate var hasRecommendationLoaded = false
     fileprivate var isRecommending: Bool = false
@@ -39,9 +39,9 @@ class ProfileTableViewController: UITableViewController {
     fileprivate var lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?
     //fileprivate var isRefreshingPosts: Bool = false
     
-    fileprivate var isLoadingWorkExperiences: Bool = true
+    fileprivate var isLoadingWorkExperiences: Bool = false
     fileprivate var workExperiences: [WorkExperience] = []
-    fileprivate var isLoadingEducations: Bool = true
+    fileprivate var isLoadingEducations: Bool = false
     fileprivate var educations: [Education] = []
     fileprivate var isLoadingExperiences: Bool {
         return self.isLoadingWorkExperiences || self.isLoadingEducations
@@ -50,7 +50,7 @@ class ProfileTableViewController: UITableViewController {
         return (self.workExperiences.count == 0 && self.educations.count == 0)
     }
     
-    fileprivate var isLoadingUserCategories: Bool = true
+    fileprivate var isLoadingUserCategories: Bool = false
     fileprivate var userCategories: [UserCategory] = []
     
     override func viewDidLoad() {
@@ -93,23 +93,35 @@ class ProfileTableViewController: UITableViewController {
     // MARK: Configuration
     
     fileprivate func configureUser() {
-        guard let currentUserId = AWSIdentityManager.defaultIdentityManager().identityId else {
+        guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
             print("No currentUserId!")
             return
         }
         if self.isCurrentUser {
             // Comes from MainTabBarVc.
-            self.user = PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB
+            if PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB == nil {
+                self.user = CurrentUser(userId: identityId)
+            } else {
+                self.user = PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB
+            }
+            self.isLoadingUser = true
             self.isLoadingInitialPosts = true
-            self.getUser(currentUserId)
+            self.isLoadingWorkExperiences = true
+            self.isLoadingEducations = true
+            self.isLoadingUserCategories = true
+            self.getUser(identityId)
         } else {
             // Comes from other Vc-s.
             guard let userId = user?.userId else {
                 print("No userId!")
                 return
             }
-            self.isCurrentUser = (userId == currentUserId)
+            self.isCurrentUser = (userId == identityId)
+            self.isLoadingUser = true
             self.isLoadingInitialPosts = true
+            self.isLoadingWorkExperiences = true
+            self.isLoadingEducations = true
+            self.isLoadingUserCategories = true
             self.getUser(userId)
         }
     }
@@ -204,7 +216,7 @@ class ProfileTableViewController: UITableViewController {
                 cell.numberOfRecommendationsButton.setTitle(self.user?.numberOfRecommendationsInt.numberToString(), for: UIControlState.normal)
                 if self.isCurrentUser {
                     cell.recommendButton.isHidden = true
-                    if self.hasUserLoaded {
+                    if !self.isLoadingUser {
                        cell.setEditButton()
                     }
                 } else {
@@ -519,7 +531,7 @@ class ProfileTableViewController: UITableViewController {
     }
     
     @IBAction func refreshControlChanged(_ sender: AnyObject) {
-        guard self.hasUserLoaded else {
+        guard !self.isLoadingUser else {
             self.refreshControl?.endRefreshing()
             return
         }
@@ -527,6 +539,7 @@ class ProfileTableViewController: UITableViewController {
             self.refreshControl?.endRefreshing()
             return
         }
+        self.isLoadingUser = true
         self.getUser(userId)
     }
     
@@ -573,43 +586,58 @@ class ProfileTableViewController: UITableViewController {
             (task: AWSTask) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                if let error = task.error {
-                    print("getUser error: \(error)")
-                    self.refreshControl?.endRefreshing()
-                } else {
-                    guard let awsUser = task.result as? AWSUser else {
-                        self.refreshControl?.endRefreshing()
-                        return
-                    }
-                    let user = FullUser(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationId: awsUser._locationId, locationName: awsUser._locationName, website: awsUser._website, about: awsUser._about, numberOfFollowers: awsUser._numberOfFollowers, numberOfPosts: awsUser._numberOfPosts, numberOfRecommendations: awsUser._numberOfRecommendations)
-                    self.user = user
-                    
+                guard task.error == nil else {
+                    print("getUser error: \(task.error!)")
                     // Reset flags and animations that were initiated.
-                    self.hasUserLoaded = true
-                    self.navigationItem.title = self.user?.preferredUsername
+                    self.isLoadingUser = false
+                    self.isLoadingInitialPosts = false
+                    self.isLoadingNextPosts = false
+                    self.isLoadingWorkExperiences = false
+                    self.isLoadingEducations = false
+                    self.isLoadingUserCategories = false
                     self.refreshControl?.endRefreshing()
-                    
-                    // Reload tableView with downloaded user.
-                    UIView.performWithoutAnimation {
-                        self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0), IndexPath(row: 1, section: 0)], with: UITableViewRowAnimation.none)
+                    // Reload tableView.
+                    self.tableView.reloadData()
+                    // Handle error and show banner.
+                    let nsError = task.error as! NSError
+                    if nsError.code == -1009 {
+                        (self.navigationController as? PRFYNavigationController)?.showBanner("No Internet Connection")
+                        // TODO No internet connection tableBackgroundView.
                     }
-                    
-                    // Load profilePic.
-                    if let profilePicUrl = awsUser._profilePicUrl {
-                        PRFYS3Manager.defaultS3Manager().downloadImageS3(profilePicUrl, imageType: .userProfilePic)
+                    return
+                }
+                guard let awsUser = task.result as? AWSUser else {
+                    print("Not an awsUser. This should not happen.")
+                    return
+                }
+                let user = FullUser(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationId: awsUser._locationId, locationName: awsUser._locationName, website: awsUser._website, about: awsUser._about, numberOfFollowers: awsUser._numberOfFollowers, numberOfPosts: awsUser._numberOfPosts, numberOfRecommendations: awsUser._numberOfRecommendations)
+                self.user = user
+                
+                // Reset flags and animations that were initiated.
+                self.isLoadingUser = false
+                self.navigationItem.title = self.user?.preferredUsername
+                self.refreshControl?.endRefreshing()
+                
+                // Reload tableView with downloaded user.
+                UIView.performWithoutAnimation {
+                    self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0), IndexPath(row: 1, section: 0)], with: UITableViewRowAnimation.none)
+                }
+                
+                // Load profilePic.
+                if let profilePicUrl = awsUser._profilePicUrl {
+                    PRFYS3Manager.defaultS3Manager().downloadImageS3(profilePicUrl, imageType: .userProfilePic)
+                }
+                
+                // Load other data.
+                if let userId = awsUser._userId {
+                    if !self.isCurrentUser {
+                        self.getRelationship(userId)
+                        self.getRecommendation(userId)
                     }
-                    
-                    // Load other data.
-                    if let userId = awsUser._userId {
-                        if !self.isCurrentUser {
-                            self.getRelationship(userId)
-                            self.getRecommendation(userId)
-                        }
-                        self.queryUserPostsDateSorted(userId, startFromBeginning: true)
-                        self.queryWorkExperiences(userId)
-                        self.queryEducations(userId)
-                        self.queryUserCategoriesNumberOfPostsSorted(userId)
-                    }
+                    self.queryUserPostsDateSorted(userId, startFromBeginning: true)
+                    self.queryWorkExperiences(userId)
+                    self.queryEducations(userId)
+                    self.queryUserCategoriesNumberOfPostsSorted(userId)
                 }
             })
             return nil
@@ -624,8 +652,18 @@ class ProfileTableViewController: UITableViewController {
         PRFYDynamoDBManager.defaultDynamoDBManager().queryUserPostsDateSortedDynamoDB(userId, lastEvaluatedKey: self.lastEvaluatedKey, completionHandler: {
             (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
             DispatchQueue.main.async(execute: {
-                if let error = error {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                guard error == nil else {
                     print("queryUserPostsDateSorted error: \(error)")
+                    self.isLoadingInitialPosts = false
+                    self.isLoadingNextPosts = true // for bug
+                    self.tableView.reloadData()
+                    let nsError = error as! NSError
+                    if nsError.code == -1009 {
+                        (self.navigationController as? PRFYNavigationController)?.showBanner("No Internet Connection")
+                        // TODO No internet connection tableBackgroundView.
+                    }
+                    return
                 }
                 if startFromBeginning {
                     self.posts = []
@@ -641,20 +679,13 @@ class ProfileTableViewController: UITableViewController {
                     }
                 }
                 // Reset flags and animations that were initiated.
-                if self.isLoadingInitialPosts {
-                    self.isLoadingInitialPosts = false
-                }
-                if self.isLoadingNextPosts {
-                    self.isLoadingNextPosts = false
-                }
+                self.isLoadingInitialPosts = false
+                self.isLoadingNextPosts = false
                 self.lastEvaluatedKey = response?.lastEvaluatedKey
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 
                 // Reload tableView with downloaded posts.
                 if self.selectedProfileSegment == ProfileSegment.posts {
-                    if startFromBeginning {
-                        self.tableView.reloadData()
-                    } else if numberOfNewPosts > 0 {
+                    if startFromBeginning || numberOfNewPosts > 0 {
                         self.tableView.reloadData()
                     }
                 }
@@ -676,8 +707,12 @@ class ProfileTableViewController: UITableViewController {
         PRFYDynamoDBManager.defaultDynamoDBManager().queryWorkExperiencesDynamoDB(userId, completionHandler: {
             (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
             DispatchQueue.main.async(execute: {
-                if let error = error {
-                    print("queryWorkExperiences error: \(error)")
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                guard error == nil else {
+                    print("queryWorkExperiences error: \(error!)")
+                    self.isLoadingWorkExperiences = false
+                    self.tableView.reloadData()
+                    return
                 }
                 self.workExperiences = []
                 if let awsWorkExperiences = response?.items as? [AWSWorkExperience] {
@@ -690,7 +725,6 @@ class ProfileTableViewController: UITableViewController {
                 
                 // Reset flags and animations that were initiated.
                 self.isLoadingWorkExperiences = false
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 
                 // Reload tableView with downloaded workExperiences.
                 if self.selectedProfileSegment == ProfileSegment.experience {
@@ -707,8 +741,12 @@ class ProfileTableViewController: UITableViewController {
         PRFYDynamoDBManager.defaultDynamoDBManager().queryEducationsDynamoDB(userId, completionHandler: {
             (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
             DispatchQueue.main.async(execute: {
-                if let error = error {
-                    print("queryEducations error: \(error)")
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                guard error == nil else {
+                    print("queryEducations error: \(error!)")
+                    self.isLoadingEducations = false
+                    self.tableView.reloadData()
+                    return
                 }
                 self.educations = []
                 if let awsEducations = response?.items as? [AWSEducation] {
@@ -721,7 +759,6 @@ class ProfileTableViewController: UITableViewController {
                 
                 // Reset flags and animations that were initiated.
                 self.isLoadingEducations = false
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 
                 // Reload tableView with downloaded educations.
                 if self.selectedProfileSegment == ProfileSegment.experience {
@@ -738,8 +775,12 @@ class ProfileTableViewController: UITableViewController {
         PRFYDynamoDBManager.defaultDynamoDBManager().queryUserCategoriesNumberOfPostsSortedDynamoDB(userId, completionHandler: {
             (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
             DispatchQueue.main.async(execute: {
-                if let error = error {
-                    print("queryUserCategoriesNumberOfPostsSorted error: \(error)")
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                guard error == nil else {
+                    print("queryUserCategoriesNumberOfPostsSorted error: \(error!)")
+                    self.isLoadingUserCategories = false
+                    self.tableView.reloadData()
+                    return
                 }
                 self.userCategories = []
                 if let awsUserCategories = response?.items as? [AWSUserCategory] {
@@ -752,7 +793,6 @@ class ProfileTableViewController: UITableViewController {
                 
                 // Reset flags and animations that were initiated.
                 self.isLoadingUserCategories = false
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 
                 // Reload tableView with downloaded userCategories.
                 if self.selectedProfileSegment == ProfileSegment.skills {
@@ -1143,7 +1183,7 @@ extension ProfileTableViewController: ProfileMainTableViewCellDelegate {
     }
     
     func followButtonTapped() {
-        if self.isCurrentUser, self.hasUserLoaded {
+        if self.isCurrentUser, !self.isLoadingUser {
             self.performSegue(withIdentifier: "segueToEditProfileVc", sender: self)
         } else {
             if self.hasRelationshipLoaded, let followingId = self.user?.userId {

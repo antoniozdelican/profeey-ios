@@ -539,6 +539,8 @@ class HomeTableViewController: UITableViewController {
                     self.tableView.deleteSections(IndexSet(integer: 0), with: UITableViewRowAnimation.none)
                     self.tableView.endUpdates()
                     self.tableView.backgroundView = self.posts.count == 0 ? self.homeEmptyFeedView: nil
+                    // Undo.
+                    PRFYS3Manager.defaultS3Manager().removeImageS3(imageUrl)
                     let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.localizedDescription, cancelButtonTitle: "Ok")
                     self.present(alertController, animated: true, completion: nil)
                 } else {
