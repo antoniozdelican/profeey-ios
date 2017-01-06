@@ -240,7 +240,6 @@ class ProfileTableViewController: UITableViewController {
                 cell.locationNameLabel.text = self.user?.locationName
                 cell.locationStackView.isHidden = self.user?.locationName != nil ? false : true
                 cell.aboutLabel.text = self.user?.about
-                
                 cell.websiteButton.setTitle(self.user?.website, for: UIControlState.normal)
                 cell.websiteButton.isHidden = self.user?.website != nil ? false : true
                 cell.profileInfoTableViewCellDelegate = self
@@ -1243,7 +1242,10 @@ extension ProfileTableViewController: ProfileMainTableViewCellDelegate {
 extension ProfileTableViewController: ProfileInfoTableViewCellDelegate {
     
     func websiteButtonTapped() {
-        // TODO
+        guard let websiteUrl = self.user?.websiteUrl else {
+            return
+        }
+        UIApplication.shared.openURL(websiteUrl)
     }
 }
 

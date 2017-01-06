@@ -73,6 +73,19 @@ class User: NSObject {
         return preferredUsername.lowercased()
     }
     
+    var websiteUrl: URL? {
+        guard let website = self.website else {
+            return nil
+        }
+        var websiteUrl: URL?
+        if website.hasPrefix("http") || website.hasPrefix("https") {
+            websiteUrl = URL(string: website)
+        } else {
+            websiteUrl = URL(string: "http://\(website)")
+        }
+        return websiteUrl
+    }
+    
     override init() {
         super.init()
     }
