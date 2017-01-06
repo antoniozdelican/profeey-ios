@@ -15,7 +15,6 @@ class NotificationsTableViewController: UITableViewController {
     fileprivate var notifications: [PRFYNotification] = []
     fileprivate var isLoadingInitialNotifications: Bool = false
     fileprivate var isLoadingNextNotifications: Bool = false
-//    fileprivate var isRefreshingPosts: Bool = false
     fileprivate var lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?
     
     fileprivate var noNetworkConnection: Bool = false
@@ -172,20 +171,20 @@ class NotificationsTableViewController: UITableViewController {
             self.lastEvaluatedKey = nil
         }
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().queryUserNotificationsDateSortedDynamoDB({
+        PRFYDynamoDBManager.defaultDynamoDBManager().queryUserNotificationsDateSortedDynamoDB(lastEvaluatedKey, completionHandler: {
             (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 guard error == nil else {
                     print("queryUserNotificationsDateSorted error: \(error!)")
                     self.isLoadingInitialNotifications = false
+                    self.isLoadingNextNotifications = false
                     self.refreshControl?.endRefreshing()
                     self.tableView.reloadData()
                     let nsError = error as! NSError
                     if nsError.code == -1009 {
                         (self.navigationController as? PRFYNavigationController)?.showBanner("No Internet Connection")
                         self.noNetworkConnection = true
-                        // TODO No internet connection tableBackgroundView.
                     }
                     return
                 }
@@ -204,8 +203,10 @@ class NotificationsTableViewController: UITableViewController {
                 
                 // Reset flags and animations that were initiated.
                 self.isLoadingInitialNotifications = false
+                self.isLoadingNextNotifications = false
                 self.refreshControl?.endRefreshing()
                 self.noNetworkConnection = false
+                self.lastEvaluatedKey = response?.lastEvaluatedKey
                 
                 // Reload tableView.
                 if startFromBeginning || numberOfNewNotifications > 0 {

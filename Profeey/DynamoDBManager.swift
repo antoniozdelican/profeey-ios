@@ -79,7 +79,7 @@ protocol DynamoDBManager {
     
     // MARK: Notifications
     
-    func queryUserNotificationsDateSortedDynamoDB(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
+    func queryUserNotificationsDateSortedDynamoDB(_ lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
     
     // MARK: UserEndpoints
     

@@ -450,14 +450,14 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
     
     // MARK: Notifications
     
-    func queryUserNotificationsDateSortedDynamoDB(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+    func queryUserNotificationsDateSortedDynamoDB(_ lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
             print("queryUserNotificationsDateSortedDynamoDB no identityId!")
             return
         }
         print("queryUserNotificationsDateSortedDynamoDB:")
         let awsNotificationsDateSortedIndex = AWSNotificationsDateSortedIndex()
-        awsNotificationsDateSortedIndex.queryUserNotificationsDateSorted(identityId, completionHandler: completionHandler)
+        awsNotificationsDateSortedIndex.queryUserNotificationsDateSorted(identityId, lastEvaluatedKey: lastEvaluatedKey, completionHandler: completionHandler)
     }
     
     // MARK: UserEndpoints

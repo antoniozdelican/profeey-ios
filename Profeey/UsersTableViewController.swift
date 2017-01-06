@@ -255,28 +255,6 @@ class UsersTableViewController: UITableViewController {
                         }
                     }
                 }
-                
-//                self.isLoadingUsers = false
-//                self.refreshControl?.endRefreshing()
-//                if let error = error {
-//                    print("queryPostLikes error: \(error)")
-//                    self.tableView.reloadData()
-//                } else {
-//                    guard let awsLikes = response?.items as? [AWSLike] else {
-//                        self.tableView.reloadData()
-//                        return
-//                    }
-//                    for awsLike in awsLikes {
-//                        let user = User(userId: awsLike._userId, firstName: awsLike._firstName, lastName: awsLike._lastName, preferredUsername: awsLike._preferredUsername, professionName: awsLike._professionName, profilePicUrl: awsLike._profilePicUrl)
-//                        self.users.append(user)
-//                    }
-//                    self.tableView.reloadData()
-//                    for user in self.users {
-//                        if let profilePicUrl = user.profilePicUrl {
-//                            PRFYS3Manager.defaultS3Manager().downloadImageS3(profilePicUrl, imageType: .userProfilePic)
-//                        }
-//                    }
-//                }
             })
         })
     }
@@ -335,30 +313,6 @@ class UsersTableViewController: UITableViewController {
                         }
                     }
                 }
-                
-                
-//                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-//                self.isLoadingUsers = false
-//                self.refreshControl?.endRefreshing()
-//                if let error = error {
-//                    print("queryFollowers error: \(error)")
-//                    self.tableView.reloadData()
-//                } else {
-//                    guard let awsRelationships = response?.items as? [AWSRelationship] else {
-//                        self.tableView.reloadData()
-//                        return
-//                    }
-//                    for awsRelationship in awsRelationships {
-//                        let user = User(userId: awsRelationship._userId, firstName: awsRelationship._firstName, lastName: awsRelationship._lastName, preferredUsername: awsRelationship._preferredUsername, professionName: awsRelationship._professionName, profilePicUrl: awsRelationship._profilePicUrl)
-//                        self.users.append(user)
-//                    }
-//                    self.tableView.reloadData()
-//                    for user in self.users {
-//                        if let profilePicUrl = user.profilePicUrl {
-//                            PRFYS3Manager.defaultS3Manager().downloadImageS3(profilePicUrl, imageType: .userProfilePic)
-//                        }
-//                    }
-//                }
             })
         })
         
@@ -402,7 +356,6 @@ class UsersTableViewController: UITableViewController {
                 self.isLoadingNextUsers = false
                 self.refreshControl?.endRefreshing()
                 self.noNetworkConnection = false
-                self.tableView.reloadData()
                 self.lastEvaluatedKey = response?.lastEvaluatedKey
                 
                 // Reload tableView with downloaded users.
@@ -418,30 +371,6 @@ class UsersTableViewController: UITableViewController {
                         }
                     }
                 }
-                
-                
-//                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-//                self.isLoadingUsers = false
-//                self.refreshControl?.endRefreshing()
-//                if let error = error {
-//                    print("queryFollowing error: \(error)")
-//                    self.tableView.reloadData()
-//                } else {
-//                    guard let awsRelationships = response?.items as? [AWSRelationship] else {
-//                        self.tableView.reloadData()
-//                        return
-//                    }
-//                    for awsRelationship in awsRelationships {
-//                        let user = User(userId: awsRelationship._followingId, firstName: awsRelationship._followingFirstName, lastName: awsRelationship._followingLastName, preferredUsername: awsRelationship._followingPreferredUsername, professionName: awsRelationship._followingProfessionName, profilePicUrl: awsRelationship._followingProfilePicUrl)
-//                        self.users.append(user)
-//                    }
-//                    self.tableView.reloadData()
-//                    for user in self.users {
-//                        if let profilePicUrl = user.profilePicUrl {
-//                            PRFYS3Manager.defaultS3Manager().downloadImageS3(profilePicUrl, imageType: .userProfilePic)
-//                        }
-//                    }
-//                }
             })
         })
     }
