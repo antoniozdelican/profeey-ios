@@ -208,16 +208,16 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         awsRelationshipsTable.removeRelationship(awsRelationship, completionHandler: completionHandler)
     }
     
-    func queryFollowersDynamoDB(_ followingId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+    func queryFollowersDynamoDB(_ followingId: String, lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         print("queryFollowersDynamoDB:")
         let awsRelationshipsFollowingIdIndex = AWSRelationshipsFollowingIdIndex()
-        awsRelationshipsFollowingIdIndex.queryFollowers(followingId, completionHandler: completionHandler)
+        awsRelationshipsFollowingIdIndex.queryFollowers(followingId, lastEvaluatedKey: lastEvaluatedKey, completionHandler: completionHandler)
     }
     
-    func queryFollowingDynamoDB(_ userId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+    func queryFollowingDynamoDB(_ userId: String, lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         print("queryFollowingDynamoDB:")
         let awsRelationshipsPrimaryIndex = AWSRelationshipsPrimaryIndex()
-        awsRelationshipsPrimaryIndex.queryFollowing(userId, completionHandler: completionHandler)
+        awsRelationshipsPrimaryIndex.queryFollowing(userId, lastEvaluatedKey: lastEvaluatedKey, completionHandler: completionHandler)
     }
     
     func queryFollowingIdsDynamoDB(_ userId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
@@ -308,10 +308,10 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         awsLikesTable.removeLike(awsLike, completionHandler: completionHandler)
     }
     
-    func queryPostLikesDynamoDB(_ postId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+    func queryPostLikesDynamoDB(_ postId: String, lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         print("queryPostLikesDynamoDB:")
         let awsLikesPostIndex = AWSLikesPostIndex()
-        awsLikesPostIndex.queryPostLikes(postId, completionHandler: completionHandler)
+        awsLikesPostIndex.queryPostLikes(postId, lastEvaluatedKey: lastEvaluatedKey, completionHandler: completionHandler)
     }
     
     // MARK: Comments

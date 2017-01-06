@@ -82,15 +82,15 @@ class AWSRelationshipsPrimaryIndex: NSObject, Index {
     
     // Mark: QueryWithPartitionKey
     
-    // Find all followings of the user with userId.
-    func queryFollowing(_ userId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+    // Find paginated followings of the user with userId.
+    func queryFollowing(_ userId: String, lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
         let queryExpression = AWSDynamoDBQueryExpression()
         queryExpression.keyConditionExpression = "#userId = :userId"
         queryExpression.expressionAttributeNames = ["#userId": "userId",]
         queryExpression.expressionAttributeValues = [":userId": userId,]
-        
-        // TODO query only needed attributes.
+        queryExpression.limit = 10
+        queryExpression.exclusiveStartKey = lastEvaluatedKey
         
         objectMapper.query(AWSRelationship.self, expression: queryExpression, completionHandler: completionHandler)
     }
@@ -99,7 +99,6 @@ class AWSRelationshipsPrimaryIndex: NSObject, Index {
     func queryFollowingIds(_ userId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
         let queryExpression = AWSDynamoDBQueryExpression()
-        queryExpression.projectionExpression = "#userId, #followingId"
         queryExpression.keyConditionExpression = "#userId = :userId"
         queryExpression.expressionAttributeNames = [
             "#userId": "userId",
@@ -108,8 +107,7 @@ class AWSRelationshipsPrimaryIndex: NSObject, Index {
         queryExpression.expressionAttributeValues = [
             ":userId": userId,
         ]
-        
-        // TODO query only needed attributes.
+        queryExpression.projectionExpression = "#userId, #followingId"
         
         objectMapper.query(AWSRelationship.self, expression: queryExpression, completionHandler: completionHandler)
     }
@@ -130,16 +128,16 @@ class AWSRelationshipsFollowingIdIndex: NSObject, Index {
     
     // MARK: QueryWithPartitionKey
     
-    // Find all followers of the user with followingId (userId).
-    func queryFollowers(_ followingId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+    // Find paginated followers of the user with followingId (userId).
+    func queryFollowers(_ followingId: String, lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
         let queryExpression = AWSDynamoDBQueryExpression()
         queryExpression.indexName = "FollowingIdIndex"
         queryExpression.keyConditionExpression = "#followingId = :followingId"
         queryExpression.expressionAttributeNames = ["#followingId": "followingId",]
         queryExpression.expressionAttributeValues = [":followingId": followingId,]
-        
-        // TODO query only needed attributes.
+        queryExpression.limit = 10
+        queryExpression.exclusiveStartKey = lastEvaluatedKey
         
         objectMapper.query(AWSRelationship.self, expression: queryExpression, completionHandler: completionHandler)
     }

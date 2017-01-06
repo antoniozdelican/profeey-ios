@@ -78,14 +78,16 @@ class AWSLikesPostIndex: NSObject, Index {
     
     // MARK: QueryWithPartitionKey
     
-    // Query all likes with postId.
-    func queryPostLikes(_ postId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+    // Query paginated likes with postId.
+    func queryPostLikes(_ postId: String, lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
         let queryExpression = AWSDynamoDBQueryExpression()
         queryExpression.indexName = "PostIndex"
         queryExpression.keyConditionExpression = "#postId = :postId"
         queryExpression.expressionAttributeNames = ["#postId": "postId",]
         queryExpression.expressionAttributeValues = [":postId": postId,]
+        queryExpression.limit = 10
+        queryExpression.exclusiveStartKey = lastEvaluatedKey
         
         objectMapper.query(AWSLike.self, expression: queryExpression, completionHandler: completionHandler)
     }

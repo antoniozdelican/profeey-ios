@@ -26,6 +26,9 @@ class UsersTableViewController: UITableViewController {
     
     fileprivate var users: [User] = []
     fileprivate var isLoadingUsers: Bool = false
+    fileprivate var isLoadingNextUsers: Bool = false
+    fileprivate var lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?
+    fileprivate var noNetworkConnection: Bool = false
     
     fileprivate var isLoadingFollowingIds: Bool = false
     fileprivate var followingIds: [String] = []
@@ -123,6 +126,17 @@ class UsersTableViewController: UITableViewController {
         if !(cell is UserTableViewCell) {
             cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
         }
+        // Load next users.
+        guard !self.isLoadingUsers else {
+            return
+        }
+        guard indexPath.row == self.users.count - 1 && !self.isLoadingNextUsers && self.lastEvaluatedKey != nil else {
+            return
+        }
+        guard !self.noNetworkConnection else {
+            return
+        }
+        self.prepareForQueries()
     }
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -142,6 +156,10 @@ class UsersTableViewController: UITableViewController {
     // MARK: IBActions
     
     @IBAction func refreshControlChanged(_ sender: AnyObject) {
+        guard !self.isLoadingUsers else {
+            self.refreshControl?.endRefreshing()
+            return
+        }
         self.prepareForQueries()
     }
     
@@ -158,25 +176,22 @@ class UsersTableViewController: UITableViewController {
                 self.refreshControl?.endRefreshing()
                 return
             }
-            self.users = []
             self.isLoadingUsers = true
-            self.queryPostLikes(postId)
+            self.queryPostLikes(postId, startFromBeginning: true)
         case .followers:
             guard let followingId = self.userId else {
                 self.refreshControl?.endRefreshing()
                 return
             }
-            self.users = []
             self.isLoadingUsers = true
-            self.queryFollowers(followingId)
+            self.queryFollowers(followingId, startFromBeginning: true)
         case .following:
             guard let userId = self.userId else {
                 self.refreshControl?.endRefreshing()
                 return
             }
-            self.users = []
             self.isLoadingUsers = true
-            self.queryFollowing(userId)
+            self.queryFollowing(userId, startFromBeginning: true)
         }
         if let currentUserId = AWSIdentityManager.defaultIdentityManager().identityId {
             self.isLoadingFollowingIds = true
@@ -186,96 +201,247 @@ class UsersTableViewController: UITableViewController {
     
     // MARK: AWS
     
-    fileprivate func queryPostLikes(_ postId: String) {
+    fileprivate func queryPostLikes(_ postId: String, startFromBeginning: Bool) {
+        if startFromBeginning {
+            self.lastEvaluatedKey = nil
+        }
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().queryPostLikesDynamoDB(postId, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().queryPostLikesDynamoDB(postId, lastEvaluatedKey: lastEvaluatedKey, completionHandler: {
             (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                self.isLoadingUsers = false
-                self.refreshControl?.endRefreshing()
-                if let error = error {
-                    print("queryPostLikes error: \(error)")
+                guard error == nil else {
+                    print("queryPostLikes error: \(error!)")
+                    self.isLoadingUsers = false
+                    self.isLoadingNextUsers = false
+                    self.refreshControl?.endRefreshing()
                     self.tableView.reloadData()
-                } else {
-                    guard let awsLikes = response?.items as? [AWSLike] else {
-                        self.tableView.reloadData()
-                        return
+                    let nsError = error as! NSError
+                    if nsError.code == -1009 {
+                        self.noNetworkConnection = true
                     }
+                    return
+                }
+                if startFromBeginning {
+                    self.users = []
+                }
+                var numberOfNewUsers = 0
+                if let awsLikes = response?.items as? [AWSLike] {
                     for awsLike in awsLikes {
                         let user = User(userId: awsLike._userId, firstName: awsLike._firstName, lastName: awsLike._lastName, preferredUsername: awsLike._preferredUsername, professionName: awsLike._professionName, profilePicUrl: awsLike._profilePicUrl)
                         self.users.append(user)
+                        numberOfNewUsers += 1
                     }
+                }
+                
+                // Reset flags and animations that were initiated.
+                self.isLoadingUsers = false
+                self.isLoadingNextUsers = false
+                self.refreshControl?.endRefreshing()
+                self.noNetworkConnection = false
+                self.tableView.reloadData()
+                self.lastEvaluatedKey = response?.lastEvaluatedKey
+                
+                // Reload tableView with downloaded users.
+                if startFromBeginning || numberOfNewUsers > 0 {
                     self.tableView.reloadData()
-                    for user in self.users {
-                        if let profilePicUrl = user.profilePicUrl {
+                }
+                
+                // Load profilePics.
+                if let awsLikes = response?.items as? [AWSLike] {
+                    for awsLike in awsLikes {
+                        if let profilePicUrl = awsLike._profilePicUrl {
                             PRFYS3Manager.defaultS3Manager().downloadImageS3(profilePicUrl, imageType: .userProfilePic)
                         }
                     }
                 }
+                
+//                self.isLoadingUsers = false
+//                self.refreshControl?.endRefreshing()
+//                if let error = error {
+//                    print("queryPostLikes error: \(error)")
+//                    self.tableView.reloadData()
+//                } else {
+//                    guard let awsLikes = response?.items as? [AWSLike] else {
+//                        self.tableView.reloadData()
+//                        return
+//                    }
+//                    for awsLike in awsLikes {
+//                        let user = User(userId: awsLike._userId, firstName: awsLike._firstName, lastName: awsLike._lastName, preferredUsername: awsLike._preferredUsername, professionName: awsLike._professionName, profilePicUrl: awsLike._profilePicUrl)
+//                        self.users.append(user)
+//                    }
+//                    self.tableView.reloadData()
+//                    for user in self.users {
+//                        if let profilePicUrl = user.profilePicUrl {
+//                            PRFYS3Manager.defaultS3Manager().downloadImageS3(profilePicUrl, imageType: .userProfilePic)
+//                        }
+//                    }
+//                }
             })
         })
     }
     
-    fileprivate func queryFollowers(_ followingId: String) {
+    fileprivate func queryFollowers(_ followingId: String, startFromBeginning: Bool) {
+        if startFromBeginning {
+            self.lastEvaluatedKey = nil
+        }
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().queryFollowersDynamoDB(followingId, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().queryFollowersDynamoDB(followingId, lastEvaluatedKey: lastEvaluatedKey, completionHandler: {
             (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                self.isLoadingUsers = false
-                self.refreshControl?.endRefreshing()
-                if let error = error {
-                    print("queryFollowers error: \(error)")
+                guard error == nil else {
+                    print("queryFollowers error: \(error!)")
+                    self.isLoadingUsers = false
+                    self.isLoadingNextUsers = false
+                    self.refreshControl?.endRefreshing()
                     self.tableView.reloadData()
-                } else {
-                    guard let awsRelationships = response?.items as? [AWSRelationship] else {
-                        self.tableView.reloadData()
-                        return
+                    let nsError = error as! NSError
+                    if nsError.code == -1009 {
+                        self.noNetworkConnection = true
                     }
+                    return
+                }
+                if startFromBeginning {
+                    self.users = []
+                }
+                var numberOfNewUsers = 0
+                if let awsRelationships = response?.items as? [AWSRelationship] {
                     for awsRelationship in awsRelationships {
                         let user = User(userId: awsRelationship._userId, firstName: awsRelationship._firstName, lastName: awsRelationship._lastName, preferredUsername: awsRelationship._preferredUsername, professionName: awsRelationship._professionName, profilePicUrl: awsRelationship._profilePicUrl)
                         self.users.append(user)
+                        numberOfNewUsers += 1
                     }
+                }
+                
+                // Reset flags and animations that were initiated.
+                self.isLoadingUsers = false
+                self.isLoadingNextUsers = false
+                self.refreshControl?.endRefreshing()
+                self.noNetworkConnection = false
+                self.tableView.reloadData()
+                self.lastEvaluatedKey = response?.lastEvaluatedKey
+                
+                // Reload tableView with downloaded users.
+                if startFromBeginning || numberOfNewUsers > 0 {
                     self.tableView.reloadData()
-                    for user in self.users {
-                        if let profilePicUrl = user.profilePicUrl {
+                }
+                
+                // Load profilePics.
+                if let awsRelationships = response?.items as? [AWSRelationship] {
+                    for awsRelationship in awsRelationships {
+                        if let profilePicUrl = awsRelationship._profilePicUrl {
                             PRFYS3Manager.defaultS3Manager().downloadImageS3(profilePicUrl, imageType: .userProfilePic)
                         }
                     }
                 }
+                
+                
+//                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+//                self.isLoadingUsers = false
+//                self.refreshControl?.endRefreshing()
+//                if let error = error {
+//                    print("queryFollowers error: \(error)")
+//                    self.tableView.reloadData()
+//                } else {
+//                    guard let awsRelationships = response?.items as? [AWSRelationship] else {
+//                        self.tableView.reloadData()
+//                        return
+//                    }
+//                    for awsRelationship in awsRelationships {
+//                        let user = User(userId: awsRelationship._userId, firstName: awsRelationship._firstName, lastName: awsRelationship._lastName, preferredUsername: awsRelationship._preferredUsername, professionName: awsRelationship._professionName, profilePicUrl: awsRelationship._profilePicUrl)
+//                        self.users.append(user)
+//                    }
+//                    self.tableView.reloadData()
+//                    for user in self.users {
+//                        if let profilePicUrl = user.profilePicUrl {
+//                            PRFYS3Manager.defaultS3Manager().downloadImageS3(profilePicUrl, imageType: .userProfilePic)
+//                        }
+//                    }
+//                }
             })
         })
         
     }
     
-    fileprivate func queryFollowing(_ userId: String) {
+    fileprivate func queryFollowing(_ userId: String, startFromBeginning: Bool) {
+        if startFromBeginning {
+            self.lastEvaluatedKey = nil
+        }
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().queryFollowingDynamoDB(userId, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().queryFollowingDynamoDB(userId, lastEvaluatedKey: lastEvaluatedKey, completionHandler: {
             (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                self.isLoadingUsers = false
-                self.refreshControl?.endRefreshing()
-                if let error = error {
-                    print("queryFollowing error: \(error)")
+                guard error == nil else {
+                    print("queryFollowers error: \(error!)")
+                    self.isLoadingUsers = false
+                    self.isLoadingNextUsers = false
+                    self.refreshControl?.endRefreshing()
                     self.tableView.reloadData()
-                } else {
-                    guard let awsRelationships = response?.items as? [AWSRelationship] else {
-                        self.tableView.reloadData()
-                        return
+                    let nsError = error as! NSError
+                    if nsError.code == -1009 {
+                        self.noNetworkConnection = true
                     }
+                    return
+                }
+                if startFromBeginning {
+                    self.users = []
+                }
+                var numberOfNewUsers = 0
+                if let awsRelationships = response?.items as? [AWSRelationship] {
                     for awsRelationship in awsRelationships {
                         let user = User(userId: awsRelationship._followingId, firstName: awsRelationship._followingFirstName, lastName: awsRelationship._followingLastName, preferredUsername: awsRelationship._followingPreferredUsername, professionName: awsRelationship._followingProfessionName, profilePicUrl: awsRelationship._followingProfilePicUrl)
                         self.users.append(user)
+                        numberOfNewUsers += 1
                     }
+                }
+                
+                // Reset flags and animations that were initiated.
+                self.isLoadingUsers = false
+                self.isLoadingNextUsers = false
+                self.refreshControl?.endRefreshing()
+                self.noNetworkConnection = false
+                self.tableView.reloadData()
+                self.lastEvaluatedKey = response?.lastEvaluatedKey
+                
+                // Reload tableView with downloaded users.
+                if startFromBeginning || numberOfNewUsers > 0 {
                     self.tableView.reloadData()
-                    for user in self.users {
-                        if let profilePicUrl = user.profilePicUrl {
+                }
+                
+                // Load profilePics.
+                if let awsRelationships = response?.items as? [AWSRelationship] {
+                    for awsRelationship in awsRelationships {
+                        if let profilePicUrl = awsRelationship._followingProfilePicUrl {
                             PRFYS3Manager.defaultS3Manager().downloadImageS3(profilePicUrl, imageType: .userProfilePic)
                         }
                     }
                 }
+                
+                
+//                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+//                self.isLoadingUsers = false
+//                self.refreshControl?.endRefreshing()
+//                if let error = error {
+//                    print("queryFollowing error: \(error)")
+//                    self.tableView.reloadData()
+//                } else {
+//                    guard let awsRelationships = response?.items as? [AWSRelationship] else {
+//                        self.tableView.reloadData()
+//                        return
+//                    }
+//                    for awsRelationship in awsRelationships {
+//                        let user = User(userId: awsRelationship._followingId, firstName: awsRelationship._followingFirstName, lastName: awsRelationship._followingLastName, preferredUsername: awsRelationship._followingPreferredUsername, professionName: awsRelationship._followingProfessionName, profilePicUrl: awsRelationship._followingProfilePicUrl)
+//                        self.users.append(user)
+//                    }
+//                    self.tableView.reloadData()
+//                    for user in self.users {
+//                        if let profilePicUrl = user.profilePicUrl {
+//                            PRFYS3Manager.defaultS3Manager().downloadImageS3(profilePicUrl, imageType: .userProfilePic)
+//                        }
+//                    }
+//                }
             })
         })
     }
@@ -382,7 +548,7 @@ extension UsersTableViewController {
                 continue
             }
             self.users[userIndex].profilePic = UIImage(data: imageData)
-            self.tableView.reloadRows(at: [IndexPath(row: userIndex, section: 0)], with: UITableViewRowAnimation.none)
+            self.tableView.reloadVisibleRow(IndexPath(row: userIndex, section: 0))
         }
     }
 }
