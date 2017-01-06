@@ -10,12 +10,13 @@ import UIKit
 
 class GalleryCollectionViewCell: UICollectionViewCell {
     
-    @IBOutlet weak var thumbnailImageView: UIImageView!
+    @IBOutlet weak var thumbnailImageView: UIImageView?
+    @IBOutlet weak var overlayView: UIView!
     
     var representedAssetIdentifier: NSString!
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        self.thumbnailImageView.image = nil
+        self.thumbnailImageView?.image = nil
     }
 }

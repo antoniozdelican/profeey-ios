@@ -416,17 +416,52 @@
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="pTR-jx-2CD">
                                                     <rect key="frame" x="0.0" y="0.0" width="194" height="194"/>
                                                 </imageView>
+                                                <view userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AYY-GH-CIz">
+                                                    <rect key="frame" x="0.0" y="0.0" width="194" height="194"/>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </view>
                                             </subviews>
                                         </view>
-                                        <color key="backgroundColor" red="0.88766813280000001" green="0.88764166830000002" blue="0.88765668870000003" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="backgroundColor" red="0.97530043129999999" green="0.97527122499999996" blue="0.97528779509999997" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
+                                            <constraint firstItem="AYY-GH-CIz" firstAttribute="leading" secondItem="rDk-09-ZHZ" secondAttribute="leading" id="6Iq-ue-0Da"/>
+                                            <constraint firstAttribute="bottom" secondItem="AYY-GH-CIz" secondAttribute="bottom" id="9zW-7a-jyf"/>
                                             <constraint firstItem="pTR-jx-2CD" firstAttribute="leading" secondItem="rDk-09-ZHZ" secondAttribute="leading" id="AX6-rC-t3U"/>
                                             <constraint firstItem="pTR-jx-2CD" firstAttribute="top" secondItem="rDk-09-ZHZ" secondAttribute="top" id="CSE-GJ-iZf"/>
                                             <constraint firstAttribute="bottom" secondItem="pTR-jx-2CD" secondAttribute="bottom" id="FhT-Kb-PMY"/>
+                                            <constraint firstAttribute="trailing" secondItem="AYY-GH-CIz" secondAttribute="trailing" id="Rej-7x-yvY"/>
+                                            <constraint firstItem="AYY-GH-CIz" firstAttribute="top" secondItem="rDk-09-ZHZ" secondAttribute="top" id="eP4-mj-Ovr"/>
                                             <constraint firstAttribute="trailing" secondItem="pTR-jx-2CD" secondAttribute="trailing" id="ngS-4q-eNO"/>
                                         </constraints>
                                         <connections>
+                                            <outlet property="overlayView" destination="AYY-GH-CIz" id="bET-4G-UUT"/>
                                             <outlet property="thumbnailImageView" destination="pTR-jx-2CD" id="jFw-oU-pjX"/>
+                                        </connections>
+                                    </collectionViewCell>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="cellCameraGallery" id="bj3-kT-nTd" customClass="GalleryCollectionViewCell" customModule="Profeey" customModuleProvider="target">
+                                        <rect key="frame" x="91" y="204" width="194" height="194"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="0.0" y="0.0" width="194" height="194"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_camera_gallery" translatesAutoresizingMaskIntoConstraints="NO" id="W1D-3s-sA9">
+                                                    <rect key="frame" x="78" y="78" width="38" height="38"/>
+                                                </imageView>
+                                                <view userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xiA-GI-Imw">
+                                                    <rect key="frame" x="-91" y="-205" width="375" height="603"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </view>
+                                            </subviews>
+                                        </view>
+                                        <color key="backgroundColor" red="0.97530043129999999" green="0.97527122499999996" blue="0.97528779509999997" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstItem="W1D-3s-sA9" firstAttribute="centerX" secondItem="bj3-kT-nTd" secondAttribute="centerX" id="6ML-Yx-3L9"/>
+                                            <constraint firstItem="W1D-3s-sA9" firstAttribute="centerY" secondItem="bj3-kT-nTd" secondAttribute="centerY" id="PBT-X2-lfl"/>
+                                        </constraints>
+                                        <connections>
+                                            <outlet property="overlayView" destination="xiA-GI-Imw" id="xLE-I9-AtP"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
@@ -445,7 +480,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xY8-Ba-PYh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1650" y="-742"/>
+            <point key="canvasLocation" x="1648.8" y="-742.5787106446777"/>
         </scene>
         <!--Camera View Controller-->
         <scene sceneID="5zi-z1-fBj">
@@ -545,6 +580,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="ic_camera_gallery" width="38" height="38"/>
         <image name="ic_remove_grey" width="14" height="14"/>
         <image name="ic_skills" width="30" height="30"/>
         <image name="ic_write_description" width="30" height="30"/>

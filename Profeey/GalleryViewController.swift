@@ -173,7 +173,7 @@ extension GalleryViewController: UICollectionViewDataSource, UICollectionViewDel
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if indexPath.item == 0 {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellGallery", for: indexPath) as! GalleryCollectionViewCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellCameraGallery", for: indexPath) as! GalleryCollectionViewCell
             return cell
         }
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellGallery", for: indexPath) as! GalleryCollectionViewCell
@@ -189,13 +189,33 @@ extension GalleryViewController: UICollectionViewDataSource, UICollectionViewDel
             resultHandler: {result, info in
                 // Set the cell's thumbnail image if it's still showing the same asset
                 if cell.representedAssetIdentifier == asset.localIdentifier as NSString {
-                    cell.thumbnailImageView.image = result
+                    cell.thumbnailImageView?.image = result
                 }
         })
         return cell
     }
     
     // MARK: UICollectionViewDelegate
+    
+    func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
+        if let cell = collectionView.cellForItem(at: indexPath) as? GalleryCollectionViewCell {
+            UIView.animate(
+                withDuration: 0.2,
+                animations: {
+                    cell.overlayView.alpha = 0.4
+            }, completion: nil)
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didUnhighlightItemAt indexPath: IndexPath) {
+        if let cell = collectionView.cellForItem(at: indexPath) as? GalleryCollectionViewCell {
+            UIView.animate(
+                withDuration: 0.2,
+                animations: {
+                    cell.overlayView.alpha = 0.0
+            }, completion: nil)
+        }
+    }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if indexPath.item == 0 {
