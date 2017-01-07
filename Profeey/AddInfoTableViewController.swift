@@ -12,15 +12,12 @@ class AddInfoTableViewController: UITableViewController {
     
     @IBOutlet weak var saveButton: UIButton!
     
-    var post: Post?
-    var photo: UIImage?
+    var postImage: UIImage?
+    var caption: String?
+    var categoryName: String?
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.post = Post()
-        self.post?.image = self.photo
-        
-        // Fix alignment for custom rightBarButtonItem.
         self.saveButton.contentEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, 0.0, -8.0)
     }
     
@@ -43,7 +40,7 @@ class AddInfoTableViewController: UITableViewController {
         if let navigationController = segue.destination as? UINavigationController,
             let childViewController = navigationController.childViewControllers[0] as? CategoriesTableViewController {
             childViewController.categoriesTableViewControllerDelegate = self
-            childViewController.categoryName = self.post?.categoryName
+            childViewController.categoryName = self.categoryName
             childViewController.isStatusBarHidden = true
         }
     }
@@ -62,17 +59,21 @@ class AddInfoTableViewController: UITableViewController {
         switch indexPath.row {
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellAddInfoImage", for: indexPath) as! AddInfoImageTableViewCell
-            cell.postImageView.image = self.post?.image
+            cell.postImageView.image = self.postImage
+            if let imageWidth = self.postImage?.size.width, let imageHeight = self.postImage?.size.height {
+                let aspectRatio = CGFloat(imageWidth / imageHeight)
+                cell.postImageViewHeightConstraint.constant = ceil(cell.postImageViewWidthConstraint.constant / aspectRatio)
+            }
             return cell
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellEditPostDescription", for: indexPath) as! EditPostDescriptionTableViewCell
             cell.editPostDescriptionTableViewCellDelegate = self
-            cell.descriptionTextView.text = self.post?.caption
-            cell.descriptionPlaceholderLabel.isHidden = self.post?.caption != nil ? true : false
+            cell.descriptionTextView.text = self.caption
+            cell.descriptionPlaceholderLabel.isHidden = self.caption != nil ? true : false
             return cell
         case 2:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellEditPostCategory", for: indexPath) as! EditPostCategoryTableViewCell
-            if let categoryName = self.post?.categoryName {
+            if let categoryName = self.categoryName {
                 cell.categoryNameLabel.text = categoryName
                 cell.categoryNameLabel.textColor = Colors.black
                 cell.clearCategoryButton.isHidden = false
@@ -122,7 +123,8 @@ class AddInfoTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.row {
         case 0:
-            return 132.0
+            //return 132.0
+            return UITableViewAutomaticDimension
         case 1:
             return UITableViewAutomaticDimension
         case 2:
@@ -158,14 +160,14 @@ extension AddInfoTableViewController: EditPostDescriptionTableViewCellDelegate {
             self.tableView.endUpdates()
             UIView.setAnimationsEnabled(true)
         }
-        self.post?.caption = textView.text.trimm().isEmpty ? nil : textView.text.trimm()
+        self.caption = textView.text.trimm().isEmpty ? nil : textView.text.trimm()
     }
 }
 
 extension AddInfoTableViewController: EditPostCategoryTableViewCellDelegate {
     
     func clearCategoryButtonTapped() {
-        self.post?.categoryName = nil
+        self.categoryName = nil
         self.tableView.reloadRows(at: [IndexPath(row: 2, section: 0)], with: UITableViewRowAnimation.none)
     }
 }
@@ -173,7 +175,7 @@ extension AddInfoTableViewController: EditPostCategoryTableViewCellDelegate {
 extension AddInfoTableViewController: CategoriesTableViewControllerDelegate {
     
     func didSelectCategory(_ categoryName: String?) {
-        self.post?.categoryName = categoryName
+        self.categoryName = categoryName
         self.tableView.reloadRows(at: [IndexPath(row: 2, section: 0)], with: UITableViewRowAnimation.none)
     }
 }

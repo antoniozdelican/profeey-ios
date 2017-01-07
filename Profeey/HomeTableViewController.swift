@@ -332,8 +332,7 @@ class HomeTableViewController: UITableViewController {
     // From Capture flow.
     @IBAction func unwindToHomeTableViewController(_ segue: UIStoryboardSegue) {
         if let sourceViewController = segue.source as? AddInfoTableViewController {
-            guard let post = sourceViewController.post,
-                let image = post.image,
+            guard let image = sourceViewController.postImage,
                 let imageData = UIImageJPEGRepresentation(image, 0.6) else {
                 return
             }
@@ -351,7 +350,7 @@ class HomeTableViewController: UITableViewController {
             self.navigationController?.setNavigationBarHidden(false, animated: true)
             self.isNavigationBarHidden = false
             // Upload image sync.
-            self.uploadImage(imageData, imageWidth: NSNumber(value: Float(image.size.width)), imageHeight: NSNumber(value: Float(image.size.height)), caption: post.caption, categoryName: post.categoryName)
+            self.uploadImage(imageData, imageWidth: NSNumber(value: Float(image.size.width)), imageHeight: NSNumber(value: Float(image.size.height)), caption: sourceViewController.caption, categoryName: sourceViewController.categoryName)
         }
     }
     

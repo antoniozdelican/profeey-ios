@@ -11,10 +11,12 @@ import UIKit
 class AddInfoImageTableViewCell: UITableViewCell {
     
     @IBOutlet weak var postImageView: UIImageView!
+    @IBOutlet weak var postImageViewHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var postImageViewWidthConstraint: NSLayoutConstraint!
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        self.postImageView.clipsToBounds = true
+        //self.postImageView.clipsToBounds = true
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

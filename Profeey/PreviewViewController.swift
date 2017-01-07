@@ -139,7 +139,7 @@ class PreviewViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destinationViewController = segue.destination as? AddInfoTableViewController {
-            destinationViewController.photo = self.finalImage
+            destinationViewController.postImage = self.finalImage
         }
     }
     
