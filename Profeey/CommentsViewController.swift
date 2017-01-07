@@ -15,6 +15,7 @@ class CommentsViewController: UIViewController {
 
     @IBOutlet weak var commentTextView: UITextView!
     @IBOutlet weak var commentFakePlaceholderLabel: UILabel!
+    @IBOutlet weak var commentContainerView: UIView!
     @IBOutlet weak var sendButton: UIButton!
     @IBOutlet weak var commentBarBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var commentBarHeightConstraint: NSLayoutConstraint!
@@ -23,11 +24,11 @@ class CommentsViewController: UIViewController {
     var postUserId: String?
     var isCommentButton: Bool = false
     
-    fileprivate var COMMENT_BAR_BOTTOM_CONSTRAINT_CONSTANT: CGFloat = 0.0
-    fileprivate var COMMENT_BAR_HEIGHT: CGFloat = 49.0
-    fileprivate var TAB_BAR_HEIGHT: CGFloat = 49.0
+    fileprivate var commentBarBottomConstraintConstant: CGFloat = 0.0
+    fileprivate var commentBarHeightConstraintConstant: CGFloat = 49.0
+    fileprivate var tabBarHeight: CGFloat = 49.0
     // Top + Bottom padding between textView and comment bar view.
-    fileprivate let COMMENT_BAR_TOP_BOTTOM_PADDING: CGFloat = 13.0
+    fileprivate var commentBarTopBottomPadding: CGFloat = 13.0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,6 +37,11 @@ class CommentsViewController: UIViewController {
         self.registerForKeyboardNotifications()
         self.commentTextView.delegate = self
         self.sendButton.isEnabled = false
+        
+        self.commentContainerView.layer.cornerRadius = 4.0
+        self.commentContainerView.layer.borderWidth = 0.5
+        self.commentContainerView.layer.borderColor = Colors.greyLight.cgColor
+        self.commentContainerView.clipsToBounds = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -57,10 +63,10 @@ class CommentsViewController: UIViewController {
     // MARK: Configuration
     
     fileprivate func configureConstants() {
-        self.COMMENT_BAR_BOTTOM_CONSTRAINT_CONSTANT = self.commentBarBottomConstraint.constant
-        self.COMMENT_BAR_HEIGHT = self.commentBarHeightConstraint.constant
+        self.commentBarBottomConstraintConstant = self.commentBarBottomConstraint.constant
+        self.commentBarHeightConstraintConstant = self.commentBarHeightConstraint.constant
         if let height = self.tabBarController?.tabBar.frame.height {
-            self.TAB_BAR_HEIGHT = height
+            self.tabBarHeight = height
         }
     }
     
@@ -69,6 +75,7 @@ class CommentsViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destinationViewController = segue.destination as? CommentsTableViewController {
             destinationViewController.postId = self.postId
+            destinationViewController.commentsTableViewControllerDelegate = self
         }
     }
     
@@ -99,7 +106,7 @@ class CommentsViewController: UIViewController {
         let userInfo: NSDictionary = (notification as NSNotification).userInfo! as NSDictionary
         let keyboardSize = (userInfo.object(forKey: UIKeyboardFrameEndUserInfoKey)! as AnyObject).cgRectValue.size
         let duration = userInfo.object(forKey: UIKeyboardAnimationDurationUserInfoKey) as! Double
-        self.commentBarBottomConstraint.constant = keyboardSize.height - self.TAB_BAR_HEIGHT
+        self.commentBarBottomConstraint.constant = keyboardSize.height - self.tabBarHeight
         UIView.animate(withDuration: duration, animations: {
             self.view.layoutIfNeeded()
         })
@@ -108,7 +115,7 @@ class CommentsViewController: UIViewController {
     func keyboardWillBeHidden(_ notification: Notification) {
         let userInfo: NSDictionary = (notification as NSNotification).userInfo! as NSDictionary
         let duration = userInfo.object(forKey: UIKeyboardAnimationDurationUserInfoKey) as! Double
-        self.commentBarBottomConstraint.constant = COMMENT_BAR_BOTTOM_CONSTRAINT_CONSTANT
+        self.commentBarBottomConstraint.constant = self.commentBarBottomConstraintConstant
         UIView.animate(withDuration: duration, animations: {
             self.view.layoutIfNeeded()
         })
@@ -150,7 +157,7 @@ class CommentsViewController: UIViewController {
         self.commentTextView.text = ""
         self.commentFakePlaceholderLabel.isHidden = false
         self.sendButton.isEnabled = false
-        self.commentBarHeightConstraint.constant = self.COMMENT_BAR_HEIGHT
+        self.commentBarHeightConstraint.constant = self.commentBarHeightConstraintConstant
     }
 }
 
@@ -169,7 +176,7 @@ extension CommentsViewController: UITextViewDelegate {
         textView.frame = newFrame
         
         // Adjust comment bar.
-        let newHeight = ceil(newFrame.height + self.COMMENT_BAR_TOP_BOTTOM_PADDING)
+        let newHeight = ceil(newFrame.height + self.commentBarTopBottomPadding)
         if newHeight != self.commentBarHeightConstraint.constant {
             self.commentBarHeightConstraint.constant = newHeight
         }

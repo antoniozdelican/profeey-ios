@@ -63,8 +63,15 @@ class PostDetailsTableViewController: UITableViewController {
             destinationViewController.postId = self.post?.postId
         }
         if let destinationViewController = segue.destination as? CommentsViewController {
-            destinationViewController.postId = self.post?.postId
-            destinationViewController.postUserId = self.post?.userId
+            if let _ = sender as? UIButton {
+                destinationViewController.postId = self.post?.postId
+                destinationViewController.postUserId = self.post?.userId
+                destinationViewController.isCommentButton = true
+            } else if let _ = sender as? PostButtonsTableViewCell {
+                destinationViewController.postId = self.post?.postId
+                destinationViewController.postUserId = self.post?.userId
+                destinationViewController.isCommentButton = false
+            }
         }
         if let navigationController = segue.destination as? UINavigationController,
             let childViewController =  navigationController.childViewControllers[0] as? EditPostViewController {
@@ -464,7 +471,7 @@ extension PostDetailsTableViewController: PostButtonsTableViewCellDelegate {
     }
     
     func commentButtonTapped(_ cell: PostButtonsTableViewCell) {
-        self.performSegue(withIdentifier: "segueToCommentsVc", sender: cell)
+        self.performSegue(withIdentifier: "segueToCommentsVc", sender: cell.commentButton)
     }
     
     func numberOfLikesButtonTapped(_ cell: PostButtonsTableViewCell) {

@@ -251,6 +251,7 @@
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
+                                    <outlet property="commentButton" destination="0y5-mG-FCq" id="rPO-SK-fpO"/>
                                     <outlet property="likeButton" destination="5Y4-GH-3oW" id="25x-uU-nlO"/>
                                     <outlet property="numberOfCommentsButton" destination="UxE-ho-MKY" id="n4j-uV-9aJ"/>
                                     <outlet property="numberOfLikesButton" destination="375-ck-bSh" id="rNJ-tr-Jw9"/>
