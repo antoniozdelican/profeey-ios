@@ -60,6 +60,7 @@ protocol DynamoDBManager {
     
     // MARK: Comments
     
+    // TODO: pagination
     func createCommentDynamoDB(_ postId: String, postUserId: String, commentText: String, completionHandler: @escaping AWSContinuationBlock)
     func removeCommentDynamoDB(_ commentId: String, completionHandler: @escaping AWSContinuationBlock)
     func queryPostCommentsDateSortedDynamoDB(_ postId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
@@ -118,4 +119,10 @@ protocol DynamoDBManager {
     // MARK: ProfessionLocations
     
     func queryLocationProfessions(_ locationId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
+    
+    // MARK: Messages
+    
+    func createMessageDynamoDB(_ conversationId: String, recipientId: String, messageText: String, completionHandler: @escaping AWSContinuationBlock)
+    func removeMessageDynamoDB(_ conversationId: String, messageId: String, completionHandler: @escaping AWSContinuationBlock)
+    func queryConversationMessagesDateSortedDynamoDB(_ conversationId: String, lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
 }

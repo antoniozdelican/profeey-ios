@@ -632,4 +632,39 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         let awsProfessionLocationsLocationIndex = AWSProfessionLocationsLocationIndex()
         awsProfessionLocationsLocationIndex.queryLocationProfessions(locationId, completionHandler: completionHandler)
     }
+    
+    // MARK: Messages
+    
+    func createMessageDynamoDB(_ conversationId: String, recipientId: String, messageText: String, completionHandler: @escaping AWSContinuationBlock) {
+        guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
+            print("createMessageDynamoDB no identityId!")
+            AWSTask().continue(completionHandler)
+            return
+        }
+        print("createMessageDynamoDB:")
+        let messageId = NSUUID().uuidString.lowercased()
+        let created = NSNumber(value: Date().timeIntervalSince1970 as Double)
+        let awsMessagesTable = AWSMessagesTable()
+        let awsMessage = AWSMessage(_conversationId: conversationId, _messageId: messageId, _created: created, _messageText: messageText, _senderId: identityId, _recipientId: recipientId)
+        awsMessagesTable.createMessage(awsMessage, completionHandler: {
+            (task: AWSTask) in
+            if let error = task.error {
+                AWSTask(error: error).continue(completionHandler)
+            } else {
+                AWSTask(result: awsMessage).continue(completionHandler)
+            }
+            return nil
+        })
+    }
+    
+    func removeMessageDynamoDB(_ conversationId: String, messageId: String, completionHandler: @escaping AWSContinuationBlock) {
+        let awsMessagesTable = AWSMessagesTable()
+        let awsMessage = AWSMessage(_conversationId: conversationId, _messageId: messageId)
+        awsMessagesTable.removeMessage(awsMessage, completionHandler: completionHandler)
+    }
+    
+    func queryConversationMessagesDateSortedDynamoDB(_ conversationId: String, lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?){
+        let awsMessagesDateSortedIndex = AWSMessagesDateSortedIndex()
+        awsMessagesDateSortedIndex.queryConversationMessagesDateSorted(conversationId, lastEvaluatedKey: lastEvaluatedKey, completionHandler: completionHandler)
+    }
 }

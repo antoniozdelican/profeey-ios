@@ -161,6 +161,9 @@ class ProfileTableViewController: UITableViewController {
         if let destinationViewController = segue.destination as? RecommendationsTableViewController {
             destinationViewController.userId = self.user?.userId
         }
+        if let destinationViewController = segue.destination as? MessagesViewController {
+            destinationViewController.otherUserId = self.user?.userId
+        }
     }
 
     // MARK: UITableViewDataSource
@@ -524,7 +527,7 @@ class ProfileTableViewController: UITableViewController {
         if self.isCurrentUser {
             self.performSegue(withIdentifier: "segueToSettingsVc", sender: self)
         } else {
-            // TODO
+            self.performSegue(withIdentifier: "segueToMessagesVc", sender: self)
         }
     }
     

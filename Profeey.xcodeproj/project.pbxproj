@@ -176,6 +176,14 @@
 		A9C8081C1D916C660018109C /* EditAboutTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C8081B1D916C660018109C /* EditAboutTableViewCell.swift */; };
 		A9C8081E1D916C720018109C /* EditLocationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C8081D1D916C720018109C /* EditLocationTableViewCell.swift */; };
 		A9C808201D916C7D0018109C /* EditProfessionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C8081F1D916C7D0018109C /* EditProfessionTableViewCell.swift */; };
+		A9C88E541E225F5700B7D2E7 /* Messages.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9C88E531E225F5700B7D2E7 /* Messages.storyboard */; };
+		A9C88E561E225F6D00B7D2E7 /* MessagesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C88E551E225F6D00B7D2E7 /* MessagesTableViewController.swift */; };
+		A9C88E581E225F7B00B7D2E7 /* MessagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C88E571E225F7B00B7D2E7 /* MessagesViewController.swift */; };
+		A9C88E5A1E22690500B7D2E7 /* MessageOwnTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C88E591E22690500B7D2E7 /* MessageOwnTableViewCell.swift */; };
+		A9C88E5C1E22698200B7D2E7 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C88E5B1E22698200B7D2E7 /* Message.swift */; };
+		A9C88E5E1E226EA600B7D2E7 /* MessageOtherTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C88E5D1E226EA600B7D2E7 /* MessageOtherTableViewCell.swift */; };
+		A9C88E611E22782700B7D2E7 /* AWSMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C88E601E22782700B7D2E7 /* AWSMessage.swift */; };
+		A9C88E631E22783200B7D2E7 /* AWSMessagesTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C88E621E22783200B7D2E7 /* AWSMessagesTable.swift */; };
 		A9CBBC451DB634A8009C8EC7 /* EditWorkExperienceTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CBBC441DB634A8009C8EC7 /* EditWorkExperienceTableViewController.swift */; };
 		A9CBBC471DB634C0009C8EC7 /* EditWorkExperience.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9CBBC461DB634C0009C8EC7 /* EditWorkExperience.storyboard */; };
 		A9CBBC501DB63FDD009C8EC7 /* EditWorkTitleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CBBC4F1DB63FDD009C8EC7 /* EditWorkTitleTableViewCell.swift */; };
@@ -446,6 +454,14 @@
 		A9C8081B1D916C660018109C /* EditAboutTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditAboutTableViewCell.swift; sourceTree = "<group>"; };
 		A9C8081D1D916C720018109C /* EditLocationTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditLocationTableViewCell.swift; sourceTree = "<group>"; };
 		A9C8081F1D916C7D0018109C /* EditProfessionTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditProfessionTableViewCell.swift; sourceTree = "<group>"; };
+		A9C88E531E225F5700B7D2E7 /* Messages.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Messages.storyboard; sourceTree = "<group>"; };
+		A9C88E551E225F6D00B7D2E7 /* MessagesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessagesTableViewController.swift; sourceTree = "<group>"; };
+		A9C88E571E225F7B00B7D2E7 /* MessagesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessagesViewController.swift; sourceTree = "<group>"; };
+		A9C88E591E22690500B7D2E7 /* MessageOwnTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageOwnTableViewCell.swift; sourceTree = "<group>"; };
+		A9C88E5B1E22698200B7D2E7 /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		A9C88E5D1E226EA600B7D2E7 /* MessageOtherTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageOtherTableViewCell.swift; sourceTree = "<group>"; };
+		A9C88E601E22782700B7D2E7 /* AWSMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSMessage.swift; sourceTree = "<group>"; };
+		A9C88E621E22783200B7D2E7 /* AWSMessagesTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSMessagesTable.swift; sourceTree = "<group>"; };
 		A9CBBC441DB634A8009C8EC7 /* EditWorkExperienceTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditWorkExperienceTableViewController.swift; sourceTree = "<group>"; };
 		A9CBBC461DB634C0009C8EC7 /* EditWorkExperience.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = EditWorkExperience.storyboard; sourceTree = "<group>"; };
 		A9CBBC4F1DB63FDD009C8EC7 /* EditWorkTitleTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditWorkTitleTableViewCell.swift; sourceTree = "<group>"; };
@@ -926,6 +942,7 @@
 				A9ACA7481DB50AF40004B8DE /* WorkExperience.swift */,
 				A99B9E301DB53E370047360D /* Education.swift */,
 				A91C1CD81DEDA8C2006FBDD4 /* PRFYNotification.swift */,
+				A9C88E5B1E22698200B7D2E7 /* Message.swift */,
 				A9A503981D2FA9180030A472 /* LocalService.swift */,
 			);
 			name = PRFY;
@@ -1040,6 +1057,27 @@
 				A9C6CB7E1D2929AA00863816 /* Extensions.swift */,
 			);
 			name = Extensions;
+			sourceTree = "<group>";
+		};
+		A9C88E521E225F4400B7D2E7 /* Messages */ = {
+			isa = PBXGroup;
+			children = (
+				A9C88E531E225F5700B7D2E7 /* Messages.storyboard */,
+				A9C88E571E225F7B00B7D2E7 /* MessagesViewController.swift */,
+				A9C88E551E225F6D00B7D2E7 /* MessagesTableViewController.swift */,
+				A9C88E591E22690500B7D2E7 /* MessageOwnTableViewCell.swift */,
+				A9C88E5D1E226EA600B7D2E7 /* MessageOtherTableViewCell.swift */,
+			);
+			name = Messages;
+			sourceTree = "<group>";
+		};
+		A9C88E5F1E22780E00B7D2E7 /* AWSMessages */ = {
+			isa = PBXGroup;
+			children = (
+				A9C88E601E22782700B7D2E7 /* AWSMessage.swift */,
+				A9C88E621E22783200B7D2E7 /* AWSMessagesTable.swift */,
+			);
+			name = AWSMessages;
 			sourceTree = "<group>";
 		};
 		A9CBBC431DB6348C009C8EC7 /* Edit Work Experience */ = {
@@ -1220,6 +1258,7 @@
 				A9A196191DDC63EE008D6494 /* Settings */,
 				A9A95B271D58752E0009CEE7 /* Post Cells */,
 				A97EDECC1D9A596F002E63F7 /* Shared */,
+				A9C88E521E225F4400B7D2E7 /* Messages */,
 			);
 			name = Main;
 			sourceTree = "<group>";
@@ -1286,6 +1325,7 @@
 				A99B9E291DB53C8D0047360D /* AWSEducations */,
 				A91C1CD11DED9C5B006FBDD4 /* AWSNotifications */,
 				A97A3F631DF0271000FC5AEA /* AWSUserEndpoints */,
+				A9C88E5F1E22780E00B7D2E7 /* AWSMessages */,
 				A9D688801E0AE01100A07D86 /* TempSearch */,
 				A9F345881DE0AA9700A5D368 /* CloudSearchProxyClient */,
 				A9CC71A81DEB44DE0054DA93 /* DynamoDB */,
@@ -1419,6 +1459,7 @@
 				A9A1D7F01DBCFE83002AF221 /* ProfileTableSectionHeader.xib in Resources */,
 				A9AFFB0A1D8AFE2A00219627 /* LocationsOld.storyboard in Resources */,
 				A9D49EEB1DD602D6000F90A8 /* AddRecommendation.storyboard in Resources */,
+				A9C88E541E225F5700B7D2E7 /* Messages.storyboard in Resources */,
 				A944BAAA1DD10323000BE754 /* HomeEmptyFeedView.xib in Resources */,
 				A9A57B2A1DD1CB92004F0177 /* DiscoverPeople.storyboard in Resources */,
 				A9E53B6F1D10667B00CD1D6C /* Notifications.storyboard in Resources */,
@@ -1476,10 +1517,12 @@
 				A9B7A2441D65A562009DA340 /* Category.swift in Sources */,
 				A9CBBC621DB66134009C8EC7 /* ExperiencesTableSectionHeader.swift in Sources */,
 				A9CBBC581DB64A2B009C8EC7 /* EditEducationFieldOfStudyTableViewCell.swift in Sources */,
+				A9C88E611E22782700B7D2E7 /* AWSMessage.swift in Sources */,
 				A9CBBC451DB634A8009C8EC7 /* EditWorkExperienceTableViewController.swift in Sources */,
 				A99B9E2F1DB53DFC0047360D /* AWSEducationUpdate.swift in Sources */,
 				A9CBBC5C1DB651BD009C8EC7 /* ExperiencesTableViewController.swift in Sources */,
 				A9D716A91D57486100300135 /* PostSmallTableViewCell.swift in Sources */,
+				A9C88E581E225F7B00B7D2E7 /* MessagesViewController.swift in Sources */,
 				A91C1CD91DEDA8C2006FBDD4 /* PRFYNotification.swift in Sources */,
 				A999CD481DBE93D400E7ADB1 /* ProfessionTableViewController.swift in Sources */,
 				A990ECB01D6A572500C3C9CE /* UsersTableViewController.swift in Sources */,
@@ -1507,6 +1550,7 @@
 				A9F49D5A1D379D70002EB68B /* AWSPostsTable.swift in Sources */,
 				A91828491DC1120700EC9E63 /* AddProfessionTableViewCell.swift in Sources */,
 				A9E4507C1D59E6D300D14553 /* CommentsTableViewController.swift in Sources */,
+				A9C88E5C1E22698200B7D2E7 /* Message.swift in Sources */,
 				A91C1CD51DED9D85006FBDD4 /* AWSNotificationsTable.swift in Sources */,
 				A99ADD261DB361BE00A34C8D /* CurrentUser.swift in Sources */,
 				A9ACA7451DB508540004B8DE /* AWSWorkExperiencesTable.swift in Sources */,
@@ -1522,6 +1566,7 @@
 				A9CBBC501DB63FDD009C8EC7 /* EditWorkTitleTableViewCell.swift in Sources */,
 				A9ACA7491DB50AF40004B8DE /* WorkExperience.swift in Sources */,
 				A9A503A11D2FE0A90030A472 /* AWSUsersTable.swift in Sources */,
+				A9C88E5E1E226EA600B7D2E7 /* MessageOtherTableViewCell.swift in Sources */,
 				A9D49EE01DD5C834000F90A8 /* UserCategory.swift in Sources */,
 				A9C808201D916C7D0018109C /* EditProfessionTableViewCell.swift in Sources */,
 				A913FC701D51F6AF000D10A6 /* DynamoDBManager.swift in Sources */,
@@ -1569,6 +1614,7 @@
 				A9E9EDAA1DFAC3B300BC2253 /* PRFYCloudSearchLocationsResult.swift in Sources */,
 				A9E4507A1D59E6C500D14553 /* CommentTableViewCell.swift in Sources */,
 				A9BF16491D6514C900060A9E /* NoResultsTableViewCell.swift in Sources */,
+				A9C88E561E225F6D00B7D2E7 /* MessagesTableViewController.swift in Sources */,
 				A9A1961D1DDC668F008D6494 /* SettingsTableViewController.swift in Sources */,
 				A932AA111E04081A0048563C /* MissingUsernameNavigationController.swift in Sources */,
 				A9B6F0B11DD9EF180031FA2F /* AddRecommendationTableViewController.swift in Sources */,
@@ -1638,10 +1684,12 @@
 				A901CFE91DA78FA900C44B26 /* CameraViewController.swift in Sources */,
 				A91C1CD71DEDA669006FBDD4 /* NotificationTableViewCell.swift in Sources */,
 				A9D688851E0AE06500A07D86 /* AWSProfession.swift in Sources */,
+				A9C88E5A1E22690500B7D2E7 /* MessageOwnTableViewCell.swift in Sources */,
 				A97A9AED1D85D0ED00507517 /* ProfessionsTableViewController.swift in Sources */,
 				A9CBBC561DB64A0E009C8EC7 /* EditEducationSchoolTableViewCell.swift in Sources */,
 				A901CFE71DA78DDC00C44B26 /* CaptureScrollViewController.swift in Sources */,
 				A96C9AB51D7DADC3007E0B9D /* UploadingTableViewCell.swift in Sources */,
+				A9C88E631E22783200B7D2E7 /* AWSMessagesTable.swift in Sources */,
 				A9D828751E07DDC30085FD95 /* NSNotificationCenterKeys.swift in Sources */,
 				A9D100631E0C4308006590F8 /* EditUser.swift in Sources */,
 				A9AFFB111D8B00DF00219627 /* CategoriesTableViewController.swift in Sources */,

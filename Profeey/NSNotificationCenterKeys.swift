@@ -32,3 +32,5 @@ let CreateEducationNotificationKey: String = "CreateEducationNotificationKey"
 let UpdateEducationNotificationKey: String = "UpdateEducationNotificationKey"
 
 let DownloadImageNotificationKey: String = "DownloadImageNotificationKey"
+
+let CreateMessageNotificationKey: String = "CreateMessageNotificationKey"
