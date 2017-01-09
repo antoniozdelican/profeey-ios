@@ -76,9 +76,6 @@ class MessagesViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destinationViewController = segue.destination as? MessagesTableViewController {
-            print("Blaa")
-            print(self.conversationId)
-            
             destinationViewController.conversationId = self.conversationId
             destinationViewController.messagesTableViewControllerDelegate = self
         }

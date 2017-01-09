@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11542" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="NotificationsViewController" customModule="Profeey" customModuleProvider="target">
+            <connections>
+                <outlet property="conversationsButton" destination="PlM-w3-Cgw" id="Ozt-k4-44B"/>
+                <outlet property="indicatorScrollView" destination="pUF-2G-jkP" id="FQ6-YU-ohA"/>
+                <outlet property="notificationsButton" destination="k84-sr-ZgL" id="twq-9q-ZDC"/>
+                <outlet property="notificationsSegmentsView" destination="udo-ZS-JMd" id="Mkh-0N-kmP"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="udo-ZS-JMd">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NHT-qN-Dkv" userLabel="Separator View">
+                    <rect key="frame" x="0.0" y="43" width="375" height="1"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="1" id="Dm4-UY-2aO">
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="number" keyPath="constant">
+                                    <real key="value" value="0.5"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
+                        </constraint>
+                    </constraints>
+                </view>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="k84-sr-ZgL">
+                    <rect key="frame" x="0.0" y="0.0" width="187.5" height="43"/>
+                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                    <state key="normal" title="Notifications">
+                        <color key="titleColor" red="0.41868340970000001" green="0.41867089270000002" blue="0.41867792609999999" alpha="1" colorSpace="calibratedRGB"/>
+                    </state>
+                    <connections>
+                        <action selector="notificationsButtonTapped:" destination="-1" eventType="touchUpInside" id="MhS-k7-loT"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PlM-w3-Cgw">
+                    <rect key="frame" x="187.5" y="0.0" width="187.5" height="43"/>
+                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                    <state key="normal" title="Messages">
+                        <color key="titleColor" red="0.41868340970000001" green="0.41867089270000002" blue="0.41867792609999999" alpha="1" colorSpace="calibratedRGB"/>
+                    </state>
+                    <connections>
+                        <action selector="conversationsButtonTapped:" destination="-1" eventType="touchUpInside" id="vO9-LD-I46"/>
+                    </connections>
+                </button>
+                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pUF-2G-jkP">
+                    <rect key="frame" x="0.0" y="43" width="375" height="1"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wte-Vb-F0Y">
+                            <rect key="frame" x="0.0" y="0.0" width="187.5" height="1"/>
+                            <color key="backgroundColor" red="0.14748379589999999" green="0.1474793851" blue="0.14748191829999999" alpha="1" colorSpace="calibratedRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="1" id="SnB-ew-k8h"/>
+                            </constraints>
+                        </view>
+                    </subviews>
+                    <constraints>
+                        <constraint firstAttribute="trailing" secondItem="wte-Vb-F0Y" secondAttribute="trailing" id="23n-Oa-txx"/>
+                        <constraint firstAttribute="height" constant="1" id="PhP-Q0-rUq"/>
+                        <constraint firstItem="wte-Vb-F0Y" firstAttribute="top" secondItem="pUF-2G-jkP" secondAttribute="top" id="UdD-b5-DmA"/>
+                        <constraint firstAttribute="bottom" secondItem="wte-Vb-F0Y" secondAttribute="bottom" id="a6z-Mo-jPs"/>
+                        <constraint firstItem="wte-Vb-F0Y" firstAttribute="leading" secondItem="pUF-2G-jkP" secondAttribute="leading" id="xZG-hj-e3P"/>
+                    </constraints>
+                </scrollView>
+            </subviews>
+            <color key="backgroundColor" red="0.97530043129999999" green="0.97527122499999996" blue="0.97528779509999997" alpha="1" colorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstItem="wte-Vb-F0Y" firstAttribute="width" secondItem="k84-sr-ZgL" secondAttribute="width" id="1t6-y9-oeL"/>
+                <constraint firstItem="pUF-2G-jkP" firstAttribute="top" secondItem="k84-sr-ZgL" secondAttribute="bottom" id="4yn-lh-zfF"/>
+                <constraint firstItem="k84-sr-ZgL" firstAttribute="leading" secondItem="udo-ZS-JMd" secondAttribute="leading" id="61c-2R-V2j"/>
+                <constraint firstItem="PlM-w3-Cgw" firstAttribute="top" secondItem="udo-ZS-JMd" secondAttribute="top" id="9Ma-Co-UdO"/>
+                <constraint firstItem="pUF-2G-jkP" firstAttribute="leading" secondItem="udo-ZS-JMd" secondAttribute="leading" id="Dcn-Pq-lus"/>
+                <constraint firstItem="k84-sr-ZgL" firstAttribute="width" secondItem="PlM-w3-Cgw" secondAttribute="width" id="Laq-4L-Cb8"/>
+                <constraint firstAttribute="bottom" secondItem="pUF-2G-jkP" secondAttribute="bottom" id="NY9-Ox-WGc"/>
+                <constraint firstItem="pUF-2G-jkP" firstAttribute="top" secondItem="PlM-w3-Cgw" secondAttribute="bottom" id="O7L-Fd-A3i"/>
+                <constraint firstItem="NHT-qN-Dkv" firstAttribute="leading" secondItem="udo-ZS-JMd" secondAttribute="leading" id="PeC-TU-Sqe"/>
+                <constraint firstAttribute="trailing" secondItem="NHT-qN-Dkv" secondAttribute="trailing" id="WL3-Gb-uNs"/>
+                <constraint firstAttribute="trailing" secondItem="PlM-w3-Cgw" secondAttribute="trailing" id="YWx-HV-AkJ"/>
+                <constraint firstItem="PlM-w3-Cgw" firstAttribute="leading" secondItem="k84-sr-ZgL" secondAttribute="trailing" id="eWn-dn-Lgd"/>
+                <constraint firstItem="k84-sr-ZgL" firstAttribute="top" secondItem="udo-ZS-JMd" secondAttribute="top" id="hru-ok-FfY"/>
+                <constraint firstAttribute="trailing" secondItem="pUF-2G-jkP" secondAttribute="trailing" id="kjt-RY-cv5"/>
+                <constraint firstAttribute="bottom" secondItem="NHT-qN-Dkv" secondAttribute="bottom" id="rSo-rl-GgE"/>
+            </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+        </view>
+    </objects>
+</document>

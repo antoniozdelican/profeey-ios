@@ -45,6 +45,9 @@
 		A932AA0C1E03E1280048563C /* WelcomeVerificationTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A932AA0B1E03E1280048563C /* WelcomeVerificationTableViewController.swift */; };
 		A932AA111E04081A0048563C /* MissingUsernameNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A932AA101E04081A0048563C /* MissingUsernameNavigationController.swift */; };
 		A941CB6B1DF3445700343802 /* PRFYCloudSearchUsersResultItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A941CB6A1DF3445700343802 /* PRFYCloudSearchUsersResultItem.swift */; };
+		A94368741E2389A20009F4EA /* NotificationsSegmentsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A94368731E2389A20009F4EA /* NotificationsSegmentsView.xib */; };
+		A94368781E238A8F0009F4EA /* NotificationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A94368771E238A8F0009F4EA /* NotificationsViewController.swift */; };
+		A943687A1E239E6C0009F4EA /* ConversationsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A94368791E239E6C0009F4EA /* ConversationsTableViewController.swift */; };
 		A944BAAA1DD10323000BE754 /* HomeEmptyFeedView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A944BAA91DD10323000BE754 /* HomeEmptyFeedView.xib */; };
 		A944BAAC1DD10413000BE754 /* HomeEmptyFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A944BAAB1DD10413000BE754 /* HomeEmptyFeedView.swift */; };
 		A945973E1DA7E463006A4C9B /* AlbumButton.xib in Resources */ = {isa = PBXBuildFile; fileRef = A945973D1DA7E463006A4C9B /* AlbumButton.xib */; };
@@ -329,6 +332,9 @@
 		A932AA0B1E03E1280048563C /* WelcomeVerificationTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeVerificationTableViewController.swift; sourceTree = "<group>"; };
 		A932AA101E04081A0048563C /* MissingUsernameNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MissingUsernameNavigationController.swift; sourceTree = "<group>"; };
 		A941CB6A1DF3445700343802 /* PRFYCloudSearchUsersResultItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PRFYCloudSearchUsersResultItem.swift; sourceTree = "<group>"; };
+		A94368731E2389A20009F4EA /* NotificationsSegmentsView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NotificationsSegmentsView.xib; sourceTree = "<group>"; };
+		A94368771E238A8F0009F4EA /* NotificationsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationsViewController.swift; sourceTree = "<group>"; };
+		A94368791E239E6C0009F4EA /* ConversationsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationsTableViewController.swift; sourceTree = "<group>"; };
 		A944BAA91DD10323000BE754 /* HomeEmptyFeedView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HomeEmptyFeedView.xib; sourceTree = "<group>"; };
 		A944BAAB1DD10413000BE754 /* HomeEmptyFeedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeEmptyFeedView.swift; sourceTree = "<group>"; };
 		A945973D1DA7E463006A4C9B /* AlbumButton.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AlbumButton.xib; sourceTree = "<group>"; };
@@ -712,6 +718,23 @@
 				A961E6FE1DE8458D00D45634 /* AWSSNS.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A943687B1E239FA40009F4EA /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				A9B68DA21D8999BB006AC4EA /* NotificationsTableViewController.swift */,
+				A91C1CD61DEDA669006FBDD4 /* NotificationTableViewCell.swift */,
+			);
+			name = Notifications;
+			sourceTree = "<group>";
+		};
+		A943687C1E239FB30009F4EA /* Conversations */ = {
+			isa = PBXGroup;
+			children = (
+				A94368791E239E6C0009F4EA /* ConversationsTableViewController.swift */,
+			);
+			name = Conversations;
 			sourceTree = "<group>";
 		};
 		A9543CA91DA3A1CC002BF372 /* Edit Post */ = {
@@ -1278,8 +1301,10 @@
 			isa = PBXGroup;
 			children = (
 				A9E53B6E1D10667B00CD1D6C /* Notifications.storyboard */,
-				A9B68DA21D8999BB006AC4EA /* NotificationsTableViewController.swift */,
-				A91C1CD61DEDA669006FBDD4 /* NotificationTableViewCell.swift */,
+				A94368731E2389A20009F4EA /* NotificationsSegmentsView.xib */,
+				A94368771E238A8F0009F4EA /* NotificationsViewController.swift */,
+				A943687B1E239FA40009F4EA /* Notifications */,
+				A943687C1E239FB30009F4EA /* Conversations */,
 			);
 			name = Notifications;
 			sourceTree = "<group>";
@@ -1447,6 +1472,7 @@
 				A9DBC6341E1139F00087CB19 /* FollowersFollowing.storyboard in Resources */,
 				A930BC831D0DD43F004D49F7 /* Assets.xcassets in Resources */,
 				A930BC811D0DD43F004D49F7 /* Main.storyboard in Resources */,
+				A94368741E2389A20009F4EA /* NotificationsSegmentsView.xib in Resources */,
 				A9AFFB0D1D8AFEB800219627 /* Categories.storyboard in Resources */,
 				A9543CAB1DA3A1ED002BF372 /* EditPost.storyboard in Resources */,
 				A9A503A71D2FF8450030A472 /* EditProfile.storyboard in Resources */,
@@ -1517,6 +1543,7 @@
 				A9B7A2441D65A562009DA340 /* Category.swift in Sources */,
 				A9CBBC621DB66134009C8EC7 /* ExperiencesTableSectionHeader.swift in Sources */,
 				A9CBBC581DB64A2B009C8EC7 /* EditEducationFieldOfStudyTableViewCell.swift in Sources */,
+				A943687A1E239E6C0009F4EA /* ConversationsTableViewController.swift in Sources */,
 				A9C88E611E22782700B7D2E7 /* AWSMessage.swift in Sources */,
 				A9CBBC451DB634A8009C8EC7 /* EditWorkExperienceTableViewController.swift in Sources */,
 				A99B9E2F1DB53DFC0047360D /* AWSEducationUpdate.swift in Sources */,
@@ -1629,6 +1656,7 @@
 				A90146E41DB2662E0092ED21 /* ProfileMainTableViewCell.swift in Sources */,
 				A9A1D7EE1DBCFE58002AF221 /* ProfileTableSectionHeader.swift in Sources */,
 				A9C808181D916C4A0018109C /* EditFirstNameTableViewCell.swift in Sources */,
+				A94368781E238A8F0009F4EA /* NotificationsViewController.swift in Sources */,
 				A9E53B731D1067E800CD1D6C /* MainTabBarController.swift in Sources */,
 				A9D3340C1D801693005565C2 /* PostInfoTableViewCell.swift in Sources */,
 				A913FC721D51FAD6000D10A6 /* PRFYDynamoDBManager.swift in Sources */,

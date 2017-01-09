@@ -53,7 +53,6 @@ class ProfileTableViewController: UITableViewController {
     fileprivate var isLoadingUserCategories: Bool = false
     fileprivate var userCategories: [UserCategory] = []
     
-    // TODO
     fileprivate var noNetworkConnection: Bool = false
     
     override func viewDidLoad() {

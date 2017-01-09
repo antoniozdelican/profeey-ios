@@ -188,7 +188,7 @@ extension MainTabBarController: UITabBarControllerDelegate {
             }
             self.previousViewController = childViewController
         }
-        if let childViewController = navigationController.childViewControllers[0] as? NotificationsTableViewController {
+        if let childViewController = navigationController.childViewControllers[0] as? NotificationsViewController {
             if self.previousViewController == childViewController {
                 childViewController.notificationsTabBarButtonTapped()
             }

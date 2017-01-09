@@ -245,10 +245,11 @@ extension NotificationsTableViewController {
             self.tableView.reloadVisibleRow(IndexPath(row: notificationIndex, section: 0))
         }
     }
+}
+
+extension NotificationsTableViewController: NotificationsTableViewControllerDelegate {
     
-    // MARK: Public
-    
-    func notificationsTabBarButtonTapped() {
+    func scrollToTop() {
         if self.notifications.count > 0 {
             self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: UITableViewScrollPosition.top, animated: true)
         }
