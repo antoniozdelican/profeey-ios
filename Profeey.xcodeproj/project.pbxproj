@@ -48,6 +48,10 @@
 		A94368741E2389A20009F4EA /* NotificationsSegmentsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A94368731E2389A20009F4EA /* NotificationsSegmentsView.xib */; };
 		A94368781E238A8F0009F4EA /* NotificationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A94368771E238A8F0009F4EA /* NotificationsViewController.swift */; };
 		A943687A1E239E6C0009F4EA /* ConversationsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A94368791E239E6C0009F4EA /* ConversationsTableViewController.swift */; };
+		A943687E1E23AB260009F4EA /* ConversationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A943687D1E23AB260009F4EA /* ConversationTableViewCell.swift */; };
+		A94368801E23AB480009F4EA /* Conversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A943687F1E23AB480009F4EA /* Conversation.swift */; };
+		A94368831E23AD810009F4EA /* AWSConversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A94368821E23AD810009F4EA /* AWSConversation.swift */; };
+		A94368851E23AF5A0009F4EA /* AWSConversationsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A94368841E23AF5A0009F4EA /* AWSConversationsTable.swift */; };
 		A944BAAA1DD10323000BE754 /* HomeEmptyFeedView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A944BAA91DD10323000BE754 /* HomeEmptyFeedView.xib */; };
 		A944BAAC1DD10413000BE754 /* HomeEmptyFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A944BAAB1DD10413000BE754 /* HomeEmptyFeedView.swift */; };
 		A945973E1DA7E463006A4C9B /* AlbumButton.xib in Resources */ = {isa = PBXBuildFile; fileRef = A945973D1DA7E463006A4C9B /* AlbumButton.xib */; };
@@ -335,6 +339,10 @@
 		A94368731E2389A20009F4EA /* NotificationsSegmentsView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NotificationsSegmentsView.xib; sourceTree = "<group>"; };
 		A94368771E238A8F0009F4EA /* NotificationsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationsViewController.swift; sourceTree = "<group>"; };
 		A94368791E239E6C0009F4EA /* ConversationsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationsTableViewController.swift; sourceTree = "<group>"; };
+		A943687D1E23AB260009F4EA /* ConversationTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationTableViewCell.swift; sourceTree = "<group>"; };
+		A943687F1E23AB480009F4EA /* Conversation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Conversation.swift; sourceTree = "<group>"; };
+		A94368821E23AD810009F4EA /* AWSConversation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSConversation.swift; sourceTree = "<group>"; };
+		A94368841E23AF5A0009F4EA /* AWSConversationsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSConversationsTable.swift; sourceTree = "<group>"; };
 		A944BAA91DD10323000BE754 /* HomeEmptyFeedView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HomeEmptyFeedView.xib; sourceTree = "<group>"; };
 		A944BAAB1DD10413000BE754 /* HomeEmptyFeedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeEmptyFeedView.swift; sourceTree = "<group>"; };
 		A945973D1DA7E463006A4C9B /* AlbumButton.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AlbumButton.xib; sourceTree = "<group>"; };
@@ -733,8 +741,18 @@
 			isa = PBXGroup;
 			children = (
 				A94368791E239E6C0009F4EA /* ConversationsTableViewController.swift */,
+				A943687D1E23AB260009F4EA /* ConversationTableViewCell.swift */,
 			);
 			name = Conversations;
+			sourceTree = "<group>";
+		};
+		A94368811E23AD4E0009F4EA /* AWSConversations */ = {
+			isa = PBXGroup;
+			children = (
+				A94368821E23AD810009F4EA /* AWSConversation.swift */,
+				A94368841E23AF5A0009F4EA /* AWSConversationsTable.swift */,
+			);
+			name = AWSConversations;
 			sourceTree = "<group>";
 		};
 		A9543CA91DA3A1CC002BF372 /* Edit Post */ = {
@@ -966,6 +984,7 @@
 				A99B9E301DB53E370047360D /* Education.swift */,
 				A91C1CD81DEDA8C2006FBDD4 /* PRFYNotification.swift */,
 				A9C88E5B1E22698200B7D2E7 /* Message.swift */,
+				A943687F1E23AB480009F4EA /* Conversation.swift */,
 				A9A503981D2FA9180030A472 /* LocalService.swift */,
 			);
 			name = PRFY;
@@ -1351,6 +1370,7 @@
 				A91C1CD11DED9C5B006FBDD4 /* AWSNotifications */,
 				A97A3F631DF0271000FC5AEA /* AWSUserEndpoints */,
 				A9C88E5F1E22780E00B7D2E7 /* AWSMessages */,
+				A94368811E23AD4E0009F4EA /* AWSConversations */,
 				A9D688801E0AE01100A07D86 /* TempSearch */,
 				A9F345881DE0AA9700A5D368 /* CloudSearchProxyClient */,
 				A9CC71A81DEB44DE0054DA93 /* DynamoDB */,
@@ -1565,6 +1585,7 @@
 				A990ECB51D6A582100C3C9CE /* UserTableViewCell.swift in Sources */,
 				A9B750011D8782C200DDC8C8 /* AWSActivity.swift in Sources */,
 				A9BF164B1D6519D100060A9E /* SearchingTableViewCell.swift in Sources */,
+				A94368831E23AD810009F4EA /* AWSConversation.swift in Sources */,
 				A9E9EDAC1DFAC3C600BC2253 /* PRFYCloudSearchLocationsResultItem.swift in Sources */,
 				A9C3C0EA1E02B7DC005CA18C /* NewPasswordTableViewController.swift in Sources */,
 				A92F93ED1DC3940A00065CD1 /* EditProfileTableViewController.swift in Sources */,
@@ -1601,6 +1622,7 @@
 				A9CBBC641DB66856009C8EC7 /* EducationTableViewCell.swift in Sources */,
 				A91828451DC0E49800EC9E63 /* LocationTableViewCell.swift in Sources */,
 				A98A38241D8C076C00C9CA75 /* AWSUserCategory.swift in Sources */,
+				A943687E1E23AB260009F4EA /* ConversationTableViewCell.swift in Sources */,
 				A9AA36391D947C4E00E5EAFA /* LogInTableViewController.swift in Sources */,
 				A9D49EE51DD5DB1A000F90A8 /* UserCategoryTableViewController.swift in Sources */,
 				A9B68DA11D897A24006AC4EA /* EmptyTableViewCell.swift in Sources */,
@@ -1614,6 +1636,7 @@
 				A9EEEE2A1E125EC100A20755 /* EditWebsiteTableViewCell.swift in Sources */,
 				A9BCBDC51DDAFA0F00265AFA /* Recommendation.swift in Sources */,
 				A9B6F0B61DDA23B40031FA2F /* AWSRecommendationsTable.swift in Sources */,
+				A94368801E23AB480009F4EA /* Conversation.swift in Sources */,
 				A915F86E1DC0D49C0031C45F /* LocationsTableViewController.swift in Sources */,
 				A97A3F691DF027E800FC5AEA /* AWSUserEndpoint.swift in Sources */,
 				A9AC8FC01DBDFF5200C9BCE0 /* PostDetailsTableViewController.swift in Sources */,
@@ -1663,6 +1686,7 @@
 				A99B9E2B1DB53CB40047360D /* AWSEducation.swift in Sources */,
 				A9E3DD431D86A42400DED8C8 /* Profession.swift in Sources */,
 				A9A503991D2FA9180030A472 /* LocalService.swift in Sources */,
+				A94368851E23AF5A0009F4EA /* AWSConversationsTable.swift in Sources */,
 				A9CBBC661DB669EA009C8EC7 /* EditEducationDescriptionTableViewCell.swift in Sources */,
 				A9EAEC071DA6A38600DA6A4D /* AWSPostUpdate.swift in Sources */,
 				A9A21DB51D95397A0093F162 /* UsernameTableViewController.swift in Sources */,
