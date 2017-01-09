@@ -161,7 +161,7 @@ class ProfileTableViewController: UITableViewController {
             destinationViewController.userId = self.user?.userId
         }
         if let destinationViewController = segue.destination as? MessagesViewController {
-            destinationViewController.otherUserId = self.user?.userId
+            destinationViewController.participant = self.user?.copyUser()
         }
     }
 

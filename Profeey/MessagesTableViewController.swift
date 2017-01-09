@@ -12,6 +12,7 @@ import AWSDynamoDB
 
 protocol MessagesTableViewControllerDelegate {
     func scrollViewWillBeginDragging()
+    func initialMessagesLoaded(_ numberOfInitialMessages: Int)
 }
 
 class MessagesTableViewController: UITableViewController {
@@ -22,6 +23,8 @@ class MessagesTableViewController: UITableViewController {
     fileprivate var messages: [Message] = []
     fileprivate var isLoadingMessages: Bool = false
     fileprivate var lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?
+    
+    fileprivate var hasLoadedInitialMessages: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -141,11 +144,17 @@ class MessagesTableViewController: UITableViewController {
                     self.isLoadingMessages = false
                 }
                 self.lastEvaluatedKey = response?.lastEvaluatedKey
+                // Special case goes only once.
+                if !self.hasLoadedInitialMessages {
+                    self.hasLoadedInitialMessages = true
+                    self.messagesTableViewControllerDelegate?.initialMessagesLoaded(self.messages.count)
+                }
                 
                 // Reload tableView with downloaded messages.
-                if numberOfOldMessages > 0 {
-                    self.tableView.reloadData()
-                }
+//                if numberOfOldMessages > 0 {
+//                    self.tableView.reloadData()
+//                }
+                self.tableView.reloadData()
             })
         })
     }

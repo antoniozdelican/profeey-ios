@@ -19,18 +19,25 @@ class MessagesViewController: UIViewController {
     @IBOutlet weak var messageBarBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var messageBarHeightConstraint: NSLayoutConstraint!
     
-    var otherUserId: String?
+    var participant: User?
+//    var otherUserId: String?
+    
+    /*
+     Until this gets set, can't post a message!
+     This is done to create/delete conversation when first/last message is created/deleted.
+    */
+    fileprivate var numberOfInitialMessages: Int?
     
     fileprivate var conversationId: String? {
         guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
             print("No identityId. This should not happen!")
             return nil
         }
-        guard let otherUserId = self.otherUserId else {
-            print("No otherUserId. This should not happen!")
+        guard let participantId = self.participant?.userId else {
+            print("No participantId. This should not happen!")
             return nil
         }
-        return [identityId, otherUserId].joined(separator: "+conversation+")
+        return [identityId, participantId].joined(separator: "+conversation+")
     }
     
     fileprivate var messageBarBottomConstraintConstant: CGFloat = 0.0
@@ -133,11 +140,11 @@ class MessagesViewController: UIViewController {
     // MARK: AWS
     
     fileprivate func createMessage(_ messageText: String) {
-        guard let conversationId = self.conversationId, let recipientId = self.otherUserId else {
+        guard let conversationId = self.conversationId, let participantId = self.participant?.userId, let numberOfInitialMessages = self.numberOfInitialMessages else {
             return
         }
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().createMessageDynamoDB(conversationId, recipientId: recipientId, messageText: messageText, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().createMessageDynamoDB(conversationId, recipientId: participantId, messageText: messageText, completionHandler: {
             (task: AWSTask) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
@@ -156,6 +163,25 @@ class MessagesViewController: UIViewController {
                 // Notify observers.
                 NotificationCenter.default.post(name: NSNotification.Name(rawValue: CreateMessageNotificationKey), object: self, userInfo: ["message": message.copyMessage()])
                 self.resetMessageBox()
+                
+                if numberOfInitialMessages == 0 {
+                    self.createConversation(messageText, participantId: participantId)
+                }
+            })
+            return nil
+        })
+    }
+    
+    // In background.
+    fileprivate func createConversation(_ messageText: String, participantId: String) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().createConversationDynamoDB(messageText, participantId: participantId, participantFirstName: self.participant?.firstName, participantLastName: self.participant?.lastName, participantPreferredUsername: self.participant?.preferredUsername, participantProfessionName: self.participant?.professionName, participantProfilePicUrl: self.participant?.profilePicUrl, completionHandler: {
+            (task: AWSTask) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                if let error = task.error {
+                    print("createConversation error: \(error)")
+                }
             })
             return nil
         })
@@ -167,7 +193,11 @@ extension MessagesViewController: UITextViewDelegate {
     
     func textViewDidChange(_ textView: UITextView) {
         self.messageFakePlaceholderLabel.isHidden = !textView.text.isEmpty
-        self.sendButton.isEnabled = !textView.text.trimm().isEmpty
+        
+        // Check if numberOfInitialMessages is set.
+        if self.numberOfInitialMessages != nil {
+            self.sendButton.isEnabled = !textView.text.trimm().isEmpty
+        }
         
         // Adjust textView frame.
         let fixedWidth = textView.frame.size.width
@@ -189,5 +219,12 @@ extension MessagesViewController: MessagesTableViewControllerDelegate {
     
     func scrollViewWillBeginDragging() {
         self.view.endEditing(true)
+    }
+    
+    func initialMessagesLoaded(_ numberOfInitialMessages: Int) {
+        if self.numberOfInitialMessages == nil {
+            self.numberOfInitialMessages = numberOfInitialMessages
+            //self.sendButton.isEnabled = true
+        }
     }
 }

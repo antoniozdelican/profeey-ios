@@ -128,5 +128,7 @@ protocol DynamoDBManager {
     
     // MARK: Conversations
     
+    func createConversationDynamoDB(_ messageText: String, participantId: String, participantFirstName: String?, participantLastName: String?, participantPreferredUsername: String?, participantProfessionName: String?, participantProfilePicUrl: String?, completionHandler: @escaping AWSContinuationBlock)
+    func removeConversationDynamoDB(_ conversationId: String, completionHandler: @escaping AWSContinuationBlock)
     func queryUserConversationsDateSortedDynamoDB(_ lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
 }

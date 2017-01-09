@@ -44,6 +44,21 @@ class AWSConversationsTable: NSObject, Table {
     func tableAttributeName(_ dataObjectAttributeName: String) -> String {
         return AWSConversation.jsonKeyPathsByPropertyKey()[dataObjectAttributeName] as! String
     }
+    
+    /*
+     IMPORTANT!
+     Create and remove are called only when first/last message is created between users.
+    */
+    
+    func createConversation(_ awsConversation: AWSConversation, completionHandler: @escaping AWSContinuationBlock) {
+        let objectMapper = AWSDynamoDBObjectMapper.default()
+        objectMapper.save(awsConversation).continue(completionHandler)
+    }
+    
+    func removeConversation(_ awsConversation: AWSConversation, completionHandler: @escaping AWSContinuationBlock) {
+        let objectMapper = AWSDynamoDBObjectMapper.default()
+        objectMapper.remove(awsConversation).continue(completionHandler)
+    }
 }
 
 class AWSConversationsDateSortedIndex: NSObject, Index {
