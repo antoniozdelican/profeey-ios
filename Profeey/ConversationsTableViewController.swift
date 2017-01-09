@@ -12,6 +12,8 @@ import AWSDynamoDB
 
 class ConversationsTableViewController: UITableViewController {
     
+    @IBOutlet var loadingTableFooterView: UIView!
+    
     fileprivate var conversations: [Conversation] = []
     fileprivate var isLoadingConversations: Bool = false
     fileprivate var lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?
@@ -20,9 +22,9 @@ class ConversationsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-        self.tableView.register(UINib(nibName: "LoadingTableSectionFooter", bundle: nil), forHeaderFooterViewReuseIdentifier: "loadingTableSectionFooter")
-        self.tableView.register(UINib(nibName: "EmptyTableSectionFooter", bundle: nil), forHeaderFooterViewReuseIdentifier: "emptyTableSectionFooter")
         
+        // Query.
+        self.tableView.tableFooterView = self.loadingTableFooterView
         self.isLoadingConversations = true
         self.queryUserConversationsDateSorted(true)
         
@@ -41,10 +43,18 @@ class ConversationsTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if !self.isLoadingConversations && self.conversations.count == 0 {
+            return 1
+        }
         return self.conversations.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if !self.isLoadingConversations && self.conversations.count == 0 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellEmpty", for: indexPath) as! EmptyTableViewCell
+            cell.emptyMessageLabel.text = "No conversations yet."
+            return cell
+        }
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellConversation", for: indexPath) as! ConversationTableViewCell
         let conversation = self.conversations[indexPath.row]
         cell.profilePicImageView.image = conversation.participant?.profilePicUrl != nil ? conversation.participant?.profilePic : UIImage(named: "ic_no_profile_pic_feed")
@@ -63,43 +73,33 @@ class ConversationsTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.layoutMargins = UIEdgeInsets.zero
-        // Load next notifications.
+        if !(cell is ConversationTableViewCell) {
+            cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
+        }
+        // Query next conversations and reset tableFooterView.
         guard indexPath.row == self.conversations.count - 1 && !self.isLoadingConversations && self.lastEvaluatedKey != nil else {
             return
         }
         guard !self.noNetworkConnection else {
             return
         }
+        self.tableView.tableFooterView = self.loadingTableFooterView
         self.isLoadingConversations = true
         self.queryUserConversationsDateSorted(false)
     }
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        if self.conversations.count == 0 {
+            return 64.0
+        }
         return 82.0
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 82.0
-    }
-    
-    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        if self.isLoadingConversations {
-            let footer = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "loadingTableSectionFooter") as? LoadingTableSectionFooter
-            return footer
-        }
         if self.conversations.count == 0 {
-            let footer = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "emptyTableSectionFooter") as? EmptyTableSectionFooter
-            footer?.emptyMessageLabel.text = "No messages yet."
-            return footer
-        }
-        return UIView()
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        if self.isLoadingConversations || self.conversations.count == 0 {
             return 64.0
         }
-        return 1.0
+        return 82.0
     }
     
     // MARK: IBActions
@@ -109,6 +109,7 @@ class ConversationsTableViewController: UITableViewController {
             self.refreshControl?.endRefreshing()
             return
         }
+        self.isLoadingConversations = true
         self.queryUserConversationsDateSorted(true)
     }
     
@@ -127,6 +128,7 @@ class ConversationsTableViewController: UITableViewController {
                     print("queryUserConversationsDateSorted error: \(error!)")
                     self.isLoadingConversations = false
                     self.refreshControl?.endRefreshing()
+                    self.tableView.tableFooterView = nil
                     self.tableView.reloadData()
                     let nsError = error as! NSError
                     if nsError.code == -1009 {
@@ -153,6 +155,7 @@ class ConversationsTableViewController: UITableViewController {
                 self.refreshControl?.endRefreshing()
                 self.noNetworkConnection = false
                 self.lastEvaluatedKey = response?.lastEvaluatedKey
+                self.tableView.tableFooterView = UIView()
                 
                 // Reload tableView.
                 if startFromBeginning || numberOfNewConversations > 0 {

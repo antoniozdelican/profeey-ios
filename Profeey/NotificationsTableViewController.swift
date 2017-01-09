@@ -12,17 +12,21 @@ import AWSDynamoDB
 
 class NotificationsTableViewController: UITableViewController {
     
+    // Removed weak so it doesn't go to nil.
+    @IBOutlet var loadingTableFooterView: UIView!
+    
     fileprivate var notifications: [PRFYNotification] = []
-    fileprivate var isLoadingInitialNotifications: Bool = false
-    fileprivate var isLoadingNextNotifications: Bool = false
+    fileprivate var isLoadingNotifications: Bool = false
     fileprivate var lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?
     fileprivate var noNetworkConnection: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-        
-        self.isLoadingInitialNotifications = true
+
+        // Query.
+        self.tableView.tableFooterView = self.loadingTableFooterView
+        self.isLoadingNotifications = true
         self.queryUserNotificationsDateSorted(true)
         
         // Add observers.
@@ -56,23 +60,16 @@ class NotificationsTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if self.isLoadingInitialNotifications {
-            return 1
-        }
-        if self.notifications.count == 0 {
+        if !self.isLoadingNotifications && self.notifications.count == 0 {
             return 1
         }
         return self.notifications.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if self.isLoadingInitialNotifications {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cellLoading", for: indexPath) as! LoadingTableViewCell
-            return cell
-        }
-        if self.notifications.count == 0 {
+        if !self.isLoadingNotifications && self.notifications.count == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellEmpty", for: indexPath) as! EmptyTableViewCell
-            cell.emptyMessageLabel.text = "You don't have any recent notifications."
+            cell.emptyMessageLabel.text = "No notifications yet."
             return cell
         }
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellNotification", for: indexPath) as! NotificationTableViewCell
@@ -103,36 +100,28 @@ class NotificationsTableViewController: UITableViewController {
         if !(cell is NotificationTableViewCell) {
             cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
         }
-        // Load next notifications.
-        guard !self.isLoadingInitialNotifications else {
-            return
-        }
-        guard indexPath.row == self.notifications.count - 1 && !self.isLoadingNextNotifications && self.lastEvaluatedKey != nil else {
+        // Load next notifications and reset tableFooterView.
+        guard indexPath.row == self.notifications.count - 1 && !self.isLoadingNotifications && self.lastEvaluatedKey != nil else {
             return
         }
         guard !self.noNetworkConnection else {
             return
         }
-        self.isLoadingNextNotifications = true
+        self.tableView.tableFooterView = self.loadingTableFooterView
+        self.isLoadingNotifications = true
         self.queryUserNotificationsDateSorted(false)
     }
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        if self.isLoadingInitialNotifications {
-            return 112.0
-        }
         if self.notifications.count == 0 {
-            return 112.0
+            return 64.0
         }
         return 64.0
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if self.isLoadingInitialNotifications {
-            return 112.0
-        }
         if self.notifications.count == 0 {
-            return 112.0
+            return 64.0
         }
         return UITableViewAutomaticDimension
     }
@@ -140,10 +129,11 @@ class NotificationsTableViewController: UITableViewController {
     // MARK: IBActions
     
     @IBAction func refreshControlChanged(_ sender: AnyObject) {
-        guard !self.isLoadingInitialNotifications else {
+        guard !self.isLoadingNotifications else {
             self.refreshControl?.endRefreshing()
             return
         }
+        self.isLoadingNotifications = true
         self.queryUserNotificationsDateSorted(true)
     }
     
@@ -176,9 +166,9 @@ class NotificationsTableViewController: UITableViewController {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 guard error == nil else {
                     print("queryUserNotificationsDateSorted error: \(error!)")
-                    self.isLoadingInitialNotifications = false
-                    self.isLoadingNextNotifications = false
+                    self.isLoadingNotifications = false
                     self.refreshControl?.endRefreshing()
+                    self.tableView.tableFooterView = UIView()
                     self.tableView.reloadData()
                     let nsError = error as! NSError
                     if nsError.code == -1009 {
@@ -201,11 +191,11 @@ class NotificationsTableViewController: UITableViewController {
                 }
                 
                 // Reset flags and animations that were initiated.
-                self.isLoadingInitialNotifications = false
-                self.isLoadingNextNotifications = false
+                self.isLoadingNotifications = false
                 self.refreshControl?.endRefreshing()
                 self.noNetworkConnection = false
                 self.lastEvaluatedKey = response?.lastEvaluatedKey
+                self.tableView.tableFooterView = UIView()
                 
                 // Reload tableView.
                 if startFromBeginning || numberOfNewNotifications > 0 {

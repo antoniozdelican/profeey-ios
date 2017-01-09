@@ -28,9 +28,6 @@ class MessagesTableViewController: UITableViewController {
         // Reverse tableView so it starts from the bottom. Do this for every cell as well.
         self.tableView.transform = CGAffineTransform(rotationAngle: -(CGFloat)(M_PI))
         
-        print("HERE")
-        print(self.conversationId)
-        
         if let conversationId = self.conversationId {
             self.isLoadingMessages = true
             self.queryConversationMessagesDateSorted(conversationId)
