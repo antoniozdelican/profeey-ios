@@ -443,7 +443,6 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
             print("queryUserActivitiesDateSortedDynamoDB no identityId!")
             return
         }
-        print("queryUserActivitiesDateSortedDynamoDB:")
         let awsActivitiesDateSortedIndex = AWSActivitiesDateSortedIndex()
         awsActivitiesDateSortedIndex.queryUserActivitiesDateSorted(identityId, lastEvaluatedKey: lastEvaluatedKey, completionHandler: completionHandler)
     }
@@ -455,7 +454,6 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
             print("queryUserNotificationsDateSortedDynamoDB no identityId!")
             return
         }
-        print("queryUserNotificationsDateSortedDynamoDB:")
         let awsNotificationsDateSortedIndex = AWSNotificationsDateSortedIndex()
         awsNotificationsDateSortedIndex.queryUserNotificationsDateSorted(identityId, lastEvaluatedKey: lastEvaluatedKey, completionHandler: completionHandler)
     }
@@ -666,5 +664,16 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
     func queryConversationMessagesDateSortedDynamoDB(_ conversationId: String, lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?){
         let awsMessagesDateSortedIndex = AWSMessagesDateSortedIndex()
         awsMessagesDateSortedIndex.queryConversationMessagesDateSorted(conversationId, lastEvaluatedKey: lastEvaluatedKey, completionHandler: completionHandler)
+    }
+    
+    // MARK: Conversations
+    
+    func queryUserConversationsDateSortedDynamoDB(_ lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?){
+        guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
+            print("queryUserConversationsDateSortedDynamoDB no identityId!")
+            return
+        }
+        let awsConversationsDateSortedIndex = AWSConversationsDateSortedIndex()
+        awsConversationsDateSortedIndex.queryUserConversationsDateSorted(identityId, lastEvaluatedKey: lastEvaluatedKey, completionHandler: completionHandler)
     }
 }

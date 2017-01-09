@@ -16,15 +16,8 @@ class Conversation: NSObject {
     var lastMessageText: String?
     var lastMessageCreated: NSNumber?
     
-    // Other user (participant).
-    var participantId: String?
-    var participantFirstName: String?
-    var participantLastName: String?
-    var participantPreferredUsername: String?
-    var participantProfessionName: String?
-    var participantProfilePicUrl: String?
-    
     // Generated.
+    var participant: User? // Participant data.
     var lastMessagereatedString: String? {
         guard let lastMessageCreated = self.lastMessageCreated else {
             return nil
@@ -37,24 +30,12 @@ class Conversation: NSObject {
         super.init()
     }
     
-    convenience init(userId: String?, conversationId: String?, lastMessageText: String?, lastMessageCreated: NSNumber?, participantId: String?, participantFirstName: String?, participantLastName: String?, participantPreferredUsername: String?, participantProfessionName: String?, participantProfilePicUrl: String?) {
+    convenience init(userId: String?, conversationId: String?, lastMessageText: String?, lastMessageCreated: NSNumber?, participant: User?) {
         self.init()
         self.userId = userId
         self.conversationId = conversationId
         self.lastMessageText = lastMessageText
         self.lastMessageCreated = lastMessageCreated
-        self.participantId = participantId
-        self.participantFirstName = participantFirstName
-        self.participantLastName = participantLastName
-        self.participantPreferredUsername = participantPreferredUsername
-        self.participantProfessionName = participantProfessionName
-        self.participantProfilePicUrl = participantProfilePicUrl
-    }
-    
-    // MARK: Custom copying
-    
-    func copyConversation() -> Conversation {
-        let conversation = Conversation(userId: userId, conversationId: conversationId, lastMessageText: lastMessageText, lastMessageCreated: lastMessageCreated, participantId: participantId, participantFirstName: participantFirstName, participantLastName: participantLastName, participantPreferredUsername: participantPreferredUsername, participantProfessionName: participantProfessionName, participantProfilePicUrl: participantProfilePicUrl)
-        return conversation
+        self.participant = participant
     }
 }

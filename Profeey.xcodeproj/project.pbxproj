@@ -52,6 +52,10 @@
 		A94368801E23AB480009F4EA /* Conversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A943687F1E23AB480009F4EA /* Conversation.swift */; };
 		A94368831E23AD810009F4EA /* AWSConversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A94368821E23AD810009F4EA /* AWSConversation.swift */; };
 		A94368851E23AF5A0009F4EA /* AWSConversationsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A94368841E23AF5A0009F4EA /* AWSConversationsTable.swift */; };
+		A94368881E23B6310009F4EA /* LoadingTableSectionFooter.xib in Resources */ = {isa = PBXBuildFile; fileRef = A94368871E23B6310009F4EA /* LoadingTableSectionFooter.xib */; };
+		A943688A1E23B6580009F4EA /* LoadingTableSectionFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A94368891E23B6580009F4EA /* LoadingTableSectionFooter.swift */; };
+		A943688C1E23BC6F0009F4EA /* EmptyTableSectionFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A943688B1E23BC6F0009F4EA /* EmptyTableSectionFooter.swift */; };
+		A943688E1E23BC820009F4EA /* EmptyTableSectionFooter.xib in Resources */ = {isa = PBXBuildFile; fileRef = A943688D1E23BC820009F4EA /* EmptyTableSectionFooter.xib */; };
 		A944BAAA1DD10323000BE754 /* HomeEmptyFeedView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A944BAA91DD10323000BE754 /* HomeEmptyFeedView.xib */; };
 		A944BAAC1DD10413000BE754 /* HomeEmptyFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A944BAAB1DD10413000BE754 /* HomeEmptyFeedView.swift */; };
 		A945973E1DA7E463006A4C9B /* AlbumButton.xib in Resources */ = {isa = PBXBuildFile; fileRef = A945973D1DA7E463006A4C9B /* AlbumButton.xib */; };
@@ -343,6 +347,10 @@
 		A943687F1E23AB480009F4EA /* Conversation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Conversation.swift; sourceTree = "<group>"; };
 		A94368821E23AD810009F4EA /* AWSConversation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSConversation.swift; sourceTree = "<group>"; };
 		A94368841E23AF5A0009F4EA /* AWSConversationsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSConversationsTable.swift; sourceTree = "<group>"; };
+		A94368871E23B6310009F4EA /* LoadingTableSectionFooter.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoadingTableSectionFooter.xib; sourceTree = "<group>"; };
+		A94368891E23B6580009F4EA /* LoadingTableSectionFooter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingTableSectionFooter.swift; sourceTree = "<group>"; };
+		A943688B1E23BC6F0009F4EA /* EmptyTableSectionFooter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptyTableSectionFooter.swift; sourceTree = "<group>"; };
+		A943688D1E23BC820009F4EA /* EmptyTableSectionFooter.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EmptyTableSectionFooter.xib; sourceTree = "<group>"; };
 		A944BAA91DD10323000BE754 /* HomeEmptyFeedView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HomeEmptyFeedView.xib; sourceTree = "<group>"; };
 		A944BAAB1DD10413000BE754 /* HomeEmptyFeedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeEmptyFeedView.swift; sourceTree = "<group>"; };
 		A945973D1DA7E463006A4C9B /* AlbumButton.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AlbumButton.xib; sourceTree = "<group>"; };
@@ -755,6 +763,17 @@
 			name = AWSConversations;
 			sourceTree = "<group>";
 		};
+		A94368861E23B6010009F4EA /* New */ = {
+			isa = PBXGroup;
+			children = (
+				A94368871E23B6310009F4EA /* LoadingTableSectionFooter.xib */,
+				A94368891E23B6580009F4EA /* LoadingTableSectionFooter.swift */,
+				A943688D1E23BC820009F4EA /* EmptyTableSectionFooter.xib */,
+				A943688B1E23BC6F0009F4EA /* EmptyTableSectionFooter.swift */,
+			);
+			name = New;
+			sourceTree = "<group>";
+		};
 		A9543CA91DA3A1CC002BF372 /* Edit Post */ = {
 			isa = PBXGroup;
 			children = (
@@ -854,6 +873,7 @@
 		A97EDECC1D9A596F002E63F7 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				A94368861E23B6010009F4EA /* New */,
 				A9D7782D1E1F01B8003390D1 /* PRFYNavigationController.swift */,
 				A9459F6F1E00196100978DA8 /* TableSectionHeader.xib */,
 				A9459F711E00197200978DA8 /* TableSectionHeader.swift */,
@@ -1494,6 +1514,7 @@
 				A930BC811D0DD43F004D49F7 /* Main.storyboard in Resources */,
 				A94368741E2389A20009F4EA /* NotificationsSegmentsView.xib in Resources */,
 				A9AFFB0D1D8AFEB800219627 /* Categories.storyboard in Resources */,
+				A943688E1E23BC820009F4EA /* EmptyTableSectionFooter.xib in Resources */,
 				A9543CAB1DA3A1ED002BF372 /* EditPost.storyboard in Resources */,
 				A9A503A71D2FF8450030A472 /* EditProfile.storyboard in Resources */,
 				A95E93AF1DBF6D0000A1FF6E /* Profession.storyboard in Resources */,
@@ -1514,6 +1535,7 @@
 				A9D49EE31DD5D920000F90A8 /* UserCategory.storyboard in Resources */,
 				A990ECB81D6A5F6A00C3C9CE /* Comments.storyboard in Resources */,
 				A9CBBC471DB634C0009C8EC7 /* EditWorkExperience.storyboard in Resources */,
+				A94368881E23B6310009F4EA /* LoadingTableSectionFooter.xib in Resources */,
 				A9459F701E00196100978DA8 /* TableSectionHeader.xib in Resources */,
 				A9ACF1891D927E1E00A99B7F /* Experiences.storyboard in Resources */,
 				A9E53B691D10665100CD1D6C /* Home.storyboard in Resources */,
@@ -1627,6 +1649,7 @@
 				A9D49EE51DD5DB1A000F90A8 /* UserCategoryTableViewController.swift in Sources */,
 				A9B68DA11D897A24006AC4EA /* EmptyTableViewCell.swift in Sources */,
 				A9BCBDC11DDAF95F00265AFA /* RecommendationsTableViewController.swift in Sources */,
+				A943688A1E23B6580009F4EA /* LoadingTableSectionFooter.swift in Sources */,
 				A91C1CD31DED9C75006FBDD4 /* AWSNotification.swift in Sources */,
 				A999CD411DBE6FB000E7ADB1 /* SearchProfessionTableViewCell.swift in Sources */,
 				A9CBBC541DB63FF6009C8EC7 /* EditWorkDescriptionTableViewCell.swift in Sources */,
@@ -1709,6 +1732,7 @@
 				A99B9E361DB548F50047360D /* EditEducationTableViewController.swift in Sources */,
 				A9D334081D800D8D005565C2 /* PostImageTableViewCell.swift in Sources */,
 				A9D49EE71DD5F58B000F90A8 /* ProfileEmptyTableViewCell.swift in Sources */,
+				A943688C1E23BC6F0009F4EA /* EmptyTableSectionFooter.swift in Sources */,
 				A9FAB36D1D8A114900E871CD /* AWSUserUpdate.swift in Sources */,
 				A99030F91D464FEE00336D26 /* GalleryCollectionViewCell.swift in Sources */,
 				A91A103A1DA833E40042B4CA /* AddInfoTableViewController.swift in Sources */,

@@ -16,7 +16,6 @@ class NotificationsTableViewController: UITableViewController {
     fileprivate var isLoadingInitialNotifications: Bool = false
     fileprivate var isLoadingNextNotifications: Bool = false
     fileprivate var lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?
-    
     fileprivate var noNetworkConnection: Bool = false
 
     override func viewDidLoad() {

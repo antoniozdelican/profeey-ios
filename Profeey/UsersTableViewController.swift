@@ -89,11 +89,11 @@ class UsersTableViewController: UITableViewController {
             if let usersType = self.usersType {
                 switch usersType {
                 case .followers:
-                    cell.emptyMessageLabel.text = "No followers yet"
+                    cell.emptyMessageLabel.text = "No followers yet."
                 case .following:
-                    cell.emptyMessageLabel.text = "No followings yet"
+                    cell.emptyMessageLabel.text = "No followings yet."
                 case .likers:
-                    cell.emptyMessageLabel.text = "No likes yet"
+                    cell.emptyMessageLabel.text = "No likes yet."
                 }
             }
             return cell
