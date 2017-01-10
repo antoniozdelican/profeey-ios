@@ -48,6 +48,8 @@ class MessagesViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        self.navigationItem.title = self.participant?.preferredUsername
+        
         self.configureConstants()
         self.registerForKeyboardNotifications()
         self.messageTextView.delegate = self
@@ -90,7 +92,6 @@ class MessagesViewController: UIViewController {
     // MARK: IBActions
     
     @IBAction func sendButtonTapped(_ sender: AnyObject) {
-        self.view.endEditing(true)
         self.sendButton.isEnabled = false
         self.createMessage(self.messageTextView.text)
     }

@@ -17,21 +17,29 @@ protocol MessagesTableViewControllerDelegate {
 
 class MessagesTableViewController: UITableViewController {
     
+    @IBOutlet var loadingTableFooterView: UIView!
+    
     var conversationId: String?
     var messagesTableViewControllerDelegate: MessagesTableViewControllerDelegate?
     
-    fileprivate var messages: [Message] = []
+    fileprivate var allMessagesSections: [[Message]] = []
     fileprivate var isLoadingMessages: Bool = false
     fileprivate var lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?
+    fileprivate var noNetworkConnection: Bool = false
     
     fileprivate var hasLoadedInitialMessages: Bool = false
+    fileprivate var currentCalendar: Calendar = Calendar.current
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.tableView.register(UINib(nibName: "OwnMessagesTableSectionHeader", bundle: nil), forHeaderFooterViewReuseIdentifier: "ownMessagesTableSectionHeader")
+        self.tableView.register(UINib(nibName: "OtherMessagesTableSectionHeader", bundle: nil), forHeaderFooterViewReuseIdentifier: "otherMessagesTableSectionHeader")
         // Reverse tableView so it starts from the bottom. Do this for every cell as well.
-        self.tableView.transform = CGAffineTransform(rotationAngle: -(CGFloat)(M_PI))
+        self.tableView.transform = CGAffineTransform(scaleX: 1, y: -1)
         
         if let conversationId = self.conversationId {
+            // Query.
+            self.tableView.tableFooterView = self.loadingTableFooterView
             self.isLoadingMessages = true
             self.queryConversationMessagesDateSorted(conversationId)
         }
@@ -47,68 +55,101 @@ class MessagesTableViewController: UITableViewController {
     // MARK: UITableViewDataSource
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        if !self.isLoadingMessages && self.allMessagesSections.count == 0 {
+            return 1
+        }
+        return self.allMessagesSections.count
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if self.isLoadingMessages {
+        if !self.isLoadingMessages && self.allMessagesSections.count == 0 {
             return 1
         }
-        if self.messages.count == 0 {
-            return 1
-        }
-        return self.messages.count
+        return self.allMessagesSections[section].count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if self.isLoadingMessages {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cellLoading", for: indexPath) as! LoadingTableViewCell
-            cell.activityIndicator?.startAnimating()
-            cell.transform = CGAffineTransform(rotationAngle: -(CGFloat)(M_PI))
-            return cell
-        }
-        if self.messages.count == 0 {
+        if !self.isLoadingMessages && self.allMessagesSections.count == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellEmpty", for: indexPath) as! EmptyTableViewCell
             cell.emptyMessageLabel.text = "No messages yet"
-            cell.transform = CGAffineTransform(rotationAngle: -(CGFloat)(M_PI))
+            cell.transform = CGAffineTransform(scaleX: 1, y: -1)
             return cell
         }
-        let message = self.messages[indexPath.row]
+        let messageSection = self.allMessagesSections[indexPath.section]
+        let message = messageSection[indexPath.row]
         if message.senderId == AWSIdentityManager.defaultIdentityManager().identityId {
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellMessageOwn", for: indexPath) as! MessageOwnTableViewCell
             cell.messageTextLabel.text = message.messageText
-            cell.transform = CGAffineTransform(rotationAngle: -(CGFloat)(M_PI))
+            cell.transform = CGAffineTransform(scaleX: 1, y: -1)
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellMessageOther", for: indexPath) as! MessageOtherTableViewCell
             cell.messageTextLabel.text = message.messageText
-            cell.transform = CGAffineTransform(rotationAngle: -(CGFloat)(M_PI))
+            cell.transform = CGAffineTransform(scaleX: 1, y: -1)
             return cell
         }
     }
     
     // MARK: UITableViewDelegate
     
-    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        cell.layoutMargins = UIEdgeInsets.zero
-    }
-    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.layoutMargins = UIEdgeInsets.zero
+        // Load next messages and reset tableFooterView.
+        guard indexPath.section == self.allMessagesSections.count - 1 && !self.isLoadingMessages && self.lastEvaluatedKey != nil else {
+            return
+        }
+        guard let conversationId = self.conversationId else {
+            return
+        }
+        guard !self.noNetworkConnection else {
+            return
+        }
+        self.tableView.tableFooterView = self.loadingTableFooterView
+        self.isLoadingMessages = true
+        self.queryConversationMessagesDateSorted(conversationId)
+    }
+    
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        if self.isLoadingMessages || self.messages.count == 0 {
+        if self.allMessagesSections.count == 0 {
             return 64.0
         }
-        return 64.0
+        return 38.0
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if self.isLoadingMessages || self.messages.count == 0 {
+        if self.allMessagesSections.count == 0 {
             return 64.0
         }
         return UITableViewAutomaticDimension
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        if self.allMessagesSections.count == 0 {
+            return UIView()
+        }
+        let firstMessageInSection = self.allMessagesSections[section].first
+        if firstMessageInSection?.senderId == AWSIdentityManager.defaultIdentityManager().identityId {
+            let header = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "ownMessagesTableSectionHeader") as? OwnMessagesTableSectionHeader
+            header?.timeLabel.text = firstMessageInSection?.createdDate?.messageDate
+            header?.transform = CGAffineTransform(scaleX: 1, y: -1)
+            return header
+        } else {
+            let header = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "otherMessagesTableSectionHeader") as? OtherMessagesTableSectionHeader
+            header?.timeLabel.text = firstMessageInSection?.createdDate?.messageDate
+            header?.transform = CGAffineTransform(scaleX: 1, y: -1)
+            return header
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if self.allMessagesSections.count == 0 {
+            return 1.0
+        }
+        return 28.0
     }
     
     // MARK: UIScrollViewDelegate
@@ -119,6 +160,7 @@ class MessagesTableViewController: UITableViewController {
     
     // MARK: AWS
     
+    // No refresh so never startFromBeginning.
     fileprivate func queryConversationMessagesDateSorted(_ conversationId: String) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         PRFYDynamoDBManager.defaultDynamoDBManager().queryConversationMessagesDateSortedDynamoDB(conversationId, lastEvaluatedKey: self.lastEvaluatedKey, completionHandler: {
@@ -128,35 +170,87 @@ class MessagesTableViewController: UITableViewController {
                 guard error == nil else {
                     print("queryConversationMessagesDateSorted error: \(error!)")
                     self.isLoadingMessages = false
+                    self.tableView.tableFooterView = UIView()
                     self.tableView.reloadData()
+                    if (error as! NSError).code == -1009 {
+                        (self.navigationController as? PRFYNavigationController)?.showBanner("No Internet Connection")
+                        self.noNetworkConnection = true
+                    }
                     return
                 }
-                var numberOfOldMessages = 0
                 if let awsMessages = response?.items as? [AWSMessage] {
                     for awsMessage in awsMessages {
                         let message = Message(conversationId: awsMessage._conversationId, messageId: awsMessage._messageId, created: awsMessage._created, messageText: awsMessage._messageText, senderId: awsMessage._senderId, recipientId: awsMessage._recipientId)
-                        self.messages.append(message)
-                        numberOfOldMessages += 1
+                        self.putMessageInMessageSection(message)
                     }
                 }
+                
                 // Reset flags and animations that were initiated.
-                if self.isLoadingMessages {
-                    self.isLoadingMessages = false
-                }
+                self.isLoadingMessages = false
+                self.noNetworkConnection = false
                 self.lastEvaluatedKey = response?.lastEvaluatedKey
+                self.tableView.tableFooterView = UIView()
+                
                 // Special case goes only once.
                 if !self.hasLoadedInitialMessages {
                     self.hasLoadedInitialMessages = true
-                    self.messagesTableViewControllerDelegate?.initialMessagesLoaded(self.messages.count)
+                    self.messagesTableViewControllerDelegate?.initialMessagesLoaded(self.allMessagesSections.count)
                 }
                 
                 // Reload tableView with downloaded messages.
-//                if numberOfOldMessages > 0 {
-//                    self.tableView.reloadData()
-//                }
                 self.tableView.reloadData()
             })
         })
+    }
+    
+    // MARK: Helpers
+    
+    fileprivate func putMessageInMessageSection(_ message: Message) {
+        let sectionsCount = self.allMessagesSections.count
+        guard sectionsCount > 0 else {
+            // Create section for the first message.
+            self.allMessagesSections.append([message])
+            return
+        }
+        guard let createdDate = message.createdDate, let lastCreatedDate = self.allMessagesSections[sectionsCount - 1][0].createdDate else {
+            print("No creation dates. This should not happen!")
+            return
+        }
+        guard self.currentCalendar.isDate(createdDate, equalTo: lastCreatedDate, toGranularity: .minute) else {
+            // Create section for next minute messages.
+            self.allMessagesSections.append([message])
+            return
+        }
+        guard message.senderId == self.allMessagesSections[sectionsCount - 1][0].senderId else {
+            // In case different sender, create new section.
+            self.allMessagesSections.append([message])
+            return
+        }
+        self.allMessagesSections[sectionsCount - 1].append(message)
+    }
+    
+    fileprivate func putNewMessageInOwnMessageSection(_ message: Message) {
+        let sectionsCount = self.allMessagesSections.count
+        guard sectionsCount > 0 else {
+            // Create section for the first message.
+            self.allMessagesSections.append([message])
+            return
+        }
+        guard let createdDate = message.createdDate, let lastCreatedDate = self.allMessagesSections[0][0].createdDate else {
+            print("No creation dates. This should not happen!")
+            return
+        }
+        guard self.currentCalendar.isDate(createdDate, equalTo: lastCreatedDate, toGranularity: .minute) else {
+            // Create section at the beginning for first message.
+            self.allMessagesSections.insert([message], at: 0)
+            return
+        }
+        guard message.senderId == self.allMessagesSections[0][0].senderId else {
+            // In case different sender, create new section.
+            self.allMessagesSections.insert([message], at: 0)
+            return
+        }
+        self.allMessagesSections[0].insert(message, at: 0)
     }
 
 }
@@ -172,14 +266,7 @@ extension MessagesTableViewController {
         guard self.conversationId == message.conversationId else {
             return
         }
-        self.messages.insert(message, at: 0)
-        
-        // TODO check if can go without this.
-        if self.messages.count == 1 {
-            self.tableView.reloadData()
-        } else {
-            self.tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.fade)
-        }
-        self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: UITableViewScrollPosition.bottom, animated: false)
+        self.putNewMessageInOwnMessageSection(message)
+        self.tableView.reloadData()
     }
 }

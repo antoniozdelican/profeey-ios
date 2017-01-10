@@ -19,13 +19,20 @@ class Message: NSObject {
     var recipientId: String?
     
     // Generated.
-    var createdString: String? {
+    var createdDate: Date? {
         guard let created = self.created else {
             return nil
         }
-        let currentDate = Date()
-        return currentDate.offsetFromShort(Date(timeIntervalSince1970: TimeInterval(created)))
+        return Date(timeIntervalSince1970: TimeInterval(created))
     }
+    
+//    var createdString: String? {
+//        guard let created = self.created else {
+//            return nil
+//        }
+//        let messageDate = Date(timeIntervalSince1970: TimeInterval(created)).messageDate
+//        return messageDate
+//    }
     
     override init() {
         super.init()

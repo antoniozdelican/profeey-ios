@@ -309,6 +309,11 @@ extension Date {
             formatter.dateFormat = "yyyyMMdd"
             return formatter
         }()
+        static let messageDate: DateFormatter = {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "MMM d, yyyy 'at' HH:mm"
+            return formatter
+        }()
     }
     var iso8601: String {
         return Formatter.iso8601.string(from: self)
@@ -318,6 +323,9 @@ extension Date {
     }
     var datestamp: String {
         return Formatter.datestamp.string(from: self)
+    }
+    var messageDate: String {
+        return Formatter.messageDate.string(from: self)
     }
 }
 
