@@ -36,6 +36,16 @@ class ConversationsTableViewController: UITableViewController {
         super.didReceiveMemoryWarning()
     }
     
+    // MARK: Navigation
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let destinationViewController = segue.destination as? MessagesViewController,
+            let cell = sender as? ConversationTableViewCell,
+            let indexPath = self.tableView.indexPath(for: cell) {
+            destinationViewController.participant = self.conversations[indexPath.row].participant?.copyUser()
+        }
+    }
+    
     // MARK: UITableViewDataSource
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -68,7 +78,10 @@ class ConversationsTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        // TODO
+        let cell = tableView.cellForRow(at: indexPath)
+        if cell is ConversationTableViewCell {
+            self.performSegue(withIdentifier: "segueToMessagesVc", sender: cell)
+        }
     }
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
@@ -128,7 +141,7 @@ class ConversationsTableViewController: UITableViewController {
                     print("queryUserConversationsDateSorted error: \(error!)")
                     self.isLoadingConversations = false
                     self.refreshControl?.endRefreshing()
-                    self.tableView.tableFooterView = nil
+                    self.tableView.tableFooterView = UIView()
                     self.tableView.reloadData()
                     let nsError = error as! NSError
                     if nsError.code == -1009 {

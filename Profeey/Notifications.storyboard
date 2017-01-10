@@ -272,11 +272,20 @@
                     </refreshControl>
                     <connections>
                         <outlet property="loadingTableFooterView" destination="6Wt-tQ-t2W" id="86H-To-kf3"/>
+                        <segue destination="EVs-RS-w2W" kind="show" identifier="segueToMessagesVc" id="mqB-lK-c6d"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="j0d-0Z-0TL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2336.8000000000002" y="662.96851574212894"/>
+        </scene>
+        <!--Messages-->
+        <scene sceneID="zEu-GN-2Lt">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Messages" id="EVs-RS-w2W" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="680-Zp-3rm" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2962" y="663"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="LVl-tf-v3F">

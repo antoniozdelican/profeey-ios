@@ -20,7 +20,6 @@ class MessagesViewController: UIViewController {
     @IBOutlet weak var messageBarHeightConstraint: NSLayoutConstraint!
     
     var participant: User?
-//    var otherUserId: String?
     
     /*
      Until this gets set, can't post a message!
