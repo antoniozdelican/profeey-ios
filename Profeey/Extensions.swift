@@ -282,64 +282,42 @@ extension Date {
         return "Now"
     }
     
-    // Used for CommonCrypto and AWSClousSearchManager
+    // Used for messageDate.
     struct Formatter {
-        static let iso8601: DateFormatter = {
+        static let messageDateToday: DateFormatter = {
             let formatter = DateFormatter()
-            formatter.calendar = Calendar(identifier: .iso8601)
-            formatter.locale = Locale(identifier: "en_US_POSIX")
-            formatter.timeZone = TimeZone(secondsFromGMT: 0)
-            formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSXXXXX"
+            formatter.dateFormat = "'Today', 'at' HH:mm"
             return formatter
         }()
-        static let amzDate: DateFormatter = {
+        static let messageDateYestarday: DateFormatter = {
             let formatter = DateFormatter()
-            formatter.calendar = Calendar(identifier: .iso8601)
-            formatter.locale = Locale(identifier: "en_US_POSIX")
-            formatter.timeZone = TimeZone(secondsFromGMT: 0)
-//            formatter.dateFormat = "yyyyMMdd'T'HHmmss'Z'"
-            formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSXXXXX"
+            formatter.dateFormat = "'Yesterday', 'at' HH:mm"
             return formatter
         }()
-        static let datestamp: DateFormatter = {
+        static let messageDateWeek: DateFormatter = {
             let formatter = DateFormatter()
-            formatter.calendar = Calendar(identifier: .iso8601)
-            formatter.locale = Locale(identifier: "en_US_POSIX")
-            formatter.timeZone = TimeZone(secondsFromGMT: 0)
-            formatter.dateFormat = "yyyyMMdd"
+            formatter.dateFormat = "EEEE, 'at' HH:mm"
             return formatter
         }()
         static let messageDate: DateFormatter = {
             let formatter = DateFormatter()
-            formatter.dateFormat = "MMM d, yyyy 'at' HH:mm"
+            formatter.dateFormat = "MMMM d, 'at' HH:mm"
             return formatter
         }()
     }
-    var iso8601: String {
-        return Formatter.iso8601.string(from: self)
-    }
-    var amzDate: String {
-        return Formatter.amzDate.string(from: self)
-    }
-    var datestamp: String {
-        return Formatter.datestamp.string(from: self)
-    }
-    var messageDate: String {
+    var messageDate: String? {
+        if Calendar.current.isDate(self, equalTo: Date(), toGranularity: .minute) {
+            return nil
+        }
+        if Calendar.current.isDateInToday(self) {
+            return Formatter.messageDateToday.string(from: self)
+        }
+        if Calendar.current.isDateInYesterday(self) {
+            return Formatter.messageDateYestarday.string(from: self)
+        }
+        if Calendar.current.isDate(self, equalTo: Date(), toGranularity: .weekOfMonth) {
+            return Formatter.messageDateWeek.string(from: self)
+        }
         return Formatter.messageDate.string(from: self)
-    }
-}
-
-extension NSNumber {
-    
-    func getMonth() -> Int {
-        let date = Date(timeIntervalSince1970: TimeInterval(self))
-        let month = (Calendar.current as NSCalendar).components([.month], from: date).month
-        return month!
-    }
-    
-    func getYear() -> Int {
-        let date = Date(timeIntervalSince1970: TimeInterval(self))
-        let year = (Calendar.current as NSCalendar).components([.year], from: date).year
-        return year!
     }
 }

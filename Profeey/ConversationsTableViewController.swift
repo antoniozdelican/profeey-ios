@@ -70,7 +70,7 @@ class ConversationsTableViewController: UITableViewController {
         cell.profilePicImageView.image = conversation.participant?.profilePicUrl != nil ? conversation.participant?.profilePic : UIImage(named: "ic_no_profile_pic_feed")
         cell.preferredUsernameLabel.text = conversation.participant?.preferredUsername
         cell.lastMessageLabel.text = conversation.lastMessageText
-        cell.timeLabel.text = conversation.lastMessagereatedString
+        cell.timeLabel.text = conversation.lastMessagerCeatedString
         return cell
     }
     

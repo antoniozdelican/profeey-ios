@@ -82,9 +82,9 @@ class MessagesTableViewController: UITableViewController {
         if message.senderId == AWSIdentityManager.defaultIdentityManager().identityId {
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellMessageOwn", for: indexPath) as! OwnMessageTableViewCell
             cell.messageTextLabel.text = message.messageText
-            cell.timeLabel.text = message.createdDate?.messageDate
+            cell.timeLabel.text = message.createdString
             // Show timeLabel only if first message in section.
-            if message == messageSection.first {
+            if message == messageSection.first && message.createdString != nil {
                 cell.showTimeLabel()
             } else {
                 cell.hideTimeLabel()
@@ -94,9 +94,9 @@ class MessagesTableViewController: UITableViewController {
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellMessageOther", for: indexPath) as! OtherMessageTableViewCell
             cell.messageTextLabel.text = message.messageText
-            cell.timeLabel.text = message.createdDate?.messageDate
+            cell.timeLabel.text = message.createdString
             // Show timeLabel and profilePicImageView only if first message in section.
-            if message == messageSection.first {
+            if message == messageSection.first && message.createdString != nil {
                cell.profilePicImageView.image = self.participant?.profilePicUrl != nil ? self.participant?.profilePic : UIImage(named: "ic_no_profile_pic_feed")
                 cell.showProfilePicAndTimeLabel()
             } else {

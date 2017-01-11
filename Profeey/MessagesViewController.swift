@@ -175,19 +175,8 @@ class MessagesViewController: UIViewController {
                     }
                     // Notify of message error.
                     // TODO
-                    
-//                    let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: task.error!.localizedDescription, cancelButtonTitle: "Ok")
-//                    self.present(alertController, animated: true, completion: nil)
                     return
                 }
-//                guard let awsMessage = task.result as? AWSMessage else {
-//                    print("Not an awsMessage. This should not happen.")
-//                    return
-//                }
-//                let message = Message(conversationId: awsMessage._conversationId, messageId: awsMessage._messageId, created: awsMessage._created, messageText: awsMessage._messageText, senderId: awsMessage._senderId, recipientId: awsMessage._recipientId)
-//                // Notify observers.
-//                NotificationCenter.default.post(name: NSNotification.Name(rawValue: CreateMessageNotificationKey), object: self, userInfo: ["message": message.copyMessage()])
-//                self.resetMessageBox()
                 
                 // Notify that message has been sent.
                 // TODO

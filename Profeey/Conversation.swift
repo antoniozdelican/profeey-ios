@@ -18,7 +18,7 @@ class Conversation: NSObject {
     
     // Generated.
     var participant: User? // Participant data.
-    var lastMessagereatedString: String? {
+    var lastMessagerCeatedString: String? {
         guard let lastMessageCreated = self.lastMessageCreated else {
             return nil
         }

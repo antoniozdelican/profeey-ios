@@ -25,14 +25,12 @@ class Message: NSObject {
         }
         return Date(timeIntervalSince1970: TimeInterval(created))
     }
-    
-//    var createdString: String? {
-//        guard let created = self.created else {
-//            return nil
-//        }
-//        let messageDate = Date(timeIntervalSince1970: TimeInterval(created)).messageDate
-//        return messageDate
-//    }
+    var createdString: String? {
+        guard let created = self.created else {
+            return nil
+        }
+        return Date(timeIntervalSince1970: TimeInterval(created)).messageDate
+    }
     
     override init() {
         super.init()
