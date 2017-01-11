@@ -227,7 +227,7 @@
                                                 <constraint firstAttribute="width" relation="lessThanOrEqual" constant="280" id="ZaZ-1i-QRh"/>
                                             </constraints>
                                         </view>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="VHg-OK-yxV">
+                                        <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="VHg-OK-yxV">
                                             <rect key="frame" x="8" y="1" width="36" height="36"/>
                                             <color key="backgroundColor" red="0.90980392160000001" green="0.90980392160000001" blue="0.90980392160000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <constraints>
@@ -236,7 +236,7 @@
                                             </constraints>
                                         </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Jan 1, 2017 at 12:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="odq-f5-Lhc">
-                                            <rect key="frame" x="52" y="41" width="104.5" height="13.5"/>
+                                            <rect key="frame" x="52" y="41" width="105" height="14"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" priority="750" constant="13" id="mt2-98-JkR"/>
                                             </constraints>
@@ -302,11 +302,20 @@
                     </tableView>
                     <connections>
                         <outlet property="loadingTableFooterView" destination="DT1-h9-beq" id="YAI-ef-hVa"/>
+                        <segue destination="eUa-vq-9a7" kind="show" identifier="segueToProfileVc" id="ybP-Oe-V4C"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dL3-uj-4mz" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3989.5999999999999" y="40.029985007496258"/>
+        </scene>
+        <!--Profile-->
+        <scene sceneID="IbG-nG-o6d">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Profile" id="eUa-vq-9a7" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Vmy-LC-aDY" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4546" y="40"/>
         </scene>
     </scenes>
     <resources>

@@ -53,6 +53,15 @@ class MessagesTableViewController: UITableViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
+    
+    // MARK: Navigation
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let destinationViewController = segue.destination as? ProfileTableViewController,
+            let cell = sender as? OtherMessageTableViewCell {
+            destinationViewController.user = self.participant?.copyUser()
+        }
+    }
 
     // MARK: UITableViewDataSource
     
@@ -102,6 +111,7 @@ class MessagesTableViewController: UITableViewController {
             } else {
                 cell.hideProfilePicAndTimeLabel()
             }
+            cell.otherMessageTableViewCellDelegate = self
             cell.transform = CGAffineTransform(scaleX: 1, y: -1)
             return cell
         }
@@ -306,5 +316,12 @@ extension MessagesTableViewController {
         }
         self.allMessagesSections[messageSectionIndex!].remove(at: messageRowIndex!)
         self.tableView.reloadData()
+    }
+}
+
+extension MessagesTableViewController: OtherMessageTableViewCellDelegate {
+    
+    func profilePicImageViewTapped(_ cell: OtherMessageTableViewCell) {
+        self.performSegue(withIdentifier: "segueToProfileVc", sender: cell)
     }
 }

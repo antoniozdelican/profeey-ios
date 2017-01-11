@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol OtherMessageTableViewCellDelegate {
+    func profilePicImageViewTapped(_ cell:OtherMessageTableViewCell)
+}
+
 class OtherMessageTableViewCell: UITableViewCell {
     
     @IBOutlet weak var messageTextLabel: UILabel!
@@ -21,13 +25,17 @@ class OtherMessageTableViewCell: UITableViewCell {
     fileprivate var timeLabelTopConstraintConstant: CGFloat = 0.0
     fileprivate var timeLabelBottomConstraintConstant: CGFloat = 0.0
     fileprivate var timeLabelHeightConstraintConstant: CGFloat = 0.0
+    
+    var otherMessageTableViewCellDelegate: OtherMessageTableViewCellDelegate?
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        self.messageTextContainerView.layer.cornerRadius = 4.0
-        self.messageTextContainerView.clipsToBounds = true
         self.profilePicImageView.layer.cornerRadius = 4.0
         self.profilePicImageView.clipsToBounds = true
+        self.profilePicImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.profilePicImageViewTapped(_:))))
+        
+        self.messageTextContainerView.layer.cornerRadius = 4.0
+        self.messageTextContainerView.clipsToBounds = true
         
         self.timeLabelTopConstraintConstant = self.timeLabelTopConstraint.constant
         self.timeLabelBottomConstraintConstant = self.timeLabelBottomConstraint.constant
@@ -56,5 +64,11 @@ class OtherMessageTableViewCell: UITableViewCell {
         self.timeLabelBottomConstraint.constant = self.timeLabelBottomConstraintConstant
         self.timeLabelHeightConstraint.constant = self.timeLabelHeightConstraintConstant
     }
-
+    
+    // MARK: Tappers
+    
+    func profilePicImageViewTapped(_ sender: AnyObject) {
+        self.otherMessageTableViewCellDelegate?.profilePicImageViewTapped(self)
+    }
+    
 }
