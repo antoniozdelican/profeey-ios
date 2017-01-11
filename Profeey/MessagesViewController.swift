@@ -85,6 +85,7 @@ class MessagesViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destinationViewController = segue.destination as? MessagesTableViewController {
             destinationViewController.conversationId = self.conversationId
+            destinationViewController.participant = self.participant // don't need to copy here
             destinationViewController.messagesTableViewControllerDelegate = self
         }
     }
@@ -93,7 +94,7 @@ class MessagesViewController: UIViewController {
     
     @IBAction func sendButtonTapped(_ sender: AnyObject) {
         self.sendButton.isEnabled = false
-        self.createMessage(self.messageTextView.text)
+        self.preCreateMessage(self.messageTextView.text)
     }
     
     // MARK: Keyboard notifications
@@ -130,6 +131,8 @@ class MessagesViewController: UIViewController {
         })
     }
     
+    // MARK: Helpers
+    
     fileprivate func resetMessageBox() {
         self.messageTextView.text = ""
         self.messageFakePlaceholderLabel.isHidden = false
@@ -137,35 +140,61 @@ class MessagesViewController: UIViewController {
         self.messageBarHeightConstraint.constant = self.messageBarHeightConstraintConstant
     }
     
-    // MARK: AWS
-    
-    fileprivate func createMessage(_ messageText: String) {
-        guard let conversationId = self.conversationId, let participantId = self.participant?.userId, let numberOfInitialMessages = self.numberOfInitialMessages else {
+    fileprivate func preCreateMessage(_ messageText: String) {
+        guard let conversationId = self.conversationId, let numberOfInitialMessages = self.numberOfInitialMessages else {
+            print("preCreateMessage no conversationId or numberOfInitialMessages. This should not happen.")
             return
         }
+        guard let senderId = AWSIdentityManager.defaultIdentityManager().identityId, let recipientId = self.participant?.userId else {
+            print("preCreateMessage no senderId or recipientId. This should not happen.")
+            return
+        }
+        self.resetMessageBox()
+        // Real-time creation.
+        let messageId = NSUUID().uuidString.lowercased()
+        let created = NSNumber(value: Date().timeIntervalSince1970 as Double)
+        let message = Message(conversationId: conversationId, messageId: messageId, created: created, messageText: messageText, senderId: senderId, recipientId: recipientId)
+        // Notify observers.
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: CreateMessageNotificationKey), object: self, userInfo: ["message": message.copyMessage()])
+        // Actual creation.
+        self.createMessage(messageText, conversationId: conversationId, messageId: messageId, created: created, senderId: senderId, recipientId: recipientId, numberOfInitialMessages: numberOfInitialMessages)
+    }
+    
+    // MARK: AWS
+    
+    fileprivate func createMessage(_ messageText: String, conversationId: String, messageId: String, created: NSNumber, senderId: String, recipientId: String, numberOfInitialMessages: Int) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().createMessageDynamoDB(conversationId, recipientId: participantId, messageText: messageText, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().createMessageDynamoDB(conversationId, recipientId: recipientId, messageText: messageText, messageId: messageId, created: created, completionHandler: {
             (task: AWSTask) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 guard task.error == nil else {
                     print("createMessage error: \(task.error!)")
-                    self.sendButton.isEnabled = true
-                    let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: task.error!.localizedDescription, cancelButtonTitle: "Ok")
-                    self.present(alertController, animated: true, completion: nil)
+                    if (task.error as! NSError).code == -1009 {
+                        (self.navigationController as? PRFYNavigationController)?.showBanner("No Internet Connection")
+                    }
+                    // Notify of message error.
+                    // TODO
+                    
+//                    let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: task.error!.localizedDescription, cancelButtonTitle: "Ok")
+//                    self.present(alertController, animated: true, completion: nil)
                     return
                 }
-                guard let awsMessage = task.result as? AWSMessage else {
-                    print("Not an awsMessage. This should not happen.")
-                    return
-                }
-                let message = Message(conversationId: awsMessage._conversationId, messageId: awsMessage._messageId, created: awsMessage._created, messageText: awsMessage._messageText, senderId: awsMessage._senderId, recipientId: awsMessage._recipientId)
-                // Notify observers.
-                NotificationCenter.default.post(name: NSNotification.Name(rawValue: CreateMessageNotificationKey), object: self, userInfo: ["message": message.copyMessage()])
-                self.resetMessageBox()
+//                guard let awsMessage = task.result as? AWSMessage else {
+//                    print("Not an awsMessage. This should not happen.")
+//                    return
+//                }
+//                let message = Message(conversationId: awsMessage._conversationId, messageId: awsMessage._messageId, created: awsMessage._created, messageText: awsMessage._messageText, senderId: awsMessage._senderId, recipientId: awsMessage._recipientId)
+//                // Notify observers.
+//                NotificationCenter.default.post(name: NSNotification.Name(rawValue: CreateMessageNotificationKey), object: self, userInfo: ["message": message.copyMessage()])
+//                self.resetMessageBox()
                 
+                // Notify that message has been sent.
+                // TODO
+                
+                // Create conversation if it's a first message between users.
                 if numberOfInitialMessages == 0 {
-                    self.createConversation(messageText, participantId: participantId)
+                    self.createConversation(messageText, participantId: recipientId)
                 }
             })
             return nil
@@ -224,7 +253,6 @@ extension MessagesViewController: MessagesTableViewControllerDelegate {
     func initialMessagesLoaded(_ numberOfInitialMessages: Int) {
         if self.numberOfInitialMessages == nil {
             self.numberOfInitialMessages = numberOfInitialMessages
-            //self.sendButton.isEnabled = true
         }
     }
 }

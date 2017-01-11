@@ -633,14 +633,13 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
     
     // MARK: Messages
     
-    func createMessageDynamoDB(_ conversationId: String, recipientId: String, messageText: String, completionHandler: @escaping AWSContinuationBlock) {
+    func createMessageDynamoDB(_ conversationId: String, recipientId: String, messageText: String, messageId: String, created: NSNumber, completionHandler: @escaping AWSContinuationBlock) {
         guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
             print("createMessageDynamoDB no identityId!")
             AWSTask().continue(completionHandler)
             return
         }
-        let messageId = NSUUID().uuidString.lowercased()
-        let created = NSNumber(value: Date().timeIntervalSince1970 as Double)
+        // messageId and created attributes are initialized before creation to simulate real-time.
         let awsMessagesTable = AWSMessagesTable()
         let awsMessage = AWSMessage(_conversationId: conversationId, _messageId: messageId, _created: created, _messageText: messageText, _senderId: identityId, _recipientId: recipientId)
         awsMessagesTable.createMessage(awsMessage, completionHandler: {

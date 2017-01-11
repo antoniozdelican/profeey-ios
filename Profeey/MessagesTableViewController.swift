@@ -20,6 +20,7 @@ class MessagesTableViewController: UITableViewController {
     @IBOutlet var loadingTableFooterView: UIView!
     
     var conversationId: String?
+    var participant: User?
     var messagesTableViewControllerDelegate: MessagesTableViewControllerDelegate?
     
     fileprivate var allMessagesSections: [[Message]] = []
@@ -46,6 +47,7 @@ class MessagesTableViewController: UITableViewController {
         
         // Add observers.
         NotificationCenter.default.addObserver(self, selector: #selector(self.createMessageNotification(_:)), name: NSNotification.Name(CreateMessageNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.deleteMessageNotification(_:)), name: NSNotification.Name(DeleteMessageNotificationKey), object: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -78,13 +80,28 @@ class MessagesTableViewController: UITableViewController {
         let messageSection = self.allMessagesSections[indexPath.section]
         let message = messageSection[indexPath.row]
         if message.senderId == AWSIdentityManager.defaultIdentityManager().identityId {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cellMessageOwn", for: indexPath) as! MessageOwnTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellMessageOwn", for: indexPath) as! OwnMessageTableViewCell
             cell.messageTextLabel.text = message.messageText
+            cell.timeLabel.text = message.createdDate?.messageDate
+            // Show timeLabel only if first message in section.
+            if message == messageSection.first {
+                cell.showTimeLabel()
+            } else {
+                cell.hideTimeLabel()
+            }
             cell.transform = CGAffineTransform(scaleX: 1, y: -1)
             return cell
         } else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cellMessageOther", for: indexPath) as! MessageOtherTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellMessageOther", for: indexPath) as! OtherMessageTableViewCell
             cell.messageTextLabel.text = message.messageText
+            cell.timeLabel.text = message.createdDate?.messageDate
+            // Show timeLabel and profilePicImageView only if first message in section.
+            if message == messageSection.first {
+               cell.profilePicImageView.image = self.participant?.profilePicUrl != nil ? self.participant?.profilePic : UIImage(named: "ic_no_profile_pic_feed")
+                cell.showProfilePicAndTimeLabel()
+            } else {
+                cell.hideProfilePicAndTimeLabel()
+            }
             cell.transform = CGAffineTransform(scaleX: 1, y: -1)
             return cell
         }
@@ -127,29 +144,26 @@ class MessagesTableViewController: UITableViewController {
         return UITableViewAutomaticDimension
     }
     
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if self.allMessagesSections.count == 0 {
-            return UIView()
-        }
-        let firstMessageInSection = self.allMessagesSections[section].first
-        if firstMessageInSection?.senderId == AWSIdentityManager.defaultIdentityManager().identityId {
-            let header = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "ownMessagesTableSectionHeader") as? OwnMessagesTableSectionHeader
-            header?.timeLabel.text = firstMessageInSection?.createdDate?.messageDate
-            header?.transform = CGAffineTransform(scaleX: 1, y: -1)
-            return header
-        } else {
-            let header = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "otherMessagesTableSectionHeader") as? OtherMessagesTableSectionHeader
-            header?.timeLabel.text = firstMessageInSection?.createdDate?.messageDate
-            header?.transform = CGAffineTransform(scaleX: 1, y: -1)
-            return header
-        }
-    }
+//    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+//        if self.allMessagesSections.count == 0 {
+//            return UIView()
+//        }
+//        let firstMessageInSection = self.allMessagesSections[section].first
+//        if firstMessageInSection?.senderId == AWSIdentityManager.defaultIdentityManager().identityId {
+//            let header = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "ownMessagesTableSectionHeader") as? OwnMessagesTableSectionHeader
+//            header?.timeLabel.text = firstMessageInSection?.createdDate?.messageDate
+//            header?.transform = CGAffineTransform(scaleX: 1, y: -1)
+//            return header
+//        } else {
+//            let header = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "otherMessagesTableSectionHeader") as? OtherMessagesTableSectionHeader
+//            header?.timeLabel.text = firstMessageInSection?.createdDate?.messageDate
+//            header?.transform = CGAffineTransform(scaleX: 1, y: -1)
+//            return header
+//        }
+//    }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if self.allMessagesSections.count == 0 {
-            return 1.0
-        }
-        return 28.0
+        return 1.0
     }
     
     // MARK: UIScrollViewDelegate
@@ -267,6 +281,30 @@ extension MessagesTableViewController {
             return
         }
         self.putNewMessageInOwnMessageSection(message)
+        self.tableView.reloadData()
+    }
+    
+    func deleteMessageNotification(_ notification: NSNotification) {
+        guard let messageId = notification.userInfo?["messageId"] as? String else {
+            return
+        }
+        var messageSectionIndex: Int?
+        var messageRowIndex: Int?
+        for (sectionIndex, messagesSection) in self.allMessagesSections.enumerated() {
+            for (rowIndex, message) in messagesSection.enumerated() {
+                if message.messageId == messageId {
+                    messageSectionIndex = sectionIndex
+                    messageRowIndex = rowIndex
+                    break
+                } else {
+                    continue
+                }
+            }
+        }
+        guard messageSectionIndex != nil && messageRowIndex != nil else {
+            return
+        }
+        self.allMessagesSections[messageSectionIndex!].remove(at: messageRowIndex!)
         self.tableView.reloadData()
     }
 }

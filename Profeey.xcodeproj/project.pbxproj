@@ -42,6 +42,8 @@
 		A930BC861D0DD43F004D49F7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A930BC841D0DD43F004D49F7 /* LaunchScreen.storyboard */; };
 		A930BCA61D0DD61A004D49F7 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = A930BCA51D0DD61A004D49F7 /* libsqlite3.tbd */; };
 		A930BCA81D0DD623004D49F7 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = A930BCA71D0DD623004D49F7 /* libz.tbd */; };
+		A931E25C1E262C75006F175A /* OwnMessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A931E25B1E262C75006F175A /* OwnMessageTableViewCell.swift */; };
+		A931E25E1E262C81006F175A /* OtherMessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A931E25D1E262C81006F175A /* OtherMessageTableViewCell.swift */; };
 		A932AA0C1E03E1280048563C /* WelcomeVerificationTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A932AA0B1E03E1280048563C /* WelcomeVerificationTableViewController.swift */; };
 		A932AA111E04081A0048563C /* MissingUsernameNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A932AA101E04081A0048563C /* MissingUsernameNavigationController.swift */; };
 		A941CB6B1DF3445700343802 /* PRFYCloudSearchUsersResultItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A941CB6A1DF3445700343802 /* PRFYCloudSearchUsersResultItem.swift */; };
@@ -186,9 +188,7 @@
 		A9C88E541E225F5700B7D2E7 /* Messages.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9C88E531E225F5700B7D2E7 /* Messages.storyboard */; };
 		A9C88E561E225F6D00B7D2E7 /* MessagesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C88E551E225F6D00B7D2E7 /* MessagesTableViewController.swift */; };
 		A9C88E581E225F7B00B7D2E7 /* MessagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C88E571E225F7B00B7D2E7 /* MessagesViewController.swift */; };
-		A9C88E5A1E22690500B7D2E7 /* MessageOwnTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C88E591E22690500B7D2E7 /* MessageOwnTableViewCell.swift */; };
 		A9C88E5C1E22698200B7D2E7 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C88E5B1E22698200B7D2E7 /* Message.swift */; };
-		A9C88E5E1E226EA600B7D2E7 /* MessageOtherTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C88E5D1E226EA600B7D2E7 /* MessageOtherTableViewCell.swift */; };
 		A9C88E611E22782700B7D2E7 /* AWSMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C88E601E22782700B7D2E7 /* AWSMessage.swift */; };
 		A9C88E631E22783200B7D2E7 /* AWSMessagesTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C88E621E22783200B7D2E7 /* AWSMessagesTable.swift */; };
 		A9CBBC451DB634A8009C8EC7 /* EditWorkExperienceTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CBBC441DB634A8009C8EC7 /* EditWorkExperienceTableViewController.swift */; };
@@ -204,10 +204,6 @@
 		A9CBBC621DB66134009C8EC7 /* ExperiencesTableSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CBBC611DB66134009C8EC7 /* ExperiencesTableSectionHeader.swift */; };
 		A9CBBC641DB66856009C8EC7 /* EducationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CBBC631DB66856009C8EC7 /* EducationTableViewCell.swift */; };
 		A9CBBC661DB669EA009C8EC7 /* EditEducationDescriptionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CBBC651DB669EA009C8EC7 /* EditEducationDescriptionTableViewCell.swift */; };
-		A9CD5BDB1E25200100CED5B6 /* OwnMessagesTableSectionHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9CD5BDA1E25200100CED5B6 /* OwnMessagesTableSectionHeader.xib */; };
-		A9CD5BDD1E25201100CED5B6 /* OtherMessagesTableSectionHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9CD5BDC1E25201100CED5B6 /* OtherMessagesTableSectionHeader.xib */; };
-		A9CD5BDF1E2520F100CED5B6 /* OwnMessagesTableSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CD5BDE1E2520F100CED5B6 /* OwnMessagesTableSectionHeader.swift */; };
-		A9CD5BE11E2524A700CED5B6 /* OtherMessagesTableSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CD5BE01E2524A700CED5B6 /* OtherMessagesTableSectionHeader.swift */; };
 		A9D100631E0C4308006590F8 /* EditUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D100621E0C4308006590F8 /* EditUser.swift */; };
 		A9D100651E0C442A006590F8 /* LocationUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D100641E0C442A006590F8 /* LocationUser.swift */; };
 		A9D100671E0C4744006590F8 /* FullUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D100661E0C4744006590F8 /* FullUser.swift */; };
@@ -337,6 +333,8 @@
 		A930BC871D0DD43F004D49F7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A930BCA51D0DD61A004D49F7 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		A930BCA71D0DD623004D49F7 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		A931E25B1E262C75006F175A /* OwnMessageTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OwnMessageTableViewCell.swift; sourceTree = "<group>"; };
+		A931E25D1E262C81006F175A /* OtherMessageTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OtherMessageTableViewCell.swift; sourceTree = "<group>"; };
 		A932AA0B1E03E1280048563C /* WelcomeVerificationTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeVerificationTableViewController.swift; sourceTree = "<group>"; };
 		A932AA101E04081A0048563C /* MissingUsernameNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MissingUsernameNavigationController.swift; sourceTree = "<group>"; };
 		A941CB6A1DF3445700343802 /* PRFYCloudSearchUsersResultItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PRFYCloudSearchUsersResultItem.swift; sourceTree = "<group>"; };
@@ -475,9 +473,7 @@
 		A9C88E531E225F5700B7D2E7 /* Messages.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Messages.storyboard; sourceTree = "<group>"; };
 		A9C88E551E225F6D00B7D2E7 /* MessagesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessagesTableViewController.swift; sourceTree = "<group>"; };
 		A9C88E571E225F7B00B7D2E7 /* MessagesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessagesViewController.swift; sourceTree = "<group>"; };
-		A9C88E591E22690500B7D2E7 /* MessageOwnTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageOwnTableViewCell.swift; sourceTree = "<group>"; };
 		A9C88E5B1E22698200B7D2E7 /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
-		A9C88E5D1E226EA600B7D2E7 /* MessageOtherTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageOtherTableViewCell.swift; sourceTree = "<group>"; };
 		A9C88E601E22782700B7D2E7 /* AWSMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSMessage.swift; sourceTree = "<group>"; };
 		A9C88E621E22783200B7D2E7 /* AWSMessagesTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSMessagesTable.swift; sourceTree = "<group>"; };
 		A9CBBC441DB634A8009C8EC7 /* EditWorkExperienceTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditWorkExperienceTableViewController.swift; sourceTree = "<group>"; };
@@ -493,10 +489,6 @@
 		A9CBBC611DB66134009C8EC7 /* ExperiencesTableSectionHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExperiencesTableSectionHeader.swift; sourceTree = "<group>"; };
 		A9CBBC631DB66856009C8EC7 /* EducationTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EducationTableViewCell.swift; sourceTree = "<group>"; };
 		A9CBBC651DB669EA009C8EC7 /* EditEducationDescriptionTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditEducationDescriptionTableViewCell.swift; sourceTree = "<group>"; };
-		A9CD5BDA1E25200100CED5B6 /* OwnMessagesTableSectionHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OwnMessagesTableSectionHeader.xib; sourceTree = "<group>"; };
-		A9CD5BDC1E25201100CED5B6 /* OtherMessagesTableSectionHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OtherMessagesTableSectionHeader.xib; sourceTree = "<group>"; };
-		A9CD5BDE1E2520F100CED5B6 /* OwnMessagesTableSectionHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OwnMessagesTableSectionHeader.swift; sourceTree = "<group>"; };
-		A9CD5BE01E2524A700CED5B6 /* OtherMessagesTableSectionHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OtherMessagesTableSectionHeader.swift; sourceTree = "<group>"; };
 		A9D100621E0C4308006590F8 /* EditUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditUser.swift; sourceTree = "<group>"; };
 		A9D100641E0C442A006590F8 /* LocationUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationUser.swift; sourceTree = "<group>"; };
 		A9D100661E0C4744006590F8 /* FullUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FullUser.swift; sourceTree = "<group>"; };
@@ -1113,14 +1105,10 @@
 			isa = PBXGroup;
 			children = (
 				A9C88E531E225F5700B7D2E7 /* Messages.storyboard */,
-				A9CD5BDA1E25200100CED5B6 /* OwnMessagesTableSectionHeader.xib */,
-				A9CD5BDC1E25201100CED5B6 /* OtherMessagesTableSectionHeader.xib */,
 				A9C88E571E225F7B00B7D2E7 /* MessagesViewController.swift */,
 				A9C88E551E225F6D00B7D2E7 /* MessagesTableViewController.swift */,
-				A9C88E591E22690500B7D2E7 /* MessageOwnTableViewCell.swift */,
-				A9C88E5D1E226EA600B7D2E7 /* MessageOtherTableViewCell.swift */,
-				A9CD5BDE1E2520F100CED5B6 /* OwnMessagesTableSectionHeader.swift */,
-				A9CD5BE01E2524A700CED5B6 /* OtherMessagesTableSectionHeader.swift */,
+				A931E25B1E262C75006F175A /* OwnMessageTableViewCell.swift */,
+				A931E25D1E262C81006F175A /* OtherMessageTableViewCell.swift */,
 			);
 			name = Messages;
 			sourceTree = "<group>";
@@ -1522,7 +1510,6 @@
 				A9A57B2A1DD1CB92004F0177 /* DiscoverPeople.storyboard in Resources */,
 				A9E53B6F1D10667B00CD1D6C /* Notifications.storyboard in Resources */,
 				A99B9E341DB53FE20047360D /* EditEducation.storyboard in Resources */,
-				A9CD5BDD1E25201100CED5B6 /* OtherMessagesTableSectionHeader.xib in Resources */,
 				A990ECB31D6A576E00C3C9CE /* Users.storyboard in Resources */,
 				A9D49EE31DD5D920000F90A8 /* UserCategory.storyboard in Resources */,
 				A990ECB81D6A5F6A00C3C9CE /* Comments.storyboard in Resources */,
@@ -1531,7 +1518,6 @@
 				A9ACF1891D927E1E00A99B7F /* Experiences.storyboard in Resources */,
 				A9E53B691D10665100CD1D6C /* Home.storyboard in Resources */,
 				A9AC8FBE1DBDFDCB00C9BCE0 /* PostDetails.storyboard in Resources */,
-				A9CD5BDB1E25200100CED5B6 /* OwnMessagesTableSectionHeader.xib in Resources */,
 				A999CD451DBE829F00E7ADB1 /* SearchTableSectionHeader.xib in Resources */,
 				A9D49EED1DD602E5000F90A8 /* Recommendations.storyboard in Resources */,
 				A9CBBC601DB6610E009C8EC7 /* ExperiencesTableSectionHeader.xib in Resources */,
@@ -1584,6 +1570,7 @@
 				A9CBBC5C1DB651BD009C8EC7 /* ExperiencesTableViewController.swift in Sources */,
 				A9D716A91D57486100300135 /* PostSmallTableViewCell.swift in Sources */,
 				A9C88E581E225F7B00B7D2E7 /* MessagesViewController.swift in Sources */,
+				A931E25C1E262C75006F175A /* OwnMessageTableViewCell.swift in Sources */,
 				A91C1CD91DEDA8C2006FBDD4 /* PRFYNotification.swift in Sources */,
 				A999CD481DBE93D400E7ADB1 /* ProfessionTableViewController.swift in Sources */,
 				A990ECB01D6A572500C3C9CE /* UsersTableViewController.swift in Sources */,
@@ -1594,7 +1581,6 @@
 				A9BA21D31E1506C200D9A035 /* S3Manager.swift in Sources */,
 				A9543CAF1DA3C4DB002BF372 /* EditPostImageTableViewCell.swift in Sources */,
 				A9D227011DE99B9700B2E894 /* AWSConfiguration.swift in Sources */,
-				A9CD5BDF1E2520F100CED5B6 /* OwnMessagesTableSectionHeader.swift in Sources */,
 				A9A5039F1D2FE0810030A472 /* AWSUser.swift in Sources */,
 				A9CBBC5A1DB6515A009C8EC7 /* WorkExperienceTableViewCell.swift in Sources */,
 				A990ECB51D6A582100C3C9CE /* UserTableViewCell.swift in Sources */,
@@ -1625,12 +1611,10 @@
 				A9A57B2E1DD1D017004F0177 /* DiscoverUserTableViewCell.swift in Sources */,
 				A9D100651E0C442A006590F8 /* LocationUser.swift in Sources */,
 				A95EB85D1D8FBEAB0039E51D /* DatePickerTableViewCell.swift in Sources */,
-				A9CD5BE11E2524A700CED5B6 /* OtherMessagesTableSectionHeader.swift in Sources */,
 				A9C498791DFF435000BD71A8 /* PRFYCloudSearchCategoriesResultItem.swift in Sources */,
 				A9CBBC501DB63FDD009C8EC7 /* EditWorkTitleTableViewCell.swift in Sources */,
 				A9ACA7491DB50AF40004B8DE /* WorkExperience.swift in Sources */,
 				A9A503A11D2FE0A90030A472 /* AWSUsersTable.swift in Sources */,
-				A9C88E5E1E226EA600B7D2E7 /* MessageOtherTableViewCell.swift in Sources */,
 				A9D49EE01DD5C834000F90A8 /* UserCategory.swift in Sources */,
 				A9C808201D916C7D0018109C /* EditProfessionTableViewCell.swift in Sources */,
 				A913FC701D51F6AF000D10A6 /* DynamoDBManager.swift in Sources */,
@@ -1718,6 +1702,7 @@
 				A99B9E311DB53E370047360D /* Education.swift in Sources */,
 				A9D962291DE77180008EA0DF /* AWSMobileClient.swift in Sources */,
 				A9B6A89F1D7F8063001EE407 /* PostUserTableViewCell.swift in Sources */,
+				A931E25E1E262C81006F175A /* OtherMessageTableViewCell.swift in Sources */,
 				A941CB6B1DF3445700343802 /* PRFYCloudSearchUsersResultItem.swift in Sources */,
 				A903EB571D16A39700B33025 /* LLSimpleCamera.m in Sources */,
 				A95EB85B1D8FBE870039E51D /* DateTableViewCell.swift in Sources */,
@@ -1752,7 +1737,6 @@
 				A901CFE91DA78FA900C44B26 /* CameraViewController.swift in Sources */,
 				A91C1CD71DEDA669006FBDD4 /* NotificationTableViewCell.swift in Sources */,
 				A9D688851E0AE06500A07D86 /* AWSProfession.swift in Sources */,
-				A9C88E5A1E22690500B7D2E7 /* MessageOwnTableViewCell.swift in Sources */,
 				A97A9AED1D85D0ED00507517 /* ProfessionsTableViewController.swift in Sources */,
 				A9CBBC561DB64A0E009C8EC7 /* EditEducationSchoolTableViewCell.swift in Sources */,
 				A901CFE71DA78DDC00C44B26 /* CaptureScrollViewController.swift in Sources */,
