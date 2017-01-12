@@ -641,7 +641,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         }
         // messageId and created attributes are initialized before creation to simulate real-time.
         let awsMessagesTable = AWSMessagesTable()
-        let awsMessage = AWSMessage(_conversationId: conversationId, _messageId: messageId, _created: created, _messageText: messageText, _senderId: identityId, _recipientId: recipientId)
+        let awsMessage = AWSMessage(_conversationId: conversationId, _messageId: messageId, _created: created, _messageText: messageText, _senderId: identityId, _recipientId: recipientId, _senderPreferredUsername: self.currentUserDynamoDB?.preferredUsername)
         awsMessagesTable.createMessage(awsMessage, completionHandler: {
             (task: AWSTask) in
             if let error = task.error {

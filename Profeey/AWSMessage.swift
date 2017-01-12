@@ -17,8 +17,10 @@ class AWSMessage: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     var _messageText: String?
     var _senderId: String?
     var _recipientId: String?
+    // For APNs.
+    var _senderPreferredUsername: String?
     
-    convenience init(_conversationId: String?, _messageId: String?, _created: NSNumber?, _messageText: String?, _senderId: String?, _recipientId: String?) {
+    convenience init(_conversationId: String?, _messageId: String?, _created: NSNumber?, _messageText: String?, _senderId: String?, _recipientId: String?, _senderPreferredUsername: String?) {
         self.init()
         self._conversationId = _conversationId
         self._messageId = _messageId
@@ -26,6 +28,7 @@ class AWSMessage: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
         self._messageText = _messageText
         self._senderId = _senderId
         self._recipientId = _recipientId
+        self._senderPreferredUsername = _senderPreferredUsername
     }
     
     // To remove Message.
@@ -58,6 +61,7 @@ class AWSMessage: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
             "_messageText" : "messageText",
             "_senderId" : "senderId",
             "_recipientId" : "recipientId",
+            "_senderPreferredUsername" : "senderPreferredUsername",
         ]
     }
 }
