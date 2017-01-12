@@ -12,8 +12,9 @@ import AWSMobileHubHelper
 enum MainChildController: Int {
     case home = 0
     case search = 1
-    case notifications = 2
-    case profile = 3
+    case capture = 2
+    case notifications = 3
+    case profile = 4
 }
 
 class MainTabBarController: UITabBarController {

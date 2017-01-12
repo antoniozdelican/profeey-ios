@@ -48,21 +48,26 @@ class OtherMessageTableViewCell: UITableViewCell {
     
     // MARK: Helpers
     
-    func hideProfilePicAndTimeLabel() {
-        self.profilePicImageView.isHidden = true
+    func showTimeLabel() {
+        self.timeLabel.isHidden = false
+        self.timeLabelTopConstraint.constant =  self.timeLabelTopConstraintConstant
+        self.timeLabelBottomConstraint.constant = self.timeLabelBottomConstraintConstant
+        self.timeLabelHeightConstraint.constant = self.timeLabelHeightConstraintConstant
+    }
+    
+    func hideTimeLabel() {
         self.timeLabel.isHidden = true
         self.timeLabelTopConstraint.constant = 0.0
         self.timeLabelBottomConstraint.constant = 1.0
         self.timeLabelHeightConstraint.constant = 0.0
     }
     
-    func showProfilePicAndTimeLabel() {
-        // Return to initial.
+    func showProfilePicImageView() {
         self.profilePicImageView.isHidden = false
-        self.timeLabel.isHidden = false
-        self.timeLabelTopConstraint.constant =  self.timeLabelTopConstraintConstant
-        self.timeLabelBottomConstraint.constant = self.timeLabelBottomConstraintConstant
-        self.timeLabelHeightConstraint.constant = self.timeLabelHeightConstraintConstant
+    }
+    
+    func hideProfilePicImageView() {
+        self.profilePicImageView.isHidden = true
     }
     
     // MARK: Tappers

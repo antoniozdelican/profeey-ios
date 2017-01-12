@@ -1299,8 +1299,8 @@
 				A9A57B281DD1CB01004F0177 /* Discover People */,
 				A9A196191DDC63EE008D6494 /* Settings */,
 				A9A95B271D58752E0009CEE7 /* Post Cells */,
-				A97EDECC1D9A596F002E63F7 /* Shared */,
 				A9C88E521E225F4400B7D2E7 /* Messages */,
+				A97EDECC1D9A596F002E63F7 /* Shared */,
 			);
 			name = Main;
 			sourceTree = "<group>";
@@ -1452,6 +1452,9 @@
 						DevelopmentTeam = EVVDW95JPN;
 						LastSwiftMigration = 0800;
 						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
 							com.apple.Push = {
 								enabled = 1;
 							};

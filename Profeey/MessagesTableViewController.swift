@@ -57,8 +57,7 @@ class MessagesTableViewController: UITableViewController {
     // MARK: Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let destinationViewController = segue.destination as? ProfileTableViewController,
-            let cell = sender as? OtherMessageTableViewCell {
+        if let destinationViewController = segue.destination as? ProfileTableViewController {
             destinationViewController.user = self.participant?.copyUser()
         }
     }
@@ -106,10 +105,15 @@ class MessagesTableViewController: UITableViewController {
             cell.timeLabel.text = message.createdString
             // Show timeLabel and profilePicImageView only if first message in section.
             if message == messageSection.first && message.createdString != nil {
-               cell.profilePicImageView.image = self.participant?.profilePicUrl != nil ? self.participant?.profilePic : UIImage(named: "ic_no_profile_pic_feed")
-                cell.showProfilePicAndTimeLabel()
+                cell.showTimeLabel()
             } else {
-                cell.hideProfilePicAndTimeLabel()
+                cell.hideTimeLabel()
+            }
+            if message == messageSection.first {
+                cell.profilePicImageView.image = self.participant?.profilePicUrl != nil ? self.participant?.profilePic : UIImage(named: "ic_no_profile_pic_feed")
+                cell.showProfilePicImageView()
+            } else {
+                cell.hideProfilePicImageView()
             }
             cell.otherMessageTableViewCellDelegate = self
             cell.transform = CGAffineTransform(scaleX: 1, y: -1)

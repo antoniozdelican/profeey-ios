@@ -93,7 +93,6 @@ class AWSMobileClient: NSObject {
      * - parameter userInfo: push notification contents
      */
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any]) {
-        print("HERE:")
         print("AWSPushManager didReceiveRemoteNotification")
         AWSPushManager.defaultPushManager().interceptApplication(application, didReceiveRemoteNotification: userInfo)
     }

@@ -29,6 +29,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             self.window?.rootViewController = rootViewController
         }
         
+        print("Endpoint ARN:")
+        print(AWSPushManager.defaultPushManager().endpointARN)
+        
+        
         
         
         // TODO
@@ -96,6 +100,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         print("didReceiveRemoteNotification fetchCompletionHandler:")
         print(userInfo)
         
+        if let conversationId = userInfo["conversationId"] as? String {
+            print("It's a message!")
+            print(conversationId)
+        } else {
+            print("It's something else!")
+        }
+        
         // TODO play with constants depending on case.
         completionHandler(UIBackgroundFetchResult.newData)
         
@@ -105,6 +116,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 tabBarController.selectMainChildViewController(MainChildController.notifications)
             }
         }
+        
+        // TODO: Publish NSNotification? - in that way we uniquely tell all the VC that Notification arrived and let them do appropriate steps.
+        // This will depend on which kind of notification comes.
+        
     }
     
     fileprivate func configureUI() {

@@ -21,23 +21,28 @@ class MessagesViewController: UIViewController {
     
     var participant: User?
     
+    fileprivate var senderId: String? {
+        return AWSIdentityManager.defaultIdentityManager().identityId
+    }
+    fileprivate var recipientId: String? {
+        return self.participant?.userId
+    }
+    fileprivate var conversationId: String? {
+        guard let senderId = self.senderId, let recipientId = self.recipientId else {
+            print("No ids. This should not happen!")
+            return nil
+        }
+        if senderId < recipientId {
+            return [senderId, recipientId].joined(separator: "+conversation+")
+        } else {
+            return [recipientId, senderId].joined(separator: "+conversation+")
+        }
+    }
     /*
      Until this gets set, can't post a message!
      This is done to create/delete conversation when first/last message is created/deleted.
     */
     fileprivate var numberOfInitialMessages: Int?
-    
-    fileprivate var conversationId: String? {
-        guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
-            print("No identityId. This should not happen!")
-            return nil
-        }
-        guard let participantId = self.participant?.userId else {
-            print("No participantId. This should not happen!")
-            return nil
-        }
-        return [identityId, participantId].joined(separator: "+conversation+")
-    }
     
     fileprivate var messageBarBottomConstraintConstant: CGFloat = 0.0
     fileprivate var messageBarHeightConstraintConstant: CGFloat = 49.0
@@ -142,11 +147,9 @@ class MessagesViewController: UIViewController {
     
     fileprivate func preCreateMessage(_ messageText: String) {
         guard let conversationId = self.conversationId, let numberOfInitialMessages = self.numberOfInitialMessages else {
-            print("preCreateMessage no conversationId or numberOfInitialMessages. This should not happen.")
             return
         }
-        guard let senderId = AWSIdentityManager.defaultIdentityManager().identityId, let recipientId = self.participant?.userId else {
-            print("preCreateMessage no senderId or recipientId. This should not happen.")
+        guard let senderId = self.senderId, let recipientId = self.recipientId else {
             return
         }
         self.resetMessageBox()
@@ -183,7 +186,9 @@ class MessagesViewController: UIViewController {
                 
                 // Create conversation if it's a first message between users.
                 if numberOfInitialMessages == 0 {
-                    self.createConversation(messageText, participantId: recipientId)
+                    self.createConversation(messageText, conversationId: conversationId, participantId: recipientId)
+                    // Set to 1 to ensure creation is not repeated! (BUG).
+                    self.numberOfInitialMessages = 1
                 }
             })
             return nil
@@ -191,9 +196,9 @@ class MessagesViewController: UIViewController {
     }
     
     // In background.
-    fileprivate func createConversation(_ messageText: String, participantId: String) {
+    fileprivate func createConversation(_ messageText: String, conversationId: String, participantId: String) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().createConversationDynamoDB(messageText, participantId: participantId, participantFirstName: self.participant?.firstName, participantLastName: self.participant?.lastName, participantPreferredUsername: self.participant?.preferredUsername, participantProfessionName: self.participant?.professionName, participantProfilePicUrl: self.participant?.profilePicUrl, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().createConversationDynamoDB(messageText, conversationId: conversationId, participantId: participantId, participantFirstName: self.participant?.firstName, participantLastName: self.participant?.lastName, participantPreferredUsername: self.participant?.preferredUsername, participantProfessionName: self.participant?.professionName, participantProfilePicUrl: self.participant?.profilePicUrl, completionHandler: {
             (task: AWSTask) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
