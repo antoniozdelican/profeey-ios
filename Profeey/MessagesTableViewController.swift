@@ -42,13 +42,13 @@ class MessagesTableViewController: UITableViewController {
             // Query.
             self.tableView.tableFooterView = self.loadingTableFooterView
             self.isLoadingMessages = true
-            self.queryConversationMessagesDateSorted(conversationId)
+            self.queryMessagesDateSorted(conversationId)
         }
         
         // Add observers.
         NotificationCenter.default.addObserver(self, selector: #selector(self.createMessageNotification(_:)), name: NSNotification.Name(CreateMessageNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.deleteMessageNotification(_:)), name: NSNotification.Name(DeleteMessageNotificationKey), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.updateConversationNotification(_:)), name: NSNotification.Name(UpdateConversationNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.apnsNewMessageNotificationKey(_:)), name: NSNotification.Name(APNsNewMessageNotificationKey), object: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -142,7 +142,7 @@ class MessagesTableViewController: UITableViewController {
         }
         self.tableView.tableFooterView = self.loadingTableFooterView
         self.isLoadingMessages = true
-        self.queryConversationMessagesDateSorted(conversationId)
+        self.queryMessagesDateSorted(conversationId)
     }
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -172,9 +172,9 @@ class MessagesTableViewController: UITableViewController {
     // MARK: AWS
     
     // No refresh so never startFromBeginning.
-    fileprivate func queryConversationMessagesDateSorted(_ conversationId: String) {
+    fileprivate func queryMessagesDateSorted(_ conversationId: String) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().queryConversationMessagesDateSortedDynamoDB(conversationId, lastEvaluatedKey: self.lastEvaluatedKey, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().queryMessagesDateSortedDynamoDB(conversationId, lastEvaluatedKey: self.lastEvaluatedKey, completionHandler: {
             (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
@@ -211,28 +211,6 @@ class MessagesTableViewController: UITableViewController {
                 // Reload tableView with downloaded messages.
                 self.tableView.reloadData()
             })
-        })
-    }
-    
-    fileprivate func getConversationMessage(_ conversationId: String, messageId: String) {
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().getMessageDynamoDB(conversationId, messageId: messageId, completionHandler: {
-            (task: AWSTask) in
-            DispatchQueue.main.async(execute: {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                guard task.error == nil else {
-                    print("getConversationMessage error: \(task.error!)")
-                    return
-                }
-                guard let awsMessage = task.result as? AWSMessage else {
-                    print("getConversationMessage erro: Not AWSMessage. This should not happen.")
-                    return
-                }
-                let message = Message(conversationId: awsMessage._conversationId, messageId: awsMessage._messageId, created: awsMessage._created, messageText: awsMessage._messageText, senderId: awsMessage._senderId, recipientId: awsMessage._recipientId)
-                self.putNewMessageInMessageSection(message)
-                self.tableView.reloadData()
-            })
-            return nil
         })
     }
     
@@ -327,18 +305,19 @@ extension MessagesTableViewController {
         self.tableView.reloadData()
     }
     
-    func updateConversationNotification(_ notification: NSNotification) {
-        guard let conversationId = notification.userInfo?["conversationId"] as? String, let messageId = notification.userInfo?["messageId"] as? String else {
+    func apnsNewMessageNotificationKey(_ notification: NSNotification) {
+        guard let message = notification.userInfo?["message"] as? Message else {
             return
         }
-        guard self.conversationId == conversationId else {
+        guard self.conversationId == message.conversationId else {
             return
         }
         // Ensure message doesn't exist yet so we don't make duplicates.
-        guard self.allMessagesSections.flatMap({ $0 }).first(where: { $0.messageId == messageId}) == nil else {
+        guard self.allMessagesSections.flatMap({ $0 }).first(where: { $0.messageId == message.messageId}) == nil else {
             return
         }
-        self.getConversationMessage(conversationId, messageId: messageId)
+        self.putNewMessageInMessageSection(message)
+        self.tableView.reloadData()
     }
 }
 

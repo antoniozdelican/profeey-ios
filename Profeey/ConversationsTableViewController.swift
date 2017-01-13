@@ -26,13 +26,13 @@ class ConversationsTableViewController: UITableViewController {
         // Query.
         self.tableView.tableFooterView = self.loadingTableFooterView
         self.isLoadingConversations = true
-        self.queryUserConversationsDateSorted(true)
+        self.queryConversationsDateSorted(true)
         
-        // Add observers.
         // Add observers.
         NotificationCenter.default.addObserver(self, selector: #selector(self.createMessageNotification(_:)), name: NSNotification.Name(CreateMessageNotificationKey), object: nil)
 //        NotificationCenter.default.addObserver(self, selector: #selector(self.deleteMessageNotification(_:)), name: NSNotification.Name(DeleteMessageNotificationKey), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.updateConversationNotification(_:)), name: NSNotification.Name(UpdateConversationNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.createConversationNotification(_:)), name: NSNotification.Name(CreateConversationNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.apnsNewMessageNotificationKey(_:)), name: NSNotification.Name(APNsNewMessageNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.downloadImageNotification(_:)), name: NSNotification.Name(DownloadImageNotificationKey), object: nil)
     }
 
@@ -102,7 +102,7 @@ class ConversationsTableViewController: UITableViewController {
         }
         self.tableView.tableFooterView = self.loadingTableFooterView
         self.isLoadingConversations = true
-        self.queryUserConversationsDateSorted(false)
+        self.queryConversationsDateSorted(false)
     }
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -127,17 +127,17 @@ class ConversationsTableViewController: UITableViewController {
             return
         }
         self.isLoadingConversations = true
-        self.queryUserConversationsDateSorted(true)
+        self.queryConversationsDateSorted(true)
     }
     
     // MARK: AWS
     
-    fileprivate func queryUserConversationsDateSorted(_ startFromBeginning: Bool) {
+    fileprivate func queryConversationsDateSorted(_ startFromBeginning: Bool) {
         if startFromBeginning {
             self.lastEvaluatedKey = nil
         }
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().queryUserConversationsDateSortedDynamoDB(lastEvaluatedKey, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().queryConversationsDateSortedDynamoDB(lastEvaluatedKey, completionHandler: {
             (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
@@ -191,22 +191,32 @@ class ConversationsTableViewController: UITableViewController {
         })
     }
     
-    fileprivate func getConversationMessage(_ conversationId: String, messageId: String) {
+    // Called only if apnsNewMessage arrives and conversation doesn't yet exists.
+    fileprivate func getConversation(_ conversationId: String) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().getMessageDynamoDB(conversationId, messageId: messageId, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().getConversationDynamoDB(conversationId, completionHandler: {
             (task: AWSTask) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 guard task.error == nil else {
-                    print("getConversationMessage error: \(task.error!)")
+                    print("getConversation error: \(task.error!)")
                     return
                 }
-                guard let awsMessage = task.result as? AWSMessage else {
-                    print("getConversationMessage erro: Not AWSMessage. This should not happen.")
+                guard let awsConversation = task.result as? AWSConversation else {
+                    print("getConversation error: Not AWSConversation. This should not happen.")
                     return
                 }
-                let message = Message(conversationId: awsMessage._conversationId, messageId: awsMessage._messageId, created: awsMessage._created, messageText: awsMessage._messageText, senderId: awsMessage._senderId, recipientId: awsMessage._recipientId)
-                self.updateConversationWithLastMessage(conversationId, message: message)
+                let participant = User(userId: awsConversation._participantId, firstName: awsConversation._participantFirstName, lastName: awsConversation._participantLastName, preferredUsername: awsConversation._participantPreferredUsername, professionName: awsConversation._participantProfessionName, profilePicUrl: awsConversation._participantProfilePicUrl)
+                let conversation = Conversation(userId: awsConversation._userId, conversationId: awsConversation._conversationId, lastMessageText: awsConversation._lastMessageText, lastMessageCreated: awsConversation._lastMessageCreated, participant: participant)
+                self.conversations.insert(conversation, at: 0)
+                
+                // Reload tableView.
+                self.tableView.reloadData()
+                
+                // Load profilePic.
+                if let profilePicUrl = awsConversation._participantProfilePicUrl {
+                    PRFYS3Manager.defaultS3Manager().downloadImageS3(profilePicUrl, imageType: .userProfilePic)
+                }
             })
             return nil
         })
@@ -244,14 +254,31 @@ extension ConversationsTableViewController {
         self.updateConversationWithLastMessage(conversationId, message: message)
     }
     
-    func updateConversationNotification(_ notification: NSNotification) {
-        guard let conversationId = notification.userInfo?["conversationId"] as? String, let messageId = notification.userInfo?["messageId"] as? String else {
+    func createConversationNotification(_ notification: NSNotification) {
+        guard let conversation = notification.userInfo?["conversation"] as? Conversation else {
             return
         }
-        guard let _ = self.conversations.index(where: { $0.conversationId == conversationId }) else {
+        // Ensure conversation doesn't exist yet so we don't make duplicates.
+        guard self.conversations.index(where: { $0.conversationId == conversation.conversationId }) == nil else {
             return
         }
-        self.getConversationMessage(conversationId, messageId: messageId)
+        self.conversations.insert(conversation, at: 0)
+        self.tableView.reloadData()
+        if let profilePicUrl = conversation.participant?.profilePicUrl {
+            PRFYS3Manager.defaultS3Manager().downloadImageS3(profilePicUrl, imageType: .userProfilePic)
+        }
+    }
+    
+    func apnsNewMessageNotificationKey(_ notification: NSNotification) {
+        guard let message = notification.userInfo?["message"] as? Message, let conversationId = message.conversationId else {
+            return
+        }
+        // If conversation already exists, only update with new message, otherwise get entire conversation.
+        if let _ = self.conversations.index(where: { $0.conversationId == conversationId }) {
+            self.updateConversationWithLastMessage(conversationId, message: message)
+        } else {
+            self.getConversation(conversationId)
+        }
     }
     
     func downloadImageNotification(_ notification: NSNotification) {

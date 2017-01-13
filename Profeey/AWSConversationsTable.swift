@@ -47,8 +47,13 @@ class AWSConversationsTable: NSObject, Table {
     
     /*
      IMPORTANT!
-     Create and remove are called only when first/last message is created between users.
+     Get/create/remove are called only when first/last message is created between users.
     */
+    
+    func getConversation(_ userId: String, conversationId: String, completionHandler: @escaping AWSContinuationBlock) {
+        let objectMapper = AWSDynamoDBObjectMapper.default()
+        objectMapper.load(AWSConversation.self, hashKey: userId, rangeKey: conversationId).continue(completionHandler)
+    }
     
     func createConversation(_ awsConversation: AWSConversation, completionHandler: @escaping AWSContinuationBlock) {
         let objectMapper = AWSDynamoDBObjectMapper.default()

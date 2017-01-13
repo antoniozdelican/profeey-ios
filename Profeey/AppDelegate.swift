@@ -71,6 +71,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
         
         // Clear the badge icon when you open the app.
+        // TODO clear only if user saw conversation.
+        // Keep track in DynamoDB how many conversations are unseen (not messages!!)
+        // Adjust Lambda function accordingly.
         UIApplication.shared.applicationIconBadgeNumber = 0
     }
     
@@ -97,10 +100,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         print(userInfo)
         
         if let conversationId = userInfo["conversationId"] as? String, let messageId = userInfo["messageId"] as? String {
-            print("It's here:")
-            print(conversationId)
-            // Notify observers.
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: UpdateConversationNotificationKey), object: self, userInfo: ["conversationId": conversationId, "messageId": messageId])
+            // Get message from DynamoDB.
+            self.getMessage(conversationId, messageId: messageId)
         } else {
             print("It's something else!")
         }
@@ -139,6 +140,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UITextView.appearance().tintColor = Colors.black
         // UISearchBar
         UISearchBar.appearance().searchBarStyle = UISearchBarStyle.minimal
+    }
+    
+    // MARK: AWS
+    
+    fileprivate func getMessage(_ conversationId: String, messageId: String) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().getMessageDynamoDB(conversationId, messageId: messageId, completionHandler: {
+            (task: AWSTask) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                guard task.error == nil else {
+                    print("getConversationMessage error: \(task.error!)")
+                    return
+                }
+                guard let awsMessage = task.result as? AWSMessage else {
+                    print("getMessage error: Not AWSMessage. This should not happen.")
+                    return
+                }
+                let message = Message(conversationId: awsMessage._conversationId, messageId: awsMessage._messageId, created: awsMessage._created, messageText: awsMessage._messageText, senderId: awsMessage._senderId, recipientId: awsMessage._recipientId)
+                // Notify observers.
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: APNsNewMessageNotificationKey), object: self, userInfo: ["message": message])
+            })
+            return nil
+        })
     }
 }
 

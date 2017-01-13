@@ -659,7 +659,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         awsMessagesTable.removeMessage(awsMessage, completionHandler: completionHandler)
     }
     
-    func queryConversationMessagesDateSortedDynamoDB(_ conversationId: String, lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?){
+    func queryMessagesDateSortedDynamoDB(_ conversationId: String, lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?){
         let awsMessagesDateSortedIndex = AWSMessagesDateSortedIndex()
         awsMessagesDateSortedIndex.queryConversationMessagesDateSorted(conversationId, lastEvaluatedKey: lastEvaluatedKey, completionHandler: completionHandler)
     }
@@ -672,7 +672,6 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
     // MARK: Conversations
     
     /*
-     IMPORTANT!
      Create and remove are called (in background) only when first/last message is created between users.
      */
     
@@ -699,12 +698,22 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         awsConversationsTable.removeConversation(awsConversation, completionHandler: completionHandler)
     }
     
-    func queryUserConversationsDateSortedDynamoDB(_ lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?){
+    func queryConversationsDateSortedDynamoDB(_ lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?){
         guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
             print("queryUserConversationsDateSortedDynamoDB no identityId!")
             return
         }
         let awsConversationsDateSortedIndex = AWSConversationsDateSortedIndex()
         awsConversationsDateSortedIndex.queryUserConversationsDateSorted(identityId, lastEvaluatedKey: lastEvaluatedKey, completionHandler: completionHandler)
+    }
+    
+    func getConversationDynamoDB(_ conversationId: String, completionHandler: @escaping AWSContinuationBlock) {
+        guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
+            print("getConversationDynamoDB no identityId!")
+            AWSTask().continue(completionHandler)
+            return
+        }
+        let awsConversationsTable = AWSConversationsTable()
+        awsConversationsTable.getConversation(identityId, conversationId: conversationId, completionHandler: completionHandler)
     }
 }

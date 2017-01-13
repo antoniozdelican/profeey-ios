@@ -38,4 +38,11 @@ class Conversation: NSObject {
         self.lastMessageCreated = lastMessageCreated
         self.participant = participant
     }
+    
+    // MARK: Custom copying
+    
+    func copyConversation() -> Conversation {
+        let conversation = Conversation(userId: userId, conversationId: conversationId, lastMessageText: lastMessageText, lastMessageCreated: lastMessageCreated, participant: participant)
+        return conversation
+    }
 }

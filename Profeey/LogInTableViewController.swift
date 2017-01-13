@@ -117,10 +117,21 @@ class LogInTableViewController: UITableViewController {
                     let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.userInfo["message"] as? String, cancelButtonTitle: "Try Again")
                     self.present(alertController, animated: true, completion: nil)
                 } else {
+                    // Set endpointARN to point to this user.
+                    //self.createEndpointUser()
+                    // Redirect to main.
                     self.redirectToMain()
                 }
             })
         })
+    }
+    
+    // In background TODO: danger it can be erased with redirectToMain.
+    fileprivate func createEndpointUser() {
+//        guard let endpointARN = AWSPushManager.defaultPushManager().endpointARN, let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
+//            return
+//        }
+        
     }
 }
 

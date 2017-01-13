@@ -153,12 +153,15 @@ class MessagesViewController: UIViewController {
             return
         }
         self.resetMessageBox()
+        
         // Real-time creation.
         let messageId = NSUUID().uuidString.lowercased()
         let created = NSNumber(value: Date().timeIntervalSince1970 as Double)
         let message = Message(conversationId: conversationId, messageId: messageId, created: created, messageText: messageText, senderId: senderId, recipientId: recipientId)
+        
         // Notify observers.
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: CreateMessageNotificationKey), object: self, userInfo: ["message": message.copyMessage()])
+        
         // Actual creation.
         self.createMessage(messageText, conversationId: conversationId, messageId: messageId, created: created, senderId: senderId, recipientId: recipientId, numberOfInitialMessages: numberOfInitialMessages)
     }
@@ -186,7 +189,15 @@ class MessagesViewController: UIViewController {
                 
                 // Create conversation if it's a first message between users.
                 if numberOfInitialMessages == 0 {
+                    let participant = User(userId: self.participant?.userId, firstName: self.participant?.firstName, lastName: self.participant?.lastName, preferredUsername: self.participant?.preferredUsername, professionName: self.participant?.professionName, profilePicUrl: self.participant?.profilePicUrl)
+                    let conversation = Conversation(userId: senderId, conversationId: conversationId, lastMessageText: messageText, lastMessageCreated: created, participant: participant)
+                    
+                    // Notify observers.
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: CreateConversationNotificationKey), object: self, userInfo: ["conversation": conversation.copyConversation()])
+                    
+                    // Actual creation.
                     self.createConversation(messageText, conversationId: conversationId, participantId: recipientId)
+                    
                     // Set to 1 to ensure creation is not repeated! (BUG).
                     self.numberOfInitialMessages = 1
                 }
