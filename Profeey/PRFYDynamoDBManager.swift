@@ -664,6 +664,11 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         awsMessagesDateSortedIndex.queryConversationMessagesDateSorted(conversationId, lastEvaluatedKey: lastEvaluatedKey, completionHandler: completionHandler)
     }
     
+    func getMessageDynamoDB(_ conversationId: String, messageId: String, completionHandler: @escaping AWSContinuationBlock) {
+        let awsMessagesTable = AWSMessagesTable()
+        awsMessagesTable.getMessage(conversationId, messageId: messageId, completionHandler: completionHandler)
+    }
+    
     // MARK: Conversations
     
     /*

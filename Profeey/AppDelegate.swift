@@ -29,15 +29,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             self.window?.rootViewController = rootViewController
         }
         
-        print("Endpoint ARN:")
-        print(AWSPushManager.defaultPushManager().endpointARN)
-        
-        
-        
-        
-        // TODO
+        // TODO: save userId (identityId) for this device (endpointARN)
+        // This is done upon user signIn.
+        // For user signOut - delete record in DynamoDB??
 //        if let endpointARN = AWSPushManager.defaultPushManager().endpointARN {
-//            PRFYDynamoDBManager.defaultDynamoDBManager().saveUserEndpointDynamoDB(endpointARN, completionHandler: {
+//            PRFYDynamoDBManager.defaultDynamoDBManager().createEndpointUserDynamoDB(endpointARN, completionHandler: {
 //                (task: AWSTask) in
 //                return nil
 //            })
@@ -100,9 +96,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         print("didReceiveRemoteNotification fetchCompletionHandler:")
         print(userInfo)
         
-        if let conversationId = userInfo["conversationId"] as? String {
-            print("It's a message!")
+        if let conversationId = userInfo["conversationId"] as? String, let messageId = userInfo["messageId"] as? String {
+            print("It's here:")
             print(conversationId)
+            // Notify observers.
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: UpdateConversationNotificationKey), object: self, userInfo: ["conversationId": conversationId, "messageId": messageId])
         } else {
             print("It's something else!")
         }
@@ -116,10 +114,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 tabBarController.selectMainChildViewController(MainChildController.notifications)
             }
         }
-        
-        // TODO: Publish NSNotification? - in that way we uniquely tell all the VC that Notification arrived and let them do appropriate steps.
-        // This will depend on which kind of notification comes.
-        
     }
     
     fileprivate func configureUI() {

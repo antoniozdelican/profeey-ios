@@ -48,6 +48,7 @@ class MessagesTableViewController: UITableViewController {
         // Add observers.
         NotificationCenter.default.addObserver(self, selector: #selector(self.createMessageNotification(_:)), name: NSNotification.Name(CreateMessageNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.deleteMessageNotification(_:)), name: NSNotification.Name(DeleteMessageNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.updateConversationNotification(_:)), name: NSNotification.Name(UpdateConversationNotificationKey), object: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -158,24 +159,6 @@ class MessagesTableViewController: UITableViewController {
         return UITableViewAutomaticDimension
     }
     
-//    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-//        if self.allMessagesSections.count == 0 {
-//            return UIView()
-//        }
-//        let firstMessageInSection = self.allMessagesSections[section].first
-//        if firstMessageInSection?.senderId == AWSIdentityManager.defaultIdentityManager().identityId {
-//            let header = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "ownMessagesTableSectionHeader") as? OwnMessagesTableSectionHeader
-//            header?.timeLabel.text = firstMessageInSection?.createdDate?.messageDate
-//            header?.transform = CGAffineTransform(scaleX: 1, y: -1)
-//            return header
-//        } else {
-//            let header = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "otherMessagesTableSectionHeader") as? OtherMessagesTableSectionHeader
-//            header?.timeLabel.text = firstMessageInSection?.createdDate?.messageDate
-//            header?.transform = CGAffineTransform(scaleX: 1, y: -1)
-//            return header
-//        }
-//    }
-    
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 1.0
     }
@@ -228,6 +211,28 @@ class MessagesTableViewController: UITableViewController {
                 // Reload tableView with downloaded messages.
                 self.tableView.reloadData()
             })
+        })
+    }
+    
+    fileprivate func getConversationMessage(_ conversationId: String, messageId: String) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().getMessageDynamoDB(conversationId, messageId: messageId, completionHandler: {
+            (task: AWSTask) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                guard task.error == nil else {
+                    print("getConversationMessage error: \(task.error!)")
+                    return
+                }
+                guard let awsMessage = task.result as? AWSMessage else {
+                    print("getConversationMessage erro: Not AWSMessage. This should not happen.")
+                    return
+                }
+                let message = Message(conversationId: awsMessage._conversationId, messageId: awsMessage._messageId, created: awsMessage._created, messageText: awsMessage._messageText, senderId: awsMessage._senderId, recipientId: awsMessage._recipientId)
+                self.putNewMessageInOwnMessageSection(message)
+                self.tableView.reloadData()
+            })
+            return nil
         })
     }
     
@@ -320,6 +325,20 @@ extension MessagesTableViewController {
         }
         self.allMessagesSections[messageSectionIndex!].remove(at: messageRowIndex!)
         self.tableView.reloadData()
+    }
+    
+    func updateConversationNotification(_ notification: NSNotification) {
+        guard let conversationId = notification.userInfo?["conversationId"] as? String, let messageId = notification.userInfo?["messageId"] as? String else {
+            return
+        }
+        guard self.conversationId == conversationId else {
+            return
+        }
+        // Ensure message doesn't exist yet so we don't make duplicates.
+        guard self.allMessagesSections.flatMap({ $0 }).first(where: { $0.messageId == messageId}) == nil else {
+            return
+        }
+        self.getConversationMessage(conversationId, messageId: messageId)
     }
 }
 

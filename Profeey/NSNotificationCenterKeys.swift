@@ -35,3 +35,6 @@ let DownloadImageNotificationKey: String = "DownloadImageNotificationKey"
 
 let CreateMessageNotificationKey: String = "CreateMessageNotificationKey"
 let DeleteMessageNotificationKey: String = "DeleteMessageNotificationKey"
+
+// From APNs
+let UpdateConversationNotificationKey: String = "UpdateConversationNotificationKey"

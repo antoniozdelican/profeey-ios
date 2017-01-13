@@ -45,6 +45,11 @@ class AWSMessagesTable: NSObject, Table {
         return AWSMessage.jsonKeyPathsByPropertyKey()[dataObjectAttributeName] as! String
     }
     
+    func getMessage(_ conversationId: String, messageId: String, completionHandler: @escaping AWSContinuationBlock) {
+        let objectMapper = AWSDynamoDBObjectMapper.default()
+        objectMapper.load(AWSMessage.self, hashKey: conversationId, rangeKey: messageId).continue(completionHandler)
+    }
+    
     func createMessage(_ awsMessage: AWSMessage, completionHandler: @escaping AWSContinuationBlock) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
         objectMapper.save(awsMessage).continue(completionHandler)
@@ -54,6 +59,7 @@ class AWSMessagesTable: NSObject, Table {
         let objectMapper = AWSDynamoDBObjectMapper.default()
         objectMapper.remove(awsMessage).continue(completionHandler)
     }
+    
 }
 
 class AWSMessagesDateSortedIndex: NSObject, Index {
