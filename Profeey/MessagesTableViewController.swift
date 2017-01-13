@@ -229,7 +229,7 @@ class MessagesTableViewController: UITableViewController {
                     return
                 }
                 let message = Message(conversationId: awsMessage._conversationId, messageId: awsMessage._messageId, created: awsMessage._created, messageText: awsMessage._messageText, senderId: awsMessage._senderId, recipientId: awsMessage._recipientId)
-                self.putNewMessageInOwnMessageSection(message)
+                self.putNewMessageInMessageSection(message)
                 self.tableView.reloadData()
             })
             return nil
@@ -262,7 +262,7 @@ class MessagesTableViewController: UITableViewController {
         self.allMessagesSections[sectionsCount - 1].append(message)
     }
     
-    fileprivate func putNewMessageInOwnMessageSection(_ message: Message) {
+    fileprivate func putNewMessageInMessageSection(_ message: Message) {
         let sectionsCount = self.allMessagesSections.count
         guard sectionsCount > 0 else {
             // Create section for the first message.
@@ -299,7 +299,7 @@ extension MessagesTableViewController {
         guard self.conversationId == message.conversationId else {
             return
         }
-        self.putNewMessageInOwnMessageSection(message)
+        self.putNewMessageInMessageSection(message)
         self.tableView.reloadData()
     }
     

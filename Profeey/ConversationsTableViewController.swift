@@ -29,6 +29,10 @@ class ConversationsTableViewController: UITableViewController {
         self.queryUserConversationsDateSorted(true)
         
         // Add observers.
+        // Add observers.
+        NotificationCenter.default.addObserver(self, selector: #selector(self.createMessageNotification(_:)), name: NSNotification.Name(CreateMessageNotificationKey), object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(self.deleteMessageNotification(_:)), name: NSNotification.Name(DeleteMessageNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.updateConversationNotification(_:)), name: NSNotification.Name(UpdateConversationNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.downloadImageNotification(_:)), name: NSNotification.Name(DownloadImageNotificationKey), object: nil)
     }
 
@@ -186,12 +190,69 @@ class ConversationsTableViewController: UITableViewController {
             })
         })
     }
+    
+    fileprivate func getConversationMessage(_ conversationId: String, messageId: String) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().getMessageDynamoDB(conversationId, messageId: messageId, completionHandler: {
+            (task: AWSTask) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                guard task.error == nil else {
+                    print("getConversationMessage error: \(task.error!)")
+                    return
+                }
+                guard let awsMessage = task.result as? AWSMessage else {
+                    print("getConversationMessage erro: Not AWSMessage. This should not happen.")
+                    return
+                }
+                let message = Message(conversationId: awsMessage._conversationId, messageId: awsMessage._messageId, created: awsMessage._created, messageText: awsMessage._messageText, senderId: awsMessage._senderId, recipientId: awsMessage._recipientId)
+                self.updateConversationWithLastMessage(conversationId, message: message)
+            })
+            return nil
+        })
+    }
+    
+    // MARK: Helper
+    
+    fileprivate func updateConversationWithLastMessage(_ conversationId: String, message: Message) {
+        guard let conversationIndex = self.conversations.index(where: { $0.conversationId == conversationId }) else {
+            return
+        }
+        // Update conversation.
+        let conversation = self.conversations[conversationIndex]
+        conversation.lastMessageCreated = message.created
+        conversation.lastMessageText = message.messageText
+        // Move conversation to top.
+        self.conversations.remove(at: conversationIndex)
+        self.conversations.insert(conversation, at: 0)
+        self.tableView.reloadData()
+    }
 
 }
 
 extension ConversationsTableViewController {
     
     // MARK: NotificationCenterActions
+    
+    func createMessageNotification(_ notification: NSNotification) {
+        guard let message = notification.userInfo?["message"] as? Message, let conversationId = message.conversationId else {
+            return
+        }
+        guard let _ = self.conversations.index(where: { $0.conversationId == conversationId }) else {
+            return
+        }
+        self.updateConversationWithLastMessage(conversationId, message: message)
+    }
+    
+    func updateConversationNotification(_ notification: NSNotification) {
+        guard let conversationId = notification.userInfo?["conversationId"] as? String, let messageId = notification.userInfo?["messageId"] as? String else {
+            return
+        }
+        guard let _ = self.conversations.index(where: { $0.conversationId == conversationId }) else {
+            return
+        }
+        self.getConversationMessage(conversationId, messageId: messageId)
+    }
     
     func downloadImageNotification(_ notification: NSNotification) {
         guard let imageKey = notification.userInfo?["imageKey"] as? String, let imageType = notification.userInfo?["imageType"] as? ImageType, let imageData = notification.userInfo?["imageData"] as? Data else {
