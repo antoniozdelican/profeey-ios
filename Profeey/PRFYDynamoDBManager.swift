@@ -246,9 +246,9 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
             return
         }
         print("createRecommendationDynamoDB:")
-        let creationDate = NSNumber(value: Date().timeIntervalSince1970 as Double)
+        let created = NSNumber(value: Date().timeIntervalSince1970 as Double)
         let awsRecommendationsTable = AWSRecommendationsTable()
-        let awsRecommendation = AWSRecommendation(_userId: identityId, _recommendingId: recommendingId, _creationDate: creationDate, _recommendationText: recommendationText, _firstName: self.currentUserDynamoDB?.firstName, _lastName: self.currentUserDynamoDB?.lastName, _preferredUsername: self.currentUserDynamoDB?.preferredUsername, _professionName: self.currentUserDynamoDB?.professionName, _profilePicUrl: self.currentUserDynamoDB?.profilePicUrl)
+        let awsRecommendation = AWSRecommendation(_userId: identityId, _recommendingId: recommendingId, _created: created, _recommendationText: recommendationText, _firstName: self.currentUserDynamoDB?.firstName, _lastName: self.currentUserDynamoDB?.lastName, _preferredUsername: self.currentUserDynamoDB?.preferredUsername, _professionName: self.currentUserDynamoDB?.professionName, _profilePicUrl: self.currentUserDynamoDB?.profilePicUrl)
         awsRecommendationsTable.createRecommendation(awsRecommendation, completionHandler: completionHandler)
     }
     
@@ -290,9 +290,9 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
             return
         }
         print("createLikeDynamoDB:")
-        let creationDate = NSNumber(value: Date().timeIntervalSince1970 as Double)
+        let created = NSNumber(value: Date().timeIntervalSince1970 as Double)
         let awsLikesTable = AWSLikesTable()
-        let awsLike = AWSLike(_userId: identityId, _postId: postId, _creationDate: creationDate, _postUserId: postUserId, _firstName: self.currentUserDynamoDB?.firstName, _lastName: self.currentUserDynamoDB?.lastName, _preferredUsername: self.currentUserDynamoDB?.preferredUsername, _professionName: self.currentUserDynamoDB?.professionName, _profilePicUrl: self.currentUserDynamoDB?.profilePicUrl)
+        let awsLike = AWSLike(_userId: identityId, _postId: postId, _created: created, _postUserId: postUserId, _firstName: self.currentUserDynamoDB?.firstName, _lastName: self.currentUserDynamoDB?.lastName, _preferredUsername: self.currentUserDynamoDB?.preferredUsername, _professionName: self.currentUserDynamoDB?.professionName, _profilePicUrl: self.currentUserDynamoDB?.profilePicUrl)
         awsLikesTable.createLike(awsLike, completionHandler: completionHandler)
     }
     
@@ -458,7 +458,19 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         awsNotificationsDateSortedIndex.queryNotificationsDateSorted(identityId, lastEvaluatedKey: lastEvaluatedKey, completionHandler: completionHandler)
     }
     
+    // MARK: NotificationsCounters
+    
+    func getNotificationsCounterDynamoDB(_ completionHandler: @escaping AWSContinuationBlock){
+        guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
+            print("getNotificationsCounterDynamoDB no identityId!")
+            return
+        }
+        let awsNotificationsCountersTable = AWSNotificationsCountersTable()
+        awsNotificationsCountersTable.getNotificationsCounter(identityId, completionHandler: completionHandler)
+    }
+    
     // MARK: UserEndpoints
+    // TODO: change to EndpointUsers
     
     func saveUserEndpointDynamoDB(_ endpointARN: String, completionHandler: @escaping AWSContinuationBlock) {
         guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {

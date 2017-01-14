@@ -14,7 +14,7 @@ class AWSLike: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     
     var _userId: String?
     var _postId: String?
-    var _creationDate: NSNumber?
+    var _created: NSNumber?
     // Need to update Post numberOfLikes upon Like create/delete
     var _postUserId: String?
     
@@ -25,11 +25,11 @@ class AWSLike: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     var _professionName: String?
     var _profilePicUrl: String?
     
-    convenience init(_userId: String?, _postId: String?, _creationDate: NSNumber?, _postUserId: String?, _firstName: String?, _lastName: String?, _preferredUsername: String?, _professionName: String?, _profilePicUrl: String?) {
+    convenience init(_userId: String?, _postId: String?, _created: NSNumber?, _postUserId: String?, _firstName: String?, _lastName: String?, _preferredUsername: String?, _professionName: String?, _profilePicUrl: String?) {
         self.init()
         self._userId = _userId
         self._postId = _postId
-        self._creationDate = _creationDate
+        self._created = _created
         self._postUserId = _postUserId
         self._firstName = _firstName
         self._lastName = _lastName
@@ -64,7 +64,7 @@ class AWSLike: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
         return [
             "_userId" : "userId",
             "_postId" : "postId",
-            "_creationDate" : "creationDate",
+            "_created" : "created",
             "_postUserId" : "postUserId",
             "_firstName" : "firstName",
             "_lastName" : "lastName",

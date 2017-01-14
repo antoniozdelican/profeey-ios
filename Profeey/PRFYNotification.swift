@@ -13,19 +13,19 @@ class PRFYNotification: NSObject {
     // Properties.
     var userId: String? // currentUser.id
     var notificationId: String?
-    var creationDate: NSNumber?
+    var created: NSNumber?
     var notificationType: NSNumber?
     // Optional if notification is Like or Comment.
     var postId: String?
     
     // Generated.
     var user: User? // Notifier data.
-    var creationDateString: String? {
-        guard let creationDate = self.creationDate else {
+    var createdString: String? {
+        guard let created = self.created else {
             return nil
         }
         let currentDate = Date()
-        return currentDate.offsetFrom(Date(timeIntervalSince1970: TimeInterval(creationDate)))
+        return currentDate.offsetFrom(Date(timeIntervalSince1970: TimeInterval(created)))
     }
     
     var notificationMessage: String? {
@@ -54,11 +54,11 @@ class PRFYNotification: NSObject {
         super.init()
     }
     
-    convenience init(userId: String?, notificationId: String?, creationDate: NSNumber?, notificationType: NSNumber?, postId: String?, user: User?) {
+    convenience init(userId: String?, notificationId: String?, created: NSNumber?, notificationType: NSNumber?, postId: String?, user: User?) {
         self.init()
         self.userId = userId
         self.notificationId = notificationId
-        self.creationDate = creationDate
+        self.created = created
         self.notificationType = notificationType
         self.postId = postId
         self.user = user

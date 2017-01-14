@@ -86,16 +86,16 @@ class AWSRecommendationsDateSortedIndex: NSObject, Index {
         let objectMapper = AWSDynamoDBObjectMapper.default()
         let queryExpression = AWSDynamoDBQueryExpression()
         queryExpression.indexName = "DateSortedIndex"
-        queryExpression.keyConditionExpression = "#recommendingId = :recommendingId AND #creationDate <= :creationDate"
+        queryExpression.keyConditionExpression = "#recommendingId = :recommendingId AND #created <= :created"
         queryExpression.expressionAttributeNames = [
             "#recommendingId": "recommendingId",
-            "#creationDate": "creationDate",
+            "#created": "created",
         ]
         let currentDateNumber = NSNumber(value: Date().timeIntervalSince1970 as Double)
         
         queryExpression.expressionAttributeValues = [
             ":recommendingId": recommendingId,
-            ":creationDate": currentDateNumber,
+            ":created": currentDateNumber,
         ]
         queryExpression.scanIndexForward = false
         objectMapper.query(AWSRecommendation.self, expression: queryExpression, completionHandler: completionHandler)

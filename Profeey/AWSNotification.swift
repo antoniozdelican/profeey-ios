@@ -13,7 +13,7 @@ class AWSNotification: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     
     var _userId: String?
     var _notificationId: String?
-    var _creationDate: NSNumber?
+    var _created: NSNumber?
     var _notificationType: NSNumber?
     
     // Optional if notification is Like or Comment.
@@ -45,7 +45,7 @@ class AWSNotification: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
         return [
             "_userId" : "userId",
             "_notificationId" : "notificationId",
-            "_creationDate" : "creationDate",
+            "_created" : "created",
             "_notificationType" : "notificationType",
             "_postId" : "postId",
             "_notifierUserId" : "notifierUserId",

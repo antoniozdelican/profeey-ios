@@ -221,6 +221,8 @@
 		A9D49EE71DD5F58B000F90A8 /* ProfileEmptyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D49EE61DD5F58B000F90A8 /* ProfileEmptyTableViewCell.swift */; };
 		A9D49EEB1DD602D6000F90A8 /* AddRecommendation.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9D49EEA1DD602D6000F90A8 /* AddRecommendation.storyboard */; };
 		A9D49EED1DD602E5000F90A8 /* Recommendations.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9D49EEC1DD602E5000F90A8 /* Recommendations.storyboard */; };
+		A9D608701E2A811D00AD8C16 /* AWSNotificationsCounter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D6086F1E2A811D00AD8C16 /* AWSNotificationsCounter.swift */; };
+		A9D608721E2A812C00AD8C16 /* AWSNotificationsCountersTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D608711E2A812C00AD8C16 /* AWSNotificationsCountersTable.swift */; };
 		A9D688851E0AE06500A07D86 /* AWSProfession.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D688841E0AE06500A07D86 /* AWSProfession.swift */; };
 		A9D688871E0AE06F00A07D86 /* AWSProfessionsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D688861E0AE06F00A07D86 /* AWSProfessionsTable.swift */; };
 		A9D6888A1E0AEE9300A07D86 /* AWSProfessionLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D688891E0AEE9300A07D86 /* AWSProfessionLocation.swift */; };
@@ -506,6 +508,8 @@
 		A9D49EE61DD5F58B000F90A8 /* ProfileEmptyTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileEmptyTableViewCell.swift; sourceTree = "<group>"; };
 		A9D49EEA1DD602D6000F90A8 /* AddRecommendation.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = AddRecommendation.storyboard; sourceTree = "<group>"; };
 		A9D49EEC1DD602E5000F90A8 /* Recommendations.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Recommendations.storyboard; sourceTree = "<group>"; };
+		A9D6086F1E2A811D00AD8C16 /* AWSNotificationsCounter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSNotificationsCounter.swift; sourceTree = "<group>"; };
+		A9D608711E2A812C00AD8C16 /* AWSNotificationsCountersTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSNotificationsCountersTable.swift; sourceTree = "<group>"; };
 		A9D688841E0AE06500A07D86 /* AWSProfession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSProfession.swift; sourceTree = "<group>"; };
 		A9D688861E0AE06F00A07D86 /* AWSProfessionsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSProfessionsTable.swift; sourceTree = "<group>"; };
 		A9D688891E0AEE9300A07D86 /* AWSProfessionLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSProfessionLocation.swift; sourceTree = "<group>"; };
@@ -1193,6 +1197,15 @@
 			name = "Add Recommendation";
 			sourceTree = "<group>";
 		};
+		A9D6086E1E2A80BF00AD8C16 /* AWSNotificationsCounters */ = {
+			isa = PBXGroup;
+			children = (
+				A9D6086F1E2A811D00AD8C16 /* AWSNotificationsCounter.swift */,
+				A9D608711E2A812C00AD8C16 /* AWSNotificationsCountersTable.swift */,
+			);
+			name = AWSNotificationsCounters;
+			sourceTree = "<group>";
+		};
 		A9D688801E0AE01100A07D86 /* TempSearch */ = {
 			isa = PBXGroup;
 			children = (
@@ -1368,6 +1381,7 @@
 				A9ACA73F1DB506910004B8DE /* AWSWorkExperiences */,
 				A99B9E291DB53C8D0047360D /* AWSEducations */,
 				A91C1CD11DED9C5B006FBDD4 /* AWSNotifications */,
+				A9D6086E1E2A80BF00AD8C16 /* AWSNotificationsCounters */,
 				A97A3F631DF0271000FC5AEA /* AWSUserEndpoints */,
 				A9C88E5F1E22780E00B7D2E7 /* AWSMessages */,
 				A94368811E23AD4E0009F4EA /* AWSConversations */,
@@ -1699,6 +1713,7 @@
 				A9AFFB0F1D8AFF1800219627 /* CategoryTableViewCell.swift in Sources */,
 				A9AA36351D945DE200E5EAFA /* OnboardingNavigationController.swift in Sources */,
 				A97DBEED1DF16BD400A9F4FE /* SearchViewController.swift in Sources */,
+				A9D608701E2A811D00AD8C16 /* AWSNotificationsCounter.swift in Sources */,
 				A9BB32211DF34228005233F3 /* PRFYCloudSearchUsersResult.swift in Sources */,
 				A999CD3F1DBE6F9F00E7ADB1 /* SearchProfessionsTableViewController.swift in Sources */,
 				A918284B1DC1233400EC9E63 /* SearchLocationTableViewCell.swift in Sources */,
@@ -1723,6 +1738,7 @@
 				A91A7B041DC4FA9300F7D6A7 /* AWSComment.swift in Sources */,
 				A9B6F0B41DDA22D80031FA2F /* AWSRecommendation.swift in Sources */,
 				A9AFFB061D8AD9DE00219627 /* SearchUserTableViewCell.swift in Sources */,
+				A9D608721E2A812C00AD8C16 /* AWSNotificationsCountersTable.swift in Sources */,
 				A9B185951DCF25CF00E1981D /* AWSRelationshipsTable.swift in Sources */,
 				A9F49D571D379D01002EB68B /* AWSPost.swift in Sources */,
 				A9C6CB7F1D2929AA00863816 /* Extensions.swift in Sources */,

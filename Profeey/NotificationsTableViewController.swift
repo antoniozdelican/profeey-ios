@@ -15,36 +15,24 @@ class NotificationsTableViewController: UITableViewController {
     // Removed weak so it doesn't go to nil.
     @IBOutlet var loadingTableFooterView: UIView!
     
-    var notifications: [PRFYNotification] = []
-    var isLoadingNotifications: Bool = false
-    var lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?
-    var noNetworkConnection: Bool = false
+    fileprivate var notifications: [PRFYNotification] = []
+    fileprivate var isLoadingNotifications: Bool = false
+    fileprivate var lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?
+    fileprivate var noNetworkConnection: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-
-        /*
-         Initial query is done by MainTabBarVc.
-         In special case when loading isn't finished and user already selected NotificationsVc, re-do the query.
-        */
-        if self.isLoadingNotifications {
-            // Query.
-            self.isLoadingNotifications = true
-            self.tableView.tableFooterView = self.loadingTableFooterView
-            self.queryNotificationsDateSorted(true)
-        } else {
-            self.tableView.tableFooterView = UIView()
-            // Load profilePics.
-            for notification in self.notifications {
-                if let profilePicUrl = notification.user?.profilePicUrl {
-                    PRFYS3Manager.defaultS3Manager().downloadImageS3(profilePicUrl, imageType: .userProfilePic)
-                }
-            }
-        }
+        
+        // Query.
+        self.isLoadingNotifications = true
+        self.tableView.tableFooterView = self.loadingTableFooterView
+        self.queryNotificationsDateSorted(true)
         
         // Add observers.
         NotificationCenter.default.addObserver(self, selector: #selector(self.downloadImageNotification(_:)), name: NSNotification.Name(DownloadImageNotificationKey), object: nil)
+        // Special observer for refreshing notifications.
+        NotificationCenter.default.addObserver(self, selector: #selector(self.uiApplicationDidBecomeActiveNotification(_:)), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -90,7 +78,7 @@ class NotificationsTableViewController: UITableViewController {
         let notification = self.notifications[indexPath.row]
         cell.profilePicImageView.image = notification.user?.profilePicUrl != nil ? notification.user?.profilePic : UIImage(named: "ic_no_profile_pic_feed")
         cell.messageLabel.attributedText = self.constructNotificationMessage(notification.user?.preferredUsername, notificationMessage: notification.notificationMessage)
-        cell.timeLabel.text = notification.creationDateString
+        cell.timeLabel.text = notification.createdString
         return cell
     }
     
@@ -174,7 +162,7 @@ class NotificationsTableViewController: UITableViewController {
             self.lastEvaluatedKey = nil
         }
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().queryNotificationsDateSortedDynamoDB(lastEvaluatedKey, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().queryNotificationsDateSortedDynamoDB(self.lastEvaluatedKey, completionHandler: {
             (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
@@ -198,7 +186,7 @@ class NotificationsTableViewController: UITableViewController {
                 if let awsNotifications = response?.items as? [AWSNotification] {
                     for awsNotification in awsNotifications {
                         let user = User(userId: awsNotification._notifierUserId, firstName: awsNotification._firstName, lastName: awsNotification._lastName, preferredUsername: awsNotification._preferredUsername, professionName: awsNotification._professionName, profilePicUrl: awsNotification._profilePicUrl)
-                        let notification = PRFYNotification(userId: awsNotification._userId, notificationId: awsNotification._notificationId, creationDate: awsNotification._creationDate, notificationType: awsNotification._notificationType, postId: awsNotification._postId, user: user)
+                        let notification = PRFYNotification(userId: awsNotification._userId, notificationId: awsNotification._notificationId, created: awsNotification._created, notificationType: awsNotification._notificationType, postId: awsNotification._postId, user: user)
                         self.notifications.append(notification)
                         numberOfNewNotifications += 1
                     }
@@ -247,6 +235,13 @@ extension NotificationsTableViewController {
             self.notifications[notificationIndex].user?.profilePic = UIImage(data: imageData)
             self.tableView.reloadVisibleRow(IndexPath(row: notificationIndex, section: 0))
         }
+    }
+    
+    func uiApplicationDidBecomeActiveNotification(_ notification: NSNotification) {
+        guard self.isLoadingNotifications == false else {
+            return
+        }
+        self.queryNotificationsDateSorted(true)
     }
 }
 

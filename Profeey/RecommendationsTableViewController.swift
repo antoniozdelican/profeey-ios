@@ -78,7 +78,7 @@ class RecommendationsTableViewController: UITableViewController {
         cell.profilePicImageView.image = user?.profilePicUrl != nil ? user?.profilePic : UIImage(named: "ic_no_profile_pic_feed")
         cell.preferredUsernameLabel.text = user?.preferredUsername
         cell.professionNameLabel.text = user?.professionName
-        cell.timeLabel.text = recommendation.creationDateString
+        cell.timeLabel.text = recommendation.createdString
         cell.recommendationTextLabel.text = recommendation.recommendationText
         recommendation.isExpandedRecommendationText ? cell.untruncate() : cell.truncate()
         cell.recommendationTableViewCellDelegate = self
@@ -131,7 +131,7 @@ class RecommendationsTableViewController: UITableViewController {
                     }
                     for awsRecommendation in awsRecommendations {
                         let user = User(userId: awsRecommendation._userId, firstName: awsRecommendation._firstName, lastName: awsRecommendation._lastName, preferredUsername: awsRecommendation._preferredUsername, professionName: awsRecommendation._professionName, profilePicUrl: awsRecommendation._profilePicUrl)
-                        let recommendation = Recommendation(userId: awsRecommendation._userId, recommendingId: awsRecommendation._recommendingId, recommendationText: awsRecommendation._recommendationText, creationDate: awsRecommendation._creationDate, user: user)
+                        let recommendation = Recommendation(userId: awsRecommendation._userId, recommendingId: awsRecommendation._recommendingId, recommendationText: awsRecommendation._recommendationText, created: awsRecommendation._created, user: user)
                         self.recommendations.append(recommendation)
                     }
                     self.tableView.reloadData()

@@ -13,7 +13,7 @@ class AWSRecommendation: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     
     var _userId: String?
     var _recommendingId: String?
-    var _creationDate: NSNumber?
+    var _created: NSNumber?
     var _recommendationText: String?
     
     // Recommender data.
@@ -23,11 +23,11 @@ class AWSRecommendation: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     var _professionName: String?
     var _profilePicUrl: String?
     
-    convenience init(_userId: String?, _recommendingId: String?, _creationDate: NSNumber?, _recommendationText: String?, _firstName: String?, _lastName: String?, _preferredUsername: String?, _professionName: String?, _profilePicUrl: String?) {
+    convenience init(_userId: String?, _recommendingId: String?, _created: NSNumber?, _recommendationText: String?, _firstName: String?, _lastName: String?, _preferredUsername: String?, _professionName: String?, _profilePicUrl: String?) {
         self.init()
         self._userId = _userId
         self._recommendingId = _recommendingId
-        self._creationDate = _creationDate
+        self._created = _created
         self._recommendationText = _recommendationText
         self._firstName = _firstName
         self._lastName = _lastName
@@ -62,7 +62,7 @@ class AWSRecommendation: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
         return [
             "_userId" : "userId",
             "_recommendingId" : "recommendingId",
-            "_creationDate" : "creationDate",
+            "_created" : "created",
             "_recommendationText" : "recommendationText",
             "_firstName" : "firstName",
             "_lastName" : "lastName",

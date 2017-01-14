@@ -33,16 +33,6 @@ class NotificationsViewController: UIViewController {
     var notificationsTableViewControllerDelegate: NotificationsTableViewControllerDelegate?
     var conversationsTableViewControllerDelegate: ConversationsTableViewControllerDelegate?
     
-    var notifications: [PRFYNotification] = []
-    var isLoadingNotifications: Bool = false
-    var notificationsLastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?
-    
-    var conversations: [Conversation] = []
-    var isLoadingConversations: Bool = false
-    var conversationsLastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?
-    
-    var noNetworkConnection: Bool = false
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
@@ -60,12 +50,6 @@ class NotificationsViewController: UIViewController {
         super.viewWillAppear(animated)
         self.indicatorScrollView.contentOffset.x = -self.mainScrollView.contentOffset.x / 2
     }
-    
-    // TEST
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        (self.tabBarController as? MainTabBarController)?.toggleNewNotificationsView(true)
-    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -76,17 +60,9 @@ class NotificationsViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destinationViewController = segue.destination as? NotificationsTableViewController {
             self.notificationsTableViewControllerDelegate = destinationViewController
-            destinationViewController.notifications = self.notifications
-            destinationViewController.isLoadingNotifications = self.isLoadingNotifications
-            destinationViewController.lastEvaluatedKey = self.notificationsLastEvaluatedKey
-            destinationViewController.noNetworkConnection = self.noNetworkConnection
         }
         if let destinationViewController = segue.destination as? ConversationsTableViewController {
             self.conversationsTableViewControllerDelegate = destinationViewController
-            destinationViewController.conversations = self.conversations
-            destinationViewController.isLoadingConversations = self.isLoadingConversations
-            destinationViewController.lastEvaluatedKey = self.conversationsLastEvaluatedKey
-            destinationViewController.noNetworkConnection = self.noNetworkConnection
         }
     }
     

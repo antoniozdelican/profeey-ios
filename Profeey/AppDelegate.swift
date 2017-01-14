@@ -88,7 +88,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         AWSMobileClient.sharedInstance.application(application, didReceiveRemoteNotification: userInfo)
         
         // Set badge.
-        (self.window?.rootViewController as? MainTabBarController)?.toggleNewNotificationsView(false)
+        //(self.window?.rootViewController as? MainTabBarController)?.toggleNewNotificationsView(false)
         
         // Determine notification type.
         if let conversationId = userInfo["conversationId"] as? String, let messageId = userInfo["messageId"] as? String {
@@ -103,9 +103,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Open NotificationsVc if needed.
         if UIApplication.shared.applicationState != UIApplicationState.active {
             (self.window?.rootViewController as? MainTabBarController)?.selectNotificationsViewController()
-//            if let tabBarController = self.window?.rootViewController as? MainTabBarController {
-//                tabBarController.selectNotificationsViewController()
-//            }
         }
     }
     

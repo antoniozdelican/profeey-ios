@@ -14,16 +14,16 @@ class Recommendation: NSObject {
     var userId: String?
     var recommendingId: String?
     var recommendationText: String?
-    var creationDate: NSNumber?
+    var created: NSNumber?
     
     // Generated.
     var user: User?
-    var creationDateString: String? {
-        guard let creationDate = self.creationDate else {
+    var createdString: String? {
+        guard let created = self.created else {
             return nil
         }
         let currentDate = Date()
-        return currentDate.offsetFromShort(Date(timeIntervalSince1970: TimeInterval(creationDate)))
+        return currentDate.offsetFromShort(Date(timeIntervalSince1970: TimeInterval(created)))
     }
     
     var isExpandedRecommendationText: Bool = false
@@ -32,12 +32,12 @@ class Recommendation: NSObject {
         super.init()
     }
     
-    convenience init(userId: String?, recommendingId: String?, recommendationText: String?, creationDate: NSNumber?, user: User?) {
+    convenience init(userId: String?, recommendingId: String?, recommendationText: String?, created: NSNumber?, user: User?) {
         self.init()
         self.userId = userId
         self.recommendingId = recommendingId
         self.recommendationText = recommendationText
-        self.creationDate = creationDate
+        self.created = created
         self.user = user
     }
 }

@@ -82,6 +82,10 @@ protocol DynamoDBManager {
     
     func queryNotificationsDateSortedDynamoDB(_ lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
     
+    // MARK: NotificationsCounters
+    
+    func getNotificationsCounterDynamoDB(_ completionHandler: @escaping AWSContinuationBlock)
+    
     // MARK: UserEndpoints
     
     func saveUserEndpointDynamoDB(_ endpointARN: String, completionHandler: @escaping AWSContinuationBlock)

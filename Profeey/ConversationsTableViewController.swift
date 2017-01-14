@@ -14,33 +14,19 @@ class ConversationsTableViewController: UITableViewController {
     
     @IBOutlet var loadingTableFooterView: UIView!
     
-    var conversations: [Conversation] = []
-    var isLoadingConversations: Bool = false
-    var lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?
-    var noNetworkConnection: Bool = false
+    fileprivate var conversations: [Conversation] = []
+    fileprivate var isLoadingConversations: Bool = false
+    fileprivate var lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?
+    fileprivate var noNetworkConnection: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         
-        /*
-         Initial query is done by MainTabBarVc.
-         In special case when loading isn't finished and user already selected ConversationsVc, re-do the query.
-         */
-        if self.isLoadingConversations {
-            // Query.
-            self.tableView.tableFooterView = self.loadingTableFooterView
-            self.isLoadingConversations = true
-            self.queryConversationsDateSorted(true)
-        } else {
-            self.tableView.tableFooterView = UIView()
-            // Load profilePics.
-            for conversation in self.conversations {
-                if let profilePicUrl = conversation.participant?.profilePicUrl {
-                    PRFYS3Manager.defaultS3Manager().downloadImageS3(profilePicUrl, imageType: .userProfilePic)
-                }
-            }
-        }
+        // Query.
+        self.tableView.tableFooterView = self.loadingTableFooterView
+        self.isLoadingConversations = true
+        self.queryConversationsDateSorted(true)
         
         // Add observers.
         NotificationCenter.default.addObserver(self, selector: #selector(self.createMessageNotification(_:)), name: NSNotification.Name(CreateMessageNotificationKey), object: nil)
@@ -48,6 +34,8 @@ class ConversationsTableViewController: UITableViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(self.createConversationNotification(_:)), name: NSNotification.Name(CreateConversationNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.apnsNewMessageNotificationKey(_:)), name: NSNotification.Name(APNsNewMessageNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.downloadImageNotification(_:)), name: NSNotification.Name(DownloadImageNotificationKey), object: nil)
+        // Special observer for refreshing notifications.
+        NotificationCenter.default.addObserver(self, selector: #selector(self.uiApplicationDidBecomeActiveNotification(_:)), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -309,6 +297,13 @@ extension ConversationsTableViewController {
             self.conversations[conversationIndex].participant?.profilePic = UIImage(data: imageData)
             self.tableView.reloadVisibleRow(IndexPath(row: conversationIndex, section: 0))
         }
+    }
+    
+    func uiApplicationDidBecomeActiveNotification(_ notification: NSNotification) {
+        guard self.isLoadingConversations == false else {
+            return
+        }
+        self.queryConversationsDateSorted(true)
     }
 }
 
