@@ -68,7 +68,7 @@ class AWSNotificationsDateSortedIndex: NSObject, Index {
     // MARK: QueryWithPartitionKeyAndSortKey
     
     // Query paginated notifications with userId and creationDate <= currentDate.
-    func queryUserNotificationsDateSorted(_ userId: String, lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+    func queryNotificationsDateSorted(_ userId: String, lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
         let queryExpression = AWSDynamoDBQueryExpression()
         queryExpression.indexName = "DateSortedIndex"

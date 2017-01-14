@@ -14,19 +14,33 @@ class ConversationsTableViewController: UITableViewController {
     
     @IBOutlet var loadingTableFooterView: UIView!
     
-    fileprivate var conversations: [Conversation] = []
-    fileprivate var isLoadingConversations: Bool = false
-    fileprivate var lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?
-    fileprivate var noNetworkConnection: Bool = false
+    var conversations: [Conversation] = []
+    var isLoadingConversations: Bool = false
+    var lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?
+    var noNetworkConnection: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         
-        // Query.
-        self.tableView.tableFooterView = self.loadingTableFooterView
-        self.isLoadingConversations = true
-        self.queryConversationsDateSorted(true)
+        /*
+         Initial query is done by MainTabBarVc.
+         In special case when loading isn't finished and user already selected ConversationsVc, re-do the query.
+         */
+        if self.isLoadingConversations {
+            // Query.
+            self.tableView.tableFooterView = self.loadingTableFooterView
+            self.isLoadingConversations = true
+            self.queryConversationsDateSorted(true)
+        } else {
+            self.tableView.tableFooterView = UIView()
+            // Load profilePics.
+            for conversation in self.conversations {
+                if let profilePicUrl = conversation.participant?.profilePicUrl {
+                    PRFYS3Manager.defaultS3Manager().downloadImageS3(profilePicUrl, imageType: .userProfilePic)
+                }
+            }
+        }
         
         // Add observers.
         NotificationCenter.default.addObserver(self, selector: #selector(self.createMessageNotification(_:)), name: NSNotification.Name(CreateMessageNotificationKey), object: nil)

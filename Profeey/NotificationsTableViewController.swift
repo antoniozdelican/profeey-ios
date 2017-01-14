@@ -15,19 +15,33 @@ class NotificationsTableViewController: UITableViewController {
     // Removed weak so it doesn't go to nil.
     @IBOutlet var loadingTableFooterView: UIView!
     
-    fileprivate var notifications: [PRFYNotification] = []
-    fileprivate var isLoadingNotifications: Bool = false
-    fileprivate var lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?
-    fileprivate var noNetworkConnection: Bool = false
+    var notifications: [PRFYNotification] = []
+    var isLoadingNotifications: Bool = false
+    var lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?
+    var noNetworkConnection: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
 
-        // Query.
-        self.tableView.tableFooterView = self.loadingTableFooterView
-        self.isLoadingNotifications = true
-        self.queryUserNotificationsDateSorted(true)
+        /*
+         Initial query is done by MainTabBarVc.
+         In special case when loading isn't finished and user already selected NotificationsVc, re-do the query.
+        */
+        if self.isLoadingNotifications {
+            // Query.
+            self.isLoadingNotifications = true
+            self.tableView.tableFooterView = self.loadingTableFooterView
+            self.queryNotificationsDateSorted(true)
+        } else {
+            self.tableView.tableFooterView = UIView()
+            // Load profilePics.
+            for notification in self.notifications {
+                if let profilePicUrl = notification.user?.profilePicUrl {
+                    PRFYS3Manager.defaultS3Manager().downloadImageS3(profilePicUrl, imageType: .userProfilePic)
+                }
+            }
+        }
         
         // Add observers.
         NotificationCenter.default.addObserver(self, selector: #selector(self.downloadImageNotification(_:)), name: NSNotification.Name(DownloadImageNotificationKey), object: nil)
@@ -109,7 +123,7 @@ class NotificationsTableViewController: UITableViewController {
         }
         self.tableView.tableFooterView = self.loadingTableFooterView
         self.isLoadingNotifications = true
-        self.queryUserNotificationsDateSorted(false)
+        self.queryNotificationsDateSorted(false)
     }
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -134,7 +148,7 @@ class NotificationsTableViewController: UITableViewController {
             return
         }
         self.isLoadingNotifications = true
-        self.queryUserNotificationsDateSorted(true)
+        self.queryNotificationsDateSorted(true)
     }
     
     // MARK: Helpers
@@ -155,17 +169,17 @@ class NotificationsTableViewController: UITableViewController {
     
     // MARK: AWS
     
-    fileprivate func queryUserNotificationsDateSorted(_ startFromBeginning: Bool) {
+    fileprivate func queryNotificationsDateSorted(_ startFromBeginning: Bool) {
         if startFromBeginning {
             self.lastEvaluatedKey = nil
         }
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().queryUserNotificationsDateSortedDynamoDB(lastEvaluatedKey, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().queryNotificationsDateSortedDynamoDB(lastEvaluatedKey, completionHandler: {
             (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 guard error == nil else {
-                    print("queryUserNotificationsDateSorted error: \(error!)")
+                    print("queryNotificationsDateSorted error: \(error!)")
                     self.isLoadingNotifications = false
                     self.refreshControl?.endRefreshing()
                     self.tableView.tableFooterView = UIView()

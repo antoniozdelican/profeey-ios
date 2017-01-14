@@ -38,5 +38,9 @@ let DeleteMessageNotificationKey: String = "DeleteMessageNotificationKey"
 
 let CreateConversationNotificationKey: String = "CreateConversationNotificationKey"
 
+// MainTabBar is loading initial and then sending to NotificationsTableVc and ConversationsTableVc
+//let UpdateInitialNotificationsNotificationKey: String = "UpdateInitialNotificationsNotificationKey"
+//let UpdateInitialConversationsNotificationKey: String = "UpdateInitialConversationsNotificationKey"
+
 // From APNs
 let APNsNewMessageNotificationKey: String = "APNsNewMessageNotificationKey"

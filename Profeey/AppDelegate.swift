@@ -43,20 +43,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
-
         return AWSMobileClient.sharedInstance.withApplication(application, withURL: url, withSourceApplication: sourceApplication, withAnnotation: annotation)
     }
     
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
+        print("applicationWillResignActive:")
     }
     
     func applicationDidEnterBackground(_ application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+        print("applicationDidEnterBackground:")
     }
     
+    func applicationWillEnterForeground(_ application: UIApplication) {
+        // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+        print("applicationWillEnterForeground:")
+        
+        // Clear the badge icon when you open the app.
+        UIApplication.shared.applicationIconBadgeNumber = 0
+    }
     
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
@@ -65,16 +73,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
-    }
-    
-    func applicationWillEnterForeground(_ application: UIApplication) {
-        // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
-        
-        // Clear the badge icon when you open the app.
-        // TODO clear only if user saw conversation.
-        // Keep track in DynamoDB how many conversations are unseen (not messages!!)
-        // Adjust Lambda function accordingly.
-        UIApplication.shared.applicationIconBadgeNumber = 0
+        print("applicationWillTerminate:")
     }
     
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
@@ -85,22 +84,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         AWSMobileClient.sharedInstance.application(application, didFailToRegisterForRemoteNotificationsWithError: error)
     }
     
-    // Removed
-//    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any]) {
-//        //AWSMobileClient.sharedInstance.application(application, didReceiveRemoteNotification: userInfo)
-//        print("didReceiveRemoteNotification:")
-//        print(userInfo)
-//    }
-    
-    // Added
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         AWSMobileClient.sharedInstance.application(application, didReceiveRemoteNotification: userInfo)
         
-        print("didReceiveRemoteNotification fetchCompletionHandler:")
-        print(userInfo)
+        // Set badge.
+        (self.window?.rootViewController as? MainTabBarController)?.toggleNewNotificationsView(false)
         
+        // Determine notification type.
         if let conversationId = userInfo["conversationId"] as? String, let messageId = userInfo["messageId"] as? String {
-            // Get message from DynamoDB.
             self.getMessage(conversationId, messageId: messageId)
         } else {
             print("It's something else!")
@@ -109,11 +100,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // TODO play with constants depending on case.
         completionHandler(UIBackgroundFetchResult.newData)
         
-        // TODO now it's exclusively for Notifications and not yet for refreshing activities/feed/etc.
+        // Open NotificationsVc if needed.
         if UIApplication.shared.applicationState != UIApplicationState.active {
-            if let tabBarController = self.window?.rootViewController as? MainTabBarController {
-                tabBarController.selectMainChildViewController(MainChildController.notifications)
-            }
+            (self.window?.rootViewController as? MainTabBarController)?.selectNotificationsViewController()
+//            if let tabBarController = self.window?.rootViewController as? MainTabBarController {
+//                tabBarController.selectNotificationsViewController()
+//            }
         }
     }
     

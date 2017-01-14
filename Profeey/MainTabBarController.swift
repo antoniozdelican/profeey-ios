@@ -8,6 +8,7 @@
 
 import UIKit
 import AWSMobileHubHelper
+import AWSDynamoDB
 
 enum MainChildController: Int {
     case home = 0
@@ -19,18 +20,35 @@ enum MainChildController: Int {
 
 class MainTabBarController: UITabBarController {
     
-    // For double tap on tabBarItem and tableView scroll.
     fileprivate var previousViewController: UIViewController?
+    fileprivate var newNotificationsView: UIView?
+    
+    fileprivate var notifications: [PRFYNotification] = []
+    fileprivate var isLoadingNotifications: Bool = false
+    fileprivate var notificationsLastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?
+    
+    fileprivate var conversations: [Conversation] = []
+    fileprivate var isLoadingConversations: Bool = false
+    fileprivate var conversationsLastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?
+    
+    fileprivate var noNetworkConnection: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = Colors.whiteDark
         self.delegate = self
-        self.configureView()
+        self.configureTabBarItems()
+        self.configureNewNotificationsView()
         
-        // Get currentUser from DynamoDB upon initialization of this rootVc.
         if AWSIdentityManager.defaultIdentityManager().isLoggedIn {
+            // Get currentUser from DynamoDB upon initialization of this rootVc.
             self.getCurrentUser()
+            // Query initial Notifications.
+            self.isLoadingNotifications = true
+            self.queryNotificationsDateSorted()
+            // Query initial Conversations.
+            self.isLoadingConversations = true
+            self.queryConversationsDateSorted()
         }
         
         // Add observers.
@@ -43,7 +61,7 @@ class MainTabBarController: UITabBarController {
     
     // MARK: Configuration
     
-    fileprivate func configureView() {
+    fileprivate func configureTabBarItems() {
         // Set images for tabBar items
         for navigationController in self.childViewControllers {
             let tabBarItem = navigationController.tabBarItem
@@ -90,6 +108,24 @@ class MainTabBarController: UITabBarController {
         }
     }
     
+    fileprivate func configureNewNotificationsView() {
+        guard let tabBarItemsCount = self.tabBar.items?.count else {
+            return
+        }
+        let taBarItemWidth = self.tabBar.frame.width / CGFloat(tabBarItemsCount)
+        // Position newNotificationsView close to middle and below notificaionsTabBarItem.
+        let x = (taBarItemWidth * CGFloat(tabBarItemsCount - 2)) + (34.0)
+        let y = self.tabBar.frame.height - 12.0
+        let frame = CGRect(x: x, y: y, width: 8.0, height: 8.0)
+        self.newNotificationsView = UIView(frame: frame)
+        if self.newNotificationsView != nil {
+            self.newNotificationsView!.backgroundColor = Colors.turquoise
+            self.newNotificationsView!.layer.cornerRadius = 4.0
+            self.tabBar.addSubview(self.newNotificationsView!)
+            self.toggleNewNotificationsView(true)
+        }
+    }
+    
     // MARK: Helpers
     
     fileprivate func showMissingUsernameFlow() {
@@ -99,9 +135,13 @@ class MainTabBarController: UITabBarController {
     
     // MARK: Public
     
-    // Public method to open NotificationsVc as response to user tapping push notification.
-    func selectMainChildViewController(_ mainChildController: MainChildController) {
-        self.selectedIndex = mainChildController.rawValue
+    // Open NotificationsVc as response to user tapping push notification.
+    func selectNotificationsViewController() {
+        self.selectedIndex = MainChildController.notifications.rawValue
+    }
+    
+    func toggleNewNotificationsView(_ isHidden: Bool) {
+        self.newNotificationsView?.isHidden = isHidden
     }
     
     // MARK: AWS
@@ -134,6 +174,66 @@ class MainTabBarController: UITabBarController {
                 }
             })
             return nil
+        })
+    }
+    
+    // Preload notifications as soon as MainTabBar is loaded.
+    fileprivate func queryNotificationsDateSorted() {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().queryNotificationsDateSortedDynamoDB(nil, completionHandler: {
+            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                guard error == nil else {
+                    print("queryNotificationsDateSorted error: \(error!)")
+                    self.isLoadingNotifications = false
+                    if (error as! NSError).code == -1009 {
+                        self.noNetworkConnection = true
+                    }
+                    return
+                }
+                if let awsNotifications = response?.items as? [AWSNotification] {
+                    for awsNotification in awsNotifications {
+                        let user = User(userId: awsNotification._notifierUserId, firstName: awsNotification._firstName, lastName: awsNotification._lastName, preferredUsername: awsNotification._preferredUsername, professionName: awsNotification._professionName, profilePicUrl: awsNotification._profilePicUrl)
+                        let notification = PRFYNotification(userId: awsNotification._userId, notificationId: awsNotification._notificationId, creationDate: awsNotification._creationDate, notificationType: awsNotification._notificationType, postId: awsNotification._postId, user: user)
+                        self.notifications.append(notification)
+                    }
+                }
+                // Reset flags and animations that were initiated.
+                self.isLoadingNotifications = false
+                self.noNetworkConnection = false
+                self.notificationsLastEvaluatedKey = response?.lastEvaluatedKey
+            })
+        })
+    }
+    
+    // Preload conversations as soon as MainTabBar is loaded.
+    fileprivate func queryConversationsDateSorted() {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().queryConversationsDateSortedDynamoDB(nil, completionHandler: {
+            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                guard error == nil else {
+                    print("queryConversationsDateSorted error: \(error!)")
+                    self.isLoadingConversations = false
+                    if (error as! NSError).code == -1009 {
+                        self.noNetworkConnection = true
+                    }
+                    return
+                }
+                if let awsConversations = response?.items as? [AWSConversation] {
+                    for awsConversation in awsConversations {
+                        let participant = User(userId: awsConversation._participantId, firstName: awsConversation._participantFirstName, lastName: awsConversation._participantLastName, preferredUsername: awsConversation._participantPreferredUsername, professionName: awsConversation._participantProfessionName, profilePicUrl: awsConversation._participantProfilePicUrl)
+                        let conversation = Conversation(userId: awsConversation._userId, conversationId: awsConversation._conversationId, lastMessageText: awsConversation._lastMessageText, lastMessageCreated: awsConversation._lastMessageCreated, participant: participant)
+                        self.conversations.append(conversation)
+                    }
+                }
+                // Reset flags and animations that were initiated.
+                self.isLoadingConversations = false
+                self.noNetworkConnection = false
+                self.conversationsLastEvaluatedKey = response?.lastEvaluatedKey
+            })
         })
     }
 }
@@ -194,6 +294,21 @@ extension MainTabBarController: UITabBarControllerDelegate {
                 childViewController.notificationsTabBarButtonTapped()
             }
             self.previousViewController = childViewController
+            
+            // Set downloaded Notifications and clear variables.
+            childViewController.notifications = self.notifications
+            childViewController.isLoadingNotifications = self.isLoadingNotifications
+            childViewController.notificationsLastEvaluatedKey = self.notificationsLastEvaluatedKey
+            self.notifications = []
+            self.notificationsLastEvaluatedKey = nil
+            // Set downloaded Conversations and clear variables.
+            childViewController.conversations = self.conversations
+            childViewController.isLoadingConversations = self.isLoadingConversations
+            childViewController.conversationsLastEvaluatedKey = self.conversationsLastEvaluatedKey
+            self.conversations = []
+            self.conversationsLastEvaluatedKey = nil
+            
+            childViewController.noNetworkConnection = self.noNetworkConnection
         }
         if let childViewController = navigationController.childViewControllers[0] as? ProfileTableViewController {
             if self.previousViewController == childViewController {
