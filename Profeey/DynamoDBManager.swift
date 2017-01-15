@@ -85,6 +85,7 @@ protocol DynamoDBManager {
     // MARK: NotificationsCounters
     
     func getNotificationsCounterDynamoDB(_ completionHandler: @escaping AWSContinuationBlock)
+    func updateNotificationsCounterDynamoDB(_ completionHandler: @escaping AWSContinuationBlock)
     
     // MARK: UserEndpoints
     

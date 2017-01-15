@@ -50,4 +50,9 @@ class AWSNotificationsCountersTable: NSObject, Table {
         let objectMapper = AWSDynamoDBObjectMapper.default()
         objectMapper.load(AWSNotificationsCounter.self, hashKey: userId, rangeKey: nil).continue(completionHandler)
     }
+    
+    func updateNotificationsCounter(_ awsNotificationsCounter: AWSNotificationsCounter, completionHandler: @escaping AWSContinuationBlock) {
+        let objectMapper = AWSDynamoDBObjectMapper.default()
+        objectMapper.save(awsNotificationsCounter).continue(completionHandler)
+    }
 }

@@ -13,6 +13,15 @@ class AWSNotificationsCounter: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     
     var _userId: String?
     var _numberOfNewNotifications: NSNumber?
+    var _lastSeenDate: NSNumber?
+    
+    // Update.
+    convenience init(_userId: String?, _numberOfNewNotifications: NSNumber?, _lastSeenDate: NSNumber?) {
+        self.init()
+        self._userId = _userId
+        self._numberOfNewNotifications = _numberOfNewNotifications
+        self._lastSeenDate = _lastSeenDate
+    }
     
     class func dynamoDBTableName() -> String {
         
@@ -28,6 +37,7 @@ class AWSNotificationsCounter: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
         return [
             "_userId" : "userId",
             "_numberOfNewNotifications" : "numberOfNewNotifications",
+            "_lastSeenDate" : "lastSeenDate",
         ]
     }
 }

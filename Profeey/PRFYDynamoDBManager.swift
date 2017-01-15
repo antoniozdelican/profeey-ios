@@ -469,6 +469,18 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         awsNotificationsCountersTable.getNotificationsCounter(identityId, completionHandler: completionHandler)
     }
     
+    func updateNotificationsCounterDynamoDB(_ completionHandler: @escaping AWSContinuationBlock) {
+        guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
+            print("updateNotificationsCounterDynamoDB no identityId!")
+            return
+        }
+        let awsNotificationsCountersTable = AWSNotificationsCountersTable()
+        let numberOfNewNotifications = NSNumber(value: 0)
+        let lastSeenDate = NSNumber(value: Date().timeIntervalSince1970 as Double)
+        let awsNotificationsCounter = AWSNotificationsCounter(_userId: identityId, _numberOfNewNotifications: numberOfNewNotifications, _lastSeenDate: lastSeenDate)
+        awsNotificationsCountersTable.updateNotificationsCounter(awsNotificationsCounter, completionHandler: completionHandler)
+    }
+    
     // MARK: UserEndpoints
     // TODO: change to EndpointUsers
     

@@ -23,6 +23,8 @@ class MainTabBarController: UITabBarController {
     fileprivate var previousViewController: UIViewController?
     fileprivate var newNotificationsView: UIView?
     
+    // Get counter and when was the last time seen.
+    var lastSeenDate: NSNumber?
     fileprivate var isLoadingNotificationsCounter: Bool = false
 
     override func viewDidLoad() {
@@ -180,13 +182,32 @@ class MainTabBarController: UITabBarController {
                     print("getNotificationsCounter error: \(task.error!)")
                     return
                 }
-                guard let awsNotificationsCounter = task.result as? AWSNotificationsCounter else {
-                    return
+                if let awsNotificationsCounter = task.result as? AWSNotificationsCounter {
+                    if let numberOfNewNotifications = awsNotificationsCounter._numberOfNewNotifications, numberOfNewNotifications.intValue > 0 {
+                        self.tabBar.items?[3].badgeValue = "\(numberOfNewNotifications.intValue)"
+                        //self.toggleNewNotificationsView(isHidden: false)
+                    } else {
+                        self.tabBar.items?[3].badgeValue = nil
+                        //self.toggleNewNotificationsView(isHidden: true)
+                    }
+                    self.lastSeenDate = awsNotificationsCounter._lastSeenDate
                 }
-                if let numberOfNewNotifications = awsNotificationsCounter._numberOfNewNotifications, numberOfNewNotifications.intValue > 0 {
-                    self.toggleNewNotificationsView(isHidden: false)
-                } else {
-                    self.toggleNewNotificationsView(isHidden: true)
+                // Reset every time, even if notificationsCounter doesn't yet exists (new user).
+                self.updateNotificationsCounter()
+            })
+        })
+    }
+    
+    // After getting notificationsCounter, immediately set counter to 0 and update lastSeenDate.
+    fileprivate func updateNotificationsCounter() {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().updateNotificationsCounterDynamoDB({
+            (task: AWSTask) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                guard task.error == nil else {
+                    print("updateNotificationsCounter error: \(task.error!)")
+                    return
                 }
             })
         })

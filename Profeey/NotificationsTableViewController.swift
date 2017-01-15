@@ -79,6 +79,11 @@ class NotificationsTableViewController: UITableViewController {
         cell.profilePicImageView.image = notification.user?.profilePicUrl != nil ? notification.user?.profilePic : UIImage(named: "ic_no_profile_pic_feed")
         cell.messageLabel.attributedText = self.constructNotificationMessage(notification.user?.preferredUsername, notificationMessage: notification.notificationMessage)
         cell.timeLabel.text = notification.createdString
+        
+        // Check for new notifications.
+        if let notificationCreated = notification.created?.intValue, let lastSeenDate = (self.tabBarController as? MainTabBarController)?.lastSeenDate?.intValue {
+            cell.contentView.backgroundColor = (notificationCreated > lastSeenDate) ? Colors.greyLight : UIColor.white
+        }
         return cell
     }
     
@@ -135,6 +140,8 @@ class NotificationsTableViewController: UITableViewController {
             self.refreshControl?.endRefreshing()
             return
         }
+        // Reset lastSeenDate.
+        (self.tabBarController as? MainTabBarController)?.lastSeenDate = NSNumber(value: Date().timeIntervalSince1970)
         self.isLoadingNotifications = true
         self.queryNotificationsDateSorted(true)
     }

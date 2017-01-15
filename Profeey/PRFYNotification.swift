@@ -20,6 +20,7 @@ class PRFYNotification: NSObject {
     
     // Generated.
     var user: User? // Notifier data.
+    
     var createdString: String? {
         guard let created = self.created else {
             return nil
