@@ -13,14 +13,14 @@ enum SearchSegmentType {
     case professions
 }
 
-protocol SearchUsersDelegate {
+protocol SearchUsersDelegate: class {
     func addLocation(_ location: Location)
     func removeLocation()
     func searchBarTextChanged(_ searchText: String)
     func scrollToTop()
 }
 
-protocol SearchProfessionsDelegate {
+protocol SearchProfessionsDelegate: class {
     func addLocation(_ location: Location)
     func removeLocation()
     func searchBarTextChanged(_ searchText: String)
@@ -37,8 +37,8 @@ class SearchViewController: UIViewController {
     fileprivate var searchBar = UISearchBar()
     fileprivate var locationBarButtonItem: UIBarButtonItem?
     fileprivate var isLocationActive: Bool = false
-    fileprivate var searchUsersDelegate: SearchUsersDelegate?
-    fileprivate var searchProfessionsDelegate: SearchProfessionsDelegate?
+    fileprivate weak var searchUsersDelegate: SearchUsersDelegate?
+    fileprivate weak var searchProfessionsDelegate: SearchProfessionsDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()

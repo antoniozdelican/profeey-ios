@@ -127,15 +127,17 @@ protocol DynamoDBManager {
     
     // MARK: Messages
     
+    func getMessageDynamoDB(_ conversationId: String, messageId: String, completionHandler: @escaping AWSContinuationBlock)
     func createMessageDynamoDB(_ conversationId: String, recipientId: String, messageText: String, messageId: String, created: NSNumber, completionHandler: @escaping AWSContinuationBlock)
     func removeMessageDynamoDB(_ conversationId: String, messageId: String, completionHandler: @escaping AWSContinuationBlock)
     func queryMessagesDateSortedDynamoDB(_ conversationId: String, lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
-    func getMessageDynamoDB(_ conversationId: String, messageId: String, completionHandler: @escaping AWSContinuationBlock)
     
     // MARK: Conversations
     
+    func getConversationDynamoDB(_ conversationId: String, completionHandler: @escaping AWSContinuationBlock)
     func createConversationDynamoDB(_ messageText: String, conversationId: String, participantId: String, participantFirstName: String?, participantLastName: String?, participantPreferredUsername: String?, participantProfessionName: String?, participantProfilePicUrl: String?, completionHandler: @escaping AWSContinuationBlock)
+    func updateSeenConversationDynamoDB(_ conversationId: String, completionHandler: @escaping AWSContinuationBlock)
     func removeConversationDynamoDB(_ conversationId: String, completionHandler: @escaping AWSContinuationBlock)
     func queryConversationsDateSortedDynamoDB(_ lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
-    func getConversationDynamoDB(_ conversationId: String, completionHandler: @escaping AWSContinuationBlock)
+    func queryUnseenConversationsDynamoDB(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
 }

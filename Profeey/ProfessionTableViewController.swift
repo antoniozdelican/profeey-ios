@@ -27,7 +27,6 @@ class ProfessionTableViewController: UITableViewController {
         
         if let professionName = self.profession?.professionName {
             self.isSearchingUsers = true
-//            self.getAllUsersWithProfession(professionName, locationId: self.location?.locationId)
             self.queryProfessionUsers(professionName, locationId: self.location?.locationId)
         }
         

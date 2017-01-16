@@ -9,7 +9,7 @@
 import UIKit
 import TTTAttributedLabel
 
-protocol CommentTableViewCellDelegate {
+protocol CommentTableViewCellDelegate: class {
     func userTapped(_ cell: CommentTableViewCell)
     func commentTextLabelTapped(_ cell: CommentTableViewCell)
 }
@@ -23,7 +23,7 @@ class CommentTableViewCell: UITableViewCell {
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var nameStackView: UIStackView!
     
-    var commentTableViewCellDelegate: CommentTableViewCellDelegate?
+    weak var commentTableViewCellDelegate: CommentTableViewCellDelegate?
     
     override func awakeFromNib() {
         super.awakeFromNib()

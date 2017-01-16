@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol PostUserTableViewCellDelegate {
+protocol PostUserTableViewCellDelegate: class {
     func expandButtonTapped(_ cell: PostUserTableViewCell)
 }
 
@@ -19,7 +19,7 @@ class PostUserTableViewCell: UITableViewCell {
     @IBOutlet weak var professionNameLabel: UILabel!
     @IBOutlet weak var expandButton: UIButton!
     
-    var postUserTableViewCellDelegate: PostUserTableViewCellDelegate?
+    weak var postUserTableViewCellDelegate: PostUserTableViewCellDelegate?
     
     override func awakeFromNib() {
         super.awakeFromNib()

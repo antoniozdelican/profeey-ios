@@ -36,6 +36,7 @@ class AWSConversationsTable: NSObject, Table {
         partitionKeyType = "String"
         indexes = [
             AWSConversationsDateSortedIndex(),
+            AWSConversationsUnseenIndex(),
         ]
         sortKeyType = "String"
         super.init()
@@ -60,6 +61,13 @@ class AWSConversationsTable: NSObject, Table {
         objectMapper.save(awsConversation).continue(completionHandler)
     }
     
+    func updateConversationSkipNull(_ awsConversation: AWSConversation, completionHandler: @escaping AWSContinuationBlock) {
+        let objectMapper = AWSDynamoDBObjectMapper.default()
+        let updateMapperConfig = AWSDynamoDBObjectMapperConfiguration()
+        updateMapperConfig.saveBehavior = AWSDynamoDBObjectMapperSaveBehavior.updateSkipNullAttributes
+        objectMapper.save(awsConversation, configuration: updateMapperConfig).continue(completionHandler)
+    }
+    
     func removeConversation(_ awsConversation: AWSConversation, completionHandler: @escaping AWSContinuationBlock) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
         objectMapper.remove(awsConversation).continue(completionHandler)
@@ -82,7 +90,7 @@ class AWSConversationsDateSortedIndex: NSObject, Index {
     // MARK: QueryWithPartitionKeyAndSortKey
     
     // Query paginated conversations with userId and lastMessageCreated <= currentDate.
-    func queryUserConversationsDateSorted(_ userId: String, lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+    func queryConversationsDateSorted(_ userId: String, lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
         let queryExpression = AWSDynamoDBQueryExpression()
         queryExpression.indexName = "DateSortedIndex"
@@ -99,6 +107,40 @@ class AWSConversationsDateSortedIndex: NSObject, Index {
         queryExpression.limit = 10
         queryExpression.exclusiveStartKey = lastEvaluatedKey
         
+        objectMapper.query(AWSConversation.self, expression: queryExpression, completionHandler: completionHandler)
+    }
+}
+
+class AWSConversationsUnseenIndex: NSObject, Index {
+    
+    var indexName: String? {
+        
+        return "UnseenIndex"
+    }
+    
+    func supportedOperations() -> [String] {
+        return [
+            QueryWithPartitionKeyAndSortKey,
+        ]
+    }
+    
+    // MARK: QueryWithPartitionKeyAndSortKey
+    
+    // Query ALL conversations with userId and lastMessageSeen == 0.
+    func queryUnseenConversations(_ userId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+        let objectMapper = AWSDynamoDBObjectMapper.default()
+        let queryExpression = AWSDynamoDBQueryExpression()
+        queryExpression.indexName = "UnseenIndex"
+        queryExpression.keyConditionExpression = "#userId = :userId AND #lastMessageSeen = :lastMessageSeen"
+        queryExpression.expressionAttributeNames = [
+            "#userId": "userId",
+            "#lastMessageSeen": "lastMessageSeen",
+        ]
+        queryExpression.expressionAttributeValues = [
+            ":userId": userId,
+            ":lastMessageSeen": NSNumber(value: 0),
+        ]
+        queryExpression.projectionExpression = "userId, conversationId"
         objectMapper.query(AWSConversation.self, expression: queryExpression, completionHandler: completionHandler)
     }
 }

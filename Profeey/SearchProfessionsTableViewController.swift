@@ -10,13 +10,13 @@ import UIKit
 import AWSMobileHubHelper
 import AWSDynamoDB
 
-protocol SearchProfessionsTableViewControllerDelegate {
+protocol SearchProfessionsTableViewControllerDelegate: class {
     func professionsTableViewWillBeginDragging()
 }
 
 class SearchProfessionsTableViewController: UITableViewController {
     
-    var searchProfessionsTableViewControllerDelegate: SearchProfessionsTableViewControllerDelegate?
+    weak var searchProfessionsTableViewControllerDelegate: SearchProfessionsTableViewControllerDelegate?
     
     fileprivate var professions: [Profession] = []
     fileprivate var isSearchingProfessions: Bool {

@@ -10,13 +10,13 @@ import UIKit
 import AWSMobileHubHelper
 import AWSDynamoDB
 
-protocol SearchUsersTableViewControllerDelegate {
+protocol SearchUsersTableViewControllerDelegate: class {
     func usersTableViewWillBeginDragging()
 }
 
 class SearchUsersTableViewController: UITableViewController {
     
-    var searchUsersTableViewControllerDelegate: SearchUsersTableViewControllerDelegate?
+    weak var searchUsersTableViewControllerDelegate: SearchUsersTableViewControllerDelegate?
     
     fileprivate var users: [User] = []
     fileprivate var isSearchingUsers: Bool {

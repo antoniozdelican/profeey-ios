@@ -25,9 +25,22 @@ class RecommendationsTableViewController: UITableViewController {
             self.isLoadingRecommendations = true
             self.queryRecommendationsDateSorted(recommendingId)
         }
-        
-        // Add observers.
-        NotificationCenter.default.addObserver(self, selector: #selector(self.downloadImageNotification(_:)), name: NSNotification.Name(DownloadImageNotificationKey), object: nil)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if self.isMovingToParentViewController {
+            // Set observers.
+            NotificationCenter.default.setObserver(self, selector: #selector(self.downloadImageNotification(_:)), name: NSNotification.Name(DownloadImageNotificationKey), object: nil)
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        if self.isMovingFromParentViewController {
+            // Remove observers.
+            NotificationCenter.default.removeObserver(self, name: NSNotification.Name(DownloadImageNotificationKey), object: nil)
+        }
+        super.viewWillDisappear(animated)
     }
 
     override func didReceiveMemoryWarning() {

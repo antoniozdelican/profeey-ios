@@ -10,14 +10,14 @@ import UIKit
 import AWSMobileHubHelper
 import AWSDynamoDB
 
-protocol LocationsTableViewControllerDelegate {
+protocol LocationsTableViewControllerDelegate: class {
     func didSelectLocation(_ location: Location)
 }
 
 class LocationsTableViewController: UITableViewController {
     
     var locationName: String?
-    var locationsTableViewControllerDelegate: LocationsTableViewControllerDelegate?
+    weak var locationsTableViewControllerDelegate: LocationsTableViewControllerDelegate?
     
     fileprivate var popularLocations: [Location] = []
     fileprivate var regularLocations: [Location] = []
@@ -33,7 +33,6 @@ class LocationsTableViewController: UITableViewController {
         self.isShowingPopularLocations = true
         self.isSearchingPopularLocations = true
         self.scanLocations()
-//        self.getAllLocations()
     }
     
     override func viewWillDisappear(_ animated: Bool) {

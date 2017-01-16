@@ -66,9 +66,10 @@ class MessagesViewController: UIViewController {
         self.messageContainerView.clipsToBounds = true
     }
     
+    // TODO do this for every other
     override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
         self.view.endEditing(true)
+        super.viewWillDisappear(animated)
     }
 
     override func didReceiveMemoryWarning() {
@@ -259,5 +260,9 @@ extension MessagesViewController: MessagesTableViewControllerDelegate {
         if self.numberOfInitialMessages == nil {
             self.numberOfInitialMessages = numberOfInitialMessages
         }
+        // Update seen.
+//        if let conversationId = self.conversationId, numberOfInitialMessages > 0 {
+//            self.updateSeenConversation(conversationId)
+//        }
     }
 }

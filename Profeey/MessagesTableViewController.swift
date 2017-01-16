@@ -30,6 +30,8 @@ class MessagesTableViewController: UITableViewController {
     
     fileprivate var hasLoadedInitialMessages: Bool = false
     fileprivate var currentCalendar: Calendar = Calendar.current
+    
+    fileprivate var seenConversation: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,11 +46,33 @@ class MessagesTableViewController: UITableViewController {
             self.isLoadingMessages = true
             self.queryMessagesDateSorted(conversationId)
         }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
-        // Add observers.
-        NotificationCenter.default.addObserver(self, selector: #selector(self.createMessageNotification(_:)), name: NSNotification.Name(CreateMessageNotificationKey), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.deleteMessageNotification(_:)), name: NSNotification.Name(DeleteMessageNotificationKey), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.apnsNewMessageNotificationKey(_:)), name: NSNotification.Name(APNsNewMessageNotificationKey), object: nil)
+        // TODO: this will fail.
+        
+        if self.isMovingToParentViewController {
+            // Set observers.
+            NotificationCenter.default.setObserver(self, selector: #selector(self.createMessageNotification(_:)), name: NSNotification.Name(CreateMessageNotificationKey), object: nil)
+            NotificationCenter.default.setObserver(self, selector: #selector(self.deleteMessageNotification(_:)), name: NSNotification.Name(DeleteMessageNotificationKey), object: nil)
+            // Special observer to simulate instant messaging.
+            NotificationCenter.default.setObserver(self, selector: #selector(self.apnsNewMessageNotificationKey(_:)), name: NSNotification.Name(APNsNewMessageNotificationKey), object: nil)
+            // Special observer for refreshing notifications.
+            NotificationCenter.default.setObserver(self, selector: #selector(self.uiApplicationDidBecomeActiveNotification(_:)), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        if self.isMovingFromParentViewController {
+            // Remove observers.
+            NotificationCenter.default.removeObserver(self, name: NSNotification.Name(CreateMessageNotificationKey), object: nil)
+            NotificationCenter.default.removeObserver(self, name: NSNotification.Name(DeleteMessageNotificationKey), object: nil)
+            NotificationCenter.default.removeObserver(self, name: NSNotification.Name(APNsNewMessageNotificationKey), object: nil)
+            NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+        }
+        super.viewWillDisappear(animated)
     }
 
     override func didReceiveMemoryWarning() {
@@ -169,51 +193,6 @@ class MessagesTableViewController: UITableViewController {
         self.messagesTableViewControllerDelegate?.scrollViewWillBeginDragging()
     }
     
-    // MARK: AWS
-    
-    // No refresh so never startFromBeginning.
-    fileprivate func queryMessagesDateSorted(_ conversationId: String) {
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().queryMessagesDateSortedDynamoDB(conversationId, lastEvaluatedKey: self.lastEvaluatedKey, completionHandler: {
-            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
-            DispatchQueue.main.async(execute: {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                guard error == nil else {
-                    print("queryConversationMessagesDateSorted error: \(error!)")
-                    self.isLoadingMessages = false
-                    self.tableView.tableFooterView = UIView()
-                    self.tableView.reloadData()
-                    if (error as! NSError).code == -1009 {
-                        (self.navigationController as? PRFYNavigationController)?.showBanner("No Internet Connection")
-                        self.noNetworkConnection = true
-                    }
-                    return
-                }
-                if let awsMessages = response?.items as? [AWSMessage] {
-                    for awsMessage in awsMessages {
-                        let message = Message(conversationId: awsMessage._conversationId, messageId: awsMessage._messageId, created: awsMessage._created, messageText: awsMessage._messageText, senderId: awsMessage._senderId, recipientId: awsMessage._recipientId)
-                        self.putMessageInMessageSection(message)
-                    }
-                }
-                
-                // Reset flags and animations that were initiated.
-                self.isLoadingMessages = false
-                self.noNetworkConnection = false
-                self.lastEvaluatedKey = response?.lastEvaluatedKey
-                self.tableView.tableFooterView = UIView()
-                
-                // Special case goes only once.
-                if !self.hasLoadedInitialMessages {
-                    self.hasLoadedInitialMessages = true
-                    self.messagesTableViewControllerDelegate?.initialMessagesLoaded(self.allMessagesSections.count)
-                }
-                
-                // Reload tableView with downloaded messages.
-                self.tableView.reloadData()
-            })
-        })
-    }
-    
     // MARK: Helpers
     
     fileprivate func putMessageInMessageSection(_ message: Message) {
@@ -262,6 +241,85 @@ class MessagesTableViewController: UITableViewController {
             return
         }
         self.allMessagesSections[0].insert(message, at: 0)
+    }
+    
+    // MARK: AWS
+    
+    // No refresh so never startFromBeginning.
+    fileprivate func queryMessagesDateSorted(_ conversationId: String) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().queryMessagesDateSortedDynamoDB(conversationId, lastEvaluatedKey: self.lastEvaluatedKey, completionHandler: {
+            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                guard error == nil else {
+                    print("queryConversationMessagesDateSorted error: \(error!)")
+                    self.isLoadingMessages = false
+                    self.tableView.tableFooterView = UIView()
+                    self.tableView.reloadData()
+                    if (error as! NSError).code == -1009 {
+                        (self.navigationController as? PRFYNavigationController)?.showBanner("No Internet Connection")
+                        self.noNetworkConnection = true
+                    }
+                    return
+                }
+                if let awsMessages = response?.items as? [AWSMessage] {
+                    for awsMessage in awsMessages {
+                        let message = Message(conversationId: awsMessage._conversationId, messageId: awsMessage._messageId, created: awsMessage._created, messageText: awsMessage._messageText, senderId: awsMessage._senderId, recipientId: awsMessage._recipientId)
+                        self.putMessageInMessageSection(message)
+                    }
+                }
+                
+                // Reset flags and animations that were initiated.
+                self.isLoadingMessages = false
+                self.noNetworkConnection = false
+                self.lastEvaluatedKey = response?.lastEvaluatedKey
+                self.tableView.tableFooterView = UIView()
+                
+                // Special case goes only once.
+                if !self.hasLoadedInitialMessages {
+                    self.hasLoadedInitialMessages = true
+                    // Notify parent it can post.
+                    self.messagesTableViewControllerDelegate?.initialMessagesLoaded(self.allMessagesSections.count)
+                }
+                
+                // Update seen but only if it's not a fresh conversation and not yet seen.
+                if self.allMessagesSections.count > 0 && self.seenConversation == false {
+                    self.updateSeenConversation(conversationId)
+                }
+                
+                // Reload tableView.
+                self.tableView.reloadData()
+            })
+        })
+    }
+    
+    // In background.
+    fileprivate func updateSeenConversation(_ conversationId: String) {
+        
+        print("This is a test:")
+        print("updateSeenConversation")
+        
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().updateSeenConversationDynamoDB(conversationId, completionHandler: {
+            (task: AWSTask) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                guard task.error == nil else {
+                    print("updateSeenConversation error: \(task.error!)")
+                    return
+                }
+                // Update badge.
+                if let numberOfUnseenConversations = (self.tabBarController as? MainTabBarController)?.numberOfUnseenConversations, numberOfUnseenConversations > 0 {
+                    let newNumberOfUnseenConversations = numberOfUnseenConversations - 1
+                    (self.tabBarController as? MainTabBarController)?.numberOfUnseenConversations = newNumberOfUnseenConversations
+                    (self.tabBarController as? MainTabBarController)?.updateUnseenConversationsBadge(newNumberOfUnseenConversations)
+                }
+                // Update seen.
+                self.seenConversation = true
+            })
+            return nil
+        })
     }
 
 }
@@ -318,6 +376,21 @@ extension MessagesTableViewController {
         }
         self.putNewMessageInMessageSection(message)
         self.tableView.reloadData()
+        
+        // TODO update seen?
+    }
+    
+    func uiApplicationDidBecomeActiveNotification(_ notification: NSNotification) {
+        guard self.isLoadingMessages == false else {
+            return
+        }
+        guard let conversationId = self.conversationId else {
+            return
+        }
+        // Always reset.
+        self.allMessagesSections = []
+        self.seenConversation = false
+        self.queryMessagesDateSorted(conversationId)
     }
 }
 

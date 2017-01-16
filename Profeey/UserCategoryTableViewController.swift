@@ -30,16 +30,36 @@ class UserCategoryTableViewController: UITableViewController {
             self.isLoadingInitialPosts = true
             self.queryUserPostsDateSortedWithCategory(userId, categoryName: categoryName, startFromBeginning: true)
         }
-        
-        // Add observers.
-        NotificationCenter.default.addObserver(self, selector: #selector(self.createPostNotification(_:)), name: NSNotification.Name(CreatePostNotificationKey), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNotification(_:)), name: NSNotification.Name(UpdatePostNotificationKey), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.deletePostNotification(_:)), name: NSNotification.Name(DeletePostNotificationKey), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.createLikeNotification(_:)), name: NSNotification.Name(CreateLikeNotificationKey), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.deleteLikeNotification(_:)), name: NSNotification.Name(DeleteLikeNotificationKey), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.createCommentNotification(_:)), name: NSNotification.Name(CreateCommentNotificationKey), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.deleteCommentNotification(_:)), name: NSNotification.Name(DeleteCommentNotificationKey), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.downloadImageNotification(_:)), name: NSNotification.Name(DownloadImageNotificationKey), object: nil)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if self.isMovingToParentViewController {
+            // Set observers.
+            NotificationCenter.default.setObserver(self, selector: #selector(self.createPostNotification(_:)), name: NSNotification.Name(CreatePostNotificationKey), object: nil)
+            NotificationCenter.default.setObserver(self, selector: #selector(self.updatePostNotification(_:)), name: NSNotification.Name(UpdatePostNotificationKey), object: nil)
+            NotificationCenter.default.setObserver(self, selector: #selector(self.deletePostNotification(_:)), name: NSNotification.Name(DeletePostNotificationKey), object: nil)
+            NotificationCenter.default.setObserver(self, selector: #selector(self.createLikeNotification(_:)), name: NSNotification.Name(CreateLikeNotificationKey), object: nil)
+            NotificationCenter.default.setObserver(self, selector: #selector(self.deleteLikeNotification(_:)), name: NSNotification.Name(DeleteLikeNotificationKey), object: nil)
+            NotificationCenter.default.setObserver(self, selector: #selector(self.createCommentNotification(_:)), name: NSNotification.Name(CreateCommentNotificationKey), object: nil)
+            NotificationCenter.default.setObserver(self, selector: #selector(self.deleteCommentNotification(_:)), name: NSNotification.Name(DeleteCommentNotificationKey), object: nil)
+            NotificationCenter.default.setObserver(self, selector: #selector(self.downloadImageNotification(_:)), name: NSNotification.Name(DownloadImageNotificationKey), object: nil)
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        if self.isMovingFromParentViewController {
+            // Remove observers.
+            NotificationCenter.default.removeObserver(self, name: NSNotification.Name(CreatePostNotificationKey), object: nil)
+            NotificationCenter.default.removeObserver(self, name: NSNotification.Name(UpdatePostNotificationKey), object: nil)
+            NotificationCenter.default.removeObserver(self, name: NSNotification.Name(DeletePostNotificationKey), object: nil)
+            NotificationCenter.default.removeObserver(self, name: NSNotification.Name(CreateLikeNotificationKey), object: nil)
+            NotificationCenter.default.removeObserver(self, name: NSNotification.Name(DeleteLikeNotificationKey), object: nil)
+            NotificationCenter.default.removeObserver(self, name: NSNotification.Name(CreateCommentNotificationKey), object: nil)
+            NotificationCenter.default.removeObserver(self, name: NSNotification.Name(DeleteCommentNotificationKey), object: nil)
+            NotificationCenter.default.removeObserver(self, name: NSNotification.Name(DownloadImageNotificationKey), object: nil)
+        }
+        super.viewWillDisappear(animated)
     }
 
     override func didReceiveMemoryWarning() {

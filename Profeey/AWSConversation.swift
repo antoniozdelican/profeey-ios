@@ -17,6 +17,8 @@ class AWSConversation: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     
     var _lastMessageText: String?
     var _lastMessageCreated: NSNumber?
+    // Bool isn't supported so setting 0 or 1.
+    var _lastMessageSeen: NSNumber?
     
     var _participantId: String?
     var _participantFirstName: String?
@@ -25,19 +27,28 @@ class AWSConversation: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     var _participantProfessionName: String?
     var _participantProfilePicUrl: String?
     
-    convenience init(_userId: String?, _conversationId: String?, _created: NSNumber?, _lastMessageText: String?, _lastMessageCreated: NSNumber?, _participantId: String?, _participantFirstName: String?, _participantLastName: String?, _participantPreferredUsername: String?, _participantProfessionName: String?, _participantProfilePicUrl: String?) {
+    convenience init(_userId: String?, _conversationId: String?, _created: NSNumber?, _lastMessageText: String?, _lastMessageCreated: NSNumber?, _lastMessageSeen: NSNumber?, _participantId: String?, _participantFirstName: String?, _participantLastName: String?, _participantPreferredUsername: String?, _participantProfessionName: String?, _participantProfilePicUrl: String?) {
         self.init()
         self._userId = _userId
         self._conversationId = _conversationId
         self._created = _created
         self._lastMessageText = _lastMessageText
         self._lastMessageCreated = _lastMessageCreated
+        self._lastMessageSeen = _lastMessageSeen
         self._participantId = _participantId
         self._participantFirstName = _participantFirstName
         self._participantLastName = _participantLastName
         self._participantPreferredUsername = _participantPreferredUsername
         self._participantProfessionName = _participantProfessionName
         self._participantProfilePicUrl = _participantProfilePicUrl
+    }
+    
+    // To update seen Conversation.
+    convenience init(_userId: String?, _conversationId: String?, _lastMessageSeen: NSNumber?) {
+        self.init()
+        self._userId = _userId
+        self._conversationId = _conversationId
+        self._lastMessageSeen = _lastMessageSeen
     }
     
     // To remove Conversation.
@@ -69,6 +80,7 @@ class AWSConversation: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
             "_created" : "created",
             "_lastMessageText" : "lastMessageText",
             "_lastMessageCreated" : "lastMessageCreated",
+            "_lastMessageSeen" : "lastMessageSeen",
             "_participantId" : "participantId",
             "_participantFirstName" : "participantFirstName",
             "_participantLastName" : "participantLastName",
@@ -78,8 +90,4 @@ class AWSConversation: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
         ]
     }
     
-    // Only interested in lastMessageCreated.
-//    class func ignoreAttributes() -> [String] {
-//        return ["created"]
-//    }
 }

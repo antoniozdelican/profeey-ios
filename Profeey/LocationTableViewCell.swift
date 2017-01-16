@@ -12,7 +12,6 @@ class LocationTableViewCell: UITableViewCell {
     
     @IBOutlet weak var locationNameLabel: UILabel!
     @IBOutlet weak var numberOfUsersLabel: UILabel!
-    
 
     override func awakeFromNib() {
         super.awakeFromNib()

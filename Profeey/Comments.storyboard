@@ -94,7 +94,7 @@
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VXD-Tk-TWe">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="569"/>
                                 <connections>
-                                    <segue destination="Ru4-U4-dtS" kind="embed" id="uyO-Ia-RqD"/>
+                                    <segue destination="Ru4-U4-dtS" kind="embed" id="Y7r-dM-wbC"/>
                                 </connections>
                             </containerView>
                         </subviews>

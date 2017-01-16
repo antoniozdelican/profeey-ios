@@ -15,6 +15,7 @@ class Conversation: NSObject {
     var conversationId: String?
     var lastMessageText: String?
     var lastMessageCreated: NSNumber?
+    var lastMessageSeen: NSNumber? // 0 or 1 because Bool isn't supported.
     
     // Generated.
     var participant: User? // Participant data.

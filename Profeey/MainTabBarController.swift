@@ -23,9 +23,13 @@ class MainTabBarController: UITabBarController {
     fileprivate var previousViewController: UIViewController?
     fileprivate var newNotificationsView: UIView?
     
-    // Get counter and when was the last time seen.
+    // Last seen date for Notifications.
     var lastSeenDate: NSNumber?
     fileprivate var isLoadingNotificationsCounter: Bool = false
+    
+    // Counter of unseen conversations.
+    var numberOfUnseenConversations: Int = 0
+    fileprivate var isLoadingNumberOfUnseenConversations = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,12 +44,15 @@ class MainTabBarController: UITabBarController {
             // Get numberOfNewNotifications
             self.isLoadingNotificationsCounter = true
             self.getNotificationsCounter()
+            // Query numberOfUnseenConversations.
+            self.isLoadingNumberOfUnseenConversations = true
+            self.queryUnseenConversations()
         }
         
         // Add observers.
-        NotificationCenter.default.addObserver(self, selector: #selector(self.downloadImageNotification(_:)), name: NSNotification.Name(DownloadImageNotificationKey), object: nil)
+        NotificationCenter.default.setObserver(self, selector: #selector(self.downloadImageNotification(_:)), name: NSNotification.Name(DownloadImageNotificationKey), object: nil)
         // Special observer for refreshing notifications.
-        NotificationCenter.default.addObserver(self, selector: #selector(self.uiApplicationDidBecomeActiveNotification(_:)), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+        NotificationCenter.default.setObserver(self, selector: #selector(self.uiApplicationDidBecomeActiveNotification(_:)), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -137,6 +144,14 @@ class MainTabBarController: UITabBarController {
         self.newNotificationsView?.isHidden = isHidden
     }
     
+    func updateUnseenConversationsBadge(_ numberOfUnseenConversations: Int) {
+        if numberOfUnseenConversations > 0 {
+            self.tabBar.items?[3].badgeValue = "\(numberOfUnseenConversations)"
+        } else {
+            self.tabBar.items?[3].badgeValue = nil
+        }
+    }
+    
     // MARK: AWS
     
     // Gets currentUser and creates currentUserDynamoDB on PRFYDynamoDBManager singleton.
@@ -184,11 +199,9 @@ class MainTabBarController: UITabBarController {
                 }
                 if let awsNotificationsCounter = task.result as? AWSNotificationsCounter {
                     if let numberOfNewNotifications = awsNotificationsCounter._numberOfNewNotifications, numberOfNewNotifications.intValue > 0 {
-                        self.tabBar.items?[3].badgeValue = "\(numberOfNewNotifications.intValue)"
-                        //self.toggleNewNotificationsView(isHidden: false)
+                        self.toggleNewNotificationsView(isHidden: false)
                     } else {
-                        self.tabBar.items?[3].badgeValue = nil
-                        //self.toggleNewNotificationsView(isHidden: true)
+                        self.toggleNewNotificationsView(isHidden: true)
                     }
                     self.lastSeenDate = awsNotificationsCounter._lastSeenDate
                 }
@@ -212,6 +225,27 @@ class MainTabBarController: UITabBarController {
             })
         })
     }
+    
+    // Query unseenIndex aka where lastMessageSeen == 0.
+    fileprivate func queryUnseenConversations() {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().queryUnseenConversationsDynamoDB({
+            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                self.isLoadingNumberOfUnseenConversations = false
+                guard error == nil else {
+                    print("queryUnseenConversations error: \(error!)")
+                    return
+                }
+                guard let awsConversations = response?.items as? [AWSConversation] else {
+                    return
+                }
+                self.numberOfUnseenConversations = awsConversations.count
+                self.updateUnseenConversationsBadge(self.numberOfUnseenConversations)
+            })
+        })
+    }
 }
 
 extension MainTabBarController {
@@ -230,10 +264,15 @@ extension MainTabBarController {
     }
     
     func uiApplicationDidBecomeActiveNotification(_ notification: NSNotification) {
-        guard AWSIdentityManager.defaultIdentityManager().isLoggedIn == true, self.isLoadingNotificationsCounter == false else {
+        guard AWSIdentityManager.defaultIdentityManager().isLoggedIn == true else {
             return
         }
-        self.getNotificationsCounter()
+        if !self.isLoadingNotificationsCounter {
+            self.getNotificationsCounter()
+        }
+        if !self.isLoadingNumberOfUnseenConversations {
+            self.queryUnseenConversations()
+        }
     }
 }
 
@@ -277,10 +316,8 @@ extension MainTabBarController: UITabBarControllerDelegate {
                 childViewController.notificationsTabBarButtonTapped()
             }
             self.previousViewController = childViewController
-            
             // Clear newNotificationsView.
             self.toggleNewNotificationsView(isHidden: true)
-            // TODO send to DynamoDB.
         }
         if let childViewController = navigationController.childViewControllers[0] as? ProfileTableViewController {
             if self.previousViewController == childViewController {

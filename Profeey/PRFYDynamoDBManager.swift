@@ -657,6 +657,11 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
     
     // MARK: Messages
     
+    func getMessageDynamoDB(_ conversationId: String, messageId: String, completionHandler: @escaping AWSContinuationBlock) {
+        let awsMessagesTable = AWSMessagesTable()
+        awsMessagesTable.getMessage(conversationId, messageId: messageId, completionHandler: completionHandler)
+    }
+    
     func createMessageDynamoDB(_ conversationId: String, recipientId: String, messageText: String, messageId: String, created: NSNumber, completionHandler: @escaping AWSContinuationBlock) {
         guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
             print("createMessageDynamoDB no identityId!")
@@ -688,16 +693,21 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         awsMessagesDateSortedIndex.queryConversationMessagesDateSorted(conversationId, lastEvaluatedKey: lastEvaluatedKey, completionHandler: completionHandler)
     }
     
-    func getMessageDynamoDB(_ conversationId: String, messageId: String, completionHandler: @escaping AWSContinuationBlock) {
-        let awsMessagesTable = AWSMessagesTable()
-        awsMessagesTable.getMessage(conversationId, messageId: messageId, completionHandler: completionHandler)
-    }
-    
     // MARK: Conversations
     
     /*
      Create and remove are called (in background) only when first/last message is created between users.
-     */
+    */
+    
+    func getConversationDynamoDB(_ conversationId: String, completionHandler: @escaping AWSContinuationBlock) {
+        guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
+            print("getConversationDynamoDB no identityId!")
+            AWSTask().continue(completionHandler)
+            return
+        }
+        let awsConversationsTable = AWSConversationsTable()
+        awsConversationsTable.getConversation(identityId, conversationId: conversationId, completionHandler: completionHandler)
+    }
     
     func createConversationDynamoDB(_ messageText: String, conversationId: String, participantId: String, participantFirstName: String?, participantLastName: String?, participantPreferredUsername: String?, participantProfessionName: String?, participantProfilePicUrl: String?, completionHandler: @escaping AWSContinuationBlock) {
         guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
@@ -706,9 +716,24 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
             return
         }
         let created = NSNumber(value: Date().timeIntervalSince1970 as Double)
+        // Set lastMessageSeen to true (1) for own new conversation.
+        let lastMessageSeen = NSNumber(value: 1)
         let awsConversationsTable = AWSConversationsTable()
-        let awsConversation = AWSConversation(_userId: identityId, _conversationId: conversationId, _created: created, _lastMessageText: messageText, _lastMessageCreated: created, _participantId: participantId, _participantFirstName: participantFirstName, _participantLastName: participantLastName, _participantPreferredUsername: participantPreferredUsername, _participantProfessionName: participantProfessionName, _participantProfilePicUrl: participantProfilePicUrl)
+        let awsConversation = AWSConversation(_userId: identityId, _conversationId: conversationId, _created: created, _lastMessageText: messageText, _lastMessageCreated: created, _lastMessageSeen: lastMessageSeen, _participantId: participantId, _participantFirstName: participantFirstName, _participantLastName: participantLastName, _participantPreferredUsername: participantPreferredUsername, _participantProfessionName: participantProfessionName, _participantProfilePicUrl: participantProfilePicUrl)
         awsConversationsTable.createConversation(awsConversation, completionHandler: completionHandler)
+    }
+    
+    func updateSeenConversationDynamoDB(_ conversationId: String, completionHandler: @escaping AWSContinuationBlock) {
+        guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
+            print("updateSeenConversationDynamoDB no identityId!")
+            AWSTask().continue(completionHandler)
+            return
+        }
+        let awsConversationsTable = AWSConversationsTable()
+        // Set lastMessageSeen to true (1) for own conversation.
+        let lastMessageSeen = NSNumber(value: 1)
+        let awsConversation = AWSConversation(_userId: identityId, _conversationId: conversationId, _lastMessageSeen: lastMessageSeen)
+        awsConversationsTable.updateConversationSkipNull(awsConversation, completionHandler: completionHandler)
     }
     
     func removeConversationDynamoDB(_ conversationId: String, completionHandler: @escaping AWSContinuationBlock) {
@@ -728,16 +753,15 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
             return
         }
         let awsConversationsDateSortedIndex = AWSConversationsDateSortedIndex()
-        awsConversationsDateSortedIndex.queryUserConversationsDateSorted(identityId, lastEvaluatedKey: lastEvaluatedKey, completionHandler: completionHandler)
+        awsConversationsDateSortedIndex.queryConversationsDateSorted(identityId, lastEvaluatedKey: lastEvaluatedKey, completionHandler: completionHandler)
     }
     
-    func getConversationDynamoDB(_ conversationId: String, completionHandler: @escaping AWSContinuationBlock) {
+    func queryUnseenConversationsDynamoDB(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
-            print("getConversationDynamoDB no identityId!")
-            AWSTask().continue(completionHandler)
+            print("queryUnseenConversationsDynamoDB no identityId!")
             return
         }
-        let awsConversationsTable = AWSConversationsTable()
-        awsConversationsTable.getConversation(identityId, conversationId: conversationId, completionHandler: completionHandler)
+        let awsConversationsUnseenIndex = AWSConversationsUnseenIndex()
+        awsConversationsUnseenIndex.queryUnseenConversations(identityId, completionHandler: completionHandler)
     }
 }

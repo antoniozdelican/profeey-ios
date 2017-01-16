@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol PostButtonsTableViewCellDelegate {
+protocol PostButtonsTableViewCellDelegate: class {
     func likeButtonTapped(_ cell: PostButtonsTableViewCell)
     func commentButtonTapped(_ cell: PostButtonsTableViewCell)
     func numberOfLikesButtonTapped(_ cell: PostButtonsTableViewCell)
@@ -22,7 +22,7 @@ class PostButtonsTableViewCell: UITableViewCell {
     @IBOutlet weak var numberOfLikesButton: UIButton!
     @IBOutlet weak var numberOfCommentsButton: UIButton!
     
-    var postButtonsTableViewCellDelegate: PostButtonsTableViewCellDelegate?
+    weak var postButtonsTableViewCellDelegate: PostButtonsTableViewCellDelegate?
 
     override func awakeFromNib() {
         super.awakeFromNib()

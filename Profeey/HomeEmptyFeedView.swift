@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol HomeEmptyFeedViewDelegate {
+protocol HomeEmptyFeedViewDelegate: class {
     func discoverButtonTapped()
 }
 
@@ -17,7 +17,7 @@ class HomeEmptyFeedView: UIView {
     @IBOutlet weak var textLabel: UILabel!
     @IBOutlet weak var discoverButton: UIButton!
     
-    var homeEmptyFeedViewDelegate: HomeEmptyFeedViewDelegate?
+    weak var homeEmptyFeedViewDelegate: HomeEmptyFeedViewDelegate?
     
     override func awakeFromNib() {
         super.awakeFromNib()

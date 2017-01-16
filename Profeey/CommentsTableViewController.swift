@@ -10,14 +10,14 @@ import UIKit
 import AWSMobileHubHelper
 import AWSDynamoDB
 
-protocol CommentsTableViewControllerDelegate {
+protocol CommentsTableViewControllerDelegate: class {
     func scrollViewWillBeginDragging()
 }
 
 class CommentsTableViewController: UITableViewController {
     
     var postId: String?
-    var commentsTableViewControllerDelegate: CommentsTableViewControllerDelegate?
+    weak var commentsTableViewControllerDelegate: CommentsTableViewControllerDelegate?
     fileprivate var comments: [Comment] = []
     fileprivate var isLoadingComments: Bool = false
 
@@ -45,6 +45,8 @@ class CommentsTableViewController: UITableViewController {
         if let destinationViewController = segue.destination as? ProfileTableViewController,
             let cell = sender as? CommentTableViewCell,
             let indexPath = self.tableView.indexPath(for: cell) {
+            
+            // TODO: check if needed to copy.
             destinationViewController.user = self.comments[indexPath.row].user?.copyUser()
         }
     }
@@ -123,7 +125,7 @@ class CommentsTableViewController: UITableViewController {
     // MARK: UIScrollViewDelegate
     
     override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        self.commentsTableViewControllerDelegate?.scrollViewWillBeginDragging()
+        //self.commentsTableViewControllerDelegate?.scrollViewWillBeginDragging()
     }
     
     // MARK: Helpers

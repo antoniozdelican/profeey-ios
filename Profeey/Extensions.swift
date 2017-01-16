@@ -321,3 +321,12 @@ extension Date {
         return Formatter.messageDate.string(from: self)
     }
 }
+
+extension NotificationCenter {
+    
+    // To fix bug of adding duplicate observers.
+    func setObserver(_ observer: Any, selector: Selector, name: NSNotification.Name?, object: Any?) {
+        NotificationCenter.default.removeObserver(observer, name: name, object: object)
+        NotificationCenter.default.addObserver(observer, selector: selector, name: name, object: object)
+    }
+}
