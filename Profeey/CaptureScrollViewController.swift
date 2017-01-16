@@ -9,11 +9,11 @@
 import UIKit
 import PhotosUI
 
-protocol CaptureScrollViewDelegate {
+protocol CaptureScrollViewDelegate: class {
     func albumSelected(_ album: PHFetchResult<PHAsset>, title: String?)
 }
 
-protocol FlashSwitchDelegate {
+protocol FlashSwitchDelegate: class {
     func flashBarButtonTapped()
 }
 
@@ -32,8 +32,8 @@ class CaptureScrollViewController: UIViewController {
     var isProfilePic: Bool = false
     var profilePicUnwind: ProfilePicUnwind?
     
-    fileprivate var captureScrollViewDelegate: CaptureScrollViewDelegate?
-    fileprivate var flashSwitchDelegate: FlashSwitchDelegate?
+    fileprivate weak var captureScrollViewDelegate: CaptureScrollViewDelegate?
+    fileprivate weak var flashSwitchDelegate: FlashSwitchDelegate?
     fileprivate var photo: UIImage?
     fileprivate var asset: PHAsset?
     fileprivate var isPhoto: Bool = true

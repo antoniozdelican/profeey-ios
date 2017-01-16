@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol EditPostDescriptionTableViewCellDelegate {
+protocol EditPostDescriptionTableViewCellDelegate: class {
     func textViewDidChange(_ textView: UITextView)
 }
 
@@ -18,7 +18,7 @@ class EditPostDescriptionTableViewCell: UITableViewCell {
     @IBOutlet weak var descriptionTextView: UITextView!
     @IBOutlet weak var descriptionPlaceholderLabel: UILabel!
     
-    var editPostDescriptionTableViewCellDelegate: EditPostDescriptionTableViewCellDelegate?
+    weak var editPostDescriptionTableViewCellDelegate: EditPostDescriptionTableViewCellDelegate?
     
     override func awakeFromNib() {
         super.awakeFromNib()

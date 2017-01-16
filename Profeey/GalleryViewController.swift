@@ -9,7 +9,7 @@
 import UIKit
 import PhotosUI
 
-protocol GalleryViewControllerDelegate {
+protocol GalleryViewControllerDelegate: class {
     func cameraButtonTapped()
     func didSelectAsset(asset: PHAsset)
 }
@@ -18,7 +18,7 @@ class GalleryViewController: UIViewController {
 
     @IBOutlet weak var collectionView: UICollectionView!
     
-    var galleryViewControllerDelegate: GalleryViewControllerDelegate?
+    weak var galleryViewControllerDelegate: GalleryViewControllerDelegate?
     
     fileprivate var imageManager: PHCachingImageManager?
     fileprivate var thumbnailSize: CGSize!

@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol CameraViewControllerDelegate {
+protocol CameraViewControllerDelegate: class {
     func galleryButtonTapped()
     func didSelectPhoto(photo: UIImage)
     func flashTypeChangedInto(_ flashType: FlashType)
@@ -23,7 +23,7 @@ class CameraViewController: UIViewController {
     @IBOutlet weak var captureButton: UIButton!
     @IBOutlet weak var cameraSwitchButton: UIButton!
     
-    var cameraViewControllerDelegate: CameraViewControllerDelegate?
+    weak var cameraViewControllerDelegate: CameraViewControllerDelegate?
     var isProfilePic: Bool = false
     
     fileprivate var imagePickerController: UIImagePickerController!
@@ -105,10 +105,8 @@ class CameraViewController: UIViewController {
     @IBAction func cameraSwitchButtonTapped(_ sender: AnyObject) {
         if self.imagePickerController.cameraDevice == UIImagePickerControllerCameraDevice.rear {
             self.imagePickerController.cameraDevice = UIImagePickerControllerCameraDevice.front
-            //self.cameraViewControllerDelegate?.toggleFlashBarButton(false)
         } else {
             self.imagePickerController.cameraDevice = UIImagePickerControllerCameraDevice.rear
-            //self.cameraViewControllerDelegate?.toggleFlashBarButton(true)
         }
     }
     

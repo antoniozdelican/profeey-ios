@@ -9,7 +9,7 @@
 import UIKit
 import AWSDynamoDB
 
-protocol CategoriesTableViewControllerDelegate {
+protocol CategoriesTableViewControllerDelegate: class {
     func didSelectCategory(_ categoryName: String?)
 }
 
@@ -17,7 +17,7 @@ class CategoriesTableViewController: UITableViewController {
     
     var categoryName: String?
     var isStatusBarHidden: Bool = false
-    var categoriesTableViewControllerDelegate: CategoriesTableViewControllerDelegate?
+    weak var categoriesTableViewControllerDelegate: CategoriesTableViewControllerDelegate?
     
     fileprivate var popularCategories: [Category] = []
     fileprivate var regularCategories: [Category] = []

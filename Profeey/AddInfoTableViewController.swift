@@ -90,7 +90,7 @@ class AddInfoTableViewController: UITableViewController {
             return UITableViewCell()
         }
     }
-    // MARK: UITableVieDelegate
+    // MARK: UITableViewDelegate
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.layoutMargins = UIEdgeInsets.zero

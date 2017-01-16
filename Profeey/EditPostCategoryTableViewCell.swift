@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol EditPostCategoryTableViewCellDelegate {
+protocol EditPostCategoryTableViewCellDelegate: class {
     func clearCategoryButtonTapped()
 }
 
@@ -18,7 +18,7 @@ class EditPostCategoryTableViewCell: UITableViewCell {
     @IBOutlet weak var categoryNameLabel: UILabel!
     @IBOutlet weak var clearCategoryButton: UIButton!
     
-    var editPostCategoryTableViewCellDelegate: EditPostCategoryTableViewCellDelegate?
+    weak var editPostCategoryTableViewCellDelegate: EditPostCategoryTableViewCellDelegate?
     
     override func awakeFromNib() {
         super.awakeFromNib()

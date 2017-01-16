@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol AddCategoryTableViewCellDelegate {
+protocol AddCategoryTableViewCellDelegate: class {
     func addCategoryTextFieldChanged(_ text: String)
 }
 
@@ -16,7 +16,7 @@ class AddCategoryTableViewCell: UITableViewCell {
     
     @IBOutlet weak var addCategoryTextField: UITextField!
     
-    var addCategoryTableViewCellDelegate: AddCategoryTableViewCellDelegate?
+    weak var addCategoryTableViewCellDelegate: AddCategoryTableViewCellDelegate?
 
     override func awakeFromNib() {
         super.awakeFromNib()

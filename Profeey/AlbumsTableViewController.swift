@@ -9,13 +9,13 @@
 import UIKit
 import PhotosUI
 
-protocol AlbumsDelegate {
+protocol AlbumsDelegate: class {
     func albumSelected(_ album: PHFetchResult<PHAsset>, title: String?)
 }
 
 class AlbumsTableViewController: UITableViewController {
     
-    var albumsDelegate: AlbumsDelegate?
+    weak var albumsDelegate: AlbumsDelegate?
     fileprivate var fetchResults: [PHFetchResult<PHAsset>] = []
     fileprivate var titles: [String] = []
 
