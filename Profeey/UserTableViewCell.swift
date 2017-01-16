@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol UserTableViewCellDelegate {
+protocol UserTableViewCellDelegate: class {
     func followButtonTapped(_ cell: UserTableViewCell)
 }
 
@@ -19,7 +19,7 @@ class UserTableViewCell: UITableViewCell {
     @IBOutlet weak var professionNameLabel: UILabel!
     @IBOutlet weak var followButton: UIButton!
     
-    var userTableViewCellDelegate: UserTableViewCellDelegate?
+    weak var userTableViewCellDelegate: UserTableViewCellDelegate?
 
     override func awakeFromNib() {
         super.awakeFromNib()

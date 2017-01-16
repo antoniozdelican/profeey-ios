@@ -10,7 +10,7 @@ import UIKit
 import AWSMobileHubHelper
 import AWSDynamoDB
 
-protocol MessagesTableViewControllerDelegate {
+protocol MessagesTableViewControllerDelegate: class {
     func scrollViewWillBeginDragging()
     func initialMessagesLoaded(_ numberOfInitialMessages: Int)
 }
@@ -21,7 +21,7 @@ class MessagesTableViewController: UITableViewController {
     
     var conversationId: String?
     var participant: User?
-    var messagesTableViewControllerDelegate: MessagesTableViewControllerDelegate?
+    weak var messagesTableViewControllerDelegate: MessagesTableViewControllerDelegate?
     
     fileprivate var allMessagesSections: [[Message]] = []
     fileprivate var isLoadingMessages: Bool = false
@@ -46,33 +46,14 @@ class MessagesTableViewController: UITableViewController {
             self.isLoadingMessages = true
             self.queryMessagesDateSorted(conversationId)
         }
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
         
-        // TODO: this will fail.
-        
-        if self.isMovingToParentViewController {
-            // Set observers.
-            NotificationCenter.default.setObserver(self, selector: #selector(self.createMessageNotification(_:)), name: NSNotification.Name(CreateMessageNotificationKey), object: nil)
-            NotificationCenter.default.setObserver(self, selector: #selector(self.deleteMessageNotification(_:)), name: NSNotification.Name(DeleteMessageNotificationKey), object: nil)
-            // Special observer to simulate instant messaging.
-            NotificationCenter.default.setObserver(self, selector: #selector(self.apnsNewMessageNotificationKey(_:)), name: NSNotification.Name(APNsNewMessageNotificationKey), object: nil)
-            // Special observer for refreshing notifications.
-            NotificationCenter.default.setObserver(self, selector: #selector(self.uiApplicationDidBecomeActiveNotification(_:)), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
-        }
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        if self.isMovingFromParentViewController {
-            // Remove observers.
-            NotificationCenter.default.removeObserver(self, name: NSNotification.Name(CreateMessageNotificationKey), object: nil)
-            NotificationCenter.default.removeObserver(self, name: NSNotification.Name(DeleteMessageNotificationKey), object: nil)
-            NotificationCenter.default.removeObserver(self, name: NSNotification.Name(APNsNewMessageNotificationKey), object: nil)
-            NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
-        }
-        super.viewWillDisappear(animated)
+        // Add observers.
+        NotificationCenter.default.addObserver(self, selector: #selector(self.createMessageNotification(_:)), name: NSNotification.Name(CreateMessageNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.deleteMessageNotification(_:)), name: NSNotification.Name(DeleteMessageNotificationKey), object: nil)
+        // Special observer to simulate instant messaging.
+        NotificationCenter.default.addObserver(self, selector: #selector(self.apnsNewMessageNotificationKey(_:)), name: NSNotification.Name(APNsNewMessageNotificationKey), object: nil)
+        // Special observer for refreshing notifications.
+        NotificationCenter.default.addObserver(self, selector: #selector(self.uiApplicationDidBecomeActiveNotification(_:)), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
     }
 
     override func didReceiveMemoryWarning() {

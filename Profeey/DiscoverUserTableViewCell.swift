@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol DiscoverUserTableViewCellDelegate {
+protocol DiscoverUserTableViewCellDelegate: class {
     func followButtonTapped(_ cell: DiscoverUserTableViewCell)
 }
 
@@ -22,7 +22,7 @@ class DiscoverUserTableViewCell: UITableViewCell {
     @IBOutlet weak var locationStackView: UIStackView!
     @IBOutlet weak var followButton: UIButton!
     
-    var discoverUserTableViewCellDelegate: DiscoverUserTableViewCellDelegate?
+    weak var discoverUserTableViewCellDelegate: DiscoverUserTableViewCellDelegate?
 
     override func awakeFromNib() {
         super.awakeFromNib()

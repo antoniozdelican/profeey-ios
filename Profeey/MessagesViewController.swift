@@ -260,9 +260,5 @@ extension MessagesViewController: MessagesTableViewControllerDelegate {
         if self.numberOfInitialMessages == nil {
             self.numberOfInitialMessages = numberOfInitialMessages
         }
-        // Update seen.
-//        if let conversationId = self.conversationId, numberOfInitialMessages > 0 {
-//            self.updateSeenConversation(conversationId)
-//        }
     }
 }

@@ -9,7 +9,7 @@
 import UIKit
 import AWSDynamoDB
 
-protocol WelcomeProfessionsTableViewControllerDelegate {
+protocol WelcomeProfessionsTableViewControllerDelegate: class {
     func didSelectProfession(_ professionName: String?)
 }
 
@@ -18,7 +18,7 @@ class WelcomeProfessionsTableViewController: UITableViewController {
     @IBOutlet weak var nextButton: UIButton!
     
     fileprivate var professionName: String?
-    fileprivate var welcomeProfessionsTableViewControllerDelegate: WelcomeProfessionsTableViewControllerDelegate?
+    fileprivate weak var welcomeProfessionsTableViewControllerDelegate: WelcomeProfessionsTableViewControllerDelegate?
     
     fileprivate var popularProfessions: [Profession] = []
     fileprivate var regularProfessions: [Profession] = []

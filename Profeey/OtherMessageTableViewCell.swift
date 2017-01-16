@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol OtherMessageTableViewCellDelegate {
+protocol OtherMessageTableViewCellDelegate: class {
     func profilePicImageViewTapped(_ cell:OtherMessageTableViewCell)
 }
 
@@ -26,7 +26,7 @@ class OtherMessageTableViewCell: UITableViewCell {
     fileprivate var timeLabelBottomConstraintConstant: CGFloat = 0.0
     fileprivate var timeLabelHeightConstraintConstant: CGFloat = 0.0
     
-    var otherMessageTableViewCellDelegate: OtherMessageTableViewCellDelegate?
+    weak var otherMessageTableViewCellDelegate: OtherMessageTableViewCellDelegate?
 
     override func awakeFromNib() {
         super.awakeFromNib()

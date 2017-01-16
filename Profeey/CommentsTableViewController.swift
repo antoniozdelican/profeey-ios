@@ -125,7 +125,7 @@ class CommentsTableViewController: UITableViewController {
     // MARK: UIScrollViewDelegate
     
     override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        //self.commentsTableViewControllerDelegate?.scrollViewWillBeginDragging()
+        self.commentsTableViewControllerDelegate?.scrollViewWillBeginDragging()
     }
     
     // MARK: Helpers

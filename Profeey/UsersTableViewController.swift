@@ -40,28 +40,12 @@ class UsersTableViewController: UITableViewController {
         if let usersType = self.usersType, usersType == .likers {
             self.navigationItem.title = "Likes"
         }
-        
         self.prepareForQueries()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        if self.isMovingToParentViewController {
-            // Set observers.
-            NotificationCenter.default.setObserver(self, selector: #selector(self.followUserNotification(_:)), name: NSNotification.Name(FollowUserNotificationKey), object: nil)
-            NotificationCenter.default.setObserver(self, selector: #selector(self.unfollowUserNotification(_:)), name: NSNotification.Name(UnfollowUserNotificationKey), object: nil)
-            NotificationCenter.default.setObserver(self, selector: #selector(self.downloadImageNotification(_:)), name: NSNotification.Name(DownloadImageNotificationKey), object: nil)
-        }
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        if self.isMovingFromParentViewController {
-            // Remove observers.
-            NotificationCenter.default.removeObserver(self, name: NSNotification.Name(FollowUserNotificationKey), object: nil)
-            NotificationCenter.default.removeObserver(self, name: NSNotification.Name(UnfollowUserNotificationKey), object: nil)
-            NotificationCenter.default.removeObserver(self, name: NSNotification.Name(DownloadImageNotificationKey), object: nil)
-        }
-        super.viewWillDisappear(animated)
+        
+        // Add observers.
+        NotificationCenter.default.addObserver(self, selector: #selector(self.followUserNotification(_:)), name: NSNotification.Name(FollowUserNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.unfollowUserNotification(_:)), name: NSNotification.Name(UnfollowUserNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.downloadImageNotification(_:)), name: NSNotification.Name(DownloadImageNotificationKey), object: nil)
     }
     
     override func didReceiveMemoryWarning() {

@@ -9,7 +9,7 @@
 import UIKit
 import TTTAttributedLabel
 
-protocol RecommendationTableViewCellDelegate {
+protocol RecommendationTableViewCellDelegate: class {
     func userTapped(_ cell: RecommendationTableViewCell)
     func recommendationTextLabelTapped(_ cell: RecommendationTableViewCell)
 }
@@ -23,7 +23,7 @@ class RecommendationTableViewCell: UITableViewCell {
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var recommendationTextLabel: TTTAttributedLabel!
     
-    var recommendationTableViewCellDelegate: RecommendationTableViewCellDelegate?
+    weak var recommendationTableViewCellDelegate: RecommendationTableViewCellDelegate?
 
     override func awakeFromNib() {
         super.awakeFromNib()
