@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol EditLastNameTableViewCellDelegate {
+protocol EditLastNameTableViewCellDelegate: class {
     func lastNameTextFieldChanged(_ text: String)
 }
 
@@ -16,7 +16,7 @@ class EditLastNameTableViewCell: UITableViewCell {
     
     @IBOutlet weak var lastNameTextField: UITextField!
     
-    var editLastNameTableViewCellDelegate: EditLastNameTableViewCellDelegate?
+    weak var editLastNameTableViewCellDelegate: EditLastNameTableViewCellDelegate?
 
     override func awakeFromNib() {
         super.awakeFromNib()

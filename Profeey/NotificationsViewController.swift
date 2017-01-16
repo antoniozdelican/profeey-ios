@@ -14,11 +14,11 @@ enum NotificationsSegmentType {
     case conversations
 }
 
-protocol NotificationsTableViewControllerDelegate {
+protocol NotificationsTableViewControllerDelegate: class {
     func scrollToTop()
 }
 
-protocol ConversationsTableViewControllerDelegate {
+protocol ConversationsTableViewControllerDelegate: class {
     func scrollToTop()
 }
 
@@ -30,8 +30,8 @@ class NotificationsViewController: UIViewController {
     @IBOutlet weak var notificationsButton: UIButton!
     @IBOutlet weak var conversationsButton: UIButton!
     
-    var notificationsTableViewControllerDelegate: NotificationsTableViewControllerDelegate?
-    var conversationsTableViewControllerDelegate: ConversationsTableViewControllerDelegate?
+    weak var notificationsTableViewControllerDelegate: NotificationsTableViewControllerDelegate?
+    weak var conversationsTableViewControllerDelegate: ConversationsTableViewControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol EditProfilePicTableViewCellDelegate {
+protocol EditProfilePicTableViewCellDelegate: class {
     func editButtonTapped()
 }
 
@@ -16,7 +16,7 @@ class EditProfilePicTableViewCell: UITableViewCell {
     
     @IBOutlet weak var profilePicImageView: UIImageView!
     
-    var editProfilePicTableViewCellDelegate: EditProfilePicTableViewCellDelegate?
+    weak var editProfilePicTableViewCellDelegate: EditProfilePicTableViewCellDelegate?
 
     override func awakeFromNib() {
         super.awakeFromNib()

@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol ProfileTableSectionHeaderDelegate {
+protocol ProfileTableSectionHeaderDelegate: class {
     func editButtonTapped()
 }
 
@@ -17,7 +17,7 @@ class ProfileTableSectionHeader: UITableViewHeaderFooterView {
     @IBOutlet weak var titleLabel: UILabel?
     @IBOutlet weak var editButton: UIButton?
     
-    var profileTableSectionHeaderDelegate: ProfileTableSectionHeaderDelegate?
+    weak var profileTableSectionHeaderDelegate: ProfileTableSectionHeaderDelegate?
     
     // MARK: IBActions
     

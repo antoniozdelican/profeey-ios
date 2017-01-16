@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol EditEducationFieldOfStudyTableViewCellDelegate {
+protocol EditEducationFieldOfStudyTableViewCellDelegate: class {
     func fieldOfStudyTextFieldChanged(_ text: String)
 }
 
@@ -16,7 +16,7 @@ class EditEducationFieldOfStudyTableViewCell: UITableViewCell {
     
     @IBOutlet weak var fieldOfStudyTextField: UITextField!
     
-    var editEducationFieldOfStudyTableViewCellDelegate: EditEducationFieldOfStudyTableViewCellDelegate?
+    weak var editEducationFieldOfStudyTableViewCellDelegate: EditEducationFieldOfStudyTableViewCellDelegate?
 
     override func awakeFromNib() {
         super.awakeFromNib()

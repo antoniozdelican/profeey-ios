@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol EditEducationDescriptionTableViewCellDelegate {
+protocol EditEducationDescriptionTableViewCellDelegate: class {
     func textViewDidBeginEditing(_ textView: UITextView)
     func textViewDidChange(_ textView: UITextView)
 }
@@ -18,7 +18,7 @@ class EditEducationDescriptionTableViewCell: UITableViewCell {
     @IBOutlet weak var educationDescriptionTextView: UITextView!
     @IBOutlet weak var educationDescriptionFakePlaceholderLabel: UILabel!
     
-    var editEducationDescriptionTableViewCellDelegate: EditEducationDescriptionTableViewCellDelegate?
+    weak var editEducationDescriptionTableViewCellDelegate: EditEducationDescriptionTableViewCellDelegate?
 
     override func awakeFromNib() {
         super.awakeFromNib()

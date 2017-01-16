@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol ProfileInfoTableViewCellDelegate {
+protocol ProfileInfoTableViewCellDelegate: class {
     func websiteButtonTapped()
 }
 
@@ -22,7 +22,7 @@ class ProfileInfoTableViewCell: UITableViewCell {
     @IBOutlet weak var websiteButton: UIButton!
     @IBOutlet weak var websiteButtonHeightConstraint: NSLayoutConstraint!
     
-    var profileInfoTableViewCellDelegate: ProfileInfoTableViewCellDelegate?
+    weak var profileInfoTableViewCellDelegate: ProfileInfoTableViewCellDelegate?
     
     override func awakeFromNib() {
         super.awakeFromNib()

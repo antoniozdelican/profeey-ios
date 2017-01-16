@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol EditWorkOrganizationTableViewCellDelegate {
+protocol EditWorkOrganizationTableViewCellDelegate: class {
     func organizationTextFieldChanged(_ text: String)
 }
 
@@ -16,7 +16,7 @@ class EditWorkOrganizationTableViewCell: UITableViewCell {
     
     @IBOutlet weak var organizationTextField: UITextField!
     
-    var editWorkOrganizationTableViewCellDelegate: EditWorkOrganizationTableViewCellDelegate?
+    weak var editWorkOrganizationTableViewCellDelegate: EditWorkOrganizationTableViewCellDelegate?
 
     override func awakeFromNib() {
         super.awakeFromNib()

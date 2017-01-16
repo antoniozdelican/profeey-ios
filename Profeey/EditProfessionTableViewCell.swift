@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol EditProfessionTableViewCellDelegate {
+protocol EditProfessionTableViewCellDelegate: class {
     func clearProfessionButtonTapped()
 }
 
@@ -17,7 +17,7 @@ class EditProfessionTableViewCell: UITableViewCell {
     @IBOutlet weak var professionNameLabel: UILabel!
     @IBOutlet weak var clearProfessionButton: UIButton!
     
-    var editProfessionTableViewCellDelegate: EditProfessionTableViewCellDelegate?
+    weak var editProfessionTableViewCellDelegate: EditProfessionTableViewCellDelegate?
     
     override func awakeFromNib() {
         super.awakeFromNib()

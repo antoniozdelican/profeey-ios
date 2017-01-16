@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol EditWebsiteTableViewCellDelegate {
+protocol EditWebsiteTableViewCellDelegate: class {
     func websiteTextFieldChanged(_ text: String)
 }
 
@@ -16,7 +16,7 @@ class EditWebsiteTableViewCell: UITableViewCell {
     
     @IBOutlet weak var websiteTextField: UITextField!
     
-    var editWebsiteTableViewCellDelegate: EditWebsiteTableViewCellDelegate?
+    weak var editWebsiteTableViewCellDelegate: EditWebsiteTableViewCellDelegate?
 
     override func awakeFromNib() {
         super.awakeFromNib()

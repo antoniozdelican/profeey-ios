@@ -9,7 +9,7 @@
 import UIKit
 import AWSMobileHubHelper
 
-protocol EditAboutDelegate {
+protocol EditAboutDelegate: class {
     func toggleAboutFakePlaceholderLabel(_ hidden: Bool)
 }
 
@@ -20,7 +20,7 @@ class EditProfileTableViewController: UITableViewController {
     var user: EditUser?
     fileprivate var profilePicUrlToRemove: String?
     fileprivate var newProfilePicImageData: Data?
-    fileprivate var editAboutDelegate: EditAboutDelegate?
+    fileprivate weak var editAboutDelegate: EditAboutDelegate?
 
     override func viewDidLoad() {
         super.viewDidLoad()

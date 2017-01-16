@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol DatePickerTableViewCellDelegate {
+protocol DatePickerTableViewCellDelegate: class {
     func didSelectMonth(_ month: Int, indexPath: IndexPath)
     func didSelectYear(_ year: Int, indexPath: IndexPath)
 }
@@ -17,7 +17,7 @@ class DatePickerTableViewCell: UITableViewCell {
 
     @IBOutlet weak var pickerView: UIPickerView!
     
-    var datePickerTableViewCellDelegate: DatePickerTableViewCellDelegate?
+    weak var datePickerTableViewCellDelegate: DatePickerTableViewCellDelegate?
     var indexPath: IndexPath?
     
     fileprivate var months: [Int] = []

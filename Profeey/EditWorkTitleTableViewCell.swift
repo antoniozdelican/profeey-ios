@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol EditWorkTitleTableViewCellDelegate {
+protocol EditWorkTitleTableViewCellDelegate: class {
     func titleTextFieldChanged(_ text: String)
 }
 
@@ -16,7 +16,7 @@ class EditWorkTitleTableViewCell: UITableViewCell {
     
     @IBOutlet weak var titleTextField: UITextField!
     
-    var editWorkTitleTableViewCellDelegate: EditWorkTitleTableViewCellDelegate?
+    weak var editWorkTitleTableViewCellDelegate: EditWorkTitleTableViewCellDelegate?
 
     override func awakeFromNib() {
         super.awakeFromNib()

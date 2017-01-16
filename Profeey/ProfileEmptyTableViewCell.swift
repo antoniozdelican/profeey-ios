@@ -13,7 +13,7 @@ enum AddButtonType {
     case experience
 }
 
-protocol ProfileEmptyTableViewCellDelegate {
+protocol ProfileEmptyTableViewCellDelegate: class {
     func addButtonTapped(_ addButtonType: AddButtonType)
 }
 
@@ -23,7 +23,7 @@ class ProfileEmptyTableViewCell: UITableViewCell {
     @IBOutlet weak var addButton: UIButton!
     
     var addButtonType: AddButtonType?
-    var profileEmptyTableViewCellDelegate: ProfileEmptyTableViewCellDelegate?
+    weak var profileEmptyTableViewCellDelegate: ProfileEmptyTableViewCellDelegate?
 
     override func awakeFromNib() {
         super.awakeFromNib()

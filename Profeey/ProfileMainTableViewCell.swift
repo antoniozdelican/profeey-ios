@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol ProfileMainTableViewCellDelegate {
+protocol ProfileMainTableViewCellDelegate: class {
     func numberOfPostsButtonTapped()
     func numberOfFollowersButtonTapped()
     func numberOfRecommendationsButtonTapped()
@@ -25,7 +25,7 @@ class ProfileMainTableViewCell: UITableViewCell {
     @IBOutlet weak var followButton: UIButton!
     @IBOutlet weak var recommendButton: UIButton!
     
-    var profileMainTableViewCellDelegate: ProfileMainTableViewCellDelegate?
+    weak var profileMainTableViewCellDelegate: ProfileMainTableViewCellDelegate?
     
     override func awakeFromNib() {
         super.awakeFromNib()

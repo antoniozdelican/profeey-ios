@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol ProfileSegmentedControlTableViewCellDelegate {
+protocol ProfileSegmentedControlTableViewCellDelegate: class {
     func segmentChanged(profileSegment: ProfileSegment)
 }
 
@@ -21,7 +21,7 @@ class ProfileSegmentedControlTableViewCell: UITableViewCell {
     @IBOutlet weak var experienceButtonBorderView: UIView!
     @IBOutlet weak var skillsButtonBorderView: UIView!
     
-    var profileSegmentedControlTableViewCellDelegate: ProfileSegmentedControlTableViewCellDelegate?
+    weak var profileSegmentedControlTableViewCellDelegate: ProfileSegmentedControlTableViewCellDelegate?
     
     override func awakeFromNib() {
         super.awakeFromNib()

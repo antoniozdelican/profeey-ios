@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol EditFirstNameTableViewCellDelegate {
+protocol EditFirstNameTableViewCellDelegate: class {
     func firstNameTextFieldChanged(_ text: String)
 }
 
@@ -16,7 +16,7 @@ class EditFirstNameTableViewCell: UITableViewCell {
     
     @IBOutlet weak var firstNameTextField: UITextField!
     
-    var editFirstNameTableViewCellDelegate: EditFirstNameTableViewCellDelegate?
+    weak var editFirstNameTableViewCellDelegate: EditFirstNameTableViewCellDelegate?
 
     override func awakeFromNib() {
         super.awakeFromNib()

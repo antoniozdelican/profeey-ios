@@ -9,7 +9,7 @@
 import UIKit
 import TTTAttributedLabel
 
-@objc protocol EducationTableViewCellDelegate {
+@objc protocol EducationTableViewCellDelegate: class {
     @objc optional func educationExpandButtonTapped(_ cell: EducationTableViewCell)
     func educationDescriptionLabelTapped(_ cell: EducationTableViewCell)
 }
@@ -24,7 +24,7 @@ class EducationTableViewCell: UITableViewCell {
     // Used in ProfileVc for custom separator.
     @IBOutlet weak var separatorViewLeftConstraint: NSLayoutConstraint?
     
-    var educationTableViewCellDelegate: EducationTableViewCellDelegate?
+    weak var educationTableViewCellDelegate: EducationTableViewCellDelegate?
 
     override func awakeFromNib() {
         super.awakeFromNib()

@@ -29,9 +29,9 @@ class NotificationsTableViewController: UITableViewController {
         self.tableView.tableFooterView = self.loadingTableFooterView
         self.queryNotificationsDateSorted(true)
         
-        // Add observers in viewDidLoad because it's one of 5 MainVcs (child of NotificationsVc).
-        NotificationCenter.default.setObserver(self, selector: #selector(self.downloadImageNotification(_:)), name: NSNotification.Name(DownloadImageNotificationKey), object: nil)
-        NotificationCenter.default.setObserver(self, selector: #selector(self.uiApplicationDidBecomeActiveNotification(_:)), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+        // Add observers.
+        NotificationCenter.default.addObserver(self, selector: #selector(self.downloadImageNotification(_:)), name: NSNotification.Name(DownloadImageNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.uiApplicationDidBecomeActiveNotification(_:)), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
     }
 
     override func didReceiveMemoryWarning() {

@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol EditLocationTableViewCellDelegate {
+protocol EditLocationTableViewCellDelegate: class {
     func clearLocationButtonTapped()
 }
 
@@ -17,7 +17,7 @@ class EditLocationTableViewCell: UITableViewCell {
     @IBOutlet weak var locationNameLabel: UILabel!
     @IBOutlet weak var clearLocationButton: UIButton!
     
-    var editLocationTableViewCellDelegate: EditLocationTableViewCellDelegate?
+    weak var editLocationTableViewCellDelegate: EditLocationTableViewCellDelegate?
 
     override func awakeFromNib() {
         super.awakeFromNib()

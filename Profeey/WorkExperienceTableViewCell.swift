@@ -9,7 +9,7 @@
 import UIKit
 import TTTAttributedLabel
 
-@objc protocol WorkExperienceTableViewCellDelegate {
+@objc protocol WorkExperienceTableViewCellDelegate: class {
     @objc optional func workExperienceExpandButtonTapped(_ cell: WorkExperienceTableViewCell)
     func workDescriptionLabelTapped(_ cell: WorkExperienceTableViewCell)
 }
@@ -24,7 +24,7 @@ class WorkExperienceTableViewCell: UITableViewCell {
     // Used in ProfileVc for custom separator.
     @IBOutlet weak var separatorViewLeftConstraint: NSLayoutConstraint?
     
-    var workExperienceTableViewCellDelegate: WorkExperienceTableViewCellDelegate?
+    weak var workExperienceTableViewCellDelegate: WorkExperienceTableViewCellDelegate?
     
     override func awakeFromNib() {
         super.awakeFromNib()

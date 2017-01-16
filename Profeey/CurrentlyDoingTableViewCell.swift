@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol CurrentlyDoingTableViewCellDelegate {
+protocol CurrentlyDoingTableViewCellDelegate: class {
     func switchChanged(_ isOn: Bool)
 }
 
@@ -17,7 +17,7 @@ class CurrentlyDoingTableViewCell: UITableViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var currentlyDoingSwitch: UISwitch!
     
-    var currentlyDoingTableViewCellDelegate: CurrentlyDoingTableViewCellDelegate?
+    weak var currentlyDoingTableViewCellDelegate: CurrentlyDoingTableViewCellDelegate?
 
     override func awakeFromNib() {
         super.awakeFromNib()

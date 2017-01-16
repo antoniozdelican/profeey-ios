@@ -14,7 +14,7 @@ enum ExperienceType {
     case education
 }
 
-protocol ExperiencesTableViewControllerDelegate {
+protocol ExperiencesTableViewControllerDelegate: class {
     func workExperiencesUpdated(_ workExperiences: [WorkExperience])
     func educationsUpdated(_ educations: [Education])
 }
@@ -23,7 +23,7 @@ class ExperiencesTableViewController: UITableViewController {
     
     var workExperiences: [WorkExperience] = []
     var educations: [Education] = []
-    var experiencesTableViewControllerDelegate: ExperiencesTableViewControllerDelegate?
+    weak var experiencesTableViewControllerDelegate: ExperiencesTableViewControllerDelegate?
 
     override func viewDidLoad() {
         super.viewDidLoad()

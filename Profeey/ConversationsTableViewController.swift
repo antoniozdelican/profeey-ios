@@ -28,14 +28,14 @@ class ConversationsTableViewController: UITableViewController {
         self.isLoadingConversations = true
         self.queryConversationsDateSorted(true)
         
-        // Add observers in viewDidLoad because it's one of 5 MainVcs (child of NotificationsVc).
-        NotificationCenter.default.setObserver(self, selector: #selector(self.createMessageNotification(_:)), name: NSNotification.Name(CreateMessageNotificationKey), object: nil)
-        NotificationCenter.default.setObserver(self, selector: #selector(self.createConversationNotification(_:)), name: NSNotification.Name(CreateConversationNotificationKey), object: nil)
-        NotificationCenter.default.setObserver(self, selector: #selector(self.downloadImageNotification(_:)), name: NSNotification.Name(DownloadImageNotificationKey), object: nil)
+        // Add observers.
+        NotificationCenter.default.addObserver(self, selector: #selector(self.createMessageNotification(_:)), name: NSNotification.Name(CreateMessageNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.createConversationNotification(_:)), name: NSNotification.Name(CreateConversationNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.downloadImageNotification(_:)), name: NSNotification.Name(DownloadImageNotificationKey), object: nil)
         // Special observer to simulate instant messaging.
-        NotificationCenter.default.setObserver(self, selector: #selector(self.apnsNewMessageNotificationKey(_:)), name: NSNotification.Name(APNsNewMessageNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.apnsNewMessageNotificationKey(_:)), name: NSNotification.Name(APNsNewMessageNotificationKey), object: nil)
         // Special observer for refreshing notifications.
-        NotificationCenter.default.setObserver(self, selector: #selector(self.uiApplicationDidBecomeActiveNotification(_:)), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.uiApplicationDidBecomeActiveNotification(_:)), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
     }
 
     override func didReceiveMemoryWarning() {

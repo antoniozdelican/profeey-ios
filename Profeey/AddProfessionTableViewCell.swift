@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol AddProfessionTableViewCellDelegate {
+protocol AddProfessionTableViewCellDelegate: class {
     func addProfessionTextFieldChanged(_ text: String)
 }
 
@@ -16,7 +16,7 @@ class AddProfessionTableViewCell: UITableViewCell {
 
     @IBOutlet weak var addProfessionTextField: UITextField!
     
-    var addProfessionTableViewCellDelegate: AddProfessionTableViewCellDelegate?
+    weak var addProfessionTableViewCellDelegate: AddProfessionTableViewCellDelegate?
     
     override func awakeFromNib() {
         super.awakeFromNib()
