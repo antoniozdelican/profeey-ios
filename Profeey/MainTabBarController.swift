@@ -18,6 +18,14 @@ enum MainChildController: Int {
     case profile = 4
 }
 
+enum NotificationType: Int {
+    case like = 0
+    case comment = 1
+    case following = 2
+    case recommendation = 3
+    case message = 4
+}
+
 class MainTabBarController: UITabBarController {
     
     fileprivate var previousViewController: UIViewController?
@@ -28,7 +36,7 @@ class MainTabBarController: UITabBarController {
     fileprivate var isLoadingNotificationsCounter: Bool = false
     
     // Counter of unseen conversations.
-    var numberOfUnseenConversations: Int = 0
+    fileprivate var unseenConversationsIds: [String] = []
     fileprivate var isLoadingNumberOfUnseenConversations = false
 
     override func viewDidLoad() {
@@ -134,21 +142,26 @@ class MainTabBarController: UITabBarController {
     
     // MARK: Public
     
-    // Open NotificationsVc as response to user tapping push notification.
-    func selectNotificationsViewController() {
-        self.selectedIndex = MainChildController.notifications.rawValue
-    }
-    
     func toggleNewNotificationsView(isHidden: Bool) {
         self.newNotificationsView?.isHidden = isHidden
     }
     
-    func updateUnseenConversationsBadge(_ numberOfUnseenConversations: Int) {
-        if numberOfUnseenConversations > 0 {
-            self.tabBar.items?[3].badgeValue = "\(numberOfUnseenConversations)"
+    func updateUnseenConversationsIds(_ conversationId: String, shouldRemove: Bool) {
+        if shouldRemove {
+            guard let unseenConversationIdIndex = self.unseenConversationsIds.index(of: conversationId) else {
+                return
+            }
+            self.unseenConversationsIds.remove(at: unseenConversationIdIndex)
         } else {
-            self.tabBar.items?[3].badgeValue = nil
+            guard self.unseenConversationsIds.index(of: conversationId) == nil else {
+                return
+            }
+            self.unseenConversationsIds.append(conversationId)
         }
+    }
+    
+    func updateUnseenConversationsBadge() {
+        self.tabBar.items?[3].badgeValue = self.unseenConversationsIds.count > 0 ? "\(self.unseenConversationsIds.count)" : nil
     }
     
     // MARK: AWS
@@ -240,9 +253,42 @@ class MainTabBarController: UITabBarController {
                 guard let awsConversations = response?.items as? [AWSConversation] else {
                     return
                 }
-                self.numberOfUnseenConversations = awsConversations.count
-                self.updateUnseenConversationsBadge(self.numberOfUnseenConversations)
+                self.unseenConversationsIds = []
+                for conversationId in awsConversations.flatMap({ $0._conversationId }) {
+                    self.updateUnseenConversationsIds(conversationId, shouldRemove: false)
+                }
+                // Update badge.
+                self.updateUnseenConversationsBadge()
             })
+        })
+    }
+    
+    // AppDelegate is calling this.
+    func getMessage(_ conversationId: String, messageId: String) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().getMessageDynamoDB(conversationId, messageId: messageId, completionHandler: {
+            (task: AWSTask) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                guard task.error == nil else {
+                    print("getConversationMessage error: \(task.error!)")
+                    return
+                }
+                guard let awsMessage = task.result as? AWSMessage else {
+                    print("getMessage error: Not AWSMessage. This should not happen.")
+                    return
+                }
+                let message = Message(conversationId: awsMessage._conversationId, messageId: awsMessage._messageId, created: awsMessage._created, messageText: awsMessage._messageText, senderId: awsMessage._senderId, recipientId: awsMessage._recipientId)
+                // Update badge.
+                self.updateUnseenConversationsIds(conversationId, shouldRemove: false)
+                // Update badge only if not on MessagesVc to avoid annoying badge toggle.
+                if !((self.selectedViewController as? UINavigationController)?.visibleViewController is MessagesViewController) {
+                    self.updateUnseenConversationsBadge()
+                }
+                // Notify observers.
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: APNsNewMessageNotificationKey), object: self, userInfo: ["message": message])
+            })
+            return nil
         })
     }
 }

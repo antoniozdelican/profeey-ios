@@ -33,6 +33,9 @@ class NotificationsViewController: UIViewController {
     weak var notificationsTableViewControllerDelegate: NotificationsTableViewControllerDelegate?
     weak var conversationsTableViewControllerDelegate: ConversationsTableViewControllerDelegate?
     
+    // App delegate can call in order to adjust segment upon use tapping push notification banner.
+    var notificationsSegmentType: NotificationsSegmentType?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
@@ -40,15 +43,25 @@ class NotificationsViewController: UIViewController {
         // SegmentsView.
         Bundle.main.loadNibNamed("NotificationsSegmentsView", owner: self, options: nil)
         self.navigationItem.titleView = self.notificationsSegmentsView
+        self.adjustSegmentColor(NotificationsSegmentType.notifications)
         
         // ScrollView
         self.mainScrollView.delegate = self
-        self.adjustSegment(NotificationsSegmentType.notifications)
+        
+        // Add observers.
+        NotificationCenter.default.addObserver(self, selector: #selector(self.uiApplicationDidBecomeActiveNotification(_:)), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.indicatorScrollView.contentOffset.x = -self.mainScrollView.contentOffset.x / 2
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if let notificationsSegmentType = self.notificationsSegmentType {
+            self.adjustNotificationsSegment(notificationsSegmentType)
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -69,18 +82,27 @@ class NotificationsViewController: UIViewController {
     // MARK: IBActions
     
     @IBAction func notificationsButtonTapped(_ sender: Any) {
-        let rect = CGRect(x: 0.0, y: 0.0, width: self.mainScrollView.bounds.width, height: self.mainScrollView.bounds.height)
-        self.mainScrollView.scrollRectToVisible(rect, animated: true)
+        self.scrollToNotificationsSegment(NotificationsSegmentType.notifications)
     }
     
     @IBAction func conversationsButtonTapped(_ sender: Any) {
-        let rect = CGRect(x: self.view.bounds.width, y: 0.0, width: self.mainScrollView.bounds.width, height: self.mainScrollView.bounds.height)
-        self.mainScrollView.scrollRectToVisible(rect, animated: true)
+        self.scrollToNotificationsSegment(NotificationsSegmentType.conversations)
     }
     
     // MARK: Helpers
     
-    fileprivate func adjustSegment(_ notificationsSegmentType: NotificationsSegmentType) {
+    fileprivate func scrollToNotificationsSegment(_ notificationsSegmentType: NotificationsSegmentType) {
+        switch notificationsSegmentType {
+        case NotificationsSegmentType.notifications:
+            let rect = CGRect(x: 0.0, y: 0.0, width: self.mainScrollView.bounds.width, height: self.mainScrollView.bounds.height)
+            self.mainScrollView.scrollRectToVisible(rect, animated: true)
+        case NotificationsSegmentType.conversations:
+            let rect = CGRect(x: self.view.bounds.width, y: 0.0, width: self.mainScrollView.bounds.width, height: self.mainScrollView.bounds.height)
+            self.mainScrollView.scrollRectToVisible(rect, animated: true)
+        }
+    }
+    
+    fileprivate func adjustSegmentColor(_ notificationsSegmentType: NotificationsSegmentType) {
         switch notificationsSegmentType {
         case NotificationsSegmentType.notifications:
             if self.notificationsButton.currentTitleColor != Colors.black {
@@ -95,6 +117,18 @@ class NotificationsViewController: UIViewController {
         }
     }
     
+    // Called only for push notifications.
+    fileprivate func adjustNotificationsSegment(_ notificationsSegmentType: NotificationsSegmentType) {
+        switch notificationsSegmentType {
+        case NotificationsSegmentType.notifications:
+            self.mainScrollView.contentOffset.x = 0.0
+        case NotificationsSegmentType.conversations:
+            self.mainScrollView.contentOffset.x = self.view.bounds.width
+        }
+        // Clear.
+        self.notificationsSegmentType = nil
+    }
+    
     // MARK: Public
     
     func notificationsTabBarButtonTapped() {
@@ -103,14 +137,25 @@ class NotificationsViewController: UIViewController {
     }
 }
 
+extension NotificationsViewController {
+    
+    // MARK: NotificationCenterActions
+    
+    func uiApplicationDidBecomeActiveNotification(_ notification: NSNotification) {
+        if let notificationsSegmentType = self.notificationsSegmentType {
+            self.adjustNotificationsSegment(notificationsSegmentType)
+        }
+    }
+}
+
 extension NotificationsViewController: UIScrollViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         self.indicatorScrollView.contentOffset.x = -scrollView.contentOffset.x / 2
         if scrollView.contentOffset.x > scrollView.bounds.width / 2 {
-            self.adjustSegment(NotificationsSegmentType.conversations)
+            self.adjustSegmentColor(NotificationsSegmentType.conversations)
         } else {
-            self.adjustSegment(NotificationsSegmentType.notifications)
+            self.adjustSegmentColor(NotificationsSegmentType.notifications)
         }
     }
 }

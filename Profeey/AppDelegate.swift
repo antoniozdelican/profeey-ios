@@ -86,23 +86,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         AWSMobileClient.sharedInstance.application(application, didReceiveRemoteNotification: userInfo)
-        
-        // Set badge.
-        
-        // Determine notification type.
-        if let conversationId = userInfo["conversationId"] as? String, let messageId = userInfo["messageId"] as? String {
-            self.getMessage(conversationId, messageId: messageId)
+
+        if let notificationType = (userInfo["notificationType"] as? NSNumber)?.intValue {
+            let mainTabBarController = self.window?.rootViewController as? MainTabBarController
+            
+            // Get new message.
+            if notificationType == NotificationType.message.rawValue, let conversationId = userInfo["conversationId"] as? String, let messageId = userInfo["messageId"] as? String {
+                (mainTabBarController)?.getMessage(conversationId, messageId: messageId)
+            }
+            
+            // Open NotificationsVc if user tapped notification banner.
+            if UIApplication.shared.applicationState != UIApplicationState.active {
+                (mainTabBarController)?.selectedIndex = MainChildController.notifications.rawValue
+                if let navigationController = (mainTabBarController)?.selectedViewController as? UINavigationController, let childViewController = navigationController.childViewControllers[0] as? NotificationsViewController {
+                    // Set segment.
+                    childViewController.notificationsSegmentType = (notificationType == NotificationType.message.rawValue) ? NotificationsSegmentType.conversations : NotificationsSegmentType.notifications
+                }
+            }
         } else {
-            print("It's something else!")
+            print("No notificationType. This should not happen.")
         }
         
         // TODO play with constants depending on case.
         completionHandler(UIBackgroundFetchResult.newData)
-        
-        // Open NotificationsVc if needed.
-        if UIApplication.shared.applicationState != UIApplicationState.active {
-            (self.window?.rootViewController as? MainTabBarController)?.selectNotificationsViewController()
-        }
     }
     
     fileprivate func configureUI() {
@@ -128,30 +134,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UITextView.appearance().tintColor = Colors.black
         // UISearchBar
         UISearchBar.appearance().searchBarStyle = UISearchBarStyle.minimal
-    }
-    
-    // MARK: AWS
-    
-    fileprivate func getMessage(_ conversationId: String, messageId: String) {
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().getMessageDynamoDB(conversationId, messageId: messageId, completionHandler: {
-            (task: AWSTask) in
-            DispatchQueue.main.async(execute: {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                guard task.error == nil else {
-                    print("getConversationMessage error: \(task.error!)")
-                    return
-                }
-                guard let awsMessage = task.result as? AWSMessage else {
-                    print("getMessage error: Not AWSMessage. This should not happen.")
-                    return
-                }
-                let message = Message(conversationId: awsMessage._conversationId, messageId: awsMessage._messageId, created: awsMessage._created, messageText: awsMessage._messageText, senderId: awsMessage._senderId, recipientId: awsMessage._recipientId)
-                // Notify observers.
-                NotificationCenter.default.post(name: NSNotification.Name(rawValue: APNsNewMessageNotificationKey), object: self, userInfo: ["message": message])
-            })
-            return nil
-        })
     }
 }
 

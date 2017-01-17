@@ -32,6 +32,7 @@ class MessagesTableViewController: UITableViewController {
     fileprivate var currentCalendar: Calendar = Calendar.current
     
     fileprivate var seenConversation: Bool = false
+    fileprivate var isVisible: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,7 +45,7 @@ class MessagesTableViewController: UITableViewController {
             // Query.
             self.tableView.tableFooterView = self.loadingTableFooterView
             self.isLoadingMessages = true
-            self.queryMessagesDateSorted(conversationId)
+            self.queryMessagesDateSorted(conversationId, startFromBeginning: true)
         }
         
         // Add observers.
@@ -54,6 +55,17 @@ class MessagesTableViewController: UITableViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(self.apnsNewMessageNotificationKey(_:)), name: NSNotification.Name(APNsNewMessageNotificationKey), object: nil)
         // Special observer for refreshing notifications.
         NotificationCenter.default.addObserver(self, selector: #selector(self.uiApplicationDidBecomeActiveNotification(_:)), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.isVisible = true
+        (self.tabBarController as? MainTabBarController)?.updateUnseenConversationsBadge()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        self.isVisible = false
+        super.viewDidDisappear(animated)
     }
 
     override func didReceiveMemoryWarning() {
@@ -147,7 +159,7 @@ class MessagesTableViewController: UITableViewController {
         }
         self.tableView.tableFooterView = self.loadingTableFooterView
         self.isLoadingMessages = true
-        self.queryMessagesDateSorted(conversationId)
+        self.queryMessagesDateSorted(conversationId, startFromBeginning: false)
     }
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -227,7 +239,10 @@ class MessagesTableViewController: UITableViewController {
     // MARK: AWS
     
     // No refresh so never startFromBeginning.
-    fileprivate func queryMessagesDateSorted(_ conversationId: String) {
+    fileprivate func queryMessagesDateSorted(_ conversationId: String, startFromBeginning: Bool) {
+        if startFromBeginning {
+            self.lastEvaluatedKey = nil
+        }
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         PRFYDynamoDBManager.defaultDynamoDBManager().queryMessagesDateSortedDynamoDB(conversationId, lastEvaluatedKey: self.lastEvaluatedKey, completionHandler: {
             (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
@@ -243,6 +258,9 @@ class MessagesTableViewController: UITableViewController {
                         self.noNetworkConnection = true
                     }
                     return
+                }
+                if startFromBeginning {
+                    self.allMessagesSections = []
                 }
                 if let awsMessages = response?.items as? [AWSMessage] {
                     for awsMessage in awsMessages {
@@ -277,10 +295,6 @@ class MessagesTableViewController: UITableViewController {
     
     // In background.
     fileprivate func updateSeenConversation(_ conversationId: String) {
-        
-        print("This is a test:")
-        print("updateSeenConversation")
-        
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         PRFYDynamoDBManager.defaultDynamoDBManager().updateSeenConversationDynamoDB(conversationId, completionHandler: {
             (task: AWSTask) in
@@ -291,12 +305,11 @@ class MessagesTableViewController: UITableViewController {
                     return
                 }
                 // Update badge.
-                if let numberOfUnseenConversations = (self.tabBarController as? MainTabBarController)?.numberOfUnseenConversations, numberOfUnseenConversations > 0 {
-                    let newNumberOfUnseenConversations = numberOfUnseenConversations - 1
-                    (self.tabBarController as? MainTabBarController)?.numberOfUnseenConversations = newNumberOfUnseenConversations
-                    (self.tabBarController as? MainTabBarController)?.updateUnseenConversationsBadge(newNumberOfUnseenConversations)
+                (self.tabBarController as? MainTabBarController)?.updateUnseenConversationsIds(conversationId, shouldRemove: true)
+                if self.isVisible {
+                    (self.tabBarController as? MainTabBarController)?.updateUnseenConversationsBadge()
                 }
-                // Update seen.
+                // Update flag.
                 self.seenConversation = true
             })
             return nil
@@ -348,7 +361,7 @@ extension MessagesTableViewController {
         guard let message = notification.userInfo?["message"] as? Message else {
             return
         }
-        guard self.conversationId == message.conversationId else {
+        guard let conversationId = self.conversationId, conversationId == message.conversationId else {
             return
         }
         // Ensure message doesn't exist yet so we don't make duplicates.
@@ -357,8 +370,8 @@ extension MessagesTableViewController {
         }
         self.putNewMessageInMessageSection(message)
         self.tableView.reloadData()
-        
-        // TODO update seen?
+        // Update seen.
+        self.updateSeenConversation(conversationId)
     }
     
     func uiApplicationDidBecomeActiveNotification(_ notification: NSNotification) {
@@ -368,10 +381,11 @@ extension MessagesTableViewController {
         guard let conversationId = self.conversationId else {
             return
         }
-        // Always reset.
-        self.allMessagesSections = []
+        // Update flag.
         self.seenConversation = false
-        self.queryMessagesDateSorted(conversationId)
+        // Query.
+        self.isLoadingMessages = true
+        self.queryMessagesDateSorted(conversationId, startFromBeginning: true)
     }
 }
 

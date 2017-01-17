@@ -34,17 +34,13 @@ class PRFYNotification: NSObject {
             return nil
         }
         switch notificationType.intValue {
-        case 0:
-            // Like
+        case NotificationType.like.rawValue:
             return " liked your post. "
-        case 1:
-            // Comment
+        case NotificationType.comment.rawValue:
             return " commented on your post. "
-        case 2:
-            // Following
+        case NotificationType.following.rawValue:
             return " started following you. "
-        case 3:
-            // Recommendation
+        case NotificationType.recommendation.rawValue:
             return " recommended you. "
         default:
             return nil

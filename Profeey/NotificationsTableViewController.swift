@@ -94,9 +94,9 @@ class NotificationsTableViewController: UITableViewController {
         guard cell is NotificationTableViewCell, let notificationType = self.notifications[indexPath.row].notificationType else {
             return
         }
-        if notificationType.intValue == 0 || notificationType.intValue == 1 {
+        if notificationType.intValue == NotificationType.like.rawValue || notificationType.intValue == NotificationType.comment.rawValue {
             self.performSegue(withIdentifier: "segueToPostDetailsVc", sender: cell)
-        } else if notificationType.intValue == 2 || notificationType.intValue == 3 {
+        } else if notificationType.intValue == NotificationType.following.rawValue || notificationType.intValue == NotificationType.recommendation.rawValue {
             self.performSegue(withIdentifier: "segueToProfileVc", sender: cell)
         }
     }

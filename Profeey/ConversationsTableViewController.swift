@@ -271,18 +271,6 @@ extension ConversationsTableViewController {
         }
     }
     
-    func apnsNewMessageNotificationKey(_ notification: NSNotification) {
-        guard let message = notification.userInfo?["message"] as? Message, let conversationId = message.conversationId else {
-            return
-        }
-        // If conversation already exists, only update with new message, otherwise get entire conversation.
-        if let _ = self.conversations.index(where: { $0.conversationId == conversationId }) {
-            self.updateConversationWithLastMessage(conversationId, message: message)
-        } else {
-            self.getConversation(conversationId)
-        }
-    }
-    
     func downloadImageNotification(_ notification: NSNotification) {
         guard let imageKey = notification.userInfo?["imageKey"] as? String, let imageType = notification.userInfo?["imageType"] as? ImageType, let imageData = notification.userInfo?["imageData"] as? Data else {
             return
@@ -296,6 +284,21 @@ extension ConversationsTableViewController {
             }
             self.conversations[conversationIndex].participant?.profilePic = UIImage(data: imageData)
             self.tableView.reloadVisibleRow(IndexPath(row: conversationIndex, section: 0))
+        }
+    }
+    
+    func apnsNewMessageNotificationKey(_ notification: NSNotification) {
+        guard let message = notification.userInfo?["message"] as? Message, let conversationId = message.conversationId else {
+            return
+        }
+        guard self.isLoadingConversations == false else {
+            return
+        }
+        // If conversation already exists, only update with new message, otherwise get entire conversation.
+        if let _ = self.conversations.index(where: { $0.conversationId == conversationId }) {
+            self.updateConversationWithLastMessage(conversationId, message: message)
+        } else {
+            self.getConversation(conversationId)
         }
     }
     

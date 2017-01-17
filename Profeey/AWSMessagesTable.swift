@@ -92,7 +92,7 @@ class AWSMessagesDateSortedIndex: NSObject, Index {
             ":created": NSNumber(value: Date().timeIntervalSince1970 as Double),
         ]
         queryExpression.scanIndexForward = false
-        queryExpression.limit = 10
+        queryExpression.limit = 20
         queryExpression.exclusiveStartKey = lastEvaluatedKey
         
         objectMapper.query(AWSMessage.self, expression: queryExpression, completionHandler: completionHandler)
