@@ -161,7 +161,10 @@ class MainTabBarController: UITabBarController {
     }
     
     func updateUnseenConversationsBadge() {
+        // Update inner app badge.
         self.tabBar.items?[3].badgeValue = self.unseenConversationsIds.count > 0 ? "\(self.unseenConversationsIds.count)" : nil
+        // Update outer app badge.
+        UIApplication.shared.applicationIconBadgeNumber = self.unseenConversationsIds.count > 0 ? self.unseenConversationsIds.count : 0
     }
     
     // MARK: AWS
