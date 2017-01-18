@@ -62,7 +62,6 @@ class AWSLikesTable: NSObject, Table {
     }
 }
 
-// Query likers of a post.
 class AWSLikesPostIndex: NSObject, Index {
     
     var indexName: String? {
@@ -79,7 +78,7 @@ class AWSLikesPostIndex: NSObject, Index {
     // MARK: QueryWithPartitionKey
     
     // Query paginated likes with postId.
-    func queryPostLikes(_ postId: String, lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+    func queryLikes(_ postId: String, lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
         let queryExpression = AWSDynamoDBQueryExpression()
         queryExpression.indexName = "PostIndex"

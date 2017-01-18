@@ -308,10 +308,10 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         awsLikesTable.removeLike(awsLike, completionHandler: completionHandler)
     }
     
-    func queryPostLikesDynamoDB(_ postId: String, lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
-        print("queryPostLikesDynamoDB:")
+    func queryLikesDynamoDB(_ postId: String, lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+        print("queryLikesDynamoDB:")
         let awsLikesPostIndex = AWSLikesPostIndex()
-        awsLikesPostIndex.queryPostLikes(postId, lastEvaluatedKey: lastEvaluatedKey, completionHandler: completionHandler)
+        awsLikesPostIndex.queryLikes(postId, lastEvaluatedKey: lastEvaluatedKey, completionHandler: completionHandler)
     }
     
     // MARK: Comments

@@ -56,7 +56,7 @@ protocol DynamoDBManager {
     func getLikeDynamoDB(_ postId: String, completionHandler: @escaping AWSContinuationBlock)
     func createLikeDynamoDB(_ postId: String, postUserId: String, completionHandler: @escaping AWSContinuationBlock)
     func removeLikeDynamoDB(_ postId: String, completionHandler: @escaping AWSContinuationBlock)
-    func queryPostLikesDynamoDB(_ postId: String, lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
+    func queryLikesDynamoDB(_ postId: String, lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
     
     // MARK: Comments
     

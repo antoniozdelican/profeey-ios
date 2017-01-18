@@ -84,7 +84,7 @@ class CommentsTableViewController: UITableViewController {
         cell.professionNameLabel.text = user?.professionName
         cell.timeLabel.text = comment.createdString
         cell.commentTextLabel.text = comment.commentText
-        comment.isExpandedCommentText ? cell.untruncate() : cell.truncate()
+        cell.truncate()
         cell.commentTableViewCellDelegate = self
         return cell
     }
@@ -313,11 +313,12 @@ extension CommentsTableViewController {
             return
         }
         for comments in self.comments.filter( { $0.user?.profilePicUrl == imageKey } ) {
-            guard let commentIndex = self.comments.index(of: comments) else {
-                continue
+            if let commentIndex = self.comments.index(of: comments) {
+                // Update user profilePic.
+                self.comments[commentIndex].user?.profilePic = UIImage(data: imageData)
+                // Update cell profilePicImageView.
+                (self.tableView.cellForRow(at: IndexPath(row: commentIndex, section: 0)) as? CommentTableViewCell)?.profilePicImageView.image = self.comments[commentIndex].user?.profilePic
             }
-            self.comments[commentIndex].user?.profilePic = UIImage(data: imageData)
-            self.tableView.reloadRows(at: [IndexPath(row: commentIndex, section: 0)], with: UITableViewRowAnimation.none)
         }
     }
 }
@@ -329,14 +330,10 @@ extension CommentsTableViewController: CommentTableViewCellDelegate {
     }
     
     func commentTextLabelTapped(_ cell: CommentTableViewCell) {
-        guard let indexPath = self.tableView.indexPath(for: cell) else {
-            return
-        }
-        if !self.comments[indexPath.row].isExpandedCommentText {
-            self.comments[indexPath.row].isExpandedCommentText = true
-            UIView.performWithoutAnimation {
-                self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
-            }
+        cell.untruncate()
+        UIView.performWithoutAnimation {
+            self.tableView.beginUpdates()
+            self.tableView.endUpdates()
         }
     }
 }

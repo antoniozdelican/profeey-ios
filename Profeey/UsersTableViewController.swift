@@ -18,6 +18,8 @@ enum UsersType {
 
 class UsersTableViewController: UITableViewController {
     
+    @IBOutlet var loadingTableFooterView: UIView!
+    
     var usersType: UsersType?
     // In case of likes.
     var postId: String?
@@ -26,7 +28,6 @@ class UsersTableViewController: UITableViewController {
     
     fileprivate var users: [User] = []
     fileprivate var isLoadingUsers: Bool = false
-    fileprivate var isLoadingNextUsers: Bool = false
     fileprivate var lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?
     fileprivate var noNetworkConnection: Bool = false
     
@@ -37,10 +38,39 @@ class UsersTableViewController: UITableViewController {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         
-        if let usersType = self.usersType, usersType == .likers {
-            self.navigationItem.title = "Likes"
+        // Query ids.
+        if let currentUserId = AWSIdentityManager.defaultIdentityManager().identityId {
+            self.isLoadingFollowingIds = true
+            self.queryFollowingIds(currentUserId)
         }
-        self.prepareForQueries()
+        
+        // Query users.
+        if let usersType = self.usersType {
+            switch usersType {
+            case .likers:
+                self.navigationItem.title = "Likes"
+                if let postId = self.postId {
+                    // Query.
+                    self.isLoadingUsers = true
+                    self.tableView.tableFooterView = self.loadingTableFooterView
+                    self.queryLikes(postId, startFromBeginning: true)
+                }
+            case .followers:
+                if let followingId = self.userId {
+                    // Query.
+                    self.isLoadingUsers = true
+                    self.tableView.tableFooterView = self.loadingTableFooterView
+                    self.queryFollowers(followingId, startFromBeginning: true)
+                }
+            case .following:
+                if let userId = self.userId {
+                    // Query.
+                    self.isLoadingUsers = true
+                    self.tableView.tableFooterView = self.loadingTableFooterView
+                    self.queryFollowing(userId, startFromBeginning: true)
+                }
+            }
+        }
         
         // Add observers.
         NotificationCenter.default.addObserver(self, selector: #selector(self.followUserNotification(_:)), name: NSNotification.Name(FollowUserNotificationKey), object: nil)
@@ -69,21 +99,14 @@ class UsersTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if self.isLoadingUsers {
-            return 1
-        }
-        if self.users.count == 0 {
+        if !self.isLoadingUsers && self.users.count == 0 {
             return 1
         }
         return self.users.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if self.isLoadingUsers {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cellLoading", for: indexPath) as! LoadingTableViewCell
-            return cell
-        }
-        if self.users.count == 0 {
+        if !self.isLoadingUsers && self.users.count == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellEmpty", for: indexPath) as! EmptyTableViewCell
             if let usersType = self.usersType {
                 switch usersType {
@@ -125,46 +148,58 @@ class UsersTableViewController: UITableViewController {
         if !(cell is UserTableViewCell) {
             cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
         }
-        // Load next users.
-        guard !self.isLoadingUsers else {
-            return
-        }
-        guard indexPath.row == self.users.count - 1 && !self.isLoadingNextUsers && self.lastEvaluatedKey != nil else {
+        guard indexPath.row == self.users.count - 1 && !self.isLoadingUsers && self.lastEvaluatedKey != nil else {
             return
         }
         guard !self.noNetworkConnection else {
             return
         }
-        self.prepareForQueries()
+        guard let usersType = self.usersType else {
+            return
+        }
+        switch usersType {
+        case .likers:
+            guard let postId = self.postId else {
+                return
+            }
+            self.isLoadingUsers = true
+            self.queryLikes(postId, startFromBeginning: true)
+        case .followers:
+            guard let followingId = self.userId else {
+                return
+            }
+            self.isLoadingUsers = true
+            self.queryFollowers(followingId, startFromBeginning: true)
+        case .following:
+            guard let userId = self.userId else {
+                return
+            }
+            self.isLoadingUsers = true
+            self.queryFollowing(userId, startFromBeginning: true)
+        }
     }
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        if self.isLoadingUsers || self.users.count == 0 {
-            return 112.0
+        if self.users.count == 0 {
+            return 64.0
         }
-        return 68.0
+        return 64.0
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if self.isLoadingUsers || self.users.count == 0  {
-            return 112.0
+        if self.users.count == 0 {
+            return 64.0
         }
-        return 68.0
+        return 64.0
     }
     
     // MARK: IBActions
     
     @IBAction func refreshControlChanged(_ sender: AnyObject) {
-        guard !self.isLoadingUsers else {
+        guard !self.isLoadingUsers && !self.isLoadingFollowingIds else {
             self.refreshControl?.endRefreshing()
             return
         }
-        self.prepareForQueries()
-    }
-    
-    // MARK: Helpers
-    
-    fileprivate func prepareForQueries() {
         guard let usersType = self.usersType else {
             self.refreshControl?.endRefreshing()
             return
@@ -176,7 +211,7 @@ class UsersTableViewController: UITableViewController {
                 return
             }
             self.isLoadingUsers = true
-            self.queryPostLikes(postId, startFromBeginning: true)
+            self.queryLikes(postId, startFromBeginning: true)
         case .followers:
             guard let followingId = self.userId else {
                 self.refreshControl?.endRefreshing()
@@ -192,6 +227,7 @@ class UsersTableViewController: UITableViewController {
             self.isLoadingUsers = true
             self.queryFollowing(userId, startFromBeginning: true)
         }
+        // Refresh ids as well.
         if let currentUserId = AWSIdentityManager.defaultIdentityManager().identityId {
             self.isLoadingFollowingIds = true
             self.queryFollowingIds(currentUserId)
@@ -200,23 +236,24 @@ class UsersTableViewController: UITableViewController {
     
     // MARK: AWS
     
-    fileprivate func queryPostLikes(_ postId: String, startFromBeginning: Bool) {
+    fileprivate func queryLikes(_ postId: String, startFromBeginning: Bool) {
         if startFromBeginning {
             self.lastEvaluatedKey = nil
         }
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().queryPostLikesDynamoDB(postId, lastEvaluatedKey: lastEvaluatedKey, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().queryLikesDynamoDB(postId, lastEvaluatedKey: lastEvaluatedKey, completionHandler: {
             (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 guard error == nil else {
-                    print("queryPostLikes error: \(error!)")
+                    print("queryLikes error: \(error!)")
                     self.isLoadingUsers = false
-                    self.isLoadingNextUsers = false
                     self.refreshControl?.endRefreshing()
+                    self.tableView.tableFooterView = UIView()
                     self.tableView.reloadData()
                     let nsError = error as! NSError
                     if nsError.code == -1009 {
+                        (self.navigationController as? PRFYNavigationController)?.showBanner("No Internet Connection")
                         self.noNetworkConnection = true
                     }
                     return
@@ -235,11 +272,11 @@ class UsersTableViewController: UITableViewController {
                 
                 // Reset flags and animations that were initiated.
                 self.isLoadingUsers = false
-                self.isLoadingNextUsers = false
                 self.refreshControl?.endRefreshing()
                 self.noNetworkConnection = false
                 self.tableView.reloadData()
                 self.lastEvaluatedKey = response?.lastEvaluatedKey
+                self.tableView.tableFooterView = UIView()
                 
                 // Reload tableView with downloaded users.
                 if startFromBeginning || numberOfNewUsers > 0 {
@@ -270,11 +307,12 @@ class UsersTableViewController: UITableViewController {
                 guard error == nil else {
                     print("queryFollowers error: \(error!)")
                     self.isLoadingUsers = false
-                    self.isLoadingNextUsers = false
                     self.refreshControl?.endRefreshing()
+                    self.tableView.tableFooterView = UIView()
                     self.tableView.reloadData()
                     let nsError = error as! NSError
                     if nsError.code == -1009 {
+                        (self.navigationController as? PRFYNavigationController)?.showBanner("No Internet Connection")
                         self.noNetworkConnection = true
                     }
                     return
@@ -293,11 +331,11 @@ class UsersTableViewController: UITableViewController {
                 
                 // Reset flags and animations that were initiated.
                 self.isLoadingUsers = false
-                self.isLoadingNextUsers = false
                 self.refreshControl?.endRefreshing()
                 self.noNetworkConnection = false
                 self.tableView.reloadData()
                 self.lastEvaluatedKey = response?.lastEvaluatedKey
+                self.tableView.tableFooterView = UIView()
                 
                 // Reload tableView with downloaded users.
                 if startFromBeginning || numberOfNewUsers > 0 {
@@ -327,13 +365,14 @@ class UsersTableViewController: UITableViewController {
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 guard error == nil else {
-                    print("queryFollowers error: \(error!)")
+                    print("queryFollowing error: \(error!)")
                     self.isLoadingUsers = false
-                    self.isLoadingNextUsers = false
                     self.refreshControl?.endRefreshing()
+                    self.tableView.tableFooterView = UIView()
                     self.tableView.reloadData()
                     let nsError = error as! NSError
                     if nsError.code == -1009 {
+                        (self.navigationController as? PRFYNavigationController)?.showBanner("No Internet Connection")
                         self.noNetworkConnection = true
                     }
                     return
@@ -352,10 +391,11 @@ class UsersTableViewController: UITableViewController {
                 
                 // Reset flags and animations that were initiated.
                 self.isLoadingUsers = false
-                self.isLoadingNextUsers = false
                 self.refreshControl?.endRefreshing()
                 self.noNetworkConnection = false
+                self.tableView.reloadData()
                 self.lastEvaluatedKey = response?.lastEvaluatedKey
+                self.tableView.tableFooterView = UIView()
                 
                 // Reload tableView with downloaded users.
                 if startFromBeginning || numberOfNewUsers > 0 {
@@ -440,28 +480,28 @@ extension UsersTableViewController {
         guard let followingId = notification.userInfo?["followingId"] as? String else {
             return
         }
-        guard let userIndex = self.users.index(where: { $0.userId == followingId }) else {
-            return
-        }
         guard !self.followingIds.contains(followingId) else {
             return
         }
+        guard let userIndex = self.users.index(where: { $0.userId == followingId }) else {
+            return
+        }
         self.followingIds.append(followingId)
-        self.tableView.reloadRows(at: [IndexPath(row: userIndex, section: 0)], with: UITableViewRowAnimation.none)
+        (self.tableView.cellForRow(at: IndexPath(row: userIndex, section: 0)) as? UserTableViewCell)?.setFollowingButton()
     }
     
     func unfollowUserNotification(_ notification: NSNotification) {
         guard let followingId = notification.userInfo?["followingId"] as? String else {
             return
         }
-        guard let userIndex = self.users.index(where: { $0.userId == followingId }) else {
-            return
-        }
         guard let followingIdIndex = self.followingIds.index(of: followingId) else {
             return
         }
+        guard let userIndex = self.users.index(where: { $0.userId == followingId }) else {
+            return
+        }
         self.followingIds.remove(at: followingIdIndex)
-        self.tableView.reloadRows(at: [IndexPath(row: userIndex, section: 0)], with: UITableViewRowAnimation.none)
+        (self.tableView.cellForRow(at: IndexPath(row: userIndex, section: 0)) as? UserTableViewCell)?.setFollowButton()
     }
     
     func downloadImageNotification(_ notification: NSNotification) {
@@ -472,11 +512,10 @@ extension UsersTableViewController {
             return
         }
         for user in self.users.filter( { $0.profilePicUrl == imageKey } ) {
-            guard let userIndex = self.users.index(of: user) else {
-                continue
+            if let userIndex = self.users.index(of: user) {
+                self.users[userIndex].profilePic = UIImage(data: imageData)
+                (self.tableView.cellForRow(at: IndexPath(row: userIndex, section: 0)) as? UserTableViewCell)?.profilePicImageView.image = self.users[userIndex].profilePic
             }
-            self.users[userIndex].profilePic = UIImage(data: imageData)
-            self.tableView.reloadVisibleRow(IndexPath(row: userIndex, section: 0))
         }
     }
 }

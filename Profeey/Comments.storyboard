@@ -199,7 +199,7 @@
                                     <constraints>
                                         <constraint firstItem="6Mz-wj-2WT" firstAttribute="leading" secondItem="2Il-9f-GqI" secondAttribute="trailing" constant="8" id="Bhg-82-tMu"/>
                                         <constraint firstItem="i6K-t5-n4A" firstAttribute="top" secondItem="Pba-Ld-0Ql" secondAttribute="top" constant="12" id="GrJ-oo-vpb"/>
-                                        <constraint firstAttribute="bottom" secondItem="IZe-Lu-Yhc" secondAttribute="bottom" constant="12" id="Pxc-ES-0Jv"/>
+                                        <constraint firstAttribute="bottom" secondItem="IZe-Lu-Yhc" secondAttribute="bottom" priority="999" constant="12" id="Pxc-ES-0Jv"/>
                                         <constraint firstItem="6Mz-wj-2WT" firstAttribute="leading" secondItem="IZe-Lu-Yhc" secondAttribute="trailing" constant="8" id="WIQ-6Z-Hmk"/>
                                         <constraint firstItem="IZe-Lu-Yhc" firstAttribute="leading" secondItem="i6K-t5-n4A" secondAttribute="trailing" constant="12" id="XNU-km-BC6"/>
                                         <constraint firstItem="6Mz-wj-2WT" firstAttribute="top" secondItem="Pba-Ld-0Ql" secondAttribute="top" constant="14" id="Yas-3f-E4L"/>
