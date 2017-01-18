@@ -322,7 +322,6 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
             AWSTask().continue(completionHandler)
             return
         }
-        print("createCommentDynamoDB:")
         let commentId = NSUUID().uuidString.lowercased()
         let created = NSNumber(value: Date().timeIntervalSince1970 as Double)
         let awsCommentsTable = AWSCommentsTable()
@@ -349,10 +348,9 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         awsCommentsTable.removeComment(awsComment, completionHandler: completionHandler)
     }
     
-    func queryPostCommentsDateSortedDynamoDB(_ postId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
-        print("queryPostCommentsDateSortedDynamoDB:")
+    func queryCommentsDateSortedDynamoDB(_ postId: String, lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         let awsCommentsPostIndex = AWSCommentsPostIndex()
-        awsCommentsPostIndex.queryPostCommentsDateSorted(postId, completionHandler: completionHandler)
+        awsCommentsPostIndex.queryCommentsDateSorted(postId, lastEvaluatedKey: lastEvaluatedKey, completionHandler: completionHandler)
     }
     
     

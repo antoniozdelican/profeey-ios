@@ -16,17 +16,23 @@ protocol CommentsTableViewControllerDelegate: class {
 
 class CommentsTableViewController: UITableViewController {
     
+    @IBOutlet var loadingTableFooterView: UIView!
+    
     var postId: String?
     weak var commentsTableViewControllerDelegate: CommentsTableViewControllerDelegate?
     fileprivate var comments: [Comment] = []
     fileprivate var isLoadingComments: Bool = false
+    fileprivate var lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?
+    fileprivate var noNetworkConnection: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         if let postId = self.postId {
+            // Query.
             self.isLoadingComments = true
-            self.queryPostCommentsDateSorted(postId)
+            self.tableView.tableFooterView = self.loadingTableFooterView
+            self.queryCommentsDateSorted(postId, startFromBeginning: true)
         }
         
         // Add observers.
@@ -58,24 +64,16 @@ class CommentsTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if self.isLoadingComments {
-            return 1
-        }
-        if self.comments.count == 0 {
+        if !self.isLoadingComments && self.comments.count == 0 {
             return 1
         }
         return self.comments.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if self.isLoadingComments {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cellLoading", for: indexPath) as! LoadingTableViewCell
-            cell.activityIndicator?.startAnimating()
-            return cell
-        }
-        if self.comments.count == 0 {
+        if !self.isLoadingComments && self.comments.count == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellEmpty", for: indexPath) as! EmptyTableViewCell
-            cell.emptyMessageLabel.text = "No comments yet"
+            cell.emptyMessageLabel.text = "No comments yet."
             return cell
         }
         let comment = self.comments[indexPath.row]
@@ -93,13 +91,6 @@ class CommentsTableViewController: UITableViewController {
     
     // MARK: UITableViewDelegate
     
-    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        cell.layoutMargins = UIEdgeInsets.zero
-        if !(cell is CommentTableViewCell) {
-            cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
-        }
-    }
-    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let cell = tableView.cellForRow(at: indexPath)
@@ -108,18 +99,53 @@ class CommentsTableViewController: UITableViewController {
         }
     }
     
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.layoutMargins = UIEdgeInsets.zero
+        if !(cell is CommentTableViewCell) {
+            cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
+        }
+        // Load next comments and reset tableFooterView.
+        guard indexPath.row == self.comments.count - 1 && !self.isLoadingComments && self.lastEvaluatedKey != nil else {
+            return
+        }
+        guard let postId = self.postId else {
+            return
+        }
+        guard !self.noNetworkConnection else {
+            return
+        }
+        self.tableView.tableFooterView = self.loadingTableFooterView
+        self.isLoadingComments = true
+        self.queryCommentsDateSorted(postId, startFromBeginning: false)
+    }
+    
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        if self.isLoadingComments || self.comments.count == 0 {
-            return 112.0
+        if self.comments.count == 0 {
+            return 64.0
         }
         return 87.0
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if self.isLoadingComments || self.comments.count == 0 {
-            return 112.0
+        if self.comments.count == 0 {
+            return 64.0
         }
         return UITableViewAutomaticDimension
+    }
+    
+    // MARK: IBActions
+    
+    @IBAction func refreshControlChanged(_ sender: AnyObject) {
+        guard !self.isLoadingComments else {
+            self.refreshControl?.endRefreshing()
+            return
+        }
+        guard let postId = self.postId else {
+            self.refreshControl?.endRefreshing()
+            return
+        }
+        self.isLoadingComments = true
+        self.queryCommentsDateSorted(postId, startFromBeginning: true)
     }
     
     // MARK: UIScrollViewDelegate
@@ -169,29 +195,57 @@ class CommentsTableViewController: UITableViewController {
     
     // MARK: AWS
     
-    fileprivate func queryPostCommentsDateSorted(_ postId: String) {
+    fileprivate func queryCommentsDateSorted(_ postId: String, startFromBeginning: Bool) {
+        if startFromBeginning {
+            self.lastEvaluatedKey = nil
+        }
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().queryPostCommentsDateSortedDynamoDB(postId, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().queryCommentsDateSortedDynamoDB(postId, lastEvaluatedKey: self.lastEvaluatedKey, completionHandler: {
             (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                self.isLoadingComments = false
-                if let error = error {
-                    print("queryPostCommentsDateSorted error: \(error)")
+                guard error == nil else {
+                    print("queryCommentsDateSorted error: \(error!)")
+                    self.isLoadingComments = false
+                    self.refreshControl?.endRefreshing()
+                    self.tableView.tableFooterView = UIView()
                     self.tableView.reloadData()
-                } else {
-                    guard let awsComments = response?.items as? [AWSComment] else {
-                        self.tableView.reloadData()
-                        return
+                    let nsError = error as! NSError
+                    if nsError.code == -1009 {
+                        (self.navigationController as? PRFYNavigationController)?.showBanner("No Internet Connection")
+                        self.noNetworkConnection = true
                     }
+                    return
+                }
+                if startFromBeginning {
+                    self.comments = []
+                }
+                var numberOfNewComments = 0
+                if let awsComments = response?.items as? [AWSComment] {
                     for awsComment in awsComments {
                         let user = User(userId: awsComment._userId, firstName: awsComment._firstName, lastName: awsComment._lastName, preferredUsername: awsComment._preferredUsername, professionName: awsComment._professionName, profilePicUrl: awsComment._profilePicUrl)
                         let comment = Comment(userId: awsComment._userId, commentId: awsComment._commentId, created: awsComment._created, commentText: awsComment._commentText, postId: awsComment._postId, postUserId: awsComment._postUserId, user: user)
                         self.comments.append(comment)
+                        numberOfNewComments += 1
                     }
+                }
+                
+                // Reset flags and animations that were initiated.
+                self.isLoadingComments = false
+                self.refreshControl?.endRefreshing()
+                self.noNetworkConnection = false
+                self.lastEvaluatedKey = response?.lastEvaluatedKey
+                self.tableView.tableFooterView = UIView()
+                
+                // Reload tableView.
+                if startFromBeginning || numberOfNewComments > 0 {
                     self.tableView.reloadData()
-                    for comment in self.comments {
-                        if let profilePicUrl = comment.user?.profilePicUrl {
+                }
+                
+                // Load profilePics.
+                if let awsComments = response?.items as? [AWSComment] {
+                    for awsComment in awsComments {
+                        if let profilePicUrl = awsComment._profilePicUrl {
                             PRFYS3Manager.defaultS3Manager().downloadImageS3(profilePicUrl, imageType: .userProfilePic)
                         }
                     }
@@ -231,7 +285,7 @@ extension CommentsTableViewController {
         if self.comments.count == 1 {
             self.tableView.reloadData()
         } else {
-            self.tableView.insertRows(at: [IndexPath(row: self.comments.count - 1, section: 0)], with: UITableViewRowAnimation.fade)
+            self.tableView.insertRows(at: [IndexPath(row: self.comments.count - 1, section: 0)], with: UITableViewRowAnimation.automatic)
         }
         self.tableView.scrollToRow(at: IndexPath(row: self.comments.count - 1, section: 0), at: UITableViewScrollPosition.bottom, animated: false)
     }
@@ -247,7 +301,7 @@ extension CommentsTableViewController {
         if self.comments.count == 0 {
             self.tableView.reloadData()
         } else {
-            self.tableView.deleteRows(at: [IndexPath(row: commentIndex, section: 0)], with: UITableViewRowAnimation.fade)
+            self.tableView.deleteRows(at: [IndexPath(row: commentIndex, section: 0)], with: UITableViewRowAnimation.automatic)
         }
     }
     

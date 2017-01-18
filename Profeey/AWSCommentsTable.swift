@@ -62,7 +62,6 @@ class AWSCommentsTable: NSObject, Table {
     }
 }
 
-// Query comments of a post.
 class AWSCommentsPostIndex: NSObject, Index {
     
     var indexName: String? {
@@ -78,8 +77,8 @@ class AWSCommentsPostIndex: NSObject, Index {
     
     // MARK: QueryWithPartitionKey
     
-    // Query all comments with postId.
-    func queryPostCommentsDateSorted(_ postId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+    // Query paginated comments with postId and created <= currentDate.
+    func queryCommentsDateSorted(_ postId: String, lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
         let queryExpression = AWSDynamoDBQueryExpression()
         queryExpression.indexName = "PostIndex"
@@ -90,8 +89,11 @@ class AWSCommentsPostIndex: NSObject, Index {
         ]
         queryExpression.expressionAttributeValues = [
             ":postId": postId,
-            ":created": NSNumber(value: Date().timeIntervalSince1970 as Double)
+            ":created": NSNumber(value: Date().timeIntervalSince1970 as Double),
         ]
+        queryExpression.limit = 10
+        queryExpression.exclusiveStartKey = lastEvaluatedKey
+        
         objectMapper.query(AWSComment.self, expression: queryExpression, completionHandler: completionHandler)
     }
 }
