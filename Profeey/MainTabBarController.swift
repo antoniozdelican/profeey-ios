@@ -36,7 +36,7 @@ class MainTabBarController: UITabBarController {
     fileprivate var isLoadingNotificationsCounter: Bool = false
     
     // Counter of unseen conversations.
-    fileprivate var unseenConversationsIds: [String] = []
+    var unseenConversationsIds: [String] = []
     fileprivate var isLoadingNumberOfUnseenConversations = false
 
     override func viewDidLoad() {
@@ -123,11 +123,11 @@ class MainTabBarController: UITabBarController {
         // Position newNotificationsView close to middle and below notificaionsTabBarItem.
         let x = (taBarItemWidth * CGFloat(tabBarItemsCount - 2)) + (34.0)
         let y = self.tabBar.frame.height - 12.0
-        let frame = CGRect(x: x, y: y, width: 8.0, height: 8.0)
+        let frame = CGRect(x: x, y: y, width: 5.0, height: 5.0)
         self.newNotificationsView = UIView(frame: frame)
+        self.newNotificationsView?.backgroundColor = Colors.red
+        self.newNotificationsView?.layer.cornerRadius = 2.5
         if self.newNotificationsView != nil {
-            self.newNotificationsView!.backgroundColor = Colors.turquoise
-            self.newNotificationsView!.layer.cornerRadius = 4.0
             self.tabBar.addSubview(self.newNotificationsView!)
             self.toggleNewNotificationsView(isHidden: true)
         }
@@ -165,6 +165,10 @@ class MainTabBarController: UITabBarController {
         self.tabBar.items?[3].badgeValue = self.unseenConversationsIds.count > 0 ? "\(self.unseenConversationsIds.count)" : nil
         // Update outer app badge.
         UIApplication.shared.applicationIconBadgeNumber = self.unseenConversationsIds.count > 0 ? self.unseenConversationsIds.count : 0
+        // Update unseenConversationsView on NotificationsVc if visible.
+        if let notificationsViewController = (self.selectedViewController as? UINavigationController)?.visibleViewController as? NotificationsViewController {
+            notificationsViewController.unseenConversationsView.isHidden = self.unseenConversationsIds.count > 0 ? false : true
+        }
     }
     
     // MARK: AWS

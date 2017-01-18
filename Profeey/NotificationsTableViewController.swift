@@ -81,7 +81,7 @@ class NotificationsTableViewController: UITableViewController {
         
         // Check for new notifications.
         if let notificationCreated = notification.created?.intValue, let lastSeenDate = (self.tabBarController as? MainTabBarController)?.lastSeenDate?.intValue {
-            cell.contentView.backgroundColor = (notificationCreated > lastSeenDate) ? Colors.greyLight : UIColor.white
+            cell.contentView.backgroundColor = (notificationCreated > lastSeenDate) ? Colors.greyLight.withAlphaComponent(0.25) : UIColor.white
         }
         return cell
     }

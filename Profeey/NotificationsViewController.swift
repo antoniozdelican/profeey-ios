@@ -29,6 +29,7 @@ class NotificationsViewController: UIViewController {
     @IBOutlet weak var indicatorScrollView: UIScrollView!
     @IBOutlet weak var notificationsButton: UIButton!
     @IBOutlet weak var conversationsButton: UIButton!
+    @IBOutlet weak var unseenConversationsView: UIView!
     
     weak var notificationsTableViewControllerDelegate: NotificationsTableViewControllerDelegate?
     weak var conversationsTableViewControllerDelegate: ConversationsTableViewControllerDelegate?
@@ -44,9 +45,13 @@ class NotificationsViewController: UIViewController {
         Bundle.main.loadNibNamed("NotificationsSegmentsView", owner: self, options: nil)
         self.navigationItem.titleView = self.notificationsSegmentsView
         self.adjustSegmentColor(NotificationsSegmentType.notifications)
-        
-        // ScrollView
+
+        // ScrollView.
         self.mainScrollView.delegate = self
+        
+        // NewConversationsView.
+        self.unseenConversationsView.layer.cornerRadius = 2.5
+        self.unseenConversationsView.isHidden = true
         
         // Add observers.
         NotificationCenter.default.addObserver(self, selector: #selector(self.uiApplicationDidBecomeActiveNotification(_:)), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
@@ -61,6 +66,9 @@ class NotificationsViewController: UIViewController {
         super.viewDidAppear(animated)
         if let notificationsSegmentType = self.notificationsSegmentType {
             self.adjustNotificationsSegment(notificationsSegmentType)
+        }
+        if let unseenConversationsIds = (self.tabBarController as? MainTabBarController)?.unseenConversationsIds {
+            self.unseenConversationsView.isHidden = unseenConversationsIds.count > 0 ? false : true
         }
     }
 
