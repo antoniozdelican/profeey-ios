@@ -191,7 +191,7 @@ class MessagesViewController: UIViewController {
                 // Create conversation if it's a first message between users.
                 if numberOfInitialMessages == 0 {
                     let participant = User(userId: self.participant?.userId, firstName: self.participant?.firstName, lastName: self.participant?.lastName, preferredUsername: self.participant?.preferredUsername, professionName: self.participant?.professionName, profilePicUrl: self.participant?.profilePicUrl)
-                    let conversation = Conversation(userId: senderId, conversationId: conversationId, lastMessageText: messageText, lastMessageCreated: created, participant: participant)
+                    let conversation = Conversation(userId: senderId, conversationId: conversationId, lastMessageText: messageText, lastMessageCreated: created, lastMessageSeen: NSNumber(value: 1), participant: participant)
                     
                     // Notify observers.
                     NotificationCenter.default.post(name: NSNotification.Name(rawValue: CreateConversationNotificationKey), object: self, userInfo: ["conversation": conversation.copyConversation()])

@@ -37,6 +37,12 @@ class ConversationsTableViewController: UITableViewController {
         // Special observer for refreshing notifications.
         NotificationCenter.default.addObserver(self, selector: #selector(self.uiApplicationDidBecomeActiveNotification(_:)), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        // For unseenConversation bug.
+        self.tableView.reloadData()
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -77,6 +83,13 @@ class ConversationsTableViewController: UITableViewController {
         cell.preferredUsernameLabel.text = conversation.participant?.preferredUsername
         cell.lastMessageLabel.text = conversation.lastMessageText
         cell.timeLabel.text = conversation.lastMessagerCeatedString
+        if let conversationId = conversation.conversationId, let unseenConversationsIds = (self.tabBarController as? MainTabBarController)?.unseenConversationsIds, unseenConversationsIds.contains(conversationId) {
+            cell.timeLabel.textColor = Colors.red
+            cell.unseenConversationView.isHidden = false
+        } else {
+            cell.timeLabel.textColor = Colors.grey
+            cell.unseenConversationView.isHidden = true
+        }
         return cell
     }
     
@@ -111,14 +124,14 @@ class ConversationsTableViewController: UITableViewController {
         if self.conversations.count == 0 {
             return 64.0
         }
-        return 82.0
+        return 64.0
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if self.conversations.count == 0 {
             return 64.0
         }
-        return 82.0
+        return 64.0
     }
     
     // MARK: IBActions
@@ -163,7 +176,7 @@ class ConversationsTableViewController: UITableViewController {
                 if let awsConversations = response?.items as? [AWSConversation] {
                     for awsConversation in awsConversations {
                         let participant = User(userId: awsConversation._participantId, firstName: awsConversation._participantFirstName, lastName: awsConversation._participantLastName, preferredUsername: awsConversation._participantPreferredUsername, professionName: awsConversation._participantProfessionName, profilePicUrl: awsConversation._participantProfilePicUrl)
-                        let conversation = Conversation(userId: awsConversation._userId, conversationId: awsConversation._conversationId, lastMessageText: awsConversation._lastMessageText, lastMessageCreated: awsConversation._lastMessageCreated, participant: participant)
+                        let conversation = Conversation(userId: awsConversation._userId, conversationId: awsConversation._conversationId, lastMessageText: awsConversation._lastMessageText, lastMessageCreated: awsConversation._lastMessageCreated, lastMessageSeen: awsConversation._lastMessageSeen, participant: participant)
                         self.conversations.append(conversation)
                         numberOfNewConversations += 1
                     }
@@ -209,7 +222,7 @@ class ConversationsTableViewController: UITableViewController {
                     return
                 }
                 let participant = User(userId: awsConversation._participantId, firstName: awsConversation._participantFirstName, lastName: awsConversation._participantLastName, preferredUsername: awsConversation._participantPreferredUsername, professionName: awsConversation._participantProfessionName, profilePicUrl: awsConversation._participantProfilePicUrl)
-                let conversation = Conversation(userId: awsConversation._userId, conversationId: awsConversation._conversationId, lastMessageText: awsConversation._lastMessageText, lastMessageCreated: awsConversation._lastMessageCreated, participant: participant)
+                let conversation = Conversation(userId: awsConversation._userId, conversationId: awsConversation._conversationId, lastMessageText: awsConversation._lastMessageText, lastMessageCreated: awsConversation._lastMessageCreated, lastMessageSeen: awsConversation._lastMessageSeen, participant: participant)
                 self.conversations.insert(conversation, at: 0)
                 
                 // Reload tableView.
@@ -234,9 +247,11 @@ class ConversationsTableViewController: UITableViewController {
         let conversation = self.conversations[conversationIndex]
         conversation.lastMessageCreated = message.created
         conversation.lastMessageText = message.messageText
-        // Move conversation to top.
         self.conversations.remove(at: conversationIndex)
         self.conversations.insert(conversation, at: 0)
+        
+        print("Here is updateConversationWithLastMessage:")
+        
         self.tableView.reloadData()
     }
 

@@ -31,19 +31,20 @@ class Conversation: NSObject {
         super.init()
     }
     
-    convenience init(userId: String?, conversationId: String?, lastMessageText: String?, lastMessageCreated: NSNumber?, participant: User?) {
+    convenience init(userId: String?, conversationId: String?, lastMessageText: String?, lastMessageCreated: NSNumber?, lastMessageSeen: NSNumber?, participant: User?) {
         self.init()
         self.userId = userId
         self.conversationId = conversationId
         self.lastMessageText = lastMessageText
         self.lastMessageCreated = lastMessageCreated
+        self.lastMessageSeen = lastMessageSeen
         self.participant = participant
     }
     
     // MARK: Custom copying
     
     func copyConversation() -> Conversation {
-        let conversation = Conversation(userId: userId, conversationId: conversationId, lastMessageText: lastMessageText, lastMessageCreated: lastMessageCreated, participant: participant)
+        let conversation = Conversation(userId: userId, conversationId: conversationId, lastMessageText: lastMessageText, lastMessageCreated: lastMessageCreated, lastMessageSeen: lastMessageSeen, participant: participant)
         return conversation
     }
 }
