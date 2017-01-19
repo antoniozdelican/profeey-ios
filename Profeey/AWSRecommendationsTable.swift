@@ -65,7 +65,6 @@ class AWSRecommendationsTable: NSObject, Table {
     }
 }
 
-// Query recommenders of the user.
 class AWSRecommendationsDateSortedIndex: NSObject, Index {
     
     var indexName: String? {
@@ -81,8 +80,8 @@ class AWSRecommendationsDateSortedIndex: NSObject, Index {
     
     // MARK: QueryWithPartitionKey
     
-    // Find all recommendations with recommendingId date sorted.
-    func queryRecommendationsDateSorted(_ recommendingId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+    // Query paginated recommendations with postId and created <= currentDate.
+    func queryRecommendationsDateSorted(_ recommendingId: String, lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
         let queryExpression = AWSDynamoDBQueryExpression()
         queryExpression.indexName = "DateSortedIndex"
@@ -91,13 +90,14 @@ class AWSRecommendationsDateSortedIndex: NSObject, Index {
             "#recommendingId": "recommendingId",
             "#created": "created",
         ]
-        let currentDateNumber = NSNumber(value: Date().timeIntervalSince1970 as Double)
-        
         queryExpression.expressionAttributeValues = [
             ":recommendingId": recommendingId,
-            ":created": currentDateNumber,
+            ":created": NSNumber(value: Date().timeIntervalSince1970 as Double),
         ]
+        queryExpression.limit = 10
         queryExpression.scanIndexForward = false
+        queryExpression.exclusiveStartKey = lastEvaluatedKey
+        
         objectMapper.query(AWSRecommendation.self, expression: queryExpression, completionHandler: completionHandler)
     }
 }

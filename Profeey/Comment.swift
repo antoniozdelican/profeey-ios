@@ -28,6 +28,8 @@ class Comment: NSObject {
         return currentDate.offsetFromShort(Date(timeIntervalSince1970: TimeInterval(created)))
     }
     
+    var isExpandedCommentText: Bool = false
+    
     override init() {
         super.init()
     }

@@ -84,7 +84,7 @@ class CommentsTableViewController: UITableViewController {
         cell.professionNameLabel.text = user?.professionName
         cell.timeLabel.text = comment.createdString
         cell.commentTextLabel.text = comment.commentText
-        cell.truncate()
+        comment.isExpandedCommentText ? cell.untruncate() : cell.truncate()
         cell.commentTableViewCellDelegate = self
         return cell
     }
@@ -330,10 +330,16 @@ extension CommentsTableViewController: CommentTableViewCellDelegate {
     }
     
     func commentTextLabelTapped(_ cell: CommentTableViewCell) {
-        cell.untruncate()
-        UIView.performWithoutAnimation {
-            self.tableView.beginUpdates()
-            self.tableView.endUpdates()
+        guard let indexPath = self.tableView.indexPath(for: cell) else {
+            return
+        }
+        if !self.comments[indexPath.row].isExpandedCommentText {
+            self.comments[indexPath.row].isExpandedCommentText = true
+            cell.untruncate()
+            UIView.performWithoutAnimation {
+                self.tableView.beginUpdates()
+                self.tableView.endUpdates()
+            }
         }
     }
 }

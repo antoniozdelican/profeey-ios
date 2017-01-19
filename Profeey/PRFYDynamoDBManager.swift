@@ -264,10 +264,10 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         awsRecommendationsTable.removeRecommendation(awsRecommendation, completionHandler: completionHandler)
     }
     
-    func queryRecommendationsDateSortedDynamoDB(_ recommendingId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+    func queryRecommendationsDateSortedDynamoDB(_ recommendingId: String, lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         print("queryRecommendationsDateSortedDynamoDB:")
         let awsRecommendationsDateSortedIndex = AWSRecommendationsDateSortedIndex()
-        awsRecommendationsDateSortedIndex.queryRecommendationsDateSorted(recommendingId, completionHandler: completionHandler)
+        awsRecommendationsDateSortedIndex.queryRecommendationsDateSorted(recommendingId, lastEvaluatedKey: lastEvaluatedKey, completionHandler: completionHandler)
     }
     
     // MARK: Likes
