@@ -61,10 +61,13 @@ class ConversationsTableViewController: UITableViewController {
     // MARK: UITableViewDataSource
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return 2
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if section == 0 {
+            return 1
+        }
         if !self.isLoadingConversations && self.conversations.count == 0 {
             return 1
         }
@@ -72,6 +75,11 @@ class ConversationsTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if indexPath.section == 0 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellAdd", for: indexPath) as! AddTableViewCell
+            cell.titleLabel.text = "New Message"
+            return cell
+        }
         if !self.isLoadingConversations && self.conversations.count == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellEmpty", for: indexPath) as! EmptyTableViewCell
             cell.emptyMessageLabel.text = "No conversations yet."
@@ -105,6 +113,12 @@ class ConversationsTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.layoutMargins = UIEdgeInsets.zero
+        // Skip section 0.
+        guard indexPath.section != 0 else {
+            cell.separatorInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0)
+            return
+        }
+        
         if !(cell is ConversationTableViewCell) {
             cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
         }
@@ -121,6 +135,9 @@ class ConversationsTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.section == 0 {
+            return 64.0
+        }
         if self.conversations.count == 0 {
             return 64.0
         }
@@ -128,6 +145,9 @@ class ConversationsTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.section == 0 {
+            return 64.0
+        }
         if self.conversations.count == 0 {
             return 64.0
         }
@@ -294,7 +314,7 @@ extension ConversationsTableViewController {
             if let conversationIndex = self.conversations.index(of: conversation) {
                 // Update data source and cells.
                 self.conversations[conversationIndex].participant?.profilePic = UIImage(data: imageData)
-                (self.tableView.cellForRow(at: IndexPath(row: conversationIndex, section: 0)) as? ConversationTableViewCell)?.profilePicImageView.image = self.conversations[conversationIndex].participant?.profilePic
+                (self.tableView.cellForRow(at: IndexPath(row: conversationIndex, section: 1)) as? ConversationTableViewCell)?.profilePicImageView.image = self.conversations[conversationIndex].participant?.profilePic
             }
         }
     }
