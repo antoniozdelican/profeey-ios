@@ -143,8 +143,13 @@ class PostDetailsTableViewController: UITableViewController {
         }
         if cell is PostInfoTableViewCell {
             self.post?.isExpandedCaption = true
-            self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
+            (self.tableView.cellForRow(at: indexPath) as? PostInfoTableViewCell)?.untruncate()
+            UIView.performWithoutAnimation {
+                self.tableView.beginUpdates()
+                self.tableView.endUpdates()
+            }
         }
+        
     }
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
@@ -192,20 +197,20 @@ class PostDetailsTableViewController: UITableViewController {
     
     // MARK: Helpers
     
-    fileprivate func setDownloadedImages(_ image: UIImage, imageType: ImageType, indexPath: IndexPath) {
-        switch imageType {
-        case .userProfilePic:
-            self.post?.user?.profilePic = image
-            UIView.performWithoutAnimation {
-                self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
-            }
-        case .postPic:
-            self.post?.image = image
-            UIView.performWithoutAnimation {
-                self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
-            }
-        }
-    }
+//    fileprivate func setDownloadedImages(_ image: UIImage, imageType: ImageType, indexPath: IndexPath) {
+//        switch imageType {
+//        case .userProfilePic:
+//            self.post?.user?.profilePic = image
+//            UIView.performWithoutAnimation {
+//                self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
+//            }
+//        case .postPic:
+//            self.post?.image = image
+//            UIView.performWithoutAnimation {
+//                self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
+//            }
+//        }
+//    }
     
     // MARK: AWS
     
@@ -276,8 +281,9 @@ class PostDetailsTableViewController: UITableViewController {
                     print("getLike error: \(error)")
                 } else {
                     if task.result != nil {
+                        // Update data source and cells.
                         self.post?.isLikedByCurrentUser = true
-                        self.tableView.reloadVisibleRow(IndexPath(row: 4, section: 0))
+                        (self.tableView.cellForRow(at: IndexPath(row: 4, section: 0)) as? PostButtonsTableViewCell)?.setSelectedLikeButton()
                     }
                 }
             })
@@ -331,11 +337,11 @@ extension PostDetailsTableViewController {
         guard let post = self.post, post.postId == postId else {
             return
         }
+        // Update data source and cells.
         post.caption = notification.userInfo?["caption"] as? String
         post.categoryName = notification.userInfo?["categoryName"] as? String
-        UIView.performWithoutAnimation {
-            self.tableView.reloadSections(IndexSet(integer: 0), with: UITableViewRowAnimation.none)
-        }
+        (self.tableView.cellForRow(at: IndexPath(row: 2, section: 0)) as? PostInfoTableViewCell)?.captionLabel.text = post.caption
+        (self.tableView.cellForRow(at: IndexPath(row: 3, section: 0)) as? PostCategoryCreationDateTableViewCell)?.categoryNameCreationDateLabel.text = [post.categoryName, post.creationDateString].flatMap({$0}).joined(separator: " · ")
     }
     
     func deletePostNotification(_ notification: NSNotification) {
@@ -356,9 +362,12 @@ extension PostDetailsTableViewController {
         guard let post = self.post, post.postId == postId else {
             return
         }
+        // Update data source and cells.
         post.numberOfLikes = NSNumber(value: post.numberOfLikesInt + 1)
         post.isLikedByCurrentUser = true
-        self.tableView.reloadVisibleRow(IndexPath(row: 4, section: 0))
+        (self.tableView.cellForRow(at: IndexPath(row: 4, section: 0)) as? PostButtonsTableViewCell)?.numberOfLikesButton.isHidden = (post.numberOfLikesString != nil) ? false : true
+        (self.tableView.cellForRow(at: IndexPath(row: 4, section: 0)) as? PostButtonsTableViewCell)?.numberOfLikesButton.setTitle(post.numberOfLikesString, for: UIControlState())
+        (self.tableView.cellForRow(at: IndexPath(row: 4, section: 0)) as? PostButtonsTableViewCell)?.setSelectedLikeButton()
     }
     
     func deleteLikeNotification(_ notification: NSNotification) {
@@ -368,9 +377,12 @@ extension PostDetailsTableViewController {
         guard let post = self.post, post.postId == postId else {
             return
         }
+        // Update data source and cells.
         post.numberOfLikes = NSNumber(value: post.numberOfLikesInt - 1)
         post.isLikedByCurrentUser = false
-        self.tableView.reloadVisibleRow(IndexPath(row: 4, section: 0))
+        (self.tableView.cellForRow(at: IndexPath(row: 4, section: 0)) as? PostButtonsTableViewCell)?.numberOfLikesButton.isHidden = (post.numberOfLikesString != nil) ? false : true
+        (self.tableView.cellForRow(at: IndexPath(row: 4, section: 0)) as? PostButtonsTableViewCell)?.numberOfLikesButton.setTitle(post.numberOfLikesString, for: UIControlState())
+        (self.tableView.cellForRow(at: IndexPath(row: 4, section: 0)) as? PostButtonsTableViewCell)?.setUnselectedLikeButton()
     }
     
     func createCommentNotification(_ notification: NSNotification) {
@@ -380,8 +392,10 @@ extension PostDetailsTableViewController {
         guard let post = self.post, post.postId == comment.postId else {
             return
         }
+        // Update data source and cells.
         post.numberOfComments = NSNumber(value: post.numberOfCommentsInt + 1)
-        self.tableView.reloadVisibleRow(IndexPath(row: 4, section: 0))
+        (self.tableView.cellForRow(at: IndexPath(row: 4, section: 0)) as? PostButtonsTableViewCell)?.numberOfCommentsButton.isHidden = (post.numberOfCommentsString != nil) ? false : true
+        (self.tableView.cellForRow(at: IndexPath(row: 4, section: 0)) as? PostButtonsTableViewCell)?.numberOfCommentsButton.setTitle(post.numberOfCommentsString, for: UIControlState())
     }
     
     func deleteCommentNotification(_ notification: NSNotification) {
@@ -391,8 +405,10 @@ extension PostDetailsTableViewController {
         guard let post = self.post, post.postId == postId else {
             return
         }
+        // Update data source and cells.
         post.numberOfComments = NSNumber(value: post.numberOfCommentsInt - 1)
-        self.tableView.reloadVisibleRow(IndexPath(row: 4, section: 0))
+        (self.tableView.cellForRow(at: IndexPath(row: 4, section: 0)) as? PostButtonsTableViewCell)?.numberOfCommentsButton.isHidden = (post.numberOfCommentsString != nil) ? false : true
+        (self.tableView.cellForRow(at: IndexPath(row: 4, section: 0)) as? PostButtonsTableViewCell)?.numberOfCommentsButton.setTitle(post.numberOfCommentsString, for: UIControlState())
     }
     
     func downloadImageNotification(_ notification: NSNotification) {
@@ -405,13 +421,13 @@ extension PostDetailsTableViewController {
                 return
             }
             self.post?.user?.profilePic = UIImage(data: imageData)
-            self.tableView.reloadVisibleRow(IndexPath(row: 0, section: 0))
+            (self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? PostUserTableViewCell)?.profilePicImageView.image = self.post?.user?.profilePic
         case .postPic:
             guard self.post?.imageUrl == imageKey else {
                 return
             }
             self.post?.image = UIImage(data: imageData)
-            self.tableView.reloadVisibleRow(IndexPath(row: 1, section: 0))
+            (self.tableView.cellForRow(at: IndexPath(row: 1, section: 0)) as? PostImageTableViewCell)?.postImageView.image = self.post?.image
         }
     }
 }

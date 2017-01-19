@@ -249,9 +249,6 @@ class ConversationsTableViewController: UITableViewController {
         conversation.lastMessageText = message.messageText
         self.conversations.remove(at: conversationIndex)
         self.conversations.insert(conversation, at: 0)
-        
-        print("Here is updateConversationWithLastMessage:")
-        
         self.tableView.reloadData()
     }
 
@@ -294,11 +291,11 @@ extension ConversationsTableViewController {
             return
         }
         for conversation in self.conversations.filter( { $0.participant?.profilePicUrl == imageKey } ) {
-            guard let conversationIndex = self.conversations.index(of: conversation) else {
-                continue
+            if let conversationIndex = self.conversations.index(of: conversation) {
+                // Update data source and cells.
+                self.conversations[conversationIndex].participant?.profilePic = UIImage(data: imageData)
+                (self.tableView.cellForRow(at: IndexPath(row: conversationIndex, section: 0)) as? ConversationTableViewCell)?.profilePicImageView.image = self.conversations[conversationIndex].participant?.profilePic
             }
-            self.conversations[conversationIndex].participant?.profilePic = UIImage(data: imageData)
-            self.tableView.reloadVisibleRow(IndexPath(row: conversationIndex, section: 0))
         }
     }
     

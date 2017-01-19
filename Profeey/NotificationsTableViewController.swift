@@ -235,11 +235,11 @@ extension NotificationsTableViewController {
             return
         }
         for notification in self.notifications.filter( { $0.user?.profilePicUrl == imageKey } ) {
-            guard let notificationIndex = self.notifications.index(of: notification) else {
-                continue
+            if let notificationIndex = self.notifications.index(of: notification) {
+                // Update data source and cells.
+                self.notifications[notificationIndex].user?.profilePic = UIImage(data: imageData)
+                (self.tableView.cellForRow(at: IndexPath(row: notificationIndex, section: 0)) as? NotificationTableViewCell)?.profilePicImageView.image = self.notifications[notificationIndex].user?.profilePic
             }
-            self.notifications[notificationIndex].user?.profilePic = UIImage(data: imageData)
-            self.tableView.reloadVisibleRow(IndexPath(row: notificationIndex, section: 0))
         }
     }
     
