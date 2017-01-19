@@ -311,9 +311,7 @@ extension SearchUsersTableViewController {
         guard let indexPathsForVisibleRows = self.tableView.indexPathsForVisibleRows, indexPathsForVisibleRows.contains(where: { $0.row == userIndex }) else {
             return
         }
-        UIView.performWithoutAnimation {
-            self.tableView.reloadRows(at: [IndexPath(row: userIndex, section: 0)], with: UITableViewRowAnimation.none)
-        }
+        (self.tableView.cellForRow(at: IndexPath(row: userIndex, section: 0)) as? SearchUserTableViewCell)?.profilePicImageView.image = self.popularUsers[userIndex].profilePic
     }
 }
 

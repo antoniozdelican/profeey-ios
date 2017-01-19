@@ -258,28 +258,28 @@ extension DiscoverPeopleTableViewController {
         guard let followingId = notification.userInfo?["followingId"] as? String else {
             return
         }
-        guard let userIndex = self.users.index(where: { $0.userId == followingId }) else {
-            return
-        }
         guard !self.followingIds.contains(followingId) else {
             return
         }
+        guard let userIndex = self.users.index(where: { $0.userId == followingId }) else {
+            return
+        }
         self.followingIds.append(followingId)
-        self.tableView.reloadRows(at: [IndexPath(row: userIndex, section: 0)], with: UITableViewRowAnimation.none)
+        (self.tableView.cellForRow(at: IndexPath(row: userIndex, section: 0)) as? DiscoverUserTableViewCell)?.setFollowingButton()
     }
     
     func unfollowUserNotification(_ notification: NSNotification) {
         guard let followingId = notification.userInfo?["followingId"] as? String else {
             return
         }
-        guard let userIndex = self.users.index(where: { $0.userId == followingId }) else {
-            return
-        }
         guard let followingIdIndex = self.followingIds.index(of: followingId) else {
             return
         }
+        guard let userIndex = self.users.index(where: { $0.userId == followingId }) else {
+            return
+        }
         self.followingIds.remove(at: followingIdIndex)
-        self.tableView.reloadRows(at: [IndexPath(row: userIndex, section: 0)], with: UITableViewRowAnimation.none)
+        (self.tableView.cellForRow(at: IndexPath(row: userIndex, section: 0)) as? DiscoverUserTableViewCell)?.setFollowButton()
     }
     
     func downloadImageNotification(_ notification: NSNotification) {
@@ -290,11 +290,11 @@ extension DiscoverPeopleTableViewController {
             return
         }
         for user in self.users.filter( { $0.profilePicUrl == imageKey } ) {
-            guard let userIndex = self.users.index(of: user) else {
-                continue
+            if let userIndex = self.users.index(of: user) {
+                // Update data source and cells.
+                self.users[userIndex].profilePic = UIImage(data: imageData)
+                (self.tableView.cellForRow(at: IndexPath(row: userIndex, section: 0)) as? DiscoverUserTableViewCell)?.profilePicImageView.image = self.users[userIndex].profilePic
             }
-            self.users[userIndex].profilePic = UIImage(data: imageData)
-            self.tableView.reloadRows(at: [IndexPath(row: userIndex, section: 0)], with: UITableViewRowAnimation.none)
         }
     }
 }
