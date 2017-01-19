@@ -516,6 +516,7 @@ extension UsersTableViewController {
         }
         for user in self.users.filter( { $0.profilePicUrl == imageKey } ) {
             if let userIndex = self.users.index(of: user) {
+                // Update data source and cells.
                 self.users[userIndex].profilePic = UIImage(data: imageData)
                 (self.tableView.cellForRow(at: IndexPath(row: userIndex, section: 0)) as? UserTableViewCell)?.profilePicImageView.image = self.users[userIndex].profilePic
             }

@@ -185,39 +185,6 @@ class ProfessionTableViewController: UITableViewController {
         })
     }
     
-//    fileprivate func getAllUsersWithProfession(_ professionName: String, locationId: String?) {
-//        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-//        PRFYCloudSearchProxyClient.defaultClient().getAllUsersWithProfession(professionName: professionName, locationId: locationId).continue({
-//            (task: AWSTask) in
-//            DispatchQueue.main.async(execute: {
-//                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-//                self.isSearchingUsers = false
-//                if let error = task.error {
-//                    print("getUsersWithProfession error: \(error)")
-//                    self.tableView.reloadData()
-//                } else {
-//                    guard let cloudSearchUsersResult = task.result as? PRFYCloudSearchUsersResult, let cloudSearchUsers = cloudSearchUsersResult.users else {
-//                        self.tableView.reloadData()
-//                        return
-//                    }
-//                    // Clear old.
-//                    self.users = []
-//                    for cloudSearchUser in cloudSearchUsers {
-//                        let user = User(userId: cloudSearchUser.userId, firstName: cloudSearchUser.firstName, lastName: cloudSearchUser.lastName, preferredUsername: cloudSearchUser.preferredUsername, professionName: cloudSearchUser.professionName, profilePicUrl: cloudSearchUser.profilePicUrl, locationName: cloudSearchUser.locationName)
-//                        self.users.append(user)
-//                    }
-//                    self.tableView.reloadData()
-//                    
-//                    for user in self.users {
-//                        if let profilePicUrl = user.profilePicUrl {
-//                            self.downloadProfilePic(profilePicUrl)
-//                        }
-//                    }
-//                }
-//            })
-//            return nil
-//        })
-//    }
 }
 
 extension ProfessionTableViewController {
@@ -261,15 +228,12 @@ extension ProfessionTableViewController {
         guard imageType == .userProfilePic else {
             return
         }
-        guard let userIndex = self.users.index(where: { $0.profilePicUrl == imageKey }) else {
-            return
-        }
-        self.users[userIndex].profilePic = UIImage(data: imageData)
-        guard let indexPathsForVisibleRows = self.tableView.indexPathsForVisibleRows, indexPathsForVisibleRows.contains(where: { $0.row == userIndex }) else {
-            return
-        }
-        UIView.performWithoutAnimation {
-            self.tableView.reloadRows(at: [IndexPath(row: userIndex, section: 0)], with: UITableViewRowAnimation.none)
+        for user in self.users.filter( { $0.profilePicUrl == imageKey } ) {
+            if let userIndex = self.users.index(of: user) {
+                // Update data source and cells.
+                self.users[userIndex].profilePic = UIImage(data: imageData)
+                (self.tableView.cellForRow(at: IndexPath(row: userIndex, section: 0)) as? SearchUserTableViewCell)?.profilePicImageView.image = self.users[userIndex].profilePic
+            }
         }
     }
 }
