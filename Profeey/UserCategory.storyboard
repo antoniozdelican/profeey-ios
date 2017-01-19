@@ -18,6 +18,20 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <inset key="separatorInset" minX="12" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        <view key="tableFooterView" contentMode="scaleToFill" id="VJo-LI-shM">
+                            <rect key="frame" x="0.0" y="268" width="375" height="64"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="B7I-VJ-9bF">
+                                    <rect key="frame" x="177.5" y="22" width="20" height="20"/>
+                                </activityIndicatorView>
+                            </subviews>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstItem="B7I-VJ-9bF" firstAttribute="centerY" secondItem="VJo-LI-shM" secondAttribute="centerY" id="pYn-Xl-aSY"/>
+                                <constraint firstItem="B7I-VJ-9bF" firstAttribute="centerX" secondItem="VJo-LI-shM" secondAttribute="centerX" id="tPU-ky-WsV"/>
+                            </constraints>
+                        </view>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellPostSmall" rowHeight="112" id="22p-wN-l0W" customClass="PostSmallTableViewCell" customModule="Profeey" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="375" height="112"/>
@@ -103,54 +117,33 @@
                                     <outlet property="titleLabel" destination="Jj4-Oi-gAf" id="LDt-hm-7ZB"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellLoading" rowHeight="112" id="SXE-jl-lc0" customClass="LoadingTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="140" width="375" height="112"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellEmpty" rowHeight="64" id="kCT-W6-2gW" customClass="EmptyTableViewCell" customModule="Profeey" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="140" width="375" height="64"/>
                                 <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="SXE-jl-lc0" id="AET-dX-dga">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="112"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="kCT-W6-2gW" id="fut-dP-XWU">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="64"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="1bM-vp-dw3">
-                                            <rect key="frame" x="177.5" y="46" width="20" height="20"/>
-                                        </activityIndicatorView>
-                                    </subviews>
-                                    <constraints>
-                                        <constraint firstItem="1bM-vp-dw3" firstAttribute="centerY" secondItem="AET-dX-dga" secondAttribute="centerY" id="OcT-qd-AdZ"/>
-                                        <constraint firstItem="1bM-vp-dw3" firstAttribute="centerX" secondItem="AET-dX-dga" secondAttribute="centerX" id="ypT-5u-Uia"/>
-                                    </constraints>
-                                </tableViewCellContentView>
-                                <connections>
-                                    <outlet property="activityIndicator" destination="1bM-vp-dw3" id="zzO-OB-qsB"/>
-                                </connections>
-                            </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellEmpty" rowHeight="112" id="2b6-vU-Kcj" customClass="EmptyTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="252" width="375" height="112"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="2b6-vU-Kcj" id="L9W-YC-nL1">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="112"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Empty message." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jaT-Ps-hR5">
-                                            <rect key="frame" x="12" y="47.5" width="351" height="17"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Empty message." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OZP-wl-4ip">
+                                            <rect key="frame" x="134" y="23.5" width="107" height="17"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <color key="textColor" red="0.14748379589999999" green="0.1474793851" blue="0.14748191829999999" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="jaT-Ps-hR5" firstAttribute="centerY" secondItem="L9W-YC-nL1" secondAttribute="centerY" id="3Ib-mT-pgH"/>
-                                        <constraint firstItem="jaT-Ps-hR5" firstAttribute="leading" secondItem="L9W-YC-nL1" secondAttribute="leading" constant="12" id="BhI-PI-6mE"/>
-                                        <constraint firstAttribute="trailing" secondItem="jaT-Ps-hR5" secondAttribute="trailing" constant="12" id="H04-1O-rY9"/>
-                                        <constraint firstItem="jaT-Ps-hR5" firstAttribute="centerX" secondItem="L9W-YC-nL1" secondAttribute="centerX" id="Zuc-XW-aKY"/>
+                                        <constraint firstItem="OZP-wl-4ip" firstAttribute="centerX" secondItem="fut-dP-XWU" secondAttribute="centerX" id="GJo-Cw-MGe"/>
+                                        <constraint firstItem="OZP-wl-4ip" firstAttribute="centerY" secondItem="fut-dP-XWU" secondAttribute="centerY" id="Yht-Xi-aT1"/>
+                                        <constraint firstItem="OZP-wl-4ip" firstAttribute="centerX" secondItem="fut-dP-XWU" secondAttribute="centerX" id="bah-1v-cBX"/>
                                     </constraints>
                                     <variation key="default">
                                         <mask key="constraints">
-                                            <exclude reference="Zuc-XW-aKY"/>
+                                            <exclude reference="bah-1v-cBX"/>
                                         </mask>
                                     </variation>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="emptyMessageLabel" destination="jaT-Ps-hR5" id="uNx-va-Ehj"/>
+                                    <outlet property="emptyMessageLabel" destination="OZP-wl-4ip" id="lTa-r4-Vq8"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -169,6 +162,7 @@
                         </connections>
                     </refreshControl>
                     <connections>
+                        <outlet property="loadingTableFooterView" destination="VJo-LI-shM" id="IOf-lZ-drf"/>
                         <segue destination="YvD-DS-Dpb" kind="show" identifier="segueToPostDetailsVc" id="EwC-oZ-keK"/>
                     </connections>
                 </tableViewController>
