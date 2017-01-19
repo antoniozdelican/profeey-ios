@@ -39,13 +39,8 @@ class HomeTableViewController: UITableViewController {
     
     // When uploading new post.
     fileprivate var isUploading: Bool = false
-    fileprivate var newPostProgress: Progress?
 
     fileprivate var noNetworkConnection: Bool = false
-    
-    // Different behaviour depending on segue or tabBarSwitch.
-    fileprivate var isNavigationBarHidden: Bool = false
-    var isTabBarSwitch: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,13 +53,6 @@ class HomeTableViewController: UITableViewController {
         self.tableView.backgroundView = self.activityIndicatorView
         Bundle.main.loadNibNamed("HomeEmptyFeedView", owner: self, options: nil)
         self.homeEmptyFeedView.homeEmptyFeedViewDelegate = self
-        
-        // Set backgroundView for statusBar.
-        if let navigationController = self.navigationController {
-            let statusBarBackgroundView = UIView(frame: UIApplication.shared.statusBarFrame)
-            statusBarBackgroundView.backgroundColor = Colors.whiteDark
-            navigationController.view.insertSubview(statusBarBackgroundView, belowSubview: navigationController.navigationBar)
-        }
         
         // Start querying activities.
         if AWSIdentityManager.defaultIdentityManager().isLoggedIn {
@@ -86,9 +74,7 @@ class HomeTableViewController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if self.isNavigationBarHidden {
-            self.navigationController?.setNavigationBarHidden(true, animated: !self.isTabBarSwitch)
-        }
+        
         // Special case.
         if self.hasDiscoveredAndFollowedUsers {
             self.isLoadingInitialPosts = true
@@ -99,28 +85,6 @@ class HomeTableViewController: UITableViewController {
             self.hasDiscoveredAndFollowedUsers = false
         }
     }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        self.navigationController?.hidesBarsOnSwipe = true
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        guard let navigationController = self.navigationController else {
-            return
-        }
-        if navigationController.isNavigationBarHidden {
-            self.isNavigationBarHidden = true
-        } else {
-            self.isNavigationBarHidden = false
-        }
-        // Only hide navigationBar if it's push, not CaptureVc presenting modally.
-        if navigationController.childViewControllers.count > 1 {
-            navigationController.hidesBarsOnSwipe = false
-            navigationController.setNavigationBarHidden(false, animated: true)
-        }
-        super.viewWillDisappear(animated)
-    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -129,8 +93,6 @@ class HomeTableViewController: UITableViewController {
     // MARK: Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Reset tabBarSwitch.
-        self.isTabBarSwitch = false
         if let destinationViewController = segue.destination as? ProfileTableViewController,
             let cell = sender as? PostUserTableViewCell,
             let indexPath = self.tableView.indexPath(for: cell) {
@@ -196,9 +158,6 @@ class HomeTableViewController: UITableViewController {
         case 1:
             if indexPath.section == 0 && self.isUploading {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellUploading", for: indexPath) as! UploadingTableViewCell
-                if let progress = self.newPostProgress {
-                    cell.progressView.progress = Float(progress.fractionCompleted)
-                }
                 return cell
             } else {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostImage", for: indexPath) as! PostImageTableViewCell
@@ -242,7 +201,11 @@ class HomeTableViewController: UITableViewController {
         }
         if cell is PostInfoTableViewCell && !self.posts[indexPath.section].isExpandedCaption {
             self.posts[indexPath.section].isExpandedCaption = true
-            self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
+            (self.tableView.cellForRow(at: indexPath) as? PostInfoTableViewCell)?.untruncate()
+            UIView.performWithoutAnimation {
+                self.tableView.beginUpdates()
+                self.tableView.endUpdates()
+            }
         }
     }
     
@@ -325,8 +288,6 @@ class HomeTableViewController: UITableViewController {
             self.refreshControl?.endRefreshing()
             return
         }
-        // TODO fetch CurrentUserDynamoDB if it was no network.
-        
         self.isRefreshingPosts = true
         self.queryUserActivitiesDateSorted(true)
     }
@@ -354,8 +315,6 @@ class HomeTableViewController: UITableViewController {
             self.tableView.endUpdates()
             self.tableView.backgroundView = nil
             self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: UITableViewScrollPosition.top, animated: false)
-            self.navigationController?.setNavigationBarHidden(false, animated: true)
-            self.isNavigationBarHidden = false
             // Upload image sync.
             self.uploadImage(imageData, imageWidth: NSNumber(value: Float(image.size.width)), imageHeight: NSNumber(value: Float(image.size.height)), caption: sourceViewController.caption, categoryName: sourceViewController.categoryName)
         }
@@ -458,9 +417,10 @@ class HomeTableViewController: UITableViewController {
                     print("getLike error: \(error)")
                 } else {
                     if task.result != nil, let postIndex = self.posts.index(where: { $0.postId == postId }) {
+                        // Update data source and cells.
                         let post = self.posts[postIndex]
                         post.isLikedByCurrentUser = true
-                        self.tableView.reloadVisibleRow(IndexPath(row: 4, section: postIndex))
+                        (self.tableView.cellForRow(at: IndexPath(row: 4, section: postIndex)) as? PostButtonsTableViewCell)?.setSelectedLikeButton()
                     }
                 }
             })
@@ -513,8 +473,9 @@ class HomeTableViewController: UITableViewController {
             progressBlock: {
                 (content: AWSLocalContent?, progress: Progress?) -> Void in
                 DispatchQueue.main.async(execute: {
-                    self.newPostProgress = progress
-                    self.tableView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: UITableViewRowAnimation.none)
+                    if let progress = progress {
+                       (self.tableView.cellForRow(at: IndexPath(row: 1, section: 0)) as? UploadingTableViewCell)?.progressView.progress = Float(progress.fractionCompleted)
+                    }
                 })
             }, completionHandler: {
                 (content: AWSLocalContent?, error: Error?) -> Void in
@@ -600,10 +561,6 @@ extension HomeTableViewController {
     
      // MARK: NotificationCenterActions
     
-    func createPostNotification() {
-        // TODO
-    }
-    
     func updatePostNotification(_ notification: NSNotification) {
         guard let postId = notification.userInfo?["postId"] as? String else {
             return
@@ -611,12 +568,12 @@ extension HomeTableViewController {
         guard let postIndex = self.posts.index(where: { $0.postId == postId }) else {
             return
         }
+        // Update data source and cells.
         let post = self.posts[postIndex]
         post.caption = notification.userInfo?["caption"] as? String
         post.categoryName = notification.userInfo?["categoryName"] as? String
-        UIView.performWithoutAnimation {
-            self.tableView.reloadSections(IndexSet(integer: postIndex), with: UITableViewRowAnimation.none)
-        }
+        (self.tableView.cellForRow(at: IndexPath(row: 2, section: postIndex)) as? PostInfoTableViewCell)?.captionLabel.text = post.caption
+        (self.tableView.cellForRow(at: IndexPath(row: 3, section: postIndex)) as? PostCategoryCreationDateTableViewCell)?.categoryNameCreationDateLabel.text = [post.categoryName, post.creationDateString].flatMap({$0}).joined(separator: " · ")
     }
     
     func deletePostNotification(_ notification: NSNotification) {
@@ -640,10 +597,13 @@ extension HomeTableViewController {
         guard let postIndex = self.posts.index(where: { $0.postId == postId }) else {
             return
         }
+        // Update data source and cells.
         let post = self.posts[postIndex]
         post.numberOfLikes = NSNumber(value: post.numberOfLikesInt + 1)
         post.isLikedByCurrentUser = true
-        self.tableView.reloadVisibleRow(IndexPath(row: 4, section: postIndex))
+        (self.tableView.cellForRow(at: IndexPath(row: 4, section: postIndex)) as? PostButtonsTableViewCell)?.numberOfLikesButton.isHidden = (post.numberOfLikesString != nil) ? false : true
+        (self.tableView.cellForRow(at: IndexPath(row: 4, section: postIndex)) as? PostButtonsTableViewCell)?.numberOfLikesButton.setTitle(post.numberOfLikesString, for: UIControlState())
+        (self.tableView.cellForRow(at: IndexPath(row: 4, section: postIndex)) as? PostButtonsTableViewCell)?.setSelectedLikeButton()
     }
     
     func deleteLikeNotification(_ notification: NSNotification) {
@@ -653,10 +613,13 @@ extension HomeTableViewController {
         guard let postIndex = self.posts.index(where: { $0.postId == postId }) else {
             return
         }
+        // Update data source and cells.
         let post = self.posts[postIndex]
         post.numberOfLikes = NSNumber(value: post.numberOfLikesInt - 1)
         post.isLikedByCurrentUser = false
-        self.tableView.reloadVisibleRow(IndexPath(row: 4, section: postIndex))
+        (self.tableView.cellForRow(at: IndexPath(row: 4, section: postIndex)) as? PostButtonsTableViewCell)?.numberOfLikesButton.isHidden = (post.numberOfLikesString != nil) ? false : true
+        (self.tableView.cellForRow(at: IndexPath(row: 4, section: postIndex)) as? PostButtonsTableViewCell)?.numberOfLikesButton.setTitle(post.numberOfLikesString, for: UIControlState())
+        (self.tableView.cellForRow(at: IndexPath(row: 4, section: postIndex)) as? PostButtonsTableViewCell)?.setUnselectedLikeButton()
     }
     
     func createCommentNotification(_ notification: NSNotification) {
@@ -666,9 +629,11 @@ extension HomeTableViewController {
         guard let postIndex = self.posts.index(where: { $0.postId == comment.postId }) else {
             return
         }
+        // Update data source and cells.
         let post = self.posts[postIndex]
         post.numberOfComments = NSNumber(value: post.numberOfCommentsInt + 1)
-        self.tableView.reloadVisibleRow(IndexPath(row: 4, section: postIndex))
+        (self.tableView.cellForRow(at: IndexPath(row: 4, section: postIndex)) as? PostButtonsTableViewCell)?.numberOfCommentsButton.isHidden = (post.numberOfCommentsString != nil) ? false : true
+        (self.tableView.cellForRow(at: IndexPath(row: 4, section: postIndex)) as? PostButtonsTableViewCell)?.numberOfCommentsButton.setTitle(post.numberOfCommentsString, for: UIControlState())
     }
     
     func deleteCommentNotification(_ notification: NSNotification) {
@@ -678,9 +643,11 @@ extension HomeTableViewController {
         guard let postIndex = self.posts.index(where: { $0.postId == postId }) else {
             return
         }
+        // Update data source and cells.
         let post = self.posts[postIndex]
         post.numberOfComments = NSNumber(value: post.numberOfCommentsInt - 1)
-        self.tableView.reloadVisibleRow(IndexPath(row: 4, section: postIndex))
+        (self.tableView.cellForRow(at: IndexPath(row: 4, section: postIndex)) as? PostButtonsTableViewCell)?.numberOfCommentsButton.isHidden = (post.numberOfCommentsString != nil) ? false : true
+        (self.tableView.cellForRow(at: IndexPath(row: 4, section: postIndex)) as? PostButtonsTableViewCell)?.numberOfCommentsButton.setTitle(post.numberOfCommentsString, for: UIControlState())
     }
     
     // Special case used only when there's no posts(activities) for a new user.
@@ -701,20 +668,21 @@ extension HomeTableViewController {
         switch imageType {
         case .userProfilePic:
             for post in self.posts.filter( { $0.user?.profilePicUrl == imageKey }) {
-                guard let postIndex = self.posts.index(of: post) else {
-                    continue
+                if let postIndex = self.posts.index(of: post) {
+                    /*
+                     Update data source and UI.
+                     This is better for memory than reloading row because it's not initializing new cells!
+                     */
+                    self.posts[postIndex].user?.profilePic = UIImage(data: imageData)
+                    (self.tableView.cellForRow(at: IndexPath(row: 0, section: postIndex)) as? PostUserTableViewCell)?.profilePicImageView.image = self.posts[postIndex].user?.profilePic
                 }
-                self.posts[postIndex].user?.profilePic = UIImage(data: imageData)
-                self.tableView.reloadVisibleRow(IndexPath(row: 0, section: postIndex))
             }
         case .postPic:
             for post in self.posts.filter( { $0.imageUrl == imageKey }) {
-                guard let postIndex = self.posts.index(of: post) else {
-                    continue
+                if let postIndex = self.posts.index(of: post) {
+                    self.posts[postIndex].image = UIImage(data: imageData)
+                    (self.tableView.cellForRow(at: IndexPath(row: 1, section: postIndex)) as? PostImageTableViewCell)?.postImageView.image = self.posts[postIndex].image
                 }
-                self.posts[postIndex].image = UIImage(data: imageData)
-                // Reload only if visible.
-                self.tableView.reloadVisibleRow(IndexPath(row: 1, section: postIndex))
             }
         }
     }
@@ -722,7 +690,6 @@ extension HomeTableViewController {
     // MARK: Public
     
     func homeTabBarButtonTapped() {
-        self.navigationController?.setNavigationBarHidden(false, animated: true)
         guard self.posts.count > 0 else {
             return
         }

@@ -45,12 +45,10 @@ class FollowersFollowingViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destinationViewController = segue.destination as? UsersTableViewController, segue.identifier == "segueToFollowersVc" {
-            print("segueToFollowersVc")
             destinationViewController.usersType = UsersType.followers
             destinationViewController.userId = self.userId
         }
         if let destinationViewController = segue.destination as? UsersTableViewController, segue.identifier == "segueToFollowingVc" {
-            print("segueToFollowingVc")
             destinationViewController.usersType = UsersType.following
             destinationViewController.userId = self.userId
         }

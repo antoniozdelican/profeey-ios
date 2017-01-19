@@ -338,11 +338,6 @@ extension MainTabBarController: UITabBarControllerDelegate {
             }
             return false
         }
-        
-        if let navigationController = viewController as? UINavigationController, let childViewController = navigationController.childViewControllers[0] as? HomeTableViewController {
-            // Set tabBarSwitch.
-            childViewController.isTabBarSwitch = true
-        }
         return true
     }
     
