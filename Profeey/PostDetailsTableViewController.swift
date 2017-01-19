@@ -195,23 +195,6 @@ class PostDetailsTableViewController: UITableViewController {
         return 1.0
     }
     
-    // MARK: Helpers
-    
-//    fileprivate func setDownloadedImages(_ image: UIImage, imageType: ImageType, indexPath: IndexPath) {
-//        switch imageType {
-//        case .userProfilePic:
-//            self.post?.user?.profilePic = image
-//            UIView.performWithoutAnimation {
-//                self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
-//            }
-//        case .postPic:
-//            self.post?.image = image
-//            UIView.performWithoutAnimation {
-//                self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
-//            }
-//        }
-//    }
-    
     // MARK: AWS
     
     fileprivate func getPost(_ postId: String) {

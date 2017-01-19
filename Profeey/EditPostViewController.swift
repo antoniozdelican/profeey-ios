@@ -241,7 +241,10 @@ extension EditPostViewController: EditPostCategoryTableViewCellDelegate {
     
     func clearCategoryButtonTapped() {
         self.editPost?.categoryName = nil
-        self.tableView.reloadRows(at: [self.bottomIndexPath], with: UITableViewRowAnimation.none)
+        (self.tableView.cellForRow(at: self.bottomIndexPath) as? EditPostCategoryTableViewCell)?.categoryNameLabel.text = "Add Skill"
+        (self.tableView.cellForRow(at: self.bottomIndexPath) as? EditPostCategoryTableViewCell)?.categoryNameLabel.textColor = Colors.disabled
+        (self.tableView.cellForRow(at: self.bottomIndexPath) as? EditPostCategoryTableViewCell)?.clearCategoryButton.isHidden = true
+        (self.tableView.cellForRow(at: self.bottomIndexPath) as? EditPostCategoryTableViewCell)?.categoryImageView.image = UIImage(named: "ic_skills")
     }
 }
 
@@ -249,6 +252,9 @@ extension EditPostViewController: CategoriesTableViewControllerDelegate {
     
     func didSelectCategory(_ categoryName: String?) {
         self.editPost?.categoryName = categoryName
-        self.tableView.reloadRows(at: [self.bottomIndexPath], with: UITableViewRowAnimation.none)
+        (self.tableView.cellForRow(at: self.bottomIndexPath) as? EditPostCategoryTableViewCell)?.categoryNameLabel.text = categoryName
+        (self.tableView.cellForRow(at: self.bottomIndexPath) as? EditPostCategoryTableViewCell)?.categoryNameLabel.textColor = Colors.black
+        (self.tableView.cellForRow(at: self.bottomIndexPath) as? EditPostCategoryTableViewCell)?.clearCategoryButton.isHidden = false
+        (self.tableView.cellForRow(at: self.bottomIndexPath) as? EditPostCategoryTableViewCell)?.categoryImageView.image = UIImage(named: "ic_skills_active")
     }
 }
