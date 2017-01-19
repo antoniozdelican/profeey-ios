@@ -163,19 +163,22 @@ class UsersTableViewController: UITableViewController {
                 return
             }
             self.isLoadingUsers = true
-            self.queryLikes(postId, startFromBeginning: true)
+            self.tableView.tableFooterView = self.loadingTableFooterView
+            self.queryLikes(postId, startFromBeginning: false)
         case .followers:
             guard let followingId = self.userId else {
                 return
             }
             self.isLoadingUsers = true
-            self.queryFollowers(followingId, startFromBeginning: true)
+            self.tableView.tableFooterView = self.loadingTableFooterView
+            self.queryFollowers(followingId, startFromBeginning: false)
         case .following:
             guard let userId = self.userId else {
                 return
             }
             self.isLoadingUsers = true
-            self.queryFollowing(userId, startFromBeginning: true)
+            self.tableView.tableFooterView = self.loadingTableFooterView
+            self.queryFollowing(userId, startFromBeginning: false)
         }
     }
     

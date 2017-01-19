@@ -114,8 +114,8 @@ class CommentsTableViewController: UITableViewController {
         guard !self.noNetworkConnection else {
             return
         }
-        self.tableView.tableFooterView = self.loadingTableFooterView
         self.isLoadingComments = true
+        self.tableView.tableFooterView = self.loadingTableFooterView
         self.queryCommentsDateSorted(postId, startFromBeginning: false)
     }
     

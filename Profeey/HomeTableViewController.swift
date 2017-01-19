@@ -18,6 +18,8 @@ enum ImageType {
 class HomeTableViewController: UITableViewController {
     
     @IBOutlet var homeEmptyFeedView: HomeEmptyFeedView!
+    @IBOutlet var loadingTableFooterView: UIView!
+    
     
     fileprivate var posts: [Post] = []
     
@@ -222,7 +224,9 @@ class HomeTableViewController: UITableViewController {
         guard !self.noNetworkConnection else {
             return
         }
+        // Query.
         self.isLoadingNextPosts = true
+        self.tableView.tableFooterView = self.loadingTableFooterView
         self.queryUserActivitiesDateSorted(false)
     }
     
@@ -339,6 +343,7 @@ class HomeTableViewController: UITableViewController {
                     self.isRefreshingPosts = false
                     self.refreshControl?.endRefreshing()
                     self.isLoadingNextPosts = false
+                    self.tableView.tableFooterView = UIView()
                     // Reload tableView.
                     self.tableView.reloadData()
                     // Handle error and show banner.
@@ -385,6 +390,7 @@ class HomeTableViewController: UITableViewController {
                     self.noNetworkConnection = false
                 }
                 self.lastEvaluatedKey = response?.lastEvaluatedKey
+                self.tableView.tableFooterView = UIView()
                 
                 // Reload tableView with downloaded posts.
                 if startFromBeginning || numberOfNewPosts > 0 {
