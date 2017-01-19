@@ -11,9 +11,15 @@ import AWSMobileHubHelper
 
 class SettingsTableViewController: UITableViewController {
 
+    @IBOutlet weak var editProfileTableViewCell: UITableViewCell!
+    @IBOutlet weak var editEmailTableViewCell: UITableViewCell!
+    @IBOutlet weak var editPasswordTableViewCell: UITableViewCell!
     @IBOutlet weak var privacyPolicyTableViewCell: UITableViewCell!
     @IBOutlet weak var termsAndConditionsTableViewCell: UITableViewCell!
+    @IBOutlet weak var getHelpTableViewCell: UITableViewCell!
     @IBOutlet weak var logOutTableViewCell: UITableViewCell!
+    
+    var user: EditUser?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,6 +28,15 @@ class SettingsTableViewController: UITableViewController {
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+    }
+    
+    // MARK: Navigation
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let destinationViewController = segue.destination as? UINavigationController,
+            let childViewController = destinationViewController.childViewControllers[0] as? EditProfileTableViewController {
+            childViewController.user = self.user
+        }
     }
     
     // MARK: UITableViewDelegate
@@ -33,14 +48,32 @@ class SettingsTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let cell = tableView.cellForRow(at: indexPath)
-        if cell == self.logOutTableViewCell {
-            self.logOutTableViewCellTapped()
+        if cell == self.editProfileTableViewCell {
+            self.performSegue(withIdentifier: "segueToEditProfileVc", sender: cell)
+        }
+        if cell == self.editEmailTableViewCell {
+            // TODO
+        }
+        if cell == self.editPasswordTableViewCell {
+            // TODO
         }
         if cell == self.privacyPolicyTableViewCell {
-            self.privacyPolicyTableViewCellTapped()
+            if let privacyPolicyUrl = URL(string: PRFYPrivacyPolicyUrl) {
+                UIApplication.shared.openURL(privacyPolicyUrl)
+            }
         }
         if cell == self.termsAndConditionsTableViewCell {
-            self.termsAndConditionsTableViewCellTapped()
+            if let termsUrl = URL(string: PRFYTermsUrl) {
+                UIApplication.shared.openURL(termsUrl)
+            }
+        }
+        if cell == self.getHelpTableViewCell {
+            if let getHelpUrl = URL(string: PRFYGetHelpUrl) {
+                UIApplication.shared.openURL(getHelpUrl)
+            }
+        }
+        if cell == self.logOutTableViewCell {
+            self.logOutTableViewCellTapped()
         }
     }
     
@@ -68,21 +101,6 @@ class SettingsTableViewController: UITableViewController {
         })
         alertController.addAction(deleteConfirmAction)
         self.present(alertController, animated: true, completion: nil)
-    }
-    
-    fileprivate func privacyPolicyTableViewCellTapped() {
-        guard let privacyPolicyUrl = URL(string: PRFYPrivacyPolicyUrl) else {
-            return
-        }
-        UIApplication.shared.openURL(privacyPolicyUrl)
-        
-    }
-    
-    fileprivate func termsAndConditionsTableViewCellTapped() {
-        guard let termsUrl = URL(string: PRFYTermsUrl) else {
-            return
-        }
-        UIApplication.shared.openURL(termsUrl)
     }
     
     fileprivate func redirectToOnboarding() {

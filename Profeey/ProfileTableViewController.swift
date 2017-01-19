@@ -129,6 +129,9 @@ class ProfileTableViewController: UITableViewController {
             let childViewController = destinationViewController.childViewControllers[0] as? EditProfileTableViewController {
             childViewController.user = self.user?.copyEditUser()
         }
+        if let destinationViewController = segue.destination as? SettingsTableViewController {
+            destinationViewController.user = self.user?.copyEditUser()
+        }
         if let destinationViewController = segue.destination as? FollowersFollowingViewController {
             destinationViewController.userId = self.user?.userId
         }

@@ -184,14 +184,27 @@
                     <navigationItem key="navigationItem" title="Settings" id="6Y5-3z-bdm"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
+                        <outlet property="editEmailTableViewCell" destination="WdA-xP-hLh" id="VtD-il-5hh"/>
+                        <outlet property="editPasswordTableViewCell" destination="oRQ-Z9-RH2" id="e36-dz-rGc"/>
+                        <outlet property="editProfileTableViewCell" destination="2B9-MY-33N" id="2Ic-oq-vkv"/>
+                        <outlet property="getHelpTableViewCell" destination="bzW-Ei-PU0" id="dMf-dE-IeT"/>
                         <outlet property="logOutTableViewCell" destination="NOR-g5-85x" id="yfd-iJ-8Lk"/>
                         <outlet property="privacyPolicyTableViewCell" destination="qDT-LU-6Xy" id="ex4-Oa-ID6"/>
                         <outlet property="termsAndConditionsTableViewCell" destination="AuR-bu-4Al" id="PCs-Gl-w78"/>
+                        <segue destination="Fz4-2M-NAa" kind="presentation" identifier="segueToEditProfileVc" id="A0e-xv-MFm"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Bhy-Tn-uF0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="193" y="89"/>
+        </scene>
+        <!--EditProfile-->
+        <scene sceneID="M8s-6j-ocm">
+            <objects>
+                <viewControllerPlaceholder storyboardName="EditProfile" id="Fz4-2M-NAa" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="s4K-Kx-U8h" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="778" y="88"/>
         </scene>
     </scenes>
 </document>
