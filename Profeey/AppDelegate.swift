@@ -94,6 +94,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
             // Open NotificationsVc if user tapped notification banner.
             if UIApplication.shared.applicationState != UIApplicationState.active {
+                
+                // Special case when app haven't loaded HomeVc yet. Fixes bug when posting.
+                if let homeViewController = (mainTabBarController?.childViewControllers[0] as? UINavigationController)?.childViewControllers[0] as? HomeTableViewController, homeViewController.viewIfLoaded == nil {
+                    homeViewController.loadViewIfNeeded()
+                }
+                
+                // Select and load NotificationsVc always.
                 (mainTabBarController)?.selectedIndex = MainChildController.notifications.rawValue
                 if let navigationController = (mainTabBarController)?.selectedViewController as? UINavigationController, let childViewController = navigationController.childViewControllers[0] as? NotificationsViewController {
                     // Set segment.

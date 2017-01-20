@@ -31,6 +31,10 @@ class MainTabBarController: UITabBarController {
     fileprivate var previousViewController: UIViewController?
     fileprivate var newNotificationsView: UIView?
     
+    // Special case when user opens the app, and not internet connection. Loading of currentUser has to be redone.
+    fileprivate var isLoadingCurrentUser: Bool = false
+    fileprivate var hasLoadedCurrentUser: Bool = false
+    
     // Last seen date for Notifications.
     var lastSeenDate: NSNumber?
     fileprivate var isLoadingNotificationsCounter: Bool = false
@@ -48,6 +52,7 @@ class MainTabBarController: UITabBarController {
         
         if AWSIdentityManager.defaultIdentityManager().isLoggedIn {
             // Get currentUser from DynamoDB upon initialization of this rootVc.
+            self.isLoadingCurrentUser = true
             self.getCurrentUser()
             // Get numberOfNewNotifications
             self.isLoadingNotificationsCounter = true
@@ -180,6 +185,7 @@ class MainTabBarController: UITabBarController {
             (task: AWSTask) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                self.isLoadingCurrentUser = false
                 if let error = task.error {
                     print("getCurrentUser error: \(error)")
                 } else {
@@ -198,6 +204,8 @@ class MainTabBarController: UITabBarController {
                     if let profilePicUrl = awsUser._profilePicUrl {
                         PRFYS3Manager.defaultS3Manager().downloadImageS3(profilePicUrl, imageType: ImageType.userProfilePic)
                     }
+                    // Set flag that currentUser has been loaded.
+                    self.hasLoadedCurrentUser = true
                 }
             })
             return nil
@@ -318,6 +326,10 @@ extension MainTabBarController {
     func uiApplicationDidBecomeActiveNotification(_ notification: NSNotification) {
         guard AWSIdentityManager.defaultIdentityManager().isLoggedIn == true else {
             return
+        }
+        if !self.isLoadingCurrentUser && !self.hasLoadedCurrentUser {
+            // Special case (no internet connection) when currentUser hasn't been loaded.
+            self.getCurrentUser()
         }
         if !self.isLoadingNotificationsCounter {
             self.getNotificationsCounter()
