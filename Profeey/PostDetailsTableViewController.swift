@@ -74,7 +74,7 @@ class PostDetailsTableViewController: UITableViewController {
             }
         }
         if let navigationController = segue.destination as? UINavigationController,
-            let childViewController =  navigationController.childViewControllers[0] as? EditPostViewController {
+            let childViewController =  navigationController.childViewControllers[0] as? EditPostTableViewController {
             childViewController.editPost = self.post?.copyEditPost()
         }
     }

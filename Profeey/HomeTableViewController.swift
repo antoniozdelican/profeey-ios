@@ -120,7 +120,7 @@ class HomeTableViewController: UITableViewController {
             }
         }
         if let navigationController = segue.destination as? UINavigationController,
-            let childViewController =  navigationController.childViewControllers[0] as? EditPostViewController,
+            let childViewController =  navigationController.childViewControllers[0] as? EditPostTableViewController,
             let cell = sender as? PostUserTableViewCell,
             let indexPath = self.tableView.indexPath(for: cell) {
             childViewController.editPost = self.posts[indexPath.section].copyEditPost()
