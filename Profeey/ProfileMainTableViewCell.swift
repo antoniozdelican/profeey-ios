@@ -46,7 +46,7 @@ class ProfileMainTableViewCell: UITableViewCell {
             self.recommendButton.setTitle("Recommend", for: UIControlState())
             self.recommendButton.setTitleColor(Colors.turquoise, for: UIControlState())
             self.recommendButton.setBackgroundImage(UIImage(named: "btn_recommend_resizable"), for: UIControlState.normal)
-            self.followButton.layoutIfNeeded()
+            self.recommendButton.layoutIfNeeded()
         }
     }
     
@@ -55,7 +55,7 @@ class ProfileMainTableViewCell: UITableViewCell {
             self.recommendButton.setTitle("Recommending", for: UIControlState())
             self.recommendButton.setTitleColor(UIColor.white, for: UIControlState())
             self.recommendButton.setBackgroundImage(UIImage(named: "btn_recommending_resizable"), for: UIControlState.normal)
-            self.followButton.layoutIfNeeded()
+            self.recommendButton.layoutIfNeeded()
         }
     }
     

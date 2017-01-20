@@ -572,9 +572,7 @@ class ProfileTableViewController: UITableViewController {
             return userCategory1.numberOfPostsInt > userCategory2.numberOfPostsInt
         })
         if self.selectedProfileSegment == ProfileSegment.skills {
-            UIView.performWithoutAnimation {
-                self.tableView.reloadSections(IndexSet([4]), with: UITableViewRowAnimation.none)
-            }
+            self.tableView.reloadData()
         }
     }
 
@@ -620,10 +618,20 @@ class ProfileTableViewController: UITableViewController {
                 self.navigationItem.title = self.user?.preferredUsername
                 self.refreshControl?.endRefreshing()
                 
-                // Reload tableView with downloaded user.
-                UIView.performWithoutAnimation {
-                    self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0), IndexPath(row: 1, section: 0)], with: UITableViewRowAnimation.none)
+                // Reload cells with downloaded user.
+                if self.isCurrentUser {
+                    (self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? ProfileMainTableViewCell)?.setEditButton()
                 }
+                let profileInfoTableViewCell = self.tableView.cellForRow(at: IndexPath(row: 1, section: 0)) as? ProfileInfoTableViewCell
+                profileInfoTableViewCell?.fullNameLabel.text = self.user?.fullName
+                profileInfoTableViewCell?.professionNameLabel.text = self.user?.professionName
+                profileInfoTableViewCell?.locationNameLabel.text = self.user?.locationName
+                profileInfoTableViewCell?.locationStackView.isHidden = self.user?.locationName != nil ? false : true
+                profileInfoTableViewCell?.aboutLabel.text = self.user?.about
+                profileInfoTableViewCell?.websiteButton.setTitle(self.user?.website, for: UIControlState.normal)
+                profileInfoTableViewCell?.websiteButton.isHidden = self.user?.website != nil ? false : true
+                self.tableView.beginUpdates()
+                self.tableView.endUpdates()
                 
                 // Load profilePic.
                 if let profilePicUrl = awsUser._profilePicUrl {
@@ -732,9 +740,7 @@ class ProfileTableViewController: UITableViewController {
                 
                 // Reload tableView with downloaded workExperiences.
                 if self.selectedProfileSegment == ProfileSegment.experience {
-                    UIView.performWithoutAnimation {
-                        self.tableView.reloadSections(IndexSet([2, 3]), with: UITableViewRowAnimation.none)
-                    }
+                    self.tableView.reloadData()
                 }
             })
         })
@@ -766,9 +772,7 @@ class ProfileTableViewController: UITableViewController {
                 
                 // Reload tableView with downloaded educations.
                 if self.selectedProfileSegment == ProfileSegment.experience {
-                    UIView.performWithoutAnimation {
-                        self.tableView.reloadSections(IndexSet([2, 3]), with: UITableViewRowAnimation.none)
-                    }
+                    self.tableView.reloadData()
                 }
             })
         })
@@ -800,9 +804,7 @@ class ProfileTableViewController: UITableViewController {
                 
                 // Reload tableView with downloaded userCategories.
                 if self.selectedProfileSegment == ProfileSegment.skills {
-                    UIView.performWithoutAnimation {
-                        self.tableView.reloadSections(IndexSet([4]), with: UITableViewRowAnimation.none)
-                    }
+                    self.tableView.reloadData()
                 }
             })
         })
@@ -817,9 +819,15 @@ class ProfileTableViewController: UITableViewController {
                 if let error = task.error {
                     print("getRelationship error: \(error)")
                 } else {
-                    self.isFollowing = (task.result != nil)
+                    // Update data source and cell.
                     self.hasRelationshipLoaded = true
-                    self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.none)
+                    if task.result != nil {
+                        self.isFollowing = true
+                        (self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? ProfileMainTableViewCell)?.setFollowingButton()
+                    } else {
+                        self.isFollowing = false
+                        (self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? ProfileMainTableViewCell)?.setFollowButton()
+                    }
                 }
             })
             return nil
@@ -865,9 +873,15 @@ class ProfileTableViewController: UITableViewController {
                 if let error = task.error {
                     print("getRecommendation error: \(error)")
                 } else {
-                    self.isRecommending = (task.result != nil)
+                    // Update data source and cell.
                     self.hasRecommendationLoaded = true
-                    self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.none)
+                    if task.result != nil {
+                        self.isRecommending = true
+                        (self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? ProfileMainTableViewCell)?.setRecommendingButton()
+                    } else {
+                        self.isRecommending = false
+                        (self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? ProfileMainTableViewCell)?.setRecommendButton()
+                    }
                 }
             })
             return nil
@@ -901,6 +915,7 @@ extension ProfileTableViewController {
         guard self.user?.userId == editUser.userId else {
             return
         }
+        // Update data source.
         self.user?.firstName = editUser.firstName
         self.user?.lastName = editUser.lastName
         self.user?.professionName = editUser.professionName
@@ -910,7 +925,20 @@ extension ProfileTableViewController {
         self.user?.about = editUser.about
         self.user?.website = editUser.website
         self.user?.profilePic = editUser.profilePic
-        self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0), IndexPath(row: 1, section: 0)], with: UITableViewRowAnimation.none)
+        // Update cell.
+        let cell = self.tableView.cellForRow(at: IndexPath(row: 1, section: 0)) as? ProfileInfoTableViewCell
+        cell?.fullNameLabel.text = self.user?.fullName
+        cell?.professionNameLabel.text = self.user?.professionName
+        cell?.locationNameLabel.text = self.user?.locationName
+        cell?.locationStackView.isHidden = self.user?.locationName != nil ? false : true
+        cell?.aboutLabel.text = self.user?.about
+        cell?.websiteButton.setTitle(self.user?.website, for: UIControlState.normal)
+        cell?.websiteButton.isHidden = self.user?.website != nil ? false : true
+        // To adjust cell height.
+        UIView.performWithoutAnimation {
+            self.tableView.beginUpdates()
+            self.tableView.endUpdates()
+        }
         // Remove old profilePic in background.
         if let profilePicUrlToRemove = notification.userInfo?["profilePicUrlToRemove"] as? String {
             PRFYS3Manager.defaultS3Manager().removeImageS3(profilePicUrlToRemove)
@@ -928,18 +956,18 @@ extension ProfileTableViewController {
         if self.selectedProfileSegment == ProfileSegment.posts {
             if self.posts.count == 1 {
                 // To remove Add Posts button.
-                self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
+                self.tableView.reloadData()
             } else {
                 self.tableView.insertRows(at: [IndexPath(row: 0, section: 1)], with: UITableViewRowAnimation.none)
             }
         }
-        // Update numberOfPosts.
+        // Update numberOfPosts and cell.
         if let numberOfPosts = self.user?.numberOfPosts {
             self.user?.numberOfPosts = NSNumber(value: numberOfPosts.intValue + 1)
         } else {
             self.user?.numberOfPosts = NSNumber(value: 1)
         }
-        self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.none)
+        (self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? ProfileMainTableViewCell)?.numberOfPostsButton.setTitle(self.user?.numberOfPostsInt.numberToString(), for: UIControlState.normal)
         // Update UserCategory.
         if let categoryName = post.categoryName {
             if let userCategoyIndex = self.userCategories.index(where: { $0.categoryName == categoryName }) {
@@ -958,12 +986,14 @@ extension ProfileTableViewController {
         guard let postIndex = self.posts.index(where: { $0.postId == postId }) else {
             return
         }
+        // Update data source and cells.
         let post = self.posts[postIndex]
         let oldCategoryName = post.categoryName
         post.caption = notification.userInfo?["caption"] as? String
         post.categoryName = notification.userInfo?["categoryName"] as? String
         if self.selectedProfileSegment == ProfileSegment.posts {
-            self.tableView.reloadRows(at: [IndexPath(row: postIndex, section: 1)], with: UITableViewRowAnimation.none)
+            (self.tableView.cellForRow(at: IndexPath(row: postIndex, section: 1)) as? PostSmallTableViewCell)?.titleLabel.text = post.caption
+            (self.tableView.cellForRow(at: IndexPath(row: postIndex, section: 1)) as? PostSmallTableViewCell)?.categoryNameLabel.text = post.categoryName
         }
         // Update UserCategories.
         if let categoryName = post.categoryName {
@@ -996,18 +1026,18 @@ extension ProfileTableViewController {
         self.posts.remove(at: postIndex)
         if self.selectedProfileSegment == ProfileSegment.posts {
             if self.posts.count == 0 {
-                self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
+                self.tableView.reloadData()
             } else {
                 self.tableView.deleteRows(at: [IndexPath(row: postIndex, section: 1)], with: UITableViewRowAnimation.none)
             }
         }
-        // Update numberOfPosts
+        // Update numberOfPosts and cell.
         if let numberOfPosts = self.user?.numberOfPosts {
             self.user?.numberOfPosts = NSNumber(value: numberOfPosts.intValue - 1)
         } else {
             self.user?.numberOfPosts = NSNumber(value: 0)
         }
-        self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.none)
+        (self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? ProfileMainTableViewCell)?.numberOfPostsButton.setTitle(self.user?.numberOfPostsInt.numberToString(), for: UIControlState.normal)
         // Update UserCategory.
         if let categoryName = oldCategoryName {
             if let userCategoyIndex = self.userCategories.index(where: { $0.categoryName == categoryName }) {
@@ -1027,10 +1057,11 @@ extension ProfileTableViewController {
         guard let postIndex = self.posts.index(where: { $0.postId == postId }) else {
             return
         }
+        // Update data source and cell.
         let post = self.posts[postIndex]
         post.numberOfLikes = NSNumber(value: post.numberOfLikesInt + 1)
         post.isLikedByCurrentUser = true
-        self.tableView.reloadVisibleRow(IndexPath(row: postIndex, section: 1))
+        (self.tableView.cellForRow(at: IndexPath(row: postIndex, section: 1)) as? PostSmallTableViewCell)?.numberOfLikesLabel.text = post.numberOfLikesSmallString
     }
     
     func deleteLikeNotification(_ notification: NSNotification) {
@@ -1044,6 +1075,7 @@ extension ProfileTableViewController {
         post.numberOfLikes = NSNumber(value: post.numberOfLikesInt - 1)
         post.isLikedByCurrentUser = false
         self.tableView.reloadVisibleRow(IndexPath(row: postIndex, section: 1))
+        (self.tableView.cellForRow(at: IndexPath(row: postIndex, section: 1)) as? PostSmallTableViewCell)?.numberOfLikesLabel.text = post.numberOfLikesSmallString
     }
     
     func createCommentNotification(_ notification: NSNotification) {
@@ -1055,7 +1087,6 @@ extension ProfileTableViewController {
         }
         let post = self.posts[postIndex]
         post.numberOfComments = NSNumber(value: post.numberOfCommentsInt + 1)
-        self.tableView.reloadVisibleRow(IndexPath(row: postIndex, section: 1))
     }
     
     func deleteCommentNotification(_ notification: NSNotification) {
@@ -1067,7 +1098,6 @@ extension ProfileTableViewController {
         }
         let post = self.posts[postIndex]
         post.numberOfComments = NSNumber(value: post.numberOfCommentsInt - 1)
-        self.tableView.reloadVisibleRow(IndexPath(row: postIndex, section: 1))
     }
     
     func followUserNotification(_ notification: NSNotification) {
@@ -1080,13 +1110,16 @@ extension ProfileTableViewController {
         guard self.hasRelationshipLoaded, !self.isFollowing else {
             return
         }
+        // Update data source and cell.
         self.isFollowing = true
         if let numberOfFollowers = self.user?.numberOfFollowers {
             self.user?.numberOfFollowers = NSNumber(value: numberOfFollowers.intValue + 1)
         } else {
             self.user?.numberOfFollowers = NSNumber(value: 1)
         }
-        self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.none)
+        let cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? ProfileMainTableViewCell
+        cell?.numberOfFollowersButton.setTitle(self.user?.numberOfFollowersInt.numberToString(), for: UIControlState.normal)
+        cell?.setFollowingButton()
     }
     
     func unfollowUserNotification(_ notification: NSNotification) {
@@ -1099,13 +1132,16 @@ extension ProfileTableViewController {
         guard self.hasRelationshipLoaded, self.isFollowing else {
             return
         }
+        // Update data source and cell.
         self.isFollowing = false
         if let numberOfFollowers = self.user?.numberOfFollowers, numberOfFollowers.intValue > 0 {
             self.user?.numberOfFollowers = NSNumber(value: numberOfFollowers.intValue - 1)
         } else {
             self.user?.numberOfFollowers = NSNumber(value: 0)
         }
-        self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.none)
+        let cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? ProfileMainTableViewCell
+        cell?.numberOfFollowersButton.setTitle(self.user?.numberOfFollowersInt.numberToString(), for: UIControlState.normal)
+        cell?.setFollowButton()
     }
     
     func recommendUserNotification(_ notification: NSNotification) {
@@ -1115,13 +1151,16 @@ extension ProfileTableViewController {
         guard self.user?.userId == recommendingId, self.hasRecommendationLoaded, !self.isRecommending else {
             return
         }
+        // Update data source and cell.
         self.isRecommending = true
         if let numberOfRecommendations = self.user?.numberOfRecommendations {
             self.user?.numberOfRecommendations = NSNumber(value: numberOfRecommendations.intValue + 1)
         } else {
             self.user?.numberOfRecommendations = NSNumber(value: 1)
         }
-        self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.none)
+        let cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? ProfileMainTableViewCell
+        cell?.numberOfRecommendationsButton.setTitle(self.user?.numberOfRecommendationsInt.numberToString(), for: UIControlState.normal)
+        cell?.setRecommendingButton()
     }
     
     func unrecommendUserNotification(_ notification: NSNotification) {
@@ -1131,13 +1170,16 @@ extension ProfileTableViewController {
         guard self.user?.userId == recommendingId, self.hasRecommendationLoaded, self.isRecommending else {
             return
         }
+        // Update data source and cell.
         self.isRecommending = false
         if let numberOfRecommendations = self.user?.numberOfRecommendations, numberOfRecommendations.intValue > 0 {
             self.user?.numberOfRecommendations = NSNumber(value: numberOfRecommendations.intValue - 1)
         } else {
             self.user?.numberOfRecommendations = NSNumber(value: 0)
         }
-        self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.none)
+        let cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? ProfileMainTableViewCell
+        cell?.numberOfRecommendationsButton.setTitle(self.user?.numberOfRecommendationsInt.numberToString(), for: UIControlState.normal)
+        cell?.setRecommendButton()
     }
     
     func downloadImageNotification(_ notification: NSNotification) {
@@ -1150,15 +1192,13 @@ extension ProfileTableViewController {
                 return
             }
             self.user?.profilePic = UIImage(data: imageData)
-            UIView.performWithoutAnimation {
-                self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.none)
-            }
+            (self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? ProfileMainTableViewCell)?.profilePicImageView.image = self.user?.profilePic
         case .postPic:
             guard let postIndex = self.posts.index(where: { $0.imageUrl == imageKey }) else {
                 return
             }
             self.posts[postIndex].image = UIImage(data: imageData)
-            self.tableView.reloadVisibleRow(IndexPath(row: postIndex, section: 1))
+            (self.tableView.cellForRow(at: IndexPath(row: postIndex, section: 1)) as? PostSmallTableViewCell)?.postImageView.image = self.posts[postIndex].image
         }
     }
     
@@ -1281,9 +1321,7 @@ extension ProfileTableViewController: ExperiencesTableViewControllerDelegate {
         self.workExperiences = workExperiences
         self.sortWorkExperiencesByToDate()
         if self.selectedProfileSegment == ProfileSegment.experience {
-            UIView.performWithoutAnimation {
-                self.tableView.reloadSections(IndexSet([2, 3]), with: UITableViewRowAnimation.none)
-            }
+            self.tableView.reloadData()
         }
     }
     
@@ -1291,9 +1329,7 @@ extension ProfileTableViewController: ExperiencesTableViewControllerDelegate {
         self.educations = educations
         self.sortEducationsByToDate()
         if self.selectedProfileSegment == ProfileSegment.experience {
-            UIView.performWithoutAnimation {
-                self.tableView.reloadSections(IndexSet([2, 3]), with: UITableViewRowAnimation.none)
-            }
+            self.tableView.reloadData()
         }
     }
 }
@@ -1306,8 +1342,10 @@ extension ProfileTableViewController: WorkExperienceTableViewCellDelegate {
         }
         if !self.workExperiences[indexPath.row].isExpandedWorkDescription {
             self.workExperiences[indexPath.row].isExpandedWorkDescription = true
+            cell.untruncate()
             UIView.performWithoutAnimation {
-                self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
+                self.tableView.beginUpdates()
+                self.tableView.endUpdates()
             }
         }
     }
@@ -1321,8 +1359,10 @@ extension ProfileTableViewController: EducationTableViewCellDelegate {
         }
         if !self.educations[indexPath.row].isExpandedEducationDescription {
             self.educations[indexPath.row].isExpandedEducationDescription = true
+            cell.untruncate()
             UIView.performWithoutAnimation {
-                self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
+                self.tableView.beginUpdates()
+                self.tableView.endUpdates()
             }
         }
     }
