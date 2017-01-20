@@ -65,6 +65,13 @@ extension UICollectionView {
     
 }
 
+extension UITableView {
+    func indexPathForView(view: UIView) -> IndexPath? {
+        let location = view.convert(CGPoint.zero, to: self)
+        return indexPathForRow(at: location)
+    }
+}
+
 extension IndexSet {
     
     func indexPathsFromIndexesWithSection(_ section: Int) -> [IndexPath] {

@@ -37,7 +37,6 @@ class WelcomeProfessionsTableViewController: UITableViewController {
         self.isShowingPopularProfessions = true
         self.isSearchingPopularProfessions = true
         self.scanProfessions()
-//        self.getAllProfessions()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -293,72 +292,6 @@ class WelcomeProfessionsTableViewController: UITableViewController {
         })
     }
     
-//    fileprivate func getAllProfessions() {
-//        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-//        PRFYCloudSearchProxyClient.defaultClient().getAllProfessions(locationId: nil).continue({
-//            (task: AWSTask) in
-//            DispatchQueue.main.async(execute: {
-//                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-//                self.isSearchingPopularProfessions = false
-//                if let error = task.error {
-//                    print("getAllProfessions error: \(error)")
-//                    UIView.performWithoutAnimation {
-//                        self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
-//                    }
-//                } else {
-//                    guard let cloudSearchProfessionsResult = task.result as? PRFYCloudSearchProfessionsResult, let cloudSearchProfessions = cloudSearchProfessionsResult.professions else {
-//                        UIView.performWithoutAnimation {
-//                            self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
-//                        }
-//                        return
-//                    }
-//                    for cloudSearchProfession in cloudSearchProfessions {
-//                        let profession = Profession(professionName: cloudSearchProfession.professionName, numberOfUsers: cloudSearchProfession.numberOfUsers)
-//                        self.popularProfessions.append(profession)
-//                    }
-//                    UIView.performWithoutAnimation {
-//                        self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
-//                    }
-//                }
-//            })
-//            return nil
-//        })
-//    }
-//    
-//    fileprivate func getProfessions(_ namePrefix: String) {
-//        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-//        PRFYCloudSearchProxyClient.defaultClient().getProfessions(namePrefix: namePrefix, locationId: nil).continue({
-//            (task: AWSTask) in
-//            DispatchQueue.main.async(execute: {
-//                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-//                self.isSearchingRegularProfessions = false
-//                if let error = task.error {
-//                    print("getProfessions error: \(error)")
-//                    UIView.performWithoutAnimation {
-//                        self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
-//                    }
-//                } else {
-//                    guard let cloudSearchProfessionsResult = task.result as? PRFYCloudSearchProfessionsResult, let cloudSearchProfessions = cloudSearchProfessionsResult.professions else {
-//                        UIView.performWithoutAnimation {
-//                            self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
-//                        }
-//                        return
-//                    }
-//                    // Clear old.
-//                    self.regularProfessions = []
-//                    for cloudSearchProfession in cloudSearchProfessions {
-//                        let profession = Profession(professionName: cloudSearchProfession.professionName, numberOfUsers: cloudSearchProfession.numberOfUsers)
-//                        self.regularProfessions.append(profession)
-//                    }
-//                    UIView.performWithoutAnimation {
-//                        self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
-//                    }
-//                }
-//            })
-//            return nil
-//        })
-//    }
-    
     fileprivate func saveUserProfession(_ professionName: String) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         FullScreenIndicator.show()
@@ -406,7 +339,6 @@ extension WelcomeProfessionsTableViewController: AddProfessionTableViewCellDeleg
             }
             self.professionName = professionName
             // Start search for existing professions.
-            //self.getProfessions(professionName)
             self.filterProfessions(professionName)
         }
     }

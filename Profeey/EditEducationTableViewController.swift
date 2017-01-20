@@ -312,22 +312,30 @@ extension EditEducationTableViewController: DatePickerTableViewCellDelegate {
     func didSelectMonth(_ month: Int, indexPath: IndexPath) {
         if indexPath == self.fromDatePickerIndexPath {
             self.education?.fromMonth = NSNumber(value: month)
-            self.tableView.reloadRows(at: [self.fromDateIndexPath], with: UITableViewRowAnimation.none)
+            (self.tableView.cellForRow(at: self.fromDateIndexPath) as? DateTableViewCell)?.monthLabel.text = self.education?.fromMonthInt?.numberToMonth()
         }
         if indexPath == self.toDatePickerIndexPath {
             self.education?.toMonth = NSNumber(value: month)
-            self.tableView.reloadRows(at: [self.toDateIndexPath], with: UITableViewRowAnimation.none)
+            if self.isCurrentlyDoing {
+                (self.tableView.cellForRow(at: self.toDateIndexPath) as? DateTableViewCell)?.monthLabel.text = nil
+            } else {
+                (self.tableView.cellForRow(at: self.toDateIndexPath) as? DateTableViewCell)?.monthLabel.text = self.education?.toMonthInt?.numberToMonth()
+            }
         }
     }
     
     func didSelectYear(_ year: Int, indexPath: IndexPath) {
         if indexPath == self.fromDatePickerIndexPath {
             self.education?.fromYear = NSNumber(value: year)
-            self.tableView.reloadRows(at: [self.fromDateIndexPath], with: UITableViewRowAnimation.none)
+            (self.tableView.cellForRow(at: self.fromDateIndexPath) as? DateTableViewCell)?.yearLabel.text = self.education?.fromYearInt?.numberToYear()
         }
         if indexPath == self.toDatePickerIndexPath {
             self.education?.toYear = NSNumber(value: year)
-            self.tableView.reloadRows(at: [self.toDateIndexPath], with: UITableViewRowAnimation.none)
+            if self.isCurrentlyDoing {
+                (self.tableView.cellForRow(at: self.toDateIndexPath) as? DateTableViewCell)?.yearLabel.text = "Present"
+            } else {
+                (self.tableView.cellForRow(at: self.toDateIndexPath) as? DateTableViewCell)?.yearLabel.text = self.education?.toYearInt?.numberToYear()
+            }
         }
     }
 }
@@ -337,7 +345,13 @@ extension EditEducationTableViewController: CurrentlyDoingTableViewCellDelegate 
     func switchChanged(_ isOn: Bool) {
         self.isCurrentlyDoing = isOn
         self.removeDatePickers()
-        self.tableView.reloadRows(at: [self.toDateIndexPath], with: UITableViewRowAnimation.none)
+        if self.isCurrentlyDoing {
+            (self.tableView.cellForRow(at: self.toDateIndexPath) as? DateTableViewCell)?.monthLabel.text = nil
+            (self.tableView.cellForRow(at: self.toDateIndexPath) as? DateTableViewCell)?.yearLabel.text = "Present"
+        } else {
+            (self.tableView.cellForRow(at: self.toDateIndexPath) as? DateTableViewCell)?.monthLabel.text = self.education?.toMonthInt?.numberToMonth()
+            (self.tableView.cellForRow(at: self.toDateIndexPath) as? DateTableViewCell)?.yearLabel.text = self.education?.toYearInt?.numberToYear()
+        }
         self.view.endEditing(true)
     }
 }

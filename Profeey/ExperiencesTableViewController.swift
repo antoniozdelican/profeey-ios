@@ -297,9 +297,7 @@ class ExperiencesTableViewController: UITableViewController {
             return workExperience1.toYearInt! == workExperience2.toYearInt! ? (workExperience1.toMonthInt! > workExperience2.toMonthInt!) : (workExperience1.toYearInt! > workExperience2.toYearInt!)
         })
         self.workExperiences = currentWorkExperiences + sortedOtherWorkExperiences
-        UIView.performWithoutAnimation {
-            self.tableView.reloadSections(IndexSet([0]), with: UITableViewRowAnimation.none)
-        }
+        self.tableView.reloadData()
     }
     
     fileprivate func sortEducationsByToDate() {
@@ -310,9 +308,7 @@ class ExperiencesTableViewController: UITableViewController {
             return education1.toYearInt! == education2.toYearInt! ? (education1.toMonthInt! > education2.toMonthInt!) : (education1.toYearInt! > education2.toYearInt!)
         })
         self.educations = currentEducations + sortedOtherEducations
-        UIView.performWithoutAnimation {
-            self.tableView.reloadSections(IndexSet([1]), with: UITableViewRowAnimation.none)
-        }
+        self.tableView.reloadData()
     }
 }
 
