@@ -37,7 +37,6 @@ class ProfileTableViewController: UITableViewController {
     fileprivate var isLoadingInitialPosts: Bool = false
     fileprivate var isLoadingNextPosts: Bool = false
     fileprivate var lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?
-    //fileprivate var isRefreshingPosts: Bool = false
     
     fileprivate var isLoadingWorkExperiences: Bool = false
     fileprivate var workExperiences: [WorkExperience] = []
@@ -925,7 +924,8 @@ extension ProfileTableViewController {
         self.user?.about = editUser.about
         self.user?.website = editUser.website
         self.user?.profilePic = editUser.profilePic
-        // Update cell.
+        // Update cells.
+        (self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? ProfileMainTableViewCell)?.profilePicImageView.image = self.user?.profilePic
         let cell = self.tableView.cellForRow(at: IndexPath(row: 1, section: 0)) as? ProfileInfoTableViewCell
         cell?.fullNameLabel.text = self.user?.fullName
         cell?.professionNameLabel.text = self.user?.professionName

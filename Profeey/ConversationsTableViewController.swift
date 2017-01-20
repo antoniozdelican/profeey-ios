@@ -91,6 +91,9 @@ class ConversationsTableViewController: UITableViewController {
         cell.preferredUsernameLabel.text = conversation.participant?.preferredUsername
         cell.lastMessageLabel.text = conversation.lastMessageText
         cell.timeLabel.text = conversation.lastMessagerCeatedString
+        
+        // TODO: fix this
+        
         if let conversationId = conversation.conversationId, let unseenConversationsIds = (self.tabBarController as? MainTabBarController)?.unseenConversationsIds, unseenConversationsIds.contains(conversationId) {
             cell.timeLabel.textColor = Colors.red
             cell.unseenConversationView.isHidden = false
@@ -338,6 +341,7 @@ extension ConversationsTableViewController {
         guard self.isLoadingConversations == false else {
             return
         }
+        self.isLoadingConversations = true
         self.queryConversationsDateSorted(true)
     }
 }

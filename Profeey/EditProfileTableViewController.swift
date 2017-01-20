@@ -16,6 +16,19 @@ protocol EditAboutDelegate: class {
 class EditProfileTableViewController: UITableViewController {
     
     @IBOutlet weak var saveButton: UIButton!
+    @IBOutlet weak var editProfilePicTableViewCell: UITableViewCell!
+    @IBOutlet weak var editLocationTableViewCell: UITableViewCell!
+    @IBOutlet weak var editProfessionTableViewCell: UITableViewCell!
+    @IBOutlet weak var profilePicImageView: UIImageView!
+    @IBOutlet weak var firstNameTextField: UITextField!
+    @IBOutlet weak var lastNameTextField: UITextField!
+    @IBOutlet weak var aboutTextView: UITextView!
+    @IBOutlet weak var aboutPlaceholderLabel: UILabel!
+    @IBOutlet weak var locationNameLabel: UILabel!
+    @IBOutlet weak var clearLocationButton: UIButton!
+    @IBOutlet weak var professionNameLabel: UILabel!
+    @IBOutlet weak var clearProfessionButton: UIButton!
+    @IBOutlet weak var websiteTextField: UITextField!
     
     var user: EditUser?
     fileprivate var profilePicUrlToRemove: String?
@@ -26,10 +39,44 @@ class EditProfileTableViewController: UITableViewController {
         super.viewDidLoad()
         self.tableView.contentInset = UIEdgeInsetsMake(-1.0, 0.0, 0.0, 0.0)
         self.saveButton.contentEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, 0.0, -8.0)
+        
+        self.configureUser()
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+    }
+    
+    // MARK: Configuration
+    
+    fileprivate func configureUser() {
+        self.profilePicImageView.image = self.user?.profilePic != nil ? self.user?.profilePic : UIImage(named: "ic_no_profile_pic_profile")
+        self.profilePicImageView.layer.cornerRadius = 4.0
+        self.profilePicImageView.clipsToBounds = true
+        self.firstNameTextField.text = self.user?.firstName
+        self.lastNameTextField.text = self.user?.lastName
+        self.aboutTextView.text = self.user?.about
+        self.aboutTextView.delegate = self
+        self.aboutPlaceholderLabel.isHidden = self.user?.about != nil ? true : false
+        if let locationName = self.user?.locationName {
+            self.locationNameLabel.text = locationName
+            self.locationNameLabel.textColor = Colors.black
+            self.clearLocationButton.isHidden = false
+        } else {
+            self.locationNameLabel.text = "Add City"
+            self.locationNameLabel.textColor = Colors.disabled
+            self.clearLocationButton.isHidden = true
+        }
+        if let professionName = self.user?.professionName {
+            self.professionNameLabel.text = professionName
+            self.professionNameLabel.textColor = Colors.black
+            self.clearProfessionButton.isHidden = false
+        } else {
+            self.professionNameLabel.text = "Add Profession"
+            self.professionNameLabel.textColor = Colors.disabled
+            self.clearProfessionButton.isHidden = true
+        }
+        self.websiteTextField.text = self.user?.website
     }
     
     // MARK: Navigation
@@ -51,89 +98,19 @@ class EditProfileTableViewController: UITableViewController {
             childViewController.professionsTableViewControllerDelegate = self
         }
     }
-
-    // MARK: UITableViewDataSource
-
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 7
-    }
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        switch indexPath.row {
-        case 0:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cellEditProfilePic", for: indexPath) as! EditProfilePicTableViewCell
-            cell.profilePicImageView.image = self.user?.profilePic != nil ? self.user?.profilePic : UIImage(named: "ic_no_profile_pic_profile")
-            cell.editProfilePicTableViewCellDelegate = self
-            return cell
-        case 1:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cellEditFirstName", for: indexPath) as! EditFirstNameTableViewCell
-            cell.firstNameTextField.text = self.user?.firstName
-            cell.editFirstNameTableViewCellDelegate = self
-            return cell
-        case 2:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cellEditLastName", for: indexPath) as! EditLastNameTableViewCell
-            cell.lastNameTextField.text = self.user?.lastName
-            cell.editLastNameTableViewCellDelegate = self
-            return cell
-        case 3:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cellEditAbout", for: indexPath) as! EditAboutTableViewCell
-            cell.aboutTextView.text = self.user?.about
-            cell.aboutPlaceholderLabel.isHidden = self.user?.about != nil ? true : false
-            cell.editAboutTableViewCellDelegate = self
-            
-            return cell
-        case 4:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cellEditLocation", for: indexPath) as! EditLocationTableViewCell
-            if let locationName = self.user?.locationName {
-                cell.locationNameLabel.text = locationName
-                cell.locationNameLabel.textColor = Colors.black
-                cell.clearLocationButton.isHidden = false
-            } else {
-                cell.locationNameLabel.text = "Add City"
-                cell.locationNameLabel.textColor = Colors.disabled
-                cell.clearLocationButton.isHidden = true
-            }
-            cell.editLocationTableViewCellDelegate = self
-            return cell
-        case 5:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cellEditProfession", for: indexPath) as! EditProfessionTableViewCell
-            if let professionName = self.user?.professionName {
-                cell.professionNameLabel.text = professionName
-                cell.professionNameLabel.textColor = Colors.black
-                cell.clearProfessionButton.isHidden = false
-            } else {
-                cell.professionNameLabel.text = "Add Profession"
-                cell.professionNameLabel.textColor = Colors.disabled
-                cell.clearProfessionButton.isHidden = true
-            }
-            cell.editProfessionTableViewCellDelegate = self
-            return cell
-        case 6:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cellEditWebsite", for: indexPath) as! EditWebsiteTableViewCell
-            cell.websiteTextField.text = self.user?.website
-            cell.editWebsiteTableViewCellDelegate = self
-            return cell
-        default:
-            return UITableViewCell()
-        }
-    }
     
     // MARK: UITableViewDelegate
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let cell = tableView.cellForRow(at: indexPath)
-        if cell is EditProfilePicTableViewCell {
+        if cell == self.editProfilePicTableViewCell {
             self.editProfilePicCellTapped()
         }
-        if cell is EditLocationTableViewCell {
+        if cell == self.editLocationTableViewCell {
             self.performSegue(withIdentifier: "segueToLocationsVc", sender: cell)
         }
-        if cell is EditProfessionTableViewCell {
+        if cell == self.editProfessionTableViewCell {
             self.performSegue(withIdentifier: "segueToProfessionsVc", sender: cell)
         }
     }
@@ -204,7 +181,44 @@ class EditProfileTableViewController: UITableViewController {
                 self.user?.profilePicUrl = nil
             }
             self.user?.profilePic = finalImage
-            self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.none)
+            self.profilePicImageView.image = self.user?.profilePic != nil ? self.user?.profilePic : UIImage(named: "ic_no_profile_pic_profile")
+        }
+    }
+    
+    @IBAction func editProfilePicButtonTapped(_ sender: AnyObject) {
+        self.editProfilePicCellTapped()
+    }
+    
+    @IBAction func firstNameTextFieldChanged(_ sender: AnyObject) {
+        if let text = self.firstNameTextField.text {
+            self.user?.firstName = text.trimm().isEmpty ? nil : text.trimm()
+        }
+    }
+    
+    @IBAction func lastNameTextFieldChanged(_ sender: AnyObject) {
+        if let text = self.lastNameTextField.text {
+            self.user?.lastName = text.trimm().isEmpty ? nil : text.trimm()
+        }
+    }
+    
+    @IBAction func clearLocationButtonTapped(_ sender: AnyObject) {
+        self.user?.locationId = nil
+        self.user?.locationName = nil
+        self.locationNameLabel.text = "Add City"
+        self.locationNameLabel.textColor = Colors.disabled
+        self.clearLocationButton.isHidden = true
+    }
+    
+    @IBAction func clearProfessionButtonTapped(_ sender: AnyObject) {
+        self.user?.professionName = nil
+        self.professionNameLabel.text = "Add Profession"
+        self.professionNameLabel.textColor = Colors.disabled
+        self.clearProfessionButton.isHidden = true
+    }
+    
+    @IBAction func websiteTextFieldChanged(_ sender: AnyObject) {
+        if let text = self.websiteTextField.text {
+            self.user?.website = text.trimm().isEmpty ? nil : text.trimm()
         }
     }
     
@@ -220,7 +234,7 @@ class EditProfileTableViewController: UITableViewController {
                 self.user?.profilePicUrl = nil
             }
             self.user?.profilePic = UIImage(named: "ic_no_profile_pic_profile")
-            self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.none)
+            self.profilePicImageView.image = self.user?.profilePic != nil ? self.user?.profilePic : UIImage(named: "ic_no_profile_pic_profile")
         })
         alertController.addAction(removePhotoAction)
         let changePhotoAction = UIAlertAction(title: "Change Photo", style: UIAlertActionStyle.default, handler: {
@@ -297,62 +311,20 @@ class EditProfileTableViewController: UITableViewController {
     }
 }
 
-extension EditProfileTableViewController: EditProfilePicTableViewCellDelegate {
-    
-    func editButtonTapped() {
-        self.editProfilePicCellTapped()
-    }
-}
-
-extension EditProfileTableViewController: EditFirstNameTableViewCellDelegate {
-    
-    func firstNameTextFieldChanged(_ text: String) {
-        self.user?.firstName = text.trimm().isEmpty ? nil : text.trimm()
-    }
-}
-
-extension EditProfileTableViewController: EditLastNameTableViewCellDelegate {
-    
-    func lastNameTextFieldChanged(_ text: String) {
-        self.user?.lastName = text.trimm().isEmpty ? nil : text.trimm()
-    }
-}
-
-extension EditProfileTableViewController: EditLocationTableViewCellDelegate {
-    
-    func clearLocationButtonTapped() {
-        self.user?.locationId = nil
-        self.user?.locationName = nil
-        self.tableView.reloadRows(at: [IndexPath(row: 4, section: 0)], with: UITableViewRowAnimation.none)
-    }
-}
-
-extension EditProfileTableViewController: EditProfessionTableViewCellDelegate {
-    
-    func clearProfessionButtonTapped() {
-        self.user?.professionName = nil
-        self.tableView.reloadRows(at: [IndexPath(row: 5, section: 0)], with: UITableViewRowAnimation.none)
-    }
-}
-
-extension EditProfileTableViewController: EditWebsiteTableViewCellDelegate {
-    
-    func websiteTextFieldChanged(_ text: String) {
-        self.user?.website = text.trimm().isEmpty ? nil : text.trimm()
-    }
-}
-
-extension EditProfileTableViewController: EditAboutTableViewCellDelegate {
+extension EditProfileTableViewController: UITextViewDelegate {
     
     func textViewDidChange(_ textView: UITextView) {
-        self.user?.about = textView.text.trimm().isEmpty ? nil : textView.text.trimm()
-        // Changing height of the cell
-        let currentOffset = self.tableView.contentOffset
-        UIView.setAnimationsEnabled(false)
-        self.tableView.beginUpdates()
-        self.tableView.endUpdates()
-        UIView.setAnimationsEnabled(true)
-        self.tableView.setContentOffset(currentOffset, animated: false)
+        if let text = self.aboutTextView.text {
+            self.aboutPlaceholderLabel.isHidden = !text.isEmpty
+            self.user?.about = text.trimm().isEmpty ? nil : text.trimm()
+            // Changing height of the cell
+            let currentOffset = self.tableView.contentOffset
+            UIView.setAnimationsEnabled(false)
+            self.tableView.beginUpdates()
+            self.tableView.endUpdates()
+            UIView.setAnimationsEnabled(true)
+            self.tableView.setContentOffset(currentOffset, animated: false)
+        }
     }
 }
 
@@ -361,7 +333,9 @@ extension EditProfileTableViewController: LocationsTableViewControllerDelegate {
     func didSelectLocation(_ location: Location) {
         self.user?.locationId = location.locationId
         self.user?.locationName = location.locationName
-        self.tableView.reloadRows(at: [IndexPath(row: 4, section: 0)], with: UITableViewRowAnimation.none)
+        self.locationNameLabel.text = location.locationName
+        self.locationNameLabel.textColor = Colors.black
+        self.clearLocationButton.isHidden = false
     }
 }
 
@@ -369,6 +343,8 @@ extension EditProfileTableViewController: ProfessionsTableViewControllerDelegate
 
     func didSelectProfession(_ professionName: String?) {
         self.user?.professionName = professionName
-        self.tableView.reloadRows(at: [IndexPath(row: 5, section: 0)], with: UITableViewRowAnimation.none)
+        self.professionNameLabel.text = professionName
+        self.professionNameLabel.textColor = Colors.black
+        self.clearProfessionButton.isHidden = false
     }
 }

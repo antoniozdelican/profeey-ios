@@ -33,7 +33,6 @@ class CategoriesTableViewController: UITableViewController {
         self.isShowingPopularCategories = true
         self.isSearchingPopularCategories = true
         self.scanCategories()
-//        self.getAllCategories()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -261,72 +260,6 @@ class CategoriesTableViewController: UITableViewController {
             })
         })
     }
-    
-//    fileprivate func getAllCategories() {
-//        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-//        PRFYCloudSearchProxyClient.defaultClient().getAllCategories().continue({
-//            (task: AWSTask) in
-//            DispatchQueue.main.async(execute: {
-//                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-//                self.isSearchingPopularCategories = false
-//                if let error = task.error {
-//                    print("getAllCategories error: \(error)")
-//                    UIView.performWithoutAnimation {
-//                        self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
-//                    }
-//                } else {
-//                    guard let cloudSearchCategoriesResult = task.result as? PRFYCloudSearchCategoriesResult, let cloudSearchCategories = cloudSearchCategoriesResult.categories else {
-//                        UIView.performWithoutAnimation {
-//                            self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
-//                        }
-//                        return
-//                    }
-//                    for cloudSearchCategory in cloudSearchCategories {
-//                        let category = Category(categoryName: cloudSearchCategory.categoryName, numberOfPosts: cloudSearchCategory.numberOfPosts)
-//                        self.popularCategories.append(category)
-//                    }
-//                    UIView.performWithoutAnimation {
-//                        self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
-//                    }
-//                }
-//            })
-//            return nil
-//        })
-//    }
-//    
-//    fileprivate func getCategories(_ namePrefix: String) {
-//        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-//        PRFYCloudSearchProxyClient.defaultClient().getCategories(namePrefix: namePrefix).continue({
-//            (task: AWSTask) in
-//            DispatchQueue.main.async(execute: {
-//                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-//                self.isSearchingRegularCategories = false
-//                if let error = task.error {
-//                    print("getCategories error: \(error)")
-//                    UIView.performWithoutAnimation {
-//                        self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
-//                    }
-//                } else {
-//                    guard let cloudSearchCategoriesResult = task.result as? PRFYCloudSearchCategoriesResult, let cloudSearchCategories = cloudSearchCategoriesResult.categories else {
-//                        UIView.performWithoutAnimation {
-//                            self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
-//                        }
-//                        return
-//                    }
-//                    // Clear old.
-//                    self.regularCategories = []
-//                    for cloudSearchCategory in cloudSearchCategories {
-//                        let category = Category(categoryName: cloudSearchCategory.categoryName, numberOfPosts: cloudSearchCategory.numberOfPosts)
-//                        self.regularCategories.append(category)
-//                    }
-//                    UIView.performWithoutAnimation {
-//                        self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
-//                    }
-//                }
-//            })
-//            return nil
-//        })
-//    }
 }
 
 extension CategoriesTableViewController: AddCategoryTableViewCellDelegate {
@@ -352,8 +285,6 @@ extension CategoriesTableViewController: AddCategoryTableViewCellDelegate {
                 self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
             }
             self.categoryName = categoryName
-            // Start search for existing categories.
-//            self.getCategories(categoryName)
             self.filterCategories(categoryName)
         }
     }

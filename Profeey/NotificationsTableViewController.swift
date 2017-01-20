@@ -247,6 +247,7 @@ extension NotificationsTableViewController {
         guard self.isLoadingNotifications == false else {
             return
         }
+        self.isLoadingNotifications = true
         self.queryNotificationsDateSorted(true)
     }
 }
