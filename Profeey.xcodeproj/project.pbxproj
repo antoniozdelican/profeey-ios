@@ -28,7 +28,6 @@
 		A918284D1DC124D900EC9E63 /* AddCategoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A918284C1DC124D900EC9E63 /* AddCategoryTableViewCell.swift */; };
 		A91A10351DA7F59F0042B4CA /* GalleryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91A10341DA7F59F0042B4CA /* GalleryViewController.swift */; };
 		A91A103A1DA833E40042B4CA /* AddInfoTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91A10391DA833E40042B4CA /* AddInfoTableViewController.swift */; };
-		A91A103C1DA836050042B4CA /* AddInfoImageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91A103B1DA836050042B4CA /* AddInfoImageTableViewCell.swift */; };
 		A91A35241D1C26E6006F22B2 /* FullScreenIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91A35231D1C26E6006F22B2 /* FullScreenIndicator.swift */; };
 		A91A7B041DC4FA9300F7D6A7 /* AWSComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91A7B031DC4FA9300F7D6A7 /* AWSComment.swift */; };
 		A91C1CD31DED9C75006FBDD4 /* AWSNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91C1CD21DED9C75006FBDD4 /* AWSNotification.swift */; };
@@ -312,7 +311,6 @@
 		A918284C1DC124D900EC9E63 /* AddCategoryTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddCategoryTableViewCell.swift; sourceTree = "<group>"; };
 		A91A10341DA7F59F0042B4CA /* GalleryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GalleryViewController.swift; sourceTree = "<group>"; };
 		A91A10391DA833E40042B4CA /* AddInfoTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddInfoTableViewController.swift; sourceTree = "<group>"; };
-		A91A103B1DA836050042B4CA /* AddInfoImageTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddInfoImageTableViewCell.swift; sourceTree = "<group>"; };
 		A91A35231D1C26E6006F22B2 /* FullScreenIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FullScreenIndicator.swift; sourceTree = "<group>"; };
 		A91A7B031DC4FA9300F7D6A7 /* AWSComment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSComment.swift; sourceTree = "<group>"; };
 		A91C1CD21DED9C75006FBDD4 /* AWSNotification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSNotification.swift; sourceTree = "<group>"; };
@@ -637,7 +635,6 @@
 			isa = PBXGroup;
 			children = (
 				A91A10391DA833E40042B4CA /* AddInfoTableViewController.swift */,
-				A91A103B1DA836050042B4CA /* AddInfoImageTableViewCell.swift */,
 			);
 			name = "Add Info";
 			sourceTree = "<group>";
@@ -1624,7 +1621,6 @@
 				A91C1CD31DED9C75006FBDD4 /* AWSNotification.swift in Sources */,
 				A999CD411DBE6FB000E7ADB1 /* SearchProfessionTableViewCell.swift in Sources */,
 				A9CBBC541DB63FF6009C8EC7 /* EditWorkDescriptionTableViewCell.swift in Sources */,
-				A91A103C1DA836050042B4CA /* AddInfoImageTableViewCell.swift in Sources */,
 				A9D185D91D71927E0073E65F /* AWSLike.swift in Sources */,
 				A9D450631DCA247B000967E2 /* AWSCommentsTable.swift in Sources */,
 				A9BCBDC51DDAFA0F00265AFA /* Recommendation.swift in Sources */,

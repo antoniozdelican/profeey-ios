@@ -11,6 +11,17 @@ import UIKit
 class AddInfoTableViewController: UITableViewController {
     
     @IBOutlet weak var saveButton: UIButton!
+    @IBOutlet weak var postImageView: UIImageView!
+    @IBOutlet weak var postImageViewHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var postImageViewWidthConstraint: NSLayoutConstraint!
+    @IBOutlet weak var captionImageView: UIImageView?
+    @IBOutlet weak var captionTextView: UITextView!
+    @IBOutlet weak var captionPlaceholderLabel: UILabel!
+    @IBOutlet weak var categoryImageView: UIImageView!
+    @IBOutlet weak var categoryNameLabel: UILabel!
+    @IBOutlet weak var clearCategoryButton: UIButton!
+    @IBOutlet weak var editPostCategoryTableViewCell: UITableViewCell!
+    
     
     var postImage: UIImage?
     var caption: String?
@@ -19,11 +30,12 @@ class AddInfoTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.saveButton.contentEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, 0.0, -8.0)
+        self.configureInfo()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
         self.view.endEditing(true)
+        super.viewWillDisappear(animated)
     }
     
     override var prefersStatusBarHidden: Bool {
@@ -32,6 +44,30 @@ class AddInfoTableViewController: UITableViewController {
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+    }
+    
+    // MARK: Configuration
+    
+    fileprivate func configureInfo() {
+        self.postImageView.image = self.postImage
+        if let imageWidth = self.postImage?.size.width, let imageHeight = self.postImage?.size.height {
+            let aspectRatio = CGFloat(imageWidth / imageHeight)
+            self.postImageViewHeightConstraint.constant = ceil(self.postImageViewWidthConstraint.constant / aspectRatio)
+        }
+        self.captionTextView.text = self.caption
+        self.captionTextView.delegate = self
+        self.captionPlaceholderLabel.isHidden = self.caption != nil ? true : false
+        if let categoryName = self.categoryName {
+            self.categoryNameLabel.text = categoryName
+            self.categoryNameLabel.textColor = Colors.black
+            self.clearCategoryButton.isHidden = false
+            self.categoryImageView.image = UIImage(named: "ic_skills_active")
+        } else {
+            self.categoryNameLabel.text = "Add Skill"
+            self.categoryNameLabel.textColor = Colors.disabled
+            self.clearCategoryButton.isHidden = true
+            self.categoryImageView.image = UIImage(named: "ic_skills")
+        }
     }
     
     // MARK: Navigation
@@ -44,52 +80,7 @@ class AddInfoTableViewController: UITableViewController {
             childViewController.isStatusBarHidden = true
         }
     }
-
-    // MARK: UITableViewDataSource
-
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
-    }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        switch indexPath.row {
-        case 0:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cellAddInfoImage", for: indexPath) as! AddInfoImageTableViewCell
-            cell.postImageView.image = self.postImage
-            if let imageWidth = self.postImage?.size.width, let imageHeight = self.postImage?.size.height {
-                let aspectRatio = CGFloat(imageWidth / imageHeight)
-                cell.postImageViewHeightConstraint.constant = ceil(cell.postImageViewWidthConstraint.constant / aspectRatio)
-            }
-            return cell
-        case 1:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cellEditPostDescription", for: indexPath) as! EditPostDescriptionTableViewCell
-            cell.editPostDescriptionTableViewCellDelegate = self
-            cell.descriptionTextView.text = self.caption
-            cell.descriptionPlaceholderLabel.isHidden = self.caption != nil ? true : false
-            return cell
-        case 2:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cellEditPostCategory", for: indexPath) as! EditPostCategoryTableViewCell
-            if let categoryName = self.categoryName {
-                cell.categoryNameLabel.text = categoryName
-                cell.categoryNameLabel.textColor = Colors.black
-                cell.clearCategoryButton.isHidden = false
-                cell.categoryImageView.image = UIImage(named: "ic_skills_active")
-            } else {
-                cell.categoryNameLabel.text = "Add Skill"
-                cell.categoryNameLabel.textColor = Colors.disabled
-                cell.clearCategoryButton.isHidden = true
-                cell.categoryImageView.image = UIImage(named: "ic_skills")
-            }
-            cell.editPostCategoryTableViewCellDelegate = self
-            return cell
-        default:
-            return UITableViewCell()
-        }
-    }
     // MARK: UITableViewDelegate
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
@@ -102,7 +93,7 @@ class AddInfoTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let cell = tableView.cellForRow(at: indexPath)
-        if cell is EditPostCategoryTableViewCell {
+        if cell == self.editPostCategoryTableViewCell {
             self.performSegue(withIdentifier: "segueToCategoriesVc", sender: self)
         }
     }
@@ -123,7 +114,6 @@ class AddInfoTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.row {
         case 0:
-            //return 132.0
             return UITableViewAutomaticDimension
         case 1:
             return UITableViewAutomaticDimension
@@ -146,29 +136,33 @@ class AddInfoTableViewController: UITableViewController {
         // Upload is on HomeVc.
         self.performSegue(withIdentifier: "segueUnwindToHomeVc", sender: self)
     }
-}
-
-extension AddInfoTableViewController: EditPostDescriptionTableViewCellDelegate {
     
-    func textViewDidChange(_ textView: UITextView) {
-        // Change height of tableViewCell.
-        let size = textView.bounds.size
-        let newSize = textView.sizeThatFits(CGSize(width: size.width, height: CGFloat.greatestFiniteMagnitude))
-        if size.height != newSize.height {
-            UIView.setAnimationsEnabled(false)
-            self.tableView.beginUpdates()
-            self.tableView.endUpdates()
-            UIView.setAnimationsEnabled(true)
-        }
-        self.caption = textView.text.trimm().isEmpty ? nil : textView.text.trimm()
+    @IBAction func clearCategoryButtonTapped(_ sender: AnyObject) {
+        self.categoryName = nil
+        self.categoryNameLabel.text = "Add Skill"
+        self.categoryNameLabel.textColor = Colors.disabled
+        self.clearCategoryButton.isHidden = true
+        self.categoryImageView.image = UIImage(named: "ic_skills")
     }
 }
 
-extension AddInfoTableViewController: EditPostCategoryTableViewCellDelegate {
+extension AddInfoTableViewController: UITextViewDelegate {
     
-    func clearCategoryButtonTapped() {
-        self.categoryName = nil
-        self.tableView.reloadRows(at: [IndexPath(row: 2, section: 0)], with: UITableViewRowAnimation.none)
+    func textViewDidChange(_ textView: UITextView) {
+        if let text = self.captionTextView.text {
+            self.captionPlaceholderLabel.isHidden = !text.isEmpty
+            self.captionImageView?.image = !text.isEmpty ? UIImage(named: "ic_write_description_active") : UIImage(named: "ic_write_description")
+            // Change height of tableViewCell.
+            let size = textView.bounds.size
+            let newSize = textView.sizeThatFits(CGSize(width: size.width, height: CGFloat.greatestFiniteMagnitude))
+            if size.height != newSize.height {
+                UIView.setAnimationsEnabled(false)
+                self.tableView.beginUpdates()
+                self.tableView.endUpdates()
+                UIView.setAnimationsEnabled(true)
+            }
+            self.caption = text.trimm().isEmpty ? nil : text.trimm()
+        }
     }
 }
 
@@ -176,6 +170,9 @@ extension AddInfoTableViewController: CategoriesTableViewControllerDelegate {
     
     func didSelectCategory(_ categoryName: String?) {
         self.categoryName = categoryName
-        self.tableView.reloadRows(at: [IndexPath(row: 2, section: 0)], with: UITableViewRowAnimation.none)
+        self.categoryNameLabel.text = categoryName
+        self.categoryNameLabel.textColor = Colors.black
+        self.clearCategoryButton.isHidden = false
+        self.categoryImageView.image = UIImage(named: "ic_skills_active")
     }
 }
