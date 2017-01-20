@@ -78,7 +78,6 @@ class UsernameTableViewController: UITableViewController {
             (alert: UIAlertAction) in
             self.newProfilePicImageData = nil
             self.profilePicImageView.image = UIImage(named: "ic_add_profile_pic")
-            self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.none)
         })
         alertController.addAction(removePhotoAction)
         let changePhotoAction = UIAlertAction(title: "Add Profile Photo", style: UIAlertActionStyle.default, handler: {
@@ -114,7 +113,6 @@ class UsernameTableViewController: UITableViewController {
             }
             self.newProfilePicImageData = imageData
             self.profilePicImageView.image = finalImage
-            self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.none)
         }
     }
     

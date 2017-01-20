@@ -65,22 +65,6 @@ extension UICollectionView {
     
 }
 
-extension UITableView {
-    func indexPathForView(view: UIView) -> IndexPath? {
-        let location = view.convert(CGPoint.zero, to: self)
-        return indexPathForRow(at: location)
-    }
-    
-    func reloadVisibleRow(_ indexPath: IndexPath) {
-        guard let indexPathsForVisibleRows = self.indexPathsForVisibleRows, indexPathsForVisibleRows.contains(where: { $0 == indexPath }) else {
-            return
-        }
-        UIView.performWithoutAnimation {
-            self.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
-        }
-    }
-}
-
 extension IndexSet {
     
     func indexPathsFromIndexesWithSection(_ section: Int) -> [IndexPath] {

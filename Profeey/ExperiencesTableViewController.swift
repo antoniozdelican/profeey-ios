@@ -375,8 +375,10 @@ extension ExperiencesTableViewController: WorkExperienceTableViewCellDelegate {
         }
         if !self.workExperiences[indexPath.row].isExpandedWorkDescription {
             self.workExperiences[indexPath.row].isExpandedWorkDescription = true
+            cell.untruncate()
             UIView.performWithoutAnimation {
-                self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
+                self.tableView.beginUpdates()
+                self.tableView.endUpdates()
             }
         }
     }
@@ -394,8 +396,10 @@ extension ExperiencesTableViewController: EducationTableViewCellDelegate {
         }
         if !self.educations[indexPath.row].isExpandedEducationDescription {
             self.educations[indexPath.row].isExpandedEducationDescription = true
+            cell.untruncate()
             UIView.performWithoutAnimation {
-                self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
+                self.tableView.beginUpdates()
+                self.tableView.endUpdates()
             }
         }
     }

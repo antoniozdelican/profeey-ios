@@ -1074,7 +1074,6 @@ extension ProfileTableViewController {
         let post = self.posts[postIndex]
         post.numberOfLikes = NSNumber(value: post.numberOfLikesInt - 1)
         post.isLikedByCurrentUser = false
-        self.tableView.reloadVisibleRow(IndexPath(row: postIndex, section: 1))
         (self.tableView.cellForRow(at: IndexPath(row: postIndex, section: 1)) as? PostSmallTableViewCell)?.numberOfLikesLabel.text = post.numberOfLikesSmallString
     }
     
