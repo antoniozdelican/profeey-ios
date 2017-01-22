@@ -18,8 +18,8 @@ enum ImageType {
 class HomeTableViewController: UITableViewController {
     
     @IBOutlet var homeEmptyFeedView: HomeEmptyFeedView!
+    @IBOutlet var homeNoNetworkView: HomeNoNetworkView!
     @IBOutlet var loadingTableFooterView: UIView!
-    
     
     fileprivate var posts: [Post] = []
     
@@ -55,6 +55,8 @@ class HomeTableViewController: UITableViewController {
         self.tableView.backgroundView = self.activityIndicatorView
         Bundle.main.loadNibNamed("HomeEmptyFeedView", owner: self, options: nil)
         self.homeEmptyFeedView.homeEmptyFeedViewDelegate = self
+        Bundle.main.loadNibNamed("HomeNoNetworkView", owner: self, options: nil)
+        self.homeNoNetworkView.homeNoNetworkViewDelegate = self
         
         // Start querying activities.
         if AWSIdentityManager.defaultIdentityManager().isLoggedIn {
@@ -130,14 +132,14 @@ class HomeTableViewController: UITableViewController {
     // MARK: UITableViewDataSource
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        if self.isLoadingInitialPosts {
+        if self.isLoadingInitialPosts || (self.noNetworkConnection && self.posts.count == 0) {
             return 0
         }
         return self.posts.count
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if self.isLoadingInitialPosts {
+        if self.isLoadingInitialPosts || (self.noNetworkConnection && self.posts.count == 0) {
             return 0
         }
         if section == 0 && self.isUploading {
@@ -344,15 +346,17 @@ class HomeTableViewController: UITableViewController {
                     self.refreshControl?.endRefreshing()
                     self.isLoadingNextPosts = false
                     self.tableView.tableFooterView = UIView()
-                    // Reload tableView.
-                    self.tableView.reloadData()
                     // Handle error and show banner.
-                    let nsError = error as! NSError
-                    if nsError.code == -1009 {
+                    if (error as! NSError).code == -1009 {
                         (self.navigationController as? PRFYNavigationController)?.showBanner("No Internet Connection")
                         self.noNetworkConnection = true
-                        // TODO No internet connection tableBackgroundView.
+                        if self.posts.count == 0 {
+                            // Only put if no yet loaded any post.
+                            self.tableView.backgroundView = self.homeNoNetworkView
+                        }
                     }
+                    // Reload tableView.
+                    self.tableView.reloadData()
                     return
                 }
                 if startFromBeginning {
@@ -372,23 +376,15 @@ class HomeTableViewController: UITableViewController {
                     }
                 }
                 // Reset flags and animations that were initiated.
-                if self.isLoadingInitialPosts {
-                    self.isLoadingInitialPosts = false
-                    self.activityIndicatorView?.stopAnimating()
-                }
-                if self.isRefreshingPosts {
-                    self.isRefreshingPosts = false
-                    self.refreshControl?.endRefreshing()
-                }
-                if self.isLoadingNextPosts {
-                    self.isLoadingNextPosts = false
-                }
+                self.isLoadingInitialPosts = false
+                self.activityIndicatorView?.stopAnimating()
+                self.isRefreshingPosts = false
+                self.refreshControl?.endRefreshing()
+                self.isLoadingNextPosts = false
                 if self.posts.count == 0 {
                     self.tableView.backgroundView = self.homeEmptyFeedView
                 }
-                if self.noNetworkConnection {
-                    self.noNetworkConnection = false
-                }
+                self.noNetworkConnection = false
                 self.lastEvaluatedKey = response?.lastEvaluatedKey
                 self.tableView.tableFooterView = UIView()
                 
@@ -782,5 +778,17 @@ extension HomeTableViewController: HomeEmptyFeedViewDelegate {
     
     func discoverButtonTapped() {
         self.performSegue(withIdentifier: "segueToDiscoverPeopleVc", sender: self)
+    }
+}
+
+extension HomeTableViewController: HomeNoNetworkViewDelegate {
+    
+    func noNetworkViewTapped() {
+        self.tableView.backgroundView = self.activityIndicatorView
+        if AWSIdentityManager.defaultIdentityManager().isLoggedIn {
+            self.isLoadingInitialPosts = true
+            self.activityIndicatorView?.startAnimating()
+            self.queryUserActivitiesDateSorted(true)
+        }
     }
 }

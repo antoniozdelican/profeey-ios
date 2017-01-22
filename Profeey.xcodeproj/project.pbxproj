@@ -232,6 +232,8 @@
 		A9DBC6361E113A6B0087CB19 /* FollowersFollowingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9DBC6351E113A6B0087CB19 /* FollowersFollowingViewController.swift */; };
 		A9DC89371E34B14B00B9D213 /* ExperiencesHeaderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9DC89361E34B14B00B9D213 /* ExperiencesHeaderTableViewCell.swift */; };
 		A9DC893B1E34D1C400B9D213 /* NoNetworkTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9DC893A1E34D1C400B9D213 /* NoNetworkTableViewCell.swift */; };
+		A9DC893D1E34F19600B9D213 /* HomeNoNetworkView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9DC893C1E34F19600B9D213 /* HomeNoNetworkView.xib */; };
+		A9DC893F1E34F26900B9D213 /* HomeNoNetworkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9DC893E1E34F26900B9D213 /* HomeNoNetworkView.swift */; };
 		A9E0267F1E2038BF00BD8ED2 /* PRFYUrls.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E0267E1E2038BF00BD8ED2 /* PRFYUrls.swift */; };
 		A9E050F41D83065D00DD992D /* LocationOldTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E050F31D83065D00DD992D /* LocationOldTableViewCell.swift */; };
 		A9E3DD431D86A42400DED8C8 /* Profession.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E3DD421D86A42400DED8C8 /* Profession.swift */; };
@@ -512,6 +514,8 @@
 		A9DBC6351E113A6B0087CB19 /* FollowersFollowingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FollowersFollowingViewController.swift; sourceTree = "<group>"; };
 		A9DC89361E34B14B00B9D213 /* ExperiencesHeaderTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExperiencesHeaderTableViewCell.swift; sourceTree = "<group>"; };
 		A9DC893A1E34D1C400B9D213 /* NoNetworkTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoNetworkTableViewCell.swift; sourceTree = "<group>"; };
+		A9DC893C1E34F19600B9D213 /* HomeNoNetworkView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HomeNoNetworkView.xib; sourceTree = "<group>"; };
+		A9DC893E1E34F26900B9D213 /* HomeNoNetworkView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeNoNetworkView.swift; sourceTree = "<group>"; };
 		A9E0267E1E2038BF00BD8ED2 /* PRFYUrls.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PRFYUrls.swift; sourceTree = "<group>"; };
 		A9E050F31D83065D00DD992D /* LocationOldTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationOldTableViewCell.swift; sourceTree = "<group>"; };
 		A9E3DD421D86A42400DED8C8 /* Profession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Profession.swift; sourceTree = "<group>"; };
@@ -1303,6 +1307,8 @@
 				A9E53B681D10665100CD1D6C /* Home.storyboard */,
 				A944BAA91DD10323000BE754 /* HomeEmptyFeedView.xib */,
 				A944BAAB1DD10413000BE754 /* HomeEmptyFeedView.swift */,
+				A9DC893C1E34F19600B9D213 /* HomeNoNetworkView.xib */,
+				A9DC893E1E34F26900B9D213 /* HomeNoNetworkView.swift */,
 				A9B7A2491D65D8C0009DA340 /* HomeTableViewController.swift */,
 			);
 			name = Home;
@@ -1495,6 +1501,7 @@
 				A9A503A71D2FF8450030A472 /* EditProfile.storyboard in Resources */,
 				A95E93AF1DBF6D0000A1FF6E /* Profession.storyboard in Resources */,
 				A96622001D0EBBC200298CE7 /* Onboarding.storyboard in Resources */,
+				A9DC893D1E34F19600B9D213 /* HomeNoNetworkView.xib in Resources */,
 				A9AFFB081D8AFE0C00219627 /* Professions.storyboard in Resources */,
 				A91828471DC0E59100EC9E63 /* Locations.storyboard in Resources */,
 				A9E53B6D1D10667100CD1D6C /* Capture.storyboard in Resources */,
@@ -1552,6 +1559,7 @@
 				A9DBC6361E113A6B0087CB19 /* FollowersFollowingViewController.swift in Sources */,
 				A903EB5B1D16A3C800B33025 /* ProfeeySimpleCamera.swift in Sources */,
 				A9B750051D8783BE00DDC8C8 /* AWSActivitiesTable.swift in Sources */,
+				A9DC893F1E34F26900B9D213 /* HomeNoNetworkView.swift in Sources */,
 				A99030FD1D46634600336D26 /* AlbumTableViewCell.swift in Sources */,
 				A98B42E11D43C95A0089A769 /* ProfessionTableViewCell.swift in Sources */,
 				A9B7A2441D65A562009DA340 /* Category.swift in Sources */,

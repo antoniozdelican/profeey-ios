@@ -581,15 +581,13 @@ class ProfileTableViewController: UITableViewController {
                     // Reset flags and animations that were initiated.
                     self.isLoadingUser = false
                     self.refreshControl?.endRefreshing()
-                    // Reload tableView.
-                    self.tableView.reloadData()
                     // Handle error and show banner.
-                    let nsError = task.error as! NSError
-                    if nsError.code == -1009 {
+                    if (task.error as! NSError).code == -1009 {
                         (self.navigationController as? PRFYNavigationController)?.showBanner("No Internet Connection")
                         self.noNetworkConnection = true
-                        // TODO No internet connection tableBackgroundView.
                     }
+                    // Reload tableView.
+                    self.tableView.reloadData()
                     return
                 }
                 guard let awsUser = task.result as? AWSUser else {
@@ -647,15 +645,13 @@ class ProfileTableViewController: UITableViewController {
                     print("queryPostsDateSorted error: \(error)")
                     self.isLoadingPosts = false
                     self.hasLoadedInitialPosts = true
+                    if (error as! NSError).code == -1009 {
+                        (self.navigationController as? PRFYNavigationController)?.showBanner("No Internet Connection")
+                        self.noNetworkConnection = true
+                    }
                     if self.selectedProfileSegment == ProfileSegment.posts {
                         self.tableView.tableFooterView = UIView()
                         self.tableView.reloadData()
-                    }
-                    let nsError = error as! NSError
-                    if nsError.code == -1009 {
-                        (self.navigationController as? PRFYNavigationController)?.showBanner("No Internet Connection")
-                        self.noNetworkConnection = true
-                        // TODO No internet connection tableBackgroundView.
                     }
                     return
                 }
@@ -707,15 +703,13 @@ class ProfileTableViewController: UITableViewController {
                     print("queryWorkExperiences error: \(error)")
                     self.isLoadingWorkExperiences = false
                     self.hasLoadedInitialWorkExperiences = true
+                    if (error as! NSError).code == -1009 {
+                        (self.navigationController as? PRFYNavigationController)?.showBanner("No Internet Connection")
+                        self.noNetworkConnection = true
+                    }
                     if self.selectedProfileSegment == ProfileSegment.experience && !self.isLoadingExperiences {
                         self.tableView.tableFooterView = UIView()
                         self.tableView.reloadData()
-                    }
-                    let nsError = error as! NSError
-                    if nsError.code == -1009 {
-                        (self.navigationController as? PRFYNavigationController)?.showBanner("No Internet Connection")
-                        self.noNetworkConnection = true
-                        // TODO No internet connection tableBackgroundView.
                     }
                     return
                 }
@@ -752,15 +746,13 @@ class ProfileTableViewController: UITableViewController {
                     print("queryEducations error: \(error)")
                     self.isLoadingEducations = false
                     self.hasLoadedInitialEducations = true
+                    if (error as! NSError).code == -1009 {
+                        (self.navigationController as? PRFYNavigationController)?.showBanner("No Internet Connection")
+                        self.noNetworkConnection = true
+                    }
                     if self.selectedProfileSegment == ProfileSegment.experience && !self.isLoadingExperiences {
                         self.tableView.tableFooterView = UIView()
                         self.tableView.reloadData()
-                    }
-                    let nsError = error as! NSError
-                    if nsError.code == -1009 {
-                        (self.navigationController as? PRFYNavigationController)?.showBanner("No Internet Connection")
-                        self.noNetworkConnection = true
-                        // TODO No internet connection tableBackgroundView.
                     }
                     return
                 }
@@ -797,15 +789,13 @@ class ProfileTableViewController: UITableViewController {
                     print("queryUserCategoriesNumberOfPostsSorted error: \(error)")
                     self.isLoadingUserCategories = false
                     self.hasLoadedInitialUserCategories = true
+                    if (error as! NSError).code == -1009 {
+                        (self.navigationController as? PRFYNavigationController)?.showBanner("No Internet Connection")
+                        self.noNetworkConnection = true
+                    }
                     if self.selectedProfileSegment == ProfileSegment.skills {
                         self.tableView.tableFooterView = UIView()
                         self.tableView.reloadData()
-                    }
-                    let nsError = error as! NSError
-                    if nsError.code == -1009 {
-                        (self.navigationController as? PRFYNavigationController)?.showBanner("No Internet Connection")
-                        self.noNetworkConnection = true
-                        // TODO No internet connection tableBackgroundView.
                     }
                     return
                 }

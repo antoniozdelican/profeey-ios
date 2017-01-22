@@ -637,7 +637,7 @@
                                     <outlet property="emptyMessageLabel" destination="ECh-aV-1qB" id="dFb-nl-2mt"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellNoNetwork" rowHeight="112" id="XfC-M8-Jtk" customClass="NoNetworkTableViewCell" customModule="Profeey" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellNoNetwork" rowHeight="112" id="XfC-M8-Jtk" customClass="NoNetworkTableViewCell" customModule="Profeey" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="780" width="375" height="112"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="XfC-M8-Jtk" id="gPl-RE-PlV">
@@ -647,12 +647,18 @@
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No internet connection." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Q5m-bW-UzK">
                                             <rect key="frame" x="111" y="48" width="152" height="17"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                            <color key="textColor" red="0.14748379589999999" green="0.1474793851" blue="0.14748191829999999" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="textColor" red="0.41868340970000001" green="0.41867089270000002" blue="0.41867792609999999" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AaZ-ou-zyz">
+                                            <rect key="frame" x="171" y="80" width="32" height="32"/>
+                                            <state key="normal" image="ic_refresh"/>
+                                        </button>
                                     </subviews>
                                     <constraints>
+                                        <constraint firstItem="AaZ-ou-zyz" firstAttribute="centerX" secondItem="gPl-RE-PlV" secondAttribute="centerX" id="Blk-35-8pD"/>
                                         <constraint firstItem="Q5m-bW-UzK" firstAttribute="centerX" secondItem="gPl-RE-PlV" secondAttribute="centerX" id="C4m-NV-vz3"/>
+                                        <constraint firstItem="AaZ-ou-zyz" firstAttribute="top" secondItem="Q5m-bW-UzK" secondAttribute="bottom" constant="15" id="V7z-Ti-0k4"/>
                                         <constraint firstItem="Q5m-bW-UzK" firstAttribute="centerY" secondItem="gPl-RE-PlV" secondAttribute="centerY" id="yha-zS-bMX"/>
                                     </constraints>
                                 </tableViewCellContentView>
@@ -787,6 +793,7 @@
         <image name="ic_heart_white" width="20" height="20"/>
         <image name="ic_location_profile" width="12" height="17"/>
         <image name="ic_recommendations" width="22" height="22"/>
+        <image name="ic_refresh" width="32" height="32"/>
         <image name="ic_settings" width="22" height="22"/>
         <image name="ic_work_experience" width="40" height="40"/>
     </resources>
