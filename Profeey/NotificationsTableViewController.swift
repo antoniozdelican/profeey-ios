@@ -61,6 +61,9 @@ class NotificationsTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if self.noNetworkConnection {
+            return 1
+        }
         if !self.isLoadingNotifications && self.notifications.count == 0 {
             return 1
         }
@@ -68,6 +71,10 @@ class NotificationsTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if self.noNetworkConnection {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellNoNetwork", for: indexPath) as! NoNetworkTableViewCell
+            return cell
+        }
         if !self.isLoadingNotifications && self.notifications.count == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellEmpty", for: indexPath) as! EmptyTableViewCell
             cell.emptyMessageLabel.text = "No notifications yet."
@@ -91,13 +98,18 @@ class NotificationsTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let cell = tableView.cellForRow(at: indexPath)
-        guard cell is NotificationTableViewCell, let notificationType = self.notifications[indexPath.row].notificationType else {
-            return
+        if cell is NoNetworkTableViewCell {
+            // Query.
+            self.isLoadingNotifications = true
+            self.tableView.tableFooterView = self.loadingTableFooterView
+            self.queryNotificationsDateSorted(true)
         }
-        if notificationType.intValue == NotificationType.like.rawValue || notificationType.intValue == NotificationType.comment.rawValue {
-            self.performSegue(withIdentifier: "segueToPostDetailsVc", sender: cell)
-        } else if notificationType.intValue == NotificationType.following.rawValue || notificationType.intValue == NotificationType.recommendation.rawValue {
-            self.performSegue(withIdentifier: "segueToProfileVc", sender: cell)
+        if cell is NotificationTableViewCell, let notificationType = self.notifications[indexPath.row].notificationType {
+            if notificationType.intValue == NotificationType.like.rawValue || notificationType.intValue == NotificationType.comment.rawValue {
+                self.performSegue(withIdentifier: "segueToPostDetailsVc", sender: cell)
+            } else if notificationType.intValue == NotificationType.following.rawValue || notificationType.intValue == NotificationType.recommendation.rawValue {
+                self.performSegue(withIdentifier: "segueToProfileVc", sender: cell)
+            }
         }
     }
     
@@ -119,6 +131,9 @@ class NotificationsTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        if self.noNetworkConnection {
+            return 112.0
+        }
         if self.notifications.count == 0 {
             return 64.0
         }
@@ -126,6 +141,9 @@ class NotificationsTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if self.noNetworkConnection {
+            return 112.0
+        }
         if self.notifications.count == 0 {
             return 64.0
         }
@@ -177,12 +195,11 @@ class NotificationsTableViewController: UITableViewController {
                     self.isLoadingNotifications = false
                     self.refreshControl?.endRefreshing()
                     self.tableView.tableFooterView = UIView()
-                    self.tableView.reloadData()
-                    let nsError = error as! NSError
-                    if nsError.code == -1009 {
+                    if (error as! NSError).code == -1009 {
                         (self.navigationController as? PRFYNavigationController)?.showBanner("No Internet Connection")
                         self.noNetworkConnection = true
                     }
+                    self.tableView.reloadData()
                     return
                 }
                 if startFromBeginning {

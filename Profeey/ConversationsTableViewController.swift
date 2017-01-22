@@ -68,6 +68,9 @@ class ConversationsTableViewController: UITableViewController {
         if section == 0 {
             return 1
         }
+        if self.noNetworkConnection {
+            return 1
+        }
         if !self.isLoadingConversations && self.conversations.count == 0 {
             return 1
         }
@@ -78,6 +81,10 @@ class ConversationsTableViewController: UITableViewController {
         if indexPath.section == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellAdd", for: indexPath) as! AddTableViewCell
             cell.titleLabel.text = "New Message"
+            return cell
+        }
+        if self.noNetworkConnection {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellNoNetwork", for: indexPath) as! NoNetworkTableViewCell
             return cell
         }
         if !self.isLoadingConversations && self.conversations.count == 0 {
@@ -109,6 +116,12 @@ class ConversationsTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let cell = tableView.cellForRow(at: indexPath)
+        if cell is NoNetworkTableViewCell {
+            // Query.
+            self.isLoadingConversations = true
+            self.tableView.tableFooterView = self.loadingTableFooterView
+            self.queryConversationsDateSorted(true)
+        }
         if cell is ConversationTableViewCell {
             self.performSegue(withIdentifier: "segueToMessagesVc", sender: cell)
         }
@@ -121,7 +134,6 @@ class ConversationsTableViewController: UITableViewController {
             cell.separatorInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0)
             return
         }
-        
         if !(cell is ConversationTableViewCell) {
             cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
         }
@@ -141,6 +153,9 @@ class ConversationsTableViewController: UITableViewController {
         if indexPath.section == 0 {
             return 64.0
         }
+        if self.noNetworkConnection {
+            return 112.0
+        }
         if self.conversations.count == 0 {
             return 64.0
         }
@@ -150,6 +165,9 @@ class ConversationsTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.section == 0 {
             return 64.0
+        }
+        if self.noNetworkConnection {
+            return 112.0
         }
         if self.conversations.count == 0 {
             return 64.0
@@ -184,12 +202,11 @@ class ConversationsTableViewController: UITableViewController {
                     self.isLoadingConversations = false
                     self.refreshControl?.endRefreshing()
                     self.tableView.tableFooterView = UIView()
-                    self.tableView.reloadData()
-                    let nsError = error as! NSError
-                    if nsError.code == -1009 {
+                    if (error as! NSError).code == -1009 {
                         (self.navigationController as? PRFYNavigationController)?.showBanner("No Internet Connection")
                         self.noNetworkConnection = true
                     }
+                    self.tableView.reloadData()
                     return
                 }
                 if startFromBeginning {
