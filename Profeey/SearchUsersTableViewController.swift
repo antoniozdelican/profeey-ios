@@ -29,6 +29,8 @@ class SearchUsersTableViewController: UITableViewController {
     
     fileprivate var isLocationActive: Bool = false
     fileprivate var location: Location?
+    
+    fileprivate var noNetworkConnection: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -65,6 +67,9 @@ class SearchUsersTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if self.noNetworkConnection {
+            return 1
+        }
         if self.isSearchingUsers {
             return 1
         }
@@ -75,10 +80,13 @@ class SearchUsersTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if self.noNetworkConnection {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellNoNetwork", for: indexPath) as! NoNetworkTableViewCell
+            return cell
+        }
         if self.isSearchingUsers {
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellSearching", for: indexPath) as! SearchingTableViewCell
             cell.activityIndicator.startAnimating()
-            // TODO update text.
             return cell
         }
         if self.users.count == 0 {
@@ -105,6 +113,9 @@ class SearchUsersTableViewController: UITableViewController {
         if cell is NoResultsTableViewCell {
             cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0)
         }
+        if cell is NoNetworkTableViewCell {
+            cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
+        }
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -113,9 +124,23 @@ class SearchUsersTableViewController: UITableViewController {
         if cell is SearchUserTableViewCell {
             self.performSegue(withIdentifier: "segueToProfileVc", sender: cell)
         }
+        if cell is NoNetworkTableViewCell {
+            // Query.
+            self.noNetworkConnection = false
+            self.isSearchingPopularUsers = true
+            self.tableView.reloadData()
+            if self.isLocationActive, let locationId = self.location?.locationId {
+                self.queryLocationUsers(locationId)
+            } else {
+                self.scanUsers()
+            }
+        }
     }
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        if self.noNetworkConnection {
+            return 112.0
+        }
         if self.isSearchingUsers {
             return 64.0
         }
@@ -126,6 +151,9 @@ class SearchUsersTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if self.noNetworkConnection {
+            return 112.0
+        }
         if self.isSearchingUsers {
             return 64.0
         }
@@ -153,6 +181,21 @@ class SearchUsersTableViewController: UITableViewController {
     
     override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         self.searchUsersTableViewControllerDelegate?.usersTableViewWillBeginDragging()
+    }
+    
+    // MARK: IBActions
+    
+    @IBAction func refreshControlChanged(_ sender: AnyObject) {
+        guard !self.isSearchingUsers else {
+            self.refreshControl?.endRefreshing()
+            return
+        }
+        // Query.
+        if self.isLocationActive, let locationId = self.location?.locationId {
+            self.queryLocationUsers(locationId)
+        } else {
+            self.scanUsers()
+        }
     }
     
     // MARK: Helpers
@@ -189,26 +232,40 @@ class SearchUsersTableViewController: UITableViewController {
             (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                self.isSearchingPopularUsers = false
-                if let error = error {
-                    print("scanUsers error: \(error)")
-                    self.tableView.reloadData()
-                } else {
-                    guard let awsUsers = response?.items as? [AWSUser] else {
-                        self.tableView.reloadData()
-                        return
+                guard error == nil else {
+                    print("scanUsers error: \(error!)")
+                    self.isSearchingPopularUsers = false
+                    self.refreshControl?.endRefreshing()
+                    if (error as! NSError).code == -1009 {
+                        (self.navigationController as? PRFYNavigationController)?.showBanner("No Internet Connection")
+                        self.noNetworkConnection = true
                     }
-                    self.popularUsers = []
+                    self.tableView.reloadData()
+                    return
+                }
+                self.popularUsers = []
+                if let awsUsers = response?.items as? [AWSUser] {
                     for awsUser in awsUsers {
                         let user = LocationUser(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationId: awsUser._locationId, locationName: awsUser._locationName, numberOfRecommendations: awsUser._numberOfRecommendations)
                         self.popularUsers.append(user)
                     }
-                    self.popularUsers = self.sortUsers(self.popularUsers)
-                    self.users = self.popularUsers
-                    self.tableView.reloadData()
-                    
-                    for user in self.popularUsers {
-                        if let profilePicUrl = user.profilePicUrl {
+                }
+                // Set popular users.
+                self.popularUsers = self.sortUsers(self.popularUsers)
+                self.users = self.popularUsers
+                
+                // Reset flags and animations that were initiated.
+                self.isSearchingPopularUsers = false
+                self.refreshControl?.endRefreshing()
+                self.noNetworkConnection = false
+                
+                // Reload tableView.
+                self.tableView.reloadData()
+                
+                // Load profilePics.
+                if let awsUsers = response?.items as? [AWSUser] {
+                    for awsUser in awsUsers {
+                        if let profilePicUrl = awsUser._profilePicUrl {
                             PRFYS3Manager.defaultS3Manager().downloadImageS3(profilePicUrl, imageType: .userProfilePic)
                         }
                     }
@@ -223,26 +280,40 @@ class SearchUsersTableViewController: UITableViewController {
             (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                self.isSearchingPopularUsers = false
-                if let error = error {
-                    print("queryLocationUsers error: \(error)")
-                    self.tableView.reloadData()
-                } else {
-                    guard let awsUsers = response?.items as? [AWSUser] else {
-                        self.tableView.reloadData()
-                        return
+                guard error == nil else {
+                    print("queryLocationUsers error: \(error!)")
+                    self.isSearchingPopularUsers = false
+                    self.refreshControl?.endRefreshing()
+                    if (error as! NSError).code == -1009 {
+                        (self.navigationController as? PRFYNavigationController)?.showBanner("No Internet Connection")
+                        self.noNetworkConnection = true
                     }
-                    self.popularUsers = []
+                    self.tableView.reloadData()
+                    return
+                }
+                self.popularUsers = []
+                if let awsUsers = response?.items as? [AWSUser] {
                     for awsUser in awsUsers {
                         let user = LocationUser(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationId: awsUser._locationId, locationName: awsUser._locationName, numberOfRecommendations: awsUser._numberOfRecommendations)
                         self.popularUsers.append(user)
                     }
-                    self.popularUsers = self.sortUsers(self.popularUsers)
-                    self.users = self.popularUsers
-                    self.tableView.reloadData()
-                    
-                    for user in self.popularUsers {
-                        if let profilePicUrl = user.profilePicUrl {
+                }
+                // Set popular users.
+                self.popularUsers = self.sortUsers(self.popularUsers)
+                self.users = self.popularUsers
+                
+                // Reset flags and animations that were initiated.
+                self.isSearchingPopularUsers = false
+                self.refreshControl?.endRefreshing()
+                self.noNetworkConnection = false
+                
+                // Reload tableView.
+                self.tableView.reloadData()
+                
+                // Load profilePics.
+                if let awsUsers = response?.items as? [AWSUser] {
+                    for awsUser in awsUsers {
+                        if let profilePicUrl = awsUser._profilePicUrl {
                             PRFYS3Manager.defaultS3Manager().downloadImageS3(profilePicUrl, imageType: .userProfilePic)
                         }
                     }

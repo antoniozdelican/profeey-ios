@@ -63,14 +63,21 @@ class AWSProfessionLocationsLocationIndex: NSObject, Index {
     
     // MARK: QueryWithPartitionKey
     
-    // Query all professions with locationId.
+    // Query all professions with locationId and numberOfUsers > 0.
     func queryLocationProfessions(_ locationId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
         let queryExpression = AWSDynamoDBQueryExpression()
         queryExpression.indexName = "LocationIndex"
         queryExpression.keyConditionExpression = "#locationId = :locationId"
-        queryExpression.expressionAttributeNames = ["#locationId": "locationId",]
-        queryExpression.expressionAttributeValues = [":locationId": locationId,]
+        queryExpression.filterExpression = "#numberOfUsers > :numberOfUsers"
+        queryExpression.expressionAttributeNames = [
+            "#locationId": "locationId",
+            "#numberOfUsers": "numberOfUsers",
+        ]
+        queryExpression.expressionAttributeValues = [
+            ":locationId": locationId,
+            ":numberOfUsers": 0,
+        ]
         objectMapper.query(AWSProfessionLocation.self, expression: queryExpression, completionHandler: completionHandler)
     }
 }

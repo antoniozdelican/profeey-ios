@@ -12,7 +12,7 @@
         <!--Navigation Controller-->
         <scene sceneID="u8z-uO-f9U">
             <objects>
-                <navigationController id="ngy-SH-I4m" sceneMemberID="viewController">
+                <navigationController id="ngy-SH-I4m" customClass="PRFYNavigationController" customModule="Profeey" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" tag="1" title="" image="ic_search" id="Mq2-pY-YZX">
                         <inset key="imageInsets" minX="0.0" minY="6" maxX="0.0" maxY="-6"/>
                     </tabBarItem>
@@ -198,7 +198,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="122"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="TID-kN-pyz" id="LZ4-C2-WzF">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="121"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="121.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="nbg-4b-fvK">
@@ -296,7 +296,7 @@
                                 <rect key="frame" x="0.0" y="150" width="375" height="64"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="37P-0R-zjM" id="4JL-0T-2rI">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="63"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="63.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="CCY-Ke-St3">
@@ -325,7 +325,7 @@
                                 <rect key="frame" x="0.0" y="214" width="375" height="64"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Lps-bi-iwi" id="9w8-RR-LeS">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="63"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="63.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No results found" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ara-GL-pDP">
@@ -342,12 +342,44 @@
                                     </constraints>
                                 </tableViewCellContentView>
                             </tableViewCell>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellNoNetwork" rowHeight="112" id="vFz-qj-tmZ" customClass="NoNetworkTableViewCell" customModule="Profeey" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="278" width="375" height="112"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="vFz-qj-tmZ" id="JC9-QI-YiF">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="111"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No internet connection." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FZw-p4-25L">
+                                            <rect key="frame" x="111" y="47" width="152" height="17"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <color key="textColor" red="0.41868340970000001" green="0.41867089270000002" blue="0.41867792609999999" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pTA-Ai-Vg5">
+                                            <rect key="frame" x="171" y="79" width="32" height="32"/>
+                                            <state key="normal" image="ic_refresh"/>
+                                        </button>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="pTA-Ai-Vg5" firstAttribute="centerX" secondItem="JC9-QI-YiF" secondAttribute="centerX" id="AjU-Ud-kat"/>
+                                        <constraint firstItem="FZw-p4-25L" firstAttribute="centerY" secondItem="JC9-QI-YiF" secondAttribute="centerY" id="KIR-cY-7tr"/>
+                                        <constraint firstItem="FZw-p4-25L" firstAttribute="centerX" secondItem="JC9-QI-YiF" secondAttribute="centerX" id="uwM-FV-YBE"/>
+                                        <constraint firstItem="pTA-Ai-Vg5" firstAttribute="top" secondItem="FZw-p4-25L" secondAttribute="bottom" constant="15" id="wc1-Mm-RLr"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                            </tableViewCell>
                         </prototypes>
                         <connections>
                             <outlet property="dataSource" destination="D5w-xI-qIa" id="vwZ-qu-7Nb"/>
                             <outlet property="delegate" destination="D5w-xI-qIa" id="YN6-W3-pcp"/>
                         </connections>
                     </tableView>
+                    <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="kse-tu-9FC">
+                        <autoresizingMask key="autoresizingMask"/>
+                        <connections>
+                            <action selector="refreshControlChanged:" destination="D5w-xI-qIa" eventType="valueChanged" id="jSU-S5-r50"/>
+                        </connections>
+                    </refreshControl>
                     <connections>
                         <segue destination="pwM-wm-Z8L" kind="show" identifier="segueToProfileVc" id="q9Y-Xs-Vbh"/>
                     </connections>
@@ -378,7 +410,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="64"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="aJe-nY-JRF" id="pe6-U2-jxt">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="63"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="63.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="SND-dw-PNb">
@@ -424,7 +456,7 @@
                                 <rect key="frame" x="0.0" y="92" width="375" height="64"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="owJ-bO-ECF" id="A0W-pT-ZAF">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="63"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="63.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="N49-YI-R1N">
@@ -453,7 +485,7 @@
                                 <rect key="frame" x="0.0" y="156" width="375" height="64"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Shm-a4-RzR" id="uPm-KD-Wxp">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="63"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="63.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No results found" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ulw-2N-ive">
@@ -470,19 +502,51 @@
                                     </constraints>
                                 </tableViewCellContentView>
                             </tableViewCell>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellNoNetwork" rowHeight="112" id="PSi-ow-x1i" customClass="NoNetworkTableViewCell" customModule="Profeey" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="220" width="375" height="112"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="PSi-ow-x1i" id="enK-zd-tef">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="111"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No internet connection." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Uvz-MK-IQA">
+                                            <rect key="frame" x="111" y="47" width="152" height="17"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <color key="textColor" red="0.41868340970000001" green="0.41867089270000002" blue="0.41867792609999999" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eNd-Xa-e9L">
+                                            <rect key="frame" x="171" y="79" width="32" height="32"/>
+                                            <state key="normal" image="ic_refresh"/>
+                                        </button>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="eNd-Xa-e9L" firstAttribute="centerX" secondItem="enK-zd-tef" secondAttribute="centerX" id="4SM-YG-f5S"/>
+                                        <constraint firstItem="eNd-Xa-e9L" firstAttribute="top" secondItem="Uvz-MK-IQA" secondAttribute="bottom" constant="15" id="ALF-S1-eKQ"/>
+                                        <constraint firstItem="Uvz-MK-IQA" firstAttribute="centerY" secondItem="enK-zd-tef" secondAttribute="centerY" id="DAE-9B-Gvg"/>
+                                        <constraint firstItem="Uvz-MK-IQA" firstAttribute="centerX" secondItem="enK-zd-tef" secondAttribute="centerX" id="mrV-ND-71L"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                            </tableViewCell>
                         </prototypes>
                         <connections>
                             <outlet property="dataSource" destination="RZV-pI-NKD" id="Yvo-QJ-lHd"/>
                             <outlet property="delegate" destination="RZV-pI-NKD" id="ftS-bQ-Jah"/>
                         </connections>
                     </tableView>
+                    <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="zbk-IA-a2H">
+                        <autoresizingMask key="autoresizingMask"/>
+                        <connections>
+                            <action selector="refreshControlChanged:" destination="RZV-pI-NKD" eventType="valueChanged" id="1Sk-rr-g4o"/>
+                        </connections>
+                    </refreshControl>
                     <connections>
                         <segue destination="ImH-WF-LIy" kind="show" identifier="segueToProfessionVc" id="Etu-2u-GDG"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MXo-Fb-9o8" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3329" y="402"/>
+            <point key="canvasLocation" x="3329" y="300"/>
         </scene>
         <!--Profession-->
         <scene sceneID="PcZ-Ib-QsH">
@@ -490,13 +554,14 @@
                 <viewControllerPlaceholder storyboardName="Profession" id="ImH-WF-LIy" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BG5-Yq-FlT" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3965" y="402"/>
+            <point key="canvasLocation" x="3965" y="300"/>
         </scene>
     </scenes>
     <resources>
         <image name="ic_location_profile" width="12" height="17"/>
         <image name="ic_profession" width="40" height="40"/>
         <image name="ic_recommendations_search" width="17" height="17"/>
+        <image name="ic_refresh" width="32" height="32"/>
         <image name="ic_search" width="25" height="25"/>
     </resources>
 </document>

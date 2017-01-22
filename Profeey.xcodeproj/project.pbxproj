@@ -1189,7 +1189,7 @@
 			name = AWSNotificationsCounters;
 			sourceTree = "<group>";
 		};
-		A9D688801E0AE01100A07D86 /* TempSearch */ = {
+		A9D688801E0AE01100A07D86 /* AWSSearch */ = {
 			isa = PBXGroup;
 			children = (
 				A9D688811E0AE02D00A07D86 /* AWSProfessions */,
@@ -1197,7 +1197,7 @@
 				A9D688821E0AE03B00A07D86 /* AWSCategories */,
 				A9D688831E0AE04A00A07D86 /* AWSLocations */,
 			);
-			name = TempSearch;
+			name = AWSSearch;
 			sourceTree = "<group>";
 		};
 		A9D688811E0AE02D00A07D86 /* AWSProfessions */ = {
@@ -1370,7 +1370,7 @@
 				A97A3F631DF0271000FC5AEA /* AWSUserEndpoints */,
 				A9C88E5F1E22780E00B7D2E7 /* AWSMessages */,
 				A94368811E23AD4E0009F4EA /* AWSConversations */,
-				A9D688801E0AE01100A07D86 /* TempSearch */,
+				A9D688801E0AE01100A07D86 /* AWSSearch */,
 				A9F345881DE0AA9700A5D368 /* CloudSearchProxyClient */,
 				A9CC71A81DEB44DE0054DA93 /* DynamoDB */,
 				A9BA21CF1E15068300D9A035 /* S3 */,

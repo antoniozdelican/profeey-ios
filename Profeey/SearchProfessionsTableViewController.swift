@@ -29,6 +29,8 @@ class SearchProfessionsTableViewController: UITableViewController {
     
     fileprivate var isLocationActive: Bool = false
     fileprivate var location: Location?
+    
+    fileprivate var noNetworkConnection: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,6 +62,9 @@ class SearchProfessionsTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if self.noNetworkConnection {
+            return 1
+        }
         if self.isSearchingProfessions {
             return 1
         }
@@ -70,10 +75,13 @@ class SearchProfessionsTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if self.noNetworkConnection {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellNoNetwork", for: indexPath) as! NoNetworkTableViewCell
+            return cell
+        }
         if self.isSearchingProfessions {
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellSearching", for: indexPath) as! SearchingTableViewCell
             cell.activityIndicator.startAnimating()
-            // TODO update text.
             return cell
         }
         if self.professions.count == 0 {
@@ -94,6 +102,9 @@ class SearchProfessionsTableViewController: UITableViewController {
         if cell is NoResultsTableViewCell {
             cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0)
         }
+        if cell is NoNetworkTableViewCell {
+            cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
+        }
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -102,9 +113,23 @@ class SearchProfessionsTableViewController: UITableViewController {
         if cell is SearchProfessionTableViewCell {
             self.performSegue(withIdentifier: "segueToProfessionVc", sender: cell)
         }
+        if cell is NoNetworkTableViewCell {
+            // Query.
+            self.noNetworkConnection = false
+            self.isSearchingPopularProfessions = true
+            self.tableView.reloadData()
+            if self.isLocationActive, let locationId = self.location?.locationId {
+                self.queryLocationProfessions(locationId)
+            } else {
+                self.scanProfessions()
+            }
+        }
     }
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        if self.noNetworkConnection {
+            return 112.0
+        }
         if self.isSearchingProfessions {
             return 64.0
         }
@@ -115,6 +140,9 @@ class SearchProfessionsTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if self.noNetworkConnection {
+            return 112.0
+        }
         if self.isSearchingProfessions {
             return 64.0
         }
@@ -136,6 +164,21 @@ class SearchProfessionsTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 32.0
+    }
+    
+    // MARK: IBActions
+    
+    @IBAction func refreshControlChanged(_ sender: AnyObject) {
+        guard !self.isSearchingProfessions else {
+            self.refreshControl?.endRefreshing()
+            return
+        }
+        // Query.
+        if self.isLocationActive, let locationId = self.location?.locationId {
+            self.queryLocationProfessions(locationId)
+        } else {
+            self.scanProfessions()
+        }
     }
     
     // MARK: UIScrollViewDelegate
@@ -174,24 +217,35 @@ class SearchProfessionsTableViewController: UITableViewController {
             (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                self.isSearchingPopularProfessions = false
-                if let error = error {
-                    print("scanProfessions error: \(error)")
-                    self.tableView.reloadData()
-                } else {
-                    guard let awsProfessions = response?.items as? [AWSProfession] else {
-                        self.tableView.reloadData()
-                        return
+                guard error == nil else {
+                    print("scanProfessions error: \(error!)")
+                    self.isSearchingPopularProfessions = false
+                    self.refreshControl?.endRefreshing()
+                    if (error as! NSError).code == -1009 {
+                        (self.navigationController as? PRFYNavigationController)?.showBanner("No Internet Connection")
+                        self.noNetworkConnection = true
                     }
-                    self.popularProfessions = []
+                    self.tableView.reloadData()
+                    return
+                }
+                self.popularProfessions = []
+                if let awsProfessions = response?.items as? [AWSProfession] {
                     for awsProfession in awsProfessions {
                         let profession = Profession(professionName: awsProfession._professionName, numberOfUsers: awsProfession._numberOfUsers)
                         self.popularProfessions.append(profession)
                     }
-                    self.popularProfessions = self.sortProfessions(self.popularProfessions)
-                    self.professions = self.popularProfessions
-                    self.tableView.reloadData()
                 }
+                // Set popular professions.
+                self.popularProfessions = self.sortProfessions(self.popularProfessions)
+                self.professions = self.popularProfessions
+                
+                // Reset flags and animations that were initiated.
+                self.isSearchingPopularProfessions = false
+                self.refreshControl?.endRefreshing()
+                self.noNetworkConnection = false
+                
+                // Reload tableView.
+                self.tableView.reloadData()
             })
         })
     }
@@ -202,24 +256,35 @@ class SearchProfessionsTableViewController: UITableViewController {
             (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                self.isSearchingPopularProfessions = false
-                if let error = error {
-                    print("queryLocationProfessions error: \(error)")
-                    self.tableView.reloadData()
-                } else {
-                    guard let awsProfessionLocations = response?.items as? [AWSProfessionLocation] else {
-                        self.tableView.reloadData()
-                        return
+                guard error == nil else {
+                    print("queryLocationProfessions error: \(error!)")
+                    self.isSearchingPopularProfessions = false
+                    self.refreshControl?.endRefreshing()
+                    if (error as! NSError).code == -1009 {
+                        (self.navigationController as? PRFYNavigationController)?.showBanner("No Internet Connection")
+                        self.noNetworkConnection = true
                     }
-                    self.popularProfessions = []
+                    self.tableView.reloadData()
+                    return
+                }
+                self.popularProfessions = []
+                if let awsProfessionLocations = response?.items as? [AWSProfessionLocation] {
                     for awsProfessionLocation in awsProfessionLocations {
                         let profession = Profession(professionName: awsProfessionLocation._professionName, numberOfUsers: awsProfessionLocation._numberOfUsers)
                         self.popularProfessions.append(profession)
                     }
-                    self.popularProfessions = self.sortProfessions(self.popularProfessions)
-                    self.professions = self.popularProfessions
-                    self.tableView.reloadData()
                 }
+                // Set popular professions.
+                self.popularProfessions = self.sortProfessions(self.popularProfessions)
+                self.professions = self.popularProfessions
+                
+                // Reset flags and animations that were initiated.
+                self.isSearchingPopularProfessions = false
+                self.refreshControl?.endRefreshing()
+                self.noNetworkConnection = false
+                
+                // Reload tableView.
+                self.tableView.reloadData()
             })
         })
     } 
