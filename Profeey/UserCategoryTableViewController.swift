@@ -31,7 +31,7 @@ class UserCategoryTableViewController: UITableViewController {
             // Query.
             self.isLoadingPosts = true
             self.tableView.tableFooterView = self.loadingTableFooterView
-            self.queryUserPostsDateSortedWithCategory(userId, categoryName: categoryName, startFromBeginning: true)
+            self.queryPostsDateSortedWithCategory(userId, categoryName: categoryName, startFromBeginning: true)
         }
         
         // Add observers.
@@ -115,7 +115,7 @@ class UserCategoryTableViewController: UITableViewController {
         }
         self.isLoadingPosts = true
         self.tableView.tableFooterView = self.loadingTableFooterView
-        self.queryUserPostsDateSortedWithCategory(userId, categoryName: categoryName, startFromBeginning: false)
+        self.queryPostsDateSortedWithCategory(userId, categoryName: categoryName, startFromBeginning: false)
     }
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -152,22 +152,22 @@ class UserCategoryTableViewController: UITableViewController {
             return
         }
         self.isLoadingPosts = true
-        self.queryUserPostsDateSortedWithCategory(userId, categoryName: categoryName, startFromBeginning: true)
+        self.queryPostsDateSortedWithCategory(userId, categoryName: categoryName, startFromBeginning: true)
     }
     
     // MARK: AWS
     
-    fileprivate func queryUserPostsDateSortedWithCategory(_ userId: String, categoryName: String, startFromBeginning: Bool) {
+    fileprivate func queryPostsDateSortedWithCategory(_ userId: String, categoryName: String, startFromBeginning: Bool) {
         if startFromBeginning {
             self.lastEvaluatedKey = nil
         }
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().queryUserPostsDateSortedWithCategoryNameDynamoDB(userId, categoryName: categoryName, lastEvaluatedKey: self.lastEvaluatedKey, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().queryPostsDateSortedWithCategoryNameDynamoDB(userId, categoryName: categoryName, lastEvaluatedKey: self.lastEvaluatedKey, completionHandler: {
             (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 guard error == nil else {
-                    print("queryUserPostsDateSortedWithCategory error: \(error!)")
+                    print("queryPostsDateSortedWithCategory error: \(error!)")
                     self.isLoadingPosts = false
                     self.refreshControl?.endRefreshing()
                     self.tableView.tableFooterView = UIView()

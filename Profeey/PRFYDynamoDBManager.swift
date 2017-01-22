@@ -356,16 +356,16 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
     
     // MARK: Posts
     
-    func queryUserPostsDateSortedDynamoDB(_ userId: String, lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
-        print("queryUserPostsDateSortedDynamoDB:")
+    func queryPostsDateSortedDynamoDB(_ userId: String, lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+        print("queryPostsDateSortedDynamoDB:")
         let awsPostsDateSortedIndex = AWSPostsDateSortedIndex()
-        awsPostsDateSortedIndex.queryUserPostsDateSorted(userId, lastEvaluatedKey: lastEvaluatedKey, completionHandler: completionHandler)
+        awsPostsDateSortedIndex.queryPostsDateSorted(userId, lastEvaluatedKey: lastEvaluatedKey, completionHandler: completionHandler)
     }
     
-    func queryUserPostsDateSortedWithCategoryNameDynamoDB(_ userId: String, categoryName: String, lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
-        print("queryUserPostsDateSortedWithCategoryNameDynamoDB:")
+    func queryPostsDateSortedWithCategoryNameDynamoDB(_ userId: String, categoryName: String, lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+        print("queryPostsDateSortedWithCategoryNameDynamoDB:")
         let awsPostsDateSortedIndex = AWSPostsDateSortedIndex()
-        awsPostsDateSortedIndex.queryUserPostsDateSortedWithCategoryName(userId, categoryName: categoryName, lastEvaluatedKey: lastEvaluatedKey, completionHandler: completionHandler)
+        awsPostsDateSortedIndex.queryPostsDateSortedWithCategoryName(userId, categoryName: categoryName, lastEvaluatedKey: lastEvaluatedKey, completionHandler: completionHandler)
     }
     
     func getPostDynamoDB(_ postId: String, completionHandler: @escaping AWSContinuationBlock) {

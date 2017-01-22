@@ -82,7 +82,7 @@ class AWSPostsPrimaryIndex: NSObject, Index {
     // Mark: QueryWithPartitionKey
     
     // Find all posts with userId.
-    func queryUserPosts(_ userId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+    func queryPosts(_ userId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
         let queryExpression = AWSDynamoDBQueryExpression()
         queryExpression.keyConditionExpression = "#userId = :userId"
@@ -110,7 +110,7 @@ class AWSPostsDateSortedIndex: NSObject, Index {
     // MARK: QueryWithPartitionKeyAndSortKey
     
     // Query paginated posts with userId and creationDate <= currentDate.
-    func queryUserPostsDateSorted(_ userId: String, lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+    func queryPostsDateSorted(_ userId: String, lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
         let queryExpression = AWSDynamoDBQueryExpression()
         queryExpression.indexName = "DateSortedIndex"
@@ -130,7 +130,7 @@ class AWSPostsDateSortedIndex: NSObject, Index {
         objectMapper.query(AWSPost.self, expression: queryExpression, completionHandler: completionHandler)
     }
     
-    func queryUserPostsDateSortedWithCategoryName(_ userId: String, categoryName: String, lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+    func queryPostsDateSortedWithCategoryName(_ userId: String, categoryName: String, lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
         let queryExpression = AWSDynamoDBQueryExpression()
         queryExpression.indexName = "DateSortedIndex"

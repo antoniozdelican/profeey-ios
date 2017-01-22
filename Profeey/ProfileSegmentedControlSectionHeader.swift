@@ -1,19 +1,19 @@
 //
-//  ProfileSegmentedControlTableViewCell.swift
+//  ProfileSegmentedControlSectionHeader.swift
 //  Profeey
 //
-//  Created by Antonio Zdelican on 28/08/16.
-//  Copyright © 2016 Profeey. All rights reserved.
+//  Created by Antonio Zdelican on 21/01/17.
+//  Copyright © 2017 Profeey. All rights reserved.
 //
 
 import UIKit
 
-protocol ProfileSegmentedControlTableViewCellDelegate: class {
-    func segmentChanged(profileSegment: ProfileSegment)
+protocol ProfileSegmentedControlSectionHeaderDelegate: class {
+    func segmentChanged(_ profileSegment: ProfileSegment)
 }
 
-class ProfileSegmentedControlTableViewCell: UITableViewCell {
-
+class ProfileSegmentedControlSectionHeader: UITableViewHeaderFooterView {
+    
     @IBOutlet weak var postsButton: UIButton!
     @IBOutlet weak var experienceButton: UIButton!
     @IBOutlet weak var skillsButton: UIButton!
@@ -21,16 +21,12 @@ class ProfileSegmentedControlTableViewCell: UITableViewCell {
     @IBOutlet weak var experienceButtonBorderView: UIView!
     @IBOutlet weak var skillsButtonBorderView: UIView!
     
-    weak var profileSegmentedControlTableViewCellDelegate: ProfileSegmentedControlTableViewCellDelegate?
+    weak var profileSegmentedControlSectionHeaderDelegate: ProfileSegmentedControlSectionHeaderDelegate?
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initial.
+        
         self.setPostsButtonActive()
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
     }
     
     fileprivate func setPostsButtonActive() {
@@ -64,18 +60,17 @@ class ProfileSegmentedControlTableViewCell: UITableViewCell {
     
     @IBAction func postsButtonTapped(_ sender: AnyObject) {
         self.setPostsButtonActive()
-        self.profileSegmentedControlTableViewCellDelegate?.segmentChanged(profileSegment: ProfileSegment.posts)
+        self.profileSegmentedControlSectionHeaderDelegate?.segmentChanged(ProfileSegment.posts)
     }
     
     @IBAction func experienceButtonTapped(_ sender: AnyObject) {
         self.setExperienceButtonActive()
-        self.profileSegmentedControlTableViewCellDelegate?.segmentChanged(profileSegment: ProfileSegment.experience)
+        self.profileSegmentedControlSectionHeaderDelegate?.segmentChanged(ProfileSegment.experience)
     }
     
     @IBAction func skillsButtonTapped(_ sender: AnyObject) {
         self.setSkillsButtonActive()
-        self.profileSegmentedControlTableViewCellDelegate?.segmentChanged(profileSegment: ProfileSegment.skills)
+        self.profileSegmentedControlSectionHeaderDelegate?.segmentChanged(ProfileSegment.skills)
     }
-    
 
 }

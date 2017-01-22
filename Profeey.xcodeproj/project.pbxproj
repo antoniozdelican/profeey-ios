@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A90146E21DB2424B0092ED21 /* ProfileTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A90146E11DB2424B0092ED21 /* ProfileTableViewController.swift */; };
 		A90146E41DB2662E0092ED21 /* ProfileMainTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A90146E31DB2662E0092ED21 /* ProfileMainTableViewCell.swift */; };
 		A90146E61DB27C580092ED21 /* ProfileInfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A90146E51DB27C580092ED21 /* ProfileInfoTableViewCell.swift */; };
 		A901CFE71DA78DDC00C44B26 /* CaptureScrollViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A901CFE61DA78DDC00C44B26 /* CaptureScrollViewController.swift */; };
@@ -16,7 +15,6 @@
 		A903EB581D16A39700B33025 /* LLSimpleCamera+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = A903EB541D16A39700B33025 /* LLSimpleCamera+Helper.m */; };
 		A903EB591D16A39700B33025 /* UIImage+FixOrientation.m in Sources */ = {isa = PBXBuildFile; fileRef = A903EB561D16A39700B33025 /* UIImage+FixOrientation.m */; };
 		A903EB5B1D16A3C800B33025 /* ProfeeySimpleCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = A903EB5A1D16A3C800B33025 /* ProfeeySimpleCamera.swift */; };
-		A905470D1D8956E700315AB0 /* LoadingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A905470C1D8956E700315AB0 /* LoadingTableViewCell.swift */; };
 		A913FC701D51F6AF000D10A6 /* DynamoDBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A913FC6F1D51F6AF000D10A6 /* DynamoDBManager.swift */; };
 		A913FC721D51FAD6000D10A6 /* PRFYDynamoDBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A913FC711D51FAD6000D10A6 /* PRFYDynamoDBManager.swift */; };
 		A915F86E1DC0D49C0031C45F /* LocationsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A915F86D1DC0D49C0031C45F /* LocationsTableViewController.swift */; };
@@ -122,8 +120,6 @@
 		A99FD1A31DCA657400BD2CC5 /* AWSCommentUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99FD1A21DCA657400BD2CC5 /* AWSCommentUpdate.swift */; };
 		A9A1961B1DDC643D008D6494 /* Settings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9A1961A1DDC643D008D6494 /* Settings.storyboard */; };
 		A9A1961D1DDC668F008D6494 /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9A1961C1DDC668F008D6494 /* SettingsTableViewController.swift */; };
-		A9A1D7EE1DBCFE58002AF221 /* ProfileTableSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9A1D7ED1DBCFE58002AF221 /* ProfileTableSectionHeader.swift */; };
-		A9A1D7F01DBCFE83002AF221 /* ProfileTableSectionHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9A1D7EF1DBCFE83002AF221 /* ProfileTableSectionHeader.xib */; };
 		A9A202F21DDF7F7100408574 /* PRFYCloudSearchProxyClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9A202F11DDF7F7100408574 /* PRFYCloudSearchProxyClient.swift */; };
 		A9A21DB51D95397A0093F162 /* UsernameTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9A21DB41D95397A0093F162 /* UsernameTableViewController.swift */; };
 		A9A503991D2FA9180030A472 /* LocalService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9A503981D2FA9180030A472 /* LocalService.swift */; };
@@ -151,7 +147,6 @@
 		A9AFFB111D8B00DF00219627 /* CategoriesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AFFB101D8B00DF00219627 /* CategoriesTableViewController.swift */; };
 		A9B185931DCF25C000E1981D /* AWSRelationship.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B185921DCF25C000E1981D /* AWSRelationship.swift */; };
 		A9B185951DCF25CF00E1981D /* AWSRelationshipsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B185941DCF25CF00E1981D /* AWSRelationshipsTable.swift */; };
-		A9B318E11D73769000FF8E2E /* ProfileSegmentedControlTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B318E01D73769000FF8E2E /* ProfileSegmentedControlTableViewCell.swift */; };
 		A9B68DA11D897A24006AC4EA /* EmptyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B68DA01D897A24006AC4EA /* EmptyTableViewCell.swift */; };
 		A9B68DA31D8999BB006AC4EA /* NotificationsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B68DA21D8999BB006AC4EA /* NotificationsTableViewController.swift */; };
 		A9B6A89F1D7F8063001EE407 /* PostUserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B6A89E1D7F8063001EE407 /* PostUserTableViewCell.swift */; };
@@ -229,8 +224,14 @@
 		A9D828751E07DDC30085FD95 /* NSNotificationCenterKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D828741E07DDC30085FD95 /* NSNotificationCenterKeys.swift */; };
 		A9D962291DE77180008EA0DF /* AWSMobileClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D962281DE77180008EA0DF /* AWSMobileClient.swift */; };
 		A9D97BF81D95718C00D6F22E /* WelcomeProfessionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D97BF71D95718C00D6F22E /* WelcomeProfessionsTableViewController.swift */; };
+		A9DA6A061E335EE700B7CE3E /* ProfileTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9DA6A051E335EE700B7CE3E /* ProfileTableViewController.swift */; };
+		A9DA6A0C1E33675200B7CE3E /* ProfileSegmentedControlSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9DA6A0B1E33675200B7CE3E /* ProfileSegmentedControlSectionHeader.swift */; };
+		A9DA6A101E33679700B7CE3E /* ProfileSegmentedControlSectionHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9DA6A0F1E33679700B7CE3E /* ProfileSegmentedControlSectionHeader.xib */; };
+		A9DA6A121E3394C100B7CE3E /* Experience.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9DA6A111E3394C100B7CE3E /* Experience.swift */; };
 		A9DBC6341E1139F00087CB19 /* FollowersFollowing.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9DBC6331E1139F00087CB19 /* FollowersFollowing.storyboard */; };
 		A9DBC6361E113A6B0087CB19 /* FollowersFollowingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9DBC6351E113A6B0087CB19 /* FollowersFollowingViewController.swift */; };
+		A9DC89371E34B14B00B9D213 /* ExperiencesHeaderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9DC89361E34B14B00B9D213 /* ExperiencesHeaderTableViewCell.swift */; };
+		A9DC893B1E34D1C400B9D213 /* NoNetworkTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9DC893A1E34D1C400B9D213 /* NoNetworkTableViewCell.swift */; };
 		A9E0267F1E2038BF00BD8ED2 /* PRFYUrls.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E0267E1E2038BF00BD8ED2 /* PRFYUrls.swift */; };
 		A9E050F41D83065D00DD992D /* LocationOldTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E050F31D83065D00DD992D /* LocationOldTableViewCell.swift */; };
 		A9E3DD431D86A42400DED8C8 /* Profession.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E3DD421D86A42400DED8C8 /* Profession.swift */; };
@@ -286,7 +287,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		A90146E11DB2424B0092ED21 /* ProfileTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileTableViewController.swift; sourceTree = "<group>"; };
 		A90146E31DB2662E0092ED21 /* ProfileMainTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileMainTableViewCell.swift; sourceTree = "<group>"; };
 		A90146E51DB27C580092ED21 /* ProfileInfoTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileInfoTableViewCell.swift; sourceTree = "<group>"; };
 		A901CFE61DA78DDC00C44B26 /* CaptureScrollViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CaptureScrollViewController.swift; sourceTree = "<group>"; };
@@ -299,7 +299,6 @@
 		A903EB551D16A39700B33025 /* UIImage+FixOrientation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+FixOrientation.h"; sourceTree = "<group>"; };
 		A903EB561D16A39700B33025 /* UIImage+FixOrientation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+FixOrientation.m"; sourceTree = "<group>"; };
 		A903EB5A1D16A3C800B33025 /* ProfeeySimpleCamera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfeeySimpleCamera.swift; sourceTree = "<group>"; };
-		A905470C1D8956E700315AB0 /* LoadingTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingTableViewCell.swift; sourceTree = "<group>"; };
 		A913FC6F1D51F6AF000D10A6 /* DynamoDBManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DynamoDBManager.swift; sourceTree = "<group>"; };
 		A913FC711D51FAD6000D10A6 /* PRFYDynamoDBManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PRFYDynamoDBManager.swift; sourceTree = "<group>"; };
 		A915F86D1DC0D49C0031C45F /* LocationsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationsTableViewController.swift; sourceTree = "<group>"; };
@@ -399,8 +398,6 @@
 		A99FD1A21DCA657400BD2CC5 /* AWSCommentUpdate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSCommentUpdate.swift; sourceTree = "<group>"; };
 		A9A1961A1DDC643D008D6494 /* Settings.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Settings.storyboard; sourceTree = "<group>"; };
 		A9A1961C1DDC668F008D6494 /* SettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
-		A9A1D7ED1DBCFE58002AF221 /* ProfileTableSectionHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileTableSectionHeader.swift; sourceTree = "<group>"; };
-		A9A1D7EF1DBCFE83002AF221 /* ProfileTableSectionHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProfileTableSectionHeader.xib; sourceTree = "<group>"; };
 		A9A202F11DDF7F7100408574 /* PRFYCloudSearchProxyClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PRFYCloudSearchProxyClient.swift; sourceTree = "<group>"; };
 		A9A202FC1DDF9DDF00408574 /* AWSApiGatewayBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AWSApiGatewayBridge.h; sourceTree = "<group>"; };
 		A9A21DB41D95397A0093F162 /* UsernameTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsernameTableViewController.swift; sourceTree = "<group>"; };
@@ -429,7 +426,6 @@
 		A9AFFB101D8B00DF00219627 /* CategoriesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoriesTableViewController.swift; sourceTree = "<group>"; };
 		A9B185921DCF25C000E1981D /* AWSRelationship.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSRelationship.swift; sourceTree = "<group>"; };
 		A9B185941DCF25CF00E1981D /* AWSRelationshipsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSRelationshipsTable.swift; sourceTree = "<group>"; };
-		A9B318E01D73769000FF8E2E /* ProfileSegmentedControlTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileSegmentedControlTableViewCell.swift; sourceTree = "<group>"; };
 		A9B68DA01D897A24006AC4EA /* EmptyTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptyTableViewCell.swift; sourceTree = "<group>"; };
 		A9B68DA21D8999BB006AC4EA /* NotificationsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationsTableViewController.swift; sourceTree = "<group>"; };
 		A9B6A89E1D7F8063001EE407 /* PostUserTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostUserTableViewCell.swift; sourceTree = "<group>"; };
@@ -508,8 +504,14 @@
 		A9D828741E07DDC30085FD95 /* NSNotificationCenterKeys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSNotificationCenterKeys.swift; sourceTree = "<group>"; };
 		A9D962281DE77180008EA0DF /* AWSMobileClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSMobileClient.swift; sourceTree = "<group>"; };
 		A9D97BF71D95718C00D6F22E /* WelcomeProfessionsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeProfessionsTableViewController.swift; sourceTree = "<group>"; };
+		A9DA6A051E335EE700B7CE3E /* ProfileTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileTableViewController.swift; sourceTree = "<group>"; };
+		A9DA6A0B1E33675200B7CE3E /* ProfileSegmentedControlSectionHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileSegmentedControlSectionHeader.swift; sourceTree = "<group>"; };
+		A9DA6A0F1E33679700B7CE3E /* ProfileSegmentedControlSectionHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProfileSegmentedControlSectionHeader.xib; sourceTree = "<group>"; };
+		A9DA6A111E3394C100B7CE3E /* Experience.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Experience.swift; sourceTree = "<group>"; };
 		A9DBC6331E1139F00087CB19 /* FollowersFollowing.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = FollowersFollowing.storyboard; sourceTree = "<group>"; };
 		A9DBC6351E113A6B0087CB19 /* FollowersFollowingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FollowersFollowingViewController.swift; sourceTree = "<group>"; };
+		A9DC89361E34B14B00B9D213 /* ExperiencesHeaderTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExperiencesHeaderTableViewCell.swift; sourceTree = "<group>"; };
+		A9DC893A1E34D1C400B9D213 /* NoNetworkTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoNetworkTableViewCell.swift; sourceTree = "<group>"; };
 		A9E0267E1E2038BF00BD8ED2 /* PRFYUrls.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PRFYUrls.swift; sourceTree = "<group>"; };
 		A9E050F31D83065D00DD992D /* LocationOldTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationOldTableViewCell.swift; sourceTree = "<group>"; };
 		A9E3DD421D86A42400DED8C8 /* Profession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Profession.swift; sourceTree = "<group>"; };
@@ -837,9 +839,9 @@
 				A9D7782D1E1F01B8003390D1 /* PRFYNavigationController.swift */,
 				A9459F6F1E00196100978DA8 /* TableSectionHeader.xib */,
 				A9459F711E00197200978DA8 /* TableSectionHeader.swift */,
-				A905470C1D8956E700315AB0 /* LoadingTableViewCell.swift */,
 				A9B68DA01D897A24006AC4EA /* EmptyTableViewCell.swift */,
 				A9BF16481D6514C900060A9E /* NoResultsTableViewCell.swift */,
+				A9DC893A1E34D1C400B9D213 /* NoNetworkTableViewCell.swift */,
 				A9BF164A1D6519D100060A9E /* SearchingTableViewCell.swift */,
 				A95EB85A1D8FBE870039E51D /* DateTableViewCell.swift */,
 				A95EB85C1D8FBEAB0039E51D /* DatePickerTableViewCell.swift */,
@@ -960,6 +962,7 @@
 				A9B7A2431D65A562009DA340 /* Category.swift */,
 				A9E3DD421D86A42400DED8C8 /* Profession.swift */,
 				A915F8741DC0D9CB0031C45F /* Location.swift */,
+				A9DA6A111E3394C100B7CE3E /* Experience.swift */,
 				A9ACA7481DB50AF40004B8DE /* WorkExperience.swift */,
 				A99B9E301DB53E370047360D /* Education.swift */,
 				A91C1CD81DEDA8C2006FBDD4 /* PRFYNotification.swift */,
@@ -1321,13 +1324,13 @@
 			isa = PBXGroup;
 			children = (
 				A9E53B701D10668400CD1D6C /* Profile.storyboard */,
-				A9A1D7EF1DBCFE83002AF221 /* ProfileTableSectionHeader.xib */,
-				A90146E11DB2424B0092ED21 /* ProfileTableViewController.swift */,
-				A9A1D7ED1DBCFE58002AF221 /* ProfileTableSectionHeader.swift */,
+				A9DA6A051E335EE700B7CE3E /* ProfileTableViewController.swift */,
+				A9DA6A0F1E33679700B7CE3E /* ProfileSegmentedControlSectionHeader.xib */,
+				A9DA6A0B1E33675200B7CE3E /* ProfileSegmentedControlSectionHeader.swift */,
 				A90146E31DB2662E0092ED21 /* ProfileMainTableViewCell.swift */,
 				A90146E51DB27C580092ED21 /* ProfileInfoTableViewCell.swift */,
-				A9B318E01D73769000FF8E2E /* ProfileSegmentedControlTableViewCell.swift */,
 				A9D716A81D57486100300135 /* PostSmallTableViewCell.swift */,
+				A9DC89361E34B14B00B9D213 /* ExperiencesHeaderTableViewCell.swift */,
 				A9D49EDD1DD5C583000F90A8 /* UserCategoryTableViewCell.swift */,
 				A9D49EE61DD5F58B000F90A8 /* ProfileEmptyTableViewCell.swift */,
 			);
@@ -1483,6 +1486,7 @@
 				A9707D251E02AC76005D729D /* ForgotPassword.storyboard in Resources */,
 				A97DBEEB1DF16ACB00A9F4FE /* Search.storyboard in Resources */,
 				A9DBC6341E1139F00087CB19 /* FollowersFollowing.storyboard in Resources */,
+				A9DA6A101E33679700B7CE3E /* ProfileSegmentedControlSectionHeader.xib in Resources */,
 				A930BC831D0DD43F004D49F7 /* Assets.xcassets in Resources */,
 				A930BC811D0DD43F004D49F7 /* Main.storyboard in Resources */,
 				A94368741E2389A20009F4EA /* NotificationsSegmentsView.xib in Resources */,
@@ -1495,7 +1499,6 @@
 				A91828471DC0E59100EC9E63 /* Locations.storyboard in Resources */,
 				A9E53B6D1D10667100CD1D6C /* Capture.storyboard in Resources */,
 				A9E53B711D10668400CD1D6C /* Profile.storyboard in Resources */,
-				A9A1D7F01DBCFE83002AF221 /* ProfileTableSectionHeader.xib in Resources */,
 				A9AFFB0A1D8AFE2A00219627 /* LocationsOld.storyboard in Resources */,
 				A9D49EEB1DD602D6000F90A8 /* AddRecommendation.storyboard in Resources */,
 				A9C88E541E225F5700B7D2E7 /* Messages.storyboard in Resources */,
@@ -1549,7 +1552,6 @@
 				A9DBC6361E113A6B0087CB19 /* FollowersFollowingViewController.swift in Sources */,
 				A903EB5B1D16A3C800B33025 /* ProfeeySimpleCamera.swift in Sources */,
 				A9B750051D8783BE00DDC8C8 /* AWSActivitiesTable.swift in Sources */,
-				A9B318E11D73769000FF8E2E /* ProfileSegmentedControlTableViewCell.swift in Sources */,
 				A99030FD1D46634600336D26 /* AlbumTableViewCell.swift in Sources */,
 				A98B42E11D43C95A0089A769 /* ProfessionTableViewCell.swift in Sources */,
 				A9B7A2441D65A562009DA340 /* Category.swift in Sources */,
@@ -1590,6 +1592,7 @@
 				A9AA36371D9463E100E5EAFA /* SignUpTableViewController.swift in Sources */,
 				A9F49D5A1D379D70002EB68B /* AWSPostsTable.swift in Sources */,
 				A91828491DC1120700EC9E63 /* AddProfessionTableViewCell.swift in Sources */,
+				A9DC89371E34B14B00B9D213 /* ExperiencesHeaderTableViewCell.swift in Sources */,
 				A9E4507C1D59E6D300D14553 /* CommentsTableViewController.swift in Sources */,
 				A9C88E5C1E22698200B7D2E7 /* Message.swift in Sources */,
 				A91C1CD51DED9D85006FBDD4 /* AWSNotificationsTable.swift in Sources */,
@@ -1634,7 +1637,6 @@
 				A918284D1DC124D900EC9E63 /* AddCategoryTableViewCell.swift in Sources */,
 				A9C4D2731D992A67000E1F35 /* SearchUsersTableViewController.swift in Sources */,
 				A9E0267F1E2038BF00BD8ED2 /* PRFYUrls.swift in Sources */,
-				A90146E21DB2424B0092ED21 /* ProfileTableViewController.swift in Sources */,
 				A9D6888C1E0AEEA400A07D86 /* AWSProfessionLocationsTable.swift in Sources */,
 				A9543CB31DA3C531002BF372 /* EditPostCategoryTableViewCell.swift in Sources */,
 				A98A38261D8C07DA00C9CA75 /* AWSUserCategoriesTable.swift in Sources */,
@@ -1661,12 +1663,12 @@
 				A9C3C0E81E02B7D2005CA18C /* ForgotPasswordTableViewController.swift in Sources */,
 				A9D334121D801B70005565C2 /* PostButtonsTableViewCell.swift in Sources */,
 				A9D688921E0AF9C000A07D86 /* AWSCategory.swift in Sources */,
+				A9DA6A061E335EE700B7CE3E /* ProfileTableViewController.swift in Sources */,
 				A9E050F41D83065D00DD992D /* LocationOldTableViewCell.swift in Sources */,
 				A9D688871E0AE06F00A07D86 /* AWSProfessionsTable.swift in Sources */,
 				A97A3F6B1DF027F200FC5AEA /* AWSUserEndpointsTable.swift in Sources */,
 				A94797A71D2E3451007CBF08 /* User.swift in Sources */,
 				A90146E41DB2662E0092ED21 /* ProfileMainTableViewCell.swift in Sources */,
-				A9A1D7EE1DBCFE58002AF221 /* ProfileTableSectionHeader.swift in Sources */,
 				A94368781E238A8F0009F4EA /* NotificationsViewController.swift in Sources */,
 				A9E53B731D1067E800CD1D6C /* MainTabBarController.swift in Sources */,
 				A9D3340C1D801693005565C2 /* PostInfoTableViewCell.swift in Sources */,
@@ -1692,6 +1694,7 @@
 				A9D962291DE77180008EA0DF /* AWSMobileClient.swift in Sources */,
 				A9B6A89F1D7F8063001EE407 /* PostUserTableViewCell.swift in Sources */,
 				A931E25E1E262C81006F175A /* OtherMessageTableViewCell.swift in Sources */,
+				A9DA6A121E3394C100B7CE3E /* Experience.swift in Sources */,
 				A941CB6B1DF3445700343802 /* PRFYCloudSearchUsersResultItem.swift in Sources */,
 				A903EB571D16A39700B33025 /* LLSimpleCamera.m in Sources */,
 				A95EB85B1D8FBE870039E51D /* DateTableViewCell.swift in Sources */,
@@ -1711,11 +1714,12 @@
 				A9B185951DCF25CF00E1981D /* AWSRelationshipsTable.swift in Sources */,
 				A9F49D571D379D01002EB68B /* AWSPost.swift in Sources */,
 				A9C6CB7F1D2929AA00863816 /* Extensions.swift in Sources */,
-				A905470D1D8956E700315AB0 /* LoadingTableViewCell.swift in Sources */,
 				A930BC7C1D0DD43F004D49F7 /* AppDelegate.swift in Sources */,
 				A9D7782E1E1F01B8003390D1 /* PRFYNavigationController.swift in Sources */,
+				A9DC893B1E34D1C400B9D213 /* NoNetworkTableViewCell.swift in Sources */,
 				A99B9E381DB54A130047360D /* CurrentlyDoingTableViewCell.swift in Sources */,
 				A999CD431DBE828800E7ADB1 /* SearchTableSectionHeader.swift in Sources */,
+				A9DA6A0C1E33675200B7CE3E /* ProfileSegmentedControlSectionHeader.swift in Sources */,
 				A9A57B2C1DD1CBB0004F0177 /* DiscoverPeopleTableViewController.swift in Sources */,
 				A99B9E2D1DB53D8C0047360D /* AWSEducationsTable.swift in Sources */,
 				A9E4EC541D81F1B700929ED1 /* LocationsOldTableViewController.swift in Sources */,

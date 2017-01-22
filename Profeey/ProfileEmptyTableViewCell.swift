@@ -34,6 +34,20 @@ class ProfileEmptyTableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
     }
     
+    func setAddPostButton() {
+        UIView.performWithoutAnimation {
+            self.addButton.setTitle("Add Post", for: UIControlState.normal)
+            self.addButton.layoutIfNeeded()
+        }
+    }
+    
+    func setAddExperienceButton() {
+        UIView.performWithoutAnimation {
+            self.addButton.setTitle("Add Experience", for: UIControlState.normal)
+            self.addButton.layoutIfNeeded()
+        }
+    }
+    
     // MARK: IBActions
     
     @IBAction func addButtonTapped(_ sender: AnyObject) {

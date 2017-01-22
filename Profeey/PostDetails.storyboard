@@ -271,8 +271,8 @@
                         <segue destination="15E-8u-e6B" kind="show" identifier="segueToProfileVc" id="BDO-SF-vEQ"/>
                         <segue destination="oGE-nJ-13N" kind="show" identifier="segueToUsersVc" id="bU8-z9-fKW"/>
                         <segue destination="NgP-cX-hfM" kind="presentation" identifier="segueToEditPostVc" animates="NO" id="KNx-DV-NyQ"/>
-                        <segue destination="30G-vb-9WZ" kind="unwind" identifier="segueUnwindToProfileVc" unwindAction="unwindToProfileTableViewController:" id="qou-YD-HY0"/>
                         <segue destination="wRz-GW-LR8" kind="show" identifier="segueToCommentsVc" id="aBL-Aj-IPd"/>
+                        <segue destination="30G-vb-9WZ" kind="unwind" identifier="segueUnwindToProfileVc" unwindAction="unwindToProfileTableViewController:" id="yls-vI-xFp"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9Yd-9d-00p" userLabel="First Responder" sceneMemberID="firstResponder"/>
