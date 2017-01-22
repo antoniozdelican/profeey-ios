@@ -24,6 +24,7 @@ class SettingsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        self.tableView.register(UINib(nibName: "SettingsTableSectionHeader", bundle: nil), forHeaderFooterViewReuseIdentifier: "settingsTableSectionHeader")
     }
 
     override func didReceiveMemoryWarning() {
@@ -41,10 +42,6 @@ class SettingsTableViewController: UITableViewController {
     
     // MARK: UITableViewDelegate
     
-    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        cell.layoutMargins = UIEdgeInsets.zero
-    }
-    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let cell = tableView.cellForRow(at: indexPath)
@@ -52,10 +49,10 @@ class SettingsTableViewController: UITableViewController {
             self.performSegue(withIdentifier: "segueToEditProfileVc", sender: cell)
         }
         if cell == self.editEmailTableViewCell {
-            // TODO
+            self.performSegue(withIdentifier: "segueToEditEmail", sender: self)
         }
         if cell == self.editPasswordTableViewCell {
-            // TODO
+            self.performSegue(withIdentifier: "segueToEditPassword", sender: self)
         }
         if cell == self.privacyPolicyTableViewCell {
             if let privacyPolicyUrl = URL(string: PRFYPrivacyPolicyUrl) {
@@ -74,6 +71,21 @@ class SettingsTableViewController: UITableViewController {
         }
         if cell == self.logOutTableViewCell {
             self.logOutTableViewCellTapped()
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        switch section {
+        case 0:
+            let header = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "settingsTableSectionHeader") as? SettingsTableSectionHeader
+            header?.titleLabel.text = "ACCOUNT"
+            return header
+        case 1:
+            let header = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "settingsTableSectionHeader") as? SettingsTableSectionHeader
+            header?.titleLabel.text = "ABOUT"
+            return header
+        default:
+            return UIView()
         }
     }
     

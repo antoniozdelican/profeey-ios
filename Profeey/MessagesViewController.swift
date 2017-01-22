@@ -66,7 +66,6 @@ class MessagesViewController: UIViewController {
         self.messageContainerView.clipsToBounds = true
     }
     
-    // TODO do this for every other
     override func viewWillDisappear(_ animated: Bool) {
         self.view.endEditing(true)
         super.viewWillDisappear(animated)
