@@ -18,6 +18,7 @@ class SettingsTableViewController: UITableViewController {
     @IBOutlet weak var termsAndConditionsTableViewCell: UITableViewCell!
     @IBOutlet weak var getHelpTableViewCell: UITableViewCell!
     @IBOutlet weak var logOutTableViewCell: UITableViewCell!
+    @IBOutlet weak var currentEmailLabel: UILabel!
     
     var user: EditUser?
     var currentEmail: String?
@@ -26,6 +27,9 @@ class SettingsTableViewController: UITableViewController {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         self.tableView.register(UINib(nibName: "SettingsTableSectionHeader", bundle: nil), forHeaderFooterViewReuseIdentifier: "settingsTableSectionHeader")
+        
+        // Configure current email.
+        self.currentEmailLabel.text = self.currentEmail
         
         // Add observers.
         NotificationCenter.default.addObserver(self, selector: #selector(self.updateEmailNotification(_:)), name: NSNotification.Name(UpdateEmailNotificationKey), object: nil)
