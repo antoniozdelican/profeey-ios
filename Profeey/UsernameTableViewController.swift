@@ -34,6 +34,7 @@ class UsernameTableViewController: UITableViewController {
         self.continueButton.setBackgroundImage(UIImage(named: "btn_white_active_resizable"), for: UIControlState.highlighted)
         self.continueButton.setBackgroundImage(UIImage(named: "btn_white_not_active_resizable"), for: UIControlState.disabled)
         self.continueButton.setTitleColor(Colors.turquoise, for: UIControlState.normal)
+        self.continueButton.setTitleColor(Colors.turquoise.withAlphaComponent(0.2), for: UIControlState.highlighted)
         self.continueButton.setTitleColor(UIColor.white, for: UIControlState.disabled)
         self.continueButton.isEnabled = false
         
@@ -100,6 +101,14 @@ class UsernameTableViewController: UITableViewController {
     
     
     @IBAction func continueButtonTapped(_ sender: AnyObject) {
+        UIView.transition(
+            with: self.continueButton,
+            duration: 0.2,
+            options: .transitionCrossDissolve,
+            animations: {
+                self.continueButton.isHighlighted = true
+        },
+            completion: nil)
         self.view.endEditing(true)
         // CHECK IF IT IS Facebook user or UserPool!
         self.queryPreferredUsernames()

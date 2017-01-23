@@ -30,6 +30,7 @@ class ForgotPasswordTableViewController: UITableViewController {
         self.sendLinkButton.setBackgroundImage(UIImage(named: "btn_white_active_resizable"), for: UIControlState.highlighted)
         self.sendLinkButton.setBackgroundImage(UIImage(named: "btn_white_not_active_resizable"), for: UIControlState.disabled)
         self.sendLinkButton.setTitleColor(Colors.turquoise, for: UIControlState.normal)
+        self.sendLinkButton.setTitleColor(Colors.turquoise.withAlphaComponent(0.2), for: UIControlState.highlighted)
         self.sendLinkButton.setTitleColor(UIColor.white, for: UIControlState.disabled)
         self.sendLinkButton.isEnabled = false
         
@@ -80,6 +81,14 @@ class ForgotPasswordTableViewController: UITableViewController {
     }
     
     @IBAction func sendLinkButtonTapped(_ sender: AnyObject) {
+        UIView.transition(
+            with: self.sendLinkButton,
+            duration: 0.2,
+            options: .transitionCrossDissolve,
+            animations: {
+                self.sendLinkButton.isHighlighted = true
+        },
+            completion: nil)
         self.view.endEditing(true)
         self.sendForgotPasswordCode()
     }

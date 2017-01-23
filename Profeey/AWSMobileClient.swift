@@ -136,8 +136,8 @@ class AWSMobileClient: NSObject {
     }
     
     fileprivate func setupCloudLogicAPI() {
-        let serviceConfiguration = AWSServiceConfiguration(region: AWSCloudLogicDefaultRegion, credentialsProvider: AWSIdentityManager.defaultIdentityManager().credentialsProvider)
-        PRFYCloudSearchProxyClient.registerClientWithConfiguration(configuration: serviceConfiguration!, forKey: AWSCloudLogicDefaultConfigurationKey as NSString)
+//        let serviceConfiguration = AWSServiceConfiguration(region: AWSCloudLogicDefaultRegion, credentialsProvider: AWSIdentityManager.defaultIdentityManager().credentialsProvider)
+//        PRFYCloudSearchProxyClient.registerClientWithConfiguration(configuration: serviceConfiguration!, forKey: AWSCloudLogicDefaultConfigurationKey as NSString)
     }
     
 }

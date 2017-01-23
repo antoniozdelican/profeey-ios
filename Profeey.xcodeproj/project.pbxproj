@@ -43,7 +43,6 @@
 		A931E25E1E262C81006F175A /* OtherMessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A931E25D1E262C81006F175A /* OtherMessageTableViewCell.swift */; };
 		A932AA0C1E03E1280048563C /* WelcomeVerificationTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A932AA0B1E03E1280048563C /* WelcomeVerificationTableViewController.swift */; };
 		A932AA111E04081A0048563C /* MissingUsernameNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A932AA101E04081A0048563C /* MissingUsernameNavigationController.swift */; };
-		A941CB6B1DF3445700343802 /* PRFYCloudSearchUsersResultItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A941CB6A1DF3445700343802 /* PRFYCloudSearchUsersResultItem.swift */; };
 		A94368741E2389A20009F4EA /* NotificationsSegmentsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A94368731E2389A20009F4EA /* NotificationsSegmentsView.xib */; };
 		A94368781E238A8F0009F4EA /* NotificationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A94368771E238A8F0009F4EA /* NotificationsViewController.swift */; };
 		A943687A1E239E6C0009F4EA /* ConversationsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A94368791E239E6C0009F4EA /* ConversationsTableViewController.swift */; };
@@ -120,7 +119,6 @@
 		A99FD1A31DCA657400BD2CC5 /* AWSCommentUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99FD1A21DCA657400BD2CC5 /* AWSCommentUpdate.swift */; };
 		A9A1961B1DDC643D008D6494 /* Settings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9A1961A1DDC643D008D6494 /* Settings.storyboard */; };
 		A9A1961D1DDC668F008D6494 /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9A1961C1DDC668F008D6494 /* SettingsTableViewController.swift */; };
-		A9A202F21DDF7F7100408574 /* PRFYCloudSearchProxyClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9A202F11DDF7F7100408574 /* PRFYCloudSearchProxyClient.swift */; };
 		A9A21DB51D95397A0093F162 /* UsernameTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9A21DB41D95397A0093F162 /* UsernameTableViewController.swift */; };
 		A9A503991D2FA9180030A472 /* LocalService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9A503981D2FA9180030A472 /* LocalService.swift */; };
 		A9A5039F1D2FE0810030A472 /* AWSUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9A5039E1D2FE0810030A472 /* AWSUser.swift */; };
@@ -160,7 +158,6 @@
 		A9B934B01D1BD9BB00ACC2B8 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B934AF1D1BD9BB00ACC2B8 /* OnboardingViewController.swift */; };
 		A9BA21D11E1506B200D9A035 /* PRFYS3Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9BA21D01E1506B200D9A035 /* PRFYS3Manager.swift */; };
 		A9BA21D31E1506C200D9A035 /* S3Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9BA21D21E1506C200D9A035 /* S3Manager.swift */; };
-		A9BB32211DF34228005233F3 /* PRFYCloudSearchUsersResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9BB32201DF34228005233F3 /* PRFYCloudSearchUsersResult.swift */; };
 		A9BB471F1E325277007CBA69 /* EditPostTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9BB471E1E325277007CBA69 /* EditPostTableViewController.swift */; };
 		A9BCBDC11DDAF95F00265AFA /* RecommendationsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9BCBDC01DDAF95F00265AFA /* RecommendationsTableViewController.swift */; };
 		A9BCBDC51DDAFA0F00265AFA /* Recommendation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9BCBDC41DDAFA0F00265AFA /* Recommendation.swift */; };
@@ -171,8 +168,6 @@
 		A9C0ED3A1D3C21C30036F791 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C0ED391D3C21C30036F791 /* Post.swift */; };
 		A9C3C0E81E02B7D2005CA18C /* ForgotPasswordTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C3C0E71E02B7D2005CA18C /* ForgotPasswordTableViewController.swift */; };
 		A9C3C0EA1E02B7DC005CA18C /* NewPasswordTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C3C0E91E02B7DC005CA18C /* NewPasswordTableViewController.swift */; };
-		A9C498771DFF430100BD71A8 /* PRFYCloudSearchCategoriesResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C498761DFF430100BD71A8 /* PRFYCloudSearchCategoriesResult.swift */; };
-		A9C498791DFF435000BD71A8 /* PRFYCloudSearchCategoriesResultItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C498781DFF435000BD71A8 /* PRFYCloudSearchCategoriesResultItem.swift */; };
 		A9C4D2731D992A67000E1F35 /* SearchUsersTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C4D2721D992A67000E1F35 /* SearchUsersTableViewController.swift */; };
 		A9C6CB7F1D2929AA00863816 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C6CB7E1D2929AA00863816 /* Extensions.swift */; };
 		A9C88E541E225F5700B7D2E7 /* Messages.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9C88E531E225F5700B7D2E7 /* Messages.storyboard */; };
@@ -255,15 +250,11 @@
 		A9E9DC5B1E16C95B00FE7C3B /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E9DC5A1E16C95B00FE7C3B /* PreviewViewController.swift */; };
 		A9E9DC5F1E16DB2A00FE7C3B /* GridView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9E9DC5E1E16DB2A00FE7C3B /* GridView.xib */; };
 		A9E9DC611E16DB3B00FE7C3B /* GridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E9DC601E16DB3B00FE7C3B /* GridView.swift */; };
-		A9E9EDAA1DFAC3B300BC2253 /* PRFYCloudSearchLocationsResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E9EDA91DFAC3B300BC2253 /* PRFYCloudSearchLocationsResult.swift */; };
-		A9E9EDAC1DFAC3C600BC2253 /* PRFYCloudSearchLocationsResultItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E9EDAB1DFAC3C600BC2253 /* PRFYCloudSearchLocationsResultItem.swift */; };
 		A9EAD3401D1E8E0C00994292 /* NoSQLModelHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9EAD33F1D1E8E0C00994292 /* NoSQLModelHelpers.swift */; };
 		A9EAEC071DA6A38600DA6A4D /* AWSPostUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9EAEC061DA6A38600DA6A4D /* AWSPostUpdate.swift */; };
 		A9EC9E391E086EAD00A5F619 /* EditPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9EC9E381E086EAD00A5F619 /* EditPost.swift */; };
 		A9F2E7881DE89FF7001A25EC /* TTTAttributedLabel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9F2E7871DE89FF7001A25EC /* TTTAttributedLabel.framework */; };
 		A9F2E78A1DE8A003001A25EC /* TTTAttributedLabel.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A9F2E7871DE89FF7001A25EC /* TTTAttributedLabel.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		A9F345911DE0C80D00A5D368 /* PRFYCloudSearchProfessionsResultItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F345901DE0C80D00A5D368 /* PRFYCloudSearchProfessionsResultItem.swift */; };
-		A9F345931DE0C81800A5D368 /* PRFYCloudSearchProfessionsResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F345921DE0C81800A5D368 /* PRFYCloudSearchProfessionsResult.swift */; };
 		A9F49D571D379D01002EB68B /* AWSPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F49D561D379D01002EB68B /* AWSPost.swift */; };
 		A9F49D5A1D379D70002EB68B /* AWSPostsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F49D591D379D70002EB68B /* AWSPostsTable.swift */; };
 		A9FAB36D1D8A114900E871CD /* AWSUserUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9FAB36C1D8A114900E871CD /* AWSUserUpdate.swift */; };
@@ -335,7 +326,6 @@
 		A931E25D1E262C81006F175A /* OtherMessageTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OtherMessageTableViewCell.swift; sourceTree = "<group>"; };
 		A932AA0B1E03E1280048563C /* WelcomeVerificationTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeVerificationTableViewController.swift; sourceTree = "<group>"; };
 		A932AA101E04081A0048563C /* MissingUsernameNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MissingUsernameNavigationController.swift; sourceTree = "<group>"; };
-		A941CB6A1DF3445700343802 /* PRFYCloudSearchUsersResultItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PRFYCloudSearchUsersResultItem.swift; sourceTree = "<group>"; };
 		A94368731E2389A20009F4EA /* NotificationsSegmentsView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NotificationsSegmentsView.xib; sourceTree = "<group>"; };
 		A94368771E238A8F0009F4EA /* NotificationsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationsViewController.swift; sourceTree = "<group>"; };
 		A94368791E239E6C0009F4EA /* ConversationsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationsTableViewController.swift; sourceTree = "<group>"; };
@@ -404,8 +394,6 @@
 		A99FD1A21DCA657400BD2CC5 /* AWSCommentUpdate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSCommentUpdate.swift; sourceTree = "<group>"; };
 		A9A1961A1DDC643D008D6494 /* Settings.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Settings.storyboard; sourceTree = "<group>"; };
 		A9A1961C1DDC668F008D6494 /* SettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
-		A9A202F11DDF7F7100408574 /* PRFYCloudSearchProxyClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PRFYCloudSearchProxyClient.swift; sourceTree = "<group>"; };
-		A9A202FC1DDF9DDF00408574 /* AWSApiGatewayBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AWSApiGatewayBridge.h; sourceTree = "<group>"; };
 		A9A21DB41D95397A0093F162 /* UsernameTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsernameTableViewController.swift; sourceTree = "<group>"; };
 		A9A503981D2FA9180030A472 /* LocalService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalService.swift; sourceTree = "<group>"; };
 		A9A5039E1D2FE0810030A472 /* AWSUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSUser.swift; sourceTree = "<group>"; };
@@ -446,7 +434,6 @@
 		A9B977281DE3750B00D37E5B /* Profeey.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Profeey.entitlements; sourceTree = "<group>"; };
 		A9BA21D01E1506B200D9A035 /* PRFYS3Manager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PRFYS3Manager.swift; sourceTree = "<group>"; };
 		A9BA21D21E1506C200D9A035 /* S3Manager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = S3Manager.swift; sourceTree = "<group>"; };
-		A9BB32201DF34228005233F3 /* PRFYCloudSearchUsersResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PRFYCloudSearchUsersResult.swift; sourceTree = "<group>"; };
 		A9BB471E1E325277007CBA69 /* EditPostTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditPostTableViewController.swift; sourceTree = "<group>"; };
 		A9BCBDC01DDAF95F00265AFA /* RecommendationsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecommendationsTableViewController.swift; sourceTree = "<group>"; };
 		A9BCBDC41DDAFA0F00265AFA /* Recommendation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Recommendation.swift; sourceTree = "<group>"; };
@@ -457,8 +444,6 @@
 		A9C0ED391D3C21C30036F791 /* Post.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		A9C3C0E71E02B7D2005CA18C /* ForgotPasswordTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForgotPasswordTableViewController.swift; sourceTree = "<group>"; };
 		A9C3C0E91E02B7DC005CA18C /* NewPasswordTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewPasswordTableViewController.swift; sourceTree = "<group>"; };
-		A9C498761DFF430100BD71A8 /* PRFYCloudSearchCategoriesResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PRFYCloudSearchCategoriesResult.swift; sourceTree = "<group>"; };
-		A9C498781DFF435000BD71A8 /* PRFYCloudSearchCategoriesResultItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PRFYCloudSearchCategoriesResultItem.swift; sourceTree = "<group>"; };
 		A9C4D2721D992A67000E1F35 /* SearchUsersTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchUsersTableViewController.swift; sourceTree = "<group>"; };
 		A9C6CB7E1D2929AA00863816 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		A9C88E531E225F5700B7D2E7 /* Messages.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Messages.storyboard; sourceTree = "<group>"; };
@@ -541,14 +526,10 @@
 		A9E9DC5A1E16C95B00FE7C3B /* PreviewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreviewViewController.swift; sourceTree = "<group>"; };
 		A9E9DC5E1E16DB2A00FE7C3B /* GridView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GridView.xib; sourceTree = "<group>"; };
 		A9E9DC601E16DB3B00FE7C3B /* GridView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridView.swift; sourceTree = "<group>"; };
-		A9E9EDA91DFAC3B300BC2253 /* PRFYCloudSearchLocationsResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PRFYCloudSearchLocationsResult.swift; sourceTree = "<group>"; };
-		A9E9EDAB1DFAC3C600BC2253 /* PRFYCloudSearchLocationsResultItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PRFYCloudSearchLocationsResultItem.swift; sourceTree = "<group>"; };
 		A9EAD33F1D1E8E0C00994292 /* NoSQLModelHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoSQLModelHelpers.swift; sourceTree = "<group>"; };
 		A9EAEC061DA6A38600DA6A4D /* AWSPostUpdate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSPostUpdate.swift; sourceTree = "<group>"; };
 		A9EC9E381E086EAD00A5F619 /* EditPost.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditPost.swift; sourceTree = "<group>"; };
 		A9F2E7871DE89FF7001A25EC /* TTTAttributedLabel.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TTTAttributedLabel.framework; path = Profeey/TTTAttributedLabel.framework; sourceTree = "<group>"; };
-		A9F345901DE0C80D00A5D368 /* PRFYCloudSearchProfessionsResultItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PRFYCloudSearchProfessionsResultItem.swift; sourceTree = "<group>"; };
-		A9F345921DE0C81800A5D368 /* PRFYCloudSearchProfessionsResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PRFYCloudSearchProfessionsResult.swift; sourceTree = "<group>"; };
 		A9F49D561D379D01002EB68B /* AWSPost.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSPost.swift; sourceTree = "<group>"; };
 		A9F49D591D379D70002EB68B /* AWSPostsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSPostsTable.swift; sourceTree = "<group>"; };
 		A9FAB36C1D8A114900E871CD /* AWSUserUpdate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSUserUpdate.swift; sourceTree = "<group>"; };
@@ -1383,7 +1364,6 @@
 				A9C88E5F1E22780E00B7D2E7 /* AWSMessages */,
 				A94368811E23AD4E0009F4EA /* AWSConversations */,
 				A9D688801E0AE01100A07D86 /* AWSSearch */,
-				A9F345881DE0AA9700A5D368 /* CloudSearchProxyClient */,
 				A9CC71A81DEB44DE0054DA93 /* DynamoDB */,
 				A9BA21CF1E15068300D9A035 /* S3 */,
 			);
@@ -1397,23 +1377,6 @@
 				A9EC9E381E086EAD00A5F619 /* EditPost.swift */,
 			);
 			name = Post;
-			sourceTree = "<group>";
-		};
-		A9F345881DE0AA9700A5D368 /* CloudSearchProxyClient */ = {
-			isa = PBXGroup;
-			children = (
-				A9A202FC1DDF9DDF00408574 /* AWSApiGatewayBridge.h */,
-				A9A202F11DDF7F7100408574 /* PRFYCloudSearchProxyClient.swift */,
-				A9BB32201DF34228005233F3 /* PRFYCloudSearchUsersResult.swift */,
-				A941CB6A1DF3445700343802 /* PRFYCloudSearchUsersResultItem.swift */,
-				A9F345921DE0C81800A5D368 /* PRFYCloudSearchProfessionsResult.swift */,
-				A9F345901DE0C80D00A5D368 /* PRFYCloudSearchProfessionsResultItem.swift */,
-				A9C498761DFF430100BD71A8 /* PRFYCloudSearchCategoriesResult.swift */,
-				A9C498781DFF435000BD71A8 /* PRFYCloudSearchCategoriesResultItem.swift */,
-				A9E9EDA91DFAC3B300BC2253 /* PRFYCloudSearchLocationsResult.swift */,
-				A9E9EDAB1DFAC3C600BC2253 /* PRFYCloudSearchLocationsResultItem.swift */,
-			);
-			name = CloudSearchProxyClient;
 			sourceTree = "<group>";
 		};
 		A9F49D581D379D58002EB68B /* AWSPosts */ = {
@@ -1565,7 +1528,6 @@
 			files = (
 				A903EB581D16A39700B33025 /* LLSimpleCamera+Helper.m in Sources */,
 				A9D185D71D7192350073E65F /* AWSLikesTable.swift in Sources */,
-				A9A202F21DDF7F7100408574 /* PRFYCloudSearchProxyClient.swift in Sources */,
 				A9B185931DCF25C000E1981D /* AWSRelationship.swift in Sources */,
 				A9D688941E0AF9CC00A07D86 /* AWSCategoriesTable.swift in Sources */,
 				A99734E41DA12F2D007FCE11 /* PostCategoryCreationDateTableViewCell.swift in Sources */,
@@ -1604,11 +1566,9 @@
 				A9B750011D8782C200DDC8C8 /* AWSActivity.swift in Sources */,
 				A9BF164B1D6519D100060A9E /* SearchingTableViewCell.swift in Sources */,
 				A94368831E23AD810009F4EA /* AWSConversation.swift in Sources */,
-				A9E9EDAC1DFAC3C600BC2253 /* PRFYCloudSearchLocationsResultItem.swift in Sources */,
 				A9C3C0EA1E02B7DC005CA18C /* NewPasswordTableViewController.swift in Sources */,
 				A92F93ED1DC3940A00065CD1 /* EditProfileTableViewController.swift in Sources */,
 				A9459F721E00197200978DA8 /* TableSectionHeader.swift in Sources */,
-				A9F345931DE0C81800A5D368 /* PRFYCloudSearchProfessionsResult.swift in Sources */,
 				A9543CB11DA3C51B002BF372 /* EditPostDescriptionTableViewCell.swift in Sources */,
 				A9B7A24A1D65D8C0009DA340 /* HomeTableViewController.swift in Sources */,
 				A9AA36371D9463E100E5EAFA /* SignUpTableViewController.swift in Sources */,
@@ -1628,7 +1588,6 @@
 				A9A57B2E1DD1D017004F0177 /* DiscoverUserTableViewCell.swift in Sources */,
 				A9D100651E0C442A006590F8 /* LocationUser.swift in Sources */,
 				A95EB85D1D8FBEAB0039E51D /* DatePickerTableViewCell.swift in Sources */,
-				A9C498791DFF435000BD71A8 /* PRFYCloudSearchCategoriesResultItem.swift in Sources */,
 				A9CBBC501DB63FDD009C8EC7 /* EditWorkTitleTableViewCell.swift in Sources */,
 				A9ACA7491DB50AF40004B8DE /* WorkExperience.swift in Sources */,
 				A9A503A11D2FE0A90030A472 /* AWSUsersTable.swift in Sources */,
@@ -1663,7 +1622,6 @@
 				A9543CB31DA3C531002BF372 /* EditPostCategoryTableViewCell.swift in Sources */,
 				A98A38261D8C07DA00C9CA75 /* AWSUserCategoriesTable.swift in Sources */,
 				A9D6888A1E0AEE9300A07D86 /* AWSProfessionLocation.swift in Sources */,
-				A9C498771DFF430100BD71A8 /* PRFYCloudSearchCategoriesResult.swift in Sources */,
 				A90146E61DB27C580092ED21 /* ProfileInfoTableViewCell.swift in Sources */,
 				A903EB591D16A39700B33025 /* UIImage+FixOrientation.m in Sources */,
 				A944BAAC1DD10413000BE754 /* HomeEmptyFeedView.swift in Sources */,
@@ -1672,9 +1630,7 @@
 				A9CBBC521DB63FEA009C8EC7 /* EditWorkOrganizationTableViewCell.swift in Sources */,
 				A9D100671E0C4744006590F8 /* FullUser.swift in Sources */,
 				A9ACA7471DB508BB0004B8DE /* AWSWorkExperienceUpdate.swift in Sources */,
-				A9F345911DE0C80D00A5D368 /* PRFYCloudSearchProfessionsResultItem.swift in Sources */,
 				A9E9DC5B1E16C95B00FE7C3B /* PreviewViewController.swift in Sources */,
-				A9E9EDAA1DFAC3B300BC2253 /* PRFYCloudSearchLocationsResult.swift in Sources */,
 				A9E4507A1D59E6C500D14553 /* CommentTableViewCell.swift in Sources */,
 				A9BF16491D6514C900060A9E /* NoResultsTableViewCell.swift in Sources */,
 				A9C88E561E225F6D00B7D2E7 /* MessagesTableViewController.swift in Sources */,
@@ -1710,7 +1666,6 @@
 				A97DBEED1DF16BD400A9F4FE /* SearchViewController.swift in Sources */,
 				A9D608701E2A811D00AD8C16 /* AWSNotificationsCounter.swift in Sources */,
 				A9C071D01E3562B200A27D42 /* SettingsTableSectionHeader.swift in Sources */,
-				A9BB32211DF34228005233F3 /* PRFYCloudSearchUsersResult.swift in Sources */,
 				A999CD3F1DBE6F9F00E7ADB1 /* SearchProfessionsTableViewController.swift in Sources */,
 				A918284B1DC1233400EC9E63 /* SearchLocationTableViewCell.swift in Sources */,
 				A99B9E311DB53E370047360D /* Education.swift in Sources */,
@@ -1718,7 +1673,6 @@
 				A9B6A89F1D7F8063001EE407 /* PostUserTableViewCell.swift in Sources */,
 				A931E25E1E262C81006F175A /* OtherMessageTableViewCell.swift in Sources */,
 				A9DA6A121E3394C100B7CE3E /* Experience.swift in Sources */,
-				A941CB6B1DF3445700343802 /* PRFYCloudSearchUsersResultItem.swift in Sources */,
 				A903EB571D16A39700B33025 /* LLSimpleCamera.m in Sources */,
 				A95EB85B1D8FBE870039E51D /* DateTableViewCell.swift in Sources */,
 				A99B9E361DB548F50047360D /* EditEducationTableViewController.swift in Sources */,

@@ -35,6 +35,7 @@ class NewPasswordTableViewController: UITableViewController {
         self.resetPasswordButton.setBackgroundImage(UIImage(named: "btn_white_active_resizable"), for: UIControlState.highlighted)
         self.resetPasswordButton.setBackgroundImage(UIImage(named: "btn_white_not_active_resizable"), for: UIControlState.disabled)
         self.resetPasswordButton.setTitleColor(Colors.turquoise, for: UIControlState.normal)
+        self.resetPasswordButton.setTitleColor(Colors.turquoise.withAlphaComponent(0.2), for: UIControlState.highlighted)
         self.resetPasswordButton.setTitleColor(UIColor.white, for: UIControlState.disabled)
         self.resetPasswordButton.isEnabled = false
     }
@@ -75,6 +76,14 @@ class NewPasswordTableViewController: UITableViewController {
     }
     
     @IBAction func resetPasswordButtonTapped(_ sender: AnyObject) {
+        UIView.transition(
+            with: self.resetPasswordButton,
+            duration: 0.2,
+            options: .transitionCrossDissolve,
+            animations: {
+                self.resetPasswordButton.isHighlighted = true
+        },
+            completion: nil)
         self.view.endEditing(true)
         self.resetPassword()
     }

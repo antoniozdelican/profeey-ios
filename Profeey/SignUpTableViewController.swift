@@ -43,6 +43,7 @@ class SignUpTableViewController: UITableViewController {
         self.signUpButton.setBackgroundImage(UIImage(named: "btn_white_active_resizable"), for: UIControlState.highlighted)
         self.signUpButton.setBackgroundImage(UIImage(named: "btn_white_not_active_resizable"), for: UIControlState.disabled)
         self.signUpButton.setTitleColor(Colors.turquoise, for: UIControlState.normal)
+        self.signUpButton.setTitleColor(Colors.turquoise.withAlphaComponent(0.2), for: UIControlState.highlighted)
         self.signUpButton.setTitleColor(UIColor.white, for: UIControlState.disabled)
         self.signUpButton.isEnabled = false
         
@@ -55,8 +56,8 @@ class SignUpTableViewController: UITableViewController {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
         self.view.endEditing(true)
+        super.viewWillDisappear(animated)
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -97,6 +98,14 @@ class SignUpTableViewController: UITableViewController {
     
     
     @IBAction func signUpButtonTapped(_ sender: AnyObject) {
+        UIView.transition(
+            with: self.signUpButton,
+            duration: 0.2,
+            options: .transitionCrossDissolve,
+            animations: {
+                self.signUpButton.isHighlighted = true
+        },
+            completion: nil)
         self.view.endEditing(true)
         self.userPoolSignUp()
     }

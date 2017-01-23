@@ -18,6 +18,7 @@ class LogInTableViewController: UITableViewController {
     @IBOutlet weak var passwordBoxView: UIView!
     @IBOutlet weak var forgotPasswordButton: UIButton!
     @IBOutlet weak var logInButton: UIButton!
+    @IBOutlet weak var facebookButton: UIButton!
     
     // NEW
     var passwordAuthenticationCompletion: AWSTaskCompletionSource<AWSCognitoIdentityPasswordAuthenticationDetails>?
@@ -33,8 +34,12 @@ class LogInTableViewController: UITableViewController {
         self.logInButton.setBackgroundImage(UIImage(named: "btn_white_active_resizable"), for: UIControlState.highlighted)
         self.logInButton.setBackgroundImage(UIImage(named: "btn_white_not_active_resizable"), for: UIControlState.disabled)
         self.logInButton.setTitleColor(Colors.turquoise, for: UIControlState.normal)
+        self.logInButton.setTitleColor(Colors.turquoise.withAlphaComponent(0.2), for: UIControlState.highlighted)
         self.logInButton.setTitleColor(UIColor.white, for: UIControlState.disabled)
         self.logInButton.isEnabled = false
+        self.facebookButton.setTitleColor(UIColor.white, for: UIControlState.normal)
+        self.facebookButton.setTitleColor(UIColor.white.withAlphaComponent(0.2), for: UIControlState.highlighted)
+        self.facebookButton.adjustsImageWhenHighlighted = false
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -68,9 +73,29 @@ class LogInTableViewController: UITableViewController {
     
     
     @IBAction func logInButtonTapped(_ sender: AnyObject) {
+        UIView.transition(
+            with: self.logInButton,
+            duration: 0.2,
+            options: .transitionCrossDissolve,
+            animations: {
+                self.logInButton.isHighlighted = true
+        },
+            completion: nil)
         self.view.endEditing(true)
         self.userPoolLogIn()
     }
+    
+    @IBAction func facebookButtonTapped(_ sender: AnyObject) {
+        UIView.transition(
+            with: self.facebookButton,
+            duration: 0.2,
+            options: .transitionCrossDissolve,
+            animations: {
+                self.facebookButton.isHighlighted = true
+        },
+            completion: nil)
+    }
+    
     
     @IBAction func forgotPasswordButtonTapped(_ sender: Any) {
         self.performSegue(withIdentifier: "segueToForgotPasswordVc", sender: self)

@@ -35,6 +35,7 @@ class WelcomeVerificationTableViewController: UITableViewController {
         self.confirmButton.setBackgroundImage(UIImage(named: "btn_white_active_resizable"), for: UIControlState.highlighted)
         self.confirmButton.setBackgroundImage(UIImage(named: "btn_white_not_active_resizable"), for: UIControlState.disabled)
         self.confirmButton.setTitleColor(Colors.turquoise, for: UIControlState.normal)
+        self.confirmButton.setTitleColor(Colors.turquoise.withAlphaComponent(0.2), for: UIControlState.highlighted)
         self.confirmButton.setTitleColor(UIColor.white, for: UIControlState.disabled)
         self.confirmButton.isEnabled = false
         
@@ -90,6 +91,14 @@ class WelcomeVerificationTableViewController: UITableViewController {
     
     
     @IBAction func confirmButtonTapped(_ sender: AnyObject) {
+        UIView.transition(
+            with: self.confirmButton,
+            duration: 0.2,
+            options: .transitionCrossDissolve,
+            animations: {
+                self.confirmButton.isHighlighted = true
+        },
+            completion: nil)
         self.view.endEditing(true)
         self.verifyEmail()
     }
