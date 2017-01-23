@@ -207,10 +207,10 @@ extension LogInTableViewController: AWSCognitoIdentityPasswordAuthentication {
                 switch type {
                 case "UserNotFoundException":
                     title = "Incorrect Username"
-                    message = "The username you entered doesn't belong to an account. Please try again."
+                    message = "The username you entered does not belong to an account. Please try again."
                 case "NotAuthorizedException":
                     title = "Incorrect Password"
-                    message = "The password you entered doesn't match with the username. Please try again."
+                    message = "The password you entered does not match with the username. Please try again."
                 default:
                     title = type
                     message = error.userInfo["message"] as? String

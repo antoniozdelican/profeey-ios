@@ -7,6 +7,9 @@
 //
 
 import UIKit
+import AWSMobileHubHelper
+import AWSCognitoIdentityProvider
+import AWSDynamoDB
 
 class EditPasswordTableViewController: UITableViewController {
     
@@ -14,6 +17,8 @@ class EditPasswordTableViewController: UITableViewController {
     @IBOutlet weak var oldPasswordTextField: UITextField!
     @IBOutlet weak var newPasswordTextField: UITextField!
     @IBOutlet weak var newConfirmPasswordTextField: UITextField!
+    
+    fileprivate var userPool: AWSCognitoIdentityUserPool?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,6 +27,8 @@ class EditPasswordTableViewController: UITableViewController {
         self.oldPasswordTextField.delegate = self
         self.newPasswordTextField.delegate = self
         self.newConfirmPasswordTextField.delegate = self
+        
+        self.userPool = AWSCognitoIdentityUserPool.init(forKey: AWSCognitoUserPoolsSignInProviderKey)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -68,11 +75,68 @@ class EditPasswordTableViewController: UITableViewController {
     
     @IBAction func doneButtonTapped(_ sender: AnyObject) {
         self.view.endEditing(true)
-        // TODO
+        self.confirmNewPassword()
     }
     
     @IBAction func cancelButtonTapped(_ sender: AnyObject) {
         self.dismiss(animated: true, completion: nil)
+    }
+    
+    // MARK: Helpers
+    
+    fileprivate func confirmNewPassword() {
+        guard let oldPassword = self.oldPasswordTextField.text?.trimm(), !oldPassword.isEmpty,
+            let newPassword = self.newPasswordTextField.text?.trimm(), !newPassword.isEmpty,
+            let newConfirmPassword = self.newConfirmPasswordTextField.text?.trimm(), !newConfirmPassword.isEmpty else {
+                return
+        }
+        guard newPassword == newConfirmPassword else {
+            let alertController = self.getSimpleAlertWithTitle("Passwords do not match", message: "Your new password and retype new password do not match. Please try again.", cancelButtonTitle: "Try Again")
+            self.present(alertController, animated: true, completion: nil)
+            return
+        }
+        self.userPoolUpdatePassword(oldPassword, newPassword: newPassword)
+    }
+    
+    // MARK: AWS
+    
+    fileprivate func userPoolUpdatePassword(_ oldPassword: String, newPassword: String) {
+        FullScreenIndicator.show()
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        self.userPool?.currentUser()?.changePassword(oldPassword, proposedPassword: newPassword).continue({
+            (task: AWSTask) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                FullScreenIndicator.hide()
+                guard task.error == nil else {
+                    print("userPoolUpdatePassword error: \(task.error!)")
+                    // Error handling.
+                    var title: String = "Something went wrong"
+                    var message: String? = "Please try again."
+                    if let type = (task.error as! NSError).userInfo["__type"] as? String {
+                        switch type {
+                        case "InvalidParameterException":
+                            title = "Invalid Password"
+                            message = "Passwords you entered should be at least 8 characters long with numbers, uppercase and lowercase letters."
+                        case "InvalidPasswordException":
+                            title = "Invalid Password"
+                            message = "Passwords you entered should be at least 8 characters long with numbers, uppercase and lowercase letters."
+                        case "NotAuthorizedException":
+                            title = "Incorrect Current Password"
+                            message = "Current password you entered does not match with your username. Please try again."
+                        default:
+                            title = type
+                            message = (task.error as! NSError).userInfo["message"] as? String
+                        }
+                    }
+                    let alertController = self.getSimpleAlertWithTitle(title, message: message, cancelButtonTitle: "Try Again")
+                    self.present(alertController, animated: true, completion: nil)
+                    return
+                }
+                self.dismiss(animated: true, completion: nil)
+            })
+            return nil
+        })
     }
 
 }
@@ -96,7 +160,7 @@ extension EditPasswordTableViewController: UITextFieldDelegate {
                     return true
             }
             self.newConfirmPasswordTextField.resignFirstResponder()
-            // TODO
+            self.confirmNewPassword()
             return true
         default:
             return false
