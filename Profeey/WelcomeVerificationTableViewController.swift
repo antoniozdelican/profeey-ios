@@ -14,9 +14,9 @@ class WelcomeVerificationTableViewController: UITableViewController {
     
     @IBOutlet weak var welcomeMessage: UILabel!
     @IBOutlet weak var verificationMessage: UILabel!
-    @IBOutlet weak var confirmationCodeTextField: UITextField!
-    @IBOutlet weak var confirmationCodeBoxView: UIView!
-    @IBOutlet weak var confirmButton: UIButton!
+    @IBOutlet weak var verificationCodeTextField: UITextField!
+    @IBOutlet weak var verificationCodeBoxView: UIView!
+    @IBOutlet weak var verifyButton: UIButton!
     
     // Got from SignUpVc.
     var firstName: String?
@@ -28,16 +28,16 @@ class WelcomeVerificationTableViewController: UITableViewController {
         super.viewDidLoad()
         self.navigationItem.hidesBackButton = true
         
-        self.confirmationCodeTextField.delegate = self
-        self.confirmationCodeBoxView.layer.cornerRadius = 4.0
+        self.verificationCodeTextField.delegate = self
+        self.verificationCodeBoxView.layer.cornerRadius = 4.0
         
-        self.confirmButton.setBackgroundImage(UIImage(named: "btn_white_active_resizable"), for: UIControlState.normal)
-        self.confirmButton.setBackgroundImage(UIImage(named: "btn_white_active_resizable"), for: UIControlState.highlighted)
-        self.confirmButton.setBackgroundImage(UIImage(named: "btn_white_not_active_resizable"), for: UIControlState.disabled)
-        self.confirmButton.setTitleColor(Colors.turquoise, for: UIControlState.normal)
-        self.confirmButton.setTitleColor(Colors.turquoise.withAlphaComponent(0.2), for: UIControlState.highlighted)
-        self.confirmButton.setTitleColor(UIColor.white, for: UIControlState.disabled)
-        self.confirmButton.isEnabled = false
+        self.verifyButton.setBackgroundImage(UIImage(named: "btn_white_active_resizable"), for: UIControlState.normal)
+        self.verifyButton.setBackgroundImage(UIImage(named: "btn_white_active_resizable"), for: UIControlState.highlighted)
+        self.verifyButton.setBackgroundImage(UIImage(named: "btn_white_not_active_resizable"), for: UIControlState.disabled)
+        self.verifyButton.setTitleColor(Colors.turquoise, for: UIControlState.normal)
+        self.verifyButton.setTitleColor(Colors.turquoise.withAlphaComponent(0.2), for: UIControlState.highlighted)
+        self.verifyButton.setTitleColor(UIColor.white, for: UIControlState.disabled)
+        self.verifyButton.isEnabled = false
         
         if let firstName = self.firstName, let email = self.email {
             self.welcomeMessage.text = "Welcome to Profeey, \(firstName)!"
@@ -72,7 +72,6 @@ class WelcomeVerificationTableViewController: UITableViewController {
     }
     
     
-    
     // MARK: UIScrollViewDelegate
     
     override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
@@ -82,21 +81,21 @@ class WelcomeVerificationTableViewController: UITableViewController {
     // MARK: IBActions
     
     @IBAction func textFieldChanged(_ sender: AnyObject) {
-        guard let confirmationCode = self.confirmationCodeTextField.text?.trimm(), !confirmationCode.isEmpty else {
-                self.confirmButton.isEnabled = false
+        guard let verificationCode = self.verificationCodeTextField.text?.trimm(), !verificationCode.isEmpty else {
+                self.verifyButton.isEnabled = false
                 return
         }
-        self.confirmButton.isEnabled = true
+        self.verifyButton.isEnabled = true
     }
     
     
-    @IBAction func confirmButtonTapped(_ sender: AnyObject) {
+    @IBAction func verifyButtonTapped(_ sender: AnyObject) {
         UIView.transition(
-            with: self.confirmButton,
+            with: self.verifyButton,
             duration: 0.2,
             options: .transitionCrossDissolve,
             animations: {
-                self.confirmButton.isHighlighted = true
+                self.verifyButton.isHighlighted = true
         },
             completion: nil)
         self.view.endEditing(true)
@@ -105,8 +104,8 @@ class WelcomeVerificationTableViewController: UITableViewController {
     
     @IBAction func skipButtonTapped(_ sender: Any) {
         self.view.endEditing(true)
-        let alertController = UIAlertController(title: "Account Not Confirmed", message: "If you ever forget your password, we can only help you if your account is confirmed.", preferredStyle: UIAlertControllerStyle.alert)
-        let cancelAction = UIAlertAction(title: "Confirm Now", style: UIAlertActionStyle.cancel, handler: nil)
+        let alertController = UIAlertController(title: "Email Not Verified", message: "If you ever forget your password, we can only help you if you have a verified email.", preferredStyle: UIAlertControllerStyle.alert)
+        let cancelAction = UIAlertAction(title: "Verify Now", style: UIAlertActionStyle.cancel, handler: nil)
         let okAction = UIAlertAction(title: "Later", style: UIAlertActionStyle.default, handler: {
             (alertAction: UIAlertAction) in
             self.performSegue(withIdentifier: "segueToUsernameVc", sender: self)
@@ -119,13 +118,13 @@ class WelcomeVerificationTableViewController: UITableViewController {
     // MARK: AWS
     
     fileprivate func verifyEmail() {
-        guard let confirmationCode = self.confirmationCodeTextField.text?.trimm(), !confirmationCode.isEmpty else {
+        guard let verificationCode = self.verificationCodeTextField.text?.trimm(), !verificationCode.isEmpty else {
             return
         }
         print("verifyEmail:")
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         FullScreenIndicator.show()
-        self.userPool?.currentUser()?.verifyAttribute("email", code: confirmationCode).continue({
+        self.userPool?.currentUser()?.verifyAttribute("email", code: verificationCode).continue({
             (task: AWSTask) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
@@ -140,7 +139,7 @@ class WelcomeVerificationTableViewController: UITableViewController {
                         switch type {
                         case "CodeMismatchException":
                             title = "Invalid Code"
-                            message = "The confirmation code you entered is invalid. Please try again."
+                            message = "Verification code you entered is invalid. Please try again."
                         default:
                             title = type
                             message = error.userInfo["message"] as? String
@@ -162,10 +161,10 @@ class WelcomeVerificationTableViewController: UITableViewController {
 extension WelcomeVerificationTableViewController: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        guard let confirmationCode = self.confirmationCodeTextField.text?.trimm(), !confirmationCode.isEmpty else {
+        guard let verificationCode = self.verificationCodeTextField.text?.trimm(), !verificationCode.isEmpty else {
             return true
         }
-        self.confirmationCodeTextField.resignFirstResponder()
+        self.verificationCodeTextField.resignFirstResponder()
         self.verifyEmail()
         return true
     }

@@ -422,7 +422,7 @@
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="G4z-an-XnT">
                                                             <rect key="frame" x="0.0" y="59" width="319" height="44"/>
                                                             <subviews>
-                                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Confirmation Code" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Gnj-Vb-jQV">
+                                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Verification Code" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Gnj-Vb-jQV">
                                                                     <rect key="frame" x="12" y="0.0" width="295" height="44"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="height" constant="44" id="UYQ-lu-qZF"/>
@@ -431,7 +431,7 @@
                                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="go" enablesReturnKeyAutomatically="YES"/>
                                                                     <connections>
-                                                                        <action selector="textFieldChanged:" destination="A4g-oY-xVY" eventType="editingChanged" id="Gfe-dH-Lg7"/>
+                                                                        <action selector="textFieldChanged:" destination="A4g-oY-xVY" eventType="editingChanged" id="6FR-NZ-ctQ"/>
                                                                     </connections>
                                                                 </textField>
                                                             </subviews>
@@ -469,11 +469,11 @@
                                                         <constraint firstAttribute="height" constant="44" id="0wR-Lj-DAH"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="18"/>
-                                                    <state key="normal" title="Confirm">
+                                                    <state key="normal" title="Verify Email">
                                                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     </state>
                                                     <connections>
-                                                        <action selector="confirmButtonTapped:" destination="A4g-oY-xVY" eventType="touchUpInside" id="8zc-9L-9vc"/>
+                                                        <action selector="verifyButtonTapped:" destination="A4g-oY-xVY" eventType="touchUpInside" id="PbI-Vn-BDh"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
@@ -503,10 +503,10 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="confirmButton" destination="TRi-nq-Z55" id="fhP-OZ-HUW"/>
-                        <outlet property="confirmationCodeBoxView" destination="G4z-an-XnT" id="ReI-53-oim"/>
-                        <outlet property="confirmationCodeTextField" destination="Gnj-Vb-jQV" id="PqI-Ey-Eto"/>
+                        <outlet property="verificationCodeBoxView" destination="G4z-an-XnT" id="Uva-qm-ap4"/>
+                        <outlet property="verificationCodeTextField" destination="Gnj-Vb-jQV" id="5k0-KE-3q2"/>
                         <outlet property="verificationMessage" destination="rYA-LV-3ln" id="lmW-9x-Ixg"/>
+                        <outlet property="verifyButton" destination="TRi-nq-Z55" id="yJa-Mp-Jh2"/>
                         <outlet property="welcomeMessage" destination="Vm1-0v-jWO" id="k3K-YF-jnu"/>
                         <segue destination="b1r-Pe-8L2" kind="show" identifier="segueToUsernameVc" id="2ZL-dX-jrn"/>
                     </connections>

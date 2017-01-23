@@ -31,13 +31,14 @@ class AWSUser: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     var _numberOfRecommendations: NSNumber?
     
     // To create User on landing.
-    convenience init(_userId: String?, _creationDate: NSNumber?, _firstName: String?, _lastName: String?, _email: String?) {
+    convenience init(_userId: String?, _creationDate: NSNumber?, _firstName: String?, _lastName: String?, _email: String?, _emailVerified: NSNumber?) {
         self.init()
         self._userId = _userId
         self._creationDate = _creationDate
         self._firstName = _firstName
         self._lastName = _lastName
         self._email = _email
+        self._emailVerified = _emailVerified
     }
     
     // To update preferredUsername and profilePicUrl on landing.

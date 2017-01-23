@@ -114,8 +114,18 @@ class EditEmailTableViewController: UITableViewController {
     }
     
     @IBAction func nextButtonTapped(_ sender: AnyObject) {
+        guard let newEmail = self.newEmailTextField.text?.trimm(), !newEmail.isEmpty, let currentEmail = self.currentEmail else {
+            return
+        }
         self.view.endEditing(true)
-        self.queryEmails()
+        // If verification, just update user, otherwise query for emails.
+        if newEmail == currentEmail {
+            FullScreenIndicator.show()
+            self.updateUser(newEmail)
+        } else {
+            FullScreenIndicator.show()
+            self.queryEmails()
+        }
     }
     
     @IBAction func cancelButtonTapped(_ sender: AnyObject) {
@@ -130,7 +140,6 @@ class EditEmailTableViewController: UITableViewController {
             return
         }
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        FullScreenIndicator.show()
         PRFYDynamoDBManager.defaultDynamoDBManager().queryEmailsDynamoDB(newEmail, completionHandler: {
             (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
             DispatchQueue.main.async(execute: {

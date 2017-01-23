@@ -72,8 +72,9 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         }
         print("createUserDynamoDB:")
         let creationDate = NSNumber(value: Date().timeIntervalSince1970 as Double)
+        let emailVerified = NSNumber(value: 0)
         let awsUsersTable = AWSUsersTable()
-        let awsUser = AWSUser(_userId: identityId, _creationDate: creationDate, _firstName: firstName, _lastName: lastName, _email: email)
+        let awsUser = AWSUser(_userId: identityId, _creationDate: creationDate, _firstName: firstName, _lastName: lastName, _email: email, _emailVerified: emailVerified)
         awsUsersTable.saveUserSkipNull(awsUser, completionHandler: {
             (task: AWSTask) in
             if let error = task.error {
