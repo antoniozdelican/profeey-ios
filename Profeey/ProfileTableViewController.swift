@@ -18,7 +18,6 @@ enum ProfileSegment {
 
 class ProfileTableViewController: UITableViewController {
     
-    @IBOutlet weak var settingsButton: UIBarButtonItem!
     @IBOutlet var loadingTableFooterView: UIView!
     
     var user: User?
@@ -59,6 +58,8 @@ class ProfileTableViewController: UITableViewController {
     
     fileprivate var selectedProfileSegment: ProfileSegment = ProfileSegment.posts
     fileprivate var noNetworkConnection: Bool = false
+    fileprivate var settingsButton: UIBarButtonItem?
+    fileprivate var isSettingsButtonSet: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -67,6 +68,13 @@ class ProfileTableViewController: UITableViewController {
         
         // Register custom header.
         self.tableView.register(UINib(nibName: "ProfileSegmentedControlSectionHeader", bundle: nil), forHeaderFooterViewReuseIdentifier: "profileSegmentedControlSectionHeader")
+        
+        // Initialize settings button.
+        let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
+        activityIndicator.hidesWhenStopped = true
+        self.settingsButton = UIBarButtonItem(customView: activityIndicator)
+        self.navigationItem.rightBarButtonItem = self.settingsButton
+        activityIndicator.startAnimating()
         
         // Configure user and start querying.
         self.configureUser()
@@ -114,7 +122,6 @@ class ProfileTableViewController: UITableViewController {
         }
         // Check if it's current again.
         self.isCurrentUser = (userId == identityId)
-        self.settingsButton.image = self.isCurrentUser ? UIImage(named: "ic_settings") : UIImage(named: "ic_mail")
         
         // Query user.
         self.isLoadingUser = true
@@ -515,15 +522,17 @@ class ProfileTableViewController: UITableViewController {
         return 0.0
     }
     
-    // MARK: IBActions
+    // MARK: Tappers
     
-    @IBAction func settingsButtonTapped(_ sender: AnyObject) {
+    func settingsButtonTapped(_ sender: AnyObject) {
         if self.isCurrentUser {
             self.performSegue(withIdentifier: "segueToSettingsVc", sender: self)
         } else {
             self.performSegue(withIdentifier: "segueToMessagesVc", sender: self)
         }
     }
+    
+    // MARK: IBActions
     
     @IBAction func unwindToProfileTableViewController(_ segue: UIStoryboardSegue) {
         // From PostDetailsVc on Post delete.
@@ -583,6 +592,9 @@ class ProfileTableViewController: UITableViewController {
                     // Reset flags and animations that were initiated.
                     self.isLoadingUser = false
                     self.refreshControl?.endRefreshing()
+                    if !self.isSettingsButtonSet {
+                        self.navigationItem.rightBarButtonItem = nil
+                    }
                     // Handle error and show banner.
                     if (task.error as! NSError).code == -1009 {
                         (self.navigationController as? PRFYNavigationController)?.showBanner("No Internet Connection")
@@ -603,6 +615,14 @@ class ProfileTableViewController: UITableViewController {
                 self.isLoadingUser = false
                 self.navigationItem.title = self.user?.preferredUsername
                 self.refreshControl?.endRefreshing()
+                
+                // Set/reinit settings button. This happens only once.
+                if !self.isSettingsButtonSet {
+                    self.isSettingsButtonSet = true
+                    self.settingsButton = UIBarButtonItem(image: nil, style: UIBarButtonItemStyle.plain, target: self, action: #selector(self.settingsButtonTapped(_:)))
+                    self.settingsButton?.image = self.isCurrentUser ? UIImage(named: "ic_settings") : UIImage(named: "ic_mail")
+                    self.navigationItem.rightBarButtonItem = self.settingsButton
+                }
                 
                 // Reload cells with downloaded user.
                 if self.isCurrentUser {
