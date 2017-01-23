@@ -27,6 +27,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let storyboard = UIStoryboard(name: "Onboarding", bundle: nil)
             let rootViewController = storyboard.instantiateInitialViewController()
             self.window?.rootViewController = rootViewController
+        } else {
+            // TEST
+//            AWSPushManager.defaultPushManager().interceptApplication(application, didFinishLaunchingWithOptions: launchOptions)
         }
         
         // TODO: save userId (identityId) for this device (endpointARN)

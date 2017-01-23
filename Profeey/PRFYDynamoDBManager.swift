@@ -96,7 +96,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
             AWSTask().continue(completionHandler)
             return
         }
-        print("saveUserPreferredUsernameAndProfilePicDynamoDB:")
+        print("updateUserPreferredUsernameAndProfilePicDynamoDB:")
         let awsUsersTable = AWSUsersTable()
         let awsUser = AWSUser(_userId: identityId, _preferredUsername: preferredUsername, _profilePicUrl: profilePicUrl)
         awsUsersTable.saveUserSkipNull(awsUser, completionHandler: {
@@ -120,7 +120,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
             AWSTask().continue(completionHandler)
             return
         }
-        print("saveUserProfessionDynamoDB:")
+        print("updateUserProfessionDynamoDB:")
         let awsUsersTable = AWSUsersTable()
         let awsUser = AWSUser(_userId: identityId, _professionName: professionName)
         awsUsersTable.saveUserSkipNull(awsUser, completionHandler: {
@@ -134,6 +134,19 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
             }
             return nil
         })
+    }
+    
+    // Updates user on edit email.
+    func updateUserEmailDynamoDB(_ email: String, completionHandler: @escaping AWSContinuationBlock) {
+        guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
+            print("updateUserEmailDynamoDB no identityId!")
+            AWSTask().continue(completionHandler)
+            return
+        }
+        print("saveUserProfessionDynamoDB:")
+        let awsUsersTable = AWSUsersTable()
+        let awsUser = AWSUser(_userId: identityId, _email: email)
+        awsUsersTable.saveUserSkipNull(awsUser, completionHandler: completionHandler)
     }
     
     func updateUserDynamoDB(_ firstName: String?, lastName: String?, professionName: String?, profilePicUrl: String?, about: String?, locationId: String?, locationName: String?, website: String?, completionHandler: @escaping AWSContinuationBlock) {
@@ -168,6 +181,13 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         print("queryPreferredUsernamesDynamoDB:")
         let awsUsersPreferredUsernameIndex = AWSUsersPreferredUsernameIndex()
         awsUsersPreferredUsernameIndex.queryPreferredUsernames(preferredUsername, completionHandler: completionHandler)
+    }
+    
+    // Check if email already exists in DynamoDB.
+    func queryEmailsDynamoDB(_ email: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+        print("queryEmailsDynamoDB:")
+        let awsUsersEmailIndex = AWSUsersEmailIndex()
+        awsUsersEmailIndex.queryEmails(email, completionHandler: completionHandler)
     }
     
     // MARK: Relationships

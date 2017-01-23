@@ -9,6 +9,7 @@
 import Foundation
 
 let UpdateUserNotificationKey: String = "UpdateUserNotificationKey"
+let UpdateEmailNotificationKey: String = "UpdateEmailNotificationKey"
 
 let CreatePostNotificationKey: String = "CreatePostNotificationKey"
 let UpdatePostNotificationKey: String = "UpdatePostNotificationKey"

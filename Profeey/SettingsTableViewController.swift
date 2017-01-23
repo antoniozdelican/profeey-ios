@@ -20,11 +20,15 @@ class SettingsTableViewController: UITableViewController {
     @IBOutlet weak var logOutTableViewCell: UITableViewCell!
     
     var user: EditUser?
+    var currentEmail: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         self.tableView.register(UINib(nibName: "SettingsTableSectionHeader", bundle: nil), forHeaderFooterViewReuseIdentifier: "settingsTableSectionHeader")
+        
+        // Add observers.
+        NotificationCenter.default.addObserver(self, selector: #selector(self.updateEmailNotification(_:)), name: NSNotification.Name(UpdateEmailNotificationKey), object: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -37,6 +41,10 @@ class SettingsTableViewController: UITableViewController {
         if let destinationViewController = segue.destination as? UINavigationController,
             let childViewController = destinationViewController.childViewControllers[0] as? EditProfileTableViewController {
             childViewController.user = self.user
+        }
+        if let destinationViewController = segue.destination as? UINavigationController,
+            let childViewController = destinationViewController.childViewControllers[0] as? EditEmailTableViewController {
+            childViewController.currentEmail = self.currentEmail
         }
     }
     
@@ -145,5 +153,20 @@ class SettingsTableViewController: UITableViewController {
                 })
             })
         }
+    }
+}
+
+extension SettingsTableViewController {
+    
+    // MARK: NotificationCenterActions
+    
+    func updateEmailNotification(_ notification: NSNotification) {
+        guard let email = notification.userInfo?["email"] as? String else {
+            return
+        }
+        guard self.user?.userId == AWSIdentityManager.defaultIdentityManager().identityId else {
+            return
+        }
+        self.currentEmail = email
     }
 }

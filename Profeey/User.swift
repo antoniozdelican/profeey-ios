@@ -27,7 +27,7 @@ class User: NSObject {
     var numberOfPosts: NSNumber?
     var numberOfRecommendations: NSNumber?
     
-    // For SignUp flow.
+    // For SignUp flow and editEmail.
     var email: String?
     
     // Generated.

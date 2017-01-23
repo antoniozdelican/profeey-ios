@@ -60,6 +60,9 @@ class MainTabBarController: UITabBarController {
             // Query numberOfUnseenConversations.
             self.isLoadingNumberOfUnseenConversations = true
             self.queryUnseenConversations()
+            
+            // TEST
+            AWSPushManager.defaultPushManager().interceptApplication(UIApplication.shared, didFinishLaunchingWithOptions: nil)
         }
         
         // Add observers.

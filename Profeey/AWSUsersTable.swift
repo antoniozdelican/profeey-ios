@@ -60,7 +60,7 @@ class AWSUsersTable: NSObject, Table {
         objectMapper.save(awsUserUpdate).continue(completionHandler)
     }
     
-    // Skip null attributes (landing flow)
+    // Skip null attributes (landing flow and edit email).
     func saveUserSkipNull(_ awsUser: AWSUser, completionHandler: @escaping AWSContinuationBlock) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
         let updateMapperConfig = AWSDynamoDBObjectMapperConfiguration()
@@ -82,7 +82,7 @@ class AWSUsersPreferredUsernameIndex: NSObject, Index {
         ]
     }
     
-    // MARK: QueryWithPartitionKeyAndSortKey
+    // MARK: QueryWithPartitionKey
     
     // Get preferredUsername(s). This is used to check if preferredUsername is available.
     func queryPreferredUsernames(_ preferredUsername: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
@@ -96,6 +96,35 @@ class AWSUsersPreferredUsernameIndex: NSObject, Index {
         objectMapper.query(AWSUser.self, expression: queryExpression, completionHandler: completionHandler)
     }
 
+}
+
+class AWSUsersEmailIndex: NSObject, Index {
+    
+    var indexName: String? {
+        
+        return "EmailIndex"
+    }
+    
+    func supportedOperations() -> [String] {
+        return [
+            QueryWithPartitionKey,
+        ]
+    }
+    
+    // MARK: QueryWithPartitionKey
+    
+    // Query emails. This is used to check if email is available for EditEmailVc.
+    func queryEmails(_ email: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+        let objectMapper = AWSDynamoDBObjectMapper.default()
+        let queryExpression = AWSDynamoDBQueryExpression()
+        queryExpression.indexName = "EmailIndex"
+        queryExpression.keyConditionExpression = "#email = :email"
+        queryExpression.expressionAttributeNames = ["#email": "email",]
+        queryExpression.expressionAttributeValues = [":email": email,]
+        queryExpression.projectionExpression = "#email"
+        objectMapper.query(AWSUser.self, expression: queryExpression, completionHandler: completionHandler)
+    }
+    
 }
 
 class AWSUsersLocationIndex: NSObject, Index {

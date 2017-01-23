@@ -73,6 +73,7 @@ class ProfileTableViewController: UITableViewController {
         
         // Add observers.
         NotificationCenter.default.addObserver(self, selector: #selector(self.updateUserNotification(_:)), name: NSNotification.Name(UpdateUserNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.updateEmailNotification(_:)), name: NSNotification.Name(UpdateEmailNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.createPostNotification(_:)), name: NSNotification.Name(CreatePostNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNotification(_:)), name: NSNotification.Name(UpdatePostNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.deletePostNotification(_:)), name: NSNotification.Name(DeletePostNotificationKey), object: nil)
@@ -147,6 +148,7 @@ class ProfileTableViewController: UITableViewController {
         }
         if let destinationViewController = segue.destination as? SettingsTableViewController {
             destinationViewController.user = self.user?.copyEditUser()
+            destinationViewController.currentEmail = self.user?.email
         }
         if let destinationViewController = segue.destination as? FollowersFollowingViewController {
             destinationViewController.userId = self.user?.userId
@@ -594,7 +596,7 @@ class ProfileTableViewController: UITableViewController {
                     print("Not an awsUser. This should not happen.")
                     return
                 }
-                let user = FullUser(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationId: awsUser._locationId, locationName: awsUser._locationName, website: awsUser._website, about: awsUser._about, numberOfFollowers: awsUser._numberOfFollowers, numberOfPosts: awsUser._numberOfPosts, numberOfRecommendations: awsUser._numberOfRecommendations)
+                let user = FullUser(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationId: awsUser._locationId, locationName: awsUser._locationName, website: awsUser._website, about: awsUser._about, numberOfFollowers: awsUser._numberOfFollowers, numberOfPosts: awsUser._numberOfPosts, numberOfRecommendations: awsUser._numberOfRecommendations, email: awsUser._email)
                 self.user = user
                 
                 // Reset flags and animations that were initiated.
@@ -1052,16 +1054,21 @@ extension ProfileTableViewController {
         cell?.aboutLabel.text = self.user?.about
         cell?.websiteButton.setTitle(self.user?.website, for: UIControlState.normal)
         cell?.websiteButton.isHidden = self.user?.website != nil ? false : true
-        // To adjust cell height.
-//        UIView.performWithoutAnimation {
-//            self.tableView.beginUpdates()
-//            self.tableView.endUpdates()
-//        }
         self.tableView.reloadData()
         // Remove old profilePic in background.
         if let profilePicUrlToRemove = notification.userInfo?["profilePicUrlToRemove"] as? String {
             PRFYS3Manager.defaultS3Manager().removeImageS3(profilePicUrlToRemove)
         }
+    }
+    
+    func updateEmailNotification(_ notification: NSNotification) {
+        guard let email = notification.userInfo?["email"] as? String else {
+            return
+        }
+        guard self.user?.userId == AWSIdentityManager.defaultIdentityManager().identityId else {
+            return
+        }
+        self.user?.email = email
     }
     
     func createPostNotification(_ notification: NSNotification) {

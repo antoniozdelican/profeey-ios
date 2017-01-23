@@ -54,6 +54,13 @@ class AWSUser: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
         self._professionName = _professionName
     }
     
+    // To update email on editEmail.
+    convenience init(_userId: String?, _email: String?) {
+        self.init()
+        self._userId = _userId
+        self._email = _email
+    }
+    
     // To update user on EditVc. Use AWSUserUpdate!
     convenience init(_userId: String?, _firstName: String?, _lastName: String?, _professionName: String?, _profilePicUrl: String?, _about: String?, _locationId: String?, _locationName: String?, _website: String?) {
         self.init()

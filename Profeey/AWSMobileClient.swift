@@ -114,8 +114,8 @@ class AWSMobileClient: NSObject {
         // Set up Cloud Logic API invocation clients.
         self.setupCloudLogicAPI()
         
-        var didFinishLaunching: Bool = AWSIdentityManager.defaultIdentityManager().interceptApplication(application, didFinishLaunchingWithOptions: launchOptions)
-        didFinishLaunching = didFinishLaunching && AWSPushManager.defaultPushManager().interceptApplication(application, didFinishLaunchingWithOptions: launchOptions)
+        let didFinishLaunching: Bool = AWSIdentityManager.defaultIdentityManager().interceptApplication(application, didFinishLaunchingWithOptions: launchOptions)
+        //didFinishLaunching = didFinishLaunching && AWSPushManager.defaultPushManager().interceptApplication(application, didFinishLaunchingWithOptions: launchOptions)
         
         if (!self.isInitialized) {
             AWSIdentityManager.defaultIdentityManager().resumeSession(completionHandler: {
