@@ -307,29 +307,122 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" id="fcU-6e-O8t">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="kUt-h4-c0z">
-                                <rect key="frame" x="318" y="5" width="41" height="33"/>
+                                <rect key="frame" x="323" y="5" width="36" height="33"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <state key="normal" title="Done">
+                                <state key="normal" title="Next">
                                     <color key="titleColor" red="0.080254554749999998" green="0.61858558649999995" blue="0.93965935710000004" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
                                 <state key="disabled">
                                     <color key="titleColor" red="0.73251521590000002" green="0.7315930128" blue="0.76011711360000001" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
                                 <connections>
-                                    <action selector="doneButtonTapped:" destination="RLt-Wj-fTx" eventType="touchUpInside" id="n5M-wv-rcd"/>
+                                    <action selector="nextButtonTapped:" destination="RLt-Wj-fTx" eventType="touchUpInside" id="UIt-XW-Weq"/>
                                 </connections>
                             </button>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="doneButton" destination="kUt-h4-c0z" id="5Tl-t8-ApX"/>
                         <outlet property="newEmailTextField" destination="fJD-jJ-1Lf" id="Yg0-p8-cHB"/>
+                        <outlet property="nextButton" destination="kUt-h4-c0z" id="AIY-nw-xDa"/>
+                        <segue destination="tL9-Bf-YmF" kind="show" identifier="segueToVerifyEmailVc" id="65f-Du-Y9Y"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VHj-VG-DZF" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2460" y="-287"/>
+        </scene>
+        <!--Verify Email-->
+        <scene sceneID="C4O-pj-vaG">
+            <objects>
+                <tableViewController id="tL9-Bf-YmF" customClass="VerifyEmailTableViewController" customModule="Profeey" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="16" sectionFooterHeight="16" id="4V5-NV-0eD">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" red="0.97647058823529409" green="0.97647058823529409" blue="0.97647058823529409" alpha="1" colorSpace="calibratedRGB"/>
+                        <inset key="separatorInset" minX="16" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        <sections>
+                            <tableViewSection id="mJX-md-tWI">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="52" id="v1L-xa-JyS">
+                                        <rect key="frame" x="0.0" y="35" width="375" height="52"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="v1L-xa-JyS" id="zok-5B-i7g">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="51"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Verification Code" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="jxA-Pd-CPa">
+                                                    <rect key="frame" x="110" y="8" width="257" height="36"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="36" id="UDC-GW-egn"/>
+                                                    </constraints>
+                                                    <color key="textColor" red="0.14748379589999999" green="0.1474793851" blue="0.14748191829999999" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
+                                                    <connections>
+                                                        <action selector="verificationCodeTextFieldChanged:" destination="tL9-Bf-YmF" eventType="editingChanged" id="WTX-O7-V4h"/>
+                                                    </connections>
+                                                </textField>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="CODE" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e9C-e9-NST">
+                                                    <rect key="frame" x="16" y="19" width="82" height="14.5"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="82" id="YHi-w5-w15"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                    <color key="textColor" red="0.41868340970000001" green="0.41867089270000002" blue="0.41867792609999999" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="jxA-Pd-CPa" secondAttribute="trailing" constant="8" id="06P-xE-1uU"/>
+                                                <constraint firstItem="jxA-Pd-CPa" firstAttribute="leading" secondItem="e9C-e9-NST" secondAttribute="trailing" constant="12" id="2xa-vN-zdE"/>
+                                                <constraint firstItem="jxA-Pd-CPa" firstAttribute="top" secondItem="zok-5B-i7g" secondAttribute="top" constant="8" id="7it-kS-xpX"/>
+                                                <constraint firstItem="e9C-e9-NST" firstAttribute="top" secondItem="zok-5B-i7g" secondAttribute="top" constant="19" id="JwA-Rd-9Uw"/>
+                                                <constraint firstItem="e9C-e9-NST" firstAttribute="leading" secondItem="zok-5B-i7g" secondAttribute="leading" constant="16" id="VOW-g3-0XL"/>
+                                                <constraint firstAttribute="bottom" secondItem="jxA-Pd-CPa" secondAttribute="bottom" constant="8" id="rKm-Gn-aEt"/>
+                                            </constraints>
+                                            <variation key="default">
+                                                <mask key="constraints">
+                                                    <exclude reference="rKm-Gn-aEt"/>
+                                                </mask>
+                                            </variation>
+                                        </tableViewCellContentView>
+                                        <inset key="separatorInset" minX="16" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                        </sections>
+                        <connections>
+                            <outlet property="dataSource" destination="tL9-Bf-YmF" id="I5a-Kc-upJ"/>
+                            <outlet property="delegate" destination="tL9-Bf-YmF" id="0fK-6L-s83"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Verify Email" id="XoA-3n-2Kz">
+                        <barButtonItem key="rightBarButtonItem" id="8hT-YY-DjP">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Evd-fl-MUS">
+                                <rect key="frame" x="314" y="5" width="45" height="33"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <state key="normal" title="Verify">
+                                    <color key="titleColor" red="0.080254554749999998" green="0.61858558649999995" blue="0.93965935710000004" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <state key="disabled">
+                                    <color key="titleColor" red="0.73251521590000002" green="0.7315930128" blue="0.76011711360000001" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="verifyButtonTapped:" destination="tL9-Bf-YmF" eventType="touchUpInside" id="2wZ-qt-MEB"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="verificationCodeTextField" destination="jxA-Pd-CPa" id="mHp-xm-d7d"/>
+                        <outlet property="verifyButton" destination="Evd-fl-MUS" id="D1M-gy-bZ5"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="kV6-Rw-VAt" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3396" y="-287"/>
         </scene>
         <!--Password-->
         <scene sceneID="BS0-bB-Tdn">

@@ -14,7 +14,7 @@ class FullUser: User {
         super.init()
     }
     
-    convenience init(userId: String?, firstName: String?, lastName: String?, preferredUsername: String?, professionName: String?, profilePicUrl: String?, locationId: String?, locationName: String?, website: String?, about: String?, numberOfFollowers: NSNumber?, numberOfPosts: NSNumber?, numberOfRecommendations: NSNumber?, email: String?) {
+    convenience init(userId: String?, firstName: String?, lastName: String?, preferredUsername: String?, professionName: String?, profilePicUrl: String?, locationId: String?, locationName: String?, website: String?, about: String?, numberOfFollowers: NSNumber?, numberOfPosts: NSNumber?, numberOfRecommendations: NSNumber?, email: String?, emailVerified: NSNumber?) {
         self.init()
         self.userId = userId
         self.firstName = firstName
@@ -30,5 +30,6 @@ class FullUser: User {
         self.numberOfPosts = numberOfPosts
         self.numberOfRecommendations = numberOfRecommendations
         self.email = email
+        self.emailVerified = emailVerified
     }
 }

@@ -156,6 +156,7 @@ class ProfileTableViewController: UITableViewController {
         if let destinationViewController = segue.destination as? SettingsTableViewController {
             destinationViewController.user = self.user?.copyEditUser()
             destinationViewController.currentEmail = self.user?.email
+            destinationViewController.currentEmailVerified = self.user?.emailVerified
         }
         if let destinationViewController = segue.destination as? FollowersFollowingViewController {
             destinationViewController.userId = self.user?.userId
@@ -608,7 +609,7 @@ class ProfileTableViewController: UITableViewController {
                     print("Not an awsUser. This should not happen.")
                     return
                 }
-                let user = FullUser(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationId: awsUser._locationId, locationName: awsUser._locationName, website: awsUser._website, about: awsUser._about, numberOfFollowers: awsUser._numberOfFollowers, numberOfPosts: awsUser._numberOfPosts, numberOfRecommendations: awsUser._numberOfRecommendations, email: awsUser._email)
+                let user = FullUser(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationId: awsUser._locationId, locationName: awsUser._locationName, website: awsUser._website, about: awsUser._about, numberOfFollowers: awsUser._numberOfFollowers, numberOfPosts: awsUser._numberOfPosts, numberOfRecommendations: awsUser._numberOfRecommendations, email: awsUser._email, emailVerified: awsUser._emailVerified)
                 self.user = user
                 
                 // Reset flags and animations that were initiated.
@@ -1082,13 +1083,14 @@ extension ProfileTableViewController {
     }
     
     func updateEmailNotification(_ notification: NSNotification) {
-        guard let email = notification.userInfo?["email"] as? String else {
+        guard let email = notification.userInfo?["email"] as? String, let emailVerified = notification.userInfo?["emailVerified"] as? NSNumber else {
             return
         }
         guard self.user?.userId == AWSIdentityManager.defaultIdentityManager().identityId else {
             return
         }
         self.user?.email = email
+        self.user?.emailVerified = emailVerified
     }
     
     func createPostNotification(_ notification: NSNotification) {

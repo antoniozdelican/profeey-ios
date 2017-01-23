@@ -22,6 +22,7 @@ class SettingsTableViewController: UITableViewController {
     
     var user: EditUser?
     var currentEmail: String?
+    var currentEmailVerified: NSNumber?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,6 +31,11 @@ class SettingsTableViewController: UITableViewController {
         
         // Configure current email.
         self.currentEmailLabel.text = self.currentEmail
+        if let currentEmailVerified = self.currentEmailVerified, currentEmailVerified.intValue == 1 {
+            self.currentEmailLabel.textColor = Colors.grey
+        } else {
+            self.currentEmailLabel.textColor = Colors.red
+        }
         
         // Add observers.
         NotificationCenter.default.addObserver(self, selector: #selector(self.updateEmailNotification(_:)), name: NSNotification.Name(UpdateEmailNotificationKey), object: nil)
@@ -49,6 +55,7 @@ class SettingsTableViewController: UITableViewController {
         if let destinationViewController = segue.destination as? UINavigationController,
             let childViewController = destinationViewController.childViewControllers[0] as? EditEmailTableViewController {
             childViewController.currentEmail = self.currentEmail
+            childViewController.currentEmailVerified = self.currentEmailVerified
         }
     }
     
@@ -165,12 +172,19 @@ extension SettingsTableViewController {
     // MARK: NotificationCenterActions
     
     func updateEmailNotification(_ notification: NSNotification) {
-        guard let email = notification.userInfo?["email"] as? String else {
+        guard let email = notification.userInfo?["email"] as? String, let emailVerified = notification.userInfo?["emailVerified"] as? NSNumber else {
             return
         }
         guard self.user?.userId == AWSIdentityManager.defaultIdentityManager().identityId else {
             return
         }
         self.currentEmail = email
+        self.currentEmailVerified = emailVerified
+        self.currentEmailLabel.text = self.currentEmail
+        if let currentEmailVerified = self.currentEmailVerified, currentEmailVerified.intValue == 1 {
+            self.currentEmailLabel.textColor = Colors.grey
+        } else {
+            self.currentEmailLabel.textColor = Colors.red
+        }
     }
 }

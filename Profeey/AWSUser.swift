@@ -21,6 +21,7 @@ class AWSUser: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     
     var _about: String?
     var _email: String?
+    var _emailVerified: NSNumber?
     var _locationId: String?
     var _locationName: String?
     var _website: String?
@@ -55,10 +56,11 @@ class AWSUser: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     }
     
     // To update email on editEmail.
-    convenience init(_userId: String?, _email: String?) {
+    convenience init(_userId: String?, _email: String?, _emailVerified: NSNumber?) {
         self.init()
         self._userId = _userId
         self._email = _email
+        self._emailVerified = _emailVerified
     }
     
     // To update user on EditVc. Use AWSUserUpdate!

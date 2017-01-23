@@ -41,7 +41,7 @@ class WelcomeVerificationTableViewController: UITableViewController {
         
         if let firstName = self.firstName, let email = self.email {
             self.welcomeMessage.text = "Welcome to Profeey, \(firstName)!"
-            self.verificationMessage.text = "To confirm your account, please check your email \(email) and enter the code."
+            self.verificationMessage.text = "To verify your email, please enter the verification code we sent to \(email)"
         }
         
         self.userPool = AWSCognitoIdentityUserPool.init(forKey: AWSCognitoUserPoolsSignInProviderKey)
@@ -150,8 +150,6 @@ class WelcomeVerificationTableViewController: UITableViewController {
                     let alertController = self.getSimpleAlertWithTitle(title, message: message, cancelButtonTitle: "Try Again")
                     self.present(alertController, animated: true, completion: nil)
                 } else {
-                    // TODO
-                    // Should be some kind of a message.
                     self.performSegue(withIdentifier: "segueToUsernameVc", sender: self)
                 }
             })

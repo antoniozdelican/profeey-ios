@@ -137,7 +137,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
     }
     
     // Updates user on edit email.
-    func updateUserEmailDynamoDB(_ email: String, completionHandler: @escaping AWSContinuationBlock) {
+    func updateUserEmailDynamoDB(_ email: String, emailVerified: NSNumber, completionHandler: @escaping AWSContinuationBlock) {
         guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
             print("updateUserEmailDynamoDB no identityId!")
             AWSTask().continue(completionHandler)
@@ -145,7 +145,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         }
         print("saveUserProfessionDynamoDB:")
         let awsUsersTable = AWSUsersTable()
-        let awsUser = AWSUser(_userId: identityId, _email: email)
+        let awsUser = AWSUser(_userId: identityId, _email: email, _emailVerified: emailVerified)
         awsUsersTable.saveUserSkipNull(awsUser, completionHandler: completionHandler)
     }
     

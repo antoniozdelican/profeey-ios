@@ -29,6 +29,7 @@ class User: NSObject {
     
     // For SignUp flow and editEmail.
     var email: String?
+    var emailVerified: NSNumber?
     
     // Generated.
     var profilePic: UIImage?
