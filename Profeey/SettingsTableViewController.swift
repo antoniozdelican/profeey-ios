@@ -128,7 +128,8 @@ class SettingsTableViewController: UITableViewController {
         alertController.addAction(cancelAction)
         let deleteConfirmAction = UIAlertAction(title: "Log Out", style: UIAlertActionStyle.default, handler: {
             (alert: UIAlertAction) in
-            self.logOut()
+            // First remove endpointUser (if exists) and then logOut.
+            self.removeEndpointUser()
         })
         alertController.addAction(deleteConfirmAction)
         self.present(alertController, animated: true, completion: nil)
@@ -144,26 +145,47 @@ class SettingsTableViewController: UITableViewController {
     
     // MARK: AWS
     
-    fileprivate func logOut() {
-        print("logOut:")
+    fileprivate func removeEndpointUser() {
         if (AWSIdentityManager.defaultIdentityManager().isLoggedIn) {
-            UIApplication.shared.isNetworkActivityIndicatorVisible = true
             FullScreenIndicator.show()
-            AWSIdentityManager.defaultIdentityManager().logout(completionHandler: {
-                (result: Any?, error: Error?) in
-                DispatchQueue.main.async(execute: {
-                    UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                    FullScreenIndicator.hide()
-                    // Credentials provider cleanUp.
-//                    AWSIdentityManager.defaultIdentityManager().credentialsProvider.clearKeychain()
-                    // User file manager cleanUp.
-                    AWSUserFileManager.defaultUserFileManager().clearCache()
-                    // Current user cleanUp.
-                    PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB = nil
-                    self.redirectToOnboarding()
+            if let endpointARN = AWSPushManager.defaultPushManager().endpointARN {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = true
+                PRFYDynamoDBManager.defaultDynamoDBManager().removeEndpointUserDynamoDB(endpointARN, completionHandler: {
+                    (task: AWSTask) in
+                    DispatchQueue.main.async(execute: {
+                        UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                        if let error = task.error {
+                            print("removeEndpointUser error :\(error)")
+                        }
+                        self.logOut()
+                    })
+                    return nil
                 })
-            })
+            } else {
+                self.logOut()
+            }
         }
+    }
+    
+    fileprivate func logOut() {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        AWSIdentityManager.defaultIdentityManager().logout(completionHandler: {
+            (result: Any?, error: Error?) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                FullScreenIndicator.hide()
+                // Don't put error because it will be shown before redirection!
+                
+                // Credentials provider cleanUp.
+                //AWSIdentityManager.defaultIdentityManager().credentialsProvider.clearKeychain()
+                // User file manager cleanUp.
+                AWSUserFileManager.defaultUserFileManager().clearCache()
+                // Current user cleanUp.
+                PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB = nil
+                // Redirect.
+                self.redirectToOnboarding()
+            })
+        })
     }
 }
 

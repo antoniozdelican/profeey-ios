@@ -500,18 +500,27 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         awsNotificationsCountersTable.updateNotificationsCounter(awsNotificationsCounter, completionHandler: completionHandler)
     }
     
-    // MARK: UserEndpoints
-    // TODO: change to EndpointUsers
+    // MARK: EndpointUsers
     
-    func saveUserEndpointDynamoDB(_ endpointARN: String, completionHandler: @escaping AWSContinuationBlock) {
+    func createEndpointUserDynamoDB(_ endpointARN: String, completionHandler: @escaping AWSContinuationBlock) {
         guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
-            print("saveEndpointDynamoDB no identityId!")
+            print("createEndpointUserDynamoDB no identityId!")
             return
         }
-        print("saveEndpointDynamoDB:")
-        let awsUserEndpointsTable = AWSUserEndpointsTable()
-        let awsUserEndpoint = AWSUserEndpoint(_userId: identityId, _endpointARN: endpointARN)
-        awsUserEndpointsTable.saveUserEndpoint(awsUserEndpoint, completionHandler: completionHandler)
+        let created = NSNumber(value: Date().timeIntervalSince1970 as Double)
+        let awsEndpointUsersTable = AWSEndpointUsersTable()
+        let awsEndpointUser = AWSEndpointUser(_endpointARN: endpointARN, _userId: identityId, _created: created)
+        awsEndpointUsersTable.createEndpointUser(awsEndpointUser, completionHandler: completionHandler)
+    }
+    
+    func removeEndpointUserDynamoDB(_ endpointARN: String, completionHandler: @escaping AWSContinuationBlock) {
+        guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
+            print("removeEndpointUserDynamoDB no identityId!")
+            return
+        }
+        let awsEndpointUsersTable = AWSEndpointUsersTable()
+        let awsEndpointUser = AWSEndpointUser(_endpointARN: endpointARN, _userId: identityId)
+        awsEndpointUsersTable.removeEndpointUser(awsEndpointUser, completionHandler: completionHandler)
     }
     
     // MARK: UserCategories

@@ -18,29 +18,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        
+        // Configure UI.
         self.configureUI()
         
+        // Configure AWS.
         let didFinishLaunching = AWSMobileClient.sharedInstance.didFinishLaunching(application, withOptions: launchOptions)
         
-        // Check if user is logged in.
         if !AWSIdentityManager.defaultIdentityManager().isLoggedIn {
             let storyboard = UIStoryboard(name: "Onboarding", bundle: nil)
             let rootViewController = storyboard.instantiateInitialViewController()
             self.window?.rootViewController = rootViewController
-        } else {
-            // TEST
-//            AWSPushManager.defaultPushManager().interceptApplication(application, didFinishLaunchingWithOptions: launchOptions)
         }
-        
-        // TODO: save userId (identityId) for this device (endpointARN)
-        // This is done upon user signIn.
-        // For user signOut - delete record in DynamoDB??
-//        if let endpointARN = AWSPushManager.defaultPushManager().endpointARN {
-//            PRFYDynamoDBManager.defaultDynamoDBManager().createEndpointUserDynamoDB(endpointARN, completionHandler: {
-//                (task: AWSTask) in
-//                return nil
-//            })
-//        }
         
         return didFinishLaunching
     }
@@ -77,6 +66,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        print("didRegisterForRemoteNotificationsWithDeviceToken:")
         AWSMobileClient.sharedInstance.application(application, didRegisterForRemoteNotificationsWithDeviceToken: deviceToken)
     }
     

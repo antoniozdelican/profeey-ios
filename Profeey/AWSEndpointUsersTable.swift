@@ -1,16 +1,16 @@
 //
-//  AWSUserEndpointsTable.swift
+//  AWSEndpointUsersTable.swift
 //  Profeey
 //
-//  Created by Antonio Zdelican on 01/12/16.
-//  Copyright © 2016 Profeey. All rights reserved.
+//  Created by Antonio Zdelican on 24/01/17.
+//  Copyright © 2017 Profeey. All rights reserved.
 //
 
-import UIKit
+import Foundation
 import AWSDynamoDB
 import AWSMobileHubHelper
 
-class AWSUserEndpointsTable: NSObject, Table {
+class AWSEndpointUsersTable: NSObject, Table {
     
     var tableName: String
     var partitionKeyName: String
@@ -24,12 +24,12 @@ class AWSUserEndpointsTable: NSObject, Table {
     }
     var tableDisplayName: String {
         
-        return "UserEndpoints"
+        return "EndpointUsers"
     }
     
     override init() {
         
-        model = AWSUserEndpoint()
+        model = AWSEndpointUser()
         
         tableName = model.classForCoder.dynamoDBTableName()
         partitionKeyName = model.classForCoder.hashKeyAttribute()
@@ -43,12 +43,16 @@ class AWSUserEndpointsTable: NSObject, Table {
     }
     
     func tableAttributeName(_ dataObjectAttributeName: String) -> String {
-        return AWSUserEndpoint.jsonKeyPathsByPropertyKey()[dataObjectAttributeName] as! String
+        return AWSEndpointUser.jsonKeyPathsByPropertyKey()[dataObjectAttributeName] as! String
     }
     
-    func saveUserEndpoint(_ awsUserEndpoint: AWSUserEndpoint, completionHandler: @escaping AWSContinuationBlock) {
+    func createEndpointUser(_ awsEndpointUser: AWSEndpointUser, completionHandler: @escaping AWSContinuationBlock) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
-        objectMapper.save(awsUserEndpoint).continue(completionHandler)
+        objectMapper.save(awsEndpointUser).continue(completionHandler)
+    }
+    
+    func removeEndpointUser(_ awsEndpointUser: AWSEndpointUser, completionHandler: @escaping AWSContinuationBlock) {
+        let objectMapper = AWSDynamoDBObjectMapper.default()
+        objectMapper.remove(awsEndpointUser).continue(completionHandler)
     }
 }
-

@@ -43,8 +43,8 @@ class LogInTableViewController: UITableViewController {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
         self.view.endEditing(true)
+        super.viewWillDisappear(animated)
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -130,33 +130,48 @@ class LogInTableViewController: UITableViewController {
 
     fileprivate func logInWithSignInProvider(_ signInProvider: AWSSignInProvider) {
         print("logInWithSignInProvider")
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
         FullScreenIndicator.show()
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
         AWSIdentityManager.defaultIdentityManager().loginWithSign(signInProvider, completionHandler: {
             (result: Any?, error: Error?) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                // TODO
-                FullScreenIndicator.hide()
                 if let error = error as? NSError {
+                    FullScreenIndicator.hide()
                     let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.userInfo["message"] as? String, cancelButtonTitle: "Try Again")
                     self.present(alertController, animated: true, completion: nil)
                 } else {
                     // Set endpointARN to point to this user.
-                    //self.createEndpointUser()
-                    // Redirect to main.
-                    self.redirectToMain()
+                    self.createEndpointUser()
                 }
             })
         })
     }
     
-    // In background TODO: danger it can be erased with redirectToMain.
+    /*
+     Each time a user Logs in, create/update an EnpointUser in DynamoDB.
+     On User Sign up, it will be done in didRegisterForRemoteNotificationsWithDeviceToken after user confirms
+     remote notifications.
+     */
     fileprivate func createEndpointUser() {
-//        guard let endpointARN = AWSPushManager.defaultPushManager().endpointARN, let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
-//            return
-//        }
-        
+        if let endpointARN = AWSPushManager.defaultPushManager().endpointARN {
+            UIApplication.shared.isNetworkActivityIndicatorVisible = true
+            PRFYDynamoDBManager.defaultDynamoDBManager().createEndpointUserDynamoDB(endpointARN, completionHandler: {
+                (task: AWSTask) in
+                DispatchQueue.main.async(execute: {
+                    UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                    if let error = task.error {
+                        print("createEndpointUser error :\(error)")
+                    }
+                    FullScreenIndicator.hide()
+                    self.redirectToMain()
+                })
+                return nil
+            })
+        } else {
+            FullScreenIndicator.hide()
+            self.redirectToMain()
+        }
     }
 }
 

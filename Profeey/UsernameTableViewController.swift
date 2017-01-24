@@ -41,9 +41,15 @@ class UsernameTableViewController: UITableViewController {
         // CHECK IF IT IS Facebook user or UserPool!
         self.userPool = AWSCognitoIdentityUserPool.init(forKey: AWSCognitoUserPoolsSignInProviderKey)
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.usernameTextField.becomeFirstResponder()
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
         self.view.endEditing(true)
+        super.viewWillDisappear(animated)
     }
 
     override func didReceiveMemoryWarning() {

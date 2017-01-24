@@ -87,8 +87,6 @@
 		A96622051D0EC49700298CE7 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96622041D0EC49700298CE7 /* Colors.swift */; };
 		A96C9AB51D7DADC3007E0B9D /* UploadingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96C9AB41D7DADC3007E0B9D /* UploadingTableViewCell.swift */; };
 		A9707D251E02AC76005D729D /* ForgotPassword.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9707D241E02AC76005D729D /* ForgotPassword.storyboard */; };
-		A97A3F691DF027E800FC5AEA /* AWSUserEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = A97A3F681DF027E800FC5AEA /* AWSUserEndpoint.swift */; };
-		A97A3F6B1DF027F200FC5AEA /* AWSUserEndpointsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A97A3F6A1DF027F200FC5AEA /* AWSUserEndpointsTable.swift */; };
 		A97A9AED1D85D0ED00507517 /* ProfessionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A97A9AEC1D85D0ED00507517 /* ProfessionsTableViewController.swift */; };
 		A97DBEEB1DF16ACB00A9F4FE /* Search.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A97DBEEA1DF16ACB00A9F4FE /* Search.storyboard */; };
 		A97DBEED1DF16BD400A9F4FE /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A97DBEEC1DF16BD400A9F4FE /* SearchViewController.swift */; };
@@ -169,6 +167,8 @@
 		A9C0ED3A1D3C21C30036F791 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C0ED391D3C21C30036F791 /* Post.swift */; };
 		A9C3C0E81E02B7D2005CA18C /* ForgotPasswordTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C3C0E71E02B7D2005CA18C /* ForgotPasswordTableViewController.swift */; };
 		A9C3C0EA1E02B7DC005CA18C /* NewPasswordTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C3C0E91E02B7DC005CA18C /* NewPasswordTableViewController.swift */; };
+		A9C443C61E3759D6009B6BCE /* AWSEndpointUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C443C51E3759D6009B6BCE /* AWSEndpointUser.swift */; };
+		A9C443C81E375A2B009B6BCE /* AWSEndpointUsersTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C443C71E375A2B009B6BCE /* AWSEndpointUsersTable.swift */; };
 		A9C4D2731D992A67000E1F35 /* SearchUsersTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C4D2721D992A67000E1F35 /* SearchUsersTableViewController.swift */; };
 		A9C6CB7F1D2929AA00863816 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C6CB7E1D2929AA00863816 /* Extensions.swift */; };
 		A9C88E541E225F5700B7D2E7 /* Messages.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9C88E531E225F5700B7D2E7 /* Messages.storyboard */; };
@@ -363,8 +363,6 @@
 		A96622041D0EC49700298CE7 /* Colors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		A96C9AB41D7DADC3007E0B9D /* UploadingTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UploadingTableViewCell.swift; sourceTree = "<group>"; };
 		A9707D241E02AC76005D729D /* ForgotPassword.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ForgotPassword.storyboard; sourceTree = "<group>"; };
-		A97A3F681DF027E800FC5AEA /* AWSUserEndpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSUserEndpoint.swift; sourceTree = "<group>"; };
-		A97A3F6A1DF027F200FC5AEA /* AWSUserEndpointsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSUserEndpointsTable.swift; sourceTree = "<group>"; };
 		A97A9AEC1D85D0ED00507517 /* ProfessionsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfessionsTableViewController.swift; sourceTree = "<group>"; };
 		A97DBEEA1DF16ACB00A9F4FE /* Search.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Search.storyboard; sourceTree = "<group>"; };
 		A97DBEEC1DF16BD400A9F4FE /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
@@ -446,6 +444,8 @@
 		A9C0ED391D3C21C30036F791 /* Post.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		A9C3C0E71E02B7D2005CA18C /* ForgotPasswordTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForgotPasswordTableViewController.swift; sourceTree = "<group>"; };
 		A9C3C0E91E02B7DC005CA18C /* NewPasswordTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewPasswordTableViewController.swift; sourceTree = "<group>"; };
+		A9C443C51E3759D6009B6BCE /* AWSEndpointUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSEndpointUser.swift; sourceTree = "<group>"; };
+		A9C443C71E375A2B009B6BCE /* AWSEndpointUsersTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSEndpointUsersTable.swift; sourceTree = "<group>"; };
 		A9C4D2721D992A67000E1F35 /* SearchUsersTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchUsersTableViewController.swift; sourceTree = "<group>"; };
 		A9C6CB7E1D2929AA00863816 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		A9C88E531E225F5700B7D2E7 /* Messages.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Messages.storyboard; sourceTree = "<group>"; };
@@ -805,13 +805,13 @@
 			name = "Forgot Password";
 			sourceTree = "<group>";
 		};
-		A97A3F631DF0271000FC5AEA /* AWSUserEndpoints */ = {
+		A97A3F631DF0271000FC5AEA /* AWSEndpointUsers */ = {
 			isa = PBXGroup;
 			children = (
-				A97A3F681DF027E800FC5AEA /* AWSUserEndpoint.swift */,
-				A97A3F6A1DF027F200FC5AEA /* AWSUserEndpointsTable.swift */,
+				A9C443C51E3759D6009B6BCE /* AWSEndpointUser.swift */,
+				A9C443C71E375A2B009B6BCE /* AWSEndpointUsersTable.swift */,
 			);
-			name = AWSUserEndpoints;
+			name = AWSEndpointUsers;
 			sourceTree = "<group>";
 		};
 		A97DBEE91DF16AB400A9F4FE /* Search */ = {
@@ -1363,7 +1363,7 @@
 				A99B9E291DB53C8D0047360D /* AWSEducations */,
 				A91C1CD11DED9C5B006FBDD4 /* AWSNotifications */,
 				A9D6086E1E2A80BF00AD8C16 /* AWSNotificationsCounters */,
-				A97A3F631DF0271000FC5AEA /* AWSUserEndpoints */,
+				A97A3F631DF0271000FC5AEA /* AWSEndpointUsers */,
 				A9C88E5F1E22780E00B7D2E7 /* AWSMessages */,
 				A94368811E23AD4E0009F4EA /* AWSConversations */,
 				A9D688801E0AE01100A07D86 /* AWSSearch */,
@@ -1615,7 +1615,6 @@
 				A9B6F0B61DDA23B40031FA2F /* AWSRecommendationsTable.swift in Sources */,
 				A94368801E23AB480009F4EA /* Conversation.swift in Sources */,
 				A915F86E1DC0D49C0031C45F /* LocationsTableViewController.swift in Sources */,
-				A97A3F691DF027E800FC5AEA /* AWSUserEndpoint.swift in Sources */,
 				A9AC8FC01DBDFF5200C9BCE0 /* PostDetailsTableViewController.swift in Sources */,
 				A9B934B01D1BD9BB00ACC2B8 /* OnboardingViewController.swift in Sources */,
 				A9E450801D5A09F100D14553 /* Comment.swift in Sources */,
@@ -1635,6 +1634,7 @@
 				A9D100671E0C4744006590F8 /* FullUser.swift in Sources */,
 				A9ACA7471DB508BB0004B8DE /* AWSWorkExperienceUpdate.swift in Sources */,
 				A9E9DC5B1E16C95B00FE7C3B /* PreviewViewController.swift in Sources */,
+				A9C443C81E375A2B009B6BCE /* AWSEndpointUsersTable.swift in Sources */,
 				A9E4507A1D59E6C500D14553 /* CommentTableViewCell.swift in Sources */,
 				A9BF16491D6514C900060A9E /* NoResultsTableViewCell.swift in Sources */,
 				A9C88E561E225F6D00B7D2E7 /* MessagesTableViewController.swift in Sources */,
@@ -1648,7 +1648,6 @@
 				A9DA6A061E335EE700B7CE3E /* ProfileTableViewController.swift in Sources */,
 				A9E050F41D83065D00DD992D /* LocationOldTableViewCell.swift in Sources */,
 				A9D688871E0AE06F00A07D86 /* AWSProfessionsTable.swift in Sources */,
-				A97A3F6B1DF027F200FC5AEA /* AWSUserEndpointsTable.swift in Sources */,
 				A94797A71D2E3451007CBF08 /* User.swift in Sources */,
 				A90146E41DB2662E0092ED21 /* ProfileMainTableViewCell.swift in Sources */,
 				A94368781E238A8F0009F4EA /* NotificationsViewController.swift in Sources */,
@@ -1692,6 +1691,7 @@
 				A9B6F0B41DDA22D80031FA2F /* AWSRecommendation.swift in Sources */,
 				A9AFFB061D8AD9DE00219627 /* SearchUserTableViewCell.swift in Sources */,
 				A9D608721E2A812C00AD8C16 /* AWSNotificationsCountersTable.swift in Sources */,
+				A9C443C61E3759D6009B6BCE /* AWSEndpointUser.swift in Sources */,
 				A9B185951DCF25CF00E1981D /* AWSRelationshipsTable.swift in Sources */,
 				A9F49D571D379D01002EB68B /* AWSPost.swift in Sources */,
 				A9C6CB7F1D2929AA00863816 /* Extensions.swift in Sources */,

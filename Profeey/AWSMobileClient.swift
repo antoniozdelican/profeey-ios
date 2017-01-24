@@ -115,7 +115,12 @@ class AWSMobileClient: NSObject {
         self.setupCloudLogicAPI()
         
         let didFinishLaunching: Bool = AWSIdentityManager.defaultIdentityManager().interceptApplication(application, didFinishLaunchingWithOptions: launchOptions)
-        //didFinishLaunching = didFinishLaunching && AWSPushManager.defaultPushManager().interceptApplication(application, didFinishLaunchingWithOptions: launchOptions)
+        
+        /*
+         AWSPushManager.defaultPushManager().interceptApplication is called only in MainTabBarVc to 
+         prevent registering push notifications before user actually Signs Up into the newly installed app.
+         */
+//        didFinishLaunching = didFinishLaunching && AWSPushManager.defaultPushManager().interceptApplication(application, didFinishLaunchingWithOptions: launchOptions)
         
         if (!self.isInitialized) {
             AWSIdentityManager.defaultIdentityManager().resumeSession(completionHandler: {

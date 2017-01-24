@@ -61,7 +61,14 @@ class MainTabBarController: UITabBarController {
             self.isLoadingNumberOfUnseenConversations = true
             self.queryUnseenConversations()
             
-            // TEST
+            // Set delegate.
+            AWSPushManager.defaultPushManager().delegate = self
+            /*
+             It is safe to call it here. 
+             The first time User install the app and Sings Up / Logs In it will 
+             registerForPushNotifications and set new token.
+             Other times it will just pass the same token.
+             */
             AWSPushManager.defaultPushManager().interceptApplication(UIApplication.shared, didFinishLaunchingWithOptions: nil)
         }
         
@@ -360,7 +367,7 @@ extension MainTabBarController: UITabBarControllerDelegate {
         guard let navigationController = viewController as? UINavigationController else {
             return
         }
-
+        
         if let childViewController = navigationController.childViewControllers[0] as? HomeTableViewController {
             if self.previousViewController == childViewController || self.previousViewController == nil {
                 childViewController.homeTabBarButtonTapped()
@@ -387,5 +394,68 @@ extension MainTabBarController: UITabBarControllerDelegate {
             }
             self.previousViewController = childViewController
         }
+    }
+}
+
+extension MainTabBarController: AWSPushManagerDelegate {
+    
+    func pushManagerDidRegister(_ pushManager: AWSPushManager) {
+        print("pushManagerDidRegister:")
+        if let endpointARN = AWSPushManager.defaultPushManager().endpointARN {
+            print(endpointARN)
+        }
+        // When user Signs Up and accepts remote notifications, create an EnpointUser in DynamoDB. Be sure to delete it on sign out.
+        if let endpointARN = AWSPushManager.defaultPushManager().endpointARN {
+            UIApplication.shared.isNetworkActivityIndicatorVisible = true
+            PRFYDynamoDBManager.defaultDynamoDBManager().createEndpointUserDynamoDB(endpointARN, completionHandler: {
+                (task: AWSTask) in
+                DispatchQueue.main.async(execute: {
+                    UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                    if let error = task.error {
+                        print("createEndpointUser error :\(error)")
+                    }
+                })
+                return nil
+            })
+        }
+    }
+    
+    func pushManager(_ pushManager: AWSPushManager, didFailToRegisterWithError error: Error) {
+        // Do nothing.
+    }
+    
+    func pushManager(_ pushManager: AWSPushManager, didReceivePushNotification userInfo: [AnyHashable : Any]) {
+        
+        print("Hello it's hereeee")
+        // Do nothing.
+        
+        // Try fix bug here.
+    }
+    
+    func pushManagerDidDisable(_ pushManager: AWSPushManager) {
+        // Do nothing.
+    }
+    
+    func pushManager(_ pushManager: AWSPushManager, didFailToDisableWithError error: Error) {
+        // Do nothing.
+    }
+}
+
+extension MainTabBarController: AWSPushTopicDelegate {
+    
+    func topicDidSubscribe(_ topic: AWSPushTopic) {
+        // Do nothing.
+    }
+    
+    func topic(_ topic: AWSPushTopic, didFailToSubscribeWithError error: Error) {
+        // Do nothing.
+    }
+    
+    func topicDidUnsubscribe(_ topic: AWSPushTopic) {
+        // Do nothing.
+    }
+    
+    func topic(_ topic: AWSPushTopic, didFailToUnsubscribeWithError error: Error) {
+        // Do nothing.
     }
 }

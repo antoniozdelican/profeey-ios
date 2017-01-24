@@ -88,9 +88,10 @@ protocol DynamoDBManager {
     func getNotificationsCounterDynamoDB(_ completionHandler: @escaping AWSContinuationBlock)
     func updateNotificationsCounterDynamoDB(_ completionHandler: @escaping AWSContinuationBlock)
     
-    // MARK: UserEndpoints
+    // MARK: EndpointUsers
     
-    func saveUserEndpointDynamoDB(_ endpointARN: String, completionHandler: @escaping AWSContinuationBlock)
+    func createEndpointUserDynamoDB(_ endpointARN: String, completionHandler: @escaping AWSContinuationBlock)
+    func removeEndpointUserDynamoDB(_ endpointARN: String, completionHandler: @escaping AWSContinuationBlock)
     
     // MARK: UserCategories
     

@@ -47,12 +47,22 @@ class WelcomeVerificationTableViewController: UITableViewController {
         self.userPool = AWSCognitoIdentityUserPool.init(forKey: AWSCognitoUserPoolsSignInProviderKey)
     }
     
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return UIStatusBarStyle.lightContent
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.verificationCodeTextField.becomeFirstResponder()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        self.view.endEditing(true)
+        super.viewWillDisappear(animated)
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return UIStatusBarStyle.lightContent
     }
     
     // MARK: UITableViewDelegate
@@ -118,39 +128,62 @@ class WelcomeVerificationTableViewController: UITableViewController {
     // MARK: AWS
     
     fileprivate func verifyEmail() {
-        guard let verificationCode = self.verificationCodeTextField.text?.trimm(), !verificationCode.isEmpty else {
+        guard let verificationCode = self.verificationCodeTextField.text?.trimm(), !verificationCode.isEmpty, let email = self.email else {
             return
         }
-        print("verifyEmail:")
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         FullScreenIndicator.show()
         self.userPool?.currentUser()?.verifyAttribute("email", code: verificationCode).continue({
             (task: AWSTask) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                FullScreenIndicator.hide()
-                if let error = task.error as? NSError {
-                    print("verifyEmail error: \(error)")
+                guard task.error == nil else {
+                    FullScreenIndicator.hide()
+                    print("verifyEmail error: \(task.error!)")
                     // Error handling.
-                    print(error.localizedDescription)
                     var title: String = "Something went wrong"
                     var message: String? = "Please try again."
-                    if let type = error.userInfo["__type"] as? String {
+                    if let type = (task.error as! NSError).userInfo["__type"] as? String {
                         switch type {
                         case "CodeMismatchException":
                             title = "Invalid Code"
                             message = "Verification code you entered is invalid. Please try again."
                         default:
                             title = type
-                            message = error.userInfo["message"] as? String
+                            message = (task.error as! NSError).userInfo["message"] as? String
                         }
                         
                     }
                     let alertController = self.getSimpleAlertWithTitle(title, message: message, cancelButtonTitle: "Try Again")
                     self.present(alertController, animated: true, completion: nil)
-                } else {
-                    self.performSegue(withIdentifier: "segueToUsernameVc", sender: self)
+                    return
                 }
+                // Update email in DynamoDB.
+                self.updateUser(email)
+            })
+            return nil
+        })
+    }
+    
+    fileprivate func updateUser(_ email: String) {
+        // Email is now verified.
+        let emailVerified = NSNumber(value: 1)
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().updateUserEmailDynamoDB(email, emailVerified: emailVerified, completionHandler: {
+            (task: AWSTask) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                FullScreenIndicator.hide()
+                guard task.error == nil else {
+                    print("updateUser error: \(task.error!)")
+                    let alertController = UIAlertController(title: "Save error", message: task.error?.localizedDescription, preferredStyle: UIAlertControllerStyle.alert)
+                    let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil)
+                    alertController.addAction(okAction)
+                    self.present(alertController, animated: true, completion: nil)
+                    return
+                }
+                // Perform segue.
+                self.performSegue(withIdentifier: "segueToUsernameVc", sender: self)
             })
             return nil
         })
