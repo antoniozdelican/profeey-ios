@@ -291,7 +291,7 @@
                                                     <color key="textColor" red="0.41868340970000001" green="0.41867089270000002" blue="0.41867792609999999" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Time" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Yb-0E-lou">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2 weeks ago" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Yb-0E-lou">
                                                     <rect key="frame" x="0.0" y="40.5" width="193" height="17"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <color key="textColor" red="0.41868340970000001" green="0.41867089270000002" blue="0.41867792609999999" alpha="1" colorSpace="calibratedRGB"/>
@@ -312,9 +312,9 @@
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="categoryNameLabel" destination="JGT-de-YTm" id="9FT-yC-hlc"/>
+                                    <outlet property="createdLabel" destination="2Yb-0E-lou" id="FQV-mm-giv"/>
                                     <outlet property="numberOfLikesLabel" destination="VrU-ql-oeM" id="gTD-q2-iMm"/>
                                     <outlet property="postImageView" destination="YhB-Vc-bg9" id="CtT-pV-MlK"/>
-                                    <outlet property="timeLabel" destination="2Yb-0E-lou" id="Ods-YL-Sfe"/>
                                     <outlet property="titleLabel" destination="Zpm-tL-qfg" id="K7k-z1-nBv"/>
                                 </connections>
                             </tableViewCell>

@@ -76,7 +76,7 @@ class RecommendationsTableViewController: UITableViewController {
         cell.profilePicImageView.image = user?.profilePicUrl != nil ? user?.profilePic : UIImage(named: "ic_no_profile_pic_feed")
         cell.preferredUsernameLabel.text = user?.preferredUsername
         cell.professionNameLabel.text = user?.professionName
-        cell.timeLabel.text = recommendation.createdString
+        cell.createdLabel.text = recommendation.createdString
         cell.recommendationTextLabel.text = recommendation.recommendationText
         recommendation.isExpandedRecommendationText ? cell.untruncate() : cell.truncate()
         cell.recommendationTableViewCellDelegate = self

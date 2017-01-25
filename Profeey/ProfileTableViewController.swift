@@ -293,7 +293,7 @@ class ProfileTableViewController: UITableViewController {
             cell.postImageView.image = post.image
             cell.titleLabel.text = post.caption
             cell.categoryNameLabel.text = post.categoryName
-            cell.timeLabel.text = post.createdString
+            cell.createdLabel.text = post.createdString
             cell.numberOfLikesLabel.text = post.numberOfLikesSmallString
             return cell
         case .experience:
