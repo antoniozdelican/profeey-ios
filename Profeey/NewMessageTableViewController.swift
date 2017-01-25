@@ -228,6 +228,9 @@ class NewMessageTableViewController: UITableViewController {
                 self.popularUsers = []
                 if let awsUsers = response?.items as? [AWSUser] {
                     for awsUser in awsUsers {
+                        guard awsUser._userId != AWSIdentityManager.defaultIdentityManager().identityId else {
+                            continue
+                        }
                         let user = LocationUser(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationId: awsUser._locationId, locationName: awsUser._locationName, numberOfRecommendations: awsUser._numberOfRecommendations)
                         self.popularUsers.append(user)
                     }
