@@ -155,7 +155,7 @@ class NewMessageTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "searchTableSectionHeader") as? SearchTableSectionHeader
-        header?.titleLabel.text = self.isShowingPopularUsers ? "POPULAR" : "BEST MATCHES"
+        header?.titleLabel.text = "BEST MATCHES"
         return header
     }
     
