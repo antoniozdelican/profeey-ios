@@ -11,6 +11,6 @@ import Foundation
 class AWSWorkExperienceUpdate: AWSWorkExperience {
     
     class func ignoreAttributes() -> [String] {
-        return ["creationDate"]
+        return ["created"]
     }
 }

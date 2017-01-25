@@ -11,6 +11,6 @@ import Foundation
 class AWSEducationUpdate: AWSEducation {
     
     class func ignoreAttributes() -> [String] {
-        return ["creationDate"]
+        return ["created"]
     }
 }

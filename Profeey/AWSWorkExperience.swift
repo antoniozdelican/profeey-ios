@@ -13,7 +13,7 @@ class AWSWorkExperience: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     
     var _userId: String?
     var _workExperienceId: String?
-    var _creationDate: NSNumber?
+    var _created: NSNumber?
     var _title: String?
     var _organization: String?
     var _workDescription: String?
@@ -22,11 +22,11 @@ class AWSWorkExperience: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     var _toMonth: NSNumber?
     var _toYear: NSNumber?
     
-    convenience init(_userId: String?, _workExperienceId: String?, _creationDate: NSNumber?, _title: String?, _organization: String?, _workDescription: String?, _fromMonth: NSNumber?, _fromYear: NSNumber?, _toMonth: NSNumber?, _toYear: NSNumber?) {
+    convenience init(_userId: String?, _workExperienceId: String?, _created: NSNumber?, _title: String?, _organization: String?, _workDescription: String?, _fromMonth: NSNumber?, _fromYear: NSNumber?, _toMonth: NSNumber?, _toYear: NSNumber?) {
         self.init()
         self._userId = _userId
         self._workExperienceId = _workExperienceId
-        self._creationDate = _creationDate
+        self._created = _created
         self._title = _title
         self._organization = _organization
         self._workDescription = _workDescription
@@ -62,7 +62,7 @@ class AWSWorkExperience: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
         return [
             "_userId" : "userId",
             "_workExperienceId" : "workExperienceId",
-            "_creationDate" : "creationDate",
+            "_created" : "created",
             "_title" : "title",
             "_organization" : "organization",
             "_workDescription" : "workDescription",

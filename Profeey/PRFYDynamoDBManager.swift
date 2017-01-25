@@ -541,9 +541,9 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         }
         print("createWorkExperienceDynamoDB:")
         let workExperienceId = NSUUID().uuidString.lowercased()
-        let creationDate = NSNumber(value: Date().timeIntervalSince1970 as Double)
+        let created = NSNumber(value: Date().timeIntervalSince1970 as Double)
         let awsWorkExperiencesTable = AWSWorkExperiencesTable()
-        let awsWorkExperience = AWSWorkExperience(_userId: identityId, _workExperienceId: workExperienceId, _creationDate: creationDate, _title: title, _organization: organization, _workDescription: workDescription, _fromMonth: fromMonth, _fromYear: fromYear, _toMonth: toMonth, _toYear: toYear)
+        let awsWorkExperience = AWSWorkExperience(_userId: identityId, _workExperienceId: workExperienceId, _created: created, _title: title, _organization: organization, _workDescription: workDescription, _fromMonth: fromMonth, _fromYear: fromYear, _toMonth: toMonth, _toYear: toYear)
         awsWorkExperiencesTable.saveWorkExperience(awsWorkExperience, completionHandler: {
             (task: AWSTask) in
             if let error = task.error {
@@ -563,7 +563,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         }
         print("updateWorkExperienceDynamoDB:")
         let awsWorkExperiencesTable = AWSWorkExperiencesTable()
-        let awsWorkExperienceUpdate = AWSWorkExperienceUpdate(_userId: identityId, _workExperienceId: workExperienceId, _creationDate: nil, _title: title, _organization: organization, _workDescription: workDescription, _fromMonth: fromMonth, _fromYear: fromYear, _toMonth: toMonth, _toYear: toYear)
+        let awsWorkExperienceUpdate = AWSWorkExperienceUpdate(_userId: identityId, _workExperienceId: workExperienceId, _created: nil, _title: title, _organization: organization, _workDescription: workDescription, _fromMonth: fromMonth, _fromYear: fromYear, _toMonth: toMonth, _toYear: toYear)
         awsWorkExperiencesTable.saveWorkExperience(awsWorkExperienceUpdate, completionHandler: {
             (task: AWSTask) in
             if let error = task.error {
@@ -603,9 +603,9 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         }
         print("creatEducationDynamoDB:")
         let educationId = NSUUID().uuidString.lowercased()
-        let creationDate = NSNumber(value: Date().timeIntervalSince1970 as Double)
+        let created = NSNumber(value: Date().timeIntervalSince1970 as Double)
         let awsEducationsTable = AWSEducationsTable()
-        let awsEducation = AWSEducation(_userId: identityId, _educationId: educationId, _creationDate: creationDate, _school: school, _fieldOfStudy: fieldOfStudy, _educationDescription: educationDescription, _fromMonth: fromMonth, _fromYear: fromYear, _toMonth: toMonth, _toYear: toYear)
+        let awsEducation = AWSEducation(_userId: identityId, _educationId: educationId, _created: created, _school: school, _fieldOfStudy: fieldOfStudy, _educationDescription: educationDescription, _fromMonth: fromMonth, _fromYear: fromYear, _toMonth: toMonth, _toYear: toYear)
         awsEducationsTable.saveEducation(awsEducation, completionHandler: {
             (task: AWSTask) in
             if let error = task.error {
@@ -625,7 +625,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         }
         print("updateEducationDynamoDB:")
         let awsEducationsTable = AWSEducationsTable()
-        let awsEducationUpdate = AWSEducationUpdate(_userId: identityId, _educationId: educationId, _creationDate: nil, _school: school, _fieldOfStudy: fieldOfStudy, _educationDescription: educationDescription, _fromMonth: fromMonth, _fromYear: fromYear, _toMonth: toMonth, _toYear: toYear)
+        let awsEducationUpdate = AWSEducationUpdate(_userId: identityId, _educationId: educationId, _created: nil, _school: school, _fieldOfStudy: fieldOfStudy, _educationDescription: educationDescription, _fromMonth: fromMonth, _fromYear: fromYear, _toMonth: toMonth, _toYear: toYear)
         awsEducationsTable.saveEducation(awsEducationUpdate, completionHandler: {
             (task: AWSTask) in
             if let error = task.error {
