@@ -110,14 +110,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     fileprivate func configureUI() {
         // UINavigationBar
+//        UINavigationBar.appearance().barTintColor = Colors.whiteDark
+//        UINavigationBar.appearance().isTranslucent = false
+//        UINavigationBar.appearance().tintColor = Colors.black
+//        UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: Colors.black]
         UINavigationBar.appearance().barTintColor = Colors.whiteDark
         UINavigationBar.appearance().isTranslucent = false
         UINavigationBar.appearance().tintColor = Colors.black
         UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: Colors.black]
+        UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
+        UINavigationBar.appearance().shadowImage = UIImage(named: "ic_navbar_shadow_resizable")
         // UITabBar
+//        UITabBar.appearance().barTintColor = Colors.whiteDark
+//        UITabBar.appearance().isTranslucent = false
+//        UITabBar.appearance().tintColor = Colors.grey
         UITabBar.appearance().barTintColor = Colors.whiteDark
         UITabBar.appearance().isTranslucent = false
         UITabBar.appearance().tintColor = Colors.grey
+        UITabBar.appearance().backgroundImage = UIImage()
+        UITabBar.appearance().shadowImage = UIImage(named: "ic_tabbar_shadow_resizable")
         // UITableView
         UITableView.appearance().tableFooterView = UIView()
         UITableView.appearance().separatorColor = Colors.greyLight
@@ -129,8 +140,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UITextField.appearance().tintColor = Colors.black
         // UITextView
         UITextView.appearance().tintColor = Colors.black
-        // UISearchBar
-        UISearchBar.appearance().searchBarStyle = UISearchBarStyle.minimal
     }
 }
 
