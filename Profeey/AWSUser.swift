@@ -12,7 +12,7 @@ import AWSDynamoDB
 class AWSUser: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     
     var _userId: String?
-    var _creationDate: NSNumber?
+    var _created: NSNumber?
     var _firstName: String?
     var _lastName: String?
     var _preferredUsername: String?
@@ -31,10 +31,10 @@ class AWSUser: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     var _numberOfRecommendations: NSNumber?
     
     // To create User on landing.
-    convenience init(_userId: String?, _creationDate: NSNumber?, _firstName: String?, _lastName: String?, _email: String?, _emailVerified: NSNumber?) {
+    convenience init(_userId: String?, _created: NSNumber?, _firstName: String?, _lastName: String?, _email: String?, _emailVerified: NSNumber?) {
         self.init()
         self._userId = _userId
-        self._creationDate = _creationDate
+        self._created = _created
         self._firstName = _firstName
         self._lastName = _lastName
         self._email = _email
@@ -91,7 +91,7 @@ class AWSUser: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     override class func jsonKeyPathsByPropertyKey() -> [AnyHashable: Any] {
         return [
             "_userId" : "userId",
-            "_creationDate" : "creationDate",
+            "_created" : "created",
             "_firstName" : "firstName",
             "_lastName" : "lastName",
             "_preferredUsername" : "preferredUsername",
@@ -107,6 +107,4 @@ class AWSUser: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
             "_numberOfRecommendations" : "numberOfRecommendations",
         ]
     }
-    
-    // Watch for creationDate update so you don't delete it!
 }
