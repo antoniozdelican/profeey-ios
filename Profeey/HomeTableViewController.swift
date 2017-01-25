@@ -178,8 +178,8 @@ class HomeTableViewController: UITableViewController {
             post.isExpandedCaption ? cell.untruncate() : cell.truncate()
             return cell
         case 3:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostCategoryCreationDate", for: indexPath) as! PostCategoryCreationDateTableViewCell
-            cell.categoryNameCreationDateLabel.text = [post.categoryName, post.creationDateString].flatMap({$0}).joined(separator: " · ")
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostCategoryCreated", for: indexPath) as! PostCategoryCreatedTableViewCell
+            cell.categoryNameCreatedLabel.text = [post.categoryName, post.createdString].flatMap({$0}).joined(separator: " · ")
             return cell
         case 4:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostButtons", for: indexPath) as! PostButtonsTableViewCell
@@ -366,7 +366,7 @@ class HomeTableViewController: UITableViewController {
                 if let awsActivities = response?.items as? [AWSActivity] {
                     for awsActivity in awsActivities {
                         let user = User(userId: awsActivity._postUserId, firstName: awsActivity._firstName, lastName: awsActivity._lastName, preferredUsername: awsActivity._preferredUsername, professionName: awsActivity._professionName, profilePicUrl: awsActivity._profilePicUrl)
-                        let post = Post(userId: awsActivity._postUserId, postId: awsActivity._postId, creationDate: awsActivity._creationDate, caption: awsActivity._caption, categoryName: awsActivity._categoryName, imageUrl: awsActivity._imageUrl, imageWidth: awsActivity._imageWidth, imageHeight: awsActivity._imageHeight, numberOfLikes: awsActivity._numberOfLikes, numberOfComments: awsActivity._numberOfComments, user: user)
+                        let post = Post(userId: awsActivity._postUserId, postId: awsActivity._postId, created: awsActivity._created, caption: awsActivity._caption, categoryName: awsActivity._categoryName, imageUrl: awsActivity._imageUrl, imageWidth: awsActivity._imageWidth, imageHeight: awsActivity._imageHeight, numberOfLikes: awsActivity._numberOfLikes, numberOfComments: awsActivity._numberOfComments, user: user)
                         self.posts.append(post)
                         numberOfNewPosts += 1
                         // Immediately getLike.
@@ -523,7 +523,7 @@ class HomeTableViewController: UITableViewController {
                     self.present(alertController, animated: true, completion: nil)
                 } else {
                     if let awsPost = task.result as? AWSPost {
-                        let newPost = Post(userId: awsPost._userId, postId: awsPost._postId, creationDate: awsPost._creationDate, caption: awsPost._caption, categoryName: awsPost._categoryName, imageUrl: awsPost._imageUrl, imageWidth: awsPost._imageWidth, imageHeight: awsPost._imageHeight, numberOfLikes: awsPost._numberOfLikes, numberOfComments: awsPost._numberOfComments, user: PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB)
+                        let newPost = Post(userId: awsPost._userId, postId: awsPost._postId, created: awsPost._created, caption: awsPost._caption, categoryName: awsPost._categoryName, imageUrl: awsPost._imageUrl, imageWidth: awsPost._imageWidth, imageHeight: awsPost._imageHeight, numberOfLikes: awsPost._numberOfLikes, numberOfComments: awsPost._numberOfComments, user: PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB)
                         newPost.image = UIImage(data: imageData)
                         // Update new post.
                         self.posts[0] = newPost
@@ -575,7 +575,7 @@ extension HomeTableViewController {
         post.caption = notification.userInfo?["caption"] as? String
         post.categoryName = notification.userInfo?["categoryName"] as? String
         (self.tableView.cellForRow(at: IndexPath(row: 2, section: postIndex)) as? PostInfoTableViewCell)?.captionLabel.text = post.caption
-        (self.tableView.cellForRow(at: IndexPath(row: 3, section: postIndex)) as? PostCategoryCreationDateTableViewCell)?.categoryNameCreationDateLabel.text = [post.categoryName, post.creationDateString].flatMap({$0}).joined(separator: " · ")
+        (self.tableView.cellForRow(at: IndexPath(row: 3, section: postIndex)) as? PostCategoryCreatedTableViewCell)?.categoryNameCreatedLabel.text = [post.categoryName, post.createdString].flatMap({$0}).joined(separator: " · ")
     }
     
     func deletePostNotification(_ notification: NSNotification) {

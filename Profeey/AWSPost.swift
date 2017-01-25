@@ -13,7 +13,7 @@ class AWSPost: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     
     var _userId: String?
     var _postId: String?
-    var _creationDate: NSNumber?
+    var _created: NSNumber?
     var _caption: String?
     var _categoryName: String?
     var _imageUrl: String?
@@ -30,11 +30,11 @@ class AWSPost: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     var _professionName: String?
     var _profilePicUrl: String?
     
-    convenience init(_userId: String?, _postId: String?, _creationDate: NSNumber?, _caption: String?, _categoryName: String?, _imageUrl: String?, _imageWidth: NSNumber?, _imageHeight: NSNumber?, _firstName: String?, _lastName: String?, _preferredUsername: String?, _professionName: String?, _profilePicUrl: String?) {
+    convenience init(_userId: String?, _postId: String?, _created: NSNumber?, _caption: String?, _categoryName: String?, _imageUrl: String?, _imageWidth: NSNumber?, _imageHeight: NSNumber?, _firstName: String?, _lastName: String?, _preferredUsername: String?, _professionName: String?, _profilePicUrl: String?) {
         self.init()
         self._userId = _userId
         self._postId = _postId
-        self._creationDate = _creationDate
+        self._created = _created
         self._caption = _caption
         self._categoryName = _categoryName
         self._imageUrl = _imageUrl
@@ -85,7 +85,7 @@ class AWSPost: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
             "_postId" : "postId",
             "_caption" : "caption",
             "_categoryName" : "categoryName",
-            "_creationDate" : "creationDate",
+            "_created" : "created",
             "_imageUrl" : "imageUrl",
             "_imageWidth" : "imageWidth",
             "_imageHeight" : "imageHeight",

@@ -83,7 +83,7 @@ class UserCategoryTableViewController: UITableViewController {
         cell.postImageView.image = post.image
         cell.titleLabel.text = post.caption
         cell.categoryNameLabel.text = post.categoryName
-        cell.timeLabel.text = post.creationDateString
+        cell.timeLabel.text = post.createdString
         cell.numberOfLikesLabel.text = post.numberOfLikesSmallString
         return cell
     }
@@ -185,7 +185,7 @@ class UserCategoryTableViewController: UITableViewController {
                 var numberOfNewPosts = 0
                 if let awsPosts = response?.items as? [AWSPost] {
                     for awsPost in awsPosts {
-                        let post = Post(userId: awsPost._userId, postId: awsPost._postId, creationDate: awsPost._creationDate, caption: awsPost._caption, categoryName: awsPost._categoryName, imageUrl: awsPost._imageUrl, imageWidth: awsPost._imageWidth, imageHeight: awsPost._imageHeight, numberOfLikes: awsPost._numberOfLikes, numberOfComments: awsPost._numberOfComments, user: self.user)
+                        let post = Post(userId: awsPost._userId, postId: awsPost._postId, created: awsPost._created, caption: awsPost._caption, categoryName: awsPost._categoryName, imageUrl: awsPost._imageUrl, imageWidth: awsPost._imageWidth, imageHeight: awsPost._imageHeight, numberOfLikes: awsPost._numberOfLikes, numberOfComments: awsPost._numberOfComments, user: self.user)
                         self.posts.append(post)
                         numberOfNewPosts += 1
                     }

@@ -226,8 +226,8 @@ extension Date {
         return (Calendar.current as NSCalendar).components(.second, from: date, to: self, options: []).second!
     }
     
-    // Calculate currentDate distance from creationDate for example.
-    // currentDate.offsetFrom(creationDate)
+    // Calculate currentDate distance from created for example.
+    // currentDate.offsetFrom(created)
     func offsetFrom(_ date: Date) -> String {
         if yearsFrom(date)   > 0 {
             return yearsFrom(date) > 1 ? "\(yearsFrom(date)) years ago" : "\(yearsFrom(date)) year ago"

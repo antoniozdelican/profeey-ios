@@ -408,9 +408,9 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         }
         print("createPostDynamoDB:")
         let postId = NSUUID().uuidString.lowercased()
-        let creationDate = NSNumber(value: Date().timeIntervalSince1970 as Double)
+        let created = NSNumber(value: Date().timeIntervalSince1970 as Double)
         let awsPostsTable = AWSPostsTable()
-        let awsPost = AWSPost(_userId: identityId, _postId: postId, _creationDate: creationDate, _caption: caption, _categoryName: categoryName, _imageUrl: imageUrl, _imageWidth: imageWidth, _imageHeight: imageHeight, _firstName: self.currentUserDynamoDB?.firstName, _lastName: self.currentUserDynamoDB?.lastName, _preferredUsername: self.currentUserDynamoDB?.preferredUsername, _professionName: self.currentUserDynamoDB?.professionName, _profilePicUrl: self.currentUserDynamoDB?.profilePicUrl)
+        let awsPost = AWSPost(_userId: identityId, _postId: postId, _created: created, _caption: caption, _categoryName: categoryName, _imageUrl: imageUrl, _imageWidth: imageWidth, _imageHeight: imageHeight, _firstName: self.currentUserDynamoDB?.firstName, _lastName: self.currentUserDynamoDB?.lastName, _preferredUsername: self.currentUserDynamoDB?.preferredUsername, _professionName: self.currentUserDynamoDB?.professionName, _profilePicUrl: self.currentUserDynamoDB?.profilePicUrl)
         awsPostsTable.savePost(awsPost, completionHandler: {
             (task: AWSTask) in
             if let error = task.error {

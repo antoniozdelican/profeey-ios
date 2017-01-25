@@ -13,7 +13,7 @@ class Post: NSObject {
     // Properties.
     var userId: String?
     var postId: String?
-    var creationDate: NSNumber?
+    var created: NSNumber?
     var caption: String?
     var categoryName: String?
     var imageUrl: String?
@@ -25,12 +25,12 @@ class Post: NSObject {
     // Generated.
     var user: User?
     var image: UIImage?
-    var creationDateString: String? {
-        guard let creationDate = self.creationDate else {
+    var createdString: String? {
+        guard let created = self.created else {
             return nil
         }
         let currentDate = Date()
-        return currentDate.offsetFrom(Date(timeIntervalSince1970: TimeInterval(creationDate)))
+        return currentDate.offsetFrom(Date(timeIntervalSince1970: TimeInterval(created)))
     }
     //Likes
     var numberOfLikesInt: Int {
@@ -81,11 +81,11 @@ class Post: NSObject {
         super.init()
     }
     
-    convenience init(userId: String?, postId: String?, creationDate: NSNumber?, caption: String?, categoryName: String?, imageUrl: String?, imageWidth: NSNumber?, imageHeight: NSNumber?, numberOfLikes: NSNumber?, numberOfComments: NSNumber?, user: User?) {
+    convenience init(userId: String?, postId: String?, created: NSNumber?, caption: String?, categoryName: String?, imageUrl: String?, imageWidth: NSNumber?, imageHeight: NSNumber?, numberOfLikes: NSNumber?, numberOfComments: NSNumber?, user: User?) {
         self.init()
         self.userId = userId
         self.postId = postId
-        self.creationDate = creationDate
+        self.created = created
         self.caption = caption
         self.categoryName = categoryName
         self.imageUrl = imageUrl
@@ -99,7 +99,7 @@ class Post: NSObject {
     // MARK: Custom copying
     
     func copyPost() -> Post {
-        let post = Post(userId: userId, postId: postId, creationDate: creationDate, caption: caption, categoryName: categoryName, imageUrl: imageUrl, imageWidth: imageWidth, imageHeight: imageHeight, numberOfLikes: numberOfLikes, numberOfComments: numberOfComments, user: user)
+        let post = Post(userId: userId, postId: postId, created: created, caption: caption, categoryName: categoryName, imageUrl: imageUrl, imageWidth: imageWidth, imageHeight: imageHeight, numberOfLikes: numberOfLikes, numberOfComments: numberOfComments, user: user)
         post.image = image
         return post
     }

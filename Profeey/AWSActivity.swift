@@ -18,7 +18,7 @@ class AWSActivity: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     
     var _caption: String?
     var _categoryName: String?
-    var _creationDate: NSNumber?
+    var _created: NSNumber?
     
     var _imageWidth: NSNumber?
     var _imageHeight: NSNumber?
@@ -31,23 +31,6 @@ class AWSActivity: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     var _preferredUsername: String?
     var _professionName: String?
     var _profilePicUrl: String?
-    
-    // Generated.
-    // TODO: refactor
-    
-    // activityId is stored in form of {postUserId}+activity+{postId}
-//    var _postUserId: String? {
-//        guard let _activityId = self._activityId else {
-//            return nil
-//        }
-//        return _activityId.components(separatedBy: "+activity+").first
-//    }
-//    var _postId: String? {
-//        guard let _activityId = self._activityId else {
-//            return nil
-//        }
-//        return _activityId.components(separatedBy: "+activity+").last
-//    }
     
     class func dynamoDBTableName() -> String {
         
@@ -72,7 +55,7 @@ class AWSActivity: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
             "_postId" : "postId",
             "_caption" : "caption",
             "_categoryName" : "categoryName",
-            "_creationDate" : "creationDate",
+            "_created" : "created",
             "_imageUrl" : "imageUrl",
             "_imageWidth" : "imageWidth",
             "_imageHeight" : "imageHeight",

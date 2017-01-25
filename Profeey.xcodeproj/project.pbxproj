@@ -44,6 +44,7 @@
 		A931E25E1E262C81006F175A /* OtherMessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A931E25D1E262C81006F175A /* OtherMessageTableViewCell.swift */; };
 		A932AA0C1E03E1280048563C /* WelcomeVerificationTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A932AA0B1E03E1280048563C /* WelcomeVerificationTableViewController.swift */; };
 		A932AA111E04081A0048563C /* MissingUsernameNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A932AA101E04081A0048563C /* MissingUsernameNavigationController.swift */; };
+		A943494F1E38FF2F004E96BF /* PostCategoryCreatedTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A943494E1E38FF2F004E96BF /* PostCategoryCreatedTableViewCell.swift */; };
 		A94368741E2389A20009F4EA /* NotificationsSegmentsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A94368731E2389A20009F4EA /* NotificationsSegmentsView.xib */; };
 		A94368781E238A8F0009F4EA /* NotificationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A94368771E238A8F0009F4EA /* NotificationsViewController.swift */; };
 		A943687A1E239E6C0009F4EA /* ConversationsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A94368791E239E6C0009F4EA /* ConversationsTableViewController.swift */; };
@@ -100,7 +101,6 @@
 		A990ECB31D6A576E00C3C9CE /* Users.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A990ECB21D6A576E00C3C9CE /* Users.storyboard */; };
 		A990ECB51D6A582100C3C9CE /* UserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A990ECB41D6A582100C3C9CE /* UserTableViewCell.swift */; };
 		A990ECB81D6A5F6A00C3C9CE /* Comments.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A990ECB71D6A5F6A00C3C9CE /* Comments.storyboard */; };
-		A99734E41DA12F2D007FCE11 /* PostCategoryCreationDateTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99734E31DA12F2D007FCE11 /* PostCategoryCreationDateTableViewCell.swift */; };
 		A99984DF1DB6B65B00842E51 /* AddTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99984DE1DB6B65B00842E51 /* AddTableViewCell.swift */; };
 		A999CD3F1DBE6F9F00E7ADB1 /* SearchProfessionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A999CD3E1DBE6F9F00E7ADB1 /* SearchProfessionsTableViewController.swift */; };
 		A999CD411DBE6FB000E7ADB1 /* SearchProfessionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A999CD401DBE6FB000E7ADB1 /* SearchProfessionTableViewCell.swift */; };
@@ -328,6 +328,7 @@
 		A931E25D1E262C81006F175A /* OtherMessageTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OtherMessageTableViewCell.swift; sourceTree = "<group>"; };
 		A932AA0B1E03E1280048563C /* WelcomeVerificationTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeVerificationTableViewController.swift; sourceTree = "<group>"; };
 		A932AA101E04081A0048563C /* MissingUsernameNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MissingUsernameNavigationController.swift; sourceTree = "<group>"; };
+		A943494E1E38FF2F004E96BF /* PostCategoryCreatedTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostCategoryCreatedTableViewCell.swift; sourceTree = "<group>"; };
 		A94368731E2389A20009F4EA /* NotificationsSegmentsView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NotificationsSegmentsView.xib; sourceTree = "<group>"; };
 		A94368771E238A8F0009F4EA /* NotificationsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationsViewController.swift; sourceTree = "<group>"; };
 		A94368791E239E6C0009F4EA /* ConversationsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationsTableViewController.swift; sourceTree = "<group>"; };
@@ -376,7 +377,6 @@
 		A990ECB21D6A576E00C3C9CE /* Users.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Users.storyboard; sourceTree = "<group>"; };
 		A990ECB41D6A582100C3C9CE /* UserTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserTableViewCell.swift; sourceTree = "<group>"; };
 		A990ECB71D6A5F6A00C3C9CE /* Comments.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Comments.storyboard; sourceTree = "<group>"; };
-		A99734E31DA12F2D007FCE11 /* PostCategoryCreationDateTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostCategoryCreationDateTableViewCell.swift; sourceTree = "<group>"; };
 		A99984DE1DB6B65B00842E51 /* AddTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddTableViewCell.swift; sourceTree = "<group>"; };
 		A999CD3E1DBE6F9F00E7ADB1 /* SearchProfessionsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchProfessionsTableViewController.swift; sourceTree = "<group>"; };
 		A999CD401DBE6FB000E7ADB1 /* SearchProfessionTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchProfessionTableViewCell.swift; sourceTree = "<group>"; };
@@ -989,7 +989,7 @@
 				A9B6A89E1D7F8063001EE407 /* PostUserTableViewCell.swift */,
 				A9D334071D800D8D005565C2 /* PostImageTableViewCell.swift */,
 				A9D3340B1D801693005565C2 /* PostInfoTableViewCell.swift */,
-				A99734E31DA12F2D007FCE11 /* PostCategoryCreationDateTableViewCell.swift */,
+				A943494E1E38FF2F004E96BF /* PostCategoryCreatedTableViewCell.swift */,
 				A9D334111D801B70005565C2 /* PostButtonsTableViewCell.swift */,
 				A96C9AB41D7DADC3007E0B9D /* UploadingTableViewCell.swift */,
 			);
@@ -1533,7 +1533,6 @@
 				A9D185D71D7192350073E65F /* AWSLikesTable.swift in Sources */,
 				A9B185931DCF25C000E1981D /* AWSRelationship.swift in Sources */,
 				A9D688941E0AF9CC00A07D86 /* AWSCategoriesTable.swift in Sources */,
-				A99734E41DA12F2D007FCE11 /* PostCategoryCreationDateTableViewCell.swift in Sources */,
 				A9DBC6361E113A6B0087CB19 /* FollowersFollowingViewController.swift in Sources */,
 				A903EB5B1D16A3C800B33025 /* ProfeeySimpleCamera.swift in Sources */,
 				A9E3DA1C1E3556280050EC99 /* EditPasswordTableViewController.swift in Sources */,
@@ -1579,6 +1578,7 @@
 				A9F49D5A1D379D70002EB68B /* AWSPostsTable.swift in Sources */,
 				A91828491DC1120700EC9E63 /* AddProfessionTableViewCell.swift in Sources */,
 				A9DC89371E34B14B00B9D213 /* ExperiencesHeaderTableViewCell.swift in Sources */,
+				A943494F1E38FF2F004E96BF /* PostCategoryCreatedTableViewCell.swift in Sources */,
 				A9E4507C1D59E6D300D14553 /* CommentsTableViewController.swift in Sources */,
 				A9C88E5C1E22698200B7D2E7 /* Message.swift in Sources */,
 				A91C1CD51DED9D85006FBDD4 /* AWSNotificationsTable.swift in Sources */,

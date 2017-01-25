@@ -116,8 +116,8 @@ class PostDetailsTableViewController: UITableViewController {
             cell.untruncate()
             return cell
         case 3:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostCategoryCreationDate", for: indexPath) as! PostCategoryCreationDateTableViewCell
-            cell.categoryNameCreationDateLabel.text = [self.post?.categoryName, self.post?.creationDateString].flatMap({$0}).joined(separator: " · ")
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostCategoryCreated", for: indexPath) as! PostCategoryCreatedTableViewCell
+            cell.categoryNameCreatedLabel.text = [self.post?.categoryName, self.post?.createdString].flatMap({$0}).joined(separator: " · ")
             return cell
         case 4:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostButtons", for: indexPath) as! PostButtonsTableViewCell
@@ -214,7 +214,7 @@ class PostDetailsTableViewController: UITableViewController {
                         return
                     }
                     let user = User(userId: awsPost._userId, firstName: awsPost._firstName, lastName: awsPost._lastName, preferredUsername: awsPost._preferredUsername, professionName: awsPost._professionName, profilePicUrl: awsPost._profilePicUrl)
-                    let post = Post(userId: awsPost._userId, postId: awsPost._postId, creationDate: awsPost._creationDate, caption: awsPost._caption, categoryName: awsPost._categoryName, imageUrl: awsPost._imageUrl, imageWidth: awsPost._imageWidth, imageHeight: awsPost._imageHeight, numberOfLikes: awsPost._numberOfLikes, numberOfComments: awsPost._numberOfComments, user: user)
+                    let post = Post(userId: awsPost._userId, postId: awsPost._postId, created: awsPost._created, caption: awsPost._caption, categoryName: awsPost._categoryName, imageUrl: awsPost._imageUrl, imageWidth: awsPost._imageWidth, imageHeight: awsPost._imageHeight, numberOfLikes: awsPost._numberOfLikes, numberOfComments: awsPost._numberOfComments, user: user)
                     self.post = post
                     self.tableView.reloadData()
                     if let profilePicUrl = post.user?.profilePicUrl {
@@ -324,7 +324,7 @@ extension PostDetailsTableViewController {
         post.caption = notification.userInfo?["caption"] as? String
         post.categoryName = notification.userInfo?["categoryName"] as? String
         (self.tableView.cellForRow(at: IndexPath(row: 2, section: 0)) as? PostInfoTableViewCell)?.captionLabel.text = post.caption
-        (self.tableView.cellForRow(at: IndexPath(row: 3, section: 0)) as? PostCategoryCreationDateTableViewCell)?.categoryNameCreationDateLabel.text = [post.categoryName, post.creationDateString].flatMap({$0}).joined(separator: " · ")
+        (self.tableView.cellForRow(at: IndexPath(row: 3, section: 0)) as? PostCategoryCreatedTableViewCell)?.categoryNameCreatedLabel.text = [post.categoryName, post.createdString].flatMap({$0}).joined(separator: " · ")
     }
     
     func deletePostNotification(_ notification: NSNotification) {
