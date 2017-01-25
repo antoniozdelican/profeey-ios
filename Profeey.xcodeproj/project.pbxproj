@@ -46,6 +46,9 @@
 		A932AA111E04081A0048563C /* MissingUsernameNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A932AA101E04081A0048563C /* MissingUsernameNavigationController.swift */; };
 		A943494F1E38FF2F004E96BF /* PostCategoryCreatedTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A943494E1E38FF2F004E96BF /* PostCategoryCreatedTableViewCell.swift */; };
 		A94349511E390A5A004E96BF /* PostCaptionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A94349501E390A5A004E96BF /* PostCaptionTableViewCell.swift */; };
+		A94349541E3921A6004E96BF /* NewMessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A94349531E3921A6004E96BF /* NewMessageViewController.swift */; };
+		A94349561E3921B5004E96BF /* NewMessageTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A94349551E3921B5004E96BF /* NewMessageTableViewController.swift */; };
+		A94349581E3921CD004E96BF /* NewMessageUserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A94349571E3921CD004E96BF /* NewMessageUserTableViewCell.swift */; };
 		A94368741E2389A20009F4EA /* NotificationsSegmentsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A94368731E2389A20009F4EA /* NotificationsSegmentsView.xib */; };
 		A94368781E238A8F0009F4EA /* NotificationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A94368771E238A8F0009F4EA /* NotificationsViewController.swift */; };
 		A943687A1E239E6C0009F4EA /* ConversationsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A94368791E239E6C0009F4EA /* ConversationsTableViewController.swift */; };
@@ -330,6 +333,9 @@
 		A932AA101E04081A0048563C /* MissingUsernameNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MissingUsernameNavigationController.swift; sourceTree = "<group>"; };
 		A943494E1E38FF2F004E96BF /* PostCategoryCreatedTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostCategoryCreatedTableViewCell.swift; sourceTree = "<group>"; };
 		A94349501E390A5A004E96BF /* PostCaptionTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostCaptionTableViewCell.swift; sourceTree = "<group>"; };
+		A94349531E3921A6004E96BF /* NewMessageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewMessageViewController.swift; sourceTree = "<group>"; };
+		A94349551E3921B5004E96BF /* NewMessageTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewMessageTableViewController.swift; sourceTree = "<group>"; };
+		A94349571E3921CD004E96BF /* NewMessageUserTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewMessageUserTableViewCell.swift; sourceTree = "<group>"; };
 		A94368731E2389A20009F4EA /* NotificationsSegmentsView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NotificationsSegmentsView.xib; sourceTree = "<group>"; };
 		A94368771E238A8F0009F4EA /* NotificationsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationsViewController.swift; sourceTree = "<group>"; };
 		A94368791E239E6C0009F4EA /* ConversationsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationsTableViewController.swift; sourceTree = "<group>"; };
@@ -710,6 +716,16 @@
 				A961E6FE1DE8458D00D45634 /* AWSSNS.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A94349521E39215E004E96BF /* NewMessage */ = {
+			isa = PBXGroup;
+			children = (
+				A94349531E3921A6004E96BF /* NewMessageViewController.swift */,
+				A94349551E3921B5004E96BF /* NewMessageTableViewController.swift */,
+				A94349571E3921CD004E96BF /* NewMessageUserTableViewCell.swift */,
+			);
+			name = NewMessage;
 			sourceTree = "<group>";
 		};
 		A943687B1E239FA40009F4EA /* Notifications */ = {
@@ -1318,6 +1334,7 @@
 				A94368771E238A8F0009F4EA /* NotificationsViewController.swift */,
 				A943687B1E239FA40009F4EA /* Notifications */,
 				A943687C1E239FB30009F4EA /* Conversations */,
+				A94349521E39215E004E96BF /* NewMessage */,
 			);
 			name = Notifications;
 			sourceTree = "<group>";
@@ -1529,6 +1546,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A94349561E3921B5004E96BF /* NewMessageTableViewController.swift in Sources */,
 				A903EB581D16A39700B33025 /* LLSimpleCamera+Helper.m in Sources */,
 				A9D185D71D7192350073E65F /* AWSLikesTable.swift in Sources */,
 				A9B185931DCF25C000E1981D /* AWSRelationship.swift in Sources */,
@@ -1631,6 +1649,7 @@
 				A944BAAC1DD10413000BE754 /* HomeEmptyFeedView.swift in Sources */,
 				A9E9B5611E0A88B3004E2D0B /* RecommendationTableViewCell.swift in Sources */,
 				A9D97BF81D95718C00D6F22E /* WelcomeProfessionsTableViewController.swift in Sources */,
+				A94349581E3921CD004E96BF /* NewMessageUserTableViewCell.swift in Sources */,
 				A9CBBC521DB63FEA009C8EC7 /* EditWorkOrganizationTableViewCell.swift in Sources */,
 				A9D100671E0C4744006590F8 /* FullUser.swift in Sources */,
 				A9ACA7471DB508BB0004B8DE /* AWSWorkExperienceUpdate.swift in Sources */,
@@ -1686,6 +1705,7 @@
 				A91A103A1DA833E40042B4CA /* AddInfoTableViewController.swift in Sources */,
 				A9E4507E1D59E6E400D14553 /* CommentsViewController.swift in Sources */,
 				A99030FB1D46632500336D26 /* AlbumsTableViewController.swift in Sources */,
+				A94349541E3921A6004E96BF /* NewMessageViewController.swift in Sources */,
 				A91A10351DA7F59F0042B4CA /* GalleryViewController.swift in Sources */,
 				A91A7B041DC4FA9300F7D6A7 /* AWSComment.swift in Sources */,
 				A9B6F0B41DDA22D80031FA2F /* AWSRecommendation.swift in Sources */,

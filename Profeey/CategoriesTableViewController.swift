@@ -36,8 +36,8 @@ class CategoriesTableViewController: UITableViewController {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
         self.view.endEditing(true)
+        super.viewWillDisappear(animated)
     }
     
     override var prefersStatusBarHidden: Bool {

@@ -125,6 +125,9 @@ class ConversationsTableViewController: UITableViewController {
         if cell is ConversationTableViewCell {
             self.performSegue(withIdentifier: "segueToMessagesVc", sender: cell)
         }
+        if cell is AddTableViewCell {
+            self.performSegue(withIdentifier: "segueToNewMessageVc", sender: cell)
+        }
     }
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
@@ -151,7 +154,7 @@ class ConversationsTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.section == 0 {
-            return 64.0
+            return 52.0
         }
         if self.noNetworkConnection {
             return 112.0
@@ -164,7 +167,7 @@ class ConversationsTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.section == 0 {
-            return 64.0
+            return 52.0
         }
         if self.noNetworkConnection {
             return 112.0

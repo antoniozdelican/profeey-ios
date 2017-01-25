@@ -1,22 +1,22 @@
 //
-//  SearchUsersTableViewController.swift
+//  NewMessageTableViewController.swift
 //  Profeey
 //
-//  Created by Antonio Zdelican on 26/09/16.
-//  Copyright © 2016 Profeey. All rights reserved.
+//  Created by Antonio Zdelican on 25/01/17.
+//  Copyright © 2017 Profeey. All rights reserved.
 //
 
 import UIKit
 import AWSMobileHubHelper
 import AWSDynamoDB
 
-protocol SearchUsersTableViewControllerDelegate: class {
-    func usersTableViewWillBeginDragging()
+protocol NewMessageTableViewControllerDelegate: class {
+    func tableViewWillBeginDragging()
 }
 
-class SearchUsersTableViewController: UITableViewController {
+class NewMessageTableViewController: UITableViewController {
     
-    weak var searchUsersTableViewControllerDelegate: SearchUsersTableViewControllerDelegate?
+    weak var newMessageTableViewControllerDelegate: NewMessageTableViewControllerDelegate?
     
     fileprivate var users: [User] = []
     fileprivate var isSearchingUsers: Bool {
@@ -34,6 +34,7 @@ class SearchUsersTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         self.tableView.register(UINib(nibName: "SearchTableSectionHeader", bundle: nil), forHeaderFooterViewReuseIdentifier: "searchTableSectionHeader")
         
         self.isShowingPopularUsers = true
@@ -41,8 +42,6 @@ class SearchUsersTableViewController: UITableViewController {
         self.scanUsers()
         
         // Add observers.
-        NotificationCenter.default.addObserver(self, selector: #selector(self.recommendUserNotification(_:)), name: NSNotification.Name(RecommendUserNotificationKey), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.unrecommendUserNotification(_:)), name: NSNotification.Name(UnrecommendUserNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.downloadImageNotification(_:)), name: NSNotification.Name(DownloadImageNotificationKey), object: nil)
     }
 
@@ -53,19 +52,19 @@ class SearchUsersTableViewController: UITableViewController {
     // MARK: Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let destinationViewController = segue.destination as? ProfileTableViewController,
-            let cell = sender as? SearchUserTableViewCell,
+        if let destinationViewController = segue.destination as? MessagesViewController,
+            let cell = sender as? NewMessageUserTableViewCell,
             let indexPath = self.tableView.indexPath(for: cell) {
-            destinationViewController.user = self.users[indexPath.row].copyUser()
+            destinationViewController.participant = self.users[indexPath.row].copyUser()
         }
     }
-
+    
     // MARK: UITableViewDataSource
-
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
-
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if self.noNetworkConnection {
             return 1
@@ -78,7 +77,7 @@ class SearchUsersTableViewController: UITableViewController {
         }
         return self.users.count
     }
-
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if self.noNetworkConnection {
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellNoNetwork", for: indexPath) as! NoNetworkTableViewCell
@@ -93,16 +92,11 @@ class SearchUsersTableViewController: UITableViewController {
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellNoResults", for: indexPath) as! NoResultsTableViewCell
             return cell
         }
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cellSearchUser", for: indexPath) as! SearchUserTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cellNewMessageUser", for: indexPath) as! NewMessageUserTableViewCell
         let user = self.users[indexPath.row]
         cell.profilePicImageView.image = user.profilePicUrl != nil ? user.profilePic : UIImage(named: "ic_no_profile_pic_feed")
-        cell.fullNameLabel.text = user.fullName
         cell.preferredUsernameLabel.text = user.preferredUsername
         cell.professionNameLabel.text = user.professionName
-        cell.locationNameLabel.text = user.locationName
-        cell.locationStackView.isHidden = user.locationName != nil ? false : true
-        cell.numberOfRecommendationsLabel.text = user.numberOfRecommendationsInt.numberToString()
-        cell.numberOfRecommendationsStackView.isHidden = user.numberOfRecommendationsInt > 0 ? false : true
         return cell
     }
     
@@ -121,19 +115,15 @@ class SearchUsersTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let cell = tableView.cellForRow(at: indexPath)
-        if cell is SearchUserTableViewCell {
-            self.performSegue(withIdentifier: "segueToProfileVc", sender: cell)
+        if cell is NewMessageUserTableViewCell {
+            self.performSegue(withIdentifier: "segueToMessagesVc", sender: cell)
         }
         if cell is NoNetworkTableViewCell {
             // Query.
             self.noNetworkConnection = false
             self.isSearchingPopularUsers = true
             self.tableView.reloadData()
-            if self.isLocationActive, let locationId = self.location?.locationId {
-                self.queryLocationUsers(locationId)
-            } else {
-                self.scanUsers()
-            }
+            self.scanUsers()
         }
     }
     
@@ -147,7 +137,7 @@ class SearchUsersTableViewController: UITableViewController {
         if self.users.count == 0 {
             return 64.0
         }
-        return 104.0
+        return 64.0
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -160,16 +150,12 @@ class SearchUsersTableViewController: UITableViewController {
         if self.users.count == 0 {
             return 64.0
         }
-        return UITableViewAutomaticDimension
+        return 64.0
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "searchTableSectionHeader") as? SearchTableSectionHeader
-        var titleText = self.isShowingPopularUsers ? "POPULAR" : "BEST MATCHES"
-        if self.isLocationActive, let locationName = self.location?.locationName {
-            titleText = titleText + " in \(locationName)"
-        }
-        header?.titleLabel.text = titleText
+        header?.titleLabel.text = self.isShowingPopularUsers ? "POPULAR" : "BEST MATCHES"
         return header
     }
     
@@ -180,7 +166,7 @@ class SearchUsersTableViewController: UITableViewController {
     // MARK: UIScrollViewDelegate
     
     override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        self.searchUsersTableViewControllerDelegate?.usersTableViewWillBeginDragging()
+        self.newMessageTableViewControllerDelegate?.tableViewWillBeginDragging()
     }
     
     // MARK: IBActions
@@ -191,11 +177,7 @@ class SearchUsersTableViewController: UITableViewController {
             return
         }
         // Query.
-        if self.isLocationActive, let locationId = self.location?.locationId {
-            self.queryLocationUsers(locationId)
-        } else {
-            self.scanUsers()
-        }
+        self.scanUsers()
     }
     
     // MARK: Helpers
@@ -273,95 +255,12 @@ class SearchUsersTableViewController: UITableViewController {
             })
         })
     }
-    
-    fileprivate func queryLocationUsers(_ locationId: String) {
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().queryLocationUsers(locationId, completionHandler: {
-            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
-            DispatchQueue.main.async(execute: {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                guard error == nil else {
-                    print("queryLocationUsers error: \(error!)")
-                    self.isSearchingPopularUsers = false
-                    self.refreshControl?.endRefreshing()
-                    if (error as! NSError).code == -1009 {
-                        (self.navigationController as? PRFYNavigationController)?.showBanner("No Internet Connection")
-                        self.noNetworkConnection = true
-                    }
-                    self.tableView.reloadData()
-                    return
-                }
-                self.popularUsers = []
-                if let awsUsers = response?.items as? [AWSUser] {
-                    for awsUser in awsUsers {
-                        let user = LocationUser(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationId: awsUser._locationId, locationName: awsUser._locationName, numberOfRecommendations: awsUser._numberOfRecommendations)
-                        self.popularUsers.append(user)
-                    }
-                }
-                // Set popular users.
-                self.popularUsers = self.sortUsers(self.popularUsers)
-                self.users = self.popularUsers
-                
-                // Reset flags and animations that were initiated.
-                self.isSearchingPopularUsers = false
-                self.refreshControl?.endRefreshing()
-                self.noNetworkConnection = false
-                
-                // Reload tableView.
-                self.tableView.reloadData()
-                
-                // Load profilePics.
-                if let awsUsers = response?.items as? [AWSUser] {
-                    for awsUser in awsUsers {
-                        if let profilePicUrl = awsUser._profilePicUrl {
-                            PRFYS3Manager.defaultS3Manager().downloadImageS3(profilePicUrl, imageType: .userProfilePic)
-                        }
-                    }
-                }
-            })
-        })
-    }
+
 }
 
-extension SearchUsersTableViewController {
+extension NewMessageTableViewController {
     
     // MARK: NSNotifications
-    
-    func recommendUserNotification(_ notification: NSNotification) {
-        guard let recommendingId = notification.userInfo?["recommendingId"] as? String else {
-            return
-        }
-        guard let user = self.popularUsers.first(where: { $0.userId == recommendingId }) else {
-            return
-        }
-        if let numberOfRecommendations = user.numberOfRecommendations {
-            user.numberOfRecommendations = NSNumber(value: numberOfRecommendations.intValue + 1)
-        } else {
-            user.numberOfRecommendations = NSNumber(value: 1)
-        }
-        self.popularUsers = self.sortUsers(self.popularUsers)
-        // Sort visible.
-        self.users = self.sortUsers(self.users)
-        self.tableView.reloadData()
-    }
-    
-    func unrecommendUserNotification(_ notification: NSNotification) {
-        guard let recommendingId = notification.userInfo?["recommendingId"] as? String else {
-            return
-        }
-        guard let user = self.popularUsers.first(where: { $0.userId == recommendingId }) else {
-            return
-        }
-        if let numberOfRecommendations = user.numberOfRecommendations, numberOfRecommendations.intValue > 0 {
-            user.numberOfRecommendations = NSNumber(value: numberOfRecommendations.intValue - 1)
-        } else {
-            user.numberOfRecommendations = NSNumber(value: 0)
-        }
-        self.popularUsers = self.sortUsers(self.popularUsers)
-        // Sort visible.
-        self.users = self.sortUsers(self.users)
-        self.tableView.reloadData()
-    }
     
     func downloadImageNotification(_ notification: NSNotification) {
         guard let imageKey = notification.userInfo?["imageKey"] as? String, let imageType = notification.userInfo?["imageType"] as? ImageType, let imageData = notification.userInfo?["imageData"] as? Data else {
@@ -382,37 +281,14 @@ extension SearchUsersTableViewController {
         guard let indexPathsForVisibleRows = self.tableView.indexPathsForVisibleRows, indexPathsForVisibleRows.contains(where: { $0.row == userIndex }) else {
             return
         }
-        (self.tableView.cellForRow(at: IndexPath(row: userIndex, section: 0)) as? SearchUserTableViewCell)?.profilePicImageView.image = self.popularUsers[userIndex].profilePic
+        (self.tableView.cellForRow(at: IndexPath(row: userIndex, section: 0)) as? NewMessageUserTableViewCell)?.profilePicImageView.image = self.popularUsers[userIndex].profilePic
     }
 }
 
-extension SearchUsersTableViewController: SearchUsersDelegate {
+extension NewMessageTableViewController: NewMessageViewControllerDelegate {
     
-    func addLocation(_ location: Location) {
-        guard let locationId = location.locationId else {
-            return
-        }
-        self.location = location
-        self.isLocationActive = true
-        // Clear old.
-        self.users = []
-        self.isSearchingPopularUsers = true
-        self.tableView.reloadData()
-        self.queryLocationUsers(locationId)
-    }
-    
-    func removeLocation() {
-        self.location = nil
-        self.isLocationActive = false
-        // Clear old.
-        self.users = []
-        self.isSearchingPopularUsers = true
-        self.tableView.reloadData()
-        self.scanUsers()
-    }
-    
-    func searchBarTextChanged(_ searchText: String) {
-        let name = searchText.trimm()
+    func searchTextFieldChanged(_ text: String) {
+        let name = text.trimm()
         if name.isEmpty {
             self.isShowingPopularUsers = true
             self.users = self.popularUsers
@@ -421,9 +297,5 @@ extension SearchUsersTableViewController: SearchUsersDelegate {
             self.isShowingPopularUsers = false
             self.filterUsers(name)
         }
-    }
-    
-    func scrollToTop() {
-        self.tableView.setContentOffset(CGPoint.zero, animated: true)
     }
 }
