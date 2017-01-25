@@ -15,6 +15,8 @@ protocol ProfessionsTableViewControllerDelegate: class {
 
 class ProfessionsTableViewController: UITableViewController {
     
+    @IBOutlet weak var addProfessionTextField: UITextField!
+    
     var professionName: String?
     weak var professionsTableViewControllerDelegate: ProfessionsTableViewControllerDelegate?
     
@@ -28,11 +30,11 @@ class ProfessionsTableViewController: UITableViewController {
         super.viewDidLoad()
         self.tableView.contentInset = UIEdgeInsetsMake(-1.0, 0.0, 0.0, 0.0)
         self.tableView.register(UINib(nibName: "TableSectionHeader", bundle: nil), forHeaderFooterViewReuseIdentifier: "tableSectionHeader")
+        self.addProfessionTextField.text = self.professionName
         
         self.isShowingPopularProfessions = true
         self.isSearchingPopularProfessions = true
         self.scanProfessions()
-//        self.getAllProfessions()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -47,79 +49,62 @@ class ProfessionsTableViewController: UITableViewController {
     // MARK: UITableViewDataSource
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch section {
-        case 0:
-            return 1
-        case 1:
-            if self.isShowingPopularProfessions {
-                if self.isSearchingPopularProfessions {
-                    return 1
-                }
-                if self.popularProfessions.count == 0 {
-                    return 1
-                }
-                return self.popularProfessions.count
-            } else {
-                if self.isSearchingRegularProfessions {
-                    return 1
-                }
-                if self.regularProfessions.count == 0 {
-                    return 1
-                }
-                return self.regularProfessions.count
+        if self.isShowingPopularProfessions {
+            if self.isSearchingPopularProfessions {
+                return 1
             }
-        default:
-            return 0
+            if self.popularProfessions.count == 0 {
+                return 1
+            }
+            return self.popularProfessions.count
+        } else {
+            if self.isSearchingRegularProfessions {
+                return 1
+            }
+            if self.regularProfessions.count == 0 {
+                return 1
+            }
+            return self.regularProfessions.count
         }
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        switch indexPath.section {
-        case 0:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cellAddProfession", for: indexPath) as! AddProfessionTableViewCell
-            cell.addProfessionTextField.text = self.professionName
-            cell.addProfessionTableViewCellDelegate = self
-            return cell
-        case 1:
-            if self.isShowingPopularProfessions {
-                if self.isSearchingPopularProfessions {
-                    let cell = tableView.dequeueReusableCell(withIdentifier: "cellSearching", for: indexPath) as! SearchingTableViewCell
-                    cell.activityIndicator.startAnimating()
-                    // TODO update text.
-                    return cell
-                }
-                if self.popularProfessions.count == 0 {
-                    let cell = tableView.dequeueReusableCell(withIdentifier: "cellNoResults", for: indexPath) as! NoResultsTableViewCell
-                    return cell
-                }
-                let cell = tableView.dequeueReusableCell(withIdentifier: "cellProfession", for: indexPath) as! ProfessionTableViewCell
-                let profession = self.popularProfessions[indexPath.row]
-                cell.professionNameLabel.text = profession.professionName
-                cell.numberOfUsersLabel.text = profession.numberOfUsersString
-                return cell
-            } else {
-                if self.isSearchingRegularProfessions {
-                    let cell = tableView.dequeueReusableCell(withIdentifier: "cellSearching", for: indexPath) as! SearchingTableViewCell
-                    cell.activityIndicator.startAnimating()
-                    // TODO update text.
-                    return cell
-                }
-                if self.regularProfessions.count == 0 {
-                    let cell = tableView.dequeueReusableCell(withIdentifier: "cellNoResults", for: indexPath) as! NoResultsTableViewCell
-                    return cell
-                }
-                let cell = tableView.dequeueReusableCell(withIdentifier: "cellProfession", for: indexPath) as! ProfessionTableViewCell
-                let profession = self.regularProfessions[indexPath.row]
-                cell.professionNameLabel.text = profession.professionName
-                cell.numberOfUsersLabel.text = profession.numberOfUsersString
+        if self.isShowingPopularProfessions {
+            if self.isSearchingPopularProfessions {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellSearching", for: indexPath) as! SearchingTableViewCell
+                cell.activityIndicator.startAnimating()
+                // TODO update text.
                 return cell
             }
-        default:
-            return UITableViewCell()
+            if self.popularProfessions.count == 0 {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellNoResults", for: indexPath) as! NoResultsTableViewCell
+                return cell
+            }
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellProfession", for: indexPath) as! ProfessionTableViewCell
+            let profession = self.popularProfessions[indexPath.row]
+            cell.professionNameLabel.text = profession.professionName
+            cell.numberOfUsersLabel.text = profession.numberOfUsersString
+            return cell
+        } else {
+            if self.isSearchingRegularProfessions {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellSearching", for: indexPath) as! SearchingTableViewCell
+                cell.activityIndicator.startAnimating()
+                // TODO update text.
+                return cell
+            }
+            if self.regularProfessions.count == 0 {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellNoResults", for: indexPath) as! NoResultsTableViewCell
+                return cell
+            }
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellProfession", for: indexPath) as! ProfessionTableViewCell
+            let profession = self.regularProfessions[indexPath.row]
+            cell.professionNameLabel.text = profession.professionName
+            cell.numberOfUsersLabel.text = profession.numberOfUsersString
+            return cell
         }
     }
     
@@ -140,40 +125,20 @@ class ProfessionsTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        switch indexPath.section {
-        case 0:
-            return 52.0
-        case 1:
-            return 64.0
-        default:
-            return 0.0
-        }
+        return 64.0
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        switch indexPath.section {
-        case 0:
-            return 52.0
-        case 1:
-            return 64.0
-        default:
-            return 0.0
-        }
+        return 64.0
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if section == 0 {
-            return UIView()
-        }
         let header = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "tableSectionHeader") as? TableSectionHeader
         header?.titleLabel.text = self.isShowingPopularProfessions ? "POPULAR" : "BEST MATCHES"
         return header
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if section == 0 {
-            return 1.0
-        }
         return 32.0
     }
     
@@ -184,6 +149,41 @@ class ProfessionsTableViewController: UITableViewController {
     }
     
     // MARK: IBActions
+    
+    @IBAction func addProfessionTextFieldChanged(_ sender: AnyObject) {
+        guard let text = self.addProfessionTextField.text else {
+            return
+        }
+        var professionName = text.trimm()
+        professionName = professionName.replacingOccurrences(of: "_", with: " ")
+        if professionName.isEmpty {
+            self.isShowingPopularProfessions = true
+            // Clear old.
+            self.regularProfessions = []
+            self.isSearchingRegularProfessions = false
+            self.tableView.reloadData()
+//            UIView.performWithoutAnimation {
+//                self.tableView.beginUpdates()
+//                self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
+//                self.tableView.endUpdates()
+//            }
+            self.professionName = nil
+        } else {
+            self.isShowingPopularProfessions = false
+            // Clear old.
+            self.regularProfessions = []
+            self.isSearchingRegularProfessions = true
+            self.tableView.reloadData()
+//            UIView.performWithoutAnimation {
+//                self.tableView.beginUpdates()
+//                self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
+//                self.tableView.endUpdates()
+//            }
+            self.professionName = professionName
+            // Start search for existing professions.
+            self.filterProfessions(professionName)
+        }
+    }
     
     @IBAction func doneButtonTapped(_ sender: AnyObject) {
         // '_' is unallowed (CloudSearch professionNameId) so replace it with ' ' if user enters it.
@@ -211,11 +211,12 @@ class ProfessionsTableViewController: UITableViewController {
         })
         self.regularProfessions = self.sortProfessions(self.regularProfessions)
         self.isSearchingRegularProfessions = false
-        UIView.performWithoutAnimation {
-            self.tableView.beginUpdates()
-            self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
-            self.tableView.endUpdates()
-        }
+        self.tableView.reloadData()
+//        UIView.performWithoutAnimation {
+//            self.tableView.beginUpdates()
+//            self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
+//            self.tableView.endUpdates()
+//        }
     }
     
     fileprivate func sortProfessions(_ professions: [Profession]) -> [Profession] {
@@ -236,14 +237,16 @@ class ProfessionsTableViewController: UITableViewController {
                 self.isSearchingPopularProfessions = false
                 if let error = error {
                     print("scanProfessions error: \(error)")
-                    UIView.performWithoutAnimation {
-                        self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
-                    }
+                    self.tableView.reloadData()
+//                    UIView.performWithoutAnimation {
+//                        self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
+//                    }
                 } else {
                     guard let awsProfessions = response?.items as? [AWSProfession] else {
-                        UIView.performWithoutAnimation {
-                            self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
-                        }
+                        self.tableView.reloadData()
+//                        UIView.performWithoutAnimation {
+//                            self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
+//                        }
                         return
                     }
                     for awsProfession in awsProfessions {
@@ -251,47 +254,14 @@ class ProfessionsTableViewController: UITableViewController {
                         self.popularProfessions.append(profession)
                     }
                     self.popularProfessions = self.sortProfessions(self.popularProfessions)
-                    UIView.performWithoutAnimation {
-                        self.tableView.beginUpdates()
-                        self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
-                        self.tableView.endUpdates()
-                    }
+                    self.tableView.reloadData()
+//                    UIView.performWithoutAnimation {
+//                        self.tableView.beginUpdates()
+//                        self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
+//                        self.tableView.endUpdates()
+//                    }
                 }
             })
         })
-    }
-}
-
-extension ProfessionsTableViewController: AddProfessionTableViewCellDelegate {
-    
-    func addProfessionTextFieldChanged(_ text: String) {
-        var professionName = text.trimm()
-        professionName = professionName.replacingOccurrences(of: "_", with: " ")
-        if professionName.isEmpty {
-            self.isShowingPopularProfessions = true
-            // Clear old.
-            self.regularProfessions = []
-            self.isSearchingRegularProfessions = false
-            UIView.performWithoutAnimation {
-                self.tableView.beginUpdates()
-                self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
-                self.tableView.endUpdates()
-            }
-            self.professionName = nil
-        } else {
-            self.isShowingPopularProfessions = false
-            // Clear old.
-            self.regularProfessions = []
-            self.isSearchingRegularProfessions = true
-            UIView.performWithoutAnimation {
-                self.tableView.beginUpdates()
-                self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
-                self.tableView.endUpdates()
-            }
-            self.professionName = professionName
-            // Start search for existing professions.
-            //self.getProfessions(professionName)
-            self.filterProfessions(professionName)
-        }
     }
 }

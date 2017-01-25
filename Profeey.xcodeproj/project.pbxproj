@@ -21,8 +21,6 @@
 		A915F8751DC0D9CB0031C45F /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = A915F8741DC0D9CB0031C45F /* Location.swift */; };
 		A91828451DC0E49800EC9E63 /* LocationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91828441DC0E49800EC9E63 /* LocationTableViewCell.swift */; };
 		A91828471DC0E59100EC9E63 /* Locations.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A91828461DC0E59100EC9E63 /* Locations.storyboard */; };
-		A91828491DC1120700EC9E63 /* AddProfessionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91828481DC1120700EC9E63 /* AddProfessionTableViewCell.swift */; };
-		A918284B1DC1233400EC9E63 /* SearchLocationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A918284A1DC1233400EC9E63 /* SearchLocationTableViewCell.swift */; };
 		A918284D1DC124D900EC9E63 /* AddCategoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A918284C1DC124D900EC9E63 /* AddCategoryTableViewCell.swift */; };
 		A91A10351DA7F59F0042B4CA /* GalleryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91A10341DA7F59F0042B4CA /* GalleryViewController.swift */; };
 		A91A103A1DA833E40042B4CA /* AddInfoTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91A10391DA833E40042B4CA /* AddInfoTableViewController.swift */; };
@@ -306,8 +304,6 @@
 		A915F8741DC0D9CB0031C45F /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		A91828441DC0E49800EC9E63 /* LocationTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationTableViewCell.swift; sourceTree = "<group>"; };
 		A91828461DC0E59100EC9E63 /* Locations.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Locations.storyboard; sourceTree = "<group>"; };
-		A91828481DC1120700EC9E63 /* AddProfessionTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddProfessionTableViewCell.swift; sourceTree = "<group>"; };
-		A918284A1DC1233400EC9E63 /* SearchLocationTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchLocationTableViewCell.swift; sourceTree = "<group>"; };
 		A918284C1DC124D900EC9E63 /* AddCategoryTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddCategoryTableViewCell.swift; sourceTree = "<group>"; };
 		A91A10341DA7F59F0042B4CA /* GalleryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GalleryViewController.swift; sourceTree = "<group>"; };
 		A91A10391DA833E40042B4CA /* AddInfoTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddInfoTableViewController.swift; sourceTree = "<group>"; };
@@ -599,7 +595,6 @@
 				A91828461DC0E59100EC9E63 /* Locations.storyboard */,
 				A915F86D1DC0D49C0031C45F /* LocationsTableViewController.swift */,
 				A91828441DC0E49800EC9E63 /* LocationTableViewCell.swift */,
-				A918284A1DC1233400EC9E63 /* SearchLocationTableViewCell.swift */,
 			);
 			name = Locations;
 			sourceTree = "<group>";
@@ -908,7 +903,6 @@
 				A9AFFB071D8AFE0C00219627 /* Professions.storyboard */,
 				A97A9AEC1D85D0ED00507517 /* ProfessionsTableViewController.swift */,
 				A98B42E01D43C95A0089A769 /* ProfessionTableViewCell.swift */,
-				A91828481DC1120700EC9E63 /* AddProfessionTableViewCell.swift */,
 			);
 			name = Professions;
 			sourceTree = "<group>";
@@ -1595,7 +1589,6 @@
 				A9B7A24A1D65D8C0009DA340 /* HomeTableViewController.swift in Sources */,
 				A9AA36371D9463E100E5EAFA /* SignUpTableViewController.swift in Sources */,
 				A9F49D5A1D379D70002EB68B /* AWSPostsTable.swift in Sources */,
-				A91828491DC1120700EC9E63 /* AddProfessionTableViewCell.swift in Sources */,
 				A9DC89371E34B14B00B9D213 /* ExperiencesHeaderTableViewCell.swift in Sources */,
 				A943494F1E38FF2F004E96BF /* PostCategoryCreatedTableViewCell.swift in Sources */,
 				A9E4507C1D59E6D300D14553 /* CommentsTableViewController.swift in Sources */,
@@ -1689,7 +1682,6 @@
 				A9D608701E2A811D00AD8C16 /* AWSNotificationsCounter.swift in Sources */,
 				A9C071D01E3562B200A27D42 /* SettingsTableSectionHeader.swift in Sources */,
 				A999CD3F1DBE6F9F00E7ADB1 /* SearchProfessionsTableViewController.swift in Sources */,
-				A918284B1DC1233400EC9E63 /* SearchLocationTableViewCell.swift in Sources */,
 				A99B9E311DB53E370047360D /* Education.swift in Sources */,
 				A9D962291DE77180008EA0DF /* AWSMobileClient.swift in Sources */,
 				A9B6A89F1D7F8063001EE407 /* PostUserTableViewCell.swift in Sources */,

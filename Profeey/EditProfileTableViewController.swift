@@ -342,9 +342,16 @@ extension EditProfileTableViewController: LocationsTableViewControllerDelegate {
 extension EditProfileTableViewController: ProfessionsTableViewControllerDelegate {
 
     func didSelectProfession(_ professionName: String?) {
-        self.user?.professionName = professionName
-        self.professionNameLabel.text = professionName
-        self.professionNameLabel.textColor = Colors.black
-        self.clearProfessionButton.isHidden = false
+        if let professionName = professionName {
+            self.user?.professionName = professionName
+            self.professionNameLabel.text = professionName
+            self.professionNameLabel.textColor = Colors.black
+            self.clearProfessionButton.isHidden = false
+        } else {
+            self.user?.professionName = nil
+            self.professionNameLabel.text = "Add Profession"
+            self.professionNameLabel.textColor = Colors.disabled
+            self.clearProfessionButton.isHidden = true
+        }
     }
 }

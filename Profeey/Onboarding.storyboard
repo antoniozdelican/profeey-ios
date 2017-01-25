@@ -867,39 +867,63 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.97530055049999997" green="0.97527122499999996" blue="0.97528779509999997" alpha="1" colorSpace="calibratedRGB"/>
                         <inset key="separatorInset" minX="16" minY="0.0" maxX="0.0" maxY="0.0"/>
-                        <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellAddProfession" rowHeight="52" id="kh2-cU-xIW" customClass="AddProfessionTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="56" width="375" height="52"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="kh2-cU-xIW" id="oMZ-Pk-wlT">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="51"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Add your profession..." textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="3zj-Gb-aXr">
-                                            <rect key="frame" x="16" y="8" width="343" height="36"/>
-                                            <constraints>
-                                                <constraint firstAttribute="height" constant="36" id="X2r-Qn-MLR"/>
-                                            </constraints>
-                                            <color key="textColor" red="0.1960784314" green="0.1960784314" blue="0.1960784314" alpha="1" colorSpace="calibratedRGB"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                            <connections>
-                                                <action selector="addProfessionTextFieldChanged:" destination="kh2-cU-xIW" eventType="editingChanged" id="pWy-rZ-cjQ"/>
-                                            </connections>
-                                        </textField>
-                                    </subviews>
+                        <view key="tableHeaderView" contentMode="scaleToFill" id="xEu-Ma-O0W">
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="52"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Add your profession..." textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="pHv-wU-ZPk">
+                                    <rect key="frame" x="16" y="8" width="343" height="36"/>
                                     <constraints>
-                                        <constraint firstItem="3zj-Gb-aXr" firstAttribute="leading" secondItem="oMZ-Pk-wlT" secondAttribute="leading" constant="16" id="Sto-au-ozy"/>
-                                        <constraint firstItem="3zj-Gb-aXr" firstAttribute="centerY" secondItem="oMZ-Pk-wlT" secondAttribute="centerY" id="VuU-jM-omW"/>
-                                        <constraint firstAttribute="trailing" secondItem="3zj-Gb-aXr" secondAttribute="trailing" constant="16" id="W9P-7e-ArT"/>
+                                        <constraint firstAttribute="height" constant="36" id="DSa-kp-GWc"/>
                                     </constraints>
-                                </tableViewCellContentView>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                <connections>
-                                    <outlet property="addProfessionTextField" destination="3zj-Gb-aXr" id="X64-NE-aqV"/>
-                                </connections>
-                            </tableViewCell>
+                                    <color key="textColor" red="0.14748379589999999" green="0.1474793851" blue="0.14748191829999999" alpha="1" colorSpace="calibratedRGB"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                    <connections>
+                                        <action selector="addProfessionTextFieldChanged:" destination="vkP-Dh-uMO" eventType="editingChanged" id="9zc-Mi-B7m"/>
+                                    </connections>
+                                </textField>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="B5g-cc-6oq" userLabel="Separator View">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="1"/>
+                                    <color key="backgroundColor" red="0.83041435480000003" green="0.83038914200000002" blue="0.83040338749999998" alpha="1" colorSpace="calibratedRGB"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="1" id="ICn-xe-X98">
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="constant">
+                                                    <real key="value" value="0.5"/>
+                                                </userDefinedRuntimeAttribute>
+                                            </userDefinedRuntimeAttributes>
+                                        </constraint>
+                                    </constraints>
+                                </view>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BEt-75-mB6" userLabel="Separator View">
+                                    <rect key="frame" x="0.0" y="51" width="375" height="1"/>
+                                    <color key="backgroundColor" red="0.83041435480000003" green="0.83038914200000002" blue="0.83040338749999998" alpha="1" colorSpace="calibratedRGB"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="1" id="kEA-Hb-v8I">
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="constant">
+                                                    <real key="value" value="0.5"/>
+                                                </userDefinedRuntimeAttribute>
+                                            </userDefinedRuntimeAttributes>
+                                        </constraint>
+                                    </constraints>
+                                </view>
+                            </subviews>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstItem="pHv-wU-ZPk" firstAttribute="leading" secondItem="xEu-Ma-O0W" secondAttribute="leading" constant="16" id="KcA-hM-MpP"/>
+                                <constraint firstItem="BEt-75-mB6" firstAttribute="leading" secondItem="xEu-Ma-O0W" secondAttribute="leading" id="ONx-d2-ycl"/>
+                                <constraint firstAttribute="trailing" secondItem="B5g-cc-6oq" secondAttribute="trailing" id="OrP-kB-id3"/>
+                                <constraint firstAttribute="bottom" secondItem="BEt-75-mB6" secondAttribute="bottom" id="Ymq-QE-MgC"/>
+                                <constraint firstItem="pHv-wU-ZPk" firstAttribute="centerY" secondItem="xEu-Ma-O0W" secondAttribute="centerY" id="dWm-jv-Ixb"/>
+                                <constraint firstItem="B5g-cc-6oq" firstAttribute="leading" secondItem="xEu-Ma-O0W" secondAttribute="leading" id="gyz-0E-r6n"/>
+                                <constraint firstAttribute="trailing" secondItem="pHv-wU-ZPk" secondAttribute="trailing" constant="16" id="oWc-y7-yOI"/>
+                                <constraint firstItem="B5g-cc-6oq" firstAttribute="top" secondItem="xEu-Ma-O0W" secondAttribute="top" id="q5L-1y-PO0"/>
+                                <constraint firstAttribute="trailing" secondItem="BEt-75-mB6" secondAttribute="trailing" id="uPh-yd-Xrp"/>
+                            </constraints>
+                        </view>
+                        <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellProfession" rowHeight="64" id="8jd-Kx-zhd" customClass="ProfessionTableViewCell" customModule="Profeey" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="108" width="375" height="64"/>
                                 <autoresizingMask key="autoresizingMask"/>
@@ -1009,6 +1033,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="addProfessionTextField" destination="pHv-wU-ZPk" id="12P-KG-KWl"/>
                         <outlet property="nextButton" destination="1Kp-px-S8S" id="vA7-ci-ZLA"/>
                         <segue destination="H5m-l2-Tl9" kind="show" identifier="segueToDiscoverPeopleVc" id="cTE-CR-Gxy"/>
                     </connections>
