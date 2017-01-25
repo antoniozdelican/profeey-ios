@@ -1,18 +1,18 @@
 //
-//  PostInfoTableViewCell.swift
+//  PostCaptionTableViewCell.swift
 //  Profeey
 //
-//  Created by Antonio Zdelican on 07/09/16.
-//  Copyright © 2016 Profeey. All rights reserved.
+//  Created by Antonio Zdelican on 25/01/17.
+//  Copyright © 2017 Profeey. All rights reserved.
 //
 
 import UIKit
 import TTTAttributedLabel
 
-class PostInfoTableViewCell: UITableViewCell {
-
-    @IBOutlet weak var captionLabel: TTTAttributedLabel!
+class PostCaptionTableViewCell: UITableViewCell {
     
+    @IBOutlet weak var captionLabel: TTTAttributedLabel!
+
     override func awakeFromNib() {
         super.awakeFromNib()
     }

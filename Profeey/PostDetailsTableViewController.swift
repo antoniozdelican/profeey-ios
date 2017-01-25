@@ -111,7 +111,7 @@ class PostDetailsTableViewController: UITableViewController {
             }
             return cell
         case 2:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostInfo", for: indexPath) as! PostInfoTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostCaption", for: indexPath) as! PostCaptionTableViewCell
             cell.captionLabel.text = self.post?.caption
             cell.untruncate()
             return cell
@@ -141,9 +141,9 @@ class PostDetailsTableViewController: UITableViewController {
         if cell is PostUserTableViewCell {
             self.performSegue(withIdentifier: "segueToProfileVc", sender: indexPath)
         }
-        if cell is PostInfoTableViewCell {
+        if cell is PostCaptionTableViewCell {
             self.post?.isExpandedCaption = true
-            (self.tableView.cellForRow(at: indexPath) as? PostInfoTableViewCell)?.untruncate()
+            (self.tableView.cellForRow(at: indexPath) as? PostCaptionTableViewCell)?.untruncate()
             UIView.performWithoutAnimation {
                 self.tableView.beginUpdates()
                 self.tableView.endUpdates()
@@ -323,7 +323,7 @@ extension PostDetailsTableViewController {
         // Update data source and cells.
         post.caption = notification.userInfo?["caption"] as? String
         post.categoryName = notification.userInfo?["categoryName"] as? String
-        (self.tableView.cellForRow(at: IndexPath(row: 2, section: 0)) as? PostInfoTableViewCell)?.captionLabel.text = post.caption
+        (self.tableView.cellForRow(at: IndexPath(row: 2, section: 0)) as? PostCaptionTableViewCell)?.captionLabel.text = post.caption
         (self.tableView.cellForRow(at: IndexPath(row: 3, section: 0)) as? PostCategoryCreatedTableViewCell)?.categoryNameCreatedLabel.text = [post.categoryName, post.createdString].flatMap({$0}).joined(separator: " · ")
     }
     

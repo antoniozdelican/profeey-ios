@@ -173,7 +173,7 @@ class HomeTableViewController: UITableViewController {
                 return cell
             }
         case 2:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostInfo", for: indexPath) as! PostInfoTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostCaption", for: indexPath) as! PostCaptionTableViewCell
             cell.captionLabel.text = post.caption
             post.isExpandedCaption ? cell.untruncate() : cell.truncate()
             return cell
@@ -203,9 +203,9 @@ class HomeTableViewController: UITableViewController {
         if cell is PostUserTableViewCell {
             self.performSegue(withIdentifier: "segueToProfileVc", sender: cell)
         }
-        if cell is PostInfoTableViewCell && !self.posts[indexPath.section].isExpandedCaption {
+        if cell is PostCaptionTableViewCell && !self.posts[indexPath.section].isExpandedCaption {
             self.posts[indexPath.section].isExpandedCaption = true
-            (self.tableView.cellForRow(at: indexPath) as? PostInfoTableViewCell)?.untruncate()
+            (self.tableView.cellForRow(at: indexPath) as? PostCaptionTableViewCell)?.untruncate()
             UIView.performWithoutAnimation {
                 self.tableView.beginUpdates()
                 self.tableView.endUpdates()
@@ -574,7 +574,7 @@ extension HomeTableViewController {
         let post = self.posts[postIndex]
         post.caption = notification.userInfo?["caption"] as? String
         post.categoryName = notification.userInfo?["categoryName"] as? String
-        (self.tableView.cellForRow(at: IndexPath(row: 2, section: postIndex)) as? PostInfoTableViewCell)?.captionLabel.text = post.caption
+        (self.tableView.cellForRow(at: IndexPath(row: 2, section: postIndex)) as? PostCaptionTableViewCell)?.captionLabel.text = post.caption
         (self.tableView.cellForRow(at: IndexPath(row: 3, section: postIndex)) as? PostCategoryCreatedTableViewCell)?.categoryNameCreatedLabel.text = [post.categoryName, post.createdString].flatMap({$0}).joined(separator: " · ")
     }
     
