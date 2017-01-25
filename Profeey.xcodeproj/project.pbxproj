@@ -21,7 +21,6 @@
 		A915F8751DC0D9CB0031C45F /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = A915F8741DC0D9CB0031C45F /* Location.swift */; };
 		A91828451DC0E49800EC9E63 /* LocationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91828441DC0E49800EC9E63 /* LocationTableViewCell.swift */; };
 		A91828471DC0E59100EC9E63 /* Locations.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A91828461DC0E59100EC9E63 /* Locations.storyboard */; };
-		A918284D1DC124D900EC9E63 /* AddCategoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A918284C1DC124D900EC9E63 /* AddCategoryTableViewCell.swift */; };
 		A91A10351DA7F59F0042B4CA /* GalleryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91A10341DA7F59F0042B4CA /* GalleryViewController.swift */; };
 		A91A103A1DA833E40042B4CA /* AddInfoTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91A10391DA833E40042B4CA /* AddInfoTableViewController.swift */; };
 		A91A35241D1C26E6006F22B2 /* FullScreenIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91A35231D1C26E6006F22B2 /* FullScreenIndicator.swift */; };
@@ -304,7 +303,6 @@
 		A915F8741DC0D9CB0031C45F /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		A91828441DC0E49800EC9E63 /* LocationTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationTableViewCell.swift; sourceTree = "<group>"; };
 		A91828461DC0E59100EC9E63 /* Locations.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Locations.storyboard; sourceTree = "<group>"; };
-		A918284C1DC124D900EC9E63 /* AddCategoryTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddCategoryTableViewCell.swift; sourceTree = "<group>"; };
 		A91A10341DA7F59F0042B4CA /* GalleryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GalleryViewController.swift; sourceTree = "<group>"; };
 		A91A10391DA833E40042B4CA /* AddInfoTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddInfoTableViewController.swift; sourceTree = "<group>"; };
 		A91A35231D1C26E6006F22B2 /* FullScreenIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FullScreenIndicator.swift; sourceTree = "<group>"; };
@@ -1045,7 +1043,6 @@
 				A9AFFB0C1D8AFEB800219627 /* Categories.storyboard */,
 				A9AFFB101D8B00DF00219627 /* CategoriesTableViewController.swift */,
 				A9AFFB0E1D8AFF1800219627 /* CategoryTableViewCell.swift */,
-				A918284C1DC124D900EC9E63 /* AddCategoryTableViewCell.swift */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -1630,7 +1627,6 @@
 				A9AC8FC01DBDFF5200C9BCE0 /* PostDetailsTableViewController.swift in Sources */,
 				A9B934B01D1BD9BB00ACC2B8 /* OnboardingViewController.swift in Sources */,
 				A9E450801D5A09F100D14553 /* Comment.swift in Sources */,
-				A918284D1DC124D900EC9E63 /* AddCategoryTableViewCell.swift in Sources */,
 				A9C4D2731D992A67000E1F35 /* SearchUsersTableViewController.swift in Sources */,
 				A9E0267F1E2038BF00BD8ED2 /* PRFYUrls.swift in Sources */,
 				A9D6888C1E0AEEA400A07D86 /* AWSProfessionLocationsTable.swift in Sources */,

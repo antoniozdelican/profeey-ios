@@ -162,11 +162,6 @@ class ProfessionsTableViewController: UITableViewController {
             self.regularProfessions = []
             self.isSearchingRegularProfessions = false
             self.tableView.reloadData()
-//            UIView.performWithoutAnimation {
-//                self.tableView.beginUpdates()
-//                self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
-//                self.tableView.endUpdates()
-//            }
             self.professionName = nil
         } else {
             self.isShowingPopularProfessions = false
@@ -174,11 +169,6 @@ class ProfessionsTableViewController: UITableViewController {
             self.regularProfessions = []
             self.isSearchingRegularProfessions = true
             self.tableView.reloadData()
-//            UIView.performWithoutAnimation {
-//                self.tableView.beginUpdates()
-//                self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
-//                self.tableView.endUpdates()
-//            }
             self.professionName = professionName
             // Start search for existing professions.
             self.filterProfessions(professionName)
@@ -212,11 +202,6 @@ class ProfessionsTableViewController: UITableViewController {
         self.regularProfessions = self.sortProfessions(self.regularProfessions)
         self.isSearchingRegularProfessions = false
         self.tableView.reloadData()
-//        UIView.performWithoutAnimation {
-//            self.tableView.beginUpdates()
-//            self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
-//            self.tableView.endUpdates()
-//        }
     }
     
     fileprivate func sortProfessions(_ professions: [Profession]) -> [Profession] {
@@ -238,15 +223,9 @@ class ProfessionsTableViewController: UITableViewController {
                 if let error = error {
                     print("scanProfessions error: \(error)")
                     self.tableView.reloadData()
-//                    UIView.performWithoutAnimation {
-//                        self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
-//                    }
                 } else {
                     guard let awsProfessions = response?.items as? [AWSProfession] else {
                         self.tableView.reloadData()
-//                        UIView.performWithoutAnimation {
-//                            self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
-//                        }
                         return
                     }
                     for awsProfession in awsProfessions {
@@ -255,11 +234,6 @@ class ProfessionsTableViewController: UITableViewController {
                     }
                     self.popularProfessions = self.sortProfessions(self.popularProfessions)
                     self.tableView.reloadData()
-//                    UIView.performWithoutAnimation {
-//                        self.tableView.beginUpdates()
-//                        self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
-//                        self.tableView.endUpdates()
-//                    }
                 }
             })
         })

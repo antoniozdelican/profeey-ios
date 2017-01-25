@@ -204,10 +204,18 @@ extension EditPostTableViewController: UITextViewDelegate {
 extension EditPostTableViewController: CategoriesTableViewControllerDelegate {
     
     func didSelectCategory(_ categoryName: String?) {
-        self.editPost?.categoryName = categoryName
-        self.categoryNameLabel.text = categoryName
-        self.categoryNameLabel.textColor = Colors.black
-        self.clearCategoryButton.isHidden = false
-        self.categoryImageView.image = UIImage(named: "ic_skills_active")
+        if let categoryName = categoryName {
+            self.editPost?.categoryName = categoryName
+            self.categoryNameLabel.text = categoryName
+            self.categoryNameLabel.textColor = Colors.black
+            self.clearCategoryButton.isHidden = false
+            self.categoryImageView.image = UIImage(named: "ic_skills_active")
+        } else {
+            self.editPost?.categoryName = nil
+            self.categoryNameLabel.text = "Add Skill"
+            self.categoryNameLabel.textColor = Colors.disabled
+            self.clearCategoryButton.isHidden = true
+            self.categoryImageView.image = UIImage(named: "ic_skills")
+        }
     }
 }

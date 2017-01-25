@@ -15,6 +15,8 @@ protocol CategoriesTableViewControllerDelegate: class {
 
 class CategoriesTableViewController: UITableViewController {
     
+    @IBOutlet weak var addCategoryTextField: UITextField!
+    
     var categoryName: String?
     var isStatusBarHidden: Bool = false
     weak var categoriesTableViewControllerDelegate: CategoriesTableViewControllerDelegate?
@@ -29,6 +31,7 @@ class CategoriesTableViewController: UITableViewController {
         super.viewDidLoad()
         self.tableView.contentInset = UIEdgeInsetsMake(-1.0, 0.0, 0.0, 0.0)
         self.tableView.register(UINib(nibName: "TableSectionHeader", bundle: nil), forHeaderFooterViewReuseIdentifier: "tableSectionHeader")
+        self.addCategoryTextField.text = self.categoryName
         
         self.isShowingPopularCategories = true
         self.isSearchingPopularCategories = true
@@ -36,8 +39,8 @@ class CategoriesTableViewController: UITableViewController {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        self.view.endEditing(true)
         super.viewWillDisappear(animated)
+        self.view.endEditing(true)
     }
     
     override var prefersStatusBarHidden: Bool {
@@ -51,80 +54,62 @@ class CategoriesTableViewController: UITableViewController {
     // MARK: UITableViewDataSource
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // Don't show empty sections.
-        return 2
+        return 1
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch section {
-        case 0:
-            return 1
-        case 1:
-            if self.isShowingPopularCategories {
-                if self.isSearchingPopularCategories {
-                    return 1
-                }
-                if self.popularCategories.count == 0 {
-                    return 1
-                }
-                return self.popularCategories.count
-            } else {
-                if self.isSearchingRegularCategories {
-                    return 1
-                }
-                if self.regularCategories.count == 0 {
-                    return 1
-                }
-                return self.regularCategories.count
+        if self.isShowingPopularCategories {
+            if self.isSearchingPopularCategories {
+                return 1
             }
-        default:
-            return 0
+            if self.popularCategories.count == 0 {
+                return 1
+            }
+            return self.popularCategories.count
+        } else {
+            if self.isSearchingRegularCategories {
+                return 1
+            }
+            if self.regularCategories.count == 0 {
+                return 1
+            }
+            return self.regularCategories.count
         }
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        switch indexPath.section {
-        case 0:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cellAddCategory", for: indexPath) as! AddCategoryTableViewCell
-            cell.addCategoryTextField.text = self.categoryName
-            cell.addCategoryTableViewCellDelegate = self
-            return cell
-        case 1:
-            if self.isShowingPopularCategories {
-                if self.isSearchingPopularCategories {
-                    let cell = tableView.dequeueReusableCell(withIdentifier: "cellSearching", for: indexPath) as! SearchingTableViewCell
-                    cell.activityIndicator.startAnimating()
-                    // TODO update text.
-                    return cell
-                }
-                if self.popularCategories.count == 0 {
-                    let cell = tableView.dequeueReusableCell(withIdentifier: "cellNoResults", for: indexPath) as! NoResultsTableViewCell
-                    return cell
-                }
-                let cell = tableView.dequeueReusableCell(withIdentifier: "cellCategory", for: indexPath) as! CategoryTableViewCell
-                let category = self.popularCategories[indexPath.row]
-                cell.categoryNameLabel.text = category.categoryName
-                cell.numberOfPostsLabel.text = category.numberOfPostsString
-                return cell
-            } else {
-                if self.isSearchingRegularCategories {
-                    let cell = tableView.dequeueReusableCell(withIdentifier: "cellSearching", for: indexPath) as! SearchingTableViewCell
-                    cell.activityIndicator.startAnimating()
-                    // TODO update text.
-                    return cell
-                }
-                if self.regularCategories.count == 0 {
-                    let cell = tableView.dequeueReusableCell(withIdentifier: "cellNoResults", for: indexPath) as! NoResultsTableViewCell
-                    return cell
-                }
-                let cell = tableView.dequeueReusableCell(withIdentifier: "cellCategory", for: indexPath) as! CategoryTableViewCell
-                let category = self.regularCategories[indexPath.row]
-                cell.categoryNameLabel.text = category.categoryName
-                cell.numberOfPostsLabel.text = category.numberOfPostsString
+        if self.isShowingPopularCategories {
+            if self.isSearchingPopularCategories {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellSearching", for: indexPath) as! SearchingTableViewCell
+                cell.activityIndicator.startAnimating()
+                // TODO update text.
                 return cell
             }
-        default:
-            return UITableViewCell()
+            if self.popularCategories.count == 0 {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellNoResults", for: indexPath) as! NoResultsTableViewCell
+                return cell
+            }
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellCategory", for: indexPath) as! CategoryTableViewCell
+            let category = self.popularCategories[indexPath.row]
+            cell.categoryNameLabel.text = category.categoryName
+            cell.numberOfPostsLabel.text = category.numberOfPostsString
+            return cell
+        } else {
+            if self.isSearchingRegularCategories {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellSearching", for: indexPath) as! SearchingTableViewCell
+                cell.activityIndicator.startAnimating()
+                // TODO update text.
+                return cell
+            }
+            if self.regularCategories.count == 0 {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellNoResults", for: indexPath) as! NoResultsTableViewCell
+                return cell
+            }
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellCategory", for: indexPath) as! CategoryTableViewCell
+            let category = self.regularCategories[indexPath.row]
+            cell.categoryNameLabel.text = category.categoryName
+            cell.numberOfPostsLabel.text = category.numberOfPostsString
+            return cell
         }
     }
     
@@ -145,40 +130,20 @@ class CategoriesTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        switch indexPath.section {
-        case 0:
-            return 52.0
-        case 1:
-            return 64.0
-        default:
-            return 0.0
-        }
+        return 64.0
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        switch indexPath.section {
-        case 0:
-            return 52.0
-        case 1:
-            return 64.0
-        default:
-            return 0.0
-        }
+        return 64.0
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if section == 0 {
-            return UIView()
-        }
         let header = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "tableSectionHeader") as? TableSectionHeader
         header?.titleLabel.text = self.isShowingPopularCategories ? "POPULAR" : "BEST MATCHES"
         return header
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if section == 0 {
-            return 1.0
-        }
         return 32.0
     }
     
@@ -189,6 +154,30 @@ class CategoriesTableViewController: UITableViewController {
     }
     
     // MARK: IBActions
+    
+    @IBAction func addCategoryTextFieldChanged(_ sender: AnyObject) {
+        guard let text = self.addCategoryTextField.text else {
+            return
+        }
+        var categoryName = text.trimm()
+        categoryName = categoryName.replacingOccurrences(of: "_", with: " ")
+        if categoryName.isEmpty {
+            self.isShowingPopularCategories = true
+            // Clear old.
+            self.regularCategories = []
+            self.isSearchingRegularCategories = false
+            self.tableView.reloadData()
+            self.categoryName = nil
+        } else {
+            self.isShowingPopularCategories = false
+            // Clear old.
+            self.regularCategories = []
+            self.isSearchingRegularCategories = true
+            self.tableView.reloadData()
+            self.categoryName = categoryName
+            self.filterCategories(categoryName)
+        }
+    }
     
     @IBAction func addButtonTapped(_ sender: AnyObject) {
         self.categoryName = self.categoryName?.replacingOccurrences(of: "_", with: " ")
@@ -215,9 +204,7 @@ class CategoriesTableViewController: UITableViewController {
         })
         self.regularCategories = self.sortCategories(self.regularCategories)
         self.isSearchingRegularCategories = false
-        UIView.performWithoutAnimation {
-            self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
-        }
+        self.tableView.reloadData()
     }
     
     fileprivate func sortCategories(_ categories: [Category]) -> [Category] {
@@ -238,14 +225,10 @@ class CategoriesTableViewController: UITableViewController {
                 self.isSearchingPopularCategories = false
                 if let error = error {
                     print("scanCategories error: \(error)")
-                    UIView.performWithoutAnimation {
-                        self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
-                    }
+                    self.tableView.reloadData()
                 } else {
                     guard let awsCategories = response?.items as? [AWSCategory] else {
-                        UIView.performWithoutAnimation {
-                            self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
-                        }
+                        self.tableView.reloadData()
                         return
                     }
                     for awsCategory in awsCategories {
@@ -253,39 +236,9 @@ class CategoriesTableViewController: UITableViewController {
                         self.popularCategories.append(category)
                     }
                     self.popularCategories = self.sortCategories(self.popularCategories)
-                    UIView.performWithoutAnimation {
-                        self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
-                    }
+                    self.tableView.reloadData()
                 }
             })
         })
-    }
-}
-
-extension CategoriesTableViewController: AddCategoryTableViewCellDelegate {
-    
-    func addCategoryTextFieldChanged(_ text: String) {
-        var categoryName = text.trimm()
-        categoryName = categoryName.replacingOccurrences(of: "_", with: " ")
-        if categoryName.isEmpty {
-            self.isShowingPopularCategories = true
-            // Clear old.
-            self.regularCategories = []
-            self.isSearchingRegularCategories = false
-            UIView.performWithoutAnimation {
-                self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
-            }
-            self.categoryName = nil
-        } else {
-            self.isShowingPopularCategories = false
-            // Clear old.
-            self.regularCategories = []
-            self.isSearchingRegularCategories = true
-            UIView.performWithoutAnimation {
-                self.tableView.reloadSections(IndexSet(integer: 1), with: UITableViewRowAnimation.none)
-            }
-            self.categoryName = categoryName
-            self.filterCategories(categoryName)
-        }
     }
 }

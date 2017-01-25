@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="SE5-kj-wZK">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="15G1217" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="SE5-kj-wZK">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -34,39 +34,63 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.97530043129999999" green="0.97527122499999996" blue="0.97528779509999997" alpha="1" colorSpace="calibratedRGB"/>
                         <inset key="separatorInset" minX="16" minY="0.0" maxX="0.0" maxY="0.0"/>
-                        <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellAddCategory" rowHeight="52" id="XV4-UR-qfN" customClass="AddCategoryTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="56" width="375" height="52"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="XV4-UR-qfN" id="Unl-1Y-tDB">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="51"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Add a skill..." textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="2lt-mM-qgk">
-                                            <rect key="frame" x="16" y="8" width="343" height="36"/>
-                                            <constraints>
-                                                <constraint firstAttribute="height" constant="36" id="8LU-uO-kIl"/>
-                                            </constraints>
-                                            <color key="textColor" red="0.14748379589999999" green="0.1474793851" blue="0.14748191829999999" alpha="1" colorSpace="calibratedRGB"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                            <connections>
-                                                <action selector="addCategoryTextFieldChanged:" destination="XV4-UR-qfN" eventType="editingChanged" id="huT-oX-FEK"/>
-                                            </connections>
-                                        </textField>
-                                    </subviews>
+                        <view key="tableHeaderView" contentMode="scaleToFill" id="NEy-lW-ctK">
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="52"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="o1K-mC-YBx" userLabel="Separator View">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="1"/>
+                                    <color key="backgroundColor" red="0.83041435480000003" green="0.83038914200000002" blue="0.83040338749999998" alpha="1" colorSpace="calibratedRGB"/>
                                     <constraints>
-                                        <constraint firstItem="2lt-mM-qgk" firstAttribute="centerY" secondItem="Unl-1Y-tDB" secondAttribute="centerY" id="Ig5-l1-RkW"/>
-                                        <constraint firstItem="2lt-mM-qgk" firstAttribute="leading" secondItem="Unl-1Y-tDB" secondAttribute="leading" constant="16" id="MVu-Qu-j47"/>
-                                        <constraint firstAttribute="trailing" secondItem="2lt-mM-qgk" secondAttribute="trailing" constant="16" id="vGo-Lc-4mB"/>
+                                        <constraint firstAttribute="height" constant="1" id="nYe-GI-tXT">
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="constant">
+                                                    <real key="value" value="0.5"/>
+                                                </userDefinedRuntimeAttribute>
+                                            </userDefinedRuntimeAttributes>
+                                        </constraint>
                                     </constraints>
-                                </tableViewCellContentView>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                <connections>
-                                    <outlet property="addCategoryTextField" destination="2lt-mM-qgk" id="g6E-E3-0Ee"/>
-                                </connections>
-                            </tableViewCell>
+                                </view>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1LA-Iv-71h" userLabel="Separator View">
+                                    <rect key="frame" x="0.0" y="51" width="375" height="1"/>
+                                    <color key="backgroundColor" red="0.83041435480000003" green="0.83038914200000002" blue="0.83040338749999998" alpha="1" colorSpace="calibratedRGB"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="1" id="XL1-ET-VPM">
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="constant">
+                                                    <real key="value" value="0.5"/>
+                                                </userDefinedRuntimeAttribute>
+                                            </userDefinedRuntimeAttributes>
+                                        </constraint>
+                                    </constraints>
+                                </view>
+                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Add a skill..." textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="dYc-B7-uAW">
+                                    <rect key="frame" x="16" y="8" width="343" height="36"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="36" id="mFg-34-VVg"/>
+                                    </constraints>
+                                    <color key="textColor" red="0.14748379589999999" green="0.1474793851" blue="0.14748191829999999" alpha="1" colorSpace="calibratedRGB"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                    <connections>
+                                        <action selector="addCategoryTextFieldChanged:" destination="bSU-Zt-F7f" eventType="editingChanged" id="xQN-rA-irV"/>
+                                    </connections>
+                                </textField>
+                            </subviews>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstAttribute="trailing" secondItem="o1K-mC-YBx" secondAttribute="trailing" id="6LN-AK-r1c"/>
+                                <constraint firstAttribute="bottom" secondItem="1LA-Iv-71h" secondAttribute="bottom" id="6rF-F3-lhx"/>
+                                <constraint firstAttribute="trailing" secondItem="dYc-B7-uAW" secondAttribute="trailing" constant="16" id="99l-L8-Uyb"/>
+                                <constraint firstItem="o1K-mC-YBx" firstAttribute="top" secondItem="NEy-lW-ctK" secondAttribute="top" id="DoR-QO-pv3"/>
+                                <constraint firstItem="o1K-mC-YBx" firstAttribute="leading" secondItem="NEy-lW-ctK" secondAttribute="leading" id="a2M-Nk-eWg"/>
+                                <constraint firstItem="dYc-B7-uAW" firstAttribute="centerY" secondItem="NEy-lW-ctK" secondAttribute="centerY" id="c3E-MU-i9l"/>
+                                <constraint firstAttribute="trailing" secondItem="1LA-Iv-71h" secondAttribute="trailing" id="exb-3i-67f"/>
+                                <constraint firstItem="dYc-B7-uAW" firstAttribute="leading" secondItem="NEy-lW-ctK" secondAttribute="leading" constant="16" id="lab-Mi-vtJ"/>
+                                <constraint firstItem="1LA-Iv-71h" firstAttribute="leading" secondItem="NEy-lW-ctK" secondAttribute="leading" id="s0y-dR-Kss"/>
+                            </constraints>
+                        </view>
+                        <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellCategory" rowHeight="64" id="VIX-uT-hob" customClass="CategoryTableViewCell" customModule="Profeey" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="108" width="375" height="64"/>
                                 <autoresizingMask key="autoresizingMask"/>
@@ -172,6 +196,9 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="addCategoryTextField" destination="dYc-B7-uAW" id="9cJ-wN-S0p"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pSU-QS-YWZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
