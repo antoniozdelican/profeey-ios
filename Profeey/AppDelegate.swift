@@ -110,10 +110,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     fileprivate func configureUI() {
         // UINavigationBar
-//        UINavigationBar.appearance().barTintColor = Colors.whiteDark
-//        UINavigationBar.appearance().isTranslucent = false
-//        UINavigationBar.appearance().tintColor = Colors.black
-//        UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: Colors.black]
         UINavigationBar.appearance().barTintColor = Colors.whiteDark
         UINavigationBar.appearance().isTranslucent = false
         UINavigationBar.appearance().tintColor = Colors.black
@@ -121,9 +117,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
         UINavigationBar.appearance().shadowImage = UIImage(named: "ic_navbar_shadow_resizable")
         // UITabBar
-//        UITabBar.appearance().barTintColor = Colors.whiteDark
-//        UITabBar.appearance().isTranslucent = false
-//        UITabBar.appearance().tintColor = Colors.grey
         UITabBar.appearance().barTintColor = Colors.whiteDark
         UITabBar.appearance().isTranslucent = false
         UITabBar.appearance().tintColor = Colors.grey

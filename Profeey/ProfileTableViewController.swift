@@ -309,14 +309,26 @@ class ProfileTableViewController: UITableViewController {
             if self.workExperiences.count > 0 && indexPath.row == 0 {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellExperiencesHeader", for: indexPath) as! ExperiencesHeaderTableViewCell
                 cell.titleLabel?.text = "WORK EXPERIENCE"
-                cell.experiencesHeaderTableViewCellDelegate = self
+                if self.isCurrentUser {
+                    cell.editButton?.isHidden = false
+                    cell.experiencesHeaderTableViewCellDelegate = self
+                } else {
+                    cell.editButton?.isHidden = true
+                    cell.experiencesHeaderTableViewCellDelegate = nil
+                }
                 return cell
             }
             if self.educations.count > 0 {
                 if (self.workExperiences.count > 0 && indexPath.row == self.workExperiences.count + 1) || (self.workExperiences.count == 0 && indexPath.row == 0) {
                     let cell = tableView.dequeueReusableCell(withIdentifier: "cellExperiencesHeader", for: indexPath) as! ExperiencesHeaderTableViewCell
                     cell.titleLabel?.text = "EDUCATION"
-                    cell.experiencesHeaderTableViewCellDelegate = self
+                    if self.isCurrentUser {
+                        cell.editButton?.isHidden = false
+                        cell.experiencesHeaderTableViewCellDelegate = self
+                    } else {
+                        cell.editButton?.isHidden = true
+                        cell.experiencesHeaderTableViewCellDelegate = nil
+                    }
                     return cell
                 }
             }

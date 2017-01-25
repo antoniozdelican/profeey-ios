@@ -49,17 +49,16 @@
                                     <constraint firstAttribute="height" constant="49" id="myE-CZ-JN3"/>
                                 </constraints>
                             </view>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_refresh" translatesAutoresizingMaskIntoConstraints="NO" id="z5k-3C-gDa">
+                            <imageView clearsContextBeforeDrawing="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_logo_grey" translatesAutoresizingMaskIntoConstraints="NO" id="hbi-VS-fk4">
                                 <rect key="frame" x="167" y="313" width="40" height="40"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="40" id="6Nd-eZ-eEu"/>
-                                    <constraint firstAttribute="height" constant="40" id="Qrx-QB-i2Q"/>
+                                    <constraint firstAttribute="height" constant="40" id="h7q-Iy-Der"/>
+                                    <constraint firstAttribute="width" constant="40" id="tIF-ND-jeW"/>
                                 </constraints>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="z5k-3C-gDa" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="0Qq-4d-cMZ"/>
                             <constraint firstAttribute="trailing" secondItem="fEm-0y-t8a" secondAttribute="trailing" id="0Yw-6L-Qmg"/>
                             <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="fEm-0y-t8a" secondAttribute="bottom" constant="48.5" id="3jU-jK-xFm"/>
                             <constraint firstAttribute="trailing" secondItem="B09-P9-vvf" secondAttribute="trailing" id="6SA-JD-m1l"/>
@@ -68,10 +67,11 @@
                             <constraint firstItem="gBa-5h-f3D" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="9c2-rQ-4NR"/>
                             <constraint firstItem="gBa-5h-f3D" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="B0M-cR-CMw"/>
                             <constraint firstItem="B09-P9-vvf" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="IoE-zj-eEL"/>
+                            <constraint firstItem="hbi-VS-fk4" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="JXw-Yt-lzv"/>
                             <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="B09-P9-vvf" secondAttribute="bottom" id="Kk8-0r-np7"/>
                             <constraint firstItem="Nth-UZ-7uS" firstAttribute="top" secondItem="Llm-lL-Icb" secondAttribute="bottom" constant="43.5" id="Kxf-PM-79Y"/>
                             <constraint firstAttribute="trailing" secondItem="Nth-UZ-7uS" secondAttribute="trailing" id="SdU-dz-mbA"/>
-                            <constraint firstItem="z5k-3C-gDa" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="lk9-q9-1eg"/>
+                            <constraint firstItem="hbi-VS-fk4" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="UHp-NR-PXY"/>
                             <constraint firstAttribute="trailing" secondItem="gBa-5h-f3D" secondAttribute="trailing" id="wAf-GC-YAh"/>
                         </constraints>
                     </view>
@@ -82,6 +82,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="ic_refresh" width="32" height="32"/>
+        <image name="ic_logo_grey" width="40" height="40"/>
     </resources>
 </document>
