@@ -108,24 +108,24 @@ class MessagesTableViewController: UITableViewController {
         if message.senderId == AWSIdentityManager.defaultIdentityManager().identityId {
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellMessageOwn", for: indexPath) as! OwnMessageTableViewCell
             cell.messageTextLabel.text = message.messageText
-            cell.timeLabel.text = message.createdString
-            // Show timeLabel only if first message in section.
+            cell.createdLabel.text = message.createdString
+            // Show createdLabel only if first message in section.
             if message == messageSection.first && message.createdString != nil {
-                cell.showTimeLabel()
+                cell.showCreatedLabel()
             } else {
-                cell.hideTimeLabel()
+                cell.hideCreatedLabel()
             }
             cell.transform = CGAffineTransform(scaleX: 1, y: -1)
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellMessageOther", for: indexPath) as! OtherMessageTableViewCell
             cell.messageTextLabel.text = message.messageText
-            cell.timeLabel.text = message.createdString
-            // Show timeLabel and profilePicImageView only if first message in section.
+            cell.createdLabel.text = message.createdString
+            // Show createdLabel and profilePicImageView only if first message in section.
             if message == messageSection.first && message.createdString != nil {
-                cell.showTimeLabel()
+                cell.showCreatedLabel()
             } else {
-                cell.hideTimeLabel()
+                cell.hideCreatedLabel()
             }
             if message == messageSection.first {
                 cell.profilePicImageView.image = self.participant?.profilePicUrl != nil ? self.participant?.profilePic : UIImage(named: "ic_no_profile_pic_feed")

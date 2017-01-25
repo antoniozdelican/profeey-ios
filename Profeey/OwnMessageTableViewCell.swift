@@ -12,22 +12,22 @@ class OwnMessageTableViewCell: UITableViewCell {
     
     @IBOutlet weak var messageTextLabel: UILabel!
     @IBOutlet weak var messageTextContainerView: UIView!
-    @IBOutlet weak var timeLabel: UILabel!
-    @IBOutlet weak var timeLabelTopConstraint: NSLayoutConstraint!
-    @IBOutlet weak var timeLabelBottomConstraint: NSLayoutConstraint!
-    @IBOutlet weak var timeLabelHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var createdLabel: UILabel!
+    @IBOutlet weak var createdLabelTopConstraint: NSLayoutConstraint!
+    @IBOutlet weak var createdLabelBottomConstraint: NSLayoutConstraint!
+    @IBOutlet weak var createdLabelHeightConstraint: NSLayoutConstraint!
     
-    fileprivate var timeLabelTopConstraintConstant: CGFloat = 0.0
-    fileprivate var timeLabelBottomConstraintConstant: CGFloat = 0.0
-    fileprivate var timeLabelHeightConstraintConstant: CGFloat = 0.0
+    fileprivate var createdLabelTopConstraintConstant: CGFloat = 0.0
+    fileprivate var createdLabelBottomConstraintConstant: CGFloat = 0.0
+    fileprivate var createdLabelHeightConstraintConstant: CGFloat = 0.0
 
     override func awakeFromNib() {
         super.awakeFromNib()
         self.messageTextContainerView.layer.cornerRadius = 4.0
         self.messageTextContainerView.clipsToBounds = true
-        self.timeLabelTopConstraintConstant = self.timeLabelTopConstraint.constant
-        self.timeLabelBottomConstraintConstant = self.timeLabelBottomConstraint.constant
-        self.timeLabelHeightConstraintConstant = self.timeLabelHeightConstraint.constant
+        self.createdLabelTopConstraintConstant = self.createdLabelTopConstraint.constant
+        self.createdLabelBottomConstraintConstant = self.createdLabelBottomConstraint.constant
+        self.createdLabelHeightConstraintConstant = self.createdLabelHeightConstraint.constant
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -36,19 +36,19 @@ class OwnMessageTableViewCell: UITableViewCell {
     
     // MARK: Helpers
     
-    func hideTimeLabel() {
-        self.timeLabel.isHidden = true
-        self.timeLabelTopConstraint.constant = 0.0
-        self.timeLabelBottomConstraint.constant = 1.0
-        self.timeLabelHeightConstraint.constant = 0.0
+    func hideCreatedLabel() {
+        self.createdLabel.isHidden = true
+        self.createdLabelTopConstraint.constant = 0.0
+        self.createdLabelBottomConstraint.constant = 1.0
+        self.createdLabelHeightConstraint.constant = 0.0
     }
     
-    func showTimeLabel() {
+    func showCreatedLabel() {
         // Return to initial.
-        self.timeLabel.isHidden = false
-        self.timeLabelTopConstraint.constant =  self.timeLabelTopConstraintConstant
-        self.timeLabelBottomConstraint.constant = self.timeLabelBottomConstraintConstant
-        self.timeLabelHeightConstraint.constant = self.timeLabelHeightConstraintConstant
+        self.createdLabel.isHidden = false
+        self.createdLabelTopConstraint.constant =  self.createdLabelTopConstraintConstant
+        self.createdLabelBottomConstraint.constant = self.createdLabelBottomConstraintConstant
+        self.createdLabelHeightConstraint.constant = self.createdLabelHeightConstraintConstant
     }
 
 }

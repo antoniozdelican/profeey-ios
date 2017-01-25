@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="ngN-Xw-YX1">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="15G1217" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="ngN-Xw-YX1">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -76,9 +76,9 @@
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
+                                    <outlet property="createdLabel" destination="7mJ-zw-emu" id="YIS-cL-ktx"/>
                                     <outlet property="messageLabel" destination="K3k-cc-52Q" id="R0T-iI-wU6"/>
                                     <outlet property="profilePicImageView" destination="g64-DK-Nbt" id="eEI-qZ-g5W"/>
-                                    <outlet property="timeLabel" destination="7mJ-zw-emu" id="gIJ-GF-ope"/>
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellEmpty" rowHeight="64" id="HtM-cS-inG" customClass="EmptyTableViewCell" customModule="Profeey" customModuleProvider="target">
@@ -291,10 +291,10 @@
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
+                                    <outlet property="createdLabel" destination="u9V-pk-UB1" id="gjN-Ex-4Lr"/>
                                     <outlet property="lastMessageLabel" destination="vnF-vh-AsC" id="XCo-oi-aO7"/>
                                     <outlet property="preferredUsernameLabel" destination="lEA-qe-hZ3" id="hue-qI-UhK"/>
                                     <outlet property="profilePicImageView" destination="nc3-Li-b3K" id="2vZ-bW-azI"/>
-                                    <outlet property="timeLabel" destination="u9V-pk-UB1" id="WOr-Qv-FxO"/>
                                     <outlet property="unseenConversationView" destination="4J8-VU-NTq" id="3Ma-Lu-4Ey"/>
                                 </connections>
                             </tableViewCell>

@@ -82,7 +82,7 @@ class CommentsTableViewController: UITableViewController {
         cell.profilePicImageView.image = user?.profilePicUrl != nil ? user?.profilePic : UIImage(named: "ic_no_profile_pic_feed")
         cell.preferredUsernameLabel.text = user?.preferredUsername
         cell.professionNameLabel.text = user?.professionName
-        cell.timeLabel.text = comment.createdString
+        cell.createdLabel.text = comment.createdString
         cell.commentTextLabel.text = comment.commentText
         comment.isExpandedCommentText ? cell.untruncate() : cell.truncate()
         cell.commentTableViewCellDelegate = self

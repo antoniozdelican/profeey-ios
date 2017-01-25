@@ -13,7 +13,7 @@ class ConversationTableViewCell: UITableViewCell {
     @IBOutlet weak var profilePicImageView: UIImageView!
     @IBOutlet weak var preferredUsernameLabel: UILabel!
     @IBOutlet weak var lastMessageLabel: UILabel!
-    @IBOutlet weak var timeLabel: UILabel!
+    @IBOutlet weak var createdLabel: UILabel!
     @IBOutlet weak var unseenConversationView: UIView!
 
     override func awakeFromNib() {

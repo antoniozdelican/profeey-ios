@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="fEt-vz-nEB">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="15G1217" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="fEt-vz-nEB">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -193,12 +193,12 @@
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
+                                    <outlet property="createdLabel" destination="YVT-nz-1LM" id="ykS-p9-fBi"/>
+                                    <outlet property="createdLabelBottomConstraint" destination="IAD-0N-OH2" id="bjl-YS-YZ3"/>
+                                    <outlet property="createdLabelHeightConstraint" destination="imG-S1-W2j" id="9J2-9n-95T"/>
+                                    <outlet property="createdLabelTopConstraint" destination="hJS-Kl-1pT" id="yFk-qm-U6t"/>
                                     <outlet property="messageTextContainerView" destination="2CK-cb-rA6" id="IQR-SI-av1"/>
                                     <outlet property="messageTextLabel" destination="Leo-ic-PNw" id="IhB-En-fqN"/>
-                                    <outlet property="timeLabel" destination="YVT-nz-1LM" id="Jco-L4-V7b"/>
-                                    <outlet property="timeLabelBottomConstraint" destination="IAD-0N-OH2" id="7Cp-f0-4gs"/>
-                                    <outlet property="timeLabelHeightConstraint" destination="imG-S1-W2j" id="whU-tc-Pe1"/>
-                                    <outlet property="timeLabelTopConstraint" destination="hJS-Kl-1pT" id="xIH-Eg-gg8"/>
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellMessageOther" rowHeight="64" id="cho-lP-1pu" customClass="OtherMessageTableViewCell" customModule="Profeey" customModuleProvider="target">
@@ -256,13 +256,13 @@
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
+                                    <outlet property="createdLabel" destination="odq-f5-Lhc" id="M2c-OO-zdb"/>
+                                    <outlet property="createdLabelBottomConstraint" destination="7YN-mg-RKJ" id="1tH-t5-WUP"/>
+                                    <outlet property="createdLabelHeightConstraint" destination="mt2-98-JkR" id="7cf-mh-V5o"/>
+                                    <outlet property="createdLabelTopConstraint" destination="YYj-pY-Wax" id="8rm-cU-Kiy"/>
                                     <outlet property="messageTextContainerView" destination="LDf-t9-Q1h" id="wEC-SG-mNF"/>
                                     <outlet property="messageTextLabel" destination="gmr-FV-ybV" id="gf3-iV-f9F"/>
                                     <outlet property="profilePicImageView" destination="VHg-OK-yxV" id="XBv-6E-S8s"/>
-                                    <outlet property="timeLabel" destination="odq-f5-Lhc" id="b1p-YQ-qeb"/>
-                                    <outlet property="timeLabelBottomConstraint" destination="7YN-mg-RKJ" id="sss-Bx-Jlt"/>
-                                    <outlet property="timeLabelHeightConstraint" destination="mt2-98-JkR" id="k0f-B3-7dy"/>
-                                    <outlet property="timeLabelTopConstraint" destination="YYj-pY-Wax" id="8PU-e2-IrZ"/>
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellEmpty" rowHeight="64" id="2P1-yE-gi5" customClass="EmptyTableViewCell" customModule="Profeey" customModuleProvider="target">

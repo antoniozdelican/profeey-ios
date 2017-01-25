@@ -97,15 +97,15 @@ class ConversationsTableViewController: UITableViewController {
         cell.profilePicImageView.image = conversation.participant?.profilePicUrl != nil ? conversation.participant?.profilePic : UIImage(named: "ic_no_profile_pic_feed")
         cell.preferredUsernameLabel.text = conversation.participant?.preferredUsername
         cell.lastMessageLabel.text = conversation.lastMessageText
-        cell.timeLabel.text = conversation.lastMessagerCeatedString
+        cell.createdLabel.text = conversation.lastMessagerCeatedString
         
         // TODO: fix this
         
         if let conversationId = conversation.conversationId, let unseenConversationsIds = (self.tabBarController as? MainTabBarController)?.unseenConversationsIds, unseenConversationsIds.contains(conversationId) {
-            cell.timeLabel.textColor = Colors.red
+            cell.createdLabel.textColor = Colors.red
             cell.unseenConversationView.isHidden = false
         } else {
-            cell.timeLabel.textColor = Colors.grey
+            cell.createdLabel.textColor = Colors.grey
             cell.unseenConversationView.isHidden = true
         }
         return cell

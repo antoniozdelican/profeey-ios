@@ -20,7 +20,7 @@ class CommentTableViewCell: UITableViewCell {
     @IBOutlet weak var preferredUsernameLabel: UILabel!
     @IBOutlet weak var professionNameLabel: UILabel!
     @IBOutlet weak var commentTextLabel: TTTAttributedLabel!
-    @IBOutlet weak var timeLabel: UILabel!
+    @IBOutlet weak var createdLabel: UILabel!
     @IBOutlet weak var nameStackView: UIStackView!
     
     weak var commentTableViewCellDelegate: CommentTableViewCellDelegate?

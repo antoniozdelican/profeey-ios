@@ -84,7 +84,7 @@ class NotificationsTableViewController: UITableViewController {
         let notification = self.notifications[indexPath.row]
         cell.profilePicImageView.image = notification.user?.profilePicUrl != nil ? notification.user?.profilePic : UIImage(named: "ic_no_profile_pic_feed")
         cell.messageLabel.attributedText = self.constructNotificationMessage(notification.user?.preferredUsername, notificationMessage: notification.notificationMessage)
-        cell.timeLabel.text = notification.createdString
+        cell.createdLabel.text = notification.createdString
         
         // Check for new notifications.
         if let notificationCreated = notification.created?.intValue, let lastSeenDate = (self.tabBarController as? MainTabBarController)?.lastSeenDate?.intValue {
