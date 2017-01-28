@@ -55,6 +55,11 @@ class AWSUsersTable: NSObject, Table {
         objectMapper.load(AWSUser.self, hashKey: userId, rangeKey: nil).continue(completionHandler)
     }
     
+    func getUserNumberOfPosts(_ userId: String, completionHandler: @escaping AWSContinuationBlock) {
+        let objectMapper = AWSDynamoDBObjectMapper.default()
+        objectMapper.load(AWSUserNumberOfPosts.self, hashKey: userId, rangeKey: nil).continue(completionHandler)
+    }
+    
     func saveUser(_ awsUserUpdate: AWSUserUpdate, completionHandler: @escaping AWSContinuationBlock) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
         objectMapper.save(awsUserUpdate).continue(completionHandler)

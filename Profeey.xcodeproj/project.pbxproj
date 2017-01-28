@@ -166,6 +166,7 @@
 		A9C071D01E3562B200A27D42 /* SettingsTableSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C071CF1E3562B200A27D42 /* SettingsTableSectionHeader.swift */; };
 		A9C071D21E3562CB00A27D42 /* SettingsTableSectionHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9C071D11E3562CB00A27D42 /* SettingsTableSectionHeader.xib */; };
 		A9C0ED3A1D3C21C30036F791 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C0ED391D3C21C30036F791 /* Post.swift */; };
+		A9C359941E3D012300392A1C /* AWSUserNumberOfPosts.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C359931E3D012300392A1C /* AWSUserNumberOfPosts.swift */; };
 		A9C3C0E81E02B7D2005CA18C /* ForgotPasswordTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C3C0E71E02B7D2005CA18C /* ForgotPasswordTableViewController.swift */; };
 		A9C3C0EA1E02B7DC005CA18C /* NewPasswordTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C3C0E91E02B7DC005CA18C /* NewPasswordTableViewController.swift */; };
 		A9C443C61E3759D6009B6BCE /* AWSEndpointUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C443C51E3759D6009B6BCE /* AWSEndpointUser.swift */; };
@@ -443,6 +444,7 @@
 		A9C071CF1E3562B200A27D42 /* SettingsTableSectionHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTableSectionHeader.swift; sourceTree = "<group>"; };
 		A9C071D11E3562CB00A27D42 /* SettingsTableSectionHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsTableSectionHeader.xib; sourceTree = "<group>"; };
 		A9C0ED391D3C21C30036F791 /* Post.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
+		A9C359931E3D012300392A1C /* AWSUserNumberOfPosts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSUserNumberOfPosts.swift; sourceTree = "<group>"; };
 		A9C3C0E71E02B7D2005CA18C /* ForgotPasswordTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForgotPasswordTableViewController.swift; sourceTree = "<group>"; };
 		A9C3C0E91E02B7DC005CA18C /* NewPasswordTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewPasswordTableViewController.swift; sourceTree = "<group>"; };
 		A9C443C51E3759D6009B6BCE /* AWSEndpointUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSEndpointUser.swift; sourceTree = "<group>"; };
@@ -765,6 +767,7 @@
 			children = (
 				A9A5039E1D2FE0810030A472 /* AWSUser.swift */,
 				A9FAB36C1D8A114900E871CD /* AWSUserUpdate.swift */,
+				A9C359931E3D012300392A1C /* AWSUserNumberOfPosts.swift */,
 				A9A503A01D2FE0A90030A472 /* AWSUsersTable.swift */,
 			);
 			name = AWSUsers;
@@ -1308,11 +1311,11 @@
 			isa = PBXGroup;
 			children = (
 				A9E53B681D10665100CD1D6C /* Home.storyboard */,
+				A9B7A2491D65D8C0009DA340 /* HomeTableViewController.swift */,
 				A944BAA91DD10323000BE754 /* HomeEmptyFeedView.xib */,
 				A944BAAB1DD10413000BE754 /* HomeEmptyFeedView.swift */,
 				A9DC893C1E34F19600B9D213 /* HomeNoNetworkView.xib */,
 				A9DC893E1E34F26900B9D213 /* HomeNoNetworkView.swift */,
-				A9B7A2491D65D8C0009DA340 /* HomeTableViewController.swift */,
 			);
 			name = Home;
 			sourceTree = "<group>";
@@ -1429,7 +1432,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 0730;
+				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = Profeey;
 				TargetAttributes = {
 					A930BC771D0DD43E004D49F7 = {
@@ -1563,6 +1566,7 @@
 				A94349511E390A5A004E96BF /* PostCaptionTableViewCell.swift in Sources */,
 				A91C1CD91DEDA8C2006FBDD4 /* PRFYNotification.swift in Sources */,
 				A999CD481DBE93D400E7ADB1 /* ProfessionTableViewController.swift in Sources */,
+				A9C359941E3D012300392A1C /* AWSUserNumberOfPosts.swift in Sources */,
 				A990ECB01D6A572500C3C9CE /* UsersTableViewController.swift in Sources */,
 				A9B68DA31D8999BB006AC4EA /* NotificationsTableViewController.swift in Sources */,
 				A9D688901E0AF3CE00A07D86 /* AWSLocationsTable.swift in Sources */,
@@ -1765,8 +1769,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -1812,8 +1818,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -1833,6 +1841,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1859,6 +1868,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "Profeey/Profeey-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -1882,6 +1892,7 @@
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Profeey/Profeey-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

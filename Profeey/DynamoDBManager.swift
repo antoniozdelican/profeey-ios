@@ -23,6 +23,7 @@ protocol DynamoDBManager {
     
     func getCurrentUserDynamoDB(_ completionHandler: @escaping AWSContinuationBlock)
     func getUserDynamoDB(_ userId: String, completionHandler: @escaping AWSContinuationBlock)
+    func getUserNumberOfPostsDynamoDB(_ completionHandler: @escaping AWSContinuationBlock)
     
     func createUserDynamoDB(_ email: String, firstName: String, lastName: String, completionHandler: @escaping AWSContinuationBlock)
     func updateUserPreferredUsernameAndProfilePicDynamoDB(_ preferredUsername: String, profilePicUrl: String?, completionHandler: @escaping AWSContinuationBlock)

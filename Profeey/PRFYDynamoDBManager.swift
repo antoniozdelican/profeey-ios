@@ -63,6 +63,18 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         usersTable.getUser(userId, completionHandler: completionHandler)
     }
     
+    // Get numberOfPosts for enabling posting recommendations.
+    func getUserNumberOfPostsDynamoDB(_ completionHandler: @escaping AWSContinuationBlock) {
+        guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
+            print("getUserNumberOfPostsDynamoDB no identityId!")
+            AWSTask().continue(completionHandler)
+            return
+        }
+        print("getUserNumberOfPostsDynamoDB:")
+        let usersTable = AWSUsersTable()
+        usersTable.getUserNumberOfPosts(identityId, completionHandler: completionHandler)
+    }
+    
     // Creates user on landing.
     func createUserDynamoDB(_ email: String, firstName: String, lastName: String, completionHandler: @escaping AWSContinuationBlock) {
         guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {

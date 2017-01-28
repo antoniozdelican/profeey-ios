@@ -16,6 +16,11 @@ class AddRecommendationTableViewController: UITableViewController {
     @IBOutlet weak var recommendationTextView: UITextView!
     @IBOutlet weak var recommendationFakePlaceholderLabel: UILabel!
     
+    // Before numberOfPosts is loaded.
+    fileprivate var isLoadingNumberOfPosts: Bool = false
+    fileprivate var activityIndicatorView: UIActivityIndicatorView?
+    fileprivate var noNetworkConnection: Bool = false
+    
     var user: User?
     
     override func viewDidLoad() {
@@ -25,16 +30,26 @@ class AddRecommendationTableViewController: UITableViewController {
         self.profilePicImageView.image = PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB?.profilePic
         self.postButton.isEnabled = false
         self.recommendationTextView.delegate = self
+        self.recommendationFakePlaceholderLabel.text = ""
+        
+        // Set background views.
+        self.activityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
+        self.tableView.backgroundView = self.activityIndicatorView
+        
+        // Disable textView until loaded numberOfPosts.
+        self.recommendationTextView.isEditable = false
+        self.isLoadingNumberOfPosts = true
+        self.activityIndicatorView?.startAnimating()
+        self.getNumberOfPosts()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.recommendationTextView.becomeFirstResponder()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        self.view.endEditing(true)
         super.viewWillDisappear(animated)
+        self.view.endEditing(true)
     }
 
     override func didReceiveMemoryWarning() {
@@ -74,6 +89,49 @@ class AddRecommendationTableViewController: UITableViewController {
     }
     
     // MARK: AWS
+    
+    fileprivate func getNumberOfPosts() {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().getUserNumberOfPostsDynamoDB({
+            (task: AWSTask) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                guard task.error == nil else {
+                    print("getNumberOfPosts error: \(task.error!)")
+                    self.isLoadingNumberOfPosts = false
+                    self.activityIndicatorView?.stopAnimating()
+                    // Handle error and show banner.
+                    if (task.error as! NSError).code == -1009 {
+                        (self.navigationController as? PRFYNavigationController)?.showBanner("No Internet Connection")
+                        self.noNetworkConnection = true
+                    }
+                    self.tableView.reloadData()
+                    return
+                }
+                // Reset flags and animations that were initiated.
+                self.isLoadingNumberOfPosts = false
+                self.activityIndicatorView?.stopAnimating()
+                
+                // Allow only user with 5 or more posts to recommend.
+                if let awsUserNumberOfPosts = task.result as? AWSUserNumberOfPosts, let numberOfPosts = awsUserNumberOfPosts._numberOfPosts, numberOfPosts.intValue >= 5 {
+                    self.recommendationTextView.isEditable = true
+                    if let preferredUsername = self.user?.preferredUsername {
+                       self.recommendationFakePlaceholderLabel.text = "Write a recommendation to \(preferredUsername)"
+                    } else {
+                       self.recommendationFakePlaceholderLabel.text = "Write a recommendation..."
+                    }
+                    self.recommendationTextView.becomeFirstResponder()
+                } else {
+                    self.recommendationFakePlaceholderLabel.text = "To give a recommendation, you need to be an experienced Profeey with at least 5 posts!"
+                }
+                UIView.performWithoutAnimation {
+                    self.tableView.beginUpdates()
+                    self.tableView.endUpdates()
+                }
+            })
+            return nil
+        })
+    }
     
     fileprivate func createRecommendation(_ recommendationText: String) {
         guard let recommendingId = self.user?.userId else {
