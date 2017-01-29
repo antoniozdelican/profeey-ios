@@ -28,7 +28,11 @@ class AWSNotification: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     
     class func dynamoDBTableName() -> String {
         
-        return "profeey-mobilehub-294297648-Notifications"
+        #if DEVELOPMENT
+            return "profeey-mobilehub-294297648-Notifications"
+        #else
+            return "prodprofeey-mobilehub-725952970-Notifications"
+        #endif
     }
     
     class func hashKeyAttribute() -> String {

@@ -30,8 +30,11 @@ class AWSEndpointUser: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     }
     
     class func dynamoDBTableName() -> String {
-        
-        return "profeey-mobilehub-294297648-EndpointUsers"
+        #if DEVELOPMENT
+            return "profeey-mobilehub-294297648-EndpointUsers"
+        #else
+            return "prodprofeey-mobilehub-725952970-EndpointUsers"
+        #endif
     }
     
     class func hashKeyAttribute() -> String {

@@ -79,8 +79,11 @@ class AWSUser: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     }
     
     class func dynamoDBTableName() -> String {
-        
-        return "profeey-mobilehub-294297648-Users"
+        #if DEVELOPMENT
+            return "profeey-mobilehub-294297648-Users"
+        #else
+            return "prodprofeey-mobilehub-725952970-Users"
+        #endif
     }
     
     class func hashKeyAttribute() -> String {

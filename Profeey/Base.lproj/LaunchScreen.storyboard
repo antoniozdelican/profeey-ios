@@ -50,14 +50,14 @@
                                 </constraints>
                             </view>
                             <imageView clearsContextBeforeDrawing="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_logo_grey" translatesAutoresizingMaskIntoConstraints="NO" id="hbi-VS-fk4">
-                                <rect key="frame" x="167" y="313" width="40" height="40"/>
+                                <rect key="frame" x="147" y="293" width="80" height="80"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="h7q-Iy-Der"/>
-                                    <constraint firstAttribute="width" constant="40" id="tIF-ND-jeW"/>
+                                    <constraint firstAttribute="height" constant="80" id="epr-43-Tvg"/>
+                                    <constraint firstAttribute="width" constant="80" id="gWk-LV-JZB"/>
                                 </constraints>
                             </imageView>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.97530043129999999" green="0.97527122499999996" blue="0.97528779509999997" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="fEm-0y-t8a" secondAttribute="trailing" id="0Yw-6L-Qmg"/>
                             <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="fEm-0y-t8a" secondAttribute="bottom" constant="48.5" id="3jU-jK-xFm"/>
@@ -82,6 +82,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="ic_logo_grey" width="40" height="40"/>
+        <image name="ic_logo_grey" width="80" height="80"/>
     </resources>
 </document>

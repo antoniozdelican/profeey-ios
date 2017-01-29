@@ -24,8 +24,11 @@ class AWSNotificationsCounter: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     }
     
     class func dynamoDBTableName() -> String {
-        
-        return "profeey-mobilehub-294297648-NotificationsCounters"
+        #if DEVELOPMENT
+            return "profeey-mobilehub-294297648-NotificationsCounters"
+        #else
+            return "prodprofeey-mobilehub-725952970-NotificationsCounters"
+        #endif
     }
     
     class func hashKeyAttribute() -> String {

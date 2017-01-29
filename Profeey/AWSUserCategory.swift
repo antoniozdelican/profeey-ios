@@ -16,8 +16,11 @@ class AWSUserCategory: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     var _numberOfPosts: NSNumber?
     
     class func dynamoDBTableName() -> String {
-        
-        return "profeey-mobilehub-294297648-UserCategories"
+        #if DEVELOPMENT
+            return "profeey-mobilehub-294297648-UserCategories"
+        #else
+            return "prodprofeey-mobilehub-725952970-UserCategories"
+        #endif
     }
     
     class func hashKeyAttribute() -> String {

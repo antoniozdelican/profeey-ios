@@ -54,8 +54,11 @@ class AWSRelationship: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     }
     
     class func dynamoDBTableName() -> String {
-        
-        return "profeey-mobilehub-294297648-Relationships"
+        #if DEVELOPMENT
+            return "profeey-mobilehub-294297648-Relationships"
+        #else
+            return "prodprofeey-mobilehub-725952970-Relationships"
+        #endif
     }
     
     class func hashKeyAttribute() -> String {

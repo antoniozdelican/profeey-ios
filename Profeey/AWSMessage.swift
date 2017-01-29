@@ -39,8 +39,11 @@ class AWSMessage: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     }
     
     class func dynamoDBTableName() -> String {
-        
-        return "profeey-mobilehub-294297648-Messages"
+        #if DEVELOPMENT
+            return "profeey-mobilehub-294297648-Messages"
+        #else
+            return "prodprofeey-mobilehub-725952970-Messages"
+        #endif
     }
     
     class func hashKeyAttribute() -> String {

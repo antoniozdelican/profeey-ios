@@ -34,7 +34,11 @@ class AWSActivity: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     
     class func dynamoDBTableName() -> String {
         
-        return "profeey-mobilehub-294297648-Activities"
+        #if DEVELOPMENT
+            return "profeey-mobilehub-294297648-Activities"
+        #else
+            return "prodprofeey-mobilehub-725952970-Activities"
+        #endif
     }
     
     class func hashKeyAttribute() -> String {

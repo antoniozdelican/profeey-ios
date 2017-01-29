@@ -25,11 +25,11 @@
 			<key>Default</key>
 			<dict>
 				<key>CloudFrontURL</key>
-				<string>https://d2e922i3q15lkl.cloudfront.net</string>
+				<string>https://dnu18m8a35eq3.cloudfront.net</string>
 				<key>Region</key>
 				<string>us-east-1</string>
 				<key>S3Bucket</key>
-				<string>profeey-contentdelivery-mobilehub-294297648</string>
+				<string>prodprofeey-contentdelivery-mobilehub-725952970</string>
 			</dict>
 		</dict>
 		<key>CredentialsProvider</key>
@@ -39,7 +39,7 @@
 				<key>Default</key>
 				<dict>
 					<key>PoolId</key>
-					<string>us-east-1:a29f1a34-0cdb-4ad4-b084-2a1a3c165375</string>
+					<string>us-east-1:bc5d579d-4f76-4c71-8930-156475d803f4</string>
 					<key>Region</key>
 					<string>us-east-1</string>
 				</dict>
@@ -63,7 +63,7 @@
 			<key>Default</key>
 			<dict>
 				<key>AppId</key>
-				<string>107342b07d0242ccab177c919c616d81</string>
+				<string>20480cb1a2cb40ce9bf5d02bfcb92246</string>
 				<key>Region</key>
 				<string>us-east-1</string>
 			</dict>
@@ -71,7 +71,7 @@
 		<key>MobileHub</key>
 		<dict>
 			<key>ProjectClientId</key>
-			<string>MobileHub 3645c688-16cc-40cc-b38f-15a1db504fac aws-my-sample-app-ios-swift-v0.6</string>
+			<string>MobileHub 5842738c-ff2f-496e-9375-eee2811bd8c2 aws-my-sample-app-ios-swift-v0.8</string>
 		</dict>
 		<key>PushManager</key>
 		<dict>
@@ -81,11 +81,11 @@
 				<string>us-east-1</string>
 				<key>SNSConfiguredTopics</key>
 				<array>
-					<string>arn:aws:sns:us-east-1:717883611405:profeey_alldevices_MOBILEHUB_294297648</string>
+					<string>arn:aws:sns:us-east-1:717883611405:prodprofeey_alldevices_MOBILEHUB_725952970</string>
 					<string></string>
 				</array>
 				<key>SNSPlatformApplicationARN</key>
-				<string>arn:aws:sns:us-east-1:717883611405:app/APNS_SANDBOX/profeey_MOBILEHUB_294297648</string>
+				<string>arn:aws:sns:us-east-1:717883611405:app/APNS/prodprofeey_MOBILEHUB_725952970</string>
 			</dict>
 		</dict>
 		<key>UserFileManager</key>
@@ -95,7 +95,7 @@
 				<key>Region</key>
 				<string>us-east-1</string>
 				<key>S3Bucket</key>
-				<string>profeey-userfiles-mobilehub-294297648</string>
+				<string>prodprofeey-userfiles-mobilehub-725952970</string>
 			</dict>
 		</dict>
 	</dict>

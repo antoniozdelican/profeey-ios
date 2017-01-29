@@ -44,8 +44,11 @@ class AWSWorkExperience: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     }
     
     class func dynamoDBTableName() -> String {
-        
-        return "profeey-mobilehub-294297648-WorkExperiences"
+        #if DEVELOPMENT
+            return "profeey-mobilehub-294297648-WorkExperiences"
+        #else
+            return "prodprofeey-mobilehub-725952970-WorkExperiences"
+        #endif
     }
     
     class func hashKeyAttribute() -> String {

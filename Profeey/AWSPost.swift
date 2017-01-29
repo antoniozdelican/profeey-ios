@@ -65,8 +65,11 @@ class AWSPost: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     }
     
     class func dynamoDBTableName() -> String {
-        
-        return "profeey-mobilehub-294297648-Posts"
+        #if DEVELOPMENT
+            return "profeey-mobilehub-294297648-Posts"
+        #else
+            return "prodprofeey-mobilehub-725952970-Posts"
+        #endif
     }
     
     class func hashKeyAttribute() -> String {

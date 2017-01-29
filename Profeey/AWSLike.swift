@@ -46,8 +46,11 @@ class AWSLike: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     }
     
     class func dynamoDBTableName() -> String {
-        
-        return "profeey-mobilehub-294297648-Likes"
+        #if DEVELOPMENT
+            return "profeey-mobilehub-294297648-Likes"
+        #else
+            return "prodprofeey-mobilehub-725952970-Likes"
+        #endif
     }
     
     class func hashKeyAttribute() -> String {

@@ -18,8 +18,11 @@ class AWSProfessionLocation: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     var _created: NSNumber?
     
     class func dynamoDBTableName() -> String {
-        
-        return "profeey-mobilehub-294297648-ProfessionLocations"
+        #if DEVELOPMENT
+            return "profeey-mobilehub-294297648-ProfessionLocations"
+        #else
+            return "prodprofeey-mobilehub-725952970-ProfessionLocations"
+        #endif
     }
     
     class func hashKeyAttribute() -> String {

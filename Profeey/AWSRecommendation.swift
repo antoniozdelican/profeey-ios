@@ -44,8 +44,11 @@ class AWSRecommendation: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     }
     
     class func dynamoDBTableName() -> String {
-        
-        return "profeey-mobilehub-294297648-Recommendations"
+        #if DEVELOPMENT
+            return "profeey-mobilehub-294297648-Recommendations"
+        #else
+            return "prodprofeey-mobilehub-725952970-Recommendations"
+        #endif
     }
     
     class func hashKeyAttribute() -> String {

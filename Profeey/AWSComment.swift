@@ -57,8 +57,11 @@ class AWSComment: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     }
     
     class func dynamoDBTableName() -> String {
-        
-        return "profeey-mobilehub-294297648-Comments"
+        #if DEVELOPMENT
+            return "profeey-mobilehub-294297648-Comments"
+        #else
+            return "prodprofeey-mobilehub-725952970-Comments"
+        #endif
     }
     
     class func hashKeyAttribute() -> String {
