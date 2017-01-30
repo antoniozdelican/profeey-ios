@@ -53,6 +53,7 @@
 		A94368801E23AB480009F4EA /* Conversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A943687F1E23AB480009F4EA /* Conversation.swift */; };
 		A94368831E23AD810009F4EA /* AWSConversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A94368821E23AD810009F4EA /* AWSConversation.swift */; };
 		A94368851E23AF5A0009F4EA /* AWSConversationsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A94368841E23AF5A0009F4EA /* AWSConversationsTable.swift */; };
+		A94480411E3FBB2A003068CA /* GalleryNoAccessView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A94480401E3FBB2A003068CA /* GalleryNoAccessView.xib */; };
 		A944BAAA1DD10323000BE754 /* HomeEmptyFeedView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A944BAA91DD10323000BE754 /* HomeEmptyFeedView.xib */; };
 		A944BAAC1DD10413000BE754 /* HomeEmptyFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A944BAAB1DD10413000BE754 /* HomeEmptyFeedView.swift */; };
 		A945973E1DA7E463006A4C9B /* AlbumButton.xib in Resources */ = {isa = PBXBuildFile; fileRef = A945973D1DA7E463006A4C9B /* AlbumButton.xib */; };
@@ -338,6 +339,7 @@
 		A943687F1E23AB480009F4EA /* Conversation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Conversation.swift; sourceTree = "<group>"; };
 		A94368821E23AD810009F4EA /* AWSConversation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSConversation.swift; sourceTree = "<group>"; };
 		A94368841E23AF5A0009F4EA /* AWSConversationsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSConversationsTable.swift; sourceTree = "<group>"; };
+		A94480401E3FBB2A003068CA /* GalleryNoAccessView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GalleryNoAccessView.xib; sourceTree = "<group>"; };
 		A944BAA91DD10323000BE754 /* HomeEmptyFeedView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HomeEmptyFeedView.xib; sourceTree = "<group>"; };
 		A944BAAB1DD10413000BE754 /* HomeEmptyFeedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeEmptyFeedView.swift; sourceTree = "<group>"; };
 		A945973D1DA7E463006A4C9B /* AlbumButton.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AlbumButton.xib; sourceTree = "<group>"; };
@@ -621,11 +623,12 @@
 		A91A10371DA7FBD70042B4CA /* Gallery */ = {
 			isa = PBXGroup;
 			children = (
+				A94480401E3FBB2A003068CA /* GalleryNoAccessView.xib */,
 				A91A10341DA7F59F0042B4CA /* GalleryViewController.swift */,
 				A99030F81D464FEE00336D26 /* GalleryCollectionViewCell.swift */,
+				A945973D1DA7E463006A4C9B /* AlbumButton.xib */,
 				A99030FA1D46632500336D26 /* AlbumsTableViewController.swift */,
 				A99030FC1D46634600336D26 /* AlbumTableViewCell.swift */,
-				A945973D1DA7E463006A4C9B /* AlbumButton.xib */,
 			);
 			name = Gallery;
 			sourceTree = "<group>";
@@ -1475,6 +1478,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A94480411E3FBB2A003068CA /* GalleryNoAccessView.xib in Resources */,
 				A94597401DA7EA64006A4C9B /* CameraOverlayView.xib in Resources */,
 				A9A1961B1DDC643D008D6494 /* Settings.storyboard in Resources */,
 				A9E9DC5F1E16DB2A00FE7C3B /* GridView.xib in Resources */,

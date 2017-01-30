@@ -9,6 +9,7 @@
 import UIKit
 import AWSMobileHubHelper
 import AWSDynamoDB
+import PhotosUI
 
 enum MainChildController: Int {
     case home = 0
@@ -356,7 +357,16 @@ extension MainTabBarController: UITabBarControllerDelegate {
         // If it's dummyCaptureNavigationController, don't show it and instead present Capture.storyboard.
         if let restorationIdentifier = viewController.restorationIdentifier, restorationIdentifier == "dummyCaptureNavigationController" {
             if let captureNavigationController = UIStoryboard(name: "Capture", bundle: nil).instantiateInitialViewController() {
-                self.present(captureNavigationController, animated: true, completion: nil)
+                
+                // Check Photos access for the first time.
+                if PHPhotoLibrary.authorizationStatus() == .notDetermined {
+                    PHPhotoLibrary.requestAuthorization({
+                        (status: PHAuthorizationStatus) in
+                        self.present(captureNavigationController, animated: true, completion: nil)
+                    })
+                } else {
+                    self.present(captureNavigationController, animated: true, completion: nil)
+                }
             }
             return false
         }

@@ -17,11 +17,15 @@ protocol GalleryViewControllerDelegate: class {
 class GalleryViewController: UIViewController {
 
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet var galleryNoAccessView: UIView!
+    @IBOutlet weak var noAccessTitleLabel: UILabel!
+    @IBOutlet weak var noAccessTextLabel: UILabel!
+    @IBOutlet weak var settingsButton: UIButton!
     
     weak var galleryViewControllerDelegate: GalleryViewControllerDelegate?
     
     fileprivate var imageManager: PHCachingImageManager?
-    fileprivate var thumbnailSize: CGSize!
+    fileprivate var thumbnailSize: CGSize?
     // Used for checking if PHCachingImageManager should start caching
     fileprivate var previousPreheatRect: CGRect!
     fileprivate var album :PHFetchResult<PHAsset>?
@@ -31,8 +35,19 @@ class GalleryViewController: UIViewController {
         super.viewDidLoad()
         self.collectionView.dataSource = self
         self.collectionView.delegate = self
-        self.imageManager = PHCachingImageManager()
-        self.resetCachedAssets()
+        Bundle.main.loadNibNamed("GalleryNoAccessView", owner: self, options: nil)
+        
+        switch PHPhotoLibrary.authorizationStatus() {
+        case .authorized:
+            self.imageManager = PHCachingImageManager()
+            self.resetCachedAssets()
+        case .denied, .restricted:
+            self.configureNoAccessView()
+        default:
+            break
+        }
+        // Init here for bug.
+        self.previousPreheatRect = CGRect.zero
         
         if self.album == nil {
             let allPhotosOptions = PHFetchOptions()
@@ -45,25 +60,47 @@ class GalleryViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         // Begin caching assets in and around collection view's visible rect
-        self.updateCachedAssets()
+        if PHPhotoLibrary.authorizationStatus() == .authorized {
+            self.updateCachedAssets()
+        }
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
     
+    // MARK: Configuration
+    
+    fileprivate func configureImageManager() {
+        self.imageManager = PHCachingImageManager()
+        self.resetCachedAssets()
+        if self.album == nil {
+            let allPhotosOptions = PHFetchOptions()
+            allPhotosOptions.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
+            allPhotosOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+            self.album = PHAsset.fetchAssets(with: allPhotosOptions)
+        }
+    }
+    
+    fileprivate func configureNoAccessView() {
+        self.settingsButton.isEnabled = true
+        self.noAccessTitleLabel.text = "Profeey doesn't have access to your photos."
+        self.noAccessTextLabel.text = "But that's easy to fix! Just go to settings and set the switch for Photos and Camera to green."
+        self.collectionView.backgroundView = self.galleryNoAccessView
+    }
+    
     // MARK: Asset Caching
     
     fileprivate func resetCachedAssets() {
         self.imageManager?.stopCachingImagesForAllAssets()
-        self.previousPreheatRect = CGRect.zero;
+        self.previousPreheatRect = CGRect.zero
     }
     
     fileprivate func updateCachedAssets() {
         guard self.isViewLoaded && self.view.window != nil else {
             return
         }
-        guard let galleryCollectionView = self.collectionView else {
+        guard let galleryCollectionView = self.collectionView, let thumbnailSize = self.thumbnailSize else {
             return
         }
         
@@ -97,13 +134,13 @@ class GalleryViewController: UIViewController {
             // Update the assets the PHCachingImageManager is caching
             self.imageManager?.startCachingImages(
                 for: assetsToStartCaching,
-                targetSize: self.thumbnailSize,
+                targetSize: thumbnailSize,
                 contentMode: PHImageContentMode.aspectFill,
                 options: nil
             )
             self.imageManager?.stopCachingImages(
                 for: assetsToStopCaching,
-                targetSize: self.thumbnailSize,
+                targetSize: thumbnailSize,
                 contentMode: PHImageContentMode.aspectFill,
                 options: nil
             )
@@ -148,11 +185,23 @@ class GalleryViewController: UIViewController {
     fileprivate func assetsAtIndexPaths(_ indexPaths: [IndexPath]) -> [PHAsset] {
         var assets: [PHAsset] = []
         for indexPath in indexPaths {
-            let asset = self.album![indexPath.item]
-            assets.append(asset)
+            // To fix bug of NSRangeException due to Gallery Icon at indexPath.item == 0
+            if indexPath.item < self.album!.count {
+                let asset = self.album![indexPath.item]
+                assets.append(asset)
+            }
         }
         return assets
     }
+    
+    // MARK: IBActions
+    
+    @IBAction func settingsButtonTapped(_ sender: AnyObject) {
+        if let url = URL(string: UIApplicationOpenSettingsURLString) {
+            UIApplication.shared.openURL(url)
+        }
+    }
+    
 }
 
 extension GalleryViewController: UICollectionViewDataSource, UICollectionViewDelegate {
@@ -176,14 +225,18 @@ extension GalleryViewController: UICollectionViewDataSource, UICollectionViewDel
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellCameraGallery", for: indexPath) as! GalleryCollectionViewCell
             return cell
         }
+        guard let album = self.album, let thumbnailSize = self.thumbnailSize else {
+            return UICollectionViewCell()
+        }
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellGallery", for: indexPath) as! GalleryCollectionViewCell
-        let asset = self.album![indexPath.item]
+        // Skip camera button at indexPath == 0.
+        let asset = album[indexPath.item - 1]
         cell.representedAssetIdentifier = asset.localIdentifier as NSString!
         
         // Request an image for the asset from the PHCachingImageManager
         self.imageManager?.requestImage(
             for: asset,
-            targetSize: thumbnailSize!,
+            targetSize: thumbnailSize,
             contentMode: PHImageContentMode.aspectFill,
             options: nil,
             resultHandler: {result, info in
@@ -222,7 +275,8 @@ extension GalleryViewController: UICollectionViewDataSource, UICollectionViewDel
             // Scroll to camera.
             self.galleryViewControllerDelegate?.cameraButtonTapped()
         } else {
-            guard let asset = self.album?[indexPath.item] else {
+            // Skip camera button at indexPath == 0.
+            guard let asset = self.album?[indexPath.item - 1] else {
                 return
             }
             self.galleryViewControllerDelegate?.didSelectAsset(asset: asset)

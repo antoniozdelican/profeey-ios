@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="15G1217" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="GalleryViewController" customModule="Profeey" customModuleProvider="target">
+            <connections>
+                <outlet property="galleryNoAccessView" destination="iN0-l3-epB" id="QDg-Iy-9Db"/>
+                <outlet property="noAccessTextLabel" destination="fcx-uf-gTl" id="Lyg-KG-UHq"/>
+                <outlet property="noAccessTitleLabel" destination="dne-Rz-Ho3" id="rOQ-YN-1uN"/>
+                <outlet property="settingsButton" destination="xey-bD-AcJ" id="5by-ac-cPU"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UMc-xU-02C">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                    <subviews>
+                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="0Ji-v5-3Kt">
+                            <rect key="frame" x="20" y="279" width="335" height="110.5"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No access title." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dne-Rz-Ho3">
+                                    <rect key="frame" x="83.5" y="0.0" width="168.5" height="29"/>
+                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="24"/>
+                                    <color key="textColor" red="0.41868340970000001" green="0.41867089270000002" blue="0.41867792609999999" alpha="1" colorSpace="calibratedRGB"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No access text." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fcx-uf-gTl">
+                                    <rect key="frame" x="111.5" y="44" width="112" height="19.5"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                    <color key="textColor" red="0.41868340970000001" green="0.41867089270000002" blue="0.41867792609999999" alpha="1" colorSpace="calibratedRGB"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xey-bD-AcJ">
+                                    <rect key="frame" x="104.5" y="78.5" width="126" height="32"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="126" id="DNK-nD-BOq"/>
+                                        <constraint firstAttribute="height" constant="32" id="e7d-3b-8OQ"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                    <state key="normal" title="Go to settings">
+                                        <color key="titleColor" red="0.080254554749999998" green="0.61858558649999995" blue="0.93965935710000004" alpha="1" colorSpace="calibratedRGB"/>
+                                    </state>
+                                    <connections>
+                                        <action selector="settingsButtonTapped:" destination="-1" eventType="touchUpInside" id="vlx-Pj-jv1"/>
+                                    </connections>
+                                </button>
+                            </subviews>
+                        </stackView>
+                    </subviews>
+                    <color key="backgroundColor" red="0.97530043129999999" green="0.97527122499999996" blue="0.97528779509999997" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="trailing" secondItem="0Ji-v5-3Kt" secondAttribute="trailing" constant="20" id="SSL-dl-Mha"/>
+                        <constraint firstItem="0Ji-v5-3Kt" firstAttribute="centerY" secondItem="UMc-xU-02C" secondAttribute="centerY" id="Y0N-qo-Hbx"/>
+                        <constraint firstItem="0Ji-v5-3Kt" firstAttribute="leading" secondItem="UMc-xU-02C" secondAttribute="leading" constant="20" id="pgK-wL-cRg"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="UMc-xU-02C" secondAttribute="trailing" id="3f7-OA-pqA"/>
+                <constraint firstItem="UMc-xU-02C" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="Vlw-GZ-ccE"/>
+                <constraint firstAttribute="bottom" secondItem="UMc-xU-02C" secondAttribute="bottom" id="bBc-xt-zN8"/>
+                <constraint firstItem="UMc-xU-02C" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="hMF-0K-6Pa"/>
+            </constraints>
+            <point key="canvasLocation" x="34.5" y="53.5"/>
+        </view>
+    </objects>
+</document>

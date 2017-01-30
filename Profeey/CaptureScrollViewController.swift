@@ -51,6 +51,13 @@ class CaptureScrollViewController: UIViewController {
         UIView.animate(withDuration: 0.2, animations: {
             self.setNeedsStatusBarAppearanceUpdate()
         })
+        
+        // Disable albumButton if not authorized to access library.
+        if PHPhotoLibrary.authorizationStatus() == .authorized {
+            self.albumButton?.isEnabled = true
+        } else if PHPhotoLibrary.authorizationStatus() == .denied {
+            self.albumButton?.isEnabled = false
+        }
     }
     
     override var prefersStatusBarHidden: Bool {
