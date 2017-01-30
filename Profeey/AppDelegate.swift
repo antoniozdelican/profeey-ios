@@ -108,6 +108,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         completionHandler(UIBackgroundFetchResult.newData)
     }
     
+    func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
+        // Called when the application receives a memory warning from the system. It is strongly recommended that you implement this method. If your app does not release enough memory during low-memory conditions, the system may terminate it outright.
+        print("applicationDidReceiveMemoryWarning in AppDelegate:")
+        
+        print("AWSUserFileManager cache:")
+        print(AWSUserFileManager.defaultUserFileManager().maxCacheSize)
+        print(AWSUserFileManager.defaultUserFileManager().cachedUsedSize)
+        print(AWSUserFileManager.defaultUserFileManager().pinnedSize)
+        
+        // Clear all cached images for now.
+        AWSUserFileManager.defaultUserFileManager().clearCache()
+    }
+    
     fileprivate func configureUI() {
         // UINavigationBar
         UINavigationBar.appearance().barTintColor = Colors.whiteDark
