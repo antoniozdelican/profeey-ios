@@ -146,7 +146,13 @@
 		</dict>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Your location is used to find places and other professionals near you.</string>
+	<string>$(PRODUCT_NAME) uses your location to find places and other people near you.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>To take photos with the $(PRODUCT_NAME) app, please give access to your camera.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>To take videos with the $(PRODUCT_NAME) app, please give access to your microphone.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>To start sharing photos on $(PRODUCT_NAME), please give access to your library.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>
