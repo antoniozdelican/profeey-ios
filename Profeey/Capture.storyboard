@@ -10,10 +10,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Navigation Controller-->
+        <!--Capture Navigation Controller-->
         <scene sceneID="NhL-vA-tN3">
             <objects>
-                <navigationController id="yJv-yj-4UH" sceneMemberID="viewController">
+                <navigationController id="yJv-yj-4UH" customClass="CaptureNavigationController" customModule="Profeey" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="jQn-ki-A3U">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -502,10 +502,10 @@
             </objects>
             <point key="canvasLocation" x="574" y="-743"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Capture Navigation Controller-->
         <scene sceneID="UVV-8x-xff">
             <objects>
-                <navigationController id="zis-a7-HOZ" sceneMemberID="viewController">
+                <navigationController id="zis-a7-HOZ" customClass="CaptureNavigationController" customModule="Profeey" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="LQ8-bO-Ksg">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>

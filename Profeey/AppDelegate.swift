@@ -123,7 +123,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     fileprivate func configureUI() {
         // UINavigationBar
-        UINavigationBar.appearance().barTintColor = Colors.whiteDark
+//        UINavigationBar.appearance().barTintColor = Colors.whiteDark
+        UINavigationBar.appearance().barTintColor = UIColor.white
         UINavigationBar.appearance().isTranslucent = false
         UINavigationBar.appearance().tintColor = Colors.black
         UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: Colors.black]

@@ -61,6 +61,7 @@
 		A9459F701E00196100978DA8 /* TableSectionHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9459F6F1E00196100978DA8 /* TableSectionHeader.xib */; };
 		A9459F721E00197200978DA8 /* TableSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9459F711E00197200978DA8 /* TableSectionHeader.swift */; };
 		A94797A71D2E3451007CBF08 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = A94797A61D2E3451007CBF08 /* User.swift */; };
+		A949A20A1E40BFB800EE8B88 /* CaptureNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A949A2091E40BFB800EE8B88 /* CaptureNavigationController.swift */; };
 		A9543CAB1DA3A1ED002BF372 /* EditPost.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9543CAA1DA3A1ED002BF372 /* EditPost.storyboard */; };
 		A9543CAF1DA3C4DB002BF372 /* EditPostImageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9543CAE1DA3C4DB002BF372 /* EditPostImageTableViewCell.swift */; };
 		A9543CB11DA3C51B002BF372 /* EditPostDescriptionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9543CB01DA3C51B002BF372 /* EditPostDescriptionTableViewCell.swift */; };
@@ -348,6 +349,7 @@
 		A9459F6F1E00196100978DA8 /* TableSectionHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TableSectionHeader.xib; sourceTree = "<group>"; };
 		A9459F711E00197200978DA8 /* TableSectionHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableSectionHeader.swift; sourceTree = "<group>"; };
 		A94797A61D2E3451007CBF08 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		A949A2091E40BFB800EE8B88 /* CaptureNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CaptureNavigationController.swift; sourceTree = "<group>"; };
 		A9543CAA1DA3A1ED002BF372 /* EditPost.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = EditPost.storyboard; sourceTree = "<group>"; };
 		A9543CAE1DA3C4DB002BF372 /* EditPostImageTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditPostImageTableViewCell.swift; sourceTree = "<group>"; };
 		A9543CB01DA3C51B002BF372 /* EditPostDescriptionTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditPostDescriptionTableViewCell.swift; sourceTree = "<group>"; };
@@ -571,6 +573,7 @@
 			isa = PBXGroup;
 			children = (
 				A9E53B6C1D10667100CD1D6C /* Capture.storyboard */,
+				A949A2091E40BFB800EE8B88 /* CaptureNavigationController.swift */,
 				A901CFE61DA78DDC00C44B26 /* CaptureScrollViewController.swift */,
 				A91A10361DA7FBCC0042B4CA /* Camera */,
 				A91A10371DA7FBD70042B4CA /* Gallery */,
@@ -1728,6 +1731,7 @@
 				A9E4EC541D81F1B700929ED1 /* LocationsOldTableViewController.swift in Sources */,
 				A9EC9E391E086EAD00A5F619 /* EditPost.swift in Sources */,
 				A9ACA7411DB506A50004B8DE /* AWSWorkExperience.swift in Sources */,
+				A949A20A1E40BFB800EE8B88 /* CaptureNavigationController.swift in Sources */,
 				A901CFE91DA78FA900C44B26 /* CameraViewController.swift in Sources */,
 				A91C1CD71DEDA669006FBDD4 /* NotificationTableViewCell.swift in Sources */,
 				A9D688851E0AE06500A07D86 /* AWSProfession.swift in Sources */,

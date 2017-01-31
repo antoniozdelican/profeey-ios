@@ -145,10 +145,10 @@
 			</dict>
 		</dict>
 	</dict>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>$(PRODUCT_NAME) uses your location to find places and other people near you.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>To take photos with the $(PRODUCT_NAME) app, please give access to your camera.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>$(PRODUCT_NAME) uses your location to find places and other people near you.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>To take videos with the $(PRODUCT_NAME) app, please give access to your microphone.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
@@ -167,6 +167,8 @@
 	</array>
 	<key>UIRequiresFullScreen</key>
 	<true/>
+	<key>UIStatusBarStyle</key>
+	<string>UIStatusBarStyleLightContent</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

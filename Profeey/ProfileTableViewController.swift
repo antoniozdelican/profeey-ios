@@ -531,7 +531,7 @@ class ProfileTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if section == 1 {
-            return 46.0
+            return 42.0
         }
         return 0.0
     }
