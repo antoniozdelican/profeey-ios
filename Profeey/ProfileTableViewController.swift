@@ -247,6 +247,7 @@ class ProfileTableViewController: UITableViewController {
                 cell.numberOfRecommendationsButton.setTitle(self.user?.numberOfRecommendationsInt.numberToString(), for: UIControlState.normal)
                 if self.isCurrentUser {
                     cell.recommendButton.isHidden = true
+                    cell.recommendButtonWidthConstraint.constant = 0.0
                     if !self.isLoadingUser {
                         cell.setEditButton()
                     }

@@ -24,6 +24,7 @@ class ProfileMainTableViewCell: UITableViewCell {
     @IBOutlet weak var numberOfRecommendationsButton: UIButton!
     @IBOutlet weak var followButton: UIButton!
     @IBOutlet weak var recommendButton: UIButton!
+    @IBOutlet weak var recommendButtonWidthConstraint: NSLayoutConstraint!
     
     weak var profileMainTableViewCellDelegate: ProfileMainTableViewCellDelegate?
     
