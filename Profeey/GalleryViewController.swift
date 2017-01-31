@@ -83,9 +83,9 @@ class GalleryViewController: UIViewController {
     }
     
     fileprivate func configureNoAccessView() {
-        self.settingsButton.isEnabled = true
         self.noAccessTitleLabel.text = "Profeey doesn't have access to your photos."
-        self.noAccessTextLabel.text = "But that's easy to fix! Just go to settings and set the switch for Photos and Camera to green."
+        self.noAccessTextLabel.text = "But that's easy to fix! Just go to settings and switch Photos to green."
+        self.settingsButton.isEnabled = true
         self.collectionView.backgroundView = self.galleryNoAccessView
     }
     

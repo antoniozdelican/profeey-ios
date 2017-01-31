@@ -357,8 +357,7 @@ extension MainTabBarController: UITabBarControllerDelegate {
         // If it's dummyCaptureNavigationController, don't show it and instead present Capture.storyboard.
         if let restorationIdentifier = viewController.restorationIdentifier, restorationIdentifier == "dummyCaptureNavigationController" {
             if let captureNavigationController = UIStoryboard(name: "Capture", bundle: nil).instantiateInitialViewController() {
-                
-                // Check Photos access for the first time.
+                // Check Photos access for the first time. This can happen on MainTabBarVc, UsernameVc, ProfileVc and EditVc.
                 if PHPhotoLibrary.authorizationStatus() == .notDetermined {
                     PHPhotoLibrary.requestAuthorization({
                         (status: PHAuthorizationStatus) in

@@ -37,6 +37,7 @@ class CaptureScrollViewController: UIViewController {
     fileprivate var photo: UIImage?
     fileprivate var asset: PHAsset?
     fileprivate var isPhoto: Bool = true
+    fileprivate var isFlashBarButtonAvailable: Bool = true
     
     // Initialy is not but as soon as it's loaded, hide it.
     fileprivate var isStatusBarHidden: Bool = false
@@ -148,7 +149,7 @@ extension CaptureScrollViewController: UIScrollViewDelegate {
         if scrollView.contentOffset.x == 0 {
             self.navigationItem.titleView = nil
             self.navigationItem.title = "Camera"
-            self.navigationItem.rightBarButtonItem = self.flashBarButtonItem
+            self.navigationItem.rightBarButtonItem = self.isFlashBarButtonAvailable ? self.flashBarButtonItem : nil
         } else if scrollView.contentOffset.x == self.view.bounds.width {
             self.navigationItem.titleView = self.albumButton
             self.navigationItem.title = nil
@@ -176,6 +177,7 @@ extension CaptureScrollViewController: CameraViewControllerDelegate {
     }
     
     func toggleFlashBarButton(_ isVisible: Bool) {
+        self.isFlashBarButtonAvailable = isVisible
         self.navigationItem.rightBarButtonItem = isVisible ? self.flashBarButtonItem : nil
     }
 }

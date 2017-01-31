@@ -17,6 +17,15 @@ protocol CameraViewControllerDelegate: class {
 
 class CameraViewController: UIViewController {
     
+    // Camera No Access views.
+    @IBOutlet var cameraNoAccessView: UIView!
+    @IBOutlet weak var noAccessTitleLabel: UILabel!
+    @IBOutlet weak var noAccessTextLabel: UILabel!
+    @IBOutlet weak var settingsButton: UIButton!
+    @IBOutlet weak var noAccessWindowSubView: UIView!
+    @IBOutlet weak var noAccessWindowSubViewAspectRatioConstraint: NSLayoutConstraint!
+    
+    // Camera Overlay views.
     @IBOutlet var cameraOverlayView: UIView!
     @IBOutlet weak var cameraWindowSubView: UIView!
     @IBOutlet weak var cameraWindowSubViewAspectRatioConstraint: NSLayoutConstraint!
@@ -31,11 +40,41 @@ class CameraViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        Bundle.main.loadNibNamed("CameraNoAccessView", owner: self, options: nil)
         Bundle.main.loadNibNamed("CameraOverlayView", owner: self, options: nil)
-        if self.isProfilePic {
-            self.configureSquareAspectRatio()
+        
+        // Determine if camera is supported and authorization status.
+        if !UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera) {
+            self.configureNoAccessView(false)
+        } else {
+            switch AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo) {
+            case .authorized:
+                self.configureCamera()
+            case .denied, .restricted:
+                self.configureNoAccessView(true)
+            default:
+                break
+            }
         }
-        self.configureCamera()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        // Determine if authorization status is not yet determined.
+        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera) {
+            if AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo) == .notDetermined {
+                AVCaptureDevice.requestAccess(forMediaType: AVMediaTypeVideo, completionHandler: {
+                    (granted: Bool) in
+                    DispatchQueue.main.async(execute: {
+                        if granted {
+                            self.configureCamera()
+                        } else {
+                            self.configureNoAccessView(true)
+                        }
+                    })
+                })
+            }
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -45,47 +84,55 @@ class CameraViewController: UIViewController {
     // MARK: Configuration
     
     fileprivate func configureCamera() {
-        // Check if camera exists.
-        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera) {
-            self.imagePickerController = UIImagePickerController()
-            self.imagePickerController.modalPresentationStyle = UIModalPresentationStyle.currentContext
-            self.imagePickerController.sourceType = UIImagePickerControllerSourceType.camera
-            self.imagePickerController.delegate = self
-            self.imagePickerController.allowsEditing = false
-            self.imagePickerController.showsCameraControls = false
-            self.imagePickerController.cameraFlashMode = UIImagePickerControllerCameraFlashMode.auto
-            
-            // Setting cameraOverlay.
-            self.cameraOverlayView.frame = self.imagePickerController.cameraOverlayView!.frame
-            self.imagePickerController.cameraOverlayView = self.cameraOverlayView
-            self.cameraOverlayView = nil
-            
-            // Setting child-parent relationship.
-            self.addChildViewController(self.imagePickerController)
-            self.imagePickerController.view.frame = CGRect(x: 0.0, y: 0.0, width: self.view.bounds.width, height: self.view.bounds.height)
-            self.view.insertSubview(self.imagePickerController.view, at: 0)
-            self.imagePickerController.didMove(toParentViewController: self)
-        } else {
-            // Disable buttons.
-            self.cameraViewControllerDelegate?.toggleFlashBarButton(false)
-            self.cameraSwitchButton.isEnabled = false
-            self.captureButton.isEnabled = false
-            // Present empty camera overlay view.
-            self.cameraOverlayView.frame = CGRect(x: 0.0, y: 0.0, width: self.view.bounds.width, height: self.view.bounds.height)
-            self.view.insertSubview(self.cameraOverlayView, at: 0)
-            // Present alert.
-            let alertController = self.getSimpleAlertWithTitle("No camera", message: "Your device doesn't have a camera.", cancelButtonTitle: "Ok")
-            self.present(alertController, animated: true, completion: nil)
+        self.imagePickerController = UIImagePickerController()
+        self.imagePickerController.modalPresentationStyle = UIModalPresentationStyle.currentContext
+        self.imagePickerController.sourceType = UIImagePickerControllerSourceType.camera
+        self.imagePickerController.delegate = self
+        self.imagePickerController.allowsEditing = false
+        self.imagePickerController.showsCameraControls = false
+        self.imagePickerController.cameraFlashMode = UIImagePickerControllerCameraFlashMode.auto
+        
+        // Setting cameraOverlay.
+        if self.isProfilePic {
+            self.configureSquareAspectRatio(self.cameraWindowSubViewAspectRatioConstraint, windowSubView: self.cameraWindowSubView)
         }
+        self.cameraOverlayView.frame = self.imagePickerController.cameraOverlayView!.frame
+        self.imagePickerController.cameraOverlayView = self.cameraOverlayView
+        self.cameraOverlayView = nil
+        
+        // Setting child-parent relationship.
+        self.addChildViewController(self.imagePickerController)
+        self.imagePickerController.view.frame = CGRect(x: 0.0, y: 0.0, width: self.view.bounds.width, height: self.view.bounds.height)
+        self.view.insertSubview(self.imagePickerController.view, at: 0)
+        self.imagePickerController.didMove(toParentViewController: self)
     }
     
-    fileprivate func configureSquareAspectRatio() {
-        self.cameraWindowSubViewAspectRatioConstraint.isActive = false
+    fileprivate func configureNoAccessView(_ isCameraSupported: Bool) {
+        if self.isProfilePic {
+            self.configureSquareAspectRatio(self.noAccessWindowSubViewAspectRatioConstraint, windowSubView: self.noAccessWindowSubView)
+        }
+        if isCameraSupported {
+            self.noAccessTitleLabel.text = "Profeey doesn't have access to your camera."
+            self.noAccessTextLabel.text = "But that's easy to fix! Just go to settings and switch Camera to green."
+            self.settingsButton.isHidden = false
+        } else {
+            self.noAccessTitleLabel.text = "Your device doesn't have a camera."
+            self.noAccessTextLabel.text = "But no worries! You can still choose photos from your library."
+            self.settingsButton.isHidden = true
+        }
+        self.cameraNoAccessView.frame = self.view.bounds
+        self.view.addSubview(self.cameraNoAccessView)
+        // Remove flash button.
+        self.cameraViewControllerDelegate?.toggleFlashBarButton(false)
+    }
+    
+    fileprivate func configureSquareAspectRatio(_ windowSubViewAspectRatioConstraint: NSLayoutConstraint, windowSubView: UIView) {
+        windowSubViewAspectRatioConstraint.isActive = false
         let squareConstraint = NSLayoutConstraint(
-            item: self.cameraWindowSubView,
+            item: windowSubView,
             attribute: NSLayoutAttribute.height,
             relatedBy: NSLayoutRelation.equal,
-            toItem: self.cameraWindowSubView,
+            toItem: windowSubView,
             attribute: NSLayoutAttribute.width,
             multiplier: 1.0,
             constant: 0.0)
@@ -107,6 +154,12 @@ class CameraViewController: UIViewController {
             self.imagePickerController.cameraDevice = UIImagePickerControllerCameraDevice.front
         } else {
             self.imagePickerController.cameraDevice = UIImagePickerControllerCameraDevice.rear
+        }
+    }
+    
+    @IBAction func settingsButtonTapped(_ sender: AnyObject) {
+        if let url = URL(string: UIApplicationOpenSettingsURLString) {
+            UIApplication.shared.openURL(url)
         }
     }
     

@@ -201,6 +201,7 @@
 		A9D227011DE99B9700B2E894 /* AWSConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D227001DE99B9700B2E894 /* AWSConfiguration.swift */; };
 		A9D334081D800D8D005565C2 /* PostImageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D334071D800D8D005565C2 /* PostImageTableViewCell.swift */; };
 		A9D334121D801B70005565C2 /* PostButtonsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D334111D801B70005565C2 /* PostButtonsTableViewCell.swift */; };
+		A9D3DFEC1E4090C200202E60 /* CameraNoAccessView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9D3DFEB1E4090C200202E60 /* CameraNoAccessView.xib */; };
 		A9D450631DCA247B000967E2 /* AWSCommentsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D450621DCA247B000967E2 /* AWSCommentsTable.swift */; };
 		A9D49EDE1DD5C583000F90A8 /* UserCategoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D49EDD1DD5C583000F90A8 /* UserCategoryTableViewCell.swift */; };
 		A9D49EE01DD5C834000F90A8 /* UserCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D49EDF1DD5C834000F90A8 /* UserCategory.swift */; };
@@ -481,6 +482,7 @@
 		A9D227001DE99B9700B2E894 /* AWSConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSConfiguration.swift; sourceTree = "<group>"; };
 		A9D334071D800D8D005565C2 /* PostImageTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostImageTableViewCell.swift; sourceTree = "<group>"; };
 		A9D334111D801B70005565C2 /* PostButtonsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostButtonsTableViewCell.swift; sourceTree = "<group>"; };
+		A9D3DFEB1E4090C200202E60 /* CameraNoAccessView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CameraNoAccessView.xib; sourceTree = "<group>"; };
 		A9D450621DCA247B000967E2 /* AWSCommentsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSCommentsTable.swift; sourceTree = "<group>"; };
 		A9D49EDD1DD5C583000F90A8 /* UserCategoryTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserCategoryTableViewCell.swift; sourceTree = "<group>"; };
 		A9D49EDF1DD5C834000F90A8 /* UserCategory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserCategory.swift; sourceTree = "<group>"; };
@@ -614,8 +616,9 @@
 		A91A10361DA7FBCC0042B4CA /* Camera */ = {
 			isa = PBXGroup;
 			children = (
-				A901CFE81DA78FA900C44B26 /* CameraViewController.swift */,
+				A9D3DFEB1E4090C200202E60 /* CameraNoAccessView.xib */,
 				A945973F1DA7EA64006A4C9B /* CameraOverlayView.xib */,
+				A901CFE81DA78FA900C44B26 /* CameraViewController.swift */,
 			);
 			name = Camera;
 			sourceTree = "<group>";
@@ -1511,6 +1514,7 @@
 				A990ECB31D6A576E00C3C9CE /* Users.storyboard in Resources */,
 				A9C071D21E3562CB00A27D42 /* SettingsTableSectionHeader.xib in Resources */,
 				A9D49EE31DD5D920000F90A8 /* UserCategory.storyboard in Resources */,
+				A9D3DFEC1E4090C200202E60 /* CameraNoAccessView.xib in Resources */,
 				A990ECB81D6A5F6A00C3C9CE /* Comments.storyboard in Resources */,
 				A9CBBC471DB634C0009C8EC7 /* EditWorkExperience.storyboard in Resources */,
 				A9459F701E00196100978DA8 /* TableSectionHeader.xib in Resources */,

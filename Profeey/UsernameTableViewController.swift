@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import PhotosUI
 import AWSMobileHubHelper
 import AWSCognitoIdentityProvider
 import AWSDynamoDB
@@ -89,7 +90,15 @@ class UsernameTableViewController: UITableViewController {
         alertController.addAction(removePhotoAction)
         let changePhotoAction = UIAlertAction(title: "Add Profile Photo", style: UIAlertActionStyle.default, handler: {
             (alert: UIAlertAction) in
-            self.performSegue(withIdentifier: "segueToCaptureVc", sender: self)
+            // Check Photos access for the first time. This can happen on MainTabBarVc, UsernameVc, ProfileVc and EditVc.
+            if PHPhotoLibrary.authorizationStatus() == .notDetermined {
+                PHPhotoLibrary.requestAuthorization({
+                    (status: PHAuthorizationStatus) in
+                    self.performSegue(withIdentifier: "segueToCaptureVc", sender: self)
+                })
+            } else {
+                self.performSegue(withIdentifier: "segueToCaptureVc", sender: self)
+            }
         })
         alertController.addAction(changePhotoAction)
         let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil)
