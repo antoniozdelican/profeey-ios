@@ -52,9 +52,8 @@
                                             </subviews>
                                         </stackView>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="j7G-QN-8IS">
-                                            <rect key="frame" x="339" y="0.0" width="36" height="62"/>
+                                            <rect key="frame" x="339" y="0.0" width="36" height="63.5"/>
                                             <constraints>
-                                                <constraint firstAttribute="height" constant="62" id="hWu-bK-bsa"/>
                                                 <constraint firstAttribute="width" constant="36" id="hgz-we-Jdh"/>
                                             </constraints>
                                             <state key="normal" image="ic_arrow_down"/>
@@ -66,11 +65,13 @@
                                     <constraints>
                                         <constraint firstAttribute="trailing" secondItem="j7G-QN-8IS" secondAttribute="trailing" id="4BN-SV-wxY"/>
                                         <constraint firstItem="j7G-QN-8IS" firstAttribute="top" secondItem="1GA-aT-Xx8" secondAttribute="top" id="ABI-A0-YHF"/>
+                                        <constraint firstItem="j7G-QN-8IS" firstAttribute="top" secondItem="1GA-aT-Xx8" secondAttribute="top" id="Pjx-f9-gQf"/>
                                         <constraint firstItem="Qmf-wo-dHb" firstAttribute="leading" secondItem="Xpi-ZP-aFl" secondAttribute="trailing" constant="12" id="TNs-jt-OpF"/>
-                                        <constraint firstItem="Qmf-wo-dHb" firstAttribute="top" secondItem="1GA-aT-Xx8" secondAttribute="top" constant="14" id="Vgo-lC-6js"/>
+                                        <constraint firstAttribute="bottom" secondItem="j7G-QN-8IS" secondAttribute="bottom" id="bYV-Ej-uFe"/>
                                         <constraint firstItem="Xpi-ZP-aFl" firstAttribute="leading" secondItem="1GA-aT-Xx8" secondAttribute="leading" constant="12" id="bZ0-3G-00k"/>
-                                        <constraint firstItem="Xpi-ZP-aFl" firstAttribute="top" secondItem="1GA-aT-Xx8" secondAttribute="top" constant="12" id="gYh-EQ-svL"/>
+                                        <constraint firstItem="Xpi-ZP-aFl" firstAttribute="centerY" secondItem="1GA-aT-Xx8" secondAttribute="centerY" id="mI0-Lf-XK2"/>
                                         <constraint firstItem="j7G-QN-8IS" firstAttribute="leading" secondItem="Qmf-wo-dHb" secondAttribute="trailing" constant="8" id="mpY-3M-OGV"/>
+                                        <constraint firstItem="Qmf-wo-dHb" firstAttribute="centerY" secondItem="1GA-aT-Xx8" secondAttribute="centerY" id="yOt-TW-ZfO"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>

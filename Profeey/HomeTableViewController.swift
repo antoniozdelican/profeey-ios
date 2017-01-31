@@ -88,6 +88,15 @@ class HomeTableViewController: UITableViewController {
             // Set back to false.
             self.hasDiscoveredAndFollowedUsers = false
         }
+        
+        // TEST
+        //self.navigationController?.setNavigationBarHidden(true, animated: true)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        // TEST
+        //self.navigationController?.setNavigationBarHidden(false, animated: true)
     }
 
     override func didReceiveMemoryWarning() {

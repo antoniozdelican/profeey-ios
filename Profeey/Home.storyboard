@@ -39,7 +39,7 @@
                         <color key="backgroundColor" red="0.97530043129999999" green="0.97527122499999996" blue="0.97528779509999997" alpha="1" colorSpace="calibratedRGB"/>
                         <inset key="separatorInset" minX="12" minY="0.0" maxX="0.0" maxY="0.0"/>
                         <view key="tableFooterView" contentMode="scaleToFill" id="bMC-el-KLH">
-                            <rect key="frame" x="0.0" y="674" width="375" height="64"/>
+                            <rect key="frame" x="0.0" y="673.5" width="375" height="64"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="w08-2s-uex">
@@ -54,7 +54,7 @@
                         </view>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellPostUser" rowHeight="64" id="Zre-gG-70s" customClass="PostUserTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="56" width="375" height="64"/>
+                                <rect key="frame" x="0.0" y="55.5" width="375" height="64"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Zre-gG-70s" id="KSG-Y3-KlG">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="63"/>
@@ -86,9 +86,8 @@
                                             </subviews>
                                         </stackView>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gld-Z8-87A">
-                                            <rect key="frame" x="339" y="0.0" width="36" height="63"/>
+                                            <rect key="frame" x="339" y="0.0" width="36" height="63.5"/>
                                             <constraints>
-                                                <constraint firstAttribute="height" constant="63" id="ohZ-J0-39v"/>
                                                 <constraint firstAttribute="width" constant="36" id="pyS-6F-RfV"/>
                                             </constraints>
                                             <state key="normal" image="ic_arrow_down"/>
@@ -100,9 +99,11 @@
                                     <constraints>
                                         <constraint firstItem="PoI-WC-PJx" firstAttribute="leading" secondItem="KSG-Y3-KlG" secondAttribute="leading" constant="12" id="1sw-xC-gDA"/>
                                         <constraint firstItem="Gld-Z8-87A" firstAttribute="leading" secondItem="4cL-0h-wrF" secondAttribute="trailing" constant="8" id="7eY-q4-Oox"/>
-                                        <constraint firstItem="PoI-WC-PJx" firstAttribute="top" secondItem="KSG-Y3-KlG" secondAttribute="top" constant="12" id="9BN-v9-OOE"/>
-                                        <constraint firstItem="4cL-0h-wrF" firstAttribute="top" secondItem="KSG-Y3-KlG" secondAttribute="top" constant="14" id="Vtg-ve-JYA"/>
+                                        <constraint firstAttribute="bottom" secondItem="Gld-Z8-87A" secondAttribute="bottom" id="OUm-j0-QRT"/>
+                                        <constraint firstItem="Gld-Z8-87A" firstAttribute="top" secondItem="KSG-Y3-KlG" secondAttribute="top" id="QV6-dA-IyY"/>
                                         <constraint firstItem="Gld-Z8-87A" firstAttribute="top" secondItem="KSG-Y3-KlG" secondAttribute="top" id="Xls-yr-F9Z"/>
+                                        <constraint firstItem="4cL-0h-wrF" firstAttribute="centerY" secondItem="KSG-Y3-KlG" secondAttribute="centerY" id="bV5-RY-s4n"/>
+                                        <constraint firstItem="PoI-WC-PJx" firstAttribute="centerY" secondItem="KSG-Y3-KlG" secondAttribute="centerY" id="eSC-w4-67u"/>
                                         <constraint firstItem="4cL-0h-wrF" firstAttribute="leading" secondItem="PoI-WC-PJx" secondAttribute="trailing" constant="12" id="qsL-wh-4hc"/>
                                         <constraint firstAttribute="trailing" secondItem="Gld-Z8-87A" secondAttribute="trailing" id="toZ-cf-GwE"/>
                                     </constraints>
@@ -115,7 +116,7 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellPostImage" rowHeight="400" id="hfP-Sb-VdR" customClass="PostImageTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="120" width="375" height="400"/>
+                                <rect key="frame" x="0.0" y="119.5" width="375" height="400"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hfP-Sb-VdR" id="Tfq-vu-CEW">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="399"/>
@@ -152,7 +153,7 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellPostCaption" rowHeight="30" id="3Ba-nR-k2B" customClass="PostCaptionTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="520" width="375" height="30"/>
+                                <rect key="frame" x="0.0" y="519.5" width="375" height="30"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="3Ba-nR-k2B" id="bIn-45-dBY">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="29"/>
@@ -177,7 +178,7 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellPostCategoryCreated" rowHeight="26" id="Jfc-eF-Dar" customClass="PostCategoryCreatedTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="550" width="375" height="26"/>
+                                <rect key="frame" x="0.0" y="549.5" width="375" height="26"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Jfc-eF-Dar" id="jcH-MR-Sg4">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="25"/>
@@ -208,7 +209,7 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellPostButtons" rowHeight="52" id="p0U-dG-J82" customClass="PostButtonsTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="576" width="375" height="52"/>
+                                <rect key="frame" x="0.0" y="575.5" width="375" height="52"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="p0U-dG-J82" id="eul-OE-1Af">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="51"/>
@@ -292,7 +293,7 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellUploading" rowHeight="40" id="a5x-57-e3X" customClass="UploadingTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="628" width="375" height="40"/>
+                                <rect key="frame" x="0.0" y="627.5" width="375" height="40"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="a5x-57-e3X" id="xEe-fD-9RY">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="39"/>
