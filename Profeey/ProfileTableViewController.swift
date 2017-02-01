@@ -117,6 +117,9 @@ class ProfileTableViewController: UITableViewController {
             } else {
                 self.user = PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB
             }
+            // Set discover people button only here and not when comming from other Vcs on own profile.
+            self.discoverPeopleBarButtonItem = UIBarButtonItem(image: UIImage(named: "ic_discover_people"), style: UIBarButtonItemStyle.plain, target: self, action: #selector(self.discoverPeopleBarButtonTapped(_:)))
+            self.navigationItem.leftBarButtonItem = self.discoverPeopleBarButtonItem
         }
         // Comes from other Vc-s.
         guard let userId = user?.userId else {
@@ -146,12 +149,6 @@ class ProfileTableViewController: UITableViewController {
             self.isLoadingUserCategories = true
             self.tableView.tableFooterView = self.loadingTableFooterView
             self.queryUserCategoriesNumberOfPostsSorted(userId)
-        }
-        
-        // Set discover people button.
-        if self.isCurrentUser {
-            self.discoverPeopleBarButtonItem = UIBarButtonItem(image: UIImage(named: "ic_discover_people"), style: UIBarButtonItemStyle.plain, target: self, action: #selector(self.discoverPeopleBarButtonTapped(_:)))
-            self.navigationItem.leftBarButtonItem = self.discoverPeopleBarButtonItem
         }
     }
     
