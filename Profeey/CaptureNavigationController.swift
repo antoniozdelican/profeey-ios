@@ -12,7 +12,7 @@ class CaptureNavigationController: UINavigationController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationBar.barTintColor = Colors.whiteDark
+        self.navigationBar.barTintColor = UIColor.white
         self.navigationBar.isTranslucent = false
         self.navigationBar.tintColor = Colors.black
         self.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: Colors.black]

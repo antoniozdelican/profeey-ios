@@ -61,6 +61,8 @@ class ProfileTableViewController: UITableViewController {
     fileprivate var noNetworkConnection: Bool = false
     fileprivate var settingsButton: UIBarButtonItem?
     fileprivate var isSettingsButtonSet: Bool = false
+    
+    fileprivate var discoverPeopleBarButtonItem: UIBarButtonItem?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -144,6 +146,12 @@ class ProfileTableViewController: UITableViewController {
             self.isLoadingUserCategories = true
             self.tableView.tableFooterView = self.loadingTableFooterView
             self.queryUserCategoriesNumberOfPostsSorted(userId)
+        }
+        
+        // Set discover people button.
+        if self.isCurrentUser {
+            self.discoverPeopleBarButtonItem = UIBarButtonItem(image: UIImage(named: "ic_discover_people"), style: UIBarButtonItemStyle.plain, target: self, action: #selector(self.discoverPeopleBarButtonTapped(_:)))
+            self.navigationItem.leftBarButtonItem = self.discoverPeopleBarButtonItem
         }
     }
     
@@ -476,7 +484,7 @@ class ProfileTableViewController: UITableViewController {
                 return 112.0
             }
             if (indexPath.row == 0) || (self.workExperiences.count > 0 && indexPath.row == self.workExperiences.count + 1) {
-                return 48.0
+                return 40.0
             }
             return 105.0
         case .skills:
@@ -510,7 +518,7 @@ class ProfileTableViewController: UITableViewController {
                 return 112.0
             }
             if (indexPath.row == 0) || (self.workExperiences.count > 0 && indexPath.row == self.workExperiences.count + 1) {
-                return 48.0
+                return 40.0
             }
             return UITableViewAutomaticDimension
         case .skills:
@@ -545,6 +553,10 @@ class ProfileTableViewController: UITableViewController {
         } else {
             self.performSegue(withIdentifier: "segueToMessagesVc", sender: self)
         }
+    }
+    
+    func discoverPeopleBarButtonTapped(_ sender: AnyObject) {
+        self.performSegue(withIdentifier: "segueToDiscoverPeopleVc", sender: self)
     }
     
     // MARK: IBActions

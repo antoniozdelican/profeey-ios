@@ -686,6 +686,7 @@
                         <segue destination="bxz-Hb-MHG" kind="show" identifier="segueToMessagesVc" id="BAH-ih-axn"/>
                         <segue destination="GtJ-WR-FMF" kind="presentation" identifier="segueToEditProfileVc" id="THS-WD-sY2"/>
                         <segue destination="yok-go-68R" kind="presentation" identifier="segueToCaptureVc" id="6kA-6Z-bfx"/>
+                        <segue destination="BdJ-Ea-hvI" kind="show" identifier="segueToDiscoverPeopleVc" id="6da-og-06T"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lwE-Ik-htb" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -771,6 +772,14 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZTa-Wq-kps" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1342" y="-2002"/>
+        </scene>
+        <!--DiscoverPeople-->
+        <scene sceneID="wcW-y4-odq">
+            <objects>
+                <viewControllerPlaceholder storyboardName="DiscoverPeople" id="BdJ-Ea-hvI" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="jiR-qh-p7O" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1333" y="-2727"/>
         </scene>
     </scenes>
     <resources>

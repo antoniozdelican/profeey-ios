@@ -55,7 +55,7 @@ class WelcomeProfessionsTableViewController: UITableViewController {
     fileprivate func configureNavigationBar() {
         self.navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
         self.navigationController?.navigationBar.shadowImage = nil
-        self.navigationController?.navigationBar.barTintColor = Colors.whiteDark
+        self.navigationController?.navigationBar.barTintColor = UIColor.white
         self.navigationController?.navigationBar.tintColor = Colors.black
         self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: Colors.black]
         // Fix alignment for custom rightBarButtonItem.

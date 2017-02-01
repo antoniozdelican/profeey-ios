@@ -47,8 +47,9 @@ class HomeTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
         self.tableView.delaysContentTouches = false
-        self.tableView.contentInset = UIEdgeInsetsMake(-1.0, 0.0, 0.0, 0.0)
+        self.tableView.contentInset = UIEdgeInsetsMake(20.0, 0.0, 0.0, 0.0)
 
         // Set background views.
         self.activityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
@@ -57,6 +58,13 @@ class HomeTableViewController: UITableViewController {
         self.homeEmptyFeedView.homeEmptyFeedViewDelegate = self
         Bundle.main.loadNibNamed("HomeNoNetworkView", owner: self, options: nil)
         self.homeNoNetworkView.homeNoNetworkViewDelegate = self
+        
+        // Set backgroundView for statusBar.
+        if let navigationController = self.navigationController {
+            let statusBarBackgroundView = UIView(frame: UIApplication.shared.statusBarFrame)
+            statusBarBackgroundView.backgroundColor = Colors.whiteDark
+            navigationController.view.insertSubview(statusBarBackgroundView, belowSubview: navigationController.navigationBar)
+        }
         
         // Start querying activities.
         if AWSIdentityManager.defaultIdentityManager().isLoggedIn {
@@ -88,15 +96,15 @@ class HomeTableViewController: UITableViewController {
             // Set back to false.
             self.hasDiscoveredAndFollowedUsers = false
         }
-        
-        // TEST
-        //self.navigationController?.setNavigationBarHidden(true, animated: true)
+        self.navigationController?.setNavigationBarHidden(true, animated: true)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        // TEST
-        //self.navigationController?.setNavigationBarHidden(false, animated: true)
+        // Only hide navigationBar if it's push, not CaptureVc presenting modally.
+        if let navigationController = self.navigationController, navigationController.childViewControllers.count > 1 {
+            navigationController.setNavigationBarHidden(false, animated: true)
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -305,10 +313,6 @@ class HomeTableViewController: UITableViewController {
         }
         self.isRefreshingPosts = true
         self.queryUserActivitiesDateSorted(true)
-    }
-    
-    @IBAction func discoverPeopleButtonTapped(_ sender: Any) {
-        self.performSegue(withIdentifier: "segueToDiscoverPeopleVc", sender: self)
     }
     
     
