@@ -102,6 +102,7 @@ class AWSUser: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
             "_profilePicUrl" : "profilePicUrl",
             "_about" : "about",
             "_email" : "email",
+            "_emailVerified" : "emailVerified",
             "_locationId" : "locationId",
             "_locationName" : "locationName",
             "_website" : "website",
