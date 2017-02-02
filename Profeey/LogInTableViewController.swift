@@ -94,6 +94,8 @@ class LogInTableViewController: UITableViewController {
                 self.facebookButton.isHighlighted = true
         },
             completion: nil)
+        let alertController = self.getSimpleAlertWithTitle("Profeey Beta is not on Facebook yet", message: "We're not on Facebook yet, but will be soon! Please use our normal Log In.", cancelButtonTitle: "Got it!")
+        self.present(alertController, animated: true, completion: nil)
     }
     
     

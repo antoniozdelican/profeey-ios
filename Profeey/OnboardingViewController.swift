@@ -59,6 +59,8 @@ class OnboardingViewController: UIViewController {
                 self.facebookButton.isHighlighted = true
         },
             completion: nil)
+        let alertController = self.getSimpleAlertWithTitle("Profeey Beta is not on Facebook yet", message: "We're not on Facebook yet, but will be soon! Please use our normal Sign Up.", cancelButtonTitle: "Got it!")
+        self.present(alertController, animated: true, completion: nil)
     }
     
     @IBAction func signUpButtonTapped(_ sender: Any) {
