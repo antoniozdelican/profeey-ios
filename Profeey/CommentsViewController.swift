@@ -84,7 +84,7 @@ class CommentsViewController: UIViewController {
     @IBAction func sendButtonTapped(_ sender: AnyObject) {
         self.view.endEditing(true)
         self.sendButton.isEnabled = false
-        self.createComment(self.commentTextView.text)
+        self.preCreateComment(self.commentTextView.text)
     }
     
     // MARK: Keyboard notifications
@@ -121,30 +121,39 @@ class CommentsViewController: UIViewController {
         })
     }
     
-    // MARK: AWS
+    // MARK: Helpers
     
-    fileprivate func createComment(_ commentText: String) {
-        guard let postId = self.postId, let postUserId = self.postUserId else {
+    fileprivate func preCreateComment(_ commentText: String) {
+        guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId, let postId = self.postId, let postUserId = self.postUserId else {
             return
         }
+        self.resetCommentBox()
+        
+        // Real-time creation.
+        let commentId = NSUUID().uuidString.lowercased()
+        let created = NSNumber(value: Date().timeIntervalSince1970 as Double)
+        let comment = Comment(userId: identityId, commentId: commentId, created: created, commentText: commentText, postId: postId, postUserId: postUserId, user: PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB)
+        
+        // Notify observers.
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: CreateCommentNotificationKey), object: self, userInfo: ["comment": comment.copyComment()])
+        
+        // Actual creation.
+        self.createComment(commentId, created: created, commentText: commentText, postId: postId, postUserId: postUserId)
+    }
+    
+    // MARK: AWS
+    
+    // In background.
+    fileprivate func createComment(_ commentId: String, created: NSNumber, commentText: String, postId: String, postUserId: String) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().createCommentDynamoDB(postId, postUserId: postUserId, commentText: commentText, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().createCommentDynamoDB(commentId, created: created, commentText: commentText, postId: postId, postUserId: postUserId, completionHandler: {
             (task: AWSTask) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 if let error = task.error {
                     print("createComment error: \(error)")
-                    self.sendButton.isEnabled = true
-                    let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.localizedDescription, cancelButtonTitle: "Ok")
-                    self.present(alertController, animated: true, completion: nil)
-                } else {
-                    guard let awsComment = task.result as? AWSComment else {
-                        return
-                    }
-                    let comment = Comment(userId: awsComment._userId, commentId: awsComment._commentId, created: awsComment._created, commentText: awsComment._commentText, postId: awsComment._postId, postUserId: awsComment._postUserId, user: PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB)
-                    // Notify observers.
-                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: CreateCommentNotificationKey), object: self, userInfo: ["comment": comment.copyComment()])
-                    self.resetCommentBox()
+                    // Undo UI.
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: DeleteCommentNotificationKey), object: self, userInfo: ["commentId": commentId, "postId": postId])
                 }
             })
             return nil

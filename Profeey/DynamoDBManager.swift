@@ -63,7 +63,7 @@ protocol DynamoDBManager {
     
     // MARK: Comments
     
-    func createCommentDynamoDB(_ postId: String, postUserId: String, commentText: String, completionHandler: @escaping AWSContinuationBlock)
+    func createCommentDynamoDB(_ commentId: String, created: NSNumber, commentText: String, postId: String, postUserId: String, completionHandler: @escaping AWSContinuationBlock)
     func removeCommentDynamoDB(_ commentId: String, completionHandler: @escaping AWSContinuationBlock)
     func queryCommentsDateSortedDynamoDB(_ postId: String, lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
     

@@ -349,14 +349,12 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
     
     // MARK: Comments
     
-    func createCommentDynamoDB(_ postId: String, postUserId: String, commentText: String, completionHandler: @escaping AWSContinuationBlock) {
+    func createCommentDynamoDB(_ commentId: String, created: NSNumber, commentText: String, postId: String, postUserId: String, completionHandler: @escaping AWSContinuationBlock) {
         guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
             print("createCommentDynamoDB no identityId!")
             AWSTask().continue(completionHandler)
             return
         }
-        let commentId = NSUUID().uuidString.lowercased()
-        let created = NSNumber(value: Date().timeIntervalSince1970 as Double)
         let awsCommentsTable = AWSCommentsTable()
         let awsComment = AWSComment(_userId: identityId, _commentId: commentId, _created: created, _commentText: commentText, _postId: postId, _postUserId: postUserId, _firstName: self.currentUserDynamoDB?.firstName, _lastName: self.currentUserDynamoDB?.lastName, _preferredUsername: self.currentUserDynamoDB?.preferredUsername, _professionName: self.currentUserDynamoDB?.professionName, _profilePicUrl: self.currentUserDynamoDB?.profilePicUrl)
         awsCommentsTable.createComment(awsComment, completionHandler: {
