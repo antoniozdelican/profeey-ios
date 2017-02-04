@@ -32,9 +32,21 @@ class PRFYNavigationController: UINavigationController {
         // Clear it first in case it was already shown.
         self.removeBanner()
         
+        var frame: CGRect
+        
+        // In case on HomeVc, navigationBar is hidden so adjust banner frame.
+        if self.navigationBar.isHidden {
+            frame = CGRect(x: self.navigationBar.frame.origin.x, y: 0.0 - self.bannerHeight, width:
+                self.navigationBar.frame.width, height: self.bannerHeight)
+        } else {
+            frame = CGRect(x: self.navigationBar.frame.origin.x, y: self.navigationBar.frame.origin.y + self.navigationBar.frame.height - self.bannerHeight, width:
+                self.navigationBar.frame.width, height: self.bannerHeight)
+        }
+        
+        print("HERE IT IS navigationBar:")
+        print(self.navigationBar.frame)
+        
         // Create banner.
-        let frame = CGRect(x: self.navigationBar.frame.origin.x, y: self.navigationBar.frame.origin.y + self.navigationBar.frame.height - self.bannerHeight, width:
-            self.navigationBar.frame.width, height: self.bannerHeight)
         let banner = UIView(frame: frame)
         banner.backgroundColor = UIColor.black.withAlphaComponent(0.8)
         self.view.insertSubview(banner, belowSubview: navigationBar)
@@ -48,6 +60,8 @@ class PRFYNavigationController: UINavigationController {
         label.center = CGPoint(x: banner.bounds.width / 2.0, y: banner.bounds.height / 2.0)
         banner.addSubview(label)
         
+        self.currentBanner = banner
+        
         // Animate banner from top.
         self.isAnimatingBanner = true
         UIView.animate(
@@ -55,7 +69,11 @@ class PRFYNavigationController: UINavigationController {
             delay: 0.0,
             options: UIViewAnimationOptions.curveEaseIn,
             animations: {
-                banner.frame.origin.y = self.navigationBar.frame.origin.y + self.navigationBar.frame.height
+                if self.navigationBar.isHidden {
+                    self.currentBanner?.frame.origin.y = 20.0
+                } else {
+                    self.currentBanner?.frame.origin.y = self.navigationBar.frame.origin.y + self.navigationBar.frame.height
+                }
                 
         }, completion: {
             (finished: Bool) in
@@ -65,7 +83,11 @@ class PRFYNavigationController: UINavigationController {
                 delay: 2.0,
                 options: UIViewAnimationOptions.curveEaseIn,
                 animations: {
-                    self.currentBanner?.frame.origin.y = self.navigationBar.frame.origin.y + self.navigationBar.frame.height - self.bannerHeight
+                    if self.navigationBar.isHidden {
+                        self.currentBanner?.frame.origin.y = 0.0 - self.bannerHeight
+                    } else {
+                        self.currentBanner?.frame.origin.y = self.navigationBar.frame.origin.y + self.navigationBar.frame.height - self.bannerHeight
+                    }
                     
             }, completion: {
                 (finished: Bool) in
@@ -74,7 +96,7 @@ class PRFYNavigationController: UINavigationController {
             })
         })
         
-        self.currentBanner = banner
+        //self.currentBanner = banner
     }
 
     fileprivate func removeBanner() {
