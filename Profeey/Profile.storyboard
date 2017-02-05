@@ -309,6 +309,7 @@
                                 <connections>
                                     <outlet property="categoryNameLabel" destination="JGT-de-YTm" id="9FT-yC-hlc"/>
                                     <outlet property="createdLabel" destination="2Yb-0E-lou" id="FQV-mm-giv"/>
+                                    <outlet property="numberOfLikesContainerView" destination="ZsW-T4-rZ4" id="1cx-aw-uOT"/>
                                     <outlet property="numberOfLikesLabel" destination="VrU-ql-oeM" id="gTD-q2-iMm"/>
                                     <outlet property="postImageView" destination="YhB-Vc-bg9" id="CtT-pV-MlK"/>
                                     <outlet property="titleLabel" destination="Zpm-tL-qfg" id="K7k-z1-nBv"/>

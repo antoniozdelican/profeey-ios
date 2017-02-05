@@ -46,7 +46,13 @@ class NotificationsTableViewController: UITableViewController {
             let indexPath = self.tableView.indexPath(for: cell) {
             destinationViewController.user = self.notifications[indexPath.row].user?.copyUser()
         }
-        if let destinationViewController = segue.destination as? PostDetailsTableViewController,
+//        if let destinationViewController = segue.destination as? PostDetailsTableViewController,
+//            let cell = sender as? NotificationTableViewCell,
+//            let indexPath = self.tableView.indexPath(for: cell) {
+//            destinationViewController.shouldDownloadPost = true
+//            destinationViewController.notificationPostId = self.notifications[indexPath.row].postId
+//        }
+        if let destinationViewController = segue.destination as? PostDetailsViewController,
             let cell = sender as? NotificationTableViewCell,
             let indexPath = self.tableView.indexPath(for: cell) {
             destinationViewController.shouldDownloadPost = true

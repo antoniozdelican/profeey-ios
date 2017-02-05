@@ -112,6 +112,7 @@
                                 <connections>
                                     <outlet property="categoryNameLabel" destination="otW-fK-PYN" id="wvd-n3-2Zw"/>
                                     <outlet property="createdLabel" destination="8Qc-HH-tAL" id="N1k-RQ-0Vl"/>
+                                    <outlet property="numberOfLikesContainerView" destination="bSO-24-zUz" id="Nic-nc-rKi"/>
                                     <outlet property="numberOfLikesLabel" destination="Zac-1g-tca" id="jUt-o2-C7v"/>
                                     <outlet property="postImageView" destination="usJ-5U-y4F" id="xL3-HB-VlQ"/>
                                     <outlet property="titleLabel" destination="Jj4-Oi-gAf" id="LDt-hm-7ZB"/>

@@ -147,6 +147,7 @@
 		A9AFFB111D8B00DF00219627 /* CategoriesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AFFB101D8B00DF00219627 /* CategoriesTableViewController.swift */; };
 		A9B185931DCF25C000E1981D /* AWSRelationship.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B185921DCF25C000E1981D /* AWSRelationship.swift */; };
 		A9B185951DCF25CF00E1981D /* AWSRelationshipsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B185941DCF25CF00E1981D /* AWSRelationshipsTable.swift */; };
+		A9B571911E46AD9200AFD67E /* PostDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B571901E46AD9200AFD67E /* PostDetailsViewController.swift */; };
 		A9B68DA11D897A24006AC4EA /* EmptyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B68DA01D897A24006AC4EA /* EmptyTableViewCell.swift */; };
 		A9B68DA31D8999BB006AC4EA /* NotificationsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B68DA21D8999BB006AC4EA /* NotificationsTableViewController.swift */; };
 		A9B6A89F1D7F8063001EE407 /* PostUserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B6A89E1D7F8063001EE407 /* PostUserTableViewCell.swift */; };
@@ -428,6 +429,7 @@
 		A9AFFB101D8B00DF00219627 /* CategoriesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoriesTableViewController.swift; sourceTree = "<group>"; };
 		A9B185921DCF25C000E1981D /* AWSRelationship.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSRelationship.swift; sourceTree = "<group>"; };
 		A9B185941DCF25CF00E1981D /* AWSRelationshipsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSRelationshipsTable.swift; sourceTree = "<group>"; };
+		A9B571901E46AD9200AFD67E /* PostDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostDetailsViewController.swift; sourceTree = "<group>"; };
 		A9B68DA01D897A24006AC4EA /* EmptyTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptyTableViewCell.swift; sourceTree = "<group>"; };
 		A9B68DA21D8999BB006AC4EA /* NotificationsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationsTableViewController.swift; sourceTree = "<group>"; };
 		A9B6A89E1D7F8063001EE407 /* PostUserTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostUserTableViewCell.swift; sourceTree = "<group>"; };
@@ -1074,6 +1076,7 @@
 			isa = PBXGroup;
 			children = (
 				A9AC8FBD1DBDFDCB00C9BCE0 /* PostDetails.storyboard */,
+				A9B571901E46AD9200AFD67E /* PostDetailsViewController.swift */,
 				A9AC8FBF1DBDFF5200C9BCE0 /* PostDetailsTableViewController.swift */,
 			);
 			name = "Post Details";
@@ -1718,6 +1721,7 @@
 				A9D608721E2A812C00AD8C16 /* AWSNotificationsCountersTable.swift in Sources */,
 				A9C443C61E3759D6009B6BCE /* AWSEndpointUser.swift in Sources */,
 				A9B185951DCF25CF00E1981D /* AWSRelationshipsTable.swift in Sources */,
+				A9B571911E46AD9200AFD67E /* PostDetailsViewController.swift in Sources */,
 				A9F49D571D379D01002EB68B /* AWSPost.swift in Sources */,
 				A9C6CB7F1D2929AA00863816 /* Extensions.swift in Sources */,
 				A930BC7C1D0DD43F004D49F7 /* AppDelegate.swift in Sources */,

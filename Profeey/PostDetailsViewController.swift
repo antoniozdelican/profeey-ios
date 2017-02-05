@@ -1,17 +1,17 @@
 //
-//  CommentsViewController.swift
+//  PostDetailsViewController.swift
 //  Profeey
 //
-//  Created by Antonio Zdelican on 09/08/16.
-//  Copyright © 2016 Profeey. All rights reserved.
+//  Created by Antonio Zdelican on 05/02/17.
+//  Copyright © 2017 Profeey. All rights reserved.
 //
 
 import UIKit
 import AWSMobileHubHelper
 import AWSDynamoDB
 
-class CommentsViewController: UIViewController {
-
+class PostDetailsViewController: UIViewController {
+    
     @IBOutlet weak var commentTextView: UITextView!
     @IBOutlet weak var commentFakePlaceholderLabel: UILabel!
     @IBOutlet weak var commentContainerView: UIView!
@@ -19,8 +19,13 @@ class CommentsViewController: UIViewController {
     @IBOutlet weak var commentBarBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var commentBarHeightConstraint: NSLayoutConstraint!
     
-    var postId: String?
-    var postUserId: String?
+    // If comming from NotificationVc, we have to download the post, otherwise it's already set.
+    var shouldDownloadPost: Bool = false
+    // If comming from NotificationVc.
+    var notificationPostId: String?
+    // If comming from ProfileVc or UserCategoriesVc (copied).
+    var post: Post?
+    // If commentButton was tapped, activate commentTextView.
     var isCommentButton: Bool = false
     
     fileprivate var commentBarBottomConstraintConstant: CGFloat = 0.0
@@ -28,7 +33,7 @@ class CommentsViewController: UIViewController {
     fileprivate var tabBarHeight: CGFloat = 49.0
     // Top + Bottom padding between textView and comment bar view.
     fileprivate var commentBarTopBottomPadding: CGFloat = 13.0
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
@@ -72,9 +77,11 @@ class CommentsViewController: UIViewController {
     // MARK: Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let destinationViewController = segue.destination as? CommentsTableViewController {
-            destinationViewController.postId = self.postId
-            destinationViewController.commentsTableViewControllerDelegate = self
+        if let destinationViewController = segue.destination as? PostDetailsTableViewController {
+            destinationViewController.shouldDownloadPost = self.shouldDownloadPost
+            destinationViewController.notificationPostId = self.notificationPostId
+            destinationViewController.post = self.post
+            destinationViewController.postDetailsTableViewControllerDelegate = self
         }
     }
     
@@ -85,7 +92,7 @@ class CommentsViewController: UIViewController {
         self.sendButton.isEnabled = false
         self.preCreateComment(self.commentTextView.text)
     }
-    
+
     // MARK: Keyboard notifications
     
     func registerForKeyboardNotifications() {
@@ -123,7 +130,20 @@ class CommentsViewController: UIViewController {
     // MARK: Helpers
     
     fileprivate func preCreateComment(_ commentText: String) {
-        guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId, let postId = self.postId, let postUserId = self.postUserId else {
+        guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
+            return
+        }
+        var postId: String?
+        var postUserId: String?
+        // Own post for sure.
+        if self.shouldDownloadPost {
+            postId = self.notificationPostId
+            postUserId = identityId
+        } else {
+            postId = self.post?.postId
+            postUserId = self.post?.userId
+        }
+        guard postId != nil && postUserId != nil else {
             return
         }
         self.resetCommentBox()
@@ -131,13 +151,13 @@ class CommentsViewController: UIViewController {
         // Real-time creation.
         let commentId = NSUUID().uuidString.lowercased()
         let created = NSNumber(value: Date().timeIntervalSince1970 as Double)
-        let comment = Comment(userId: identityId, commentId: commentId, created: created, commentText: commentText, postId: postId, postUserId: postUserId, user: PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB)
+        let comment = Comment(userId: identityId, commentId: commentId, created: created, commentText: commentText, postId: postId!, postUserId: postUserId!, user: PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB)
         
         // Notify observers.
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: CreateCommentNotificationKey), object: self, userInfo: ["comment": comment.copyComment()])
         
         // Actual creation.
-        self.createComment(commentId, created: created, commentText: commentText, postId: postId, postUserId: postUserId)
+        self.createComment(commentId, created: created, commentText: commentText, postId: postId!, postUserId: postUserId!)
     }
     
     // MARK: AWS
@@ -167,9 +187,10 @@ class CommentsViewController: UIViewController {
         self.sendButton.isEnabled = false
         self.commentBarHeightConstraint.constant = self.commentBarHeightConstraintConstant
     }
+
 }
 
-extension CommentsViewController: UITextViewDelegate {
+extension PostDetailsViewController: UITextViewDelegate {
     
     func textViewDidChange(_ textView: UITextView) {
         self.commentFakePlaceholderLabel.isHidden = !textView.text.isEmpty
@@ -191,7 +212,7 @@ extension CommentsViewController: UITextViewDelegate {
     }
 }
 
-extension CommentsViewController: CommentsTableViewControllerDelegate {
+extension PostDetailsViewController: PostDetailsTableViewControllerDelegate {
     
     func scrollViewWillBeginDragging() {
         self.view.endEditing(true)

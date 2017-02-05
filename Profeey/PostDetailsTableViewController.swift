@@ -8,8 +8,15 @@
 
 import UIKit
 import AWSMobileHubHelper
+import AWSDynamoDB
+
+protocol PostDetailsTableViewControllerDelegate: class {
+    func scrollViewWillBeginDragging()
+}
 
 class PostDetailsTableViewController: UITableViewController {
+    
+    @IBOutlet var loadingTableFooterView: UIView!
     
     // If comming from NotificationVc, we have to download the post, otherwise it's already set.
     var shouldDownloadPost: Bool = false
@@ -18,8 +25,15 @@ class PostDetailsTableViewController: UITableViewController {
     // If comming from ProfileVc or UserCategoriesVc (copied).
     var post: Post?
     
+    weak var postDetailsTableViewControllerDelegate: PostDetailsTableViewControllerDelegate?
     fileprivate var isLoadingPost: Bool = false
     fileprivate var activityIndicatorView: UIActivityIndicatorView?
+    
+    // Comments.
+    fileprivate var comments: [Comment] = []
+    fileprivate var isLoadingComments: Bool = false
+    fileprivate var lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?
+    fileprivate var noNetworkConnection: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,6 +50,12 @@ class PostDetailsTableViewController: UITableViewController {
         } else if let postId = self.post?.postId {
             // Just check if currentUser liked this post.
             self.getLike(postId)
+            // Query comments.
+            if let postId = self.post?.postId {
+                self.isLoadingComments = true
+                self.tableView.tableFooterView = self.loadingTableFooterView
+                self.queryCommentsDateSorted(postId, startFromBeginning: true)
+            }
         }
         
         // Add observers.
@@ -56,7 +76,12 @@ class PostDetailsTableViewController: UITableViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destinationViewController = segue.destination as? ProfileTableViewController {
-            destinationViewController.user = self.post?.user?.copyUser()
+            if let cell = sender as? CommentTableViewCell,
+                let indexPath = self.tableView.indexPath(for: cell) {
+                destinationViewController.user = self.comments[indexPath.row].user?.copyUser()
+            } else {
+               destinationViewController.user = self.post?.user?.copyUser()
+            }
         }
         if let destinationViewController = segue.destination as? UsersTableViewController {
             destinationViewController.usersType = UsersType.likers
@@ -85,52 +110,76 @@ class PostDetailsTableViewController: UITableViewController {
         if self.shouldDownloadPost, self.isLoadingPost {
             return 0
         }
-        return 1
+        return 2
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        if section == 0 {
+            return 5
+        }
+        if !self.isLoadingComments && self.comments.count == 0 {
+            return 1
+        }
+        return self.comments.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let user = self.post?.user
-        switch indexPath.row {
-        case 0:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostUser", for: indexPath) as! PostUserTableViewCell
-            cell.profilePicImageView.image = user?.profilePicUrl != nil ? user?.profilePic : UIImage(named: "ic_no_profile_pic_feed")
-            cell.preferredUsernameLabel.text = user?.preferredUsername
-            cell.professionNameLabel.text = user?.professionName
-            cell.postUserTableViewCellDelegate = self
-            return cell
-        case 1:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostImage", for: indexPath) as! PostImageTableViewCell
-            cell.postImageView.image = self.post?.image
-            if let imageWidth = self.post?.imageWidth?.floatValue, let imageHeight = self.post?.imageHeight?.floatValue {
-                let aspectRatio = CGFloat(imageWidth / imageHeight)
-                cell.postImageViewHeightConstraint.constant = ceil(tableView.bounds.width / aspectRatio)
+        if indexPath.section == 0 {
+            switch indexPath.row {
+            case 0:
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostUser", for: indexPath) as! PostUserTableViewCell
+                let user = self.post?.user
+                cell.profilePicImageView.image = user?.profilePicUrl != nil ? user?.profilePic : UIImage(named: "ic_no_profile_pic_feed")
+                cell.preferredUsernameLabel.text = user?.preferredUsername
+                cell.professionNameLabel.text = user?.professionName
+                cell.postUserTableViewCellDelegate = self
+                return cell
+            case 1:
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostImage", for: indexPath) as! PostImageTableViewCell
+                cell.postImageView.image = self.post?.image
+                if let imageWidth = self.post?.imageWidth?.floatValue, let imageHeight = self.post?.imageHeight?.floatValue {
+                    let aspectRatio = CGFloat(imageWidth / imageHeight)
+                    cell.postImageViewHeightConstraint.constant = ceil(tableView.bounds.width / aspectRatio)
+                }
+                return cell
+            case 2:
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostCaption", for: indexPath) as! PostCaptionTableViewCell
+                cell.captionLabel.text = self.post?.caption
+                cell.untruncate()
+                return cell
+            case 3:
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostCategoryCreated", for: indexPath) as! PostCategoryCreatedTableViewCell
+                cell.categoryNameCreatedLabel.text = [self.post?.categoryName, self.post?.createdString].flatMap({$0}).joined(separator: " · ")
+                return cell
+            case 4:
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostButtons", for: indexPath) as! PostButtonsTableViewCell
+                (self.post?.isLikedByCurrentUser != nil && self.post!.isLikedByCurrentUser) ? cell.setSelectedLikeButton() : cell.setUnselectedLikeButton()
+                cell.postButtonsTableViewCellDelegate = self
+                cell.numberOfLikesButton.isHidden = (self.post?.numberOfLikesString != nil) ? false : true
+                cell.numberOfLikesButton.setTitle(self.post?.numberOfLikesString, for: UIControlState())
+                cell.numberOfCommentsButton.isHidden = (self.post?.numberOfCommentsString != nil) ? false : true
+                cell.numberOfCommentsButton.setTitle(self.post?.numberOfCommentsString, for: UIControlState())
+                return cell
+            default:
+                return UITableViewCell()
             }
-            return cell
-        case 2:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostCaption", for: indexPath) as! PostCaptionTableViewCell
-            cell.captionLabel.text = self.post?.caption
-            cell.untruncate()
-            return cell
-        case 3:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostCategoryCreated", for: indexPath) as! PostCategoryCreatedTableViewCell
-            cell.categoryNameCreatedLabel.text = [self.post?.categoryName, self.post?.createdString].flatMap({$0}).joined(separator: " · ")
-            return cell
-        case 4:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostButtons", for: indexPath) as! PostButtonsTableViewCell
-            (self.post?.isLikedByCurrentUser != nil && self.post!.isLikedByCurrentUser) ? cell.setSelectedLikeButton() : cell.setUnselectedLikeButton()
-            cell.postButtonsTableViewCellDelegate = self
-            cell.numberOfLikesButton.isHidden = (self.post?.numberOfLikesString != nil) ? false : true
-            cell.numberOfLikesButton.setTitle(self.post?.numberOfLikesString, for: UIControlState())
-            cell.numberOfCommentsButton.isHidden = (self.post?.numberOfCommentsString != nil) ? false : true
-            cell.numberOfCommentsButton.setTitle(self.post?.numberOfCommentsString, for: UIControlState())
-            return cell
-        default:
-            return UITableViewCell()
         }
+        if !self.isLoadingComments && self.comments.count == 0 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellEmpty", for: indexPath) as! EmptyTableViewCell
+            cell.emptyMessageLabel.text = "No comments yet."
+            return cell
+        }
+        let comment = self.comments[indexPath.row]
+        let commentUser = comment.user
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cellComment", for: indexPath) as! CommentTableViewCell
+        cell.profilePicImageView.image = commentUser?.profilePicUrl != nil ? commentUser?.profilePic : UIImage(named: "ic_no_profile_pic_feed")
+        cell.preferredUsernameLabel.text = commentUser?.preferredUsername
+        cell.professionNameLabel.text = commentUser?.professionName
+        cell.createdLabel.text = comment.createdString
+        cell.commentTextLabel.text = comment.commentText
+        comment.isExpandedCommentText ? cell.untruncate() : cell.truncate()
+        cell.commentTableViewCellDelegate = self
+        return cell
     }
     
     // MARK: UITableViewDelegate
@@ -149,54 +198,140 @@ class PostDetailsTableViewController: UITableViewController {
                 self.tableView.endUpdates()
             }
         }
-        
+        if cell is CommentTableViewCell {
+            self.commentCellTapped(cell as! CommentTableViewCell)
+        }
     }
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.layoutMargins = UIEdgeInsets.zero
-        if cell is PostUserTableViewCell || cell is PostImageTableViewCell {
+        if cell is PostUserTableViewCell || cell is PostImageTableViewCell || cell is PostButtonsTableViewCell {
             cell.separatorInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0)
+        } else if cell is CommentTableViewCell {
+            cell.separatorInset = UIEdgeInsetsMake(0.0, 64.0, 0.0, 0.0)
         } else {
             cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
         }
+        // Load next comments and reset tableFooterView.
+        guard indexPath.section == 1 && indexPath.row == self.comments.count - 1 && !self.isLoadingComments && self.lastEvaluatedKey != nil else {
+            return
+        }
+        guard let postId = self.post?.postId else {
+            return
+        }
+        guard !self.noNetworkConnection else {
+            return
+        }
+        self.isLoadingComments = true
+        self.tableView.tableFooterView = self.loadingTableFooterView
+        self.queryCommentsDateSorted(postId, startFromBeginning: false)
+        
     }
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        switch indexPath.row {
-        case 0:
-            return 64.0
-        case 1:
-            return 400.0
-        case 2:
-            return 30.0
-        case 3:
-            return 26.0
-        case 4:
-            return 52.0
-        default:
-            return 0
+        if indexPath.section == 0 {
+            switch indexPath.row {
+            case 0:
+                return 64.0
+            case 1:
+                return 400.0
+            case 2:
+                return 30.0
+            case 3:
+                return 26.0
+            case 4:
+                return 52.0
+            default:
+                return 0
+            }
         }
+        if self.comments.count == 0 {
+            return 64.0
+        }
+        return 87.0
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        switch indexPath.row {
-        case 0:
-            return 64.0
-        case 1:
-            return UITableViewAutomaticDimension
-        case 2:
-            return UITableViewAutomaticDimension
-        case 3:
-            return UITableViewAutomaticDimension
-        case 4:
-            return 52.0
-        default:
-            return 0
+        if indexPath.section == 0 {
+            switch indexPath.row {
+            case 0:
+                return 64.0
+            case 1:
+                return UITableViewAutomaticDimension
+            case 2:
+                return UITableViewAutomaticDimension
+            case 3:
+                return UITableViewAutomaticDimension
+            case 4:
+                return 52.0
+            default:
+                return 0
+            }
         }
+        if self.comments.count == 0 {
+            return 64.0
+        }
+        return UITableViewAutomaticDimension
     }
     
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 1.0
+    // MARK: UIScrollViewDelegate
+    
+    override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        self.postDetailsTableViewControllerDelegate?.scrollViewWillBeginDragging()
+    }
+    
+    // MARK: IBActions
+    
+//    @IBAction func refreshControlChanged(_ sender: AnyObject) {
+//        guard !self.isLoadingComments else {
+//            self.refreshControl?.endRefreshing()
+//            return
+//        }
+//        guard let postId = self.postId else {
+//            self.refreshControl?.endRefreshing()
+//            return
+//        }
+//        self.isLoadingComments = true
+//        self.queryCommentsDateSorted(postId, startFromBeginning: true)
+//    }
+    
+    // MARK: Helpers
+    
+    fileprivate func commentCellTapped(_ cell: CommentTableViewCell) {
+        guard let indexPath = self.tableView.indexPath(for: cell) else {
+            return
+        }
+        guard let userId = self.comments[indexPath.row].userId, let commentId = self.comments[indexPath.row].commentId , let postId = self.comments[indexPath.row].postId else {
+            return
+        }
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
+        if userId == AWSIdentityManager.defaultIdentityManager().identityId {
+            // DELETE
+            let deleteAction = UIAlertAction(title: "Delete", style: UIAlertActionStyle.destructive, handler: {
+                (alert: UIAlertAction) in
+                let alertController = UIAlertController(title: "Delete Comment?", message: nil, preferredStyle: UIAlertControllerStyle.alert)
+                let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil)
+                alertController.addAction(cancelAction)
+                let deleteConfirmAction = UIAlertAction(title: "Delete", style: UIAlertActionStyle.default, handler: {
+                    (alert: UIAlertAction) in
+                    // In background
+                    self.removeComment(commentId)
+                    // Notify observers.
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: DeleteCommentNotificationKey), object: self, userInfo: ["commentId": commentId, "postId": postId])
+                })
+                alertController.addAction(deleteConfirmAction)
+                self.present(alertController, animated: true, completion: nil)
+            })
+            alertController.addAction(deleteAction)
+        } else {
+            // REPORT
+            let reportAction = UIAlertAction(title: "Report", style: UIAlertActionStyle.destructive, handler: nil)
+            alertController.addAction(reportAction)
+        }
+        // CANCEL
+        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil)
+        alertController.addAction(cancelAction)
+        self.present(alertController, animated: true, completion: nil)
     }
     
     // MARK: AWS
@@ -229,6 +364,12 @@ class PostDetailsTableViewController: UITableViewController {
                     }
                     if let postId = post.postId {
                         self.getLike(postId)
+                    }
+                    // Query comments.
+                    if let postId = self.post?.postId {
+                        self.isLoadingComments = true
+                        self.tableView.tableFooterView = self.loadingTableFooterView
+                        self.queryCommentsDateSorted(postId, startFromBeginning: true)
                     }
                 }
             })
@@ -311,6 +452,80 @@ class PostDetailsTableViewController: UITableViewController {
             return nil
         })
     }
+    
+    fileprivate func queryCommentsDateSorted(_ postId: String, startFromBeginning: Bool) {
+        if startFromBeginning {
+            self.lastEvaluatedKey = nil
+        }
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().queryCommentsDateSortedDynamoDB(postId, lastEvaluatedKey: self.lastEvaluatedKey, completionHandler: {
+            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                guard error == nil else {
+                    print("queryCommentsDateSorted error: \(error!)")
+                    self.isLoadingComments = false
+                    self.refreshControl?.endRefreshing()
+                    self.tableView.tableFooterView = UIView()
+                    self.tableView.reloadData()
+                    let nsError = error as! NSError
+                    if nsError.code == -1009 {
+                        (self.navigationController as? PRFYNavigationController)?.showBanner("No Internet Connection")
+                        self.noNetworkConnection = true
+                    }
+                    return
+                }
+                if startFromBeginning {
+                    self.comments = []
+                }
+                var numberOfNewComments = 0
+                if let awsComments = response?.items as? [AWSComment] {
+                    for awsComment in awsComments {
+                        let user = User(userId: awsComment._userId, firstName: awsComment._firstName, lastName: awsComment._lastName, preferredUsername: awsComment._preferredUsername, professionName: awsComment._professionName, profilePicUrl: awsComment._profilePicUrl)
+                        let comment = Comment(userId: awsComment._userId, commentId: awsComment._commentId, created: awsComment._created, commentText: awsComment._commentText, postId: awsComment._postId, postUserId: awsComment._postUserId, user: user)
+                        self.comments.append(comment)
+                        numberOfNewComments += 1
+                    }
+                }
+                
+                // Reset flags and animations that were initiated.
+                self.isLoadingComments = false
+                self.refreshControl?.endRefreshing()
+                self.noNetworkConnection = false
+                self.lastEvaluatedKey = response?.lastEvaluatedKey
+                self.tableView.tableFooterView = UIView()
+                
+                // Reload tableView.
+                if startFromBeginning || numberOfNewComments > 0 {
+                    self.tableView.reloadData()
+                }
+                
+                // Load profilePics.
+                if let awsComments = response?.items as? [AWSComment] {
+                    for awsComment in awsComments {
+                        if let profilePicUrl = awsComment._profilePicUrl {
+                            PRFYS3Manager.defaultS3Manager().downloadImageS3(profilePicUrl, imageType: .userProfilePic)
+                        }
+                    }
+                }
+            })
+        })
+    }
+    
+    // In background
+    fileprivate func removeComment(_ commentId: String) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().removeCommentDynamoDB(commentId, completionHandler: {
+            (task: AWSTask) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                if let error = task.error {
+                    print("removeComment error: \(error)")
+                }
+            })
+            return nil
+        })
+    }
 }
 
 extension PostDetailsTableViewController {
@@ -329,6 +544,10 @@ extension PostDetailsTableViewController {
         post.categoryName = notification.userInfo?["categoryName"] as? String
         (self.tableView.cellForRow(at: IndexPath(row: 2, section: 0)) as? PostCaptionTableViewCell)?.captionLabel.text = post.caption
         (self.tableView.cellForRow(at: IndexPath(row: 3, section: 0)) as? PostCategoryCreatedTableViewCell)?.categoryNameCreatedLabel.text = [post.categoryName, post.createdString].flatMap({$0}).joined(separator: " · ")
+        UIView.performWithoutAnimation {
+            self.tableView.beginUpdates()
+            self.tableView.endUpdates()
+        }
     }
     
     func deletePostNotification(_ notification: NSNotification) {
@@ -383,19 +602,37 @@ extension PostDetailsTableViewController {
         post.numberOfComments = NSNumber(value: post.numberOfCommentsInt + 1)
         (self.tableView.cellForRow(at: IndexPath(row: 4, section: 0)) as? PostButtonsTableViewCell)?.numberOfCommentsButton.isHidden = (post.numberOfCommentsString != nil) ? false : true
         (self.tableView.cellForRow(at: IndexPath(row: 4, section: 0)) as? PostButtonsTableViewCell)?.numberOfCommentsButton.setTitle(post.numberOfCommentsString, for: UIControlState())
+        // Update comments.
+        self.comments.insert(comment, at: self.comments.count)
+        if self.comments.count == 1 {
+            self.tableView.reloadData()
+        } else {
+            self.tableView.insertRows(at: [IndexPath(row: self.comments.count - 1, section: 1)], with: UITableViewRowAnimation.automatic)
+        }
+        self.tableView.scrollToRow(at: IndexPath(row: self.comments.count - 1, section: 1), at: UITableViewScrollPosition.bottom, animated: false)
     }
     
     func deleteCommentNotification(_ notification: NSNotification) {
-        guard let postId = notification.userInfo?["postId"] as? String else {
+        guard let postId = notification.userInfo?["postId"] as? String, let commentId = notification.userInfo?["commentId"] as? String else {
             return
         }
         guard let post = self.post, post.postId == postId else {
+            return
+        }
+        guard let commentIndex = self.comments.index(where: { $0.commentId == commentId }) else {
             return
         }
         // Update data source and cells.
         post.numberOfComments = NSNumber(value: post.numberOfCommentsInt - 1)
         (self.tableView.cellForRow(at: IndexPath(row: 4, section: 0)) as? PostButtonsTableViewCell)?.numberOfCommentsButton.isHidden = (post.numberOfCommentsString != nil) ? false : true
         (self.tableView.cellForRow(at: IndexPath(row: 4, section: 0)) as? PostButtonsTableViewCell)?.numberOfCommentsButton.setTitle(post.numberOfCommentsString, for: UIControlState())
+        // Update comments.
+        self.comments.remove(at: commentIndex)
+        if self.comments.count == 0 {
+            self.tableView.reloadData()
+        } else {
+            self.tableView.deleteRows(at: [IndexPath(row: commentIndex, section: 1)], with: UITableViewRowAnimation.automatic)
+        }
     }
     
     func downloadImageNotification(_ notification: NSNotification) {
@@ -404,11 +641,20 @@ extension PostDetailsTableViewController {
         }
         switch imageType {
         case .userProfilePic:
-            guard self.post?.user?.profilePicUrl == imageKey else {
-                return
+            // Update post userProfilePic
+            if self.post?.user?.profilePicUrl == imageKey {
+                self.post?.user?.profilePic = UIImage(data: imageData)
+                (self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? PostUserTableViewCell)?.profilePicImageView.image = self.post?.user?.profilePic
             }
-            self.post?.user?.profilePic = UIImage(data: imageData)
-            (self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? PostUserTableViewCell)?.profilePicImageView.image = self.post?.user?.profilePic
+            // Update comments userProfilePics
+            for comments in self.comments.filter( { $0.user?.profilePicUrl == imageKey } ) {
+                if let commentIndex = self.comments.index(of: comments) {
+                    // Update user profilePic.
+                    self.comments[commentIndex].user?.profilePic = UIImage(data: imageData)
+                    // Update cell profilePicImageView.
+                    (self.tableView.cellForRow(at: IndexPath(row: commentIndex, section: 1)) as? CommentTableViewCell)?.profilePicImageView.image = self.comments[commentIndex].user?.profilePic
+                }
+            }
         case .postPic:
             guard self.post?.imageUrl == imageKey else {
                 return
@@ -474,7 +720,9 @@ extension PostDetailsTableViewController: PostButtonsTableViewCellDelegate {
     }
     
     func commentButtonTapped(_ cell: PostButtonsTableViewCell) {
-        self.performSegue(withIdentifier: "segueToCommentsVc", sender: cell.commentButton)
+        if self.comments.count > 0 {
+            self.tableView.scrollToRow(at: IndexPath(row: 0, section: 1), at: UITableViewScrollPosition.top, animated: true)
+        }
     }
     
     func numberOfLikesButtonTapped(_ cell: PostButtonsTableViewCell) {
@@ -482,6 +730,29 @@ extension PostDetailsTableViewController: PostButtonsTableViewCellDelegate {
     }
     
     func numberOfCommentsButtonTapped(_ cell: PostButtonsTableViewCell) {
-        self.performSegue(withIdentifier: "segueToCommentsVc", sender: cell)
+        if self.comments.count > 0 {
+            self.tableView.scrollToRow(at: IndexPath(row: 0, section: 1), at: UITableViewScrollPosition.top, animated: true)
+        }
+    }
+}
+
+extension PostDetailsTableViewController: CommentTableViewCellDelegate {
+    
+    func userTapped(_ cell: CommentTableViewCell) {
+        self.performSegue(withIdentifier: "segueToProfileVc", sender: cell)
+    }
+    
+    func commentTextLabelTapped(_ cell: CommentTableViewCell) {
+        guard let indexPath = self.tableView.indexPath(for: cell) else {
+            return
+        }
+        if !self.comments[indexPath.row].isExpandedCommentText {
+            self.comments[indexPath.row].isExpandedCommentText = true
+            cell.untruncate()
+            UIView.performWithoutAnimation {
+                self.tableView.beginUpdates()
+                self.tableView.endUpdates()
+            }
+        }
     }
 }
