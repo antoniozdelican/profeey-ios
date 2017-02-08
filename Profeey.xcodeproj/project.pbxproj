@@ -91,6 +91,8 @@
 		A96622051D0EC49700298CE7 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96622041D0EC49700298CE7 /* Colors.swift */; };
 		A96C9AB51D7DADC3007E0B9D /* UploadingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96C9AB41D7DADC3007E0B9D /* UploadingTableViewCell.swift */; };
 		A9707D251E02AC76005D729D /* ForgotPassword.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9707D241E02AC76005D729D /* ForgotPassword.storyboard */; };
+		A976F7941E4B678D00028859 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A976F7921E4B678D00028859 /* FBSDKCoreKit.framework */; };
+		A976F7951E4B678D00028859 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A976F7931E4B678D00028859 /* FBSDKLoginKit.framework */; };
 		A97A9AED1D85D0ED00507517 /* ProfessionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A97A9AEC1D85D0ED00507517 /* ProfessionsTableViewController.swift */; };
 		A97DBEEB1DF16ACB00A9F4FE /* Search.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A97DBEEA1DF16ACB00A9F4FE /* Search.storyboard */; };
 		A97DBEED1DF16BD400A9F4FE /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A97DBEEC1DF16BD400A9F4FE /* SearchViewController.swift */; };
@@ -373,6 +375,8 @@
 		A96855C21E3E6B08003D7760 /* InfoDev.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = InfoDev.plist; sourceTree = "<group>"; };
 		A96C9AB41D7DADC3007E0B9D /* UploadingTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UploadingTableViewCell.swift; sourceTree = "<group>"; };
 		A9707D241E02AC76005D729D /* ForgotPassword.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ForgotPassword.storyboard; sourceTree = "<group>"; };
+		A976F7921E4B678D00028859 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = Profeey/FBSDKCoreKit.framework; sourceTree = "<group>"; };
+		A976F7931E4B678D00028859 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = Profeey/FBSDKLoginKit.framework; sourceTree = "<group>"; };
 		A97A9AEC1D85D0ED00507517 /* ProfessionsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfessionsTableViewController.swift; sourceTree = "<group>"; };
 		A97DBEEA1DF16ACB00A9F4FE /* Search.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Search.storyboard; sourceTree = "<group>"; };
 		A97DBEEC1DF16BD400A9F4FE /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
@@ -557,10 +561,12 @@
 				A961E71A1DE847CA00D45634 /* AWSMobileHubHelper.framework in Frameworks */,
 				A961E7251DE847F600D45634 /* AWSMobileAnalytics.framework in Frameworks */,
 				A961E7211DE847F600D45634 /* AWSCore.framework in Frameworks */,
+				A976F7951E4B678D00028859 /* FBSDKLoginKit.framework in Frameworks */,
 				A961E7231DE847F600D45634 /* AWSDynamoDB.framework in Frameworks */,
 				A961E7271DE847F600D45634 /* AWSS3.framework in Frameworks */,
 				A961E71F1DE847F600D45634 /* AWSCognitoIdentityProvider.framework in Frameworks */,
 				A961E7291DE847F600D45634 /* AWSSNS.framework in Frameworks */,
+				A976F7941E4B678D00028859 /* FBSDKCoreKit.framework in Frameworks */,
 				A930BCA81D0DD623004D49F7 /* libz.tbd in Frameworks */,
 				A961E71B1DE847F600D45634 /* AWSAPIGateway.framework in Frameworks */,
 				A930BCA61D0DD61A004D49F7 /* libsqlite3.tbd in Frameworks */,
@@ -722,6 +728,8 @@
 				A961E6FC1DE8458D00D45634 /* AWSMobileAnalytics.framework */,
 				A961E6FD1DE8458D00D45634 /* AWSS3.framework */,
 				A961E6FE1DE8458D00D45634 /* AWSSNS.framework */,
+				A976F7921E4B678D00028859 /* FBSDKCoreKit.framework */,
+				A976F7931E4B678D00028859 /* FBSDKLoginKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
