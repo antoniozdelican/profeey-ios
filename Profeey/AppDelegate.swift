@@ -131,7 +131,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
         UINavigationBar.appearance().shadowImage = UIImage(named: "ic_navbar_shadow_resizable")
         // UITabBar
-        UITabBar.appearance().barTintColor = Colors.whiteDark
+        UITabBar.appearance().barTintColor = UIColor.white
         UITabBar.appearance().isTranslucent = false
         UITabBar.appearance().tintColor = Colors.grey
         UITabBar.appearance().backgroundImage = UIImage()

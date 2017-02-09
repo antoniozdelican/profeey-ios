@@ -10,6 +10,10 @@ import UIKit
 import AWSMobileHubHelper
 import AWSDynamoDB
 
+protocol PostDetailsViewControllerDelegate: class {
+    func toggleTableViewContentOffsetY(_ offsetY: CGFloat)
+}
+
 class PostDetailsViewController: UIViewController {
     
     @IBOutlet weak var commentTextView: UITextView!
@@ -30,9 +34,9 @@ class PostDetailsViewController: UIViewController {
     
     fileprivate var commentBarBottomConstraintConstant: CGFloat = 0.0
     fileprivate var commentBarHeightConstraintConstant: CGFloat = 49.0
-    fileprivate var tabBarHeight: CGFloat = 49.0
     // Top + Bottom padding between textView and comment bar view.
     fileprivate var commentBarTopBottomPadding: CGFloat = 13.0
+    fileprivate weak var postDetailsViewControllerDelegate: PostDetailsViewControllerDelegate?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -56,12 +60,23 @@ class PostDetailsViewController: UIViewController {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
         self.view.endEditing(true)
+        super.viewWillDisappear(animated)
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+    }
+    
+    // Awesome! Hides and shows bottomBar only for this Vc.
+    
+    override var hidesBottomBarWhenPushed: Bool {
+        get {
+            return navigationController?.topViewController == self
+        }
+        set {
+            super.hidesBottomBarWhenPushed = newValue
+        }
     }
     
     // MARK: Configuration
@@ -69,9 +84,6 @@ class PostDetailsViewController: UIViewController {
     fileprivate func configureConstants() {
         self.commentBarBottomConstraintConstant = self.commentBarBottomConstraint.constant
         self.commentBarHeightConstraintConstant = self.commentBarHeightConstraint.constant
-        if let height = self.tabBarController?.tabBar.frame.height {
-            self.tabBarHeight = height
-        }
     }
     
     // MARK: Navigation
@@ -82,6 +94,7 @@ class PostDetailsViewController: UIViewController {
             destinationViewController.notificationPostId = self.notificationPostId
             destinationViewController.post = self.post
             destinationViewController.postDetailsTableViewControllerDelegate = self
+            self.postDetailsViewControllerDelegate = destinationViewController
         }
     }
     
@@ -112,7 +125,8 @@ class PostDetailsViewController: UIViewController {
         let userInfo: NSDictionary = (notification as NSNotification).userInfo! as NSDictionary
         let keyboardSize = (userInfo.object(forKey: UIKeyboardFrameEndUserInfoKey)! as AnyObject).cgRectValue.size
         let duration = userInfo.object(forKey: UIKeyboardAnimationDurationUserInfoKey) as! Double
-        self.commentBarBottomConstraint.constant = keyboardSize.height - self.tabBarHeight
+        self.commentBarBottomConstraint.constant = keyboardSize.height
+        self.postDetailsViewControllerDelegate?.toggleTableViewContentOffsetY(keyboardSize.height)
         UIView.animate(withDuration: duration, animations: {
             self.view.layoutIfNeeded()
         })
@@ -122,6 +136,7 @@ class PostDetailsViewController: UIViewController {
         let userInfo: NSDictionary = (notification as NSNotification).userInfo! as NSDictionary
         let duration = userInfo.object(forKey: UIKeyboardAnimationDurationUserInfoKey) as! Double
         self.commentBarBottomConstraint.constant = self.commentBarBottomConstraintConstant
+        self.postDetailsViewControllerDelegate?.toggleTableViewContentOffsetY(self.commentBarBottomConstraintConstant)
         UIView.animate(withDuration: duration, animations: {
             self.view.layoutIfNeeded()
         })
@@ -214,7 +229,7 @@ extension PostDetailsViewController: UITextViewDelegate {
 
 extension PostDetailsViewController: PostDetailsTableViewControllerDelegate {
     
-    func scrollViewWillBeginDragging() {
+    func scrollViewWillBeginDecelerating() {
         self.view.endEditing(true)
     }
 }

@@ -11,7 +11,7 @@ import AWSMobileHubHelper
 import AWSDynamoDB
 
 protocol PostDetailsTableViewControllerDelegate: class {
-    func scrollViewWillBeginDragging()
+    func scrollViewWillBeginDecelerating()
 }
 
 class PostDetailsTableViewController: UITableViewController {
@@ -276,8 +276,11 @@ class PostDetailsTableViewController: UITableViewController {
     
     // MARK: UIScrollViewDelegate
     
-    override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        self.postDetailsTableViewControllerDelegate?.scrollViewWillBeginDragging()
+    override func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
+        if scrollView.panGestureRecognizer.translation(in: scrollView.superview).y > 0 {
+            // Handle to dragging down.
+            self.postDetailsTableViewControllerDelegate?.scrollViewWillBeginDecelerating()
+        }
     }
     
     // MARK: IBActions
@@ -754,5 +757,12 @@ extension PostDetailsTableViewController: CommentTableViewCellDelegate {
                 self.tableView.endUpdates()
             }
         }
+    }
+}
+
+extension PostDetailsTableViewController: PostDetailsViewControllerDelegate {
+    
+    func toggleTableViewContentOffsetY(_ offsetY: CGFloat) {
+        self.tableView.contentOffset.y = self.tableView.contentOffset.y + offsetY
     }
 }
