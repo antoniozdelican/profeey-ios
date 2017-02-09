@@ -185,6 +185,10 @@ class ProfileTableViewController: UITableViewController {
         if let destinationViewController = segue.destination as? PostDetailsViewController,
             let cell = sender as? PostSmallTableViewCell,
             let indexPath = self.tableView.indexPath(for: cell) {
+            // For bug.
+            if self.posts[indexPath.row].user is CurrentUser {
+                self.posts[indexPath.row].user = self.user
+            }
             destinationViewController.post = self.posts[indexPath.row].copyPost()
         }
         if let destinationViewController = segue.destination as? UserCategoryTableViewController,

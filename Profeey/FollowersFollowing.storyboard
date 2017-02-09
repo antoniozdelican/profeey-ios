@@ -62,7 +62,7 @@
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GI7-Sk-QXR">
                                                 <rect key="frame" x="0.0" y="0.0" width="187.5" height="1"/>
-                                                <color key="backgroundColor" red="0.14748379589999999" green="0.1474793851" blue="0.14748191829999999" alpha="1" colorSpace="calibratedRGB"/>
+                                                <color key="backgroundColor" red="0.1184447631" green="0.81979954239999997" blue="0.82960152629999995" alpha="1" colorSpace="calibratedRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="1" id="XWX-yP-eeg"/>
                                                 </constraints>
@@ -77,7 +77,7 @@
                                         </constraints>
                                     </scrollView>
                                 </subviews>
-                                <color key="backgroundColor" red="0.97530043129999999" green="0.97527122499999996" blue="0.97528779509999997" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstItem="GI7-Sk-QXR" firstAttribute="width" secondItem="YhE-RF-uNn" secondAttribute="width" id="3a8-0s-zVf"/>
                                     <constraint firstAttribute="height" constant="40" id="6Dt-gX-m4B"/>
