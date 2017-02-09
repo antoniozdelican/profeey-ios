@@ -15,6 +15,8 @@
 		A903EB581D16A39700B33025 /* LLSimpleCamera+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = A903EB541D16A39700B33025 /* LLSimpleCamera+Helper.m */; };
 		A903EB591D16A39700B33025 /* UIImage+FixOrientation.m in Sources */ = {isa = PBXBuildFile; fileRef = A903EB561D16A39700B33025 /* UIImage+FixOrientation.m */; };
 		A903EB5B1D16A3C800B33025 /* ProfeeySimpleCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = A903EB5A1D16A3C800B33025 /* ProfeeySimpleCamera.swift */; };
+		A90E2E011E4CE05D00E8D0AE /* CommentsTableSectionHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = A90E2E001E4CE05D00E8D0AE /* CommentsTableSectionHeader.xib */; };
+		A90E2E031E4CE08000E8D0AE /* CommentsTableSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A90E2E021E4CE08000E8D0AE /* CommentsTableSectionHeader.swift */; };
 		A913FC701D51F6AF000D10A6 /* DynamoDBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A913FC6F1D51F6AF000D10A6 /* DynamoDBManager.swift */; };
 		A913FC721D51FAD6000D10A6 /* PRFYDynamoDBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A913FC711D51FAD6000D10A6 /* PRFYDynamoDBManager.swift */; };
 		A915F86E1DC0D49C0031C45F /* LocationsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A915F86D1DC0D49C0031C45F /* LocationsTableViewController.swift */; };
@@ -304,6 +306,8 @@
 		A903EB551D16A39700B33025 /* UIImage+FixOrientation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+FixOrientation.h"; sourceTree = "<group>"; };
 		A903EB561D16A39700B33025 /* UIImage+FixOrientation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+FixOrientation.m"; sourceTree = "<group>"; };
 		A903EB5A1D16A3C800B33025 /* ProfeeySimpleCamera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfeeySimpleCamera.swift; sourceTree = "<group>"; };
+		A90E2E001E4CE05D00E8D0AE /* CommentsTableSectionHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommentsTableSectionHeader.xib; sourceTree = "<group>"; };
+		A90E2E021E4CE08000E8D0AE /* CommentsTableSectionHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentsTableSectionHeader.swift; sourceTree = "<group>"; };
 		A913FC6F1D51F6AF000D10A6 /* DynamoDBManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DynamoDBManager.swift; sourceTree = "<group>"; };
 		A913FC711D51FAD6000D10A6 /* PRFYDynamoDBManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PRFYDynamoDBManager.swift; sourceTree = "<group>"; };
 		A915F86D1DC0D49C0031C45F /* LocationsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationsTableViewController.swift; sourceTree = "<group>"; };
@@ -1086,6 +1090,8 @@
 				A9AC8FBD1DBDFDCB00C9BCE0 /* PostDetails.storyboard */,
 				A9B571901E46AD9200AFD67E /* PostDetailsViewController.swift */,
 				A9AC8FBF1DBDFF5200C9BCE0 /* PostDetailsTableViewController.swift */,
+				A90E2E001E4CE05D00E8D0AE /* CommentsTableSectionHeader.xib */,
+				A90E2E021E4CE08000E8D0AE /* CommentsTableSectionHeader.swift */,
 			);
 			name = "Post Details";
 			sourceTree = "<group>";
@@ -1506,6 +1512,7 @@
 				A9DBC6341E1139F00087CB19 /* FollowersFollowing.storyboard in Resources */,
 				A9DA6A101E33679700B7CE3E /* ProfileSegmentedControlSectionHeader.xib in Resources */,
 				A930BC831D0DD43F004D49F7 /* Assets.xcassets in Resources */,
+				A90E2E011E4CE05D00E8D0AE /* CommentsTableSectionHeader.xib in Resources */,
 				A930BC811D0DD43F004D49F7 /* Main.storyboard in Resources */,
 				A94368741E2389A20009F4EA /* NotificationsSegmentsView.xib in Resources */,
 				A9AFFB0D1D8AFEB800219627 /* Categories.storyboard in Resources */,
@@ -1713,6 +1720,7 @@
 				A9DA6A121E3394C100B7CE3E /* Experience.swift in Sources */,
 				A903EB571D16A39700B33025 /* LLSimpleCamera.m in Sources */,
 				A95EB85B1D8FBE870039E51D /* DateTableViewCell.swift in Sources */,
+				A90E2E031E4CE08000E8D0AE /* CommentsTableSectionHeader.swift in Sources */,
 				A99B9E361DB548F50047360D /* EditEducationTableViewController.swift in Sources */,
 				A9D334081D800D8D005565C2 /* PostImageTableViewCell.swift in Sources */,
 				A9D49EE71DD5F58B000F90A8 /* ProfileEmptyTableViewCell.swift in Sources */,

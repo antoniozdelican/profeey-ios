@@ -22,6 +22,7 @@ class CommentTableViewCell: UITableViewCell {
     @IBOutlet weak var commentTextLabel: TTTAttributedLabel!
     @IBOutlet weak var createdLabel: UILabel!
     @IBOutlet weak var nameStackView: UIStackView!
+    @IBOutlet weak var separatorView: UIView!
     
     weak var commentTableViewCellDelegate: CommentTableViewCellDelegate?
     

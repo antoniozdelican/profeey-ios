@@ -39,6 +39,7 @@ class PostDetailsTableViewController: UITableViewController {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         self.tableView.contentInset = UIEdgeInsetsMake(-1.0, 0.0, 0.0, 0.0)
+        self.tableView.register(UINib(nibName: "CommentsTableSectionHeader", bundle: nil), forHeaderFooterViewReuseIdentifier: "commentsTableSectionHeader")
         
         if self.shouldDownloadPost, let notificationPostId = self.notificationPostId {
             // Downlod the post.
@@ -205,13 +206,6 @@ class PostDetailsTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.layoutMargins = UIEdgeInsets.zero
-        if cell is PostUserTableViewCell || cell is PostImageTableViewCell || cell is PostButtonsTableViewCell {
-            cell.separatorInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0)
-        } else if cell is CommentTableViewCell {
-            cell.separatorInset = UIEdgeInsetsMake(0.0, 64.0, 0.0, 0.0)
-        } else {
-            cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
-        }
         // Load next comments and reset tableFooterView.
         guard indexPath.section == 1 && indexPath.row == self.comments.count - 1 && !self.isLoadingComments && self.lastEvaluatedKey != nil else {
             return
@@ -272,6 +266,35 @@ class PostDetailsTableViewController: UITableViewController {
             return 64.0
         }
         return UITableViewAutomaticDimension
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        if section == 0 {
+            return UIView()
+        }
+        if (self.isLoadingComments) || (!self.isLoadingComments && self.comments.count == 0) {
+            return UIView()
+        }
+        let header = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "commentsTableSectionHeader") as? CommentsTableSectionHeader
+        header?.titleLabel.text = "Comments"
+        return header
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if section == 0 {
+            return 1.0
+        }
+        if (self.isLoadingComments) || (!self.isLoadingComments && self.comments.count == 0) {
+            return 1.0
+        }
+        return 32.0
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        if section == 0 {
+            return 1.0
+        }
+        return 12.0
     }
     
     // MARK: UIScrollViewDelegate
