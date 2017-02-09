@@ -21,6 +21,8 @@ class UsernameTableViewController: UITableViewController {
     
     fileprivate var userPool: AWSCognitoIdentityUserPool?
     fileprivate var newProfilePicImageData: Data?
+    
+    var isUserPoolUser: Bool = true
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,8 +41,10 @@ class UsernameTableViewController: UITableViewController {
         self.continueButton.setTitleColor(UIColor.white, for: UIControlState.disabled)
         self.continueButton.isEnabled = false
         
-        // CHECK IF IT IS Facebook user or UserPool!
-        self.userPool = AWSCognitoIdentityUserPool.init(forKey: AWSCognitoUserPoolsSignInProviderKey)
+        // Check if it's a userPool User.
+        if self.isUserPoolUser {
+           self.userPool = AWSCognitoIdentityUserPool.init(forKey: AWSCognitoUserPoolsSignInProviderKey)
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -166,8 +170,17 @@ class UsernameTableViewController: UITableViewController {
                         self.present(alertController, animated: true, completion: nil)
                         return
                     }
-                    // 2. updatePreferredUsername in userPool if it's not for Fb
-                    self.userPoolUpdatePreferredUsername()
+                    // 2. updatePreferredUsername if isUserPoolUser, else go to updateUser.
+                    if self.isUserPoolUser {
+                        self.userPoolUpdatePreferredUsername()
+                    } else {
+                        // 3a. Store profilePic if exists and update in DynamoDB with preferredUsername.
+                        if let profilePicImageData = self.newProfilePicImageData {
+                            self.uploadImage(preferredUsername, imageData: profilePicImageData)
+                        } else {
+                            self.updateUser(preferredUsername, profilePicUrl: nil)
+                        }
+                    }
                 }
             })
         })
@@ -205,7 +218,7 @@ class UsernameTableViewController: UITableViewController {
                     let alertController = self.getSimpleAlertWithTitle(title, message: message, cancelButtonTitle: "Try Again")
                     self.present(alertController, animated: true, completion: nil)
                 } else {
-                    // 3. Stored profilePic if exists and update in DynamoDB with preferredUsername
+                    // 3. Stored profilePic if exists and update in DynamoDB with preferredUsername.
                     if let profilePicImageData = self.newProfilePicImageData {
                         self.uploadImage(preferredUsername, imageData: profilePicImageData)
                     } else {

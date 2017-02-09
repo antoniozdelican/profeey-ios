@@ -166,6 +166,9 @@
                                     </stackView>
                                 </subviews>
                             </stackView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="AVO-0R-cwd">
+                                <rect key="frame" x="178" y="355" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" red="0.1184447631" green="0.81979954239999997" blue="0.82960152629999995" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
@@ -177,16 +180,20 @@
                             <constraint firstItem="43u-QR-bCq" firstAttribute="top" secondItem="vlg-hd-GG8" secondAttribute="bottom" constant="224" id="g3S-uJ-VDr"/>
                             <constraint firstItem="du4-kg-UNF" firstAttribute="centerX" secondItem="dng-l7-T6S" secondAttribute="centerX" id="ldP-xt-ww2"/>
                             <constraint firstItem="vlg-hd-GG8" firstAttribute="leading" secondItem="dng-l7-T6S" secondAttribute="leading" constant="28" id="rBd-wr-wfO"/>
+                            <constraint firstItem="AVO-0R-cwd" firstAttribute="centerX" secondItem="ObW-2v-LFp" secondAttribute="centerX" id="sXK-Re-e01"/>
                             <constraint firstAttribute="trailing" secondItem="vlg-hd-GG8" secondAttribute="trailing" constant="28" id="vku-zx-2lq"/>
+                            <constraint firstItem="AVO-0R-cwd" firstAttribute="centerY" secondItem="ObW-2v-LFp" secondAttribute="centerY" id="xgd-X9-B3H"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="bZI-km-WYg"/>
                     <connections>
+                        <outlet property="activityIndicatorView" destination="AVO-0R-cwd" id="0SA-sJ-ciL"/>
                         <outlet property="facebookButton" destination="ObW-2v-LFp" id="ULS-PH-NGS"/>
                         <outlet property="logInButton" destination="7kW-lW-eFb" id="yJR-30-U52"/>
                         <outlet property="privacyPolicyButton" destination="Haf-at-OKf" id="W8b-vw-8mi"/>
                         <outlet property="signUpButton" destination="Pxl-u3-F8O" id="IwS-eh-pty"/>
                         <outlet property="termsButton" destination="Krp-nF-iDz" id="itT-x0-47U"/>
+                        <segue destination="b1r-Pe-8L2" kind="show" identifier="segueToUsernameVc" id="m5o-ZM-Co8"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ill-WN-2Cu" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -656,6 +663,9 @@
                                                         <constraint firstAttribute="height" constant="1" id="jag-eP-4Ux"/>
                                                     </constraints>
                                                 </view>
+                                                <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="ldf-yq-9Hy">
+                                                    <rect key="frame" x="177" y="184" width="20" height="20"/>
+                                                </activityIndicatorView>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="hVZ-4a-wih" firstAttribute="leading" secondItem="dP9-ls-2s0" secondAttribute="leading" constant="28" id="332-GC-UTf"/>
@@ -665,11 +675,13 @@
                                                 <constraint firstItem="OGm-fl-3UT" firstAttribute="top" secondItem="sCl-0a-A0X" secondAttribute="bottom" constant="22" id="Ewy-rA-JSq"/>
                                                 <constraint firstItem="sCl-0a-A0X" firstAttribute="centerX" secondItem="dP9-ls-2s0" secondAttribute="centerX" id="Ixj-gR-zOg"/>
                                                 <constraint firstItem="YGg-JJ-hyd" firstAttribute="centerX" secondItem="dP9-ls-2s0" secondAttribute="centerX" id="LRX-or-Pdd"/>
+                                                <constraint firstItem="ldf-yq-9Hy" firstAttribute="centerY" secondItem="OGm-fl-3UT" secondAttribute="centerY" id="OCe-BV-JOd"/>
                                                 <constraint firstAttribute="trailing" secondItem="YGg-JJ-hyd" secondAttribute="trailing" constant="28" id="Qe2-uK-ZUO"/>
                                                 <constraint firstItem="OGm-fl-3UT" firstAttribute="leading" secondItem="dP9-ls-2s0" secondAttribute="leading" constant="28" id="S7P-YD-nrb"/>
                                                 <constraint firstItem="hVZ-4a-wih" firstAttribute="centerY" secondItem="sCl-0a-A0X" secondAttribute="centerY" id="cQW-bT-1Wv"/>
                                                 <constraint firstItem="sCl-0a-A0X" firstAttribute="top" secondItem="wQv-81-3L4" secondAttribute="bottom" constant="32" id="dOD-9C-Tdp"/>
                                                 <constraint firstItem="YGg-JJ-hyd" firstAttribute="top" secondItem="dP9-ls-2s0" secondAttribute="top" constant="16" id="e9c-2M-5ea"/>
+                                                <constraint firstItem="ldf-yq-9Hy" firstAttribute="centerX" secondItem="OGm-fl-3UT" secondAttribute="centerX" id="gpC-hW-AWl"/>
                                                 <constraint firstItem="YGg-JJ-hyd" firstAttribute="leading" secondItem="dP9-ls-2s0" secondAttribute="leading" constant="28" id="hNI-sG-KR1"/>
                                                 <constraint firstAttribute="trailing" secondItem="OGm-fl-3UT" secondAttribute="trailing" constant="28" id="jJb-9B-iek"/>
                                                 <constraint firstAttribute="trailing" secondItem="wQv-81-3L4" secondAttribute="trailing" constant="28" id="tMw-8K-ziU"/>
@@ -690,6 +702,7 @@
                     </tableView>
                     <navigationItem key="navigationItem" id="fgZ-Fo-hRj"/>
                     <connections>
+                        <outlet property="activityIndicatorView" destination="ldf-yq-9Hy" id="D3s-Xx-Eha"/>
                         <outlet property="facebookButton" destination="OGm-fl-3UT" id="ole-Oc-iAr"/>
                         <outlet property="forgotPasswordButton" destination="wQv-81-3L4" id="sxC-jV-wU8"/>
                         <outlet property="logInButton" destination="YGg-JJ-hyd" id="zzd-E4-grf"/>
@@ -698,6 +711,7 @@
                         <outlet property="usernameBoxView" destination="nvS-Db-phe" id="YBU-AW-gd3"/>
                         <outlet property="usernameTextField" destination="6ty-PG-Mr8" id="xHc-rJ-9T6"/>
                         <segue destination="v0v-cp-zgW" kind="presentation" identifier="segueToForgotPasswordVc" id="E26-t4-BqV"/>
+                        <segue destination="b1r-Pe-8L2" kind="show" identifier="segueToUsernameVc" id="YkC-fP-hTG"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HLB-tZ-HlR" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -925,10 +939,10 @@
                         </view>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellProfession" rowHeight="64" id="8jd-Kx-zhd" customClass="ProfessionTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="108" width="375" height="64"/>
+                                <rect key="frame" x="0.0" y="107.5" width="375" height="64"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="8jd-Kx-zhd" id="ytE-O7-HSN">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="63"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="63.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="vpH-5W-hgv">
@@ -962,10 +976,10 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellSearching" rowHeight="64" id="7Vg-PX-cEc" customClass="SearchingTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="172" width="375" height="64"/>
+                                <rect key="frame" x="0.0" y="171.5" width="375" height="64"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="7Vg-PX-cEc" id="tm5-vs-1Gn">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="63"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="63.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="gSa-80-Dxi">
@@ -991,10 +1005,10 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellNoResults" rowHeight="64" id="TlQ-YK-a4h" customClass="NoResultsTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="236" width="375" height="64"/>
+                                <rect key="frame" x="0.0" y="235.5" width="375" height="64"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="TlQ-YK-a4h" id="7xh-3H-2iw">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="63"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="63.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No results found" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="q3L-HR-n2X">
@@ -1065,6 +1079,6 @@
         <image name="ic_facebook_signup" width="11" height="20"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="2ZL-dX-jrn"/>
+        <segue reference="YkC-fP-hTG"/>
     </inferredMetricsTieBreakers>
 </document>

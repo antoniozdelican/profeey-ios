@@ -76,8 +76,11 @@ class ProfileTableViewController: UITableViewController {
         let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
         activityIndicator.hidesWhenStopped = true
         self.settingsButton = UIBarButtonItem(customView: activityIndicator)
-        self.navigationItem.rightBarButtonItem = self.settingsButton
-        activityIndicator.startAnimating()
+        
+        // TEMP
+        
+        //self.navigationItem.rightBarButtonItem = self.settingsButton
+        //activityIndicator.startAnimating()
         
         // Configure user and start querying.
         self.configureUser()
@@ -101,6 +104,63 @@ class ProfileTableViewController: UITableViewController {
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+    }
+    
+    // TEMP
+    
+    @IBAction func tempButtonTapped(_ sender: Any) {
+        self.removeEndpointUser()
+    }
+    
+    fileprivate func removeEndpointUser() {
+        if (AWSIdentityManager.defaultIdentityManager().isLoggedIn) {
+            FullScreenIndicator.show()
+            if let endpointARN = AWSPushManager.defaultPushManager().endpointARN {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = true
+                PRFYDynamoDBManager.defaultDynamoDBManager().removeEndpointUserDynamoDB(endpointARN, completionHandler: {
+                    (task: AWSTask) in
+                    DispatchQueue.main.async(execute: {
+                        UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                        if let error = task.error {
+                            print("removeEndpointUser error :\(error)")
+                        }
+                        self.logOut()
+                    })
+                    return nil
+                })
+            } else {
+                self.logOut()
+            }
+        }
+    }
+    
+    fileprivate func logOut() {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        AWSIdentityManager.defaultIdentityManager().logout(completionHandler: {
+            (result: Any?, error: Error?) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                FullScreenIndicator.hide()
+                // Don't put error because it will be shown before redirection!
+                
+                // Credentials provider cleanUp.
+                //AWSIdentityManager.defaultIdentityManager().credentialsProvider.clearKeychain()
+                // User file manager cleanUp.
+                AWSUserFileManager.defaultUserFileManager().clearCache()
+                // Current user cleanUp.
+                PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB = nil
+                // Redirect.
+                self.redirectToOnboarding()
+            })
+        })
+    }
+    
+    fileprivate func redirectToOnboarding() {
+        guard let window = UIApplication.shared.keyWindow,
+            let initialViewController = UIStoryboard(name: "Onboarding", bundle: nil).instantiateInitialViewController() else {
+                return
+        }
+        window.rootViewController = initialViewController
     }
     
     // MARK: Configuration

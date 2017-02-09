@@ -30,8 +30,10 @@ class AWSUser: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     var _numberOfPosts: NSNumber?
     var _numberOfRecommendations: NSNumber?
     
+    var _isFacebookUser: NSNumber?
+    
     // To create User on landing.
-    convenience init(_userId: String?, _created: NSNumber?, _firstName: String?, _lastName: String?, _email: String?, _emailVerified: NSNumber?) {
+    convenience init(_userId: String?, _created: NSNumber?, _firstName: String?, _lastName: String?, _email: String?, _emailVerified: NSNumber?, _isFacebookUser: NSNumber?) {
         self.init()
         self._userId = _userId
         self._created = _created
@@ -39,6 +41,7 @@ class AWSUser: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
         self._lastName = _lastName
         self._email = _email
         self._emailVerified = _emailVerified
+        self._isFacebookUser = _isFacebookUser
     }
     
     // To update preferredUsername and profilePicUrl on landing.
@@ -109,6 +112,7 @@ class AWSUser: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
             "_numberOfFollowers" : "numberOfFollowers",
             "_numberOfPosts" : "numberOfPosts",
             "_numberOfRecommendations" : "numberOfRecommendations",
+            "_isFacebookUser" : "isFacebookUser",
         ]
     }
 }

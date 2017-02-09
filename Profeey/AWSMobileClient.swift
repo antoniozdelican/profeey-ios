@@ -61,14 +61,7 @@ class AWSMobileClient: NSObject {
      */
     func applicationDidBecomeActive(_ application: UIApplication) {
         print("applicationDidBecomeActive:")
-        //self.initializeMobileAnalytics()
     }
-    
-//    private func initializeMobileAnalytics() {
-//        if (self.mobileAnalytics == nil) {
-//            self.mobileAnalytics = AWSMobileAnalytics.default()
-//        }
-//    }
     
     /**
      * Handles callback from iOS platform indicating push notification registration was a success.
@@ -106,13 +99,14 @@ class AWSMobileClient: NSObject {
     func didFinishLaunching(_ application: UIApplication, withOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         print("didFinishLaunching:")
         
-        // Register the sign in provider instances with their unique identifier.
+        // Register the sign in provider instances with their unique identifier
+        AWSSignInProviderFactory.sharedInstance().registerAWSSign(AWSFacebookSignInProvider.sharedInstance(), forKey: AWSFacebookSignInProviderKey)
         
         // Set up cognito user pool.
         self.setupUserPool()
         
         // Set up Cloud Logic API invocation clients.
-        self.setupCloudLogicAPI()
+        // self.setupCloudLogicAPI()
         
         let didFinishLaunching: Bool = AWSIdentityManager.defaultIdentityManager().interceptApplication(application, didFinishLaunchingWithOptions: launchOptions)
         
@@ -140,9 +134,9 @@ class AWSMobileClient: NSObject {
         AWSSignInProviderFactory.sharedInstance().registerAWSSign(AWSCognitoUserPoolsSignInProvider.sharedInstance(), forKey:AWSCognitoUserPoolsSignInProviderKey)
     }
     
-    fileprivate func setupCloudLogicAPI() {
+//    fileprivate func setupCloudLogicAPI() {
 //        let serviceConfiguration = AWSServiceConfiguration(region: AWSCloudLogicDefaultRegion, credentialsProvider: AWSIdentityManager.defaultIdentityManager().credentialsProvider)
 //        PRFYCloudSearchProxyClient.registerClientWithConfiguration(configuration: serviceConfiguration!, forKey: AWSCloudLogicDefaultConfigurationKey as NSString)
-    }
+//    }
     
 }

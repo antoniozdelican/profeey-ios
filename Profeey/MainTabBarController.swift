@@ -151,9 +151,12 @@ class MainTabBarController: UITabBarController {
     
     // MARK: Helpers
     
-    fileprivate func showMissingUsernameFlow() {
-        let navigationController = UIStoryboard(name: "Onboarding", bundle: nil).instantiateViewController(withIdentifier: "missingUsernameNavigationController")
-        self.present(navigationController, animated: true, completion: nil)
+    fileprivate func showMissingUsernameFlow(_ isUserPoolUser: Bool) {
+        if let navigationController = UIStoryboard(name: "Onboarding", bundle: nil).instantiateViewController(withIdentifier: "missingUsernameNavigationController") as? UINavigationController,
+            let childViewController = navigationController.childViewControllers[0] as? UsernameTableViewController {
+            childViewController.isUserPoolUser = isUserPoolUser
+            self.present(navigationController, animated: true, completion: nil)
+        }
     }
     
     // MARK: Public
@@ -206,7 +209,11 @@ class MainTabBarController: UITabBarController {
                     guard awsUser._preferredUsername != nil else {
                         // This only happens if users closes the app on the UsernameTableViewController of the Onboarding flow.
                         print("getCurrentUser error: currentUser doesn't have preferredUsername.")
-                        self.showMissingUsernameFlow()
+                        if let isFacebookUser = awsUser._isFacebookUser, isFacebookUser.intValue == 1 {
+                            self.showMissingUsernameFlow(false)
+                        } else {
+                            self.showMissingUsernameFlow(true)
+                        }
                         return
                     }
                     // Update locally.

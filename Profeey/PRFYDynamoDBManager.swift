@@ -78,15 +78,45 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
     // Creates user on landing.
     func createUserDynamoDB(_ email: String, firstName: String, lastName: String, completionHandler: @escaping AWSContinuationBlock) {
         guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
-            print("getRelationshipDynamoDB no identityId!")
+            print("createUserDynamoDB no identityId!")
             AWSTask().continue(completionHandler)
             return
         }
         print("createUserDynamoDB:")
         let created = NSNumber(value: Date().timeIntervalSince1970 as Double)
         let emailVerified = NSNumber(value: 0)
+        let isFacebookUser = NSNumber(value: 0)
         let awsUsersTable = AWSUsersTable()
-        let awsUser = AWSUser(_userId: identityId, _created: created, _firstName: firstName, _lastName: lastName, _email: email, _emailVerified: emailVerified)
+        let awsUser = AWSUser(_userId: identityId, _created: created, _firstName: firstName, _lastName: lastName, _email: email, _emailVerified: emailVerified, _isFacebookUser: isFacebookUser)
+        awsUsersTable.saveUserSkipNull(awsUser, completionHandler: {
+            (task: AWSTask) in
+            if let error = task.error {
+                AWSTask(error: error).continue(completionHandler)
+            } else {
+                // Set currentUser (init).
+                self.currentUserDynamoDB = CurrentUser(userId: identityId)
+                self.currentUserDynamoDB?.firstName = firstName
+                self.currentUserDynamoDB?.lastName = lastName
+                AWSTask(result: awsUser).continue(completionHandler)
+            }
+            return nil
+        })
+    }
+    
+    // Creates facebookUser on landing.
+    func createFacebookUserDynamoDB(_ email: String?, firstName: String?, lastName: String?, completionHandler: @escaping AWSContinuationBlock) {
+        guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
+            print("createFacebookUserDynamoDB no identityId!")
+            AWSTask().continue(completionHandler)
+            return
+        }
+        print("createFacebookUserDynamoDB:")
+        let created = NSNumber(value: Date().timeIntervalSince1970 as Double)
+        // Email is verified by Facebook if provided.
+        let emailVerified = email != nil ? NSNumber(value: 1) : nil
+        let isFacebookUser = NSNumber(value: 1)
+        let awsUsersTable = AWSUsersTable()
+        let awsUser = AWSUser(_userId: identityId, _created: created, _firstName: firstName, _lastName: lastName, _email: email, _emailVerified: emailVerified, _isFacebookUser: isFacebookUser)
         awsUsersTable.saveUserSkipNull(awsUser, completionHandler: {
             (task: AWSTask) in
             if let error = task.error {
