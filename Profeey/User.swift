@@ -31,6 +31,9 @@ class User: NSObject {
     var email: String?
     var emailVerified: NSNumber?
     
+    // For settings to remove editEmail and editPassword.
+    var isFacebookUser: NSNumber?
+    
     // Generated.
     var profilePic: UIImage?
     var fullName: String? {

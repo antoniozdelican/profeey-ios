@@ -76,11 +76,8 @@ class ProfileTableViewController: UITableViewController {
         let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
         activityIndicator.hidesWhenStopped = true
         self.settingsButton = UIBarButtonItem(customView: activityIndicator)
-        
-        // TEMP
-        
-        //self.navigationItem.rightBarButtonItem = self.settingsButton
-        //activityIndicator.startAnimating()
+        self.navigationItem.rightBarButtonItem = self.settingsButton
+        activityIndicator.startAnimating()
         
         // Configure user and start querying.
         self.configureUser()
@@ -104,63 +101,6 @@ class ProfileTableViewController: UITableViewController {
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-    }
-    
-    // TEMP
-    
-    @IBAction func tempButtonTapped(_ sender: Any) {
-        self.removeEndpointUser()
-    }
-    
-    fileprivate func removeEndpointUser() {
-        if (AWSIdentityManager.defaultIdentityManager().isLoggedIn) {
-            FullScreenIndicator.show()
-            if let endpointARN = AWSPushManager.defaultPushManager().endpointARN {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = true
-                PRFYDynamoDBManager.defaultDynamoDBManager().removeEndpointUserDynamoDB(endpointARN, completionHandler: {
-                    (task: AWSTask) in
-                    DispatchQueue.main.async(execute: {
-                        UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                        if let error = task.error {
-                            print("removeEndpointUser error :\(error)")
-                        }
-                        self.logOut()
-                    })
-                    return nil
-                })
-            } else {
-                self.logOut()
-            }
-        }
-    }
-    
-    fileprivate func logOut() {
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        AWSIdentityManager.defaultIdentityManager().logout(completionHandler: {
-            (result: Any?, error: Error?) in
-            DispatchQueue.main.async(execute: {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                FullScreenIndicator.hide()
-                // Don't put error because it will be shown before redirection!
-                
-                // Credentials provider cleanUp.
-                //AWSIdentityManager.defaultIdentityManager().credentialsProvider.clearKeychain()
-                // User file manager cleanUp.
-                AWSUserFileManager.defaultUserFileManager().clearCache()
-                // Current user cleanUp.
-                PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB = nil
-                // Redirect.
-                self.redirectToOnboarding()
-            })
-        })
-    }
-    
-    fileprivate func redirectToOnboarding() {
-        guard let window = UIApplication.shared.keyWindow,
-            let initialViewController = UIStoryboard(name: "Onboarding", bundle: nil).instantiateInitialViewController() else {
-                return
-        }
-        window.rootViewController = initialViewController
     }
     
     // MARK: Configuration
@@ -223,6 +163,7 @@ class ProfileTableViewController: UITableViewController {
             destinationViewController.user = self.user?.copyEditUser()
             destinationViewController.currentEmail = self.user?.email
             destinationViewController.currentEmailVerified = self.user?.emailVerified
+            destinationViewController.isFacebookUser = self.user?.isFacebookUser
         }
         if let destinationViewController = segue.destination as? FollowersFollowingViewController {
             destinationViewController.userId = self.user?.userId
@@ -697,7 +638,7 @@ class ProfileTableViewController: UITableViewController {
                     print("Not an awsUser. This should not happen.")
                     return
                 }
-                let user = FullUser(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationId: awsUser._locationId, locationName: awsUser._locationName, website: awsUser._website, about: awsUser._about, numberOfFollowers: awsUser._numberOfFollowers, numberOfPosts: awsUser._numberOfPosts, numberOfRecommendations: awsUser._numberOfRecommendations, email: awsUser._email, emailVerified: awsUser._emailVerified)
+                let user = FullUser(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationId: awsUser._locationId, locationName: awsUser._locationName, website: awsUser._website, about: awsUser._about, numberOfFollowers: awsUser._numberOfFollowers, numberOfPosts: awsUser._numberOfPosts, numberOfRecommendations: awsUser._numberOfRecommendations, email: awsUser._email, emailVerified: awsUser._emailVerified, isFacebookUser: awsUser._isFacebookUser)
                 self.user = user
                 
                 // Reset flags and animations that were initiated.

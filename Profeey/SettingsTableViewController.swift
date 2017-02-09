@@ -23,6 +23,7 @@ class SettingsTableViewController: UITableViewController {
     var user: EditUser?
     var currentEmail: String?
     var currentEmailVerified: NSNumber?
+    var isFacebookUser: NSNumber?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -91,6 +92,19 @@ class SettingsTableViewController: UITableViewController {
         if cell == self.logOutTableViewCell {
             self.logOutTableViewCellTapped()
         }
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        // Remove editEmail and editPassword if facebookUser.
+        if let isFacebookUser = self.isFacebookUser, isFacebookUser.intValue == 1 {
+            if indexPath == IndexPath(row: 1, section: 0) {
+                return 0.0
+            }
+            if indexPath == IndexPath(row: 2, section: 0) {
+                return 0.0
+            }
+        }
+        return 44.0
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
