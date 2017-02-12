@@ -125,19 +125,17 @@ class HomeTableViewController: UITableViewController {
             destinationViewController.usersType = UsersType.likers
             destinationViewController.postId = self.posts[indexPath.section].postId
         }
-//        if let destinationViewController = segue.destination as? CommentsViewController {
-//            if let commentButton = sender as? UIButton,
-//                let indexPath = self.tableView.indexPathForView(view: commentButton) {
-//                destinationViewController.postId = self.posts[indexPath.section].postId
-//                destinationViewController.postUserId = self.posts[indexPath.section].userId
-//                destinationViewController.isCommentButton = true
-//            } else if let cell = sender as? PostButtonsTableViewCell,
-//                let indexPath = self.tableView.indexPath(for: cell) {
-//                destinationViewController.postId = self.posts[indexPath.section].postId
-//                destinationViewController.postUserId = self.posts[indexPath.section].userId
-//                destinationViewController.isCommentButton = false
-//            }
-//        }
+        if let destinationViewController = segue.destination as? PostDetailsViewController {
+            if let commentButton = sender as? UIButton,
+                let indexPath = self.tableView.indexPathForView(view: commentButton) {
+                destinationViewController.post = self.posts[indexPath.section].copyPost()
+                destinationViewController.isCommentButton = true
+            } else if let cell = sender as? PostButtonsTableViewCell,
+                let indexPath = self.tableView.indexPath(for: cell) {
+                destinationViewController.post = self.posts[indexPath.section].copyPost()
+                destinationViewController.isCommentButton = false
+            }
+        }
         if let navigationController = segue.destination as? UINavigationController,
             let childViewController =  navigationController.childViewControllers[0] as? EditPostTableViewController,
             let cell = sender as? PostUserTableViewCell,
@@ -162,8 +160,7 @@ class HomeTableViewController: UITableViewController {
         if section == 0 && self.isUploading {
             return 2
         }
-        //return 5
-        return 3
+        return 5
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -182,32 +179,24 @@ class HomeTableViewController: UITableViewController {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellUploading", for: indexPath) as! UploadingTableViewCell
                 return cell
             } else {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostSmall", for: indexPath) as! PostSmallTableViewCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostImage", for: indexPath) as! PostImageTableViewCell
                 cell.postImageView.image = post.image
-                cell.titleLabel.text = post.caption
-                cell.categoryNameLabel.text = post.categoryName
-                cell.createdLabel.text = post.createdString
-                cell.numberOfLikesLabel.text = post.numberOfLikesSmallString
+                if let imageWidth = post.imageWidth?.floatValue, let imageHeight = post.imageHeight?.floatValue {
+                    let aspectRatio = CGFloat(imageWidth / imageHeight)
+                    cell.postImageViewHeightConstraint.constant = ceil(tableView.bounds.width / aspectRatio)
+                }
                 return cell
-                
-//                let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostImage", for: indexPath) as! PostImageTableViewCell
-//                cell.postImageView.image = post.image
-//                if let imageWidth = post.imageWidth?.floatValue, let imageHeight = post.imageHeight?.floatValue {
-//                    let aspectRatio = CGFloat(imageWidth / imageHeight)
-//                    cell.postImageViewHeightConstraint.constant = ceil(tableView.bounds.width / aspectRatio)
-//                }
-//                return cell
             }
-//        case 2:
-//            let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostCaption", for: indexPath) as! PostCaptionTableViewCell
-//            cell.captionLabel.text = post.caption
-//            post.isExpandedCaption ? cell.untruncate() : cell.truncate()
-//            return cell
-//        case 3:
-//            let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostCategoryCreated", for: indexPath) as! PostCategoryCreatedTableViewCell
-//            cell.categoryNameCreatedLabel.text = [post.categoryName, post.createdString].flatMap({$0}).joined(separator: " · ")
-//            return cell
         case 2:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostCaption", for: indexPath) as! PostCaptionTableViewCell
+            cell.captionLabel.text = post.caption
+            post.isExpandedCaption ? cell.untruncate() : cell.truncate()
+            return cell
+        case 3:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostCategoryCreated", for: indexPath) as! PostCategoryCreatedTableViewCell
+            cell.categoryNameCreatedLabel.text = [post.categoryName, post.createdString].flatMap({$0}).joined(separator: " · ")
+            return cell
+        case 4:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostButtons", for: indexPath) as! PostButtonsTableViewCell
             post.isLikedByCurrentUser ? cell.setSelectedLikeButton() : cell.setUnselectedLikeButton()
             cell.postButtonsTableViewCellDelegate = self
@@ -265,23 +254,22 @@ class HomeTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.row {
         case 0:
-            return 64.0
+            return 60.0
         case 1:
             if indexPath.section == 0 && self.isUploading {
                 return 40.0
             }
-//            if let imageWidth = self.posts[indexPath.section].imageWidth?.floatValue, let imageHeight = self.posts[indexPath.section].imageHeight?.floatValue {
-//                let aspectRatio = CGFloat(imageWidth / imageHeight)
-//                return ceil(tableView.bounds.width / aspectRatio)
-//            }
-//            return 0.0
-            return 112.0
-//        case 2:
-//            return 30.0
-//        case 3:
-//            return 26.0
+            if let imageWidth = self.posts[indexPath.section].imageWidth?.floatValue, let imageHeight = self.posts[indexPath.section].imageHeight?.floatValue {
+                let aspectRatio = CGFloat(imageWidth / imageHeight)
+                return ceil(tableView.bounds.width / aspectRatio)
+            }
+            return 0.0
         case 2:
-            return 52.0
+            return 30.0
+        case 3:
+            return 26.0
+        case 4:
+            return 50.0
         default:
             return 0
         }
@@ -290,23 +278,22 @@ class HomeTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.row {
         case 0:
-            return 64.0
+            return 60.0
         case 1:
             if indexPath.section == 0 && self.isUploading {
                 return 40.0
             }
-//            if let imageWidth = self.posts[indexPath.section].imageWidth?.floatValue, let imageHeight = self.posts[indexPath.section].imageHeight?.floatValue {
-//                let aspectRatio = CGFloat(imageWidth / imageHeight)
-//                return ceil(tableView.bounds.width / aspectRatio)
-//            }
-//            return 0.0
-            return 112.0
-//        case 2:
-//            return UITableViewAutomaticDimension
-//        case 3:
-//            return 26.0
+            if let imageWidth = self.posts[indexPath.section].imageWidth?.floatValue, let imageHeight = self.posts[indexPath.section].imageHeight?.floatValue {
+                let aspectRatio = CGFloat(imageWidth / imageHeight)
+                return ceil(tableView.bounds.width / aspectRatio)
+            }
+            return 0.0
         case 2:
-            return 52.0
+            return UITableViewAutomaticDimension
+        case 3:
+            return 26.0
+        case 4:
+            return 50.0
         default:
             return 0
         }
@@ -631,12 +618,9 @@ extension HomeTableViewController {
         let post = self.posts[postIndex]
         post.numberOfLikes = NSNumber(value: post.numberOfLikesInt + 1)
         post.isLikedByCurrentUser = true
-//        (self.tableView.cellForRow(at: IndexPath(row: 4, section: postIndex)) as? PostButtonsTableViewCell)?.numberOfLikesButton.isHidden = (post.numberOfLikesString != nil) ? false : true
-//        (self.tableView.cellForRow(at: IndexPath(row: 4, section: postIndex)) as? PostButtonsTableViewCell)?.numberOfLikesButton.setTitle(post.numberOfLikesString, for: UIControlState())
-//        (self.tableView.cellForRow(at: IndexPath(row: 4, section: postIndex)) as? PostButtonsTableViewCell)?.setSelectedLikeButton()
-        (self.tableView.cellForRow(at: IndexPath(row: 2, section: postIndex)) as? PostButtonsTableViewCell)?.numberOfLikesButton.isHidden = (post.numberOfLikesString != nil) ? false : true
-        (self.tableView.cellForRow(at: IndexPath(row: 2, section: postIndex)) as? PostButtonsTableViewCell)?.numberOfLikesButton.setTitle(post.numberOfLikesString, for: UIControlState())
-        (self.tableView.cellForRow(at: IndexPath(row: 2, section: postIndex)) as? PostButtonsTableViewCell)?.setSelectedLikeButton()
+        (self.tableView.cellForRow(at: IndexPath(row: 4, section: postIndex)) as? PostButtonsTableViewCell)?.numberOfLikesButton.isHidden = (post.numberOfLikesString != nil) ? false : true
+        (self.tableView.cellForRow(at: IndexPath(row: 4, section: postIndex)) as? PostButtonsTableViewCell)?.numberOfLikesButton.setTitle(post.numberOfLikesString, for: UIControlState())
+        (self.tableView.cellForRow(at: IndexPath(row: 4, section: postIndex)) as? PostButtonsTableViewCell)?.setSelectedLikeButton()
     }
     
     func deleteLikeNotification(_ notification: NSNotification) {
@@ -650,12 +634,9 @@ extension HomeTableViewController {
         let post = self.posts[postIndex]
         post.numberOfLikes = NSNumber(value: post.numberOfLikesInt - 1)
         post.isLikedByCurrentUser = false
-//        (self.tableView.cellForRow(at: IndexPath(row: 4, section: postIndex)) as? PostButtonsTableViewCell)?.numberOfLikesButton.isHidden = (post.numberOfLikesString != nil) ? false : true
-//        (self.tableView.cellForRow(at: IndexPath(row: 4, section: postIndex)) as? PostButtonsTableViewCell)?.numberOfLikesButton.setTitle(post.numberOfLikesString, for: UIControlState())
-//        (self.tableView.cellForRow(at: IndexPath(row: 4, section: postIndex)) as? PostButtonsTableViewCell)?.setUnselectedLikeButton()
-        (self.tableView.cellForRow(at: IndexPath(row: 2, section: postIndex)) as? PostButtonsTableViewCell)?.numberOfLikesButton.isHidden = (post.numberOfLikesString != nil) ? false : true
-        (self.tableView.cellForRow(at: IndexPath(row: 2, section: postIndex)) as? PostButtonsTableViewCell)?.numberOfLikesButton.setTitle(post.numberOfLikesString, for: UIControlState())
-        (self.tableView.cellForRow(at: IndexPath(row: 2, section: postIndex)) as? PostButtonsTableViewCell)?.setUnselectedLikeButton()
+        (self.tableView.cellForRow(at: IndexPath(row: 4, section: postIndex)) as? PostButtonsTableViewCell)?.numberOfLikesButton.isHidden = (post.numberOfLikesString != nil) ? false : true
+        (self.tableView.cellForRow(at: IndexPath(row: 4, section: postIndex)) as? PostButtonsTableViewCell)?.numberOfLikesButton.setTitle(post.numberOfLikesString, for: UIControlState())
+        (self.tableView.cellForRow(at: IndexPath(row: 4, section: postIndex)) as? PostButtonsTableViewCell)?.setUnselectedLikeButton()
     }
     
     func createCommentNotification(_ notification: NSNotification) {
@@ -668,10 +649,8 @@ extension HomeTableViewController {
         // Update data source and cells.
         let post = self.posts[postIndex]
         post.numberOfComments = NSNumber(value: post.numberOfCommentsInt + 1)
-//        (self.tableView.cellForRow(at: IndexPath(row: 4, section: postIndex)) as? PostButtonsTableViewCell)?.numberOfCommentsButton.isHidden = (post.numberOfCommentsString != nil) ? false : true
-//        (self.tableView.cellForRow(at: IndexPath(row: 4, section: postIndex)) as? PostButtonsTableViewCell)?.numberOfCommentsButton.setTitle(post.numberOfCommentsString, for: UIControlState())
-        (self.tableView.cellForRow(at: IndexPath(row: 2, section: postIndex)) as? PostButtonsTableViewCell)?.numberOfCommentsButton.isHidden = (post.numberOfCommentsString != nil) ? false : true
-        (self.tableView.cellForRow(at: IndexPath(row: 2, section: postIndex)) as? PostButtonsTableViewCell)?.numberOfCommentsButton.setTitle(post.numberOfCommentsString, for: UIControlState())
+        (self.tableView.cellForRow(at: IndexPath(row: 4, section: postIndex)) as? PostButtonsTableViewCell)?.numberOfCommentsButton.isHidden = (post.numberOfCommentsString != nil) ? false : true
+        (self.tableView.cellForRow(at: IndexPath(row: 4, section: postIndex)) as? PostButtonsTableViewCell)?.numberOfCommentsButton.setTitle(post.numberOfCommentsString, for: UIControlState())
     }
     
     func deleteCommentNotification(_ notification: NSNotification) {
@@ -684,10 +663,8 @@ extension HomeTableViewController {
         // Update data source and cells.
         let post = self.posts[postIndex]
         post.numberOfComments = NSNumber(value: post.numberOfCommentsInt - 1)
-//        (self.tableView.cellForRow(at: IndexPath(row: 4, section: postIndex)) as? PostButtonsTableViewCell)?.numberOfCommentsButton.isHidden = (post.numberOfCommentsString != nil) ? false : true
-//        (self.tableView.cellForRow(at: IndexPath(row: 4, section: postIndex)) as? PostButtonsTableViewCell)?.numberOfCommentsButton.setTitle(post.numberOfCommentsString, for: UIControlState())
-        (self.tableView.cellForRow(at: IndexPath(row: 2, section: postIndex)) as? PostButtonsTableViewCell)?.numberOfCommentsButton.isHidden = (post.numberOfCommentsString != nil) ? false : true
-        (self.tableView.cellForRow(at: IndexPath(row: 2, section: postIndex)) as? PostButtonsTableViewCell)?.numberOfCommentsButton.setTitle(post.numberOfCommentsString, for: UIControlState())
+        (self.tableView.cellForRow(at: IndexPath(row: 4, section: postIndex)) as? PostButtonsTableViewCell)?.numberOfCommentsButton.isHidden = (post.numberOfCommentsString != nil) ? false : true
+        (self.tableView.cellForRow(at: IndexPath(row: 4, section: postIndex)) as? PostButtonsTableViewCell)?.numberOfCommentsButton.setTitle(post.numberOfCommentsString, for: UIControlState())
     }
     
     // Special case used only when there's no posts(activities) for a new user.
@@ -721,8 +698,7 @@ extension HomeTableViewController {
             for post in self.posts.filter( { $0.imageUrl == imageKey }) {
                 if let postIndex = self.posts.index(of: post) {
                     self.posts[postIndex].image = UIImage(data: imageData)
-                    //(self.tableView.cellForRow(at: IndexPath(row: 1, section: postIndex)) as? PostImageTableViewCell)?.postImageView.image = self.posts[postIndex].image
-                    (self.tableView.cellForRow(at: IndexPath(row: 1, section: postIndex))  as? PostSmallTableViewCell)?.postImageView.image = self.posts[postIndex].image
+                    (self.tableView.cellForRow(at: IndexPath(row: 1, section: postIndex)) as? PostImageTableViewCell)?.postImageView.image = self.posts[postIndex].image
                 }
             }
         }
@@ -801,7 +777,7 @@ extension HomeTableViewController: PostButtonsTableViewCellDelegate {
     }
     
     func commentButtonTapped(_ cell: PostButtonsTableViewCell) {
-        self.performSegue(withIdentifier: "segueToCommentsVc", sender: cell.commentButton)
+        self.performSegue(withIdentifier: "segueToPostDetailsVc", sender: cell.commentButton)
     }
     
     func numberOfLikesButtonTapped(_ cell: PostButtonsTableViewCell) {
@@ -809,7 +785,7 @@ extension HomeTableViewController: PostButtonsTableViewCellDelegate {
     }
     
     func numberOfCommentsButtonTapped(_ cell: PostButtonsTableViewCell) {
-        self.performSegue(withIdentifier: "segueToCommentsVc", sender: cell)
+        self.performSegue(withIdentifier: "segueToPostDetailsVc", sender: cell)
     }
 }
 

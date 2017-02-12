@@ -52,11 +52,6 @@ class UserCategoryTableViewController: UITableViewController {
     // MARK: Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if let destinationViewController = segue.destination as? PostDetailsTableViewController,
-//            let cell = sender as? PostSmallTableViewCell,
-//            let indexPath = self.tableView.indexPath(for: cell) {
-//            destinationViewController.post = self.posts[indexPath.row].copyPost()
-//        }
         if let destinationViewController = segue.destination as? PostDetailsViewController,
             let cell = sender as? PostSmallTableViewCell,
             let indexPath = self.tableView.indexPath(for: cell) {

@@ -117,7 +117,7 @@ class PostDetailsTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
-            return 4
+            return 5
         }
         if !self.isLoadingComments && self.comments.count == 0 {
             return 1
@@ -133,8 +133,7 @@ class PostDetailsTableViewController: UITableViewController {
                 let user = self.post?.user
                 cell.profilePicImageView.image = user?.profilePicUrl != nil ? user?.profilePic : UIImage(named: "ic_no_profile_pic_feed")
                 cell.preferredUsernameLabel.text = user?.preferredUsername
-                //cell.professionNameLabel.text = user?.professionName
-                cell.professionNameLabel.text = [self.post?.categoryName, self.post?.createdString].flatMap({$0}).joined(separator: " · ")
+                cell.professionNameLabel.text = user?.professionName
                 cell.postUserTableViewCellDelegate = self
                 return cell
             case 1:
@@ -151,6 +150,10 @@ class PostDetailsTableViewController: UITableViewController {
                 cell.untruncate()
                 return cell
             case 3:
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostCategoryCreated", for: indexPath) as! PostCategoryCreatedTableViewCell
+                cell.categoryNameCreatedLabel.text = [self.post?.categoryName, self.post?.createdString].flatMap({$0}).joined(separator: " · ")
+                return cell
+            case 4:
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostButtons", for: indexPath) as! PostButtonsTableViewCell
                 (self.post?.isLikedByCurrentUser != nil && self.post!.isLikedByCurrentUser) ? cell.setSelectedLikeButton() : cell.setUnselectedLikeButton()
                 cell.postButtonsTableViewCellDelegate = self
@@ -225,7 +228,9 @@ class PostDetailsTableViewController: UITableViewController {
             case 2:
                 return 30.0
             case 3:
-                return 52.0
+                return 26.0
+            case 4:
+                return 50.0
             default:
                 return 0
             }
@@ -246,7 +251,9 @@ class PostDetailsTableViewController: UITableViewController {
             case 2:
                 return UITableViewAutomaticDimension
             case 3:
-                return 52.0
+                return 26.0
+            case 4:
+                return 50.0
             default:
                 return 0
             }
@@ -586,9 +593,9 @@ extension PostDetailsTableViewController {
         // Update data source and cells.
         post.numberOfLikes = NSNumber(value: post.numberOfLikesInt + 1)
         post.isLikedByCurrentUser = true
-        (self.tableView.cellForRow(at: IndexPath(row: 3, section: 0)) as? PostButtonsTableViewCell)?.numberOfLikesButton.isHidden = (post.numberOfLikesString != nil) ? false : true
-        (self.tableView.cellForRow(at: IndexPath(row: 3, section: 0)) as? PostButtonsTableViewCell)?.numberOfLikesButton.setTitle(post.numberOfLikesString, for: UIControlState())
-        (self.tableView.cellForRow(at: IndexPath(row: 3, section: 0)) as? PostButtonsTableViewCell)?.setSelectedLikeButton()
+        (self.tableView.cellForRow(at: IndexPath(row: 4, section: 0)) as? PostButtonsTableViewCell)?.numberOfLikesButton.isHidden = (post.numberOfLikesString != nil) ? false : true
+        (self.tableView.cellForRow(at: IndexPath(row: 4, section: 0)) as? PostButtonsTableViewCell)?.numberOfLikesButton.setTitle(post.numberOfLikesString, for: UIControlState())
+        (self.tableView.cellForRow(at: IndexPath(row: 4, section: 0)) as? PostButtonsTableViewCell)?.setSelectedLikeButton()
     }
     
     func deleteLikeNotification(_ notification: NSNotification) {
@@ -601,9 +608,9 @@ extension PostDetailsTableViewController {
         // Update data source and cells.
         post.numberOfLikes = NSNumber(value: post.numberOfLikesInt - 1)
         post.isLikedByCurrentUser = false
-        (self.tableView.cellForRow(at: IndexPath(row: 3, section: 0)) as? PostButtonsTableViewCell)?.numberOfLikesButton.isHidden = (post.numberOfLikesString != nil) ? false : true
-        (self.tableView.cellForRow(at: IndexPath(row: 3, section: 0)) as? PostButtonsTableViewCell)?.numberOfLikesButton.setTitle(post.numberOfLikesString, for: UIControlState())
-        (self.tableView.cellForRow(at: IndexPath(row: 3, section: 0)) as? PostButtonsTableViewCell)?.setUnselectedLikeButton()
+        (self.tableView.cellForRow(at: IndexPath(row: 4, section: 0)) as? PostButtonsTableViewCell)?.numberOfLikesButton.isHidden = (post.numberOfLikesString != nil) ? false : true
+        (self.tableView.cellForRow(at: IndexPath(row: 4, section: 0)) as? PostButtonsTableViewCell)?.numberOfLikesButton.setTitle(post.numberOfLikesString, for: UIControlState())
+        (self.tableView.cellForRow(at: IndexPath(row: 4, section: 0)) as? PostButtonsTableViewCell)?.setUnselectedLikeButton()
     }
     
     func createCommentNotification(_ notification: NSNotification) {
@@ -615,8 +622,8 @@ extension PostDetailsTableViewController {
         }
         // Update data source and cells.
         post.numberOfComments = NSNumber(value: post.numberOfCommentsInt + 1)
-        (self.tableView.cellForRow(at: IndexPath(row: 3, section: 0)) as? PostButtonsTableViewCell)?.numberOfCommentsButton.isHidden = (post.numberOfCommentsString != nil) ? false : true
-        (self.tableView.cellForRow(at: IndexPath(row: 3, section: 0)) as? PostButtonsTableViewCell)?.numberOfCommentsButton.setTitle(post.numberOfCommentsString, for: UIControlState())
+        (self.tableView.cellForRow(at: IndexPath(row: 4, section: 0)) as? PostButtonsTableViewCell)?.numberOfCommentsButton.isHidden = (post.numberOfCommentsString != nil) ? false : true
+        (self.tableView.cellForRow(at: IndexPath(row: 4, section: 0)) as? PostButtonsTableViewCell)?.numberOfCommentsButton.setTitle(post.numberOfCommentsString, for: UIControlState())
         // Update comments.
         self.comments.insert(comment, at: self.comments.count)
         if self.comments.count == 1 {
@@ -639,8 +646,8 @@ extension PostDetailsTableViewController {
         }
         // Update data source and cells.
         post.numberOfComments = NSNumber(value: post.numberOfCommentsInt - 1)
-        (self.tableView.cellForRow(at: IndexPath(row: 3, section: 0)) as? PostButtonsTableViewCell)?.numberOfCommentsButton.isHidden = (post.numberOfCommentsString != nil) ? false : true
-        (self.tableView.cellForRow(at: IndexPath(row: 3, section: 0)) as? PostButtonsTableViewCell)?.numberOfCommentsButton.setTitle(post.numberOfCommentsString, for: UIControlState())
+        (self.tableView.cellForRow(at: IndexPath(row: 4, section: 0)) as? PostButtonsTableViewCell)?.numberOfCommentsButton.isHidden = (post.numberOfCommentsString != nil) ? false : true
+        (self.tableView.cellForRow(at: IndexPath(row: 4, section: 0)) as? PostButtonsTableViewCell)?.numberOfCommentsButton.setTitle(post.numberOfCommentsString, for: UIControlState())
         // Update comments.
         self.comments.remove(at: commentIndex)
         if self.comments.count == 0 {
