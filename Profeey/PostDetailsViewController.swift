@@ -232,4 +232,8 @@ extension PostDetailsViewController: PostDetailsTableViewControllerDelegate {
     func scrollViewWillBeginDecelerating() {
         self.view.endEditing(true)
     }
+    
+    func commentButtonTapped() {
+        self.commentTextView.becomeFirstResponder()
+    }
 }

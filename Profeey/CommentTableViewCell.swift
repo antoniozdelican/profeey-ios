@@ -12,17 +12,14 @@ import TTTAttributedLabel
 protocol CommentTableViewCellDelegate: class {
     func userTapped(_ cell: CommentTableViewCell)
     func commentTextLabelTapped(_ cell: CommentTableViewCell)
+    func moreButtonTapped(_ cell: CommentTableViewCell)
 }
 
 class CommentTableViewCell: UITableViewCell {
 
     @IBOutlet weak var profilePicImageView: UIImageView!
-    @IBOutlet weak var preferredUsernameLabel: UILabel!
-    @IBOutlet weak var professionNameLabel: UILabel!
     @IBOutlet weak var commentTextLabel: TTTAttributedLabel!
-    @IBOutlet weak var createdLabel: UILabel!
-    @IBOutlet weak var nameStackView: UIStackView!
-    @IBOutlet weak var separatorView: UIView!
+    @IBOutlet weak var preferredUsernameCreatedLabel: UILabel!
     
     weak var commentTableViewCellDelegate: CommentTableViewCellDelegate?
     
@@ -32,7 +29,6 @@ class CommentTableViewCell: UITableViewCell {
         self.profilePicImageView.clipsToBounds = true
         
         self.profilePicImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.profilePicImageViewTapped(_:))))
-        self.nameStackView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.nameStackViewTapped(_:))))
         self.commentTextLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.commentTextLabelTapped(_:))))
     }
 
@@ -46,13 +42,16 @@ class CommentTableViewCell: UITableViewCell {
         self.commentTableViewCellDelegate?.userTapped(self)
     }
     
-    func nameStackViewTapped(_ sender: AnyObject) {
-        self.commentTableViewCellDelegate?.userTapped(self)
-    }
-    
     func commentTextLabelTapped(_ sender: AnyObject) {
         self.commentTableViewCellDelegate?.commentTextLabelTapped(self)
     }
+    
+    // MARK: IBActions
+    
+    @IBAction func moreButtonTapped(_ sender: AnyObject) {
+        self.commentTableViewCellDelegate?.moreButtonTapped(self)
+    }
+    
     
     // MARK: Helpers
     

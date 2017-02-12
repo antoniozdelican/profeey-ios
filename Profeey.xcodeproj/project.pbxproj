@@ -107,7 +107,6 @@
 		A990ECB01D6A572500C3C9CE /* UsersTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A990ECAF1D6A572500C3C9CE /* UsersTableViewController.swift */; };
 		A990ECB31D6A576E00C3C9CE /* Users.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A990ECB21D6A576E00C3C9CE /* Users.storyboard */; };
 		A990ECB51D6A582100C3C9CE /* UserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A990ECB41D6A582100C3C9CE /* UserTableViewCell.swift */; };
-		A990ECB81D6A5F6A00C3C9CE /* Comments.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A990ECB71D6A5F6A00C3C9CE /* Comments.storyboard */; };
 		A99984DF1DB6B65B00842E51 /* AddTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99984DE1DB6B65B00842E51 /* AddTableViewCell.swift */; };
 		A999CD3F1DBE6F9F00E7ADB1 /* SearchProfessionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A999CD3E1DBE6F9F00E7ADB1 /* SearchProfessionsTableViewController.swift */; };
 		A999CD411DBE6FB000E7ADB1 /* SearchProfessionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A999CD401DBE6FB000E7ADB1 /* SearchProfessionTableViewCell.swift */; };
@@ -247,8 +246,6 @@
 		A9E3DA1C1E3556280050EC99 /* EditPasswordTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E3DA1B1E3556280050EC99 /* EditPasswordTableViewController.swift */; };
 		A9E3DD431D86A42400DED8C8 /* Profession.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E3DD421D86A42400DED8C8 /* Profession.swift */; };
 		A9E4507A1D59E6C500D14553 /* CommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E450791D59E6C500D14553 /* CommentTableViewCell.swift */; };
-		A9E4507C1D59E6D300D14553 /* CommentsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E4507B1D59E6D300D14553 /* CommentsTableViewController.swift */; };
-		A9E4507E1D59E6E400D14553 /* CommentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E4507D1D59E6E400D14553 /* CommentsViewController.swift */; };
 		A9E450801D5A09F100D14553 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E4507F1D5A09F100D14553 /* Comment.swift */; };
 		A9E4EC541D81F1B700929ED1 /* LocationsOldTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E4EC531D81F1B700929ED1 /* LocationsOldTableViewController.swift */; };
 		A9E53B691D10665100CD1D6C /* Home.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9E53B681D10665100CD1D6C /* Home.storyboard */; };
@@ -393,7 +390,6 @@
 		A990ECAF1D6A572500C3C9CE /* UsersTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsersTableViewController.swift; sourceTree = "<group>"; };
 		A990ECB21D6A576E00C3C9CE /* Users.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Users.storyboard; sourceTree = "<group>"; };
 		A990ECB41D6A582100C3C9CE /* UserTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserTableViewCell.swift; sourceTree = "<group>"; };
-		A990ECB71D6A5F6A00C3C9CE /* Comments.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Comments.storyboard; sourceTree = "<group>"; };
 		A99984DE1DB6B65B00842E51 /* AddTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddTableViewCell.swift; sourceTree = "<group>"; };
 		A999CD3E1DBE6F9F00E7ADB1 /* SearchProfessionsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchProfessionsTableViewController.swift; sourceTree = "<group>"; };
 		A999CD401DBE6FB000E7ADB1 /* SearchProfessionTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchProfessionTableViewCell.swift; sourceTree = "<group>"; };
@@ -534,8 +530,6 @@
 		A9E3DA1B1E3556280050EC99 /* EditPasswordTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditPasswordTableViewController.swift; sourceTree = "<group>"; };
 		A9E3DD421D86A42400DED8C8 /* Profession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Profession.swift; sourceTree = "<group>"; };
 		A9E450791D59E6C500D14553 /* CommentTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentTableViewCell.swift; sourceTree = "<group>"; };
-		A9E4507B1D59E6D300D14553 /* CommentsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentsTableViewController.swift; sourceTree = "<group>"; };
-		A9E4507D1D59E6E400D14553 /* CommentsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentsViewController.swift; sourceTree = "<group>"; };
 		A9E4507F1D5A09F100D14553 /* Comment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
 		A9E4EC531D81F1B700929ED1 /* LocationsOldTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationsOldTableViewController.swift; sourceTree = "<group>"; };
 		A9E53B681D10665100CD1D6C /* Home.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Home.storyboard; sourceTree = "<group>"; };
@@ -902,17 +896,6 @@
 			name = Users;
 			sourceTree = "<group>";
 		};
-		A990ECB61D6A5F4F00C3C9CE /* Comments */ = {
-			isa = PBXGroup;
-			children = (
-				A990ECB71D6A5F6A00C3C9CE /* Comments.storyboard */,
-				A9E4507D1D59E6E400D14553 /* CommentsViewController.swift */,
-				A9E4507B1D59E6D300D14553 /* CommentsTableViewController.swift */,
-				A9E450791D59E6C500D14553 /* CommentTableViewCell.swift */,
-			);
-			name = Comments;
-			sourceTree = "<group>";
-		};
 		A998B8851D86EEE200D7424A /* Locations Old */ = {
 			isa = PBXGroup;
 			children = (
@@ -1092,6 +1075,7 @@
 				A9AC8FBF1DBDFF5200C9BCE0 /* PostDetailsTableViewController.swift */,
 				A90E2E001E4CE05D00E8D0AE /* CommentsTableSectionHeader.xib */,
 				A90E2E021E4CE08000E8D0AE /* CommentsTableSectionHeader.swift */,
+				A9E450791D59E6C500D14553 /* CommentTableViewCell.swift */,
 			);
 			name = "Post Details";
 			sourceTree = "<group>";
@@ -1321,7 +1305,6 @@
 				A9543CA91DA3A1CC002BF372 /* Edit Post */,
 				A9DBC6321E1139B90087CB19 /* Followers Following */,
 				A990ECB11D6A575400C3C9CE /* Users */,
-				A990ECB61D6A5F4F00C3C9CE /* Comments */,
 				A915F86C1DC0D3600031C45F /* Locations */,
 				A998B8851D86EEE200D7424A /* Locations Old */,
 				A998B8861D86EEF900D7424A /* Professions */,
@@ -1536,7 +1519,6 @@
 				A9C071D21E3562CB00A27D42 /* SettingsTableSectionHeader.xib in Resources */,
 				A9D49EE31DD5D920000F90A8 /* UserCategory.storyboard in Resources */,
 				A9D3DFEC1E4090C200202E60 /* CameraNoAccessView.xib in Resources */,
-				A990ECB81D6A5F6A00C3C9CE /* Comments.storyboard in Resources */,
 				A9CBBC471DB634C0009C8EC7 /* EditWorkExperience.storyboard in Resources */,
 				A9459F701E00196100978DA8 /* TableSectionHeader.xib in Resources */,
 				A9ACF1891D927E1E00A99B7F /* Experiences.storyboard in Resources */,
@@ -1623,7 +1605,6 @@
 				A9F49D5A1D379D70002EB68B /* AWSPostsTable.swift in Sources */,
 				A9DC89371E34B14B00B9D213 /* ExperiencesHeaderTableViewCell.swift in Sources */,
 				A943494F1E38FF2F004E96BF /* PostCategoryCreatedTableViewCell.swift in Sources */,
-				A9E4507C1D59E6D300D14553 /* CommentsTableViewController.swift in Sources */,
 				A9C88E5C1E22698200B7D2E7 /* Message.swift in Sources */,
 				A91C1CD51DED9D85006FBDD4 /* AWSNotificationsTable.swift in Sources */,
 				A99ADD261DB361BE00A34C8D /* CurrentUser.swift in Sources */,
@@ -1727,7 +1708,6 @@
 				A9FAB36D1D8A114900E871CD /* AWSUserUpdate.swift in Sources */,
 				A99030F91D464FEE00336D26 /* GalleryCollectionViewCell.swift in Sources */,
 				A91A103A1DA833E40042B4CA /* AddInfoTableViewController.swift in Sources */,
-				A9E4507E1D59E6E400D14553 /* CommentsViewController.swift in Sources */,
 				A99030FB1D46632500336D26 /* AlbumsTableViewController.swift in Sources */,
 				A94349541E3921A6004E96BF /* NewMessageViewController.swift in Sources */,
 				A91A10351DA7F59F0042B4CA /* GalleryViewController.swift in Sources */,
@@ -1831,6 +1811,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "";
 				SDKROOT = iphoneos;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1873,6 +1854,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "";
 				SDKROOT = iphoneos;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -1972,6 +1954,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "";
 				SDKROOT = iphoneos;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";

@@ -12,6 +12,7 @@ import AWSDynamoDB
 
 protocol PostDetailsTableViewControllerDelegate: class {
     func scrollViewWillBeginDecelerating()
+    func commentButtonTapped()
 }
 
 class PostDetailsTableViewController: UITableViewController {
@@ -88,17 +89,17 @@ class PostDetailsTableViewController: UITableViewController {
             destinationViewController.usersType = UsersType.likers
             destinationViewController.postId = self.post?.postId
         }
-        if let destinationViewController = segue.destination as? CommentsViewController {
-            if let _ = sender as? UIButton {
-                destinationViewController.postId = self.post?.postId
-                destinationViewController.postUserId = self.post?.userId
-                destinationViewController.isCommentButton = true
-            } else if let _ = sender as? PostButtonsTableViewCell {
-                destinationViewController.postId = self.post?.postId
-                destinationViewController.postUserId = self.post?.userId
-                destinationViewController.isCommentButton = false
-            }
-        }
+//        if let destinationViewController = segue.destination as? CommentsViewController {
+//            if let _ = sender as? UIButton {
+//                destinationViewController.postId = self.post?.postId
+//                destinationViewController.postUserId = self.post?.userId
+//                destinationViewController.isCommentButton = true
+//            } else if let _ = sender as? PostButtonsTableViewCell {
+//                destinationViewController.postId = self.post?.postId
+//                destinationViewController.postUserId = self.post?.userId
+//                destinationViewController.isCommentButton = false
+//            }
+//        }
         if let navigationController = segue.destination as? UINavigationController,
             let childViewController =  navigationController.childViewControllers[0] as? EditPostTableViewController {
             childViewController.editPost = self.post?.copyEditPost()
@@ -116,7 +117,7 @@ class PostDetailsTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
-            return 5
+            return 4
         }
         if !self.isLoadingComments && self.comments.count == 0 {
             return 1
@@ -132,7 +133,8 @@ class PostDetailsTableViewController: UITableViewController {
                 let user = self.post?.user
                 cell.profilePicImageView.image = user?.profilePicUrl != nil ? user?.profilePic : UIImage(named: "ic_no_profile_pic_feed")
                 cell.preferredUsernameLabel.text = user?.preferredUsername
-                cell.professionNameLabel.text = user?.professionName
+                //cell.professionNameLabel.text = user?.professionName
+                cell.professionNameLabel.text = [self.post?.categoryName, self.post?.createdString].flatMap({$0}).joined(separator: " · ")
                 cell.postUserTableViewCellDelegate = self
                 return cell
             case 1:
@@ -149,10 +151,6 @@ class PostDetailsTableViewController: UITableViewController {
                 cell.untruncate()
                 return cell
             case 3:
-                let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostCategoryCreated", for: indexPath) as! PostCategoryCreatedTableViewCell
-                cell.categoryNameCreatedLabel.text = [self.post?.categoryName, self.post?.createdString].flatMap({$0}).joined(separator: " · ")
-                return cell
-            case 4:
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostButtons", for: indexPath) as! PostButtonsTableViewCell
                 (self.post?.isLikedByCurrentUser != nil && self.post!.isLikedByCurrentUser) ? cell.setSelectedLikeButton() : cell.setUnselectedLikeButton()
                 cell.postButtonsTableViewCellDelegate = self
@@ -174,9 +172,7 @@ class PostDetailsTableViewController: UITableViewController {
         let commentUser = comment.user
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellComment", for: indexPath) as! CommentTableViewCell
         cell.profilePicImageView.image = commentUser?.profilePicUrl != nil ? commentUser?.profilePic : UIImage(named: "ic_no_profile_pic_feed")
-        cell.preferredUsernameLabel.text = commentUser?.preferredUsername
-        cell.professionNameLabel.text = commentUser?.professionName
-        cell.createdLabel.text = comment.createdString
+        cell.preferredUsernameCreatedLabel.text = [commentUser?.preferredUsername, comment.createdString].flatMap({$0}).joined(separator: " · ")
         cell.commentTextLabel.text = comment.commentText
         comment.isExpandedCommentText ? cell.untruncate() : cell.truncate()
         cell.commentTableViewCellDelegate = self
@@ -198,9 +194,6 @@ class PostDetailsTableViewController: UITableViewController {
                 self.tableView.beginUpdates()
                 self.tableView.endUpdates()
             }
-        }
-        if cell is CommentTableViewCell {
-            self.commentCellTapped(cell as! CommentTableViewCell)
         }
     }
     
@@ -226,14 +219,12 @@ class PostDetailsTableViewController: UITableViewController {
         if indexPath.section == 0 {
             switch indexPath.row {
             case 0:
-                return 64.0
+                return 60.0
             case 1:
                 return 400.0
             case 2:
                 return 30.0
             case 3:
-                return 26.0
-            case 4:
                 return 52.0
             default:
                 return 0
@@ -249,14 +240,12 @@ class PostDetailsTableViewController: UITableViewController {
         if indexPath.section == 0 {
             switch indexPath.row {
             case 0:
-                return 64.0
+                return 60.0
             case 1:
                 return UITableViewAutomaticDimension
             case 2:
                 return UITableViewAutomaticDimension
             case 3:
-                return UITableViewAutomaticDimension
-            case 4:
                 return 52.0
             default:
                 return 0
@@ -323,7 +312,7 @@ class PostDetailsTableViewController: UITableViewController {
     
     // MARK: Helpers
     
-    fileprivate func commentCellTapped(_ cell: CommentTableViewCell) {
+    fileprivate func commentMoreButtonTapped(_ cell: CommentTableViewCell) {
         guard let indexPath = self.tableView.indexPath(for: cell) else {
             return
         }
@@ -437,7 +426,7 @@ class PostDetailsTableViewController: UITableViewController {
                     if task.result != nil {
                         // Update data source and cells.
                         self.post?.isLikedByCurrentUser = true
-                        (self.tableView.cellForRow(at: IndexPath(row: 4, section: 0)) as? PostButtonsTableViewCell)?.setSelectedLikeButton()
+                        (self.tableView.cellForRow(at: IndexPath(row: 3, section: 0)) as? PostButtonsTableViewCell)?.setSelectedLikeButton()
                     }
                 }
             })
@@ -597,9 +586,9 @@ extension PostDetailsTableViewController {
         // Update data source and cells.
         post.numberOfLikes = NSNumber(value: post.numberOfLikesInt + 1)
         post.isLikedByCurrentUser = true
-        (self.tableView.cellForRow(at: IndexPath(row: 4, section: 0)) as? PostButtonsTableViewCell)?.numberOfLikesButton.isHidden = (post.numberOfLikesString != nil) ? false : true
-        (self.tableView.cellForRow(at: IndexPath(row: 4, section: 0)) as? PostButtonsTableViewCell)?.numberOfLikesButton.setTitle(post.numberOfLikesString, for: UIControlState())
-        (self.tableView.cellForRow(at: IndexPath(row: 4, section: 0)) as? PostButtonsTableViewCell)?.setSelectedLikeButton()
+        (self.tableView.cellForRow(at: IndexPath(row: 3, section: 0)) as? PostButtonsTableViewCell)?.numberOfLikesButton.isHidden = (post.numberOfLikesString != nil) ? false : true
+        (self.tableView.cellForRow(at: IndexPath(row: 3, section: 0)) as? PostButtonsTableViewCell)?.numberOfLikesButton.setTitle(post.numberOfLikesString, for: UIControlState())
+        (self.tableView.cellForRow(at: IndexPath(row: 3, section: 0)) as? PostButtonsTableViewCell)?.setSelectedLikeButton()
     }
     
     func deleteLikeNotification(_ notification: NSNotification) {
@@ -612,9 +601,9 @@ extension PostDetailsTableViewController {
         // Update data source and cells.
         post.numberOfLikes = NSNumber(value: post.numberOfLikesInt - 1)
         post.isLikedByCurrentUser = false
-        (self.tableView.cellForRow(at: IndexPath(row: 4, section: 0)) as? PostButtonsTableViewCell)?.numberOfLikesButton.isHidden = (post.numberOfLikesString != nil) ? false : true
-        (self.tableView.cellForRow(at: IndexPath(row: 4, section: 0)) as? PostButtonsTableViewCell)?.numberOfLikesButton.setTitle(post.numberOfLikesString, for: UIControlState())
-        (self.tableView.cellForRow(at: IndexPath(row: 4, section: 0)) as? PostButtonsTableViewCell)?.setUnselectedLikeButton()
+        (self.tableView.cellForRow(at: IndexPath(row: 3, section: 0)) as? PostButtonsTableViewCell)?.numberOfLikesButton.isHidden = (post.numberOfLikesString != nil) ? false : true
+        (self.tableView.cellForRow(at: IndexPath(row: 3, section: 0)) as? PostButtonsTableViewCell)?.numberOfLikesButton.setTitle(post.numberOfLikesString, for: UIControlState())
+        (self.tableView.cellForRow(at: IndexPath(row: 3, section: 0)) as? PostButtonsTableViewCell)?.setUnselectedLikeButton()
     }
     
     func createCommentNotification(_ notification: NSNotification) {
@@ -626,8 +615,8 @@ extension PostDetailsTableViewController {
         }
         // Update data source and cells.
         post.numberOfComments = NSNumber(value: post.numberOfCommentsInt + 1)
-        (self.tableView.cellForRow(at: IndexPath(row: 4, section: 0)) as? PostButtonsTableViewCell)?.numberOfCommentsButton.isHidden = (post.numberOfCommentsString != nil) ? false : true
-        (self.tableView.cellForRow(at: IndexPath(row: 4, section: 0)) as? PostButtonsTableViewCell)?.numberOfCommentsButton.setTitle(post.numberOfCommentsString, for: UIControlState())
+        (self.tableView.cellForRow(at: IndexPath(row: 3, section: 0)) as? PostButtonsTableViewCell)?.numberOfCommentsButton.isHidden = (post.numberOfCommentsString != nil) ? false : true
+        (self.tableView.cellForRow(at: IndexPath(row: 3, section: 0)) as? PostButtonsTableViewCell)?.numberOfCommentsButton.setTitle(post.numberOfCommentsString, for: UIControlState())
         // Update comments.
         self.comments.insert(comment, at: self.comments.count)
         if self.comments.count == 1 {
@@ -650,8 +639,8 @@ extension PostDetailsTableViewController {
         }
         // Update data source and cells.
         post.numberOfComments = NSNumber(value: post.numberOfCommentsInt - 1)
-        (self.tableView.cellForRow(at: IndexPath(row: 4, section: 0)) as? PostButtonsTableViewCell)?.numberOfCommentsButton.isHidden = (post.numberOfCommentsString != nil) ? false : true
-        (self.tableView.cellForRow(at: IndexPath(row: 4, section: 0)) as? PostButtonsTableViewCell)?.numberOfCommentsButton.setTitle(post.numberOfCommentsString, for: UIControlState())
+        (self.tableView.cellForRow(at: IndexPath(row: 3, section: 0)) as? PostButtonsTableViewCell)?.numberOfCommentsButton.isHidden = (post.numberOfCommentsString != nil) ? false : true
+        (self.tableView.cellForRow(at: IndexPath(row: 3, section: 0)) as? PostButtonsTableViewCell)?.numberOfCommentsButton.setTitle(post.numberOfCommentsString, for: UIControlState())
         // Update comments.
         self.comments.remove(at: commentIndex)
         if self.comments.count == 0 {
@@ -746,9 +735,7 @@ extension PostDetailsTableViewController: PostButtonsTableViewCellDelegate {
     }
     
     func commentButtonTapped(_ cell: PostButtonsTableViewCell) {
-        if self.comments.count > 0 {
-            self.tableView.scrollToRow(at: IndexPath(row: 0, section: 1), at: UITableViewScrollPosition.top, animated: true)
-        }
+        self.postDetailsTableViewControllerDelegate?.commentButtonTapped()
     }
     
     func numberOfLikesButtonTapped(_ cell: PostButtonsTableViewCell) {
@@ -781,11 +768,15 @@ extension PostDetailsTableViewController: CommentTableViewCellDelegate {
             }
         }
     }
+    
+    func moreButtonTapped(_ cell: CommentTableViewCell) {
+        self.commentMoreButtonTapped(cell)
+    }
 }
 
 extension PostDetailsTableViewController: PostDetailsViewControllerDelegate {
     
     func toggleTableViewContentOffsetY(_ offsetY: CGFloat) {
-        self.tableView.contentOffset.y = self.tableView.contentOffset.y + offsetY
+        // TODO
     }
 }

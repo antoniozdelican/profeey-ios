@@ -125,19 +125,19 @@ class HomeTableViewController: UITableViewController {
             destinationViewController.usersType = UsersType.likers
             destinationViewController.postId = self.posts[indexPath.section].postId
         }
-        if let destinationViewController = segue.destination as? CommentsViewController {
-            if let commentButton = sender as? UIButton,
-                let indexPath = self.tableView.indexPathForView(view: commentButton) {
-                destinationViewController.postId = self.posts[indexPath.section].postId
-                destinationViewController.postUserId = self.posts[indexPath.section].userId
-                destinationViewController.isCommentButton = true
-            } else if let cell = sender as? PostButtonsTableViewCell,
-                let indexPath = self.tableView.indexPath(for: cell) {
-                destinationViewController.postId = self.posts[indexPath.section].postId
-                destinationViewController.postUserId = self.posts[indexPath.section].userId
-                destinationViewController.isCommentButton = false
-            }
-        }
+//        if let destinationViewController = segue.destination as? CommentsViewController {
+//            if let commentButton = sender as? UIButton,
+//                let indexPath = self.tableView.indexPathForView(view: commentButton) {
+//                destinationViewController.postId = self.posts[indexPath.section].postId
+//                destinationViewController.postUserId = self.posts[indexPath.section].userId
+//                destinationViewController.isCommentButton = true
+//            } else if let cell = sender as? PostButtonsTableViewCell,
+//                let indexPath = self.tableView.indexPath(for: cell) {
+//                destinationViewController.postId = self.posts[indexPath.section].postId
+//                destinationViewController.postUserId = self.posts[indexPath.section].userId
+//                destinationViewController.isCommentButton = false
+//            }
+//        }
         if let navigationController = segue.destination as? UINavigationController,
             let childViewController =  navigationController.childViewControllers[0] as? EditPostTableViewController,
             let cell = sender as? PostUserTableViewCell,

@@ -425,7 +425,6 @@
                         <segue destination="L9S-XV-FEq" kind="show" identifier="segueToProfileVc" id="bcN-4v-a2q"/>
                         <segue destination="P1G-ba-iDt" kind="show" identifier="segueToUsersVc" id="N0X-PW-F6Q"/>
                         <segue destination="fcG-wo-A8j" kind="presentation" identifier="segueToEditPostVc" animates="NO" id="Lgi-4f-QXa"/>
-                        <segue destination="OtY-w6-n9d" kind="show" identifier="segueToCommentsVc" id="gfO-go-YFo"/>
                         <segue destination="zuL-f0-Fd6" kind="show" identifier="segueToDiscoverPeopleVc" id="eWr-pq-F5O"/>
                     </connections>
                 </tableViewController>
@@ -464,14 +463,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="26Q-oq-Gy1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1477" y="599"/>
-        </scene>
-        <!--Comments-->
-        <scene sceneID="nml-SK-GJ3">
-            <objects>
-                <viewControllerPlaceholder storyboardName="Comments" id="OtY-w6-n9d" sceneMemberID="viewController"/>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="gvs-9P-h1J" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1477" y="528"/>
         </scene>
     </scenes>
     <resources>
