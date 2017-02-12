@@ -22,6 +22,9 @@ struct Colors {
     // #7E7E7E
     static let grey = UIColor(red: 126.0/255.0, green: 126.0/255.0, blue: 126.0/255.0, alpha: 1.0)
     
+    // #A3A3A3
+    static let greyIcons = UIColor(red: 163.0/255.0, green: 163.0/255.0, blue: 163.0/255.0, alpha: 1.0)
+    
     // #DCDCDC
     static let greyLight = UIColor(red: 220.0/255.0, green: 220.0/255.0, blue: 220.0/255.0, alpha: 1.0)
     

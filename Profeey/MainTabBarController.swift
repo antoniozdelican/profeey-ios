@@ -93,7 +93,8 @@ class MainTabBarController: UITabBarController {
                     return
                 }
                 tabBarItem?.image = image.withRenderingMode(UIImageRenderingMode.alwaysOriginal)
-                tabBarItem?.selectedImage = selectedImage.withRenderingMode(UIImageRenderingMode.alwaysOriginal)
+                //tabBarItem?.selectedImage = selectedImage.withRenderingMode(UIImageRenderingMode.alwaysOriginal)
+                tabBarItem?.selectedImage = selectedImage
             }
             if tabBarItem?.tag == 1 {
                 guard let image = UIImage(named: "ic_search"), let selectedImage = UIImage(named: "ic_search_active") else {

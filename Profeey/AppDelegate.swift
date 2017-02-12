@@ -125,7 +125,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // UINavigationBar
         UINavigationBar.appearance().barTintColor = UIColor.white
         UINavigationBar.appearance().isTranslucent = false
-        UINavigationBar.appearance().tintColor = Colors.black
+        UINavigationBar.appearance().tintColor = Colors.greyIcons
         UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: Colors.black, NSFontAttributeName: UIFont.systemFont(ofSize: 17.0, weight: UIFontWeightMedium)]
         //UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: Colors.black]
         UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
@@ -133,7 +133,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // UITabBar
         UITabBar.appearance().barTintColor = UIColor.white
         UITabBar.appearance().isTranslucent = false
-        UITabBar.appearance().tintColor = Colors.grey
+        UITabBar.appearance().tintColor = Colors.turquoise
         UITabBar.appearance().backgroundImage = UIImage()
         UITabBar.appearance().shadowImage = UIImage(named: "ic_tabbar_shadow_resizable")
         // UITableView
