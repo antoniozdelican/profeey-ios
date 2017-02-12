@@ -2,7 +2,7 @@
 //  ProfileSegmentedControlSectionHeader.swift
 //  Profeey
 //
-//  Created by Antonio Zdelican on 21/01/17.
+//  Created by Antonio Zdelican on 12/02/17.
 //  Copyright © 2017 Profeey. All rights reserved.
 //
 
@@ -13,64 +13,25 @@ protocol ProfileSegmentedControlSectionHeaderDelegate: class {
 }
 
 class ProfileSegmentedControlSectionHeader: UITableViewHeaderFooterView {
-    
-    @IBOutlet weak var postsButton: UIButton!
-    @IBOutlet weak var experienceButton: UIButton!
-    @IBOutlet weak var skillsButton: UIButton!
-    @IBOutlet weak var postsButtonBorderView: UIView!
-    @IBOutlet weak var experienceButtonBorderView: UIView!
-    @IBOutlet weak var skillsButtonBorderView: UIView!
+
+    @IBOutlet weak var segmentedControl: UISegmentedControl!
     
     weak var profileSegmentedControlSectionHeaderDelegate: ProfileSegmentedControlSectionHeaderDelegate?
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        
-        self.setPostsButtonActive()
-    }
-    
-    fileprivate func setPostsButtonActive() {
-        self.postsButton.setTitleColor(Colors.black, for: UIControlState())
-        self.experienceButton.setTitleColor(Colors.grey, for: UIControlState())
-        self.skillsButton.setTitleColor(Colors.grey, for: UIControlState())
-        self.postsButtonBorderView.isHidden = false
-        self.experienceButtonBorderView.isHidden = true
-        self.skillsButtonBorderView.isHidden = true
-    }
-    
-    fileprivate func setExperienceButtonActive() {
-        self.postsButton.setTitleColor(Colors.grey, for: UIControlState())
-        self.experienceButton.setTitleColor(Colors.black, for: UIControlState())
-        self.skillsButton.setTitleColor(Colors.grey, for: UIControlState())
-        self.postsButtonBorderView.isHidden = true
-        self.experienceButtonBorderView.isHidden = false
-        self.skillsButtonBorderView.isHidden = true
-    }
-    
-    fileprivate func setSkillsButtonActive() {
-        self.postsButton.setTitleColor(Colors.grey, for: UIControlState())
-        self.experienceButton.setTitleColor(Colors.grey, for: UIControlState())
-        self.skillsButton.setTitleColor(Colors.black, for: UIControlState())
-        self.postsButtonBorderView.isHidden = true
-        self.experienceButtonBorderView.isHidden = true
-        self.skillsButtonBorderView.isHidden = false
-    }
-    
+
     // MARK: IBActions
     
-    @IBAction func postsButtonTapped(_ sender: AnyObject) {
-        self.setPostsButtonActive()
-        self.profileSegmentedControlSectionHeaderDelegate?.segmentChanged(ProfileSegment.posts)
-    }
+    @IBAction func segmentedControlValueChanged(_ sender: AnyObject) {
+        switch self.segmentedControl.selectedSegmentIndex {
+        case 0:
+            self.profileSegmentedControlSectionHeaderDelegate?.segmentChanged(ProfileSegment.posts)
+        case 1:
+            self.profileSegmentedControlSectionHeaderDelegate?.segmentChanged(ProfileSegment.experience)
+        case 2:
+            self.profileSegmentedControlSectionHeaderDelegate?.segmentChanged(ProfileSegment.skills)
+        default:
+            return
+        }
     
-    @IBAction func experienceButtonTapped(_ sender: AnyObject) {
-        self.setExperienceButtonActive()
-        self.profileSegmentedControlSectionHeaderDelegate?.segmentChanged(ProfileSegment.experience)
-    }
-    
-    @IBAction func skillsButtonTapped(_ sender: AnyObject) {
-        self.setSkillsButtonActive()
-        self.profileSegmentedControlSectionHeaderDelegate?.segmentChanged(ProfileSegment.skills)
     }
 
 }
