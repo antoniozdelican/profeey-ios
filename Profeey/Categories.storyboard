@@ -184,20 +184,34 @@
                             <outlet property="delegate" destination="bSU-Zt-F7f" id="o1i-Cq-p8e"/>
                         </connections>
                     </tableView>
+                    <toolbarItems/>
                     <navigationItem key="navigationItem" title="Skill" id="UXF-qV-Mvg">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="iuE-3n-5Cc">
+                        <barButtonItem key="leftBarButtonItem" image="ic_cancel_x" id="iuE-3n-5Cc">
                             <connections>
                                 <action selector="cancelButtonTapped:" destination="bSU-Zt-F7f" id="SHB-Mp-5NG"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" title="Done" id="cFo-L1-EyO">
-                            <connections>
-                                <action selector="addButtonTapped:" destination="bSU-Zt-F7f" id="2WX-zI-AKL"/>
-                            </connections>
+                        <barButtonItem key="rightBarButtonItem" id="SLH-0v-pk8">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="bdg-Ha-NnA">
+                                <rect key="frame" x="318" y="5" width="41" height="33"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <state key="normal" title="Done">
+                                    <color key="titleColor" red="0.080254554749999998" green="0.61858558649999995" blue="0.93965935710000004" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <state key="disabled">
+                                    <color key="titleColor" red="0.73251521590000002" green="0.7315930128" blue="0.76011711360000001" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="doneButtonTapped:" destination="bSU-Zt-F7f" eventType="touchUpInside" id="XNi-7m-H5y"/>
+                                </connections>
+                            </button>
                         </barButtonItem>
                     </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="addCategoryTextField" destination="dYc-B7-uAW" id="9cJ-wN-S0p"/>
+                        <outlet property="doneButton" destination="bdg-Ha-NnA" id="ED1-gS-Uwl"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pSU-QS-YWZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -205,4 +219,7 @@
             <point key="canvasLocation" x="3373" y="278"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="ic_cancel_x" width="21" height="20"/>
+    </resources>
 </document>

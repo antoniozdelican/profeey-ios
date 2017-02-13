@@ -39,7 +39,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" title="Location" id="Zlg-mR-AcS">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="zGc-up-Kmr">
+                        <barButtonItem key="leftBarButtonItem" image="ic_cancel_x" id="zGc-up-Kmr">
                             <connections>
                                 <action selector="cancelButtonTapped:" destination="ydx-6S-qwk" id="STH-6Q-zs0"/>
                             </connections>
@@ -51,4 +51,7 @@
             <point key="canvasLocation" x="-1058" y="140"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="ic_cancel_x" width="21" height="20"/>
+    </resources>
 </document>

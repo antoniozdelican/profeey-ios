@@ -15,6 +15,7 @@ protocol ProfessionsTableViewControllerDelegate: class {
 
 class ProfessionsTableViewController: UITableViewController {
     
+    @IBOutlet weak var doneButton: UIButton!
     @IBOutlet weak var addProfessionTextField: UITextField!
     
     var professionName: String?
@@ -30,6 +31,7 @@ class ProfessionsTableViewController: UITableViewController {
         super.viewDidLoad()
         self.tableView.contentInset = UIEdgeInsetsMake(-1.0, 0.0, 0.0, 0.0)
         self.tableView.register(UINib(nibName: "TableSectionHeader", bundle: nil), forHeaderFooterViewReuseIdentifier: "tableSectionHeader")
+        self.doneButton?.contentEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, 0.0, -8.0)
         self.addProfessionTextField.text = self.professionName
         
         self.isShowingPopularProfessions = true

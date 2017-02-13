@@ -15,6 +15,7 @@ protocol CategoriesTableViewControllerDelegate: class {
 
 class CategoriesTableViewController: UITableViewController {
     
+    @IBOutlet weak var doneButton: UIButton!
     @IBOutlet weak var addCategoryTextField: UITextField!
     
     var categoryName: String?
@@ -31,6 +32,7 @@ class CategoriesTableViewController: UITableViewController {
         super.viewDidLoad()
         self.tableView.contentInset = UIEdgeInsetsMake(-1.0, 0.0, 0.0, 0.0)
         self.tableView.register(UINib(nibName: "TableSectionHeader", bundle: nil), forHeaderFooterViewReuseIdentifier: "tableSectionHeader")
+        self.doneButton?.contentEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, 0.0, -8.0)
         self.addCategoryTextField.text = self.categoryName
         
         self.isShowingPopularCategories = true
@@ -179,7 +181,7 @@ class CategoriesTableViewController: UITableViewController {
         }
     }
     
-    @IBAction func addButtonTapped(_ sender: AnyObject) {
+    @IBAction func doneButtonTapped(_ sender: AnyObject) {
         self.categoryName = self.categoryName?.replacingOccurrences(of: "_", with: " ")
         self.categoriesTableViewControllerDelegate?.didSelectCategory(self.categoryName)
         self.dismiss(animated: true, completion: nil)

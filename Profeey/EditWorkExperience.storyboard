@@ -220,7 +220,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Work Experience" id="Jjb-FH-Vka">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="YcG-j7-1BX">
+                        <barButtonItem key="leftBarButtonItem" image="ic_cancel_x" id="YcG-j7-1BX">
                             <connections>
                                 <action selector="cancelButtonTapped:" destination="l91-fs-VTM" id="GVD-2z-U6Q"/>
                             </connections>
@@ -267,4 +267,7 @@
             <point key="canvasLocation" x="-982" y="134"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="ic_cancel_x" width="21" height="20"/>
+    </resources>
 </document>

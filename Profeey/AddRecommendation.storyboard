@@ -103,7 +103,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Add Recommendation" id="7v6-NU-7nJ">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="Njb-HK-XoU">
+                        <barButtonItem key="leftBarButtonItem" image="ic_cancel_x" id="Njb-HK-XoU">
                             <connections>
                                 <action selector="cancelButtonTapped:" destination="PiB-yQ-Ple" id="UwF-EE-tWc"/>
                             </connections>
@@ -131,4 +131,7 @@
             <point key="canvasLocation" x="144.80000000000001" y="4.9475262368815596"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="ic_cancel_x" width="21" height="20"/>
+    </resources>
 </document>

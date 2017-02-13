@@ -134,7 +134,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Place" id="rhR-NJ-9Ha">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="e7N-vc-xSS">
+                        <barButtonItem key="leftBarButtonItem" image="ic_cancel_x" id="e7N-vc-xSS">
                             <connections>
                                 <action selector="cancelButtonTapped:" destination="OOJ-SG-eKd" id="rUX-Yl-d5i"/>
                             </connections>
@@ -149,4 +149,7 @@
             <point key="canvasLocation" x="112.8" y="-9.4452773613193415"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="ic_cancel_x" width="21" height="20"/>
+    </resources>
 </document>

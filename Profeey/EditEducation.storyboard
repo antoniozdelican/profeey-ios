@@ -220,7 +220,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Education" id="gGb-qk-pP8">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="39F-8n-xKN">
+                        <barButtonItem key="leftBarButtonItem" image="ic_cancel_x" id="39F-8n-xKN">
                             <connections>
                                 <action selector="cancelButtonTapped:" destination="sTK-EU-LBK" id="cQH-NS-rRY"/>
                             </connections>
@@ -267,4 +267,7 @@
             <point key="canvasLocation" x="-982" y="134"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="ic_cancel_x" width="21" height="20"/>
+    </resources>
 </document>

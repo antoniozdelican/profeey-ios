@@ -150,7 +150,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Edit Post" id="d6f-B7-AUz">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="6Lh-Pk-o9z">
+                        <barButtonItem key="leftBarButtonItem" image="ic_cancel_x" id="6Lh-Pk-o9z">
                             <connections>
                                 <action selector="cancelButtonTapped:" destination="wnN-8s-Hae" id="huG-Qn-CjY"/>
                             </connections>
@@ -191,6 +191,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="ic_cancel_x" width="21" height="20"/>
         <image name="ic_remove_grey" width="14" height="14"/>
         <image name="ic_skills" width="30" height="30"/>
     </resources>

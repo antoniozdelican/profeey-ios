@@ -300,7 +300,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Email" id="EfW-rX-ISy">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="Ozs-CU-cdb">
+                        <barButtonItem key="leftBarButtonItem" image="ic_cancel_x" id="Ozs-CU-cdb">
                             <connections>
                                 <action selector="cancelButtonTapped:" destination="RLt-Wj-fTx" id="gZ7-PL-HON"/>
                             </connections>
@@ -585,7 +585,7 @@
                     </tableView>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="Password" id="J8t-8f-KMF">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="Egx-wB-Xue">
+                        <barButtonItem key="leftBarButtonItem" image="ic_cancel_x" id="Egx-wB-Xue">
                             <connections>
                                 <action selector="cancelButtonTapped:" destination="Gsg-jq-3sB" id="Mll-c1-FMb"/>
                             </connections>
@@ -636,4 +636,7 @@
             <point key="canvasLocation" x="1462" y="501"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="ic_cancel_x" width="21" height="20"/>
+    </resources>
 </document>

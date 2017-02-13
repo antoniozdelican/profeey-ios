@@ -185,19 +185,31 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Profession" id="Wog-GS-ett">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="YMO-1N-j0d">
+                        <barButtonItem key="leftBarButtonItem" image="ic_cancel_x" id="YMO-1N-j0d">
                             <connections>
                                 <action selector="cancelButtonTapped:" destination="Hi8-Ey-38y" id="ScR-go-eUA"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="hvd-4B-DEl">
-                            <connections>
-                                <action selector="doneButtonTapped:" destination="Hi8-Ey-38y" id="3ZB-le-xuS"/>
-                            </connections>
+                        <barButtonItem key="rightBarButtonItem" id="Duc-oz-0Ot">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="cYV-yf-J8o">
+                                <rect key="frame" x="318" y="5" width="41" height="33"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <state key="normal" title="Done">
+                                    <color key="titleColor" red="0.080254554749999998" green="0.61858558649999995" blue="0.93965935710000004" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <state key="disabled">
+                                    <color key="titleColor" red="0.73251521590000002" green="0.7315930128" blue="0.76011711360000001" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="doneButtonTapped:" destination="Hi8-Ey-38y" eventType="touchUpInside" id="UUr-BF-QBq"/>
+                                </connections>
+                            </button>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="addProfessionTextField" destination="FmP-eY-T18" id="XWo-qT-Six"/>
+                        <outlet property="doneButton" destination="cYV-yf-J8o" id="h3J-aY-Ed9"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="a52-A7-hbr" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -205,4 +217,7 @@
             <point key="canvasLocation" x="3372" y="277.51124437781112"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="ic_cancel_x" width="21" height="20"/>
+    </resources>
 </document>

@@ -86,7 +86,7 @@
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="FhM-DF-oAK"/>
                     </toolbarItems>
                     <navigationItem key="navigationItem" title="Title" id="IFO-aM-FZM">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="6ZP-8O-v8d">
+                        <barButtonItem key="leftBarButtonItem" image="ic_cancel_x" id="6ZP-8O-v8d">
                             <connections>
                                 <action selector="closeButtonTapped:" destination="eIR-DP-y87" id="0kj-4x-M8j"/>
                             </connections>
@@ -569,7 +569,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Albums" id="1dJ-Oz-pKw">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="c9G-2m-n6S">
+                        <barButtonItem key="leftBarButtonItem" image="ic_cancel_x" id="c9G-2m-n6S">
                             <connections>
                                 <action selector="cancelButtonTapped:" destination="GKV-4e-GSj" id="C5L-b7-oMx"/>
                             </connections>
@@ -583,6 +583,7 @@
     </scenes>
     <resources>
         <image name="ic_camera_gallery" width="38" height="38"/>
+        <image name="ic_cancel_x" width="21" height="20"/>
         <image name="ic_remove_grey" width="14" height="14"/>
         <image name="ic_skills" width="30" height="30"/>
         <image name="ic_write_description" width="30" height="30"/>

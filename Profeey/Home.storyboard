@@ -321,7 +321,9 @@
                             <outlet property="delegate" destination="Qkr-xF-wW1" id="eEI-MF-th6"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Profeey" id="odO-LM-84T"/>
+                    <navigationItem key="navigationItem" title="Profeey" id="odO-LM-84T">
+                        <barButtonItem key="leftBarButtonItem" image="ic_camera" id="nNn-0R-S9w"/>
+                    </navigationItem>
                     <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" misplaced="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="pv7-Wk-vhh">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -384,6 +386,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="ic_camera" width="24" height="21"/>
         <image name="ic_comment" width="24" height="24"/>
         <image name="ic_comments" width="17" height="17"/>
         <image name="ic_home" width="25" height="25"/>
