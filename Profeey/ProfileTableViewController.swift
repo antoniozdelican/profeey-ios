@@ -493,7 +493,7 @@ class ProfileTableViewController: UITableViewController {
             if self.userCategories.count == 0 {
                 return 112.0
             }
-            return 50.0
+            return 44.0
         }
     }
     
@@ -527,7 +527,7 @@ class ProfileTableViewController: UITableViewController {
             if self.userCategories.count == 0 {
                 return 112.0
             }
-            return 50.0
+            return 44.0
         }
     }
     

@@ -30,27 +30,11 @@
                                 <action selector="segmentedControlValueChanged:" destination="1Lo-37-HQ0" eventType="valueChanged" id="92v-cs-Lgw"/>
                             </connections>
                         </segmentedControl>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RfY-vX-YcJ" userLabel="Separator View">
-                            <rect key="frame" x="0.0" y="43" width="375" height="1"/>
-                            <color key="backgroundColor" red="0.86274509799999999" green="0.86274509799999999" blue="0.86274509799999999" alpha="1" colorSpace="calibratedRGB"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="1" id="7Ho-qz-1GF">
-                                    <userDefinedRuntimeAttributes>
-                                        <userDefinedRuntimeAttribute type="number" keyPath="constant">
-                                            <real key="value" value="0.5"/>
-                                        </userDefinedRuntimeAttribute>
-                                    </userDefinedRuntimeAttributes>
-                                </constraint>
-                            </constraints>
-                        </view>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="trailing" secondItem="4ia-ZH-RNz" secondAttribute="trailing" constant="12" id="14B-W3-sbf"/>
-                        <constraint firstItem="RfY-vX-YcJ" firstAttribute="leading" secondItem="j2J-Ch-ceg" secondAttribute="leading" id="9HY-nC-qJe"/>
-                        <constraint firstAttribute="trailing" secondItem="RfY-vX-YcJ" secondAttribute="trailing" id="ISm-hJ-Lo1"/>
                         <constraint firstItem="4ia-ZH-RNz" firstAttribute="centerY" secondItem="j2J-Ch-ceg" secondAttribute="centerY" id="RLI-bt-PO5"/>
-                        <constraint firstAttribute="bottom" secondItem="RfY-vX-YcJ" secondAttribute="bottom" id="klS-VE-wCW"/>
                         <constraint firstItem="4ia-ZH-RNz" firstAttribute="leading" secondItem="j2J-Ch-ceg" secondAttribute="leading" constant="12" id="xsx-PL-tOe"/>
                     </constraints>
                 </view>

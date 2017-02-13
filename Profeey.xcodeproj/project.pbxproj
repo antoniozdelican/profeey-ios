@@ -95,6 +95,12 @@
 		A9707D251E02AC76005D729D /* ForgotPassword.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9707D241E02AC76005D729D /* ForgotPassword.storyboard */; };
 		A976F7941E4B678D00028859 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A976F7921E4B678D00028859 /* FBSDKCoreKit.framework */; };
 		A976F7951E4B678D00028859 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A976F7931E4B678D00028859 /* FBSDKLoginKit.framework */; };
+		A97951A91E51AC7F00104BD2 /* LocationsGoogle.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A97951A81E51AC7F00104BD2 /* LocationsGoogle.storyboard */; };
+		A97951B01E51AF4F00104BD2 /* GoogleMapsBase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A97951AE1E51AF4F00104BD2 /* GoogleMapsBase.framework */; };
+		A97951B11E51AF4F00104BD2 /* GooglePlaces.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A97951AF1E51AF4F00104BD2 /* GooglePlaces.framework */; };
+		A97951B31E51AF5B00104BD2 /* GooglePlaces.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A97951B21E51AF5B00104BD2 /* GooglePlaces.bundle */; };
+		A97951C51E51B09A00104BD2 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = A97951C41E51B09A00104BD2 /* libc++.tbd */; };
+		A97951C71E51B70100104BD2 /* LocationsGoogleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A97951C61E51B70100104BD2 /* LocationsGoogleViewController.swift */; };
 		A97A9AED1D85D0ED00507517 /* ProfessionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A97A9AEC1D85D0ED00507517 /* ProfessionsTableViewController.swift */; };
 		A97DBEEB1DF16ACB00A9F4FE /* Search.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A97DBEEA1DF16ACB00A9F4FE /* Search.storyboard */; };
 		A97DBEED1DF16BD400A9F4FE /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A97DBEEC1DF16BD400A9F4FE /* SearchViewController.swift */; };
@@ -380,6 +386,19 @@
 		A9707D241E02AC76005D729D /* ForgotPassword.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ForgotPassword.storyboard; sourceTree = "<group>"; };
 		A976F7921E4B678D00028859 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = Profeey/FBSDKCoreKit.framework; sourceTree = "<group>"; };
 		A976F7931E4B678D00028859 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = Profeey/FBSDKLoginKit.framework; sourceTree = "<group>"; };
+		A97951A81E51AC7F00104BD2 /* LocationsGoogle.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LocationsGoogle.storyboard; sourceTree = "<group>"; };
+		A97951AE1E51AF4F00104BD2 /* GoogleMapsBase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleMapsBase.framework; path = Profeey/GoogleMapsBase.framework; sourceTree = "<group>"; };
+		A97951AF1E51AF4F00104BD2 /* GooglePlaces.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GooglePlaces.framework; path = Profeey/GooglePlaces.framework; sourceTree = "<group>"; };
+		A97951B21E51AF5B00104BD2 /* GooglePlaces.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GooglePlaces.bundle; path = Profeey/GooglePlaces.framework/Versions/A/Resources/GooglePlaces.bundle; sourceTree = "<group>"; };
+		A97951B41E51AF8400104BD2 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
+		A97951B61E51AF9700104BD2 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		A97951BA1E51B00900104BD2 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		A97951BC1E51B01400104BD2 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		A97951BE1E51B01F00104BD2 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
+		A97951C01E51B02900104BD2 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
+		A97951C21E51B08C00104BD2 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		A97951C41E51B09A00104BD2 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
+		A97951C61E51B70100104BD2 /* LocationsGoogleViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationsGoogleViewController.swift; sourceTree = "<group>"; };
 		A97A9AEC1D85D0ED00507517 /* ProfessionsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfessionsTableViewController.swift; sourceTree = "<group>"; };
 		A97DBEEA1DF16ACB00A9F4FE /* Search.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Search.storyboard; sourceTree = "<group>"; };
 		A97DBEEC1DF16BD400A9F4FE /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
@@ -559,12 +578,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A97951C51E51B09A00104BD2 /* libc++.tbd in Frameworks */,
+				A97951B01E51AF4F00104BD2 /* GoogleMapsBase.framework in Frameworks */,
 				A9F2E7881DE89FF7001A25EC /* TTTAttributedLabel.framework in Frameworks */,
 				A961E71A1DE847CA00D45634 /* AWSMobileHubHelper.framework in Frameworks */,
 				A961E7251DE847F600D45634 /* AWSMobileAnalytics.framework in Frameworks */,
 				A961E7211DE847F600D45634 /* AWSCore.framework in Frameworks */,
 				A976F7951E4B678D00028859 /* FBSDKLoginKit.framework in Frameworks */,
 				A961E7231DE847F600D45634 /* AWSDynamoDB.framework in Frameworks */,
+				A97951B11E51AF4F00104BD2 /* GooglePlaces.framework in Frameworks */,
 				A961E7271DE847F600D45634 /* AWSS3.framework in Frameworks */,
 				A961E71F1DE847F600D45634 /* AWSCognitoIdentityProvider.framework in Frameworks */,
 				A961E7291DE847F600D45634 /* AWSSNS.framework in Frameworks */,
@@ -679,6 +701,9 @@
 		A930BC6F1D0DD43E004D49F7 = {
 			isa = PBXGroup;
 			children = (
+				A97951B21E51AF5B00104BD2 /* GooglePlaces.bundle */,
+				A97951AE1E51AF4F00104BD2 /* GoogleMapsBase.framework */,
+				A97951AF1E51AF4F00104BD2 /* GooglePlaces.framework */,
 				A930BC7A1D0DD43E004D49F7 /* Profeey */,
 				A930BC791D0DD43E004D49F7 /* Products */,
 				A930BCA31D0DD5CC004D49F7 /* Frameworks */,
@@ -717,6 +742,14 @@
 		A930BCA31D0DD5CC004D49F7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A97951C41E51B09A00104BD2 /* libc++.tbd */,
+				A97951C21E51B08C00104BD2 /* ImageIO.framework */,
+				A97951C01E51B02900104BD2 /* GLKit.framework */,
+				A97951BE1E51B01F00104BD2 /* CoreText.framework */,
+				A97951BC1E51B01400104BD2 /* CoreLocation.framework */,
+				A97951BA1E51B00900104BD2 /* CoreGraphics.framework */,
+				A97951B61E51AF9700104BD2 /* CoreData.framework */,
+				A97951B41E51AF8400104BD2 /* Accelerate.framework */,
 				A9F2E7871DE89FF7001A25EC /* TTTAttributedLabel.framework */,
 				A95C31B31D3E16370003377F /* UICKeyChainStore.framework */,
 				A930BCA71D0DD623004D49F7 /* libz.tbd */,
@@ -838,6 +871,15 @@
 				A9C3C0E91E02B7DC005CA18C /* NewPasswordTableViewController.swift */,
 			);
 			name = "Forgot Password";
+			sourceTree = "<group>";
+		};
+		A97951A71E51AC6200104BD2 /* LocationsGoogle */ = {
+			isa = PBXGroup;
+			children = (
+				A97951A81E51AC7F00104BD2 /* LocationsGoogle.storyboard */,
+				A97951C61E51B70100104BD2 /* LocationsGoogleViewController.swift */,
+			);
+			name = LocationsGoogle;
 			sourceTree = "<group>";
 		};
 		A97A3F631DF0271000FC5AEA /* AWSEndpointUsers */ = {
@@ -1309,6 +1351,7 @@
 				A9543CA91DA3A1CC002BF372 /* Edit Post */,
 				A9DBC6321E1139B90087CB19 /* Followers Following */,
 				A990ECB11D6A575400C3C9CE /* Users */,
+				A97951A71E51AC6200104BD2 /* LocationsGoogle */,
 				A915F86C1DC0D3600031C45F /* Locations */,
 				A998B8851D86EEE200D7424A /* Locations Old */,
 				A998B8861D86EEF900D7424A /* Professions */,
@@ -1514,6 +1557,7 @@
 				A9AFFB081D8AFE0C00219627 /* Professions.storyboard in Resources */,
 				A91828471DC0E59100EC9E63 /* Locations.storyboard in Resources */,
 				A9E53B6D1D10667100CD1D6C /* Capture.storyboard in Resources */,
+				A97951A91E51AC7F00104BD2 /* LocationsGoogle.storyboard in Resources */,
 				A9E53B711D10668400CD1D6C /* Profile.storyboard in Resources */,
 				A9AFFB0A1D8AFE2A00219627 /* LocationsOld.storyboard in Resources */,
 				A9D49EEB1DD602D6000F90A8 /* AddRecommendation.storyboard in Resources */,
@@ -1529,6 +1573,7 @@
 				A9CBBC471DB634C0009C8EC7 /* EditWorkExperience.storyboard in Resources */,
 				A9459F701E00196100978DA8 /* TableSectionHeader.xib in Resources */,
 				A9ACF1891D927E1E00A99B7F /* Experiences.storyboard in Resources */,
+				A97951B31E51AF5B00104BD2 /* GooglePlaces.bundle in Resources */,
 				A9E53B691D10665100CD1D6C /* Home.storyboard in Resources */,
 				A9AC8FBE1DBDFDCB00C9BCE0 /* PostDetails.storyboard in Resources */,
 				A999CD451DBE829F00E7ADB1 /* SearchTableSectionHeader.xib in Resources */,
@@ -1730,6 +1775,7 @@
 				A9C6CB7F1D2929AA00863816 /* Extensions.swift in Sources */,
 				A930BC7C1D0DD43F004D49F7 /* AppDelegate.swift in Sources */,
 				A9D7782E1E1F01B8003390D1 /* PRFYNavigationController.swift in Sources */,
+				A97951C71E51B70100104BD2 /* LocationsGoogleViewController.swift in Sources */,
 				A9DC893B1E34D1C400B9D213 /* NoNetworkTableViewCell.swift in Sources */,
 				A99B9E381DB54A130047360D /* CurrentlyDoingTableViewCell.swift in Sources */,
 				A999CD431DBE828800E7ADB1 /* SearchTableSectionHeader.swift in Sources */,

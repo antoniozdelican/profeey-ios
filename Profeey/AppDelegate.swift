@@ -12,6 +12,8 @@ import CoreFoundation
 import UIKit
 import AWSMobileHubHelper
 
+import GooglePlaces
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -30,6 +32,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let rootViewController = storyboard.instantiateInitialViewController()
             self.window?.rootViewController = rootViewController
         }
+        
+        // Configure GooglePlaces.
+        GMSPlacesClient.provideAPIKey("AIzaSyBr550EpB473VAhM316jyVkfZxupuYHvY4")
         
         return didFinishLaunching
     }
