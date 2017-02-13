@@ -14,7 +14,7 @@ class CaptureNavigationController: UINavigationController {
         super.viewDidLoad()
         self.navigationBar.barTintColor = UIColor.white
         self.navigationBar.isTranslucent = false
-        self.navigationBar.tintColor = Colors.black
+        self.navigationBar.tintColor = Colors.greyIcons
         self.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: Colors.black]
         self.navigationBar.setBackgroundImage(UIImage(), for: .default)
         self.navigationBar.shadowImage = UIImage(named: "ic_navbar_shadow_resizable")
