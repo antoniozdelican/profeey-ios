@@ -365,7 +365,8 @@ class ProfileTableViewController: UITableViewController {
                 cell.workDescriptionLabel.text = workExperience.workDescription
                 workExperience.isExpandedWorkDescription ? cell.untruncate() : cell.truncate()
                 cell.workExperienceTableViewCellDelegate = self
-                cell.separatorViewLeftConstraint?.constant = (indexPath.row == self.workExperiences.count) ? 0.0 : 12.0
+//                cell.separatorViewLeftConstraint?.constant = (indexPath.row == self.workExperiences.count) ? 0.0 : 12.0
+                cell.separatorView.backgroundColor = (indexPath.row == self.workExperiences.count) ? UIColor.clear : Colors.greyLighter
                 return cell
             } else if let experienceType = experience.experienceType, experienceType == .education, let education = experience as? Education {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellEducation", for: indexPath) as! EducationTableViewCell
@@ -376,7 +377,8 @@ class ProfileTableViewController: UITableViewController {
                 education.isExpandedEducationDescription ? cell.untruncate() : cell.truncate()
                 cell.educationTableViewCellDelegate = self
                 let lastIndex = (self.workExperiences.count > 0) ? self.experiences.count + 1 : self.experiences.count
-                cell.separatorViewLeftConstraint?.constant = (indexPath.row == lastIndex) ? 0.0 : 12.0
+//                cell.separatorViewLeftConstraint?.constant = (indexPath.row == lastIndex) ? 0.0 : 12.0
+                cell.separatorView.backgroundColor = (indexPath.row == lastIndex) ? UIColor.clear : Colors.greyLighter
                 return cell
             } else {
                 return UITableViewCell()
@@ -542,7 +544,7 @@ class ProfileTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if section == 1 {
-            return 42.0
+            return 44.0
         }
         return 0.0
     }

@@ -30,7 +30,7 @@ class LocationsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.register(UINib(nibName: "SearchTableSectionHeader", bundle: nil), forHeaderFooterViewReuseIdentifier: "searchTableSectionHeader")
-        self.navigationItem.title = "Choose a city"
+        self.navigationItem.title = "Choose a place"
         
         // Configure SearchBar.
         self.searchBar.text = self.locationName

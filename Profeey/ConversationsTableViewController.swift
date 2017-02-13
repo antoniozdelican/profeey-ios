@@ -134,7 +134,7 @@ class ConversationsTableViewController: UITableViewController {
         cell.layoutMargins = UIEdgeInsets.zero
         // Skip section 0.
         guard indexPath.section != 0 else {
-            cell.separatorInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0)
+            cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
             return
         }
         if !(cell is ConversationTableViewCell) {
@@ -154,7 +154,7 @@ class ConversationsTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.section == 0 {
-            return 52.0
+            return 44.0
         }
         if self.noNetworkConnection {
             return 112.0
@@ -167,7 +167,7 @@ class ConversationsTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.section == 0 {
-            return 52.0
+            return 44.0
         }
         if self.noNetworkConnection {
             return 112.0

@@ -19,7 +19,7 @@
                     <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                     <subviews>
                         <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="4ia-ZH-RNz">
-                            <rect key="frame" x="12" y="8" width="351" height="29"/>
+                            <rect key="frame" x="12" y="6" width="351" height="33"/>
                             <segments>
                                 <segment title="Posts"/>
                                 <segment title="Exeprience"/>
@@ -34,7 +34,8 @@
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="trailing" secondItem="4ia-ZH-RNz" secondAttribute="trailing" constant="12" id="14B-W3-sbf"/>
-                        <constraint firstItem="4ia-ZH-RNz" firstAttribute="centerY" secondItem="j2J-Ch-ceg" secondAttribute="centerY" id="RLI-bt-PO5"/>
+                        <constraint firstAttribute="bottom" secondItem="4ia-ZH-RNz" secondAttribute="bottom" constant="6" id="2dz-zd-y05"/>
+                        <constraint firstItem="4ia-ZH-RNz" firstAttribute="top" secondItem="j2J-Ch-ceg" secondAttribute="top" constant="6" id="XV1-5e-Ybb"/>
                         <constraint firstItem="4ia-ZH-RNz" firstAttribute="leading" secondItem="j2J-Ch-ceg" secondAttribute="leading" constant="12" id="xsx-PL-tOe"/>
                     </constraints>
                 </view>

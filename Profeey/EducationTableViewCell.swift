@@ -23,6 +23,7 @@ class EducationTableViewCell: UITableViewCell {
     @IBOutlet weak var educationDescriptionLabel: TTTAttributedLabel!
     // Used in ProfileVc for custom separator.
     @IBOutlet weak var separatorViewLeftConstraint: NSLayoutConstraint?
+    @IBOutlet weak var separatorView: UIView!
     
     weak var educationTableViewCellDelegate: EducationTableViewCellDelegate?
 
