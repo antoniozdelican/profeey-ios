@@ -11,10 +11,7 @@
 		A90146E61DB27C580092ED21 /* ProfileInfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A90146E51DB27C580092ED21 /* ProfileInfoTableViewCell.swift */; };
 		A901CFE71DA78DDC00C44B26 /* CaptureScrollViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A901CFE61DA78DDC00C44B26 /* CaptureScrollViewController.swift */; };
 		A901CFE91DA78FA900C44B26 /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A901CFE81DA78FA900C44B26 /* CameraViewController.swift */; };
-		A903EB571D16A39700B33025 /* LLSimpleCamera.m in Sources */ = {isa = PBXBuildFile; fileRef = A903EB521D16A39700B33025 /* LLSimpleCamera.m */; };
-		A903EB581D16A39700B33025 /* LLSimpleCamera+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = A903EB541D16A39700B33025 /* LLSimpleCamera+Helper.m */; };
 		A903EB591D16A39700B33025 /* UIImage+FixOrientation.m in Sources */ = {isa = PBXBuildFile; fileRef = A903EB561D16A39700B33025 /* UIImage+FixOrientation.m */; };
-		A903EB5B1D16A3C800B33025 /* ProfeeySimpleCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = A903EB5A1D16A3C800B33025 /* ProfeeySimpleCamera.swift */; };
 		A90E2E011E4CE05D00E8D0AE /* CommentsTableSectionHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = A90E2E001E4CE05D00E8D0AE /* CommentsTableSectionHeader.xib */; };
 		A90E2E031E4CE08000E8D0AE /* CommentsTableSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A90E2E021E4CE08000E8D0AE /* CommentsTableSectionHeader.swift */; };
 		A913FC701D51F6AF000D10A6 /* DynamoDBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A913FC6F1D51F6AF000D10A6 /* DynamoDBManager.swift */; };
@@ -304,13 +301,8 @@
 		A901CFE61DA78DDC00C44B26 /* CaptureScrollViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CaptureScrollViewController.swift; sourceTree = "<group>"; };
 		A901CFE81DA78FA900C44B26 /* CameraViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
 		A903EB501D16A39600B33025 /* Profeey-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Profeey-Bridging-Header.h"; sourceTree = "<group>"; };
-		A903EB511D16A39700B33025 /* LLSimpleCamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLSimpleCamera.h; sourceTree = "<group>"; };
-		A903EB521D16A39700B33025 /* LLSimpleCamera.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLSimpleCamera.m; sourceTree = "<group>"; };
-		A903EB531D16A39700B33025 /* LLSimpleCamera+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "LLSimpleCamera+Helper.h"; sourceTree = "<group>"; };
-		A903EB541D16A39700B33025 /* LLSimpleCamera+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "LLSimpleCamera+Helper.m"; sourceTree = "<group>"; };
 		A903EB551D16A39700B33025 /* UIImage+FixOrientation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+FixOrientation.h"; sourceTree = "<group>"; };
 		A903EB561D16A39700B33025 /* UIImage+FixOrientation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+FixOrientation.m"; sourceTree = "<group>"; };
-		A903EB5A1D16A3C800B33025 /* ProfeeySimpleCamera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfeeySimpleCamera.swift; sourceTree = "<group>"; };
 		A90E2E001E4CE05D00E8D0AE /* CommentsTableSectionHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommentsTableSectionHeader.xib; sourceTree = "<group>"; };
 		A90E2E021E4CE08000E8D0AE /* CommentsTableSectionHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentsTableSectionHeader.swift; sourceTree = "<group>"; };
 		A913FC6F1D51F6AF000D10A6 /* DynamoDBManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DynamoDBManager.swift; sourceTree = "<group>"; };
@@ -615,20 +607,6 @@
 			name = Capture;
 			sourceTree = "<group>";
 		};
-		A903EB4F1D16A35400B33025 /* Camera */ = {
-			isa = PBXGroup;
-			children = (
-				A903EB511D16A39700B33025 /* LLSimpleCamera.h */,
-				A903EB521D16A39700B33025 /* LLSimpleCamera.m */,
-				A903EB531D16A39700B33025 /* LLSimpleCamera+Helper.h */,
-				A903EB541D16A39700B33025 /* LLSimpleCamera+Helper.m */,
-				A903EB551D16A39700B33025 /* UIImage+FixOrientation.h */,
-				A903EB561D16A39700B33025 /* UIImage+FixOrientation.m */,
-				A903EB5A1D16A3C800B33025 /* ProfeeySimpleCamera.swift */,
-			);
-			name = Camera;
-			sourceTree = "<group>";
-		};
 		A915F86C1DC0D3600031C45F /* Locations */ = {
 			isa = PBXGroup;
 			children = (
@@ -724,7 +702,6 @@
 				A9C6CB7D1D29296B00863816 /* Extensions */,
 				A9EAD3481D1E8F3500994292 /* AWS */,
 				A9A503971D2FA7DB0030A472 /* PRFY */,
-				A903EB4F1D16A35400B33025 /* Camera */,
 				A9E53B671D10661700CD1D6C /* Side */,
 				A9E53B611D10657400CD1D6C /* Main */,
 				A9E0267D1E2037EC00BD8ED2 /* Misc */,
@@ -1148,6 +1125,8 @@
 			isa = PBXGroup;
 			children = (
 				A9C6CB7E1D2929AA00863816 /* Extensions.swift */,
+				A903EB551D16A39700B33025 /* UIImage+FixOrientation.h */,
+				A903EB561D16A39700B33025 /* UIImage+FixOrientation.m */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -1606,12 +1585,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				A94349561E3921B5004E96BF /* NewMessageTableViewController.swift in Sources */,
-				A903EB581D16A39700B33025 /* LLSimpleCamera+Helper.m in Sources */,
 				A9D185D71D7192350073E65F /* AWSLikesTable.swift in Sources */,
 				A9B185931DCF25C000E1981D /* AWSRelationship.swift in Sources */,
 				A9D688941E0AF9CC00A07D86 /* AWSCategoriesTable.swift in Sources */,
 				A9DBC6361E113A6B0087CB19 /* FollowersFollowingViewController.swift in Sources */,
-				A903EB5B1D16A3C800B33025 /* ProfeeySimpleCamera.swift in Sources */,
 				A9E3DA1C1E3556280050EC99 /* EditPasswordTableViewController.swift in Sources */,
 				A9B750051D8783BE00DDC8C8 /* AWSActivitiesTable.swift in Sources */,
 				A9DC893F1E34F26900B9D213 /* HomeNoNetworkView.swift in Sources */,
@@ -1752,7 +1729,6 @@
 				A9B6A89F1D7F8063001EE407 /* PostUserTableViewCell.swift in Sources */,
 				A931E25E1E262C81006F175A /* OtherMessageTableViewCell.swift in Sources */,
 				A9DA6A121E3394C100B7CE3E /* Experience.swift in Sources */,
-				A903EB571D16A39700B33025 /* LLSimpleCamera.m in Sources */,
 				A95EB85B1D8FBE870039E51D /* DateTableViewCell.swift in Sources */,
 				A90E2E031E4CE08000E8D0AE /* CommentsTableSectionHeader.swift in Sources */,
 				A99B9E361DB548F50047360D /* EditEducationTableViewController.swift in Sources */,
