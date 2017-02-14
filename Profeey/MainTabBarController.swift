@@ -14,9 +14,9 @@ import PhotosUI
 enum MainChildController: Int {
     case home = 0
     case search = 1
-    case capture = 2
-    case notifications = 3
-    case profile = 4
+//    case capture = 2
+    case notifications = 2
+    case profile = 3
 }
 
 enum NotificationType: Int {
@@ -93,7 +93,6 @@ class MainTabBarController: UITabBarController {
                     return
                 }
                 tabBarItem?.image = image.withRenderingMode(UIImageRenderingMode.alwaysOriginal)
-                //tabBarItem?.selectedImage = selectedImage.withRenderingMode(UIImageRenderingMode.alwaysOriginal)
                 tabBarItem?.selectedImage = selectedImage
             }
             if tabBarItem?.tag == 1 {
@@ -103,21 +102,21 @@ class MainTabBarController: UITabBarController {
                 tabBarItem?.image = image.withRenderingMode(UIImageRenderingMode.alwaysOriginal)
                 tabBarItem?.selectedImage = selectedImage
             }
+//            if tabBarItem?.tag == 2 {
+//                guard let image = UIImage(named: "ic_camera"), let selectedImage = UIImage(named: "ic_camera_active") else {
+//                    return
+//                }
+//                tabBarItem?.image = image.withRenderingMode(UIImageRenderingMode.alwaysOriginal)
+//                tabBarItem?.selectedImage = selectedImage
+//            }
             if tabBarItem?.tag == 2 {
-                guard let image = UIImage(named: "ic_camera"), let selectedImage = UIImage(named: "ic_camera_active") else {
-                    return
-                }
-                tabBarItem?.image = image.withRenderingMode(UIImageRenderingMode.alwaysOriginal)
-                tabBarItem?.selectedImage = selectedImage
-            }
-            if tabBarItem?.tag == 3 {
                 guard let image = UIImage(named: "ic_notifications"), let selectedImage = UIImage(named: "ic_notifications_active") else {
                     return
                 }
                 tabBarItem?.image = image.withRenderingMode(UIImageRenderingMode.alwaysOriginal)
                 tabBarItem?.selectedImage = selectedImage
             }
-            if tabBarItem?.tag == 4 {
+            if tabBarItem?.tag == 3 {
                 guard let image = UIImage(named: "ic_profile"), let selectedImage = UIImage(named: "ic_profile_active") else {
                     return
                 }
@@ -138,7 +137,8 @@ class MainTabBarController: UITabBarController {
         }
         let taBarItemWidth = self.tabBar.frame.width / CGFloat(tabBarItemsCount)
         // Position newNotificationsView close to middle and below notificaionsTabBarItem.
-        let x = (taBarItemWidth * CGFloat(tabBarItemsCount - 2)) + (34.0)
+        //let x = (taBarItemWidth * CGFloat(tabBarItemsCount - 2)) + (34.0)
+        let x = (taBarItemWidth * CGFloat(tabBarItemsCount - 2)) + (ceil(taBarItemWidth / 2 - 3.5))
         let y = self.tabBar.frame.height - 12.0
         let frame = CGRect(x: x, y: y, width: 5.0, height: 5.0)
         self.newNotificationsView = UIView(frame: frame)
@@ -181,8 +181,11 @@ class MainTabBarController: UITabBarController {
     }
     
     func updateUnseenConversationsBadge() {
+        guard let tabBarItemsCount = self.tabBar.items?.count else {
+            return
+        }
         // Update inner app badge.
-        self.tabBar.items?[3].badgeValue = self.unseenConversationsIds.count > 0 ? "\(self.unseenConversationsIds.count)" : nil
+        self.tabBar.items?[tabBarItemsCount - 2].badgeValue = self.unseenConversationsIds.count > 0 ? "\(self.unseenConversationsIds.count)" : nil
         // Update outer app badge.
         UIApplication.shared.applicationIconBadgeNumber = self.unseenConversationsIds.count > 0 ? self.unseenConversationsIds.count : 0
         // Update unseenConversationsView on NotificationsVc if visible.
@@ -363,20 +366,20 @@ extension MainTabBarController: UITabBarControllerDelegate {
     
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
         // If it's dummyCaptureNavigationController, don't show it and instead present Capture.storyboard.
-        if let restorationIdentifier = viewController.restorationIdentifier, restorationIdentifier == "dummyCaptureNavigationController" {
-            if let captureNavigationController = UIStoryboard(name: "Capture", bundle: nil).instantiateInitialViewController() {
-                // Check Photos access for the first time. This can happen on MainTabBarVc, UsernameVc, ProfileVc and EditVc.
-                if PHPhotoLibrary.authorizationStatus() == .notDetermined {
-                    PHPhotoLibrary.requestAuthorization({
-                        (status: PHAuthorizationStatus) in
-                        self.present(captureNavigationController, animated: true, completion: nil)
-                    })
-                } else {
-                    self.present(captureNavigationController, animated: true, completion: nil)
-                }
-            }
-            return false
-        }
+//        if let restorationIdentifier = viewController.restorationIdentifier, restorationIdentifier == "dummyCaptureNavigationController" {
+//            if let captureNavigationController = UIStoryboard(name: "Capture", bundle: nil).instantiateInitialViewController() {
+//                // Check Photos access for the first time. This can happen on MainTabBarVc, UsernameVc, ProfileVc and EditVc.
+//                if PHPhotoLibrary.authorizationStatus() == .notDetermined {
+//                    PHPhotoLibrary.requestAuthorization({
+//                        (status: PHAuthorizationStatus) in
+//                        self.present(captureNavigationController, animated: true, completion: nil)
+//                    })
+//                } else {
+//                    self.present(captureNavigationController, animated: true, completion: nil)
+//                }
+//            }
+//            return false
+//        }
         return true
     }
     

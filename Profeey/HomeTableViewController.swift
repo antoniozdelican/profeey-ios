@@ -9,6 +9,7 @@
 import UIKit
 import AWSMobileHubHelper
 import AWSDynamoDB
+import PhotosUI
 
 enum ImageType {
     case userProfilePic
@@ -307,6 +308,17 @@ class HomeTableViewController: UITableViewController {
     }
     
     // MARK: IBActions
+    
+    @IBAction func addPostButtonTapped(_ sender: AnyObject) {
+        // Check Photos access for the first time. This can happen on MainTabBarVc, HomeVc, UsernameVc, ProfileVc and EditVc.
+        if PHPhotoLibrary.authorizationStatus() == .notDetermined {
+            PHPhotoLibrary.requestAuthorization({
+                (status: PHAuthorizationStatus) in
+                self.performSegue(withIdentifier: "segueToCaptureVc", sender: self)
+            })
+        }
+        self.performSegue(withIdentifier: "segueToCaptureVc", sender: self)
+    }
     
     @IBAction func refreshControlChanged(_ sender: AnyObject) {
         guard !self.isRefreshingPosts && !self.isLoadingInitialPosts else {

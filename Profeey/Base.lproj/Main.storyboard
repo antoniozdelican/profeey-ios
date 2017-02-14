@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Ke3-2G-nhc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="15G1217" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Ke3-2G-nhc">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -20,7 +20,6 @@
                     <connections>
                         <segue destination="97w-Xf-MCQ" kind="relationship" relationship="viewControllers" id="gqd-rf-IV7"/>
                         <segue destination="i34-VO-fQf" kind="relationship" relationship="viewControllers" id="4Xl-FK-d0C"/>
-                        <segue destination="mGX-QG-puc" kind="relationship" relationship="viewControllers" id="Hat-yC-APf"/>
                         <segue destination="0VB-vA-lol" kind="relationship" relationship="viewControllers" id="HUj-4u-qdN"/>
                         <segue destination="PkX-gg-apD" kind="relationship" relationship="viewControllers" id="NXb-c0-2Gb"/>
                     </connections>
@@ -57,7 +56,7 @@
         <scene sceneID="nTt-kK-HNC">
             <objects>
                 <viewControllerPlaceholder storyboardName="Notifications" id="0VB-vA-lol" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" tag="3" title="" image="ic_notifications" id="xbh-mp-FOv">
+                    <tabBarItem key="tabBarItem" tag="2" title="" image="ic_notifications" id="xbh-mp-FOv">
                         <inset key="imageInsets" minX="0.0" minY="6" maxX="0.0" maxY="-6"/>
                     </tabBarItem>
                 </viewControllerPlaceholder>
@@ -69,7 +68,7 @@
         <scene sceneID="cb4-oG-6WN">
             <objects>
                 <navigationController id="PkX-gg-apD" customClass="PRFYNavigationController" customModule="Profeey" customModuleProvider="target" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" tag="4" title="" image="ic_profile" id="OwU-Yo-zab">
+                    <tabBarItem key="tabBarItem" tag="3" title="" image="ic_profile" id="OwU-Yo-zab">
                         <inset key="imageInsets" minX="0.0" minY="6" maxX="0.0" maxY="-6"/>
                     </tabBarItem>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
@@ -113,7 +112,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="ic_camera" width="25" height="25"/>
+        <image name="ic_camera" width="24" height="21"/>
         <image name="ic_home" width="25" height="25"/>
         <image name="ic_notifications" width="25" height="25"/>
         <image name="ic_profile" width="25" height="25"/>
