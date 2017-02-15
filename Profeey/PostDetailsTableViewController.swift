@@ -433,7 +433,7 @@ class PostDetailsTableViewController: UITableViewController {
                     if task.result != nil {
                         // Update data source and cells.
                         self.post?.isLikedByCurrentUser = true
-                        (self.tableView.cellForRow(at: IndexPath(row: 3, section: 0)) as? PostButtonsTableViewCell)?.setSelectedLikeButton()
+                        (self.tableView.cellForRow(at: IndexPath(row: 4, section: 0)) as? PostButtonsTableViewCell)?.setSelectedLikeButton()
                     }
                 }
             })
