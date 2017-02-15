@@ -135,9 +135,9 @@ class NotificationsTableViewController: UITableViewController {
             return 112.0
         }
         if self.notifications.count == 0 {
-            return 64.0
+            return 60.0
         }
-        return 64.0
+        return 60.0
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -145,7 +145,7 @@ class NotificationsTableViewController: UITableViewController {
             return 112.0
         }
         if self.notifications.count == 0 {
-            return 64.0
+            return 60.0
         }
         return UITableViewAutomaticDimension
     }
