@@ -113,7 +113,7 @@ class RecommendationsTableViewController: UITableViewController {
         if self.recommendations.count == 0 {
             return 64.0
         }
-        return 87.0
+        return 84.0
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
