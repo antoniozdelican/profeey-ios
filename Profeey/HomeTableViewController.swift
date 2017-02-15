@@ -792,6 +792,23 @@ extension HomeTableViewController: PostButtonsTableViewCellDelegate {
         self.performSegue(withIdentifier: "segueToPostDetailsVc", sender: cell.commentButton)
     }
     
+    func shareButtonTapped(_ cell: PostButtonsTableViewCell) {
+        guard let indexPath = self.tableView.indexPath(for: cell) else {
+            return
+        }
+        let post = self.posts[indexPath.section]
+        var activityItems:[Any] = []
+        if let caption = post.caption {
+            activityItems.append(caption)
+        }
+        if let image = post.image {
+            activityItems.append(image)
+        }
+        let activityController = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
+        activityController.popoverPresentationController?.barButtonItem = UIBarButtonItem(title: "Share", style: UIBarButtonItemStyle.plain, target: nil, action: nil)
+        self.present(activityController, animated: true, completion: nil)
+    }
+    
     func numberOfLikesButtonTapped(_ cell: PostButtonsTableViewCell) {
         self.performSegue(withIdentifier: "segueToUsersVc", sender: cell)
     }

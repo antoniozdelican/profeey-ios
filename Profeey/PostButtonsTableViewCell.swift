@@ -11,6 +11,7 @@ import UIKit
 protocol PostButtonsTableViewCellDelegate: class {
     func likeButtonTapped(_ cell: PostButtonsTableViewCell)
     func commentButtonTapped(_ cell: PostButtonsTableViewCell)
+    func shareButtonTapped(_ cell: PostButtonsTableViewCell)
     func numberOfLikesButtonTapped(_ cell: PostButtonsTableViewCell)
     func numberOfCommentsButtonTapped(_ cell: PostButtonsTableViewCell)
 }
@@ -19,6 +20,7 @@ class PostButtonsTableViewCell: UITableViewCell {
     
     @IBOutlet weak var likeButton: UIButton!
     @IBOutlet weak var commentButton: UIButton!
+    @IBOutlet weak var shareButton: UIButton!
     @IBOutlet weak var numberOfLikesButton: UIButton!
     @IBOutlet weak var numberOfCommentsButton: UIButton!
     
@@ -62,6 +64,10 @@ class PostButtonsTableViewCell: UITableViewCell {
     
     @IBAction func commentButtonTapped(_ sender: AnyObject) {
         self.postButtonsTableViewCellDelegate?.commentButtonTapped(self)
+    }
+    
+    @IBAction func shareButtonTapped(_ sender: AnyObject) {
+        self.postButtonsTableViewCellDelegate?.shareButtonTapped(self)
     }
     
     @IBAction func numberOfLikesButtonTapped(_ sender: AnyObject) {

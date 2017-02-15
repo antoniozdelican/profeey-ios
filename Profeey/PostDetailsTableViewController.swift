@@ -745,6 +745,10 @@ extension PostDetailsTableViewController: PostButtonsTableViewCellDelegate {
         self.postDetailsTableViewControllerDelegate?.commentButtonTapped()
     }
     
+    func shareButtonTapped(_ cell: PostButtonsTableViewCell) {
+        //self.performSegue(withIdentifier: "segueToPostDetailsVc", sender: cell.commentButton)
+    }
+    
     func numberOfLikesButtonTapped(_ cell: PostButtonsTableViewCell) {
         self.performSegue(withIdentifier: "segueToUsersVc", sender: cell)
     }
