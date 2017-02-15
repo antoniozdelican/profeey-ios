@@ -122,20 +122,20 @@ class DiscoverPeopleTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         if self.isSearchingUsers {
-            return 64.0
+            return 60.0
         }
         if self.users.count == 0 {
-            return 64.0
+            return 60.0
         }
         return 104.0
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if self.isSearchingUsers {
-            return 64.0
+            return 60.0
         }
         if self.users.count == 0 {
-            return 64.0
+            return 60.0
         }
         return UITableViewAutomaticDimension
     }
