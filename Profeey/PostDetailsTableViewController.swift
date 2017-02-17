@@ -694,7 +694,30 @@ extension PostDetailsTableViewController: PostUserTableViewCellDelegate {
             return
         }
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
+        // Share.
+        let shareAction = UIAlertAction(title: "Share", style: UIAlertActionStyle.default, handler: {
+            (alert: UIAlertAction) in
+            var activityItems:[Any] = []
+            if postUserId != AWSIdentityManager.defaultIdentityManager().identityId, let preferredUsername = post.user?.preferredUsername {
+                activityItems.append("\(preferredUsername)'s post")
+            }
+            if let image = post.image {
+                activityItems.append(image)
+            }
+            let activityController = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
+            activityController.popoverPresentationController?.barButtonItem = UIBarButtonItem(title: "Share", style: UIBarButtonItemStyle.plain, target: nil, action: nil)
+            self.present(activityController, animated: true, completion: nil)
+        })
+        alertController.addAction(shareAction)
+        
         if postUserId == AWSIdentityManager.defaultIdentityManager().identityId {
+            // Edit.
+            let editAction = UIAlertAction(title: "Edit", style: UIAlertActionStyle.default, handler: {
+                (alert: UIAlertAction) in
+                self.performSegue(withIdentifier: "segueToEditPostVc", sender: cell)
+            })
+            alertController.addAction(editAction)
+            // Delete.
             let deleteAction = UIAlertAction(title: "Delete", style: UIAlertActionStyle.destructive, handler: {
                 (alert: UIAlertAction) in
                 let alertController = UIAlertController(title: "Delete Post?", message: nil, preferredStyle: UIAlertControllerStyle.alert)
@@ -708,14 +731,10 @@ extension PostDetailsTableViewController: PostUserTableViewCellDelegate {
                 self.present(alertController, animated: true, completion: nil)
             })
             alertController.addAction(deleteAction)
-            let editAction = UIAlertAction(title: "Edit", style: UIAlertActionStyle.default, handler: {
-                (alert: UIAlertAction) in
-                self.performSegue(withIdentifier: "segueToEditPostVc", sender: cell)
-            })
-            alertController.addAction(editAction)
         } else {
-            let reportAction = UIAlertAction(title: "Report", style: UIAlertActionStyle.destructive, handler: nil)
-            alertController.addAction(reportAction)
+            // Report.
+//            let reportAction = UIAlertAction(title: "Report", style: UIAlertActionStyle.destructive, handler: nil)
+//            alertController.addAction(reportAction)
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil)
         alertController.addAction(cancelAction)
@@ -743,10 +762,6 @@ extension PostDetailsTableViewController: PostButtonsTableViewCellDelegate {
     
     func commentButtonTapped(_ cell: PostButtonsTableViewCell) {
         self.postDetailsTableViewControllerDelegate?.commentButtonTapped()
-    }
-    
-    func shareButtonTapped(_ cell: PostButtonsTableViewCell) {
-        //self.performSegue(withIdentifier: "segueToPostDetailsVc", sender: cell.commentButton)
     }
     
     func numberOfLikesButtonTapped(_ cell: PostButtonsTableViewCell) {
