@@ -104,14 +104,14 @@
 		<dict>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>fb1412092672165114</string>
+				<string>fb1853757274912712</string>
 			</array>
 		</dict>
 	</array>
 	<key>FacebookAppID</key>
-	<string>1412092672165114</string>
+	<string>1853757274912712</string>
 	<key>FacebookDisplayName</key>
-	<string>Profeey Dev</string>
+	<string>Profeey</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>fbapi</string>
