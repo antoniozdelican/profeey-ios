@@ -48,6 +48,7 @@ class PostDetailsTableViewController: UITableViewController {
             self.tableView.backgroundView = self.activityIndicatorView
             self.activityIndicatorView?.startAnimating()
             self.isLoadingPost = true
+            self.isLoadingComments = true
             self.getPost(notificationPostId)
         } else if let postId = self.post?.postId {
             // Just check if currentUser liked this post.
@@ -89,17 +90,6 @@ class PostDetailsTableViewController: UITableViewController {
             destinationViewController.usersType = UsersType.likers
             destinationViewController.postId = self.post?.postId
         }
-//        if let destinationViewController = segue.destination as? CommentsViewController {
-//            if let _ = sender as? UIButton {
-//                destinationViewController.postId = self.post?.postId
-//                destinationViewController.postUserId = self.post?.userId
-//                destinationViewController.isCommentButton = true
-//            } else if let _ = sender as? PostButtonsTableViewCell {
-//                destinationViewController.postId = self.post?.postId
-//                destinationViewController.postUserId = self.post?.userId
-//                destinationViewController.isCommentButton = false
-//            }
-//        }
         if let navigationController = segue.destination as? UINavigationController,
             let childViewController =  navigationController.childViewControllers[0] as? EditPostTableViewController {
             childViewController.editPost = self.post?.copyEditPost()
@@ -364,31 +354,46 @@ class PostDetailsTableViewController: UITableViewController {
             (task: AWSTask) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                self.isLoadingPost = false
-                self.activityIndicatorView?.stopAnimating()
-                if let error = task.error {
-                    print("getPost error: \(error)")
+                guard task.error == nil else {
+                    print("getPost error: \(task.error!)")
+                    self.isLoadingPost = false
+                    self.isLoadingComments = false
+                    self.refreshControl?.endRefreshing()
+                    self.tableView.tableFooterView = UIView()
                     self.tableView.reloadData()
-                } else {
-                    guard let awsPost = task.result as? AWSPost else {
-                        self.tableView.reloadData()
-                        return
+                    if (task.error as! NSError).code == -1009 {
+                        (self.navigationController as? PRFYNavigationController)?.showBanner("No Internet Connection")
+                        self.noNetworkConnection = true
                     }
+                    return
+                }
+                if let awsPost = task.result as? AWSPost {
                     let user = User(userId: awsPost._userId, firstName: awsPost._firstName, lastName: awsPost._lastName, preferredUsername: awsPost._preferredUsername, professionName: awsPost._professionName, profilePicUrl: awsPost._profilePicUrl)
                     let post = Post(userId: awsPost._userId, postId: awsPost._postId, created: awsPost._created, caption: awsPost._caption, categoryName: awsPost._categoryName, imageUrl: awsPost._imageUrl, imageWidth: awsPost._imageWidth, imageHeight: awsPost._imageHeight, numberOfLikes: awsPost._numberOfLikes, numberOfComments: awsPost._numberOfComments, user: user)
                     self.post = post
-                    self.tableView.reloadData()
-                    if let profilePicUrl = post.user?.profilePicUrl {
+                }
+                
+                // Reset flags and animations that were initiated.
+                self.isLoadingPost = false
+                self.refreshControl?.endRefreshing()
+                self.noNetworkConnection = false
+                self.tableView.tableFooterView = UIView()
+                
+                // Reload tableView.
+                self.tableView.reloadData()
+                
+                // Load other data.
+                if let awsPost = task.result as? AWSPost {
+                    if let profilePicUrl = awsPost._profilePicUrl {
                         PRFYS3Manager.defaultS3Manager().downloadImageS3(profilePicUrl, imageType: .userProfilePic)
                     }
-                    if let imageUrl = post.imageUrl {
+                    if let imageUrl = awsPost._imageUrl {
                         PRFYS3Manager.defaultS3Manager().downloadImageS3(imageUrl, imageType: .postPic)
                     }
-                    if let postId = post.postId {
+                    if let postId = awsPost._postId {
+                        // Get like.
                         self.getLike(postId)
-                    }
-                    // Query comments.
-                    if let postId = self.post?.postId {
+                        // Query comments.
                         self.isLoadingComments = true
                         self.tableView.tableFooterView = self.loadingTableFooterView
                         self.queryCommentsDateSorted(postId, startFromBeginning: true)
