@@ -10,4 +10,4 @@ import Foundation
 
 let PRFYTermsUrl:String = "https://www.profeey.com/terms"
 let PRFYPrivacyPolicyUrl:String = "https://www.profeey.com/privacy-policy"
-let PRFYGetHelpUrl:String = "https://www.profeey.com"
+let PRFYGetHelpUrl:String = "https://www.profeey.com/support"
