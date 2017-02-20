@@ -114,39 +114,15 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="44" id="AuR-bu-4Al">
-                                        <rect key="frame" x="0.0" y="287" width="375" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="AuR-bu-4Al" id="cqW-qZ-3IB">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Terms and Conditions" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PIQ-hf-NWw">
-                                                    <rect key="frame" x="16" y="12.5" width="159" height="20"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                                    <color key="textColor" red="0.14748379589999999" green="0.1474793851" blue="0.14748191829999999" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="PIQ-hf-NWw" firstAttribute="centerY" secondItem="cqW-qZ-3IB" secondAttribute="centerY" id="d89-45-8TZ"/>
-                                                <constraint firstItem="PIQ-hf-NWw" firstAttribute="leading" secondItem="cqW-qZ-3IB" secondAttribute="leading" constant="16" id="dtq-px-fuc"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                </cells>
-                            </tableViewSection>
-                            <tableViewSection id="NqN-eQ-IMV">
-                                <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="44" id="bzW-Ei-PU0">
-                                        <rect key="frame" x="0.0" y="363" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="287" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="bzW-Ei-PU0" id="yXF-lt-4hI">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Get Help" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o3B-QZ-0bD">
-                                                    <rect key="frame" x="16" y="11" width="64" height="20"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Help Center" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o3B-QZ-0bD">
+                                                    <rect key="frame" x="16" y="11" width="87" height="20"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                     <color key="textColor" red="0.14748379589999999" green="0.1474793851" blue="0.14748191829999999" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -163,7 +139,7 @@
                             <tableViewSection id="1iq-eK-wGa">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="NOR-g5-85x">
-                                        <rect key="frame" x="0.0" y="439" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="363" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="NOR-g5-85x" id="c18-El-Kx6">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
@@ -200,7 +176,6 @@
                         <outlet property="getHelpTableViewCell" destination="bzW-Ei-PU0" id="dMf-dE-IeT"/>
                         <outlet property="logOutTableViewCell" destination="NOR-g5-85x" id="yfd-iJ-8Lk"/>
                         <outlet property="privacyPolicyTableViewCell" destination="qDT-LU-6Xy" id="ex4-Oa-ID6"/>
-                        <outlet property="termsAndConditionsTableViewCell" destination="AuR-bu-4Al" id="PCs-Gl-w78"/>
                         <segue destination="Fz4-2M-NAa" kind="presentation" identifier="segueToEditProfileVc" id="A0e-xv-MFm"/>
                         <segue destination="cjN-Ve-7bh" kind="presentation" identifier="segueToEditEmail" id="DL3-1Y-sTb"/>
                         <segue destination="S1s-aw-3a1" kind="presentation" identifier="segueToEditPassword" id="Y6Z-C5-vGG"/>

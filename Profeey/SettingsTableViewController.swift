@@ -15,7 +15,7 @@ class SettingsTableViewController: UITableViewController {
     @IBOutlet weak var editEmailTableViewCell: UITableViewCell!
     @IBOutlet weak var editPasswordTableViewCell: UITableViewCell!
     @IBOutlet weak var privacyPolicyTableViewCell: UITableViewCell!
-    @IBOutlet weak var termsAndConditionsTableViewCell: UITableViewCell!
+    //@IBOutlet weak var termsAndConditionsTableViewCell: UITableViewCell!
     @IBOutlet weak var getHelpTableViewCell: UITableViewCell!
     @IBOutlet weak var logOutTableViewCell: UITableViewCell!
     @IBOutlet weak var currentEmailLabel: UILabel!
@@ -79,11 +79,11 @@ class SettingsTableViewController: UITableViewController {
                 UIApplication.shared.openURL(privacyPolicyUrl)
             }
         }
-        if cell == self.termsAndConditionsTableViewCell {
-            if let termsUrl = URL(string: PRFYTermsUrl) {
-                UIApplication.shared.openURL(termsUrl)
-            }
-        }
+//        if cell == self.termsAndConditionsTableViewCell {
+//            if let termsUrl = URL(string: PRFYTermsUrl) {
+//                UIApplication.shared.openURL(termsUrl)
+//            }
+//        }
         if cell == self.getHelpTableViewCell {
             if let getHelpUrl = URL(string: PRFYGetHelpUrl) {
                 UIApplication.shared.openURL(getHelpUrl)

@@ -16,7 +16,7 @@ class OnboardingViewController: UIViewController {
     @IBOutlet weak var facebookButton: UIButton!
     @IBOutlet weak var signUpButton: UIButton!
     @IBOutlet weak var logInButton: UIButton!
-    @IBOutlet weak var termsButton: UIButton!
+    //@IBOutlet weak var termsButton: UIButton!
     @IBOutlet weak var privacyPolicyButton: UIButton!
     @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
     
@@ -50,8 +50,8 @@ class OnboardingViewController: UIViewController {
         self.signUpButton.setTitleColor(UIColor.white, for: UIControlState.normal)
         self.signUpButton.setTitleColor(UIColor.white.withAlphaComponent(0.2), for: UIControlState.highlighted)
         
-        self.termsButton.setAttributedTitle(NSAttributedString(string: "Terms of Service", attributes: [NSUnderlineStyleAttributeName: NSUnderlineStyle.styleSingle.rawValue, NSForegroundColorAttributeName: UIColor.white]), for: UIControlState.normal)
-        self.privacyPolicyButton.setAttributedTitle(NSAttributedString(string: "Privacy and Policy.", attributes: [NSUnderlineStyleAttributeName: NSUnderlineStyle.styleSingle.rawValue, NSForegroundColorAttributeName: UIColor.white]), for: UIControlState.normal)
+//        self.termsButton.setAttributedTitle(NSAttributedString(string: "Terms of Service", attributes: [NSUnderlineStyleAttributeName: NSUnderlineStyle.styleSingle.rawValue, NSForegroundColorAttributeName: UIColor.white]), for: UIControlState.normal)
+        self.privacyPolicyButton.setAttributedTitle(NSAttributedString(string: "Privacy Policy.", attributes: [NSUnderlineStyleAttributeName: NSUnderlineStyle.styleSingle.rawValue, NSForegroundColorAttributeName: UIColor.white]), for: UIControlState.normal)
         self.logInButton.setAttributedTitle(NSAttributedString(string: "Log in.", attributes: [NSUnderlineStyleAttributeName: NSUnderlineStyle.styleSingle.rawValue, NSForegroundColorAttributeName: UIColor.white]), for: UIControlState.normal)
     }
     
@@ -84,12 +84,12 @@ class OnboardingViewController: UIViewController {
             completion: nil)
     }
     
-    @IBAction func termsButtonTapped(_ sender: Any) {
-        guard let termsUrl = URL(string: PRFYTermsUrl) else {
-            return
-        }
-        UIApplication.shared.openURL(termsUrl)
-    }
+//    @IBAction func termsButtonTapped(_ sender: Any) {
+//        guard let termsUrl = URL(string: PRFYTermsUrl) else {
+//            return
+//        }
+//        UIApplication.shared.openURL(termsUrl)
+//    }
     
     @IBAction func privacyPolicyButtonTapped(_ sender: Any) {
         guard let privacyPolicyUrl = URL(string: PRFYPrivacyPolicyUrl) else {
@@ -111,7 +111,7 @@ class OnboardingViewController: UIViewController {
     fileprivate func enableButtons() {
         // Enable all buttons.
         self.signUpButton.isEnabled = true
-        self.termsButton.isEnabled = true
+        //self.termsButton.isEnabled = true
         self.privacyPolicyButton.isEnabled = true
         self.logInButton.isEnabled = true
         self.facebookButton.isEnabled = true
@@ -141,7 +141,7 @@ class OnboardingViewController: UIViewController {
                 }
                 // Disable all buttons.
                 self.signUpButton.isEnabled = false
-                self.termsButton.isEnabled = false
+                //self.termsButton.isEnabled = false
                 self.privacyPolicyButton.isEnabled = false
                 self.logInButton.isEnabled = false
                 UIView.transition(

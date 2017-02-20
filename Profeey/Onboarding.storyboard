@@ -114,10 +114,10 @@
                                 </subviews>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="lms-kq-Olv">
-                                <rect key="frame" x="85" y="463" width="206" height="29.5"/>
+                                <rect key="frame" x="98.5" y="463" width="179.5" height="29.5"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="eEd-Up-ii0">
-                                        <rect key="frame" x="13.5" y="0.0" width="179.5" height="14.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="179.5" height="14.5"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="By signing up, you agree to our " textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jmm-JZ-Pcs">
                                                 <rect key="frame" x="0.0" y="0.0" width="179.5" height="14.5"/>
@@ -128,29 +128,10 @@
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="IKa-Hg-nn5">
-                                        <rect key="frame" x="0.0" y="14.5" width="206" height="15"/>
+                                        <rect key="frame" x="49.5" y="14.5" width="81" height="15"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="751" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Krp-nF-iDz">
-                                                <rect key="frame" x="0.0" y="0.0" width="98" height="15"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="15" id="z0n-Kd-XOp"/>
-                                                </constraints>
-                                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="12"/>
-                                                <state key="normal" title="Terms of Service">
-                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="termsButtonTapped:" destination="CXt-zB-vbc" eventType="touchUpInside" id="ybd-uu-3Ol"/>
-                                                </connections>
-                                            </button>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="and" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aQp-XG-4C2">
-                                                <rect key="frame" x="101" y="0.0" width="21" height="15"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Haf-at-OKf">
-                                                <rect key="frame" x="125" y="0.0" width="81" height="15"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="81" height="15"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="15" id="0ON-FG-r7I"/>
                                                 </constraints>
@@ -192,7 +173,6 @@
                         <outlet property="logInButton" destination="7kW-lW-eFb" id="yJR-30-U52"/>
                         <outlet property="privacyPolicyButton" destination="Haf-at-OKf" id="W8b-vw-8mi"/>
                         <outlet property="signUpButton" destination="Pxl-u3-F8O" id="IwS-eh-pty"/>
-                        <outlet property="termsButton" destination="Krp-nF-iDz" id="itT-x0-47U"/>
                         <segue destination="b1r-Pe-8L2" kind="show" identifier="segueToUsernameVc" id="m5o-ZM-Co8"/>
                     </connections>
                 </viewController>
@@ -1079,6 +1059,6 @@
         <image name="ic_facebook_signup" width="11" height="20"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="YkC-fP-hTG"/>
+        <segue reference="m5o-ZM-Co8"/>
     </inferredMetricsTieBreakers>
 </document>
