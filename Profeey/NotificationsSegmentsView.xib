@@ -37,7 +37,7 @@
                     </constraints>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="k84-sr-ZgL">
-                    <rect key="frame" x="0.0" y="0.0" width="187.5" height="43"/>
+                    <rect key="frame" x="0.0" y="0.0" width="187.5" height="42"/>
                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
                     <state key="normal" title="Notifications">
                         <color key="titleColor" red="0.41868340970000001" green="0.41867089270000002" blue="0.41867792609999999" alpha="1" colorSpace="calibratedRGB"/>
@@ -47,7 +47,7 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PlM-w3-Cgw">
-                    <rect key="frame" x="187.5" y="0.0" width="187.5" height="43"/>
+                    <rect key="frame" x="187.5" y="0.0" width="187.5" height="42"/>
                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
                     <state key="normal" title="Messages">
                         <color key="titleColor" red="0.41868340970000001" green="0.41867089270000002" blue="0.41867792609999999" alpha="1" colorSpace="calibratedRGB"/>
@@ -57,7 +57,7 @@
                     </connections>
                 </button>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="M33-gS-4YD">
-                    <rect key="frame" x="321" y="20" width="5" height="5"/>
+                    <rect key="frame" x="321" y="19.5" width="5" height="5"/>
                     <color key="backgroundColor" red="0.98658347130000001" green="0.12904104590000001" blue="0.1457204074" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="5" id="6s3-N7-4PQ"/>
@@ -65,7 +65,7 @@
                     </constraints>
                 </view>
                 <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pUF-2G-jkP">
-                    <rect key="frame" x="0.0" y="43" width="375" height="1"/>
+                    <rect key="frame" x="0.0" y="42" width="375" height="2"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wte-Vb-F0Y">
                             <rect key="frame" x="0.0" y="0.0" width="187.5" height="2"/>
@@ -78,7 +78,7 @@
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="trailing" secondItem="wte-Vb-F0Y" secondAttribute="trailing" id="23n-Oa-txx"/>
-                        <constraint firstAttribute="height" constant="1" id="PhP-Q0-rUq"/>
+                        <constraint firstAttribute="height" constant="2" id="PhP-Q0-rUq"/>
                         <constraint firstItem="wte-Vb-F0Y" firstAttribute="top" secondItem="pUF-2G-jkP" secondAttribute="top" id="UdD-b5-DmA"/>
                         <constraint firstAttribute="bottom" secondItem="wte-Vb-F0Y" secondAttribute="bottom" id="a6z-Mo-jPs"/>
                         <constraint firstItem="wte-Vb-F0Y" firstAttribute="leading" secondItem="pUF-2G-jkP" secondAttribute="leading" id="xZG-hj-e3P"/>

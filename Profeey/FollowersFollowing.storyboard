@@ -38,7 +38,7 @@
                                         </constraints>
                                     </view>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YhE-RF-uNn">
-                                        <rect key="frame" x="0.0" y="0.0" width="187.5" height="39"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="187.5" height="38"/>
                                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
                                         <state key="normal" title="Followers">
                                             <color key="titleColor" red="0.41868340970000001" green="0.41867089270000002" blue="0.41867792609999999" alpha="1" colorSpace="calibratedRGB"/>
@@ -48,7 +48,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vbz-tq-BGz">
-                                        <rect key="frame" x="187.5" y="0.0" width="187.5" height="39"/>
+                                        <rect key="frame" x="187.5" y="0.0" width="187.5" height="38"/>
                                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
                                         <state key="normal" title="Following">
                                             <color key="titleColor" red="0.41868340970000001" green="0.41867089270000002" blue="0.41867792609999999" alpha="1" colorSpace="calibratedRGB"/>
@@ -58,13 +58,13 @@
                                         </connections>
                                     </button>
                                     <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dWL-ae-pP8">
-                                        <rect key="frame" x="0.0" y="39" width="375" height="1"/>
+                                        <rect key="frame" x="0.0" y="38" width="375" height="2"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GI7-Sk-QXR">
-                                                <rect key="frame" x="0.0" y="0.0" width="187.5" height="1"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="187.5" height="2"/>
                                                 <color key="backgroundColor" red="0.1184447631" green="0.81979954239999997" blue="0.82960152629999995" alpha="1" colorSpace="calibratedRGB"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="1" id="XWX-yP-eeg"/>
+                                                    <constraint firstAttribute="height" constant="2" id="XWX-yP-eeg"/>
                                                 </constraints>
                                             </view>
                                         </subviews>
@@ -73,7 +73,7 @@
                                             <constraint firstItem="GI7-Sk-QXR" firstAttribute="top" secondItem="dWL-ae-pP8" secondAttribute="top" id="D7G-XD-vX6"/>
                                             <constraint firstAttribute="trailing" secondItem="GI7-Sk-QXR" secondAttribute="trailing" id="DF1-gI-f5Q"/>
                                             <constraint firstAttribute="bottom" secondItem="GI7-Sk-QXR" secondAttribute="bottom" id="MAX-E0-dW9"/>
-                                            <constraint firstAttribute="height" constant="1" id="P4s-Xz-FaM"/>
+                                            <constraint firstAttribute="height" constant="2" id="P4s-Xz-FaM"/>
                                         </constraints>
                                     </scrollView>
                                 </subviews>
