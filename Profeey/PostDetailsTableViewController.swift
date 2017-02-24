@@ -738,8 +738,11 @@ extension PostDetailsTableViewController: PostUserTableViewCellDelegate {
             alertController.addAction(deleteAction)
         } else {
             // Report.
-//            let reportAction = UIAlertAction(title: "Report", style: UIAlertActionStyle.destructive, handler: nil)
-//            alertController.addAction(reportAction)
+            let reportAction = UIAlertAction(title: "Report", style: UIAlertActionStyle.destructive, handler: {
+                (alert: UIAlertAction) in
+                // TODO
+            })
+            alertController.addAction(reportAction)
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil)
         alertController.addAction(cancelAction)
