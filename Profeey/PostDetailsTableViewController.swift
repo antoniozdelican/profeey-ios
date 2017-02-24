@@ -94,6 +94,10 @@ class PostDetailsTableViewController: UITableViewController {
             let childViewController =  navigationController.childViewControllers[0] as? EditPostTableViewController {
             childViewController.editPost = self.post?.copyEditPost()
         }
+        if let navigationController = segue.destination as? UINavigationController,
+            let childViewController =  navigationController.childViewControllers[0] as? ReportTableViewController {
+            childViewController.reportType = ReportType.post
+        }
     }
 
     // MARK: UITableViewDataSource
@@ -740,7 +744,7 @@ extension PostDetailsTableViewController: PostUserTableViewCellDelegate {
             // Report.
             let reportAction = UIAlertAction(title: "Report", style: UIAlertActionStyle.destructive, handler: {
                 (alert: UIAlertAction) in
-                // TODO
+                self.performSegue(withIdentifier: "segueToReportVc", sender: cell)
             })
             alertController.addAction(reportAction)
         }

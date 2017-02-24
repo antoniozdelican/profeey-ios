@@ -143,6 +143,10 @@ class HomeTableViewController: UITableViewController {
             let indexPath = self.tableView.indexPath(for: cell) {
             childViewController.editPost = self.posts[indexPath.section].copyEditPost()
         }
+        if let navigationController = segue.destination as? UINavigationController,
+            let childViewController =  navigationController.childViewControllers[0] as? ReportTableViewController {
+            childViewController.reportType = ReportType.post
+        }
     }
 
     // MARK: UITableViewDataSource
@@ -781,7 +785,7 @@ extension HomeTableViewController: PostUserTableViewCellDelegate {
             // Report.
             let reportAction = UIAlertAction(title: "Report", style: UIAlertActionStyle.destructive, handler: {
                 (alert: UIAlertAction) in
-                // TODO
+                self.performSegue(withIdentifier: "segueToReportVc", sender: cell)
             })
             alertController.addAction(reportAction)
         }

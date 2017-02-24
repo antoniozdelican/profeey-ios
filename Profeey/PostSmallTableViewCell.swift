@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol PostSmallTableViewCellDelegate: class {
+    func moreButtonTapped(_ cell: PostSmallTableViewCell)
+}
+
 class PostSmallTableViewCell: UITableViewCell {
 
     @IBOutlet weak var postImageView: UIImageView!
@@ -16,6 +20,8 @@ class PostSmallTableViewCell: UITableViewCell {
     @IBOutlet weak var createdLabel: UILabel!
     @IBOutlet weak var numberOfLikesLabel: UILabel!
     @IBOutlet weak var numberOfLikesContainerView: UIView!
+    
+    weak var postSmallTableViewCellDelegate: PostSmallTableViewCellDelegate?
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -35,6 +41,12 @@ class PostSmallTableViewCell: UITableViewCell {
         if(highlighted) {
             self.numberOfLikesContainerView.backgroundColor = color
         }
+    }
+    
+    // MARK: IBActions
+    
+    @IBAction func moreButtonTapped(_ sender: AnyObject) {
+        self.postSmallTableViewCellDelegate?.moreButtonTapped(self)
     }
 
 }

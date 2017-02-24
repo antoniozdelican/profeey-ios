@@ -39,7 +39,7 @@
                         <color key="backgroundColor" red="0.97530043129999999" green="0.97527122499999996" blue="0.97528779509999997" alpha="1" colorSpace="calibratedRGB"/>
                         <inset key="separatorInset" minX="12" minY="0.0" maxX="0.0" maxY="0.0"/>
                         <view key="tableFooterView" contentMode="scaleToFill" id="bMC-el-KLH">
-                            <rect key="frame" x="0.0" y="667.5" width="375" height="64"/>
+                            <rect key="frame" x="0.0" y="668" width="375" height="64"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="w08-2s-uex">
@@ -54,7 +54,7 @@
                         </view>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellPostUser" rowHeight="60" id="Zre-gG-70s" customClass="PostUserTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="55.5" width="375" height="60"/>
+                                <rect key="frame" x="0.0" y="56" width="375" height="60"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Zre-gG-70s" id="KSG-Y3-KlG">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="60"/>
@@ -116,7 +116,7 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellPostImage" rowHeight="400" id="hfP-Sb-VdR" customClass="PostImageTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="115.5" width="375" height="400"/>
+                                <rect key="frame" x="0.0" y="116" width="375" height="400"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hfP-Sb-VdR" id="Tfq-vu-CEW">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="400"/>
@@ -153,7 +153,7 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellPostCaption" rowHeight="30" id="3Ba-nR-k2B" customClass="PostCaptionTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="515.5" width="375" height="30"/>
+                                <rect key="frame" x="0.0" y="516" width="375" height="30"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="3Ba-nR-k2B" id="bIn-45-dBY">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="30"/>
@@ -178,7 +178,7 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellPostCategoryCreated" rowHeight="26" id="Jfc-eF-Dar" customClass="PostCategoryCreatedTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="545.5" width="375" height="26"/>
+                                <rect key="frame" x="0.0" y="546" width="375" height="26"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Jfc-eF-Dar" id="jcH-MR-Sg4">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="26"/>
@@ -209,7 +209,7 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellPostButtons" rowHeight="50" id="p0U-dG-J82" customClass="PostButtonsTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="571.5" width="375" height="50"/>
+                                <rect key="frame" x="0.0" y="572" width="375" height="50"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="p0U-dG-J82" id="eul-OE-1Af">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="50"/>
@@ -287,7 +287,7 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellUploading" rowHeight="40" id="a5x-57-e3X" customClass="UploadingTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="621.5" width="375" height="40"/>
+                                <rect key="frame" x="0.0" y="622" width="375" height="40"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="a5x-57-e3X" id="xEe-fD-9RY">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="40"/>
@@ -343,6 +343,7 @@
                         <segue destination="zuL-f0-Fd6" kind="show" identifier="segueToDiscoverPeopleVc" id="eWr-pq-F5O"/>
                         <segue destination="QOG-T2-Jdx" kind="show" identifier="segueToPostDetailsVc" id="kNA-NO-uuB"/>
                         <segue destination="Dwd-vz-ZqW" kind="presentation" identifier="segueToCaptureVc" id="64i-uC-8Di"/>
+                        <segue destination="sP9-6D-Hu4" kind="presentation" identifier="segueToReportVc" id="Pwg-pi-ZVd"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5s8-oY-yAi" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -395,7 +396,15 @@
                 <viewControllerPlaceholder storyboardName="PostDetails" id="QOG-T2-Jdx" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="t6Z-Vx-J0u" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1474" y="696"/>
+            <point key="canvasLocation" x="1477" y="682"/>
+        </scene>
+        <!--Report-->
+        <scene sceneID="Z0E-wm-2As">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Report" id="sP9-6D-Hu4" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ZZt-78-cYh" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1486" y="757"/>
         </scene>
     </scenes>
     <resources>

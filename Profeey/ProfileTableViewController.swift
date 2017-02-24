@@ -202,6 +202,14 @@ class ProfileTableViewController: UITableViewController {
         if let destinationViewController = segue.destination as? MessagesViewController {
             destinationViewController.participant = self.user?.copyUser()
         }
+        if let navigationController = segue.destination as? UINavigationController,
+            let childViewController =  navigationController.childViewControllers[0] as? ReportTableViewController,
+            let cell = sender as? PostSmallTableViewCell,
+            let indexPath = self.tableView.indexPath(for: cell) {
+            // TODO
+            print(indexPath)
+            childViewController.reportType = ReportType.post
+        }
     }
     
     // MARK: UITableViewDataSource
@@ -307,6 +315,7 @@ class ProfileTableViewController: UITableViewController {
             cell.categoryNameLabel.text = post.categoryName
             cell.createdLabel.text = post.createdString
             cell.numberOfLikesLabel.text = post.numberOfLikesSmallString
+            cell.postSmallTableViewCellDelegate = self
             return cell
         case .experience:
             if self.experiences.count == 0 {
@@ -1517,5 +1526,73 @@ extension ProfileTableViewController: ProfileEmptyTableViewCellDelegate {
         case .experience:
             self.performSegue(withIdentifier: "segueToExperiencesVc", sender: self)
         }
+    }
+}
+
+extension ProfileTableViewController: PostSmallTableViewCellDelegate {
+    
+    func moreButtonTapped(_ cell: PostSmallTableViewCell) {
+        guard let indexPath = self.tableView.indexPath(for: cell) else {
+            return
+        }
+        let post = self.posts[indexPath.row]
+        guard let postId = post.postId, let postUserId = post.userId, let imageKey = post.imageUrl else {
+            return
+        }
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
+        // Share.
+        let shareAction = UIAlertAction(title: "Share", style: UIAlertActionStyle.default, handler: {
+            (alert: UIAlertAction) in
+            var activityItems:[Any] = []
+            if postUserId != AWSIdentityManager.defaultIdentityManager().identityId, let preferredUsername = post.user?.preferredUsername {
+                activityItems.append("\(preferredUsername)'s post")
+            }
+            if let image = post.image {
+                activityItems.append(image)
+            }
+            let activityController = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
+            activityController.popoverPresentationController?.barButtonItem = UIBarButtonItem(title: "Share", style: UIBarButtonItemStyle.plain, target: nil, action: nil)
+            self.present(activityController, animated: true, completion: nil)
+        })
+        alertController.addAction(shareAction)
+        
+        if postUserId == AWSIdentityManager.defaultIdentityManager().identityId {
+            // Edit.
+            let editAction = UIAlertAction(title: "Edit", style: UIAlertActionStyle.default, handler: {
+                (alert: UIAlertAction) in
+                // TODO
+                //self.performSegue(withIdentifier: "segueToEditPostVc", sender: cell)
+            })
+            alertController.addAction(editAction)
+            // Delete.
+            let deleteAction = UIAlertAction(title: "Delete", style: UIAlertActionStyle.destructive, handler: {
+                (alert: UIAlertAction) in
+                let alertController = UIAlertController(title: "Delete Post?", message: nil, preferredStyle: UIAlertControllerStyle.alert)
+                let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil)
+                alertController.addAction(cancelAction)
+                let deleteConfirmAction = UIAlertAction(title: "Delete", style: UIAlertActionStyle.default, handler: {
+                    (alert: UIAlertAction) in
+//                    // In background
+//                    self.removePost(postId, imageKey: imageKey)
+//                    // Notifiy observers.
+//                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: DeletePostNotificationKey), object: self, userInfo: ["postId": postId])
+                    
+                    // TODO
+                })
+                alertController.addAction(deleteConfirmAction)
+                self.present(alertController, animated: true, completion: nil)
+            })
+            alertController.addAction(deleteAction)
+        } else {
+            // Report.
+            let reportAction = UIAlertAction(title: "Report", style: UIAlertActionStyle.destructive, handler: {
+                (alert: UIAlertAction) in
+                self.performSegue(withIdentifier: "segueToReportVc", sender: cell)
+            })
+            alertController.addAction(reportAction)
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil)
+        alertController.addAction(cancelAction)
+        self.present(alertController, animated: true, completion: nil)
     }
 }

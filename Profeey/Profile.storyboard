@@ -302,6 +302,9 @@
                                                 <constraint firstAttribute="width" constant="24" id="x1q-SW-430"/>
                                             </constraints>
                                             <state key="normal" image="ic_more_vertical_small"/>
+                                            <connections>
+                                                <action selector="moreButtonTapped:" destination="nIi-SS-ZXM" eventType="touchUpInside" id="x64-EG-zpS"/>
+                                            </connections>
                                         </button>
                                     </subviews>
                                     <constraints>
@@ -700,6 +703,7 @@
                         <segue destination="GtJ-WR-FMF" kind="presentation" identifier="segueToEditProfileVc" id="THS-WD-sY2"/>
                         <segue destination="yok-go-68R" kind="presentation" identifier="segueToCaptureVc" id="6kA-6Z-bfx"/>
                         <segue destination="BdJ-Ea-hvI" kind="show" identifier="segueToDiscoverPeopleVc" id="6da-og-06T"/>
+                        <segue destination="TYQ-XE-est" kind="presentation" identifier="segueToReportVc" id="eOo-cR-S0g"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lwE-Ik-htb" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -785,6 +789,14 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZTa-Wq-kps" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1342" y="-2002"/>
+        </scene>
+        <!--Report-->
+        <scene sceneID="OF2-QN-1Oc">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Report" id="TYQ-XE-est" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="vWK-lc-hdR" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1318" y="-1862"/>
         </scene>
         <!--DiscoverPeople-->
         <scene sceneID="wcW-y4-odq">

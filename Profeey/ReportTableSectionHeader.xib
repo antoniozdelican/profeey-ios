@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="15G1217" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="8WP-Sc-eaw" customClass="ReportTableSectionHeader" customModule="Profeey" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="40"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CHL-Hc-nma">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="40"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Header title" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="akM-O1-V0E">
+                            <rect key="frame" x="16" y="17.5" width="351" height="14.5"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                            <color key="textColor" red="0.4941176471" green="0.4941176471" blue="0.4941176471" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" red="0.97530043129999999" green="0.97527122499999996" blue="0.97528779509999997" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="trailing" secondItem="akM-O1-V0E" secondAttribute="trailing" constant="8" id="3TL-2i-W2D"/>
+                        <constraint firstAttribute="bottom" secondItem="akM-O1-V0E" secondAttribute="bottom" constant="8" id="GRh-wB-00Y"/>
+                        <constraint firstItem="akM-O1-V0E" firstAttribute="leading" secondItem="CHL-Hc-nma" secondAttribute="leading" constant="16" id="k3F-nI-1Ga"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="CHL-Hc-nma" secondAttribute="bottom" id="0d0-ki-xCQ"/>
+                <constraint firstItem="CHL-Hc-nma" firstAttribute="leading" secondItem="8WP-Sc-eaw" secondAttribute="leading" id="7pV-ew-JBt"/>
+                <constraint firstItem="CHL-Hc-nma" firstAttribute="top" secondItem="8WP-Sc-eaw" secondAttribute="top" id="MXD-IN-Lcw"/>
+                <constraint firstAttribute="trailing" secondItem="CHL-Hc-nma" secondAttribute="trailing" id="gP5-jT-J1V"/>
+            </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="titleLabel" destination="akM-O1-V0E" id="VLC-rb-yU1"/>
+            </connections>
+            <point key="canvasLocation" x="55.5" y="54"/>
+        </view>
+    </objects>
+</document>
