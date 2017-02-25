@@ -7,18 +7,28 @@
 //
 
 import UIKit
-import AWSMobileHubHelper
 
-enum ReportType {
-    case user
-    case post
+enum ReportType: String {
+    case user = "USER"
+    case post = "POST"
+}
+
+// Not using on DynamoDB, just here.
+enum ReportMidType: String {
+    case spam = "SPAM"
+    case inappropriate = "INAP"
+}
+
+enum ReportDetailType: String {
+    case spam = "SPAM"
+    case spamFakeAccount = "SPAM_FAKE"
+    case spamHackedAccount = "SPAM_HACK"
+    case inappropriateNudo = "INAP_NUDO"
+    case inappropriateHarm = "INAP_HARM"
+    case inappropriateIntellectual = "INAP_INTE"
 }
 
 class ReportTableViewController: UITableViewController {
-    
-    @IBOutlet weak var headerMessageLabel: UILabel!
-    @IBOutlet weak var spamTableViewCell: UITableViewCell!
-    @IBOutlet weak var inappropriateTableViewCell: UITableViewCell!
     
     var reportType: ReportType?
     var userId: String?
@@ -26,17 +36,7 @@ class ReportTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)        
-        if let reportType = self.reportType {
-            switch reportType {
-            case .user:
-                self.navigationItem.title = "Report User"
-                self.headerMessageLabel.text = "Tell us what's wrong with this user:"
-            case .post:
-                self.navigationItem.title = "Report Post"
-                self.headerMessageLabel.text = "Tell us what's wrong with this post:"
-            }
-        }
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -46,8 +46,54 @@ class ReportTableViewController: UITableViewController {
     // MARK: Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let destinationViewController = segue.destination as? ReportConfirmationTableViewController {
+        if let destinationViewController = segue.destination as? ReportDetailsTableViewController,
+            let cell = sender as? ReportTypeTableViewCell,
+            let indexPath = self.tableView.indexPath(for: cell) {
+            if indexPath.row == 1 {
+                destinationViewController.reportMidType = ReportMidType.spam
+            }
+            if indexPath.row == 2 {
+                destinationViewController.reportMidType = ReportMidType.inappropriate
+            }
             destinationViewController.reportType = self.reportType
+            destinationViewController.userId = self.userId
+            destinationViewController.postId = self.postId
+        }
+    }
+    
+    // MARK: UITableViewDataSource
+    
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 3
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        switch indexPath.row {
+        case 0:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellReportHeader", for: indexPath) as! ReportHeaderTableViewCell
+            if let reportType = self.reportType {
+                switch reportType {
+                case .user:
+                    cell.headerMessageLabel.text = "Tell us what's wrong with this user:"
+                case .post:
+                    cell.headerMessageLabel.text = "Tell us what's wrong with this post:"
+                }
+            }
+            return cell
+        case 1:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellReportType", for: indexPath) as! ReportTypeTableViewCell
+            cell.reportTypeLabel.text = "It's spam"
+            return cell
+        case 2:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellReportType", for: indexPath) as! ReportTypeTableViewCell
+            cell.reportTypeLabel.text = "It's inappropriate"
+            return cell
+        default:
+            return UITableViewCell()
         }
     }
     
@@ -56,23 +102,11 @@ class ReportTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let cell = tableView.cellForRow(at: indexPath)
-        
-        // TODO
-        var userInfo: [String: Any] = [:]
-        if let postId = self.postId {
-            userInfo["postId"] = postId
+        if indexPath.row == 1 {
+            self.performSegue(withIdentifier: "segueToReportDetailsVc", sender: cell)
         }
-        if cell == self.spamTableViewCell {
-            // TODO
-            self.performSegue(withIdentifier: "segueToReportConfirmationVc", sender: cell)
-            
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: CreateReportNotificationKey), object: self, userInfo: userInfo)
-        }
-        if cell == self.inappropriateTableViewCell {
-            // TODO
-            self.performSegue(withIdentifier: "segueToReportConfirmationVc", sender: cell)
-            
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: CreateReportNotificationKey), object: self, userInfo: userInfo)
+        if indexPath.row == 2 {
+            self.performSegue(withIdentifier: "segueToReportDetailsVc", sender: cell)
         }
     }
     
@@ -85,10 +119,7 @@ class ReportTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.row == 0 {
-            return UITableViewAutomaticDimension
-        }
-        return 52.0
+        return UITableViewAutomaticDimension
     }
     
     // MARK: IBActions

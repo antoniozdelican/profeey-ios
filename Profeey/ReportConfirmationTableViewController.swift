@@ -11,8 +11,6 @@ import UIKit
 class ReportConfirmationTableViewController: UITableViewController {
 
     @IBOutlet weak var doneButton: UIButton!
-    @IBOutlet weak var headerMessageLabel: UILabel!
-    @IBOutlet weak var thanksMessageLabel: UILabel!
     
     var reportType: ReportType?
     
@@ -28,12 +26,35 @@ class ReportConfirmationTableViewController: UITableViewController {
                 self.navigationItem.title = "Report Post"
             }
         }
-        self.headerMessageLabel.text = "Your report has been submitted."
-        self.thanksMessageLabel.text = "Thanks for helping us making Profeey a safe place for everybody."
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+    }
+    
+    // MARK: UITableViewDataSource
+    
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 2
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        switch indexPath.row {
+        case 0:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellReportHeader", for: indexPath) as! ReportHeaderTableViewCell
+            cell.headerMessageLabel.text = "Your report has been submitted."
+            return cell
+        case 1:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellReportType", for: indexPath) as! ReportTypeTableViewCell
+            cell.reportTypeLabel.text = "Thanks for helping us making Profeey a safe place for everybody."
+            return cell
+        default:
+            return UITableViewCell()
+        }
     }
 
     // MARK: UITableViewDelegate
