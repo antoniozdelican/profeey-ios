@@ -22,7 +22,7 @@
                             <rect key="frame" x="12" y="6" width="351" height="33"/>
                             <segments>
                                 <segment title="Posts"/>
-                                <segment title="Exeprience"/>
+                                <segment title="Experience"/>
                                 <segment title="Skills"/>
                             </segments>
                             <color key="tintColor" red="0.080254554749999998" green="0.61858558649999995" blue="0.93965935710000004" alpha="1" colorSpace="calibratedRGB"/>

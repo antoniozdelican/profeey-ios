@@ -204,12 +204,15 @@ class ProfileTableViewController: UITableViewController {
             destinationViewController.participant = self.user?.copyUser()
         }
         if let navigationController = segue.destination as? UINavigationController,
-            let childViewController =  navigationController.childViewControllers[0] as? ReportTableViewController,
-            let cell = sender as? PostSmallTableViewCell,
-            let indexPath = self.tableView.indexPath(for: cell) {
-            childViewController.userId = self.posts[indexPath.row].userId
-            childViewController.postId = self.posts[indexPath.row].postId
-            childViewController.reportType = ReportType.post
+            let childViewController =  navigationController.childViewControllers[0] as? ReportTableViewController {
+            if let cell = sender as? PostSmallTableViewCell, let indexPath = self.tableView.indexPath(for: cell) {
+                childViewController.userId = self.posts[indexPath.row].userId
+                childViewController.postId = self.posts[indexPath.row].postId
+                childViewController.reportType = ReportType.post
+            } else {
+                childViewController.userId = self.user?.userId
+                childViewController.reportType = ReportType.user
+            }
         }
         if let navigationController = segue.destination as? UINavigationController,
             let childViewController =  navigationController.childViewControllers[0] as? EditPostTableViewController,
@@ -580,6 +583,34 @@ class ProfileTableViewController: UITableViewController {
         }
     }
     
+    func blockButtonTapped(_ sender: AnyObject) {
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
+        // Block.
+        let blockAction = UIAlertAction(title: "Block", style: UIAlertActionStyle.destructive, handler: {
+            (alert: UIAlertAction) in
+            let message = ["Block", self.user?.preferredUsername].flatMap({ $0 }).joined(separator: " ") + "?"
+            let alertController = UIAlertController(title: nil, message: message, preferredStyle: UIAlertControllerStyle.actionSheet)
+            let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil)
+            alertController.addAction(cancelAction)
+            let blockConfirmAction = UIAlertAction(title: "Block", style: UIAlertActionStyle.destructive, handler: {
+                (alert: UIAlertAction) in
+                // TODO
+            })
+            alertController.addAction(blockConfirmAction)
+            self.present(alertController, animated: true, completion: nil)
+        })
+        alertController.addAction(blockAction)
+        // Report.
+        let reportAction = UIAlertAction(title: "Report", style: UIAlertActionStyle.destructive, handler: {
+            (alert: UIAlertAction) in
+            self.performSegue(withIdentifier: "segueToReportVc", sender: sender)
+        })
+        alertController.addAction(reportAction)
+        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil)
+        alertController.addAction(cancelAction)
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
     func discoverPeopleBarButtonTapped(_ sender: AnyObject) {
         self.performSegue(withIdentifier: "segueToDiscoverPeopleVc", sender: self)
     }
@@ -665,6 +696,7 @@ class ProfileTableViewController: UITableViewController {
                 
                 // Reset flags and animations that were initiated.
                 self.isLoadingUser = false
+                
                 self.navigationItem.title = self.user?.preferredUsername
                 self.refreshControl?.endRefreshing()
                 
@@ -672,8 +704,15 @@ class ProfileTableViewController: UITableViewController {
                 if !self.isSettingsButtonSet {
                     self.isSettingsButtonSet = true
                     self.settingsButton = UIBarButtonItem(image: nil, style: UIBarButtonItemStyle.plain, target: self, action: #selector(self.settingsButtonTapped(_:)))
-                    self.settingsButton?.image = self.isCurrentUser ? UIImage(named: "ic_settings") : UIImage(named: "ic_mail")
-                    self.navigationItem.rightBarButtonItem = self.settingsButton
+                    if self.isCurrentUser {
+                        self.settingsButton?.image = UIImage(named: "ic_settings")
+                        self.navigationItem.rightBarButtonItem = self.settingsButton
+                    } else {
+                        self.settingsButton?.image = UIImage(named: "ic_mail")
+                        let blockButton = UIBarButtonItem(image: UIImage(named: "ic_more_vertical_big"), style: UIBarButtonItemStyle.plain, target: self, action: #selector(self.blockButtonTapped(_:)))
+                        self.navigationItem.rightBarButtonItems = [self.settingsButton!, blockButton]
+                    }
+                    
                 }
                 
                 // Reload cells with downloaded user.

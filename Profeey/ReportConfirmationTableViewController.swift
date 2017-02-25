@@ -18,14 +18,7 @@ class ReportConfirmationTableViewController: UITableViewController {
         super.viewDidLoad()
         self.navigationItem.hidesBackButton = true
         self.doneButton?.contentEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, 0.0, -8.0)
-        if let reportType = self.reportType {
-            switch reportType {
-            case .user:
-                self.navigationItem.title = "Report User"
-            case .post:
-                self.navigationItem.title = "Report Post"
-            }
-        }
+        self.navigationItem.title = (self.reportType == .user) ? "Report User" : "Report Post"
     }
 
     override func didReceiveMemoryWarning() {

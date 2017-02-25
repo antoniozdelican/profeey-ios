@@ -11,7 +11,7 @@ import AWSMobileHubHelper
 
 class ReportDetailsTableViewController: UITableViewController {
     
-    var reportType: ReportType?
+    var reportType: ReportType = ReportType.post
     var reportMidType: ReportMidType?
     var userId: String?
     var postId: String?
@@ -19,14 +19,7 @@ class ReportDetailsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-        if let reportType = self.reportType {
-            switch reportType {
-            case .user:
-                self.navigationItem.title = "Report User"
-            case .post:
-                self.navigationItem.title = "Report Post"
-            }
-        }
+        self.navigationItem.title = (self.reportType == .user) ? "Report User" : "Report Post"
     }
 
     override func didReceiveMemoryWarning() {
@@ -55,21 +48,14 @@ class ReportDetailsTableViewController: UITableViewController {
         switch indexPath.row {
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellReportHeader", for: indexPath) as! ReportHeaderTableViewCell
-            if let reportType = self.reportType {
-                switch reportType {
-                case .user:
-                    cell.headerMessageLabel.text = "What's the reason for reporting this user:"
-                case .post:
-                    cell.headerMessageLabel.text = "What's the reason for reporting this post:"
-                }
-            }
+            cell.headerMessageLabel.text = (self.reportType == .user) ? "What's the reason for reporting this user:" : "What's the reason for reporting this post:"
             return cell
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellReportType", for: indexPath) as! ReportTypeTableViewCell
             if let reportMidType = self.reportMidType {
                 switch reportMidType {
                 case .spam:
-                    cell.reportTypeLabel.text = "It's just spam"
+                    cell.reportTypeLabel.text = (self.reportType == .user) ? "They are just posting spam" : "It's just spam"
                 case .inappropriate:
                     cell.reportTypeLabel.text = "Nudity or pornography"
                 }
@@ -80,7 +66,7 @@ class ReportDetailsTableViewController: UITableViewController {
             if let reportMidType = self.reportMidType {
                 switch reportMidType {
                 case .spam:
-                    cell.reportTypeLabel.text = "It's from a fake account"
+                    cell.reportTypeLabel.text = (self.reportType == .user) ? "It's a fake account" : "It's from a fake account"
                 case .inappropriate:
                     cell.reportTypeLabel.text = "Violence or harm"
                 }
@@ -91,7 +77,7 @@ class ReportDetailsTableViewController: UITableViewController {
             if let reportMidType = self.reportMidType {
                 switch reportMidType {
                 case .spam:
-                    cell.reportTypeLabel.text = "It's from a hacked account"
+                    cell.reportTypeLabel.text = (self.reportType == .user) ? "It's a hacked account" : "It's from a hacked account"
                 case .inappropriate:
                     cell.reportTypeLabel.text = "Intellectual property violation"
                 }
@@ -106,29 +92,29 @@ class ReportDetailsTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        if let reportType = self.reportType, let reportMidType = self.reportMidType {
+        if let reportMidType = self.reportMidType {
             if indexPath.row == 1 {
                 switch reportMidType {
                 case .spam:
-                    self.createReport(reportType, reportDetailType: ReportDetailType.spam)
+                    self.createReport(self.reportType, reportDetailType: ReportDetailType.spam)
                 case .inappropriate:
-                    self.createReport(reportType, reportDetailType: ReportDetailType.inappropriateNudo)
+                    self.createReport(self.reportType, reportDetailType: ReportDetailType.inappropriateNudo)
                 }
             }
             if indexPath.row == 2 {
                 switch reportMidType {
                 case .spam:
-                    self.createReport(reportType, reportDetailType: ReportDetailType.spamFakeAccount)
+                    self.createReport(self.reportType, reportDetailType: ReportDetailType.spamFakeAccount)
                 case .inappropriate:
-                    self.createReport(reportType, reportDetailType: ReportDetailType.inappropriateHarm)
+                    self.createReport(self.reportType, reportDetailType: ReportDetailType.inappropriateHarm)
                 }
             }
             if indexPath.row == 3 {
                 switch reportMidType {
                 case .spam:
-                    self.createReport(reportType, reportDetailType: ReportDetailType.spamHackedAccount)
+                    self.createReport(self.reportType, reportDetailType: ReportDetailType.spamHackedAccount)
                 case .inappropriate:
-                    self.createReport(reportType, reportDetailType: ReportDetailType.inappropriateIntellectual)
+                    self.createReport(self.reportType, reportDetailType: ReportDetailType.inappropriateIntellectual)
                 }
             }
         }

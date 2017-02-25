@@ -30,13 +30,14 @@ enum ReportDetailType: String {
 
 class ReportTableViewController: UITableViewController {
     
-    var reportType: ReportType?
+    var reportType: ReportType = ReportType.post
     var userId: String?
     var postId: String?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        self.navigationItem.title = (self.reportType == .user) ? "Report User" : "Report Post"
     }
 
     override func didReceiveMemoryWarning() {
@@ -75,22 +76,15 @@ class ReportTableViewController: UITableViewController {
         switch indexPath.row {
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellReportHeader", for: indexPath) as! ReportHeaderTableViewCell
-            if let reportType = self.reportType {
-                switch reportType {
-                case .user:
-                    cell.headerMessageLabel.text = "Tell us what's wrong with this user:"
-                case .post:
-                    cell.headerMessageLabel.text = "Tell us what's wrong with this post:"
-                }
-            }
+            cell.headerMessageLabel.text = (self.reportType == .user) ? "Tell us what's wrong with this user:" : "Tell us what's wrong with this post:"
             return cell
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellReportType", for: indexPath) as! ReportTypeTableViewCell
-            cell.reportTypeLabel.text = "It's spam"
+            cell.reportTypeLabel.text = (self.reportType == .user) ? "They are posting spam" : "It's spam"
             return cell
         case 2:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellReportType", for: indexPath) as! ReportTypeTableViewCell
-            cell.reportTypeLabel.text = "It's inappropriate"
+            cell.reportTypeLabel.text = (self.reportType == .user) ? "They are being inappropriate" : "It's inappropriate"
             return cell
         default:
             return UITableViewCell()
