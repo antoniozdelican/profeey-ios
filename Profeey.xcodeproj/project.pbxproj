@@ -262,6 +262,7 @@
 		A9EAD3401D1E8E0C00994292 /* NoSQLModelHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9EAD33F1D1E8E0C00994292 /* NoSQLModelHelpers.swift */; };
 		A9EAEC071DA6A38600DA6A4D /* AWSPostUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9EAEC061DA6A38600DA6A4D /* AWSPostUpdate.swift */; };
 		A9EC9E391E086EAD00A5F619 /* EditPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9EC9E381E086EAD00A5F619 /* EditPost.swift */; };
+		A9F179E51E61B7DD00A15292 /* PostReportTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F179E41E61B7DD00A15292 /* PostReportTableViewCell.swift */; };
 		A9F2E7881DE89FF7001A25EC /* TTTAttributedLabel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9F2E7871DE89FF7001A25EC /* TTTAttributedLabel.framework */; };
 		A9F2E78A1DE8A003001A25EC /* TTTAttributedLabel.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A9F2E7871DE89FF7001A25EC /* TTTAttributedLabel.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A9F49D571D379D01002EB68B /* AWSPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F49D561D379D01002EB68B /* AWSPost.swift */; };
@@ -554,6 +555,7 @@
 		A9EAD33F1D1E8E0C00994292 /* NoSQLModelHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoSQLModelHelpers.swift; sourceTree = "<group>"; };
 		A9EAEC061DA6A38600DA6A4D /* AWSPostUpdate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSPostUpdate.swift; sourceTree = "<group>"; };
 		A9EC9E381E086EAD00A5F619 /* EditPost.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditPost.swift; sourceTree = "<group>"; };
+		A9F179E41E61B7DD00A15292 /* PostReportTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostReportTableViewCell.swift; sourceTree = "<group>"; };
 		A9F2E7871DE89FF7001A25EC /* TTTAttributedLabel.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TTTAttributedLabel.framework; path = Profeey/TTTAttributedLabel.framework; sourceTree = "<group>"; };
 		A9F49D561D379D01002EB68B /* AWSPost.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSPost.swift; sourceTree = "<group>"; };
 		A9F49D591D379D70002EB68B /* AWSPostsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSPostsTable.swift; sourceTree = "<group>"; };
@@ -1024,6 +1026,7 @@
 				A943494E1E38FF2F004E96BF /* PostCategoryCreatedTableViewCell.swift */,
 				A9D334111D801B70005565C2 /* PostButtonsTableViewCell.swift */,
 				A96C9AB41D7DADC3007E0B9D /* UploadingTableViewCell.swift */,
+				A9F179E41E61B7DD00A15292 /* PostReportTableViewCell.swift */,
 			);
 			name = "Post Cells";
 			sourceTree = "<group>";
@@ -1758,6 +1761,7 @@
 				A97A9AED1D85D0ED00507517 /* ProfessionsTableViewController.swift in Sources */,
 				A9CBBC561DB64A0E009C8EC7 /* EditEducationSchoolTableViewCell.swift in Sources */,
 				A901CFE71DA78DDC00C44B26 /* CaptureScrollViewController.swift in Sources */,
+				A9F179E51E61B7DD00A15292 /* PostReportTableViewCell.swift in Sources */,
 				A96C9AB51D7DADC3007E0B9D /* UploadingTableViewCell.swift in Sources */,
 				A9C88E631E22783200B7D2E7 /* AWSMessagesTable.swift in Sources */,
 				A9D828751E07DDC30085FD95 /* NSNotificationCenterKeys.swift in Sources */,

@@ -21,6 +21,8 @@ class ReportTableViewController: UITableViewController {
     @IBOutlet weak var inappropriateTableViewCell: UITableViewCell!
     
     var reportType: ReportType?
+    var userId: String?
+    var postId: String?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,13 +56,23 @@ class ReportTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let cell = tableView.cellForRow(at: indexPath)
+        
+        // TODO
+        var userInfo: [String: Any] = [:]
+        if let postId = self.postId {
+            userInfo["postId"] = postId
+        }
         if cell == self.spamTableViewCell {
             // TODO
             self.performSegue(withIdentifier: "segueToReportConfirmationVc", sender: cell)
+            
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: CreateReportNotificationKey), object: self, userInfo: userInfo)
         }
         if cell == self.inappropriateTableViewCell {
             // TODO
             self.performSegue(withIdentifier: "segueToReportConfirmationVc", sender: cell)
+            
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: CreateReportNotificationKey), object: self, userInfo: userInfo)
         }
     }
     

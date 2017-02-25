@@ -69,6 +69,7 @@ class PostDetailsTableViewController: UITableViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(self.createCommentNotification(_:)), name: NSNotification.Name(CreateCommentNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.deleteCommentNotification(_:)), name: NSNotification.Name(DeleteCommentNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.downloadImageNotification(_:)), name: NSNotification.Name(DownloadImageNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.createReportNotification(_:)), name: NSNotification.Name(CreateReportNotificationKey), object: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -96,6 +97,7 @@ class PostDetailsTableViewController: UITableViewController {
         }
         if let navigationController = segue.destination as? UINavigationController,
             let childViewController =  navigationController.childViewControllers[0] as? ReportTableViewController {
+            childViewController.postId = self.post?.postId
             childViewController.reportType = ReportType.post
         }
     }
@@ -106,10 +108,18 @@ class PostDetailsTableViewController: UITableViewController {
         if self.shouldDownloadPost, self.isLoadingPost {
             return 0
         }
+        // Reported post.
+        if let post = self.post, post.isReportedByCurrentUser {
+            return 1
+        }
         return 2
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        // Reported post.
+        if let post = self.post, post.isReportedByCurrentUser {
+            return 1
+        }
         if section == 0 {
             return 5
         }
@@ -120,6 +130,11 @@ class PostDetailsTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        // Reported post.
+        if let post = self.post, post.isReportedByCurrentUser {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostReport", for: indexPath) as! PostReportTableViewCell
+            return cell
+        }
         if indexPath.section == 0 {
             switch indexPath.row {
             case 0:
@@ -213,6 +228,10 @@ class PostDetailsTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        // Reported post.
+        if let post = self.post, post.isReportedByCurrentUser {
+            return 200.0
+        }
         if indexPath.section == 0 {
             switch indexPath.row {
             case 0:
@@ -236,6 +255,10 @@ class PostDetailsTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        // Reported post.
+        if let post = self.post, post.isReportedByCurrentUser {
+            return 200.0
+        }
         if indexPath.section == 0 {
             switch indexPath.row {
             case 0:
@@ -693,6 +716,17 @@ extension PostDetailsTableViewController {
             self.post?.image = UIImage(data: imageData)
             (self.tableView.cellForRow(at: IndexPath(row: 1, section: 0)) as? PostImageTableViewCell)?.postImageView.image = self.post?.image
         }
+    }
+    
+    func createReportNotification(_ notification: NSNotification) {
+        guard let postId = notification.userInfo?["postId"] as? String else {
+            return
+        }
+        guard let post = self.post, post.postId == postId else {
+            return
+        }
+        post.isReportedByCurrentUser = true
+        self.tableView.reloadData()
     }
 }
 

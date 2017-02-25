@@ -50,6 +50,9 @@ class PostDetailsViewController: UIViewController {
         self.commentContainerView.layer.borderWidth = 0.5
         self.commentContainerView.layer.borderColor = Colors.greyLight.cgColor
         self.commentContainerView.clipsToBounds = true
+        
+        // Add observers.
+        NotificationCenter.default.addObserver(self, selector: #selector(self.createReportNotification(_:)), name: NSNotification.Name(CreateReportNotificationKey), object: nil)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -203,6 +206,16 @@ class PostDetailsViewController: UIViewController {
         self.commentBarHeightConstraint.constant = self.commentBarHeightConstraintConstant
     }
 
+}
+
+extension PostDetailsViewController {
+    
+    // MARK: NotificationCenterActions
+    
+    func createReportNotification(_ notification: NSNotification) {
+        self.resetCommentBox()
+        self.commentTextView.isEditable = false
+    }
 }
 
 extension PostDetailsViewController: UITextViewDelegate {

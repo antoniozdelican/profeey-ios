@@ -83,6 +83,7 @@ class HomeTableViewController: UITableViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(self.deleteCommentNotification(_:)), name: NSNotification.Name(DeleteCommentNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.followUserNotification(_:)), name: NSNotification.Name(FollowUserNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.downloadImageNotification(_:)), name: NSNotification.Name(DownloadImageNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.createReportNotification(_:)), name: NSNotification.Name(CreateReportNotificationKey), object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -144,7 +145,10 @@ class HomeTableViewController: UITableViewController {
             childViewController.editPost = self.posts[indexPath.section].copyEditPost()
         }
         if let navigationController = segue.destination as? UINavigationController,
-            let childViewController =  navigationController.childViewControllers[0] as? ReportTableViewController {
+            let childViewController =  navigationController.childViewControllers[0] as? ReportTableViewController,
+            let cell = sender as? PostUserTableViewCell,
+            let indexPath = self.tableView.indexPath(for: cell) {
+            childViewController.postId = self.posts[indexPath.section].postId
             childViewController.reportType = ReportType.post
         }
     }
@@ -165,6 +169,10 @@ class HomeTableViewController: UITableViewController {
         if section == 0 && self.isUploading {
             return 2
         }
+        // Reported posts.
+        if self.posts[section].isReportedByCurrentUser {
+            return 1
+        }
         return 5
     }
 
@@ -173,6 +181,11 @@ class HomeTableViewController: UITableViewController {
         let user = post.user
         switch indexPath.row {
         case 0:
+            // Reported posts.
+            if self.posts[indexPath.section].isReportedByCurrentUser {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostReport", for: indexPath) as! PostReportTableViewCell
+                return cell
+            }
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostUser", for: indexPath) as! PostUserTableViewCell
             cell.profilePicImageView.image = user?.profilePicUrl != nil ? user?.profilePic : UIImage(named: "ic_no_profile_pic_feed")
             cell.preferredUsernameLabel.text = user?.preferredUsername
@@ -259,6 +272,10 @@ class HomeTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.row {
         case 0:
+            // Reported posts.
+            if self.posts[indexPath.section].isReportedByCurrentUser {
+                return 200.0
+            }
             return 60.0
         case 1:
             if indexPath.section == 0 && self.isUploading {
@@ -283,6 +300,10 @@ class HomeTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.row {
         case 0:
+            // Reported posts.
+            if self.posts[indexPath.section].isReportedByCurrentUser {
+                return 200.0
+            }
             return 60.0
         case 1:
             if indexPath.section == 0 && self.isUploading {
@@ -718,6 +739,18 @@ extension HomeTableViewController {
                 }
             }
         }
+    }
+    
+    func createReportNotification(_ notification: NSNotification) {
+        guard let postId = notification.userInfo?["postId"] as? String else {
+            return
+        }
+        guard let postIndex = self.posts.index(where: { $0.postId == postId }) else {
+            return
+        }
+        let post = self.posts[postIndex]
+        post.isReportedByCurrentUser = true
+        self.tableView.reloadSections(IndexSet([postIndex]), with: UITableViewRowAnimation.none)
     }
     
     // MARK: Public
