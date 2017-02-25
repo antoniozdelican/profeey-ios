@@ -207,6 +207,7 @@ class ProfileTableViewController: UITableViewController {
             let childViewController =  navigationController.childViewControllers[0] as? ReportTableViewController,
             let cell = sender as? PostSmallTableViewCell,
             let indexPath = self.tableView.indexPath(for: cell) {
+            childViewController.userId = self.posts[indexPath.row].userId
             childViewController.postId = self.posts[indexPath.row].postId
             childViewController.reportType = ReportType.post
         }

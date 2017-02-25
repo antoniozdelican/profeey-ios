@@ -832,4 +832,20 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         let awsConversationsUnseenIndex = AWSConversationsUnseenIndex()
         awsConversationsUnseenIndex.queryUnseenConversations(identityId, completionHandler: completionHandler)
     }
+    
+    // MARK: Reports
+    
+    func createReportDynamoDB(_ reportedUserId: String, reportedPostId: String?, reportType: ReportType, reportDetailType: ReportDetailType, completionHandler: @escaping AWSContinuationBlock){
+        guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
+            print("createReportDynamoDB no identityId!")
+            AWSTask().continue(completionHandler)
+            return
+        }
+        let created = NSNumber(value: Date().timeIntervalSince1970 as Double)
+        // Put reportId depending on reportedType aka if it has reportedPostId put it as reportId (so there's no duplicate reports).
+        let reportId = reportedPostId != nil ? reportedPostId : reportedUserId
+        let awsReportsTable = AWSReportsTable()
+        let awsReport = AWSReport(_userId: identityId, _reportId: reportId, _created: created, _reportedUserId: reportedUserId, _reportedPostId: reportedPostId, _reportType: reportType.rawValue, _reportDetailType: reportDetailType.rawValue)
+        awsReportsTable.createReport(awsReport, completionHandler: completionHandler)
+    }
 }

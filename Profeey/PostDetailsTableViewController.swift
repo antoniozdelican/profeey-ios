@@ -97,6 +97,7 @@ class PostDetailsTableViewController: UITableViewController {
         }
         if let navigationController = segue.destination as? UINavigationController,
             let childViewController =  navigationController.childViewControllers[0] as? ReportTableViewController {
+            childViewController.userId = self.post?.userId
             childViewController.postId = self.post?.postId
             childViewController.reportType = ReportType.post
         }

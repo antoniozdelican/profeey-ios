@@ -144,4 +144,8 @@ protocol DynamoDBManager {
     func removeConversationDynamoDB(_ conversationId: String, completionHandler: @escaping AWSContinuationBlock)
     func queryConversationsDateSortedDynamoDB(_ lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
     func queryUnseenConversationsDynamoDB(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
+    
+    // MARK: Reports
+    
+    func createReportDynamoDB(_ reportedUserId: String, reportedPostId: String?, reportType: ReportType, reportDetailType: ReportDetailType, completionHandler: @escaping AWSContinuationBlock)
 }

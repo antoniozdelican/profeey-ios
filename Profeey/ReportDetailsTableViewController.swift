@@ -110,25 +110,25 @@ class ReportDetailsTableViewController: UITableViewController {
             if indexPath.row == 1 {
                 switch reportMidType {
                 case .spam:
-                    self.test(reportType, reportDetailType: ReportDetailType.spam)
+                    self.createReport(reportType, reportDetailType: ReportDetailType.spam)
                 case .inappropriate:
-                    self.test(reportType, reportDetailType: ReportDetailType.inappropriateNudo)
+                    self.createReport(reportType, reportDetailType: ReportDetailType.inappropriateNudo)
                 }
             }
             if indexPath.row == 2 {
                 switch reportMidType {
                 case .spam:
-                    self.test(reportType, reportDetailType: ReportDetailType.spamFakeAccount)
+                    self.createReport(reportType, reportDetailType: ReportDetailType.spamFakeAccount)
                 case .inappropriate:
-                    self.test(reportType, reportDetailType: ReportDetailType.inappropriateHarm)
+                    self.createReport(reportType, reportDetailType: ReportDetailType.inappropriateHarm)
                 }
             }
             if indexPath.row == 3 {
                 switch reportMidType {
                 case .spam:
-                    self.test(reportType, reportDetailType: ReportDetailType.spamHackedAccount)
+                    self.createReport(reportType, reportDetailType: ReportDetailType.spamHackedAccount)
                 case .inappropriate:
-                    self.test(reportType, reportDetailType: ReportDetailType.inappropriateIntellectual)
+                    self.createReport(reportType, reportDetailType: ReportDetailType.inappropriateIntellectual)
                 }
             }
         }
@@ -148,21 +148,32 @@ class ReportDetailsTableViewController: UITableViewController {
     
     // MARK: AWS
     
-    private func test(_ reportType: ReportType, reportDetailType: ReportDetailType) {
-        print(reportType)
-        print(reportDetailType)
-        
-        // TEST
-        var userInfo: [String: Any] = [:]
-        if let userId = self.userId {
-            userInfo["userId"] = userId
+    fileprivate func createReport(_ reportType: ReportType, reportDetailType: ReportDetailType) {
+        guard let reportedUserId = self.userId else {
+            return
         }
-        if let postId = self.postId {
-            userInfo["postId"] = postId
-        }
-        NotificationCenter.default.post(name: NSNotification.Name(rawValue: CreateReportNotificationKey), object: self, userInfo: userInfo)
-        
-        self.performSegue(withIdentifier: "segueToReportConfirmationVc", sender: self)
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        FullScreenIndicator.show()
+        PRFYDynamoDBManager.defaultDynamoDBManager().createReportDynamoDB(reportedUserId, reportedPostId: self.postId, reportType: reportType, reportDetailType: reportDetailType, completionHandler: {
+            (task: AWSTask) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                FullScreenIndicator.hide()
+                if let error = task.error {
+                    print("createReport error: \(error)")
+                    let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error.localizedDescription, cancelButtonTitle: "Ok")
+                    self.present(alertController, animated: true, completion: nil)
+                } else {
+                    var userInfo: [String: Any] = ["userId": reportedUserId]
+                    if let postId = self.postId {
+                        userInfo["postId"] = postId
+                    }
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: CreateReportNotificationKey), object: self, userInfo: userInfo)
+                    self.performSegue(withIdentifier: "segueToReportConfirmationVc", sender: self)
+                }
+            })
+            return nil
+        })
     }
 
 }

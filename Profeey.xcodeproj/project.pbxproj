@@ -266,6 +266,8 @@
 		A9F179E71E61ECDF00A15292 /* ReportDetailsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F179E61E61ECDF00A15292 /* ReportDetailsTableViewController.swift */; };
 		A9F179E91E61F1AA00A15292 /* ReportHeaderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F179E81E61F1AA00A15292 /* ReportHeaderTableViewCell.swift */; };
 		A9F179EB1E61F1B800A15292 /* ReportTypeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F179EA1E61F1B800A15292 /* ReportTypeTableViewCell.swift */; };
+		A9F179EE1E62020F00A15292 /* AWSReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F179ED1E62020F00A15292 /* AWSReport.swift */; };
+		A9F179F01E62021E00A15292 /* AWSReportsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F179EF1E62021E00A15292 /* AWSReportsTable.swift */; };
 		A9F2E7881DE89FF7001A25EC /* TTTAttributedLabel.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9F2E7871DE89FF7001A25EC /* TTTAttributedLabel.framework */; };
 		A9F2E78A1DE8A003001A25EC /* TTTAttributedLabel.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A9F2E7871DE89FF7001A25EC /* TTTAttributedLabel.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A9F49D571D379D01002EB68B /* AWSPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F49D561D379D01002EB68B /* AWSPost.swift */; };
@@ -562,6 +564,8 @@
 		A9F179E61E61ECDF00A15292 /* ReportDetailsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReportDetailsTableViewController.swift; sourceTree = "<group>"; };
 		A9F179E81E61F1AA00A15292 /* ReportHeaderTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReportHeaderTableViewCell.swift; sourceTree = "<group>"; };
 		A9F179EA1E61F1B800A15292 /* ReportTypeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReportTypeTableViewCell.swift; sourceTree = "<group>"; };
+		A9F179ED1E62020F00A15292 /* AWSReport.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSReport.swift; sourceTree = "<group>"; };
+		A9F179EF1E62021E00A15292 /* AWSReportsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSReportsTable.swift; sourceTree = "<group>"; };
 		A9F2E7871DE89FF7001A25EC /* TTTAttributedLabel.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TTTAttributedLabel.framework; path = Profeey/TTTAttributedLabel.framework; sourceTree = "<group>"; };
 		A9F49D561D379D01002EB68B /* AWSPost.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSPost.swift; sourceTree = "<group>"; };
 		A9F49D591D379D70002EB68B /* AWSPostsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSPostsTable.swift; sourceTree = "<group>"; };
@@ -1418,6 +1422,7 @@
 				A97A3F631DF0271000FC5AEA /* AWSEndpointUsers */,
 				A9C88E5F1E22780E00B7D2E7 /* AWSMessages */,
 				A94368811E23AD4E0009F4EA /* AWSConversations */,
+				A9F179EC1E6201F700A15292 /* AWSReport */,
 				A9D688801E0AE01100A07D86 /* AWSSearch */,
 				A9CC71A81DEB44DE0054DA93 /* DynamoDB */,
 				A9BA21CF1E15068300D9A035 /* S3 */,
@@ -1432,6 +1437,15 @@
 				A9EC9E381E086EAD00A5F619 /* EditPost.swift */,
 			);
 			name = Post;
+			sourceTree = "<group>";
+		};
+		A9F179EC1E6201F700A15292 /* AWSReport */ = {
+			isa = PBXGroup;
+			children = (
+				A9F179ED1E62020F00A15292 /* AWSReport.swift */,
+				A9F179EF1E62021E00A15292 /* AWSReportsTable.swift */,
+			);
+			name = AWSReport;
 			sourceTree = "<group>";
 		};
 		A9F49D581D379D58002EB68B /* AWSPosts */ = {
@@ -1654,6 +1668,7 @@
 				A9ACA7491DB50AF40004B8DE /* WorkExperience.swift in Sources */,
 				A9A503A11D2FE0A90030A472 /* AWSUsersTable.swift in Sources */,
 				A9D49EE01DD5C834000F90A8 /* UserCategory.swift in Sources */,
+				A9F179EE1E62020F00A15292 /* AWSReport.swift in Sources */,
 				A913FC701D51F6AF000D10A6 /* DynamoDBManager.swift in Sources */,
 				A9D49EDE1DD5C583000F90A8 /* UserCategoryTableViewCell.swift in Sources */,
 				A9CBBC641DB66856009C8EC7 /* EducationTableViewCell.swift in Sources */,
@@ -1720,6 +1735,7 @@
 				A9CBBC661DB669EA009C8EC7 /* EditEducationDescriptionTableViewCell.swift in Sources */,
 				A9EAEC071DA6A38600DA6A4D /* AWSPostUpdate.swift in Sources */,
 				A9A21DB51D95397A0093F162 /* UsernameTableViewController.swift in Sources */,
+				A9F179F01E62021E00A15292 /* AWSReportsTable.swift in Sources */,
 				A9BA21D11E1506B200D9A035 /* PRFYS3Manager.swift in Sources */,
 				A99FD1A31DCA657400BD2CC5 /* AWSCommentUpdate.swift in Sources */,
 				A9C0ED3A1D3C21C30036F791 /* Post.swift in Sources */,

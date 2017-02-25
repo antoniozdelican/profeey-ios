@@ -55,9 +55,9 @@ class ReportTableViewController: UITableViewController {
             if indexPath.row == 2 {
                 destinationViewController.reportMidType = ReportMidType.inappropriate
             }
-            destinationViewController.reportType = self.reportType
             destinationViewController.userId = self.userId
             destinationViewController.postId = self.postId
+            destinationViewController.reportType = self.reportType
         }
     }
     

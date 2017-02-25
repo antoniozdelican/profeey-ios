@@ -148,6 +148,7 @@ class HomeTableViewController: UITableViewController {
             let childViewController =  navigationController.childViewControllers[0] as? ReportTableViewController,
             let cell = sender as? PostUserTableViewCell,
             let indexPath = self.tableView.indexPath(for: cell) {
+            childViewController.userId = self.posts[indexPath.section].userId
             childViewController.postId = self.posts[indexPath.section].postId
             childViewController.reportType = ReportType.post
         }
