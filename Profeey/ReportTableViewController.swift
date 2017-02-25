@@ -16,6 +16,7 @@ enum ReportType {
 
 class ReportTableViewController: UITableViewController {
     
+    @IBOutlet weak var headerMessageLabel: UILabel!
     @IBOutlet weak var spamTableViewCell: UITableViewCell!
     @IBOutlet weak var inappropriateTableViewCell: UITableViewCell!
     
@@ -28,11 +29,12 @@ class ReportTableViewController: UITableViewController {
             switch reportType {
             case .user:
                 self.navigationItem.title = "Report User"
+                self.headerMessageLabel.text = "Tell us what's wrong with this user:"
             case .post:
                 self.navigationItem.title = "Report Post"
+                self.headerMessageLabel.text = "Tell us what's wrong with this post:"
             }
         }
-        self.tableView.register(UINib(nibName: "ReportTableSectionHeader", bundle: nil), forHeaderFooterViewReuseIdentifier: "reportTableSectionHeader")
     }
 
     override func didReceiveMemoryWarning() {
@@ -62,21 +64,19 @@ class ReportTableViewController: UITableViewController {
         }
     }
     
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let header = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "reportTableSectionHeader") as? ReportTableSectionHeader
-        if let reportType = self.reportType {
-            switch reportType {
-            case .user:
-                header?.titleLabel.text = "Tell us what's wrong with this user."
-            case .post:
-                header?.titleLabel.text = "Tell us what's wrong with this post."
-            }
-        }
-        return header
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.layoutMargins = UIEdgeInsets.zero
     }
     
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 60.0
+    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 52.0
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.row == 0 {
+            return UITableViewAutomaticDimension
+        }
+        return 52.0
     }
     
     // MARK: IBActions

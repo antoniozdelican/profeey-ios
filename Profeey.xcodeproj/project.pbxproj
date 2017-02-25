@@ -29,8 +29,6 @@
 		A91C1CD71DEDA669006FBDD4 /* NotificationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91C1CD61DEDA669006FBDD4 /* NotificationTableViewCell.swift */; };
 		A91C1CD91DEDA8C2006FBDD4 /* PRFYNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91C1CD81DEDA8C2006FBDD4 /* PRFYNotification.swift */; };
 		A928CCB81E369B7C0030ACA9 /* VerifyEmailTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A928CCB71E369B7C0030ACA9 /* VerifyEmailTableViewController.swift */; };
-		A92A86BA1E6061D800EB0162 /* ReportTableSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A92A86B91E6061D800EB0162 /* ReportTableSectionHeader.swift */; };
-		A92A86BC1E6061E600EB0162 /* ReportTableSectionHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = A92A86BB1E6061E600EB0162 /* ReportTableSectionHeader.xib */; };
 		A92A86BE1E606E1300EB0162 /* ReportConfirmationTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A92A86BD1E606E1300EB0162 /* ReportConfirmationTableViewController.swift */; };
 		A92F93ED1DC3940A00065CD1 /* EditProfileTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A92F93EC1DC3940A00065CD1 /* EditProfileTableViewController.swift */; };
 		A930BC7C1D0DD43F004D49F7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A930BC7B1D0DD43F004D49F7 /* AppDelegate.swift */; };
@@ -319,8 +317,6 @@
 		A91C1CD61DEDA669006FBDD4 /* NotificationTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationTableViewCell.swift; sourceTree = "<group>"; };
 		A91C1CD81DEDA8C2006FBDD4 /* PRFYNotification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PRFYNotification.swift; sourceTree = "<group>"; };
 		A928CCB71E369B7C0030ACA9 /* VerifyEmailTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerifyEmailTableViewController.swift; sourceTree = "<group>"; };
-		A92A86B91E6061D800EB0162 /* ReportTableSectionHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReportTableSectionHeader.swift; sourceTree = "<group>"; };
-		A92A86BB1E6061E600EB0162 /* ReportTableSectionHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ReportTableSectionHeader.xib; sourceTree = "<group>"; };
 		A92A86BD1E606E1300EB0162 /* ReportConfirmationTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReportConfirmationTableViewController.swift; sourceTree = "<group>"; };
 		A92F93EC1DC3940A00065CD1 /* EditProfileTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditProfileTableViewController.swift; sourceTree = "<group>"; };
 		A930BC781D0DD43E004D49F7 /* Profeey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Profeey.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -782,8 +778,6 @@
 				A945078C1E605D24000D1F97 /* Report.storyboard */,
 				A945078E1E605E5B000D1F97 /* ReportTableViewController.swift */,
 				A92A86BD1E606E1300EB0162 /* ReportConfirmationTableViewController.swift */,
-				A92A86BB1E6061E600EB0162 /* ReportTableSectionHeader.xib */,
-				A92A86B91E6061D800EB0162 /* ReportTableSectionHeader.swift */,
 			);
 			name = Report;
 			sourceTree = "<group>";
@@ -1525,7 +1519,6 @@
 				A945078D1E605D24000D1F97 /* Report.storyboard in Resources */,
 				A94368741E2389A20009F4EA /* NotificationsSegmentsView.xib in Resources */,
 				A9AFFB0D1D8AFEB800219627 /* Categories.storyboard in Resources */,
-				A92A86BC1E6061E600EB0162 /* ReportTableSectionHeader.xib in Resources */,
 				A9543CAB1DA3A1ED002BF372 /* EditPost.storyboard in Resources */,
 				A9A503A71D2FF8450030A472 /* EditProfile.storyboard in Resources */,
 				A95E93AF1DBF6D0000A1FF6E /* Profession.storyboard in Resources */,
@@ -1593,7 +1586,6 @@
 				A9B7A2441D65A562009DA340 /* Category.swift in Sources */,
 				A9CBBC621DB66134009C8EC7 /* ExperiencesTableSectionHeader.swift in Sources */,
 				A9CBBC581DB64A2B009C8EC7 /* EditEducationFieldOfStudyTableViewCell.swift in Sources */,
-				A92A86BA1E6061D800EB0162 /* ReportTableSectionHeader.swift in Sources */,
 				A943687A1E239E6C0009F4EA /* ConversationsTableViewController.swift in Sources */,
 				A9C88E611E22782700B7D2E7 /* AWSMessage.swift in Sources */,
 				A9CBBC451DB634A8009C8EC7 /* EditWorkExperienceTableViewController.swift in Sources */,
