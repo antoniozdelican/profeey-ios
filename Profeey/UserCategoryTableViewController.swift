@@ -43,6 +43,7 @@ class UserCategoryTableViewController: UITableViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(self.createCommentNotification(_:)), name: NSNotification.Name(CreateCommentNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.deleteCommentNotification(_:)), name: NSNotification.Name(DeleteCommentNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.downloadImageNotification(_:)), name: NSNotification.Name(DownloadImageNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.createReportNotification(_:)), name: NSNotification.Name(CreateReportNotificationKey), object: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -61,9 +62,14 @@ class UserCategoryTableViewController: UITableViewController {
             let childViewController =  navigationController.childViewControllers[0] as? ReportTableViewController,
             let cell = sender as? PostSmallTableViewCell,
             let indexPath = self.tableView.indexPath(for: cell) {
-            // TODO
-            print(indexPath)
+            childViewController.postId = self.posts[indexPath.row].postId
             childViewController.reportType = ReportType.post
+        }
+        if let navigationController = segue.destination as? UINavigationController,
+            let childViewController =  navigationController.childViewControllers[0] as? EditPostTableViewController,
+            let cell = sender as? PostSmallTableViewCell,
+            let indexPath = self.tableView.indexPath(for: cell) {
+            childViewController.editPost = self.posts[indexPath.row].copyEditPost()
         }
     }
 
@@ -84,6 +90,11 @@ class UserCategoryTableViewController: UITableViewController {
         if !self.isLoadingPosts && self.posts.count == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellEmpty", for: indexPath) as! EmptyTableViewCell
             cell.emptyMessageLabel.text = "No posts yet."
+            return cell
+        }
+        // Reported posts.
+        if self.posts[indexPath.row].isReportedByCurrentUser {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostReport", for: indexPath) as! PostReportTableViewCell
             return cell
         }
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostSmall", for: indexPath) as! PostSmallTableViewCell
@@ -223,6 +234,23 @@ class UserCategoryTableViewController: UITableViewController {
             })
         })
     }
+    
+    // In background.
+    fileprivate func removePost(_ postId: String, imageKey: String) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().removePostDynamoDB(postId, completionHandler: {
+            (task: AWSTask) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                if let error = task.error {
+                    print("removePost error: \(error)")
+                } else {
+                    PRFYS3Manager.defaultS3Manager().removeImageS3(imageKey)
+                }
+            })
+            return nil
+        })
+    }
 }
 
 extension UserCategoryTableViewController {
@@ -352,6 +380,18 @@ extension UserCategoryTableViewController {
         post.image = UIImage(data: imageData)
         (self.tableView.cellForRow(at: IndexPath(row: postIndex, section: 0)) as? PostSmallTableViewCell)?.postImageView.image = post.image
     }
+    
+    func createReportNotification(_ notification: NSNotification) {
+        guard let postId = notification.userInfo?["postId"] as? String else {
+            return
+        }
+        guard let postIndex = self.posts.index(where: { $0.postId == postId }) else {
+            return
+        }
+        let post = self.posts[postIndex]
+        post.isReportedByCurrentUser = true
+        self.tableView.reloadRows(at: [IndexPath(row: postIndex, section: 0)], with: UITableViewRowAnimation.none)
+    }
 }
 
 extension UserCategoryTableViewController: PostSmallTableViewCellDelegate {
@@ -385,8 +425,7 @@ extension UserCategoryTableViewController: PostSmallTableViewCellDelegate {
             // Edit.
             let editAction = UIAlertAction(title: "Edit", style: UIAlertActionStyle.default, handler: {
                 (alert: UIAlertAction) in
-                // TODO
-                //self.performSegue(withIdentifier: "segueToEditPostVc", sender: cell)
+                self.performSegue(withIdentifier: "segueToEditPostVc", sender: cell)
             })
             alertController.addAction(editAction)
             // Delete.
@@ -397,12 +436,10 @@ extension UserCategoryTableViewController: PostSmallTableViewCellDelegate {
                 alertController.addAction(cancelAction)
                 let deleteConfirmAction = UIAlertAction(title: "Delete", style: UIAlertActionStyle.default, handler: {
                     (alert: UIAlertAction) in
-                    //                    // In background
-                    //                    self.removePost(postId, imageKey: imageKey)
-                    //                    // Notifiy observers.
-                    //                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: DeletePostNotificationKey), object: self, userInfo: ["postId": postId])
-                    
-                    // TODO
+                    // In background
+                    self.removePost(postId, imageKey: imageKey)
+                    // Notifiy observers.
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: DeletePostNotificationKey), object: self, userInfo: ["postId": postId])
                 })
                 alertController.addAction(deleteConfirmAction)
                 self.present(alertController, animated: true, completion: nil)

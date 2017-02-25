@@ -19,7 +19,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <inset key="separatorInset" minX="12" minY="0.0" maxX="0.0" maxY="0.0"/>
                         <view key="tableFooterView" contentMode="scaleToFill" id="T9F-RW-HhC">
-                            <rect key="frame" x="0.0" y="882" width="375" height="64"/>
+                            <rect key="frame" x="0.0" y="994" width="375" height="64"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="w4t-jp-bL3">
@@ -675,6 +675,42 @@
                                     </constraints>
                                 </tableViewCellContentView>
                             </tableViewCell>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellPostReport" rowHeight="112" id="XRa-3u-Cvi" customClass="PostReportTableViewCell" customModule="Profeey" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="882" width="375" height="112"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="XRa-3u-Cvi" id="VFa-zP-5eO">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="112"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="YRv-kn-B2F">
+                                            <rect key="frame" x="24" y="33" width="327" height="46.5"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Report confirmation message." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tOC-jb-190">
+                                                    <rect key="frame" x="0.0" y="0.0" width="327" height="19.5"/>
+                                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
+                                                    <color key="textColor" red="0.41868340970000001" green="0.41867089270000002" blue="0.41867792609999999" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Thanks message." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cDS-mm-ipt">
+                                                    <rect key="frame" x="0.0" y="29.5" width="327" height="17"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <color key="textColor" red="0.41868340970000001" green="0.41867089270000002" blue="0.41867792609999999" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </stackView>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="YRv-kn-B2F" firstAttribute="leading" secondItem="VFa-zP-5eO" secondAttribute="leading" constant="24" id="85I-yU-US4"/>
+                                        <constraint firstAttribute="trailing" secondItem="YRv-kn-B2F" secondAttribute="trailing" constant="24" id="9X1-en-mtf"/>
+                                        <constraint firstItem="YRv-kn-B2F" firstAttribute="centerY" secondItem="VFa-zP-5eO" secondAttribute="centerY" id="wfv-dD-Oru"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="confirmationMessageLabel" destination="tOC-jb-190" id="BhO-9c-c5H"/>
+                                    <outlet property="thanksMessageLabel" destination="cDS-mm-ipt" id="qYa-bB-mSP"/>
+                                </connections>
+                            </tableViewCell>
                         </prototypes>
                         <connections>
                             <outlet property="dataSource" destination="7JE-ec-Xgs" id="gpO-8k-iLi"/>
@@ -704,6 +740,7 @@
                         <segue destination="yok-go-68R" kind="presentation" identifier="segueToCaptureVc" id="6kA-6Z-bfx"/>
                         <segue destination="BdJ-Ea-hvI" kind="show" identifier="segueToDiscoverPeopleVc" id="6da-og-06T"/>
                         <segue destination="TYQ-XE-est" kind="presentation" identifier="segueToReportVc" id="eOo-cR-S0g"/>
+                        <segue destination="jUm-Ti-cK0" kind="presentation" identifier="segueToEditPostVc" id="U4Q-yK-H44"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lwE-Ik-htb" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -796,7 +833,15 @@
                 <viewControllerPlaceholder storyboardName="Report" id="TYQ-XE-est" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vWK-lc-hdR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1318" y="-1862"/>
+            <point key="canvasLocation" x="1314" y="-1879"/>
+        </scene>
+        <!--EditPost-->
+        <scene sceneID="pdB-d6-am3">
+            <objects>
+                <viewControllerPlaceholder storyboardName="EditPost" id="jUm-Ti-cK0" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="jbA-Vc-XoL" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1324" y="-1760"/>
         </scene>
         <!--DiscoverPeople-->
         <scene sceneID="wcW-y4-odq">

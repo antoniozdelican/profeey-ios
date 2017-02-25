@@ -19,7 +19,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <inset key="separatorInset" minX="12" minY="0.0" maxX="0.0" maxY="0.0"/>
                         <view key="tableFooterView" contentMode="scaleToFill" id="VJo-LI-shM">
-                            <rect key="frame" x="0.0" y="204" width="375" height="64"/>
+                            <rect key="frame" x="0.0" y="316" width="375" height="64"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="B7I-VJ-9bF">
@@ -160,6 +160,42 @@
                                     <outlet property="emptyMessageLabel" destination="OZP-wl-4ip" id="lTa-r4-Vq8"/>
                                 </connections>
                             </tableViewCell>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellPostReport" rowHeight="112" id="PSW-L7-2gk" customClass="PostReportTableViewCell" customModule="Profeey" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="204" width="375" height="112"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="PSW-L7-2gk" id="k1y-GB-iTm">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="112"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="rVy-zs-Mb5">
+                                            <rect key="frame" x="24" y="33" width="327" height="46.5"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Report confirmation message." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nk0-vy-zF8">
+                                                    <rect key="frame" x="0.0" y="0.0" width="327" height="19.5"/>
+                                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
+                                                    <color key="textColor" red="0.41868340970000001" green="0.41867089270000002" blue="0.41867792609999999" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Thanks message." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5JQ-BP-Hzd">
+                                                    <rect key="frame" x="0.0" y="29.5" width="327" height="17"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <color key="textColor" red="0.41868340970000001" green="0.41867089270000002" blue="0.41867792609999999" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </stackView>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="trailing" secondItem="rVy-zs-Mb5" secondAttribute="trailing" constant="24" id="Esn-0L-M4U"/>
+                                        <constraint firstItem="rVy-zs-Mb5" firstAttribute="leading" secondItem="k1y-GB-iTm" secondAttribute="leading" constant="24" id="c6K-zm-dDs"/>
+                                        <constraint firstItem="rVy-zs-Mb5" firstAttribute="centerY" secondItem="k1y-GB-iTm" secondAttribute="centerY" id="s9t-qN-hLO"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="confirmationMessageLabel" destination="nk0-vy-zF8" id="V8b-YG-Lgc"/>
+                                    <outlet property="thanksMessageLabel" destination="5JQ-BP-Hzd" id="A9q-mE-YFG"/>
+                                </connections>
+                            </tableViewCell>
                         </prototypes>
                         <connections>
                             <outlet property="dataSource" destination="1d0-mW-6Nc" id="qHx-aA-Vyj"/>
@@ -179,6 +215,7 @@
                         <outlet property="loadingTableFooterView" destination="VJo-LI-shM" id="IOf-lZ-drf"/>
                         <segue destination="YvD-DS-Dpb" kind="show" identifier="segueToPostDetailsVc" id="EwC-oZ-keK"/>
                         <segue destination="q6i-Oc-vtD" kind="presentation" identifier="segueToReportVc" id="jlL-CL-zjn"/>
+                        <segue destination="C3n-gy-N0W" kind="presentation" identifier="segueToEditPostVc" id="Ei5-KH-aEm"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Zkl-aI-Pek" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -200,6 +237,14 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Wqc-Rn-Jco" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="905" y="-292"/>
+        </scene>
+        <!--EditPost-->
+        <scene sceneID="yWP-tZ-aRe">
+            <objects>
+                <viewControllerPlaceholder storyboardName="EditPost" id="C3n-gy-N0W" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gA7-gv-zEJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="893" y="-199"/>
         </scene>
     </scenes>
     <resources>

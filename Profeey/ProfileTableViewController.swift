@@ -97,6 +97,7 @@ class ProfileTableViewController: UITableViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(self.recommendUserNotification(_:)), name: NSNotification.Name(RecommendUserNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.unrecommendUserNotification(_:)), name: NSNotification.Name(UnrecommendUserNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.downloadImageNotification(_:)), name: NSNotification.Name(DownloadImageNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.createReportNotification(_:)), name: NSNotification.Name(CreateReportNotificationKey), object: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -206,9 +207,14 @@ class ProfileTableViewController: UITableViewController {
             let childViewController =  navigationController.childViewControllers[0] as? ReportTableViewController,
             let cell = sender as? PostSmallTableViewCell,
             let indexPath = self.tableView.indexPath(for: cell) {
-            // TODO
-            print(indexPath)
+            childViewController.postId = self.posts[indexPath.row].postId
             childViewController.reportType = ReportType.post
+        }
+        if let navigationController = segue.destination as? UINavigationController,
+            let childViewController =  navigationController.childViewControllers[0] as? EditPostTableViewController,
+            let cell = sender as? PostSmallTableViewCell,
+            let indexPath = self.tableView.indexPath(for: cell) {
+            childViewController.editPost = self.posts[indexPath.row].copyEditPost()
         }
     }
     
@@ -306,6 +312,11 @@ class ProfileTableViewController: UITableViewController {
                 cell.addButtonType = AddButtonType.post
                 cell.setAddPostButton()
                 cell.profileEmptyTableViewCellDelegate = self
+                return cell
+            }
+            // Reported posts.
+            if self.posts[indexPath.row].isReportedByCurrentUser {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostReport", for: indexPath) as! PostReportTableViewCell
                 return cell
             }
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostSmall", for: indexPath) as! PostSmallTableViewCell
@@ -977,6 +988,23 @@ class ProfileTableViewController: UITableViewController {
         })
     }
     
+    // In background.
+    fileprivate func removePost(_ postId: String, imageKey: String) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().removePostDynamoDB(postId, completionHandler: {
+            (task: AWSTask) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                if let error = task.error {
+                    print("removePost error: \(error)")
+                } else {
+                    PRFYS3Manager.defaultS3Manager().removeImageS3(imageKey)
+                }
+            })
+            return nil
+        })
+    }
+    
     // MARK: Helpers
     
     fileprivate func sortWorkExperiencesByToDate() {
@@ -1387,6 +1415,20 @@ extension ProfileTableViewController {
             (self.tableView.cellForRow(at: IndexPath(row: postIndex, section: 1)) as? PostSmallTableViewCell)?.postImageView.image = self.posts[postIndex].image
         }
     }
+    
+    func createReportNotification(_ notification: NSNotification) {
+        guard let postId = notification.userInfo?["postId"] as? String else {
+            return
+        }
+        guard let postIndex = self.posts.index(where: { $0.postId == postId }) else {
+            return
+        }
+        let post = self.posts[postIndex]
+        post.isReportedByCurrentUser = true
+        if self.selectedProfileSegment == ProfileSegment.posts {
+            self.tableView.reloadRows(at: [IndexPath(row: postIndex, section: 1)], with: UITableViewRowAnimation.none)
+        }
+    }
 }
 
 extension ProfileTableViewController: ProfileInfoTableViewCellDelegate {
@@ -1560,8 +1602,7 @@ extension ProfileTableViewController: PostSmallTableViewCellDelegate {
             // Edit.
             let editAction = UIAlertAction(title: "Edit", style: UIAlertActionStyle.default, handler: {
                 (alert: UIAlertAction) in
-                // TODO
-                //self.performSegue(withIdentifier: "segueToEditPostVc", sender: cell)
+                self.performSegue(withIdentifier: "segueToEditPostVc", sender: cell)
             })
             alertController.addAction(editAction)
             // Delete.
@@ -1572,12 +1613,10 @@ extension ProfileTableViewController: PostSmallTableViewCellDelegate {
                 alertController.addAction(cancelAction)
                 let deleteConfirmAction = UIAlertAction(title: "Delete", style: UIAlertActionStyle.default, handler: {
                     (alert: UIAlertAction) in
-//                    // In background
-//                    self.removePost(postId, imageKey: imageKey)
-//                    // Notifiy observers.
-//                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: DeletePostNotificationKey), object: self, userInfo: ["postId": postId])
-                    
-                    // TODO
+                    // In background
+                    self.removePost(postId, imageKey: imageKey)
+                    // Notifiy observers.
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: DeletePostNotificationKey), object: self, userInfo: ["postId": postId])
                 })
                 alertController.addAction(deleteConfirmAction)
                 self.present(alertController, animated: true, completion: nil)

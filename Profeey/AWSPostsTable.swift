@@ -147,7 +147,7 @@ class AWSPostsDateSortedIndex: NSObject, Index {
             ":categoryName": categoryName,
         ]
         queryExpression.scanIndexForward = false
-        queryExpression.limit = 10
+        //queryExpression.limit = 10
         queryExpression.exclusiveStartKey = lastEvaluatedKey
         
         objectMapper.query(AWSPost.self, expression: queryExpression, completionHandler: completionHandler)
