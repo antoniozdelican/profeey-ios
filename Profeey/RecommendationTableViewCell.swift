@@ -12,16 +12,14 @@ import TTTAttributedLabel
 protocol RecommendationTableViewCellDelegate: class {
     func userTapped(_ cell: RecommendationTableViewCell)
     func recommendationTextLabelTapped(_ cell: RecommendationTableViewCell)
+    func moreButtonTapped(_ cell: RecommendationTableViewCell)
 }
 
 class RecommendationTableViewCell: UITableViewCell {
     
     @IBOutlet weak var profilePicImageView: UIImageView!
-    @IBOutlet weak var preferredUsernameLabel: UILabel!
-    @IBOutlet weak var professionNameLabel: UILabel!
-    @IBOutlet weak var nameStackView: UIStackView!
-    @IBOutlet weak var createdLabel: UILabel!
     @IBOutlet weak var recommendationTextLabel: TTTAttributedLabel!
+    @IBOutlet weak var preferredUsernameCreatedLabel: UILabel!
     
     weak var recommendationTableViewCellDelegate: RecommendationTableViewCellDelegate?
 
@@ -31,7 +29,6 @@ class RecommendationTableViewCell: UITableViewCell {
         self.profilePicImageView.clipsToBounds = true
         
         self.profilePicImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.profilePicImageViewTapped(_:))))
-        self.nameStackView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.nameStackViewTapped(_:))))
         self.recommendationTextLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.recommendationTextLabelTapped(_:))))
     }
 
@@ -45,12 +42,14 @@ class RecommendationTableViewCell: UITableViewCell {
         self.recommendationTableViewCellDelegate?.userTapped(self)
     }
     
-    func nameStackViewTapped(_ sender: AnyObject) {
-        self.recommendationTableViewCellDelegate?.userTapped(self)
-    }
-    
     func recommendationTextLabelTapped(_ sender: AnyObject) {
         self.recommendationTableViewCellDelegate?.recommendationTextLabelTapped(self)
+    }
+    
+    // MARK: IBActions
+    
+    @IBAction func moreButtonTapped(_ sender: AnyObject) {
+        self.recommendationTableViewCellDelegate?.moreButtonTapped(self)
     }
     
     // MARK: Helpers
@@ -69,5 +68,4 @@ class RecommendationTableViewCell: UITableViewCell {
         self.recommendationTextLabel.attributedTruncationToken = nil
         self.recommendationTextLabel.numberOfLines = 0
     }
-
 }

@@ -34,6 +34,8 @@ class RecommendationsTableViewController: UITableViewController {
         
         // Add observers.
         NotificationCenter.default.addObserver(self, selector: #selector(self.downloadImageNotification(_:)), name: NSNotification.Name(DownloadImageNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.unrecommendUserNotification(_:)), name: NSNotification.Name(UnrecommendUserNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.createReportNotification(_:)), name: NSNotification.Name(CreateReportNotificationKey), object: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -47,6 +49,13 @@ class RecommendationsTableViewController: UITableViewController {
             let cell = sender as? RecommendationTableViewCell,
             let indexPath = self.tableView.indexPath(for: cell) {
             destinationViewController.user = self.recommendations[indexPath.row].user?.copyUser()
+        }
+        if let navigationController = segue.destination as? UINavigationController,
+            let childViewController =  navigationController.childViewControllers[0] as? ReportTableViewController,
+            let cell = sender as? RecommendationTableViewCell,
+            let indexPath = self.tableView.indexPath(for: cell) {
+            childViewController.userId = self.recommendations[indexPath.row].userId
+            childViewController.reportType = ReportType.user
         }
     }
     
@@ -74,9 +83,7 @@ class RecommendationsTableViewController: UITableViewController {
         let user = recommendation.user
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellRecommendation", for: indexPath) as! RecommendationTableViewCell
         cell.profilePicImageView.image = user?.profilePicUrl != nil ? user?.profilePic : UIImage(named: "ic_no_profile_pic_feed")
-        cell.preferredUsernameLabel.text = user?.preferredUsername
-        cell.professionNameLabel.text = user?.professionName
-        cell.createdLabel.text = recommendation.createdString
+        cell.preferredUsernameCreatedLabel.text = [user?.preferredUsername, recommendation.createdString].flatMap({$0}).joined(separator: " · ")
         cell.recommendationTextLabel.text = recommendation.recommendationText
         recommendation.isExpandedRecommendationText ? cell.untruncate() : cell.truncate()
         cell.recommendationTableViewCellDelegate = self
@@ -198,6 +205,21 @@ class RecommendationsTableViewController: UITableViewController {
             })
         })
     }
+    
+    // In background.
+    fileprivate func removeRecommendation(_ recommendingId: String) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().removeRecommendationDynamoDB(recommendingId, completionHandler: {
+            (task: AWSTask) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                if let error = task.error {
+                    print("removeRecommendation error: \(error)")
+                }
+            })
+            return nil
+        })
+    }
 }
 
 extension RecommendationsTableViewController {
@@ -219,6 +241,34 @@ extension RecommendationsTableViewController {
             }
         }
     }
+    
+    func unrecommendUserNotification(_ notification: NSNotification) {
+        guard let recommendingId = notification.userInfo?["recommendingId"] as? String, let userId = notification.userInfo?["userId"] as? String else {
+            return
+        }
+        guard self.userId == recommendingId else {
+            return
+        }
+        guard let recommendationIndex = self.recommendations.index(where: { $0.userId == userId }) else {
+            return
+        }
+        self.recommendations.remove(at: recommendationIndex)
+        if self.recommendations.count == 0 {
+            self.tableView.reloadData()
+        } else {
+            self.tableView.deleteRows(at: [IndexPath(row: recommendationIndex, section: 0)], with: UITableViewRowAnimation.automatic)
+        }
+        
+        
+    }
+    
+    func createReportNotification(_ notification: NSNotification) {
+        guard let _ = notification.userInfo?["userId"] as? String else {
+            return
+        }
+        // It's a comment (user) report.
+        // Do nothing for now with UI.
+    }
 }
 
 extension RecommendationsTableViewController: RecommendationTableViewCellDelegate {
@@ -239,5 +289,45 @@ extension RecommendationsTableViewController: RecommendationTableViewCellDelegat
                 self.tableView.endUpdates()
             }
         }
+    }
+    
+    func moreButtonTapped(_ cell: RecommendationTableViewCell) {
+        guard let indexPath = self.tableView.indexPath(for: cell) else {
+            return
+        }
+        guard let recommendingId = self.userId, let userId = self.recommendations[indexPath.row].userId else {
+            return
+        }
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
+        if userId == AWSIdentityManager.defaultIdentityManager().identityId {
+            // Delete.
+            let deleteAction = UIAlertAction(title: "Delete", style: UIAlertActionStyle.destructive, handler: {
+                (alert: UIAlertAction) in
+                let alertController = UIAlertController(title: "Delete Recommendation?", message: nil, preferredStyle: UIAlertControllerStyle.alert)
+                let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil)
+                alertController.addAction(cancelAction)
+                let deleteConfirmAction = UIAlertAction(title: "Delete", style: UIAlertActionStyle.default, handler: {
+                    (alert: UIAlertAction) in
+                    // In background
+                    self.removeRecommendation(recommendingId)
+                    // Notify observers.
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: UnrecommendUserNotificationKey), object: self, userInfo: ["recommendingId": recommendingId, "userId": userId])
+                })
+                alertController.addAction(deleteConfirmAction)
+                self.present(alertController, animated: true, completion: nil)
+            })
+            alertController.addAction(deleteAction)
+        } else {
+            // Report.
+            let reportAction = UIAlertAction(title: "Report", style: UIAlertActionStyle.destructive, handler: {
+                (alert: UIAlertAction) in
+                self.performSegue(withIdentifier: "segueToReportVc", sender: cell)
+            })
+            alertController.addAction(reportAction)
+        }
+        // Cancel.
+        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil)
+        alertController.addAction(cancelAction)
+        self.present(alertController, animated: true, completion: nil)
     }
 }

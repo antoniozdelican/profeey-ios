@@ -52,7 +52,6 @@ class CommentTableViewCell: UITableViewCell {
         self.commentTableViewCellDelegate?.moreButtonTapped(self)
     }
     
-    
     // MARK: Helpers
     
     func truncate() {
