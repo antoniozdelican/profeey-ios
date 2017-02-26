@@ -273,7 +273,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Empty message." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NvO-vf-xNl">
-                                            <rect key="frame" x="134" y="23.5" width="107" height="17"/>
+                                            <rect key="frame" x="20" y="23.5" width="335" height="17"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <color key="textColor" red="0.41868340970000001" green="0.41867089270000002" blue="0.41867792609999999" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
@@ -281,7 +281,8 @@
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="NvO-vf-xNl" firstAttribute="centerX" secondItem="toe-qU-qk4" secondAttribute="centerX" id="VI7-TJ-EAd"/>
-                                        <constraint firstItem="NvO-vf-xNl" firstAttribute="centerX" secondItem="toe-qU-qk4" secondAttribute="centerX" id="hhJ-f9-I54"/>
+                                        <constraint firstAttribute="trailing" secondItem="NvO-vf-xNl" secondAttribute="trailing" constant="20" id="bcU-bA-d4e"/>
+                                        <constraint firstItem="NvO-vf-xNl" firstAttribute="leading" secondItem="toe-qU-qk4" secondAttribute="leading" constant="20" id="uU8-Sf-dpO"/>
                                         <constraint firstItem="NvO-vf-xNl" firstAttribute="centerY" secondItem="toe-qU-qk4" secondAttribute="centerY" id="xx5-ne-scb"/>
                                     </constraints>
                                     <variation key="default">

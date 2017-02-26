@@ -260,4 +260,9 @@ extension MessagesViewController: MessagesTableViewControllerDelegate {
             self.numberOfInitialMessages = numberOfInitialMessages
         }
     }
+    
+    func blockedConversation() {
+        self.messageTextView.isEditable = false
+        self.sendButton.isEnabled = false
+    }
 }

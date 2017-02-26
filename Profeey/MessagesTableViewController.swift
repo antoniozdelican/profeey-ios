@@ -13,6 +13,7 @@ import AWSDynamoDB
 protocol MessagesTableViewControllerDelegate: class {
     func scrollViewWillBeginDragging()
     func initialMessagesLoaded(_ numberOfInitialMessages: Int)
+    func blockedConversation()
 }
 
 class MessagesTableViewController: UITableViewController {
@@ -24,7 +25,7 @@ class MessagesTableViewController: UITableViewController {
     weak var messagesTableViewControllerDelegate: MessagesTableViewControllerDelegate?
     
     fileprivate var allMessagesSections: [[Message]] = []
-    fileprivate var isLoadingMessages: Bool = false
+    fileprivate var isLoadingMessages: Bool = true
     fileprivate var lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?
     fileprivate var noNetworkConnection: Bool = false
     
@@ -33,6 +34,11 @@ class MessagesTableViewController: UITableViewController {
     
     fileprivate var seenConversation: Bool = false
     fileprivate var isVisible: Bool = false
+    
+    fileprivate var isLoadingBlock = true
+    fileprivate var isBlocking: Bool = false
+    fileprivate var isLoadingAmIBlocked = true
+    fileprivate var amIBlocked: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,11 +47,10 @@ class MessagesTableViewController: UITableViewController {
         // Reverse tableView so it starts from the bottom. Do this for every cell as well.
         self.tableView.transform = CGAffineTransform(scaleX: 1, y: -1)
         
-        if let conversationId = self.conversationId {
+        if let conversationId = self.conversationId, let userId = self.participant?.userId {
             // Query.
             self.tableView.tableFooterView = self.loadingTableFooterView
-            self.isLoadingMessages = true
-            self.queryMessagesDateSorted(conversationId, startFromBeginning: true)
+            self.getAmIBlocked(userId, conversationId: conversationId)
         }
         
         // Add observers.
@@ -86,11 +91,17 @@ class MessagesTableViewController: UITableViewController {
         if !self.isLoadingMessages && self.allMessagesSections.count == 0 {
             return 1
         }
+        if !self.isLoadingBlock && self.isBlocking || !self.isLoadingAmIBlocked && self.amIBlocked {
+            return 1
+        }
         return self.allMessagesSections.count
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if !self.isLoadingMessages && self.allMessagesSections.count == 0 {
+            return 1
+        }
+        if !self.isLoadingBlock && self.isBlocking || !self.isLoadingAmIBlocked && self.amIBlocked {
             return 1
         }
         return self.allMessagesSections[section].count
@@ -100,6 +111,17 @@ class MessagesTableViewController: UITableViewController {
         if !self.isLoadingMessages && self.allMessagesSections.count == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellEmpty", for: indexPath) as! EmptyTableViewCell
             cell.emptyMessageLabel.text = "No messages yet"
+            cell.transform = CGAffineTransform(scaleX: 1, y: -1)
+            return cell
+        }
+        if !self.isLoadingBlock && self.isBlocking || !self.isLoadingAmIBlocked && self.amIBlocked {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellEmpty", for: indexPath) as! EmptyTableViewCell
+            if self.isBlocking {
+                cell.emptyMessageLabel.text = "You have blocked this user"
+            }
+            if self.amIBlocked {
+                cell.emptyMessageLabel.text = "You are blocked from this user"
+            }
             cell.transform = CGAffineTransform(scaleX: 1, y: -1)
             return cell
         }
@@ -237,6 +259,59 @@ class MessagesTableViewController: UITableViewController {
     }
     
     // MARK: AWS
+    
+    // Check blockings first.
+    fileprivate func getAmIBlocked(_ userId: String, conversationId: String) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().getAmIBlockedDynamoDB(userId, completionHandler: {
+            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                if let error = error {
+                    print("getAmIBlocked error: \(error)")
+                } else {
+                    self.isLoadingAmIBlocked = false
+                    if let awsBlocks = response?.items as? [AWSBlock], awsBlocks.count != 0 {
+                        self.amIBlocked = true
+                        self.messagesTableViewControllerDelegate?.blockedConversation()
+                        self.tableView.tableFooterView = UIView()
+                        self.tableView.reloadData()
+                    } else {
+                        self.amIBlocked = false
+                        // Get if I blocked.
+                        self.getBlock(userId, conversationId: conversationId)
+                    }
+                }
+            })
+        })
+    }
+    
+    fileprivate func getBlock(_ userId: String, conversationId: String) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().getBlockDynamoDB(userId, completionHandler: {
+            (task: AWSTask) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                if let error = task.error {
+                    print("getBlock error: \(error)")
+                } else {
+                    self.isLoadingBlock = false
+                    if task.result != nil {
+                        self.isBlocking = true
+                        self.messagesTableViewControllerDelegate?.blockedConversation()
+                        self.tableView.tableFooterView = UIView()
+                        self.tableView.reloadData()
+                    } else {
+                        self.isBlocking = false
+                        // Load messages if there's no blocking between users.
+                        self.isLoadingMessages = true
+                        self.queryMessagesDateSorted(conversationId, startFromBeginning: true)
+                    }
+                }
+            })
+            return nil
+        })
+    }
     
     // No refresh so never startFromBeginning.
     fileprivate func queryMessagesDateSorted(_ conversationId: String, startFromBeginning: Bool) {
