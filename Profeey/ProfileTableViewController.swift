@@ -29,6 +29,10 @@ class ProfileTableViewController: UITableViewController {
     fileprivate var isRecommending: Bool = false
     fileprivate var isLoadingRelationship = true
     fileprivate var isFollowing: Bool = false
+    fileprivate var isLoadingBlock = true
+    fileprivate var isBlocking: Bool = false
+    fileprivate var isLoadingAmIBlocked = true
+    fileprivate var amIBlocked: Bool = false
     
     fileprivate var posts: [Post] = []
     fileprivate var isLoadingPosts: Bool = false
@@ -98,6 +102,9 @@ class ProfileTableViewController: UITableViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(self.unrecommendUserNotification(_:)), name: NSNotification.Name(UnrecommendUserNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.downloadImageNotification(_:)), name: NSNotification.Name(DownloadImageNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.createReportNotification(_:)), name: NSNotification.Name(CreateReportNotificationKey), object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.blockUserNotification(_:)), name: NSNotification.Name(BlockUserNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.unblockUserNotification(_:)), name: NSNotification.Name(UnblockUserNotificationKey), object: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -130,6 +137,19 @@ class ProfileTableViewController: UITableViewController {
         // Check if it's current again.
         self.isCurrentUser = (userId == identityId)
         
+        // First check if not blocked.
+        if !self.isCurrentUser {
+            self.getAmIBlocked(userId)
+        } else {
+            self.queryUserData(userId)
+        }
+        // Query for your block.
+        self.isLoadingBlock = true
+        self.getBlock(userId)
+
+    }
+    
+    fileprivate func queryUserData(_ userId: String) {
         // Query user.
         self.isLoadingUser = true
         self.getUser(userId)
@@ -151,6 +171,36 @@ class ProfileTableViewController: UITableViewController {
             self.tableView.tableFooterView = self.loadingTableFooterView
             self.queryUserCategoriesNumberOfPostsSorted(userId)
         }
+    }
+    
+    // MARK: Early AWS
+    
+    fileprivate func getAmIBlocked(_ userId: String) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().getAmIBlockedDynamoDB(userId, completionHandler: {
+            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                if let error = error {
+                    print("getAmIBlocked error: \(error)")
+                } else {
+                    self.isLoadingAmIBlocked = false
+                    if let awsBlocks = response?.items as? [AWSBlock], awsBlocks.count != 0 {
+                        self.amIBlocked = true
+                        (self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? ProfileMainTableViewCell)?.numberOfPostsButton.isEnabled = false
+                        (self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? ProfileMainTableViewCell)?.numberOfFollowersButton.isEnabled = false
+                        (self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? ProfileMainTableViewCell)?.numberOfRecommendationsButton.isEnabled = false
+                        // I can block as well.
+                        let blockButton = UIBarButtonItem(image: UIImage(named: "ic_more_vertical_big"), style: UIBarButtonItemStyle.plain, target: self, action: #selector(self.blockButtonTapped(_:)))
+                        self.navigationItem.rightBarButtonItems = [blockButton]
+                    } else {
+                        self.amIBlocked = false
+                        self.queryUserData(userId)
+                    }
+                    self.tableView.reloadData()
+                }
+            })
+        })
     }
     
     // MARK: Navigation
@@ -237,7 +287,7 @@ class ProfileTableViewController: UITableViewController {
         }
         switch self.selectedProfileSegment {
         case .posts:
-            if !self.isLoadingPosts && self.posts.count == 0 {
+            if !self.isLoadingPosts && self.posts.count == 0 || self.isBlocking || self.amIBlocked {
                 return 1
             }
             return self.posts.count
@@ -245,7 +295,7 @@ class ProfileTableViewController: UITableViewController {
             if self.isLoadingExperiences {
                 return 0
             }
-            if self.experiences.count == 0 {
+            if self.experiences.count == 0 || self.isBlocking || self.amIBlocked {
                 return 1
             }
             var experiencesCount = self.experiences.count
@@ -257,7 +307,7 @@ class ProfileTableViewController: UITableViewController {
             }
             return experiencesCount
         case .skills:
-            if !self.isLoadingUserCategories && self.userCategories.count == 0 {
+            if !self.isLoadingUserCategories && self.userCategories.count == 0 || self.isBlocking || self.amIBlocked {
                 return 1
             }
             return self.userCategories.count
@@ -309,9 +359,9 @@ class ProfileTableViewController: UITableViewController {
         }
         switch self.selectedProfileSegment {
         case .posts:
-            if self.posts.count == 0 {
+            if self.posts.count == 0 || self.isBlocking || self.amIBlocked {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellProfileEmpty", for: indexPath) as! ProfileEmptyTableViewCell
-                cell.emptyMessageLabel.text = "No posts yet."
+                cell.emptyMessageLabel.text = !self.amIBlocked ? "No posts yet." : "You are blocked from following and viewing this account."
                 cell.addButton.isHidden = self.isCurrentUser ? false : true
                 cell.addButtonType = AddButtonType.post
                 cell.setAddPostButton()
@@ -333,9 +383,9 @@ class ProfileTableViewController: UITableViewController {
             cell.postSmallTableViewCellDelegate = self
             return cell
         case .experience:
-            if self.experiences.count == 0 {
+            if self.experiences.count == 0 || self.isBlocking || self.amIBlocked {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellProfileEmpty", for: indexPath) as! ProfileEmptyTableViewCell
-                cell.emptyMessageLabel.text = "No experiences yet."
+                cell.emptyMessageLabel.text = !self.amIBlocked ? "No experiences yet." : "You are blocked from following and viewing this account."
                 cell.addButton.isHidden = self.isCurrentUser ? false : true
                 cell.addButtonType = AddButtonType.experience
                 cell.setAddExperienceButton()
@@ -408,9 +458,9 @@ class ProfileTableViewController: UITableViewController {
                 return UITableViewCell()
             }
         case .skills:
-            if self.userCategories.count == 0 {
+            if self.userCategories.count == 0 || self.isBlocking || self.amIBlocked {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellProfileEmpty", for: indexPath) as! ProfileEmptyTableViewCell
-                cell.emptyMessageLabel.text = "No posts with skills yet."
+                cell.emptyMessageLabel.text = !self.amIBlocked ? "No posts with skills yet." : "You are blocked from following and viewing this account."
                 cell.addButton.isHidden = self.isCurrentUser ? false : true
                 cell.addButtonType = AddButtonType.post
                 cell.setAddPostButton()
@@ -503,12 +553,12 @@ class ProfileTableViewController: UITableViewController {
         }
         switch self.selectedProfileSegment {
         case .posts:
-            if self.posts.count == 0 {
+            if self.posts.count == 0 || self.isBlocking || self.amIBlocked {
                 return 112.0
             }
             return 112.0
         case .experience:
-            if self.experiences.count == 0 {
+            if self.experiences.count == 0 || self.isBlocking || self.amIBlocked {
                 return 112.0
             }
             if (indexPath.row == 0) || (self.workExperiences.count > 0 && indexPath.row == self.workExperiences.count + 1) {
@@ -516,7 +566,7 @@ class ProfileTableViewController: UITableViewController {
             }
             return 105.0
         case .skills:
-            if self.userCategories.count == 0 {
+            if self.userCategories.count == 0 || self.isBlocking || self.amIBlocked {
                 return 112.0
             }
             return 44.0
@@ -537,12 +587,12 @@ class ProfileTableViewController: UITableViewController {
         }
         switch self.selectedProfileSegment {
         case .posts:
-            if self.posts.count == 0 {
+            if self.posts.count == 0 || self.isBlocking || self.amIBlocked {
                 return 112.0
             }
             return 112.0
         case .experience:
-            if self.experiences.count == 0 {
+            if self.experiences.count == 0 || self.isBlocking || self.amIBlocked {
                 return 112.0
             }
             if (indexPath.row == 0) || (self.workExperiences.count > 0 && indexPath.row == self.workExperiences.count + 1) {
@@ -550,7 +600,7 @@ class ProfileTableViewController: UITableViewController {
             }
             return UITableViewAutomaticDimension
         case .skills:
-            if self.userCategories.count == 0 {
+            if self.userCategories.count == 0 || self.isBlocking || self.amIBlocked {
                 return 112.0
             }
             return 44.0
@@ -584,31 +634,46 @@ class ProfileTableViewController: UITableViewController {
     }
     
     func blockButtonTapped(_ sender: AnyObject) {
-        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
-        // Block.
-        let blockAction = UIAlertAction(title: "Block", style: UIAlertActionStyle.destructive, handler: {
-            (alert: UIAlertAction) in
-            let message = ["Block", self.user?.preferredUsername].flatMap({ $0 }).joined(separator: " ") + "?"
-            let alertController = UIAlertController(title: nil, message: message, preferredStyle: UIAlertControllerStyle.actionSheet)
+        if !self.isCurrentUser, !self.isLoadingBlock, let blockingId = self.user?.userId, let preferredUsername = self.user?.preferredUsername {
+            let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
+            // Block/Unblock.
+            if !self.isBlocking {
+                let blockAction = UIAlertAction(title: "Block", style: UIAlertActionStyle.destructive, handler: {
+                    (alert: UIAlertAction) in
+                    let alertController = UIAlertController(title: "Block \(preferredUsername)", message: "If you block \(preferredUsername), you won't be able to follow or interact with each other.", preferredStyle: UIAlertControllerStyle.alert)
+                    let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil)
+                    alertController.addAction(cancelAction)
+                    let blockConfirmAction = UIAlertAction(title: "Block", style: UIAlertActionStyle.destructive, handler: {
+                        (alert: UIAlertAction) in
+                        // In background.
+                        self.createBlock(blockingId)
+                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: BlockUserNotificationKey), object: self, userInfo: ["blockingId": blockingId])
+                        
+                    })
+                    alertController.addAction(blockConfirmAction)
+                    self.present(alertController, animated: true, completion: nil)
+                })
+                alertController.addAction(blockAction)
+                
+            } else {
+                let unblockAction = UIAlertAction(title: "Unblock", style: UIAlertActionStyle.destructive, handler: {
+                    (alert: UIAlertAction) in
+                    // In background.
+                    self.removeBlock(blockingId)
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: UnblockUserNotificationKey), object: self, userInfo: ["blockingId": blockingId])
+                })
+                alertController.addAction(unblockAction)
+            }
+            // Report.
+            let reportAction = UIAlertAction(title: "Report", style: UIAlertActionStyle.destructive, handler: {
+                (alert: UIAlertAction) in
+                self.performSegue(withIdentifier: "segueToReportVc", sender: sender)
+            })
+            alertController.addAction(reportAction)
             let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil)
             alertController.addAction(cancelAction)
-            let blockConfirmAction = UIAlertAction(title: "Block", style: UIAlertActionStyle.destructive, handler: {
-                (alert: UIAlertAction) in
-                // TODO
-            })
-            alertController.addAction(blockConfirmAction)
             self.present(alertController, animated: true, completion: nil)
-        })
-        alertController.addAction(blockAction)
-        // Report.
-        let reportAction = UIAlertAction(title: "Report", style: UIAlertActionStyle.destructive, handler: {
-            (alert: UIAlertAction) in
-            self.performSegue(withIdentifier: "segueToReportVc", sender: sender)
-        })
-        alertController.addAction(reportAction)
-        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil)
-        alertController.addAction(cancelAction)
-        self.present(alertController, animated: true, completion: nil)
+        }
     }
     
     func discoverPeopleBarButtonTapped(_ sender: AnyObject) {
@@ -1045,6 +1110,60 @@ class ProfileTableViewController: UITableViewController {
         })
     }
     
+    fileprivate func getBlock(_ blockingId: String) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().getBlockDynamoDB(blockingId, completionHandler: {
+            (task: AWSTask) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                if let error = task.error {
+                    print("getBlock error: \(error)")
+                } else {
+                    self.isLoadingBlock = false
+                    if task.result != nil {
+                        self.isBlocking = true
+                    } else {
+                        self.isBlocking = false
+                    }
+                    self.tableView.reloadData()
+                }
+            })
+            return nil
+        })
+    }
+    
+    // In background.
+    fileprivate func createBlock(_ blockingId: String) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().createBlockDynamoDB(blockingId, completionHandler: {
+            (task: AWSTask) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                if let error = task.error {
+                    print("createBlock error: \(error)")
+                }
+                // Unfollow as well in background.
+                self.unfollowUser(blockingId)
+            })
+            return nil
+        })
+    }
+    
+    // In background.
+    fileprivate func removeBlock(_ blockingId: String) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().removeBlockDynamoDB(blockingId, completionHandler: {
+            (task: AWSTask) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                if let error = task.error {
+                    print("removeBlock error: \(error)")
+                }
+            })
+            return nil
+        })
+    }
+    
     // MARK: Helpers
     
     fileprivate func sortWorkExperiencesByToDate() {
@@ -1468,6 +1587,34 @@ extension ProfileTableViewController {
         if self.selectedProfileSegment == ProfileSegment.posts {
             self.tableView.reloadRows(at: [IndexPath(row: postIndex, section: 1)], with: UITableViewRowAnimation.none)
         }
+    }
+    
+    func blockUserNotification(_ notification: NSNotification) {
+        guard let blockingId = notification.userInfo?["blockingId"] as? String else {
+            return
+        }
+        guard self.user?.userId == blockingId else {
+            return
+        }
+        guard !self.isLoadingBlock, !self.isBlocking else {
+            return
+        }
+        self.isBlocking = true
+        self.tableView.reloadData()
+    }
+    
+    func unblockUserNotification(_ notification: NSNotification) {
+        guard let blockingId = notification.userInfo?["blockingId"] as? String else {
+            return
+        }
+        guard self.user?.userId == blockingId else {
+            return
+        }
+        guard !self.isLoadingBlock, self.isBlocking else {
+            return
+        }
+        self.isBlocking = false
+        self.tableView.reloadData()
     }
 }
 

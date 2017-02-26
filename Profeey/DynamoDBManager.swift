@@ -148,4 +148,11 @@ protocol DynamoDBManager {
     // MARK: Reports
     
     func createReportDynamoDB(_ reportedUserId: String, reportedPostId: String?, reportType: ReportType, reportDetailType: ReportDetailType, completionHandler: @escaping AWSContinuationBlock)
+    
+    // MARK: Blocks
+    
+    func getBlockDynamoDB(_ blockingId: String, completionHandler: @escaping AWSContinuationBlock)
+    func createBlockDynamoDB(_ blockingId: String, completionHandler: @escaping AWSContinuationBlock)
+    func removeBlockDynamoDB(_ blockingId: String, completionHandler: @escaping AWSContinuationBlock)
+    func getAmIBlockedDynamoDB(_ userId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
 }

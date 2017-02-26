@@ -41,6 +41,9 @@ let CreateConversationNotificationKey: String = "CreateConversationNotificationK
 
 let CreateReportNotificationKey: String = "CreateReportNotificationKey"
 
+let BlockUserNotificationKey: String = "BlockUserNotificationKey"
+let UnblockUserNotificationKey: String = "UnblockUserNotificationKey"
+
 // From APNs
 let APNsNewMessageNotificationKey: String = "APNsNewMessageNotificationKey"
 

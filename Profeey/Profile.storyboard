@@ -610,8 +610,8 @@
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="112"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Empty message." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ECh-aV-1qB">
-                                            <rect key="frame" x="134" y="48" width="107" height="17"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Empty message." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ECh-aV-1qB">
+                                            <rect key="frame" x="20" y="48" width="335" height="17"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <color key="textColor" red="0.41868340970000001" green="0.41867089270000002" blue="0.41867792609999999" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
@@ -636,7 +636,8 @@
                                         <constraint firstItem="ECh-aV-1qB" firstAttribute="centerX" secondItem="VmK-nQ-ro2" secondAttribute="centerX" id="JA6-rn-Q81"/>
                                         <constraint firstItem="1lF-FE-YrK" firstAttribute="centerX" secondItem="VmK-nQ-ro2" secondAttribute="centerX" id="dC6-HN-aEI"/>
                                         <constraint firstItem="1lF-FE-YrK" firstAttribute="top" secondItem="ECh-aV-1qB" secondAttribute="bottom" constant="15" id="hyZ-p3-lwW"/>
-                                        <constraint firstItem="ECh-aV-1qB" firstAttribute="centerX" secondItem="VmK-nQ-ro2" secondAttribute="centerX" id="uxE-At-VdR"/>
+                                        <constraint firstItem="ECh-aV-1qB" firstAttribute="leading" secondItem="VmK-nQ-ro2" secondAttribute="leading" constant="20" id="jDm-bJ-MkB"/>
+                                        <constraint firstAttribute="trailing" secondItem="ECh-aV-1qB" secondAttribute="trailing" constant="20" id="pJj-qe-PL0"/>
                                     </constraints>
                                     <variation key="default">
                                         <mask key="constraints">

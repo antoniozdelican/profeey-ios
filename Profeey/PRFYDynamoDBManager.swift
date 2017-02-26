@@ -241,7 +241,6 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
             AWSTask().continue(completionHandler)
             return
         }
-        print("getRelationshipDynamoDB:")
         let awsRelationshipsTable = AWSRelationshipsTable()
         awsRelationshipsTable.getRelationship(identityId, followingId: followingId, completionHandler: completionHandler)
     }
@@ -252,7 +251,6 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
             AWSTask().continue(completionHandler)
             return
         }
-        print("createRelationshipDynamoDB:")
         let created = NSNumber(value: Date().timeIntervalSince1970 as Double)
         let awsRelationshipsTable = AWSRelationshipsTable()
         let awsRelationship = AWSRelationship(_userId: identityId, _followingId: followingId, _created: created, _firstName: self.currentUserDynamoDB?.firstName, _lastName: self.currentUserDynamoDB?.lastName, _preferredUsername: self.currentUserDynamoDB?.preferredUsername, _professionName: self.currentUserDynamoDB?.professionName, _profilePicUrl: self.currentUserDynamoDB?.profilePicUrl, _followingFirstName: followingFirstName, _followingLastName: followingLastName, _followingPreferredUsername: followingPreferredUsername, _followingProfessionName: followingProfessionName, _followingProfilePicUrl: followingProfilePicUrl)
@@ -265,7 +263,6 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
             AWSTask().continue(completionHandler)
             return
         }
-        print("removeRelationshipDynamoDB:")
         let awsRelationshipsTable = AWSRelationshipsTable()
         let awsRelationship = AWSRelationship(_userId: identityId, _followingId: followingId)
         awsRelationshipsTable.removeRelationship(awsRelationship, completionHandler: completionHandler)
@@ -847,5 +844,49 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         let awsReportsTable = AWSReportsTable()
         let awsReport = AWSReport(_userId: identityId, _reportId: reportId, _created: created, _reportedUserId: reportedUserId, _reportedPostId: reportedPostId, _reportType: reportType.rawValue, _reportDetailType: reportDetailType.rawValue)
         awsReportsTable.createReport(awsReport, completionHandler: completionHandler)
+    }
+    
+    // MARK: Blocks
+    
+    func getBlockDynamoDB(_ blockingId: String, completionHandler: @escaping AWSContinuationBlock) {
+        guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
+            print("getBlockDynamoDB no identityId!")
+            AWSTask().continue(completionHandler)
+            return
+        }
+        let awsBlocksTable = AWSBlocksTable()
+        awsBlocksTable.getBlock(identityId, blockingId: blockingId, completionHandler: completionHandler)
+    }
+    
+    func createBlockDynamoDB(_ blockingId: String, completionHandler: @escaping AWSContinuationBlock) {
+        guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
+            print("createBlockDynamoDB no identityId!")
+            AWSTask().continue(completionHandler)
+            return
+        }
+        let created = NSNumber(value: Date().timeIntervalSince1970 as Double)
+        let awsBlocksTable = AWSBlocksTable()
+        let awsBlock = AWSBlock(_userId: identityId, _blockingId: blockingId, _created: created)
+        awsBlocksTable.createBlock(awsBlock, completionHandler: completionHandler)
+    }
+    
+    func removeBlockDynamoDB(_ blockingId: String, completionHandler: @escaping AWSContinuationBlock) {
+        guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
+            print("removeBlockDynamoDB no identityId!")
+            AWSTask().continue(completionHandler)
+            return
+        }
+        let awsBlocksTable = AWSBlocksTable()
+        let awsBlock = AWSBlock(_userId: identityId, _blockingId: blockingId)
+        awsBlocksTable.removeBlock(awsBlock, completionHandler: completionHandler)
+    }
+    
+    func getAmIBlockedDynamoDB(_ userId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+        guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
+            print("getAmIBlockedDynamoDB no identityId!")
+            return
+        }
+        let awsBlocksBlockingIdIndex = AWSBlocksBlockingIdIndex()
+        awsBlocksBlockingIdIndex.getAmIBlocked(identityId, userId: userId, completionHandler: completionHandler)
     }
 }

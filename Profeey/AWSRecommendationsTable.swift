@@ -48,7 +48,7 @@ class AWSRecommendationsTable: NSObject, Table {
         return AWSRecommendation.jsonKeyPathsByPropertyKey()[dataObjectAttributeName] as! String
     }
     
-    // Find if user with userId is recommendind user with recommendingId.
+    // Find if user with userId is recommending user with recommendingId.
     func getRecommendation(_ userId: String, recommendingId: String, completionHandler: @escaping AWSContinuationBlock) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
         objectMapper.load(AWSRecommendation.self, hashKey: userId, rangeKey: recommendingId).continue(completionHandler)
