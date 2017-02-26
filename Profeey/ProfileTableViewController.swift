@@ -143,10 +143,6 @@ class ProfileTableViewController: UITableViewController {
         } else {
             self.queryUserData(userId)
         }
-        // Query for your block.
-        self.isLoadingBlock = true
-        self.getBlock(userId)
-
     }
     
     fileprivate func queryUserData(_ userId: String) {
@@ -193,6 +189,9 @@ class ProfileTableViewController: UITableViewController {
                         // I can block as well.
                         let blockButton = UIBarButtonItem(image: UIImage(named: "ic_more_vertical_big"), style: UIBarButtonItemStyle.plain, target: self, action: #selector(self.blockButtonTapped(_:)))
                         self.navigationItem.rightBarButtonItems = [blockButton]
+                        
+                        // Get block for other as well so I can block them too.
+                        self.getBlock(userId)
                     } else {
                         self.amIBlocked = false
                         self.queryUserData(userId)
@@ -330,12 +329,16 @@ class ProfileTableViewController: UITableViewController {
                         cell.setEditButton()
                     }
                 } else {
-                    cell.recommendButton.isHidden = false
-                    if !self.isLoadingRecommendation {
-                        self.isRecommending ? cell.setRecommendingButton() : cell.setRecommendButton()
-                    }
-                    if !self.isLoadingRelationship  {
-                        self.isFollowing ? cell.setFollowingButton() : cell.setFollowButton()
+                    if !self.isLoadingBlock {
+                        cell.recommendButton.isHidden = self.isBlocking
+                        if !self.isBlocking {
+                            if !self.isLoadingRecommendation {
+                                self.isRecommending ? cell.setRecommendingButton() : cell.setRecommendButton()
+                            }
+                            if !self.isLoadingRelationship  {
+                                self.isFollowing ? cell.setFollowingButton() : cell.setFollowButton()
+                            }
+                        }
                     }
                 }
                 cell.profileMainTableViewCellDelegate = self
@@ -800,10 +803,9 @@ class ProfileTableViewController: UITableViewController {
                     PRFYS3Manager.defaultS3Manager().downloadImageS3(profilePicUrl, imageType: .userProfilePic)
                 }
                 
-                // Load relationship and recommendation.
+                // Load block before relationship and recommendation.
                 if let userId = awsUser._userId, !self.isCurrentUser {
-                    self.getRelationship(userId)
-                    self.getRecommendation(userId)
+                    self.getBlock(userId)
                 }
             })
             return nil
@@ -1110,9 +1112,9 @@ class ProfileTableViewController: UITableViewController {
         })
     }
     
-    fileprivate func getBlock(_ blockingId: String) {
+    fileprivate func getBlock(_ userId: String) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().getBlockDynamoDB(blockingId, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().getBlockDynamoDB(userId, completionHandler: {
             (task: AWSTask) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
@@ -1122,8 +1124,16 @@ class ProfileTableViewController: UITableViewController {
                     self.isLoadingBlock = false
                     if task.result != nil {
                         self.isBlocking = true
+                        let cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? ProfileMainTableViewCell
+                        cell?.recommendButton.isHidden = true
+                        cell?.setBlockingButton()
                     } else {
                         self.isBlocking = false
+                        // Load relationship and recommendation only if not blocking and not blocked.
+                        if !self.amIBlocked {
+                            self.getRelationship(userId)
+                            self.getRecommendation(userId)
+                        }
                     }
                     self.tableView.reloadData()
                 }
@@ -1220,6 +1230,8 @@ extension ProfileTableViewController: ProfileMainTableViewCellDelegate {
     func followButtonTapped() {
         if self.isCurrentUser, !self.isLoadingUser {
             self.performSegue(withIdentifier: "segueToEditProfileVc", sender: self)
+        } else if !self.isLoadingBlock, self.isBlocking {
+            self.blockButtonTapped(self)
         } else {
             if !self.isLoadingRelationship, let followingId = self.user?.userId {
                 if self.isFollowing {
@@ -1600,6 +1612,8 @@ extension ProfileTableViewController {
             return
         }
         self.isBlocking = true
+        (self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? ProfileMainTableViewCell)?.recommendButton.isHidden = true
+        (self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? ProfileMainTableViewCell)?.setBlockingButton()
         self.tableView.reloadData()
     }
     
@@ -1614,6 +1628,14 @@ extension ProfileTableViewController {
             return
         }
         self.isBlocking = false
+        (self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? ProfileMainTableViewCell)?.recommendButton.isHidden = false
+        (self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? ProfileMainTableViewCell)?.setFollowButton()
+        
+        // Load relationships and recommendations.
+        self.isLoadingRelationship = true
+        self.isLoadingRecommendation = true
+        self.getRelationship(blockingId)
+        self.getRecommendation(blockingId)
         self.tableView.reloadData()
     }
 }

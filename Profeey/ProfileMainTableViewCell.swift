@@ -87,6 +87,15 @@ class ProfileMainTableViewCell: UITableViewCell {
         }
     }
     
+    func setBlockingButton() {
+        UIView.performWithoutAnimation {
+            self.followButton.setTitle("Blocked", for: UIControlState())
+            self.followButton.setTitleColor(Colors.red, for: UIControlState())
+            self.followButton.setBackgroundImage(UIImage(named: "btn_block_resizable"), for: UIControlState.normal)
+            self.followButton.layoutIfNeeded()
+        }
+    }
+    
     // MARK: IBActions
     
     @IBAction func numberOfPostsButtonTapped(_ sender: AnyObject) {
