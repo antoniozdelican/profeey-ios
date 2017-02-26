@@ -97,9 +97,14 @@ class PostDetailsTableViewController: UITableViewController {
         }
         if let navigationController = segue.destination as? UINavigationController,
             let childViewController =  navigationController.childViewControllers[0] as? ReportTableViewController {
-            childViewController.userId = self.post?.userId
-            childViewController.postId = self.post?.postId
-            childViewController.reportType = ReportType.post
+            if let cell = sender as? CommentTableViewCell, let indexPath = self.tableView.indexPath(for: cell) {
+                childViewController.userId = self.comments[indexPath.row].userId
+                childViewController.reportType = ReportType.user
+            } else {
+                childViewController.userId = self.post?.userId
+                childViewController.postId = self.post?.postId
+                childViewController.reportType = ReportType.post
+            }
         }
     }
 
@@ -346,7 +351,7 @@ class PostDetailsTableViewController: UITableViewController {
         }
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
         if userId == AWSIdentityManager.defaultIdentityManager().identityId {
-            // DELETE
+            // Delete.
             let deleteAction = UIAlertAction(title: "Delete", style: UIAlertActionStyle.destructive, handler: {
                 (alert: UIAlertAction) in
                 let alertController = UIAlertController(title: "Delete Comment?", message: nil, preferredStyle: UIAlertControllerStyle.alert)
@@ -364,11 +369,14 @@ class PostDetailsTableViewController: UITableViewController {
             })
             alertController.addAction(deleteAction)
         } else {
-            // REPORT
-            let reportAction = UIAlertAction(title: "Report", style: UIAlertActionStyle.destructive, handler: nil)
+            // Report.
+            let reportAction = UIAlertAction(title: "Report", style: UIAlertActionStyle.destructive, handler: {
+                (alert: UIAlertAction) in
+                self.performSegue(withIdentifier: "segueToReportVc", sender: cell)
+            })
             alertController.addAction(reportAction)
         }
-        // CANCEL
+        // Cancel.
         let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil)
         alertController.addAction(cancelAction)
         self.present(alertController, animated: true, completion: nil)
@@ -720,14 +728,17 @@ extension PostDetailsTableViewController {
     }
     
     func createReportNotification(_ notification: NSNotification) {
-        guard let postId = notification.userInfo?["postId"] as? String else {
-            return
+        if let postId = notification.userInfo?["postId"] as? String {
+            // It's a post report.
+            guard let post = self.post, post.postId == postId else {
+                return
+            }
+            post.isReportedByCurrentUser = true
+            self.tableView.reloadData()
+        } else {
+            // It's a comment (user) report.
+            // Do nothing for now with UI.
         }
-        guard let post = self.post, post.postId == postId else {
-            return
-        }
-        post.isReportedByCurrentUser = true
-        self.tableView.reloadData()
     }
 }
 
