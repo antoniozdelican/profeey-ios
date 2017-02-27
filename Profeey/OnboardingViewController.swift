@@ -16,7 +16,7 @@ class OnboardingViewController: UIViewController {
     @IBOutlet weak var facebookButton: UIButton!
     @IBOutlet weak var signUpButton: UIButton!
     @IBOutlet weak var logInButton: UIButton!
-    //@IBOutlet weak var termsButton: UIButton!
+    @IBOutlet weak var termsButton: UIButton!
     @IBOutlet weak var privacyPolicyButton: UIButton!
     @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
     
@@ -84,18 +84,16 @@ class OnboardingViewController: UIViewController {
             completion: nil)
     }
     
-//    @IBAction func termsButtonTapped(_ sender: Any) {
-//        guard let termsUrl = URL(string: PRFYTermsUrl) else {
-//            return
-//        }
-//        UIApplication.shared.openURL(termsUrl)
-//    }
+    @IBAction func termsButtonTapped(_ sender: Any) {
+        if let termsUrl = URL(string: PRFYTermsUrl) {
+            UIApplication.shared.openURL(termsUrl)
+        }
+    }
     
     @IBAction func privacyPolicyButtonTapped(_ sender: Any) {
-        guard let privacyPolicyUrl = URL(string: PRFYPrivacyPolicyUrl) else {
-            return
+        if let privacyPolicyUrl = URL(string: PRFYPrivacyPolicyUrl) {
+            UIApplication.shared.openURL(privacyPolicyUrl)
         }
-        UIApplication.shared.openURL(privacyPolicyUrl)
     }
     
     // MARK: Helpers

@@ -128,10 +128,29 @@
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="IKa-Hg-nn5">
-                                        <rect key="frame" x="49.5" y="14.5" width="81" height="15"/>
+                                        <rect key="frame" x="18" y="14.5" width="144" height="15"/>
                                         <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Wc-Zf-mwY">
+                                                <rect key="frame" x="0.0" y="0.0" width="36" height="15"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="15" id="1PQ-qI-mlb"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="12"/>
+                                                <state key="normal" title="Terms">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="termsButtonTapped:" destination="CXt-zB-vbc" eventType="touchUpInside" id="ljT-Os-y6G"/>
+                                                </connections>
+                                            </button>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="and" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O88-zM-sFB">
+                                                <rect key="frame" x="39" y="0.0" width="21" height="15"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Haf-at-OKf">
-                                                <rect key="frame" x="0.0" y="0.0" width="81" height="15"/>
+                                                <rect key="frame" x="63" y="0.0" width="81" height="15"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="15" id="0ON-FG-r7I"/>
                                                 </constraints>
@@ -173,6 +192,7 @@
                         <outlet property="logInButton" destination="7kW-lW-eFb" id="yJR-30-U52"/>
                         <outlet property="privacyPolicyButton" destination="Haf-at-OKf" id="W8b-vw-8mi"/>
                         <outlet property="signUpButton" destination="Pxl-u3-F8O" id="IwS-eh-pty"/>
+                        <outlet property="termsButton" destination="3Wc-Zf-mwY" id="ZcC-Er-3Lg"/>
                         <segue destination="b1r-Pe-8L2" kind="show" identifier="segueToUsernameVc" id="m5o-ZM-Co8"/>
                     </connections>
                 </viewController>
