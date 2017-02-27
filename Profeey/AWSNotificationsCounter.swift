@@ -15,6 +15,8 @@ class AWSNotificationsCounter: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     var _numberOfNewNotifications: NSNumber?
     var _lastSeenDate: NSNumber?
     
+    var _blocked: NSNumber?
+    
     // Update.
     convenience init(_userId: String?, _numberOfNewNotifications: NSNumber?, _lastSeenDate: NSNumber?) {
         self.init()

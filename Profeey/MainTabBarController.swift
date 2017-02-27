@@ -160,6 +160,14 @@ class MainTabBarController: UITabBarController {
         }
     }
     
+    // For disabledUser.
+    fileprivate func redirectToOnboarding() {
+        if let window = UIApplication.shared.keyWindow,
+            let initialViewController = UIStoryboard(name: "Onboarding", bundle: nil).instantiateInitialViewController() {
+            window.rootViewController = initialViewController
+        }
+    }
+    
     // MARK: Public
     
     func toggleNewNotificationsView(isHidden: Bool) {
@@ -220,6 +228,12 @@ class MainTabBarController: UITabBarController {
                         }
                         return
                     }
+                    // Check if disabled. If yes, logOut.
+                    guard awsUser._isDisabled == nil || (awsUser._isDisabled != nil && awsUser._isDisabled!.intValue != 1) else {
+                        self.logOut()
+                        return
+                    }
+                    
                     // Update locally.
                     PRFYDynamoDBManager.defaultDynamoDBManager().updateCurrentUserLocal(awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationId: awsUser._locationId, locationName: awsUser._locationName, profilePic: nil)
                     // Get profilePic.
@@ -326,6 +340,28 @@ class MainTabBarController: UITabBarController {
                 NotificationCenter.default.post(name: NSNotification.Name(rawValue: APNsNewMessageNotificationKey), object: self, userInfo: ["message": message])
             })
             return nil
+        })
+    }
+    
+    // Just in case it's a disabled user.
+    fileprivate func logOut() {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        AWSIdentityManager.defaultIdentityManager().logout(completionHandler: {
+            (result: Any?, error: Error?) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                FullScreenIndicator.hide()
+                // Don't put error because it will be shown before redirection!
+                
+                // Credentials provider cleanUp.
+                //AWSIdentityManager.defaultIdentityManager().credentialsProvider.clearKeychain()
+                // User file manager cleanUp.
+                AWSUserFileManager.defaultUserFileManager().clearCache()
+                // Current user cleanUp.
+                PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB = nil
+                // Redirect.
+                self.redirectToOnboarding()
+            })
         })
     }
 }

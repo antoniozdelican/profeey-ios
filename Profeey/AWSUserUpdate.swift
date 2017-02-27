@@ -13,6 +13,6 @@ import Foundation
 class AWSUserUpdate: AWSUser {
     
     class func ignoreAttributes() -> [String] {
-        return ["created", "preferredUsername", "email", "emailVerified", "numberOfFollowers", "numberOfPosts", "numberOfRecommendations", "isFacebookUser"]
+        return ["created", "preferredUsername", "email", "emailVerified", "numberOfFollowers", "numberOfPosts", "numberOfRecommendations", "isFacebookUser", "isDisabled"]
     }
 }

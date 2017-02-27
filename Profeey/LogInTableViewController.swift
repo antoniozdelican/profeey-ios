@@ -133,11 +133,18 @@ class LogInTableViewController: UITableViewController {
     // MARK: Helpers
     
     fileprivate func redirectToMain() {
-        guard let window = UIApplication.shared.keyWindow,
-            let initialViewController = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController() else {
-                return
+        if let window = UIApplication.shared.keyWindow,
+            let initialViewController = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController() {
+                window.rootViewController = initialViewController
         }
-        window.rootViewController = initialViewController
+    }
+    
+    // For disabledUser.
+    fileprivate func redirectToOnboarding() {
+        if let window = UIApplication.shared.keyWindow,
+            let initialViewController = UIStoryboard(name: "Onboarding", bundle: nil).instantiateInitialViewController() {
+                window.rootViewController = initialViewController
+        }
     }
     
     fileprivate func enableButtons() {
@@ -239,9 +246,15 @@ class LogInTableViewController: UITableViewController {
                     self.enableButtons()
                     return
                 }
-                if let _ = task.result as? AWSUser {
+                if let user = task.result as? AWSUser {
                     // User already exists in DynamoDB, so this is logIn.
-                    self.redirectToMain()
+                    
+                    // Check if disabled. If yes, logOut.
+                    if let isDisabled = user._isDisabled, isDisabled.intValue == 1 {
+                        self.logOut()
+                    } else {
+                        self.redirectToMain()
+                    }
                 } else {
                     // User doesn't exists in DynamoDB, so this is signUp.
                     self.getFacebookGraphData()
@@ -320,6 +333,28 @@ class LogInTableViewController: UITableViewController {
             FullScreenIndicator.hide()
             self.redirectToMain()
         }
+    }
+    
+    // Just in case it's a disabled user.
+    fileprivate func logOut() {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        AWSIdentityManager.defaultIdentityManager().logout(completionHandler: {
+            (result: Any?, error: Error?) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                FullScreenIndicator.hide()
+                // Don't put error because it will be shown before redirection!
+                
+                // Credentials provider cleanUp.
+                //AWSIdentityManager.defaultIdentityManager().credentialsProvider.clearKeychain()
+                // User file manager cleanUp.
+                AWSUserFileManager.defaultUserFileManager().clearCache()
+                // Current user cleanUp.
+                PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB = nil
+                // Redirect.
+                self.redirectToOnboarding()
+            })
+        })
     }
 }
 

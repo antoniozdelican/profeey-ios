@@ -31,6 +31,7 @@ class AWSUser: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     var _numberOfRecommendations: NSNumber?
     
     var _isFacebookUser: NSNumber?
+    var _isDisabled: NSNumber?
     
     // To create User on landing.
     convenience init(_userId: String?, _created: NSNumber?, _firstName: String?, _lastName: String?, _email: String?, _emailVerified: NSNumber?, _isFacebookUser: NSNumber?) {
