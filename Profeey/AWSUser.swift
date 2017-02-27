@@ -114,6 +114,7 @@ class AWSUser: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
             "_numberOfPosts" : "numberOfPosts",
             "_numberOfRecommendations" : "numberOfRecommendations",
             "_isFacebookUser" : "isFacebookUser",
+            "_isDisabled" : "isDisabled",
         ]
     }
 }

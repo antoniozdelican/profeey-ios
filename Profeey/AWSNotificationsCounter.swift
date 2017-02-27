@@ -14,8 +14,8 @@ class AWSNotificationsCounter: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     var _userId: String?
     var _numberOfNewNotifications: NSNumber?
     var _lastSeenDate: NSNumber?
-    
-    var _blocked: NSNumber?
+    // Using here to check every time on applicationDidBecomeActive. So we don't create a new table.
+    var _isDisabled: NSNumber?
     
     // Update.
     convenience init(_userId: String?, _numberOfNewNotifications: NSNumber?, _lastSeenDate: NSNumber?) {
@@ -43,6 +43,7 @@ class AWSNotificationsCounter: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
             "_userId" : "userId",
             "_numberOfNewNotifications" : "numberOfNewNotifications",
             "_lastSeenDate" : "lastSeenDate",
+            "_isDisabled" : "isDisabled",
         ]
     }
 }

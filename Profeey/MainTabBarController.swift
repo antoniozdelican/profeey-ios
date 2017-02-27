@@ -168,6 +168,11 @@ class MainTabBarController: UITabBarController {
         }
     }
     
+    fileprivate func showDisabledMessage() {
+        let alertController = self.getSimpleAlertWithTitle("Disabled account", message: "Your account has been disabled for violating our terms. Go to www.profeey.com/terms and learn more.", cancelButtonTitle: "Ok")
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
     // MARK: Public
     
     func toggleNewNotificationsView(isHidden: Bool) {
@@ -267,6 +272,11 @@ class MainTabBarController: UITabBarController {
                         self.toggleNewNotificationsView(isHidden: true)
                     }
                     self.lastSeenDate = awsNotificationsCounter._lastSeenDate
+                    
+                    // Check if disabled. If yes, logOut.
+                    if let isDisabled = awsNotificationsCounter._isDisabled, isDisabled.intValue == 1 {
+                        self.logOut()
+                    }
                 }
                 // Reset every time, even if notificationsCounter doesn't yet exists (new user).
                 self.updateNotificationsCounter()
@@ -359,6 +369,10 @@ class MainTabBarController: UITabBarController {
                 AWSUserFileManager.defaultUserFileManager().clearCache()
                 // Current user cleanUp.
                 PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB = nil
+                
+                // Present disabled message.
+                self.showDisabledMessage()
+                
                 // Redirect.
                 self.redirectToOnboarding()
             })

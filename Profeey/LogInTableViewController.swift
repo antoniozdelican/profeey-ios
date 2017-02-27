@@ -147,6 +147,11 @@ class LogInTableViewController: UITableViewController {
         }
     }
     
+    fileprivate func showDisabledMessage() {
+        let alertController = self.getSimpleAlertWithTitle("Disabled account", message: "Your account has been disabled for violating our terms. Go to www.profeey.com/terms and learn more.", cancelButtonTitle: "Ok")
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
     fileprivate func enableButtons() {
         // Enable all buttons and textFields.
         self.usernameTextField.isEnabled = true
@@ -351,6 +356,10 @@ class LogInTableViewController: UITableViewController {
                 AWSUserFileManager.defaultUserFileManager().clearCache()
                 // Current user cleanUp.
                 PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB = nil
+                
+                // Present disabled message.
+                self.showDisabledMessage()
+                
                 // Redirect.
                 self.redirectToOnboarding()
             })
