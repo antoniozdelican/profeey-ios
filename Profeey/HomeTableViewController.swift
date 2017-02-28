@@ -230,7 +230,7 @@ class HomeTableViewController: UITableViewController {
         case 0:
             // Reported posts.
             if self.posts[indexPath.section].isReportedByCurrentUser {
-                return 200.0
+                return 112.0
             }
             return 60.0
         case 1:
@@ -248,7 +248,7 @@ class HomeTableViewController: UITableViewController {
         case 0:
             // Reported posts.
             if self.posts[indexPath.section].isReportedByCurrentUser {
-                return 200.0
+                return 112.0
             }
             return 60.0
         case 1:
