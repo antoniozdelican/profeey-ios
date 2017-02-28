@@ -38,7 +38,7 @@
                             <rect key="frame" x="0.0" y="0.0" width="375" height="52"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Add your profession..." textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="FmP-eY-T18">
+                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Search your profession..." textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="FmP-eY-T18">
                                     <rect key="frame" x="16" y="8" width="343" height="36"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="36" id="vrq-9r-bdZ"/>
@@ -190,26 +190,9 @@
                                 <action selector="cancelButtonTapped:" destination="Hi8-Ey-38y" id="ScR-go-eUA"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" id="Duc-oz-0Ot">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="cYV-yf-J8o">
-                                <rect key="frame" x="318" y="5" width="41" height="33"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <state key="normal" title="Done">
-                                    <color key="titleColor" red="0.080254554749999998" green="0.61858558649999995" blue="0.93965935710000004" alpha="1" colorSpace="calibratedRGB"/>
-                                </state>
-                                <state key="disabled">
-                                    <color key="titleColor" red="0.73251521590000002" green="0.7315930128" blue="0.76011711360000001" alpha="1" colorSpace="calibratedRGB"/>
-                                </state>
-                                <connections>
-                                    <action selector="doneButtonTapped:" destination="Hi8-Ey-38y" eventType="touchUpInside" id="UUr-BF-QBq"/>
-                                </connections>
-                            </button>
-                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="addProfessionTextField" destination="FmP-eY-T18" id="XWo-qT-Six"/>
-                        <outlet property="doneButton" destination="cYV-yf-J8o" id="h3J-aY-Ed9"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="a52-A7-hbr" userLabel="First Responder" sceneMemberID="firstResponder"/>

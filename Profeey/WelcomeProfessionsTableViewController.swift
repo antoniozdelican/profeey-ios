@@ -11,10 +11,10 @@ import AWSDynamoDB
 
 class WelcomeProfessionsTableViewController: UITableViewController {
     
-    @IBOutlet weak var nextButton: UIButton!
+    @IBOutlet weak var skipButton: UIButton!
     @IBOutlet weak var addProfessionTextField: UITextField!
     
-    fileprivate var professionName: String?
+    //fileprivate var professionName: String?
     
     fileprivate var popularProfessions: [Profession] = []
     fileprivate var regularProfessions: [Profession] = []
@@ -30,16 +30,14 @@ class WelcomeProfessionsTableViewController: UITableViewController {
         self.tableView.register(UINib(nibName: "TableSectionHeader", bundle: nil), forHeaderFooterViewReuseIdentifier: "tableSectionHeader")
         self.configureNavigationBar()
         
-        self.addProfessionTextField.text = self.professionName
-        
         self.isShowingPopularProfessions = true
         self.isSearchingPopularProfessions = true
         self.scanProfessions()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
         self.view.endEditing(true)
+        super.viewWillDisappear(animated)
     }
 
     override func didReceiveMemoryWarning() {
@@ -59,7 +57,7 @@ class WelcomeProfessionsTableViewController: UITableViewController {
         self.navigationController?.navigationBar.tintColor = Colors.black
         self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: Colors.black]
         // Fix alignment for custom rightBarButtonItem.
-        self.nextButton.contentEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, 0.0, -8.0)
+        self.skipButton.contentEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, 0.0, -8.0)
     }
     
     // MARK: Navigation
@@ -142,9 +140,11 @@ class WelcomeProfessionsTableViewController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
         let cell = tableView.cellForRow(at: indexPath)
         if cell is ProfessionTableViewCell {
-            let selectedProfession = self.isShowingPopularProfessions ? self.popularProfessions[indexPath.row] : self.regularProfessions[indexPath.row]
-            self.addProfessionTextField.text = selectedProfession.professionName
-            self.professionName = selectedProfession.professionName
+            let profession = self.isShowingPopularProfessions ? self.popularProfessions[indexPath.row] : self.regularProfessions[indexPath.row]
+            if let professionName = profession.professionName {
+                self.view.endEditing(true)
+                self.saveUserProfession(professionName)
+            }
         }
     }
     
@@ -186,34 +186,28 @@ class WelcomeProfessionsTableViewController: UITableViewController {
             self.regularProfessions = []
             self.isSearchingRegularProfessions = false
             self.tableView.reloadData()
-            self.professionName = nil
         } else {
             self.isShowingPopularProfessions = false
             // Clear old.
             self.regularProfessions = []
             self.isSearchingRegularProfessions = true
             self.tableView.reloadData()
-            self.professionName = professionName
             // Start search for existing professions.
             self.filterProfessions(professionName)
         }
     }
     
-    @IBAction func nextButtonTapped(_ sender: AnyObject) {
+    @IBAction func skipButtonTapped(_ sender: AnyObject) {
         self.view.endEditing(true)
-        if let professionName = self.professionName {
-            self.saveUserProfession(professionName)
-        } else {
-            let alertController = UIAlertController(title: "No Profession", message: "Are you sure you don't want to pick a profession?", preferredStyle: UIAlertControllerStyle.alert)
-            let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil)
-            let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: {
-                (alertAction: UIAlertAction) in
-                self.performSegue(withIdentifier: "segueToDiscoverPeopleVc", sender: self)
-            })
-            alertController.addAction(cancelAction)
-            alertController.addAction(okAction)
-            self.present(alertController, animated: true, completion: nil)
-        }
+        let alertController = UIAlertController(title: "No Profession", message: "Are you sure you don't want to pick a profession?", preferredStyle: UIAlertControllerStyle.alert)
+        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil)
+        let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: {
+            (alertAction: UIAlertAction) in
+            self.performSegue(withIdentifier: "segueToDiscoverPeopleVc", sender: self)
+        })
+        alertController.addAction(cancelAction)
+        alertController.addAction(okAction)
+        self.present(alertController, animated: true, completion: nil)
     }
     
     // MARK: Helpers
