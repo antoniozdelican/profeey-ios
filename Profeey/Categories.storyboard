@@ -64,7 +64,7 @@
                                         </constraint>
                                     </constraints>
                                 </view>
-                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Add a skill..." textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="dYc-B7-uAW">
+                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Search a skill..." textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="dYc-B7-uAW">
                                     <rect key="frame" x="16" y="8" width="343" height="36"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="36" id="mFg-34-VVg"/>
@@ -191,27 +191,10 @@
                                 <action selector="cancelButtonTapped:" destination="bSU-Zt-F7f" id="SHB-Mp-5NG"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" id="SLH-0v-pk8">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="bdg-Ha-NnA">
-                                <rect key="frame" x="318" y="5" width="41" height="33"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <state key="normal" title="Done">
-                                    <color key="titleColor" red="0.080254554749999998" green="0.61858558649999995" blue="0.93965935710000004" alpha="1" colorSpace="calibratedRGB"/>
-                                </state>
-                                <state key="disabled">
-                                    <color key="titleColor" red="0.73251521590000002" green="0.7315930128" blue="0.76011711360000001" alpha="1" colorSpace="calibratedRGB"/>
-                                </state>
-                                <connections>
-                                    <action selector="doneButtonTapped:" destination="bSU-Zt-F7f" eventType="touchUpInside" id="XNi-7m-H5y"/>
-                                </connections>
-                            </button>
-                        </barButtonItem>
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="addCategoryTextField" destination="dYc-B7-uAW" id="9cJ-wN-S0p"/>
-                        <outlet property="doneButton" destination="bdg-Ha-NnA" id="ED1-gS-Uwl"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pSU-QS-YWZ" userLabel="First Responder" sceneMemberID="firstResponder"/>

@@ -289,7 +289,7 @@
                         <outlet property="loadingTableFooterView" destination="bMC-el-KLH" id="OSA-66-VMl"/>
                         <segue destination="L9S-XV-FEq" kind="show" identifier="segueToProfileVc" id="bcN-4v-a2q"/>
                         <segue destination="P1G-ba-iDt" kind="show" identifier="segueToUsersVc" id="N0X-PW-F6Q"/>
-                        <segue destination="fcG-wo-A8j" kind="presentation" identifier="segueToEditPostVc" animates="NO" id="Lgi-4f-QXa"/>
+                        <segue destination="fcG-wo-A8j" kind="presentation" identifier="segueToEditPostVc" id="Lgi-4f-QXa"/>
                         <segue destination="zuL-f0-Fd6" kind="show" identifier="segueToDiscoverPeopleVc" id="eWr-pq-F5O"/>
                         <segue destination="QOG-T2-Jdx" kind="show" identifier="segueToPostDetailsVc" id="kNA-NO-uuB"/>
                         <segue destination="Dwd-vz-ZqW" kind="presentation" identifier="segueToCaptureVc" id="64i-uC-8Di"/>
