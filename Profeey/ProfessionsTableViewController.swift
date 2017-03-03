@@ -81,7 +81,11 @@ class ProfessionsTableViewController: UITableViewController {
                 return cell
             }
             if self.popularProfessions.count == 0 {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "cellNoResults", for: indexPath) as! NoResultsTableViewCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellNoResultsRequest", for: indexPath) as! NoResultsRequestTableViewCell
+                cell.noResultsMessageLabel.text = "No results found message"
+                cell.setProfessionButton()
+                cell.noResultsRequestTableViewCellDelegate = self
+//                let cell = tableView.dequeueReusableCell(withIdentifier: "cellNoResults", for: indexPath) as! NoResultsTableViewCell
                 return cell
             }
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellProfession", for: indexPath) as! ProfessionTableViewCell
@@ -97,7 +101,11 @@ class ProfessionsTableViewController: UITableViewController {
                 return cell
             }
             if self.regularProfessions.count == 0 {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "cellNoResults", for: indexPath) as! NoResultsTableViewCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellNoResultsRequest", for: indexPath) as! NoResultsRequestTableViewCell
+                cell.noResultsMessageLabel.text = "No results found message"
+                cell.setProfessionButton()
+                cell.noResultsRequestTableViewCellDelegate = self
+                //                let cell = tableView.dequeueReusableCell(withIdentifier: "cellNoResults", for: indexPath) as! NoResultsTableViewCell
                 return cell
             }
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellProfession", for: indexPath) as! ProfessionTableViewCell
@@ -129,12 +137,25 @@ class ProfessionsTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if self.isShowingPopularProfessions {
+            if !self.isSearchingPopularProfessions && self.popularProfessions.count == 0 {
+                return UITableViewAutomaticDimension
+            }
+        } else {
+            if !self.isSearchingRegularProfessions && self.regularProfessions.count == 0 {
+                return UITableViewAutomaticDimension
+            }
+        }
         return 60.0
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "tableSectionHeader") as? TableSectionHeader
-        header?.titleLabel.text = self.isShowingPopularProfessions ? "POPULAR" : "BEST MATCHES"
+        if self.isShowingPopularProfessions {
+            header?.titleLabel.text = self.popularProfessions.count != 0 ? "POPULAR" : "NO RESULTS FOUND"
+        } else {
+            header?.titleLabel.text = self.regularProfessions.count != 0 ? "BEST MATCHES" : "NO RESULTS FOUND"
+        }
         return header
     }
     
@@ -230,5 +251,12 @@ class ProfessionsTableViewController: UITableViewController {
                 }
             })
         })
+    }
+}
+
+extension ProfessionsTableViewController: NoResultsRequestTableViewCellDelegate {
+    
+    func requestButtonTapped() {
+        // todo
     }
 }

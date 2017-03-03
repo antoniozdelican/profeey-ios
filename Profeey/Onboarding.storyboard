@@ -872,7 +872,7 @@
             </objects>
             <point key="canvasLocation" x="3521" y="-674"/>
         </scene>
-        <!--Choose your profession-->
+        <!--Whats your profession-->
         <scene sceneID="uGO-hk-5kt">
             <objects>
                 <tableViewController id="vkP-Dh-uMO" customClass="WelcomeProfessionsTableViewController" customModule="Profeey" customModuleProvider="target" sceneMemberID="viewController">
@@ -1031,7 +1031,7 @@
                             <outlet property="delegate" destination="vkP-Dh-uMO" id="6tM-KN-uzL"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Choose your profession" id="Pzj-Hc-z1x">
+                    <navigationItem key="navigationItem" title="Whats your profession" id="Pzj-Hc-z1x">
                         <barButtonItem key="rightBarButtonItem" id="V9e-RL-yBO">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="1Kp-px-S8S">
                                 <rect key="frame" x="323" y="5" width="36" height="33"/>

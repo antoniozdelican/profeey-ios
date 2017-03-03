@@ -157,26 +157,46 @@
                                     <outlet property="activityIndicator" destination="fi3-sR-3d7" id="SDk-9B-cqx"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellNoResults" rowHeight="60" id="zYt-ZT-pgF" customClass="NoResultsTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="228" width="375" height="60"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellNoResultsRequest" rowHeight="104" id="zYt-ZT-pgF" customClass="NoResultsRequestTableViewCell" customModule="Profeey" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="228" width="375" height="104"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="zYt-ZT-pgF" id="coQ-My-60I">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="59"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="103"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No results found" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="167-dn-8Dm">
-                                            <rect key="frame" x="16" y="21.5" width="343" height="17"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No results message" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="167-dn-8Dm">
+                                            <rect key="frame" x="16" y="21" width="343" height="17"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <color key="textColor" red="0.41868340970000001" green="0.41867089270000002" blue="0.41867792609999999" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OTi-mD-Ei4">
+                                            <rect key="frame" x="124" y="50" width="126" height="32"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="126" id="GC7-Tw-aO2"/>
+                                                <constraint firstAttribute="height" constant="32" id="pAM-tJ-NA7"/>
+                                            </constraints>
+                                            <state key="normal" title="Send Request">
+                                                <color key="titleColor" red="0.080254554749999998" green="0.61858558649999995" blue="0.93965935710000004" alpha="1" colorSpace="calibratedRGB"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="requestButtonTapped:" destination="zYt-ZT-pgF" eventType="touchUpInside" id="w9o-r4-9NG"/>
+                                            </connections>
+                                        </button>
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="167-dn-8Dm" firstAttribute="leading" secondItem="coQ-My-60I" secondAttribute="leading" constant="16" id="Bdb-eH-JCZ"/>
+                                        <constraint firstAttribute="bottom" secondItem="OTi-mD-Ei4" secondAttribute="bottom" constant="21" id="IOT-z5-ApK"/>
+                                        <constraint firstItem="OTi-mD-Ei4" firstAttribute="centerX" secondItem="coQ-My-60I" secondAttribute="centerX" id="bU6-pw-99w"/>
+                                        <constraint firstItem="167-dn-8Dm" firstAttribute="top" secondItem="coQ-My-60I" secondAttribute="top" constant="21" id="cXd-lX-jxP"/>
+                                        <constraint firstItem="OTi-mD-Ei4" firstAttribute="top" secondItem="167-dn-8Dm" secondAttribute="bottom" constant="12" id="ii6-w9-oJ3"/>
                                         <constraint firstAttribute="trailing" secondItem="167-dn-8Dm" secondAttribute="trailing" constant="16" id="mWZ-Gk-Pkk"/>
-                                        <constraint firstItem="167-dn-8Dm" firstAttribute="centerY" secondItem="coQ-My-60I" secondAttribute="centerY" id="pMs-V2-9It"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="noResultsMessageLabel" destination="167-dn-8Dm" id="ZsL-h8-Lhk"/>
+                                    <outlet property="requestButton" destination="OTi-mD-Ei4" id="6fQ-OL-GPJ"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
