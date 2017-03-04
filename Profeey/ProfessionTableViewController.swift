@@ -22,7 +22,7 @@ class ProfessionTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-        self.navigationItem.title = self.profession?.professionName
+        self.navigationItem.title = self.profession?.professionName?.replacingOccurrences(of: "_", with: " ")
         self.tableView.register(UINib(nibName: "SearchTableSectionHeader", bundle: nil), forHeaderFooterViewReuseIdentifier: "searchTableSectionHeader")
         
         if let professionName = self.profession?.professionName {
@@ -80,7 +80,7 @@ class ProfessionTableViewController: UITableViewController {
         cell.profilePicImageView.image = user.profilePicUrl != nil ? user.profilePic : UIImage(named: "ic_no_profile_pic_feed")
         cell.fullNameLabel.text = user.fullName
         cell.preferredUsernameLabel.text = user.preferredUsername
-        cell.professionNameLabel.text = user.professionName
+        cell.professionNameLabel.text = user.professionNameWhitespace
         cell.schoolNameLabel.text = user.schoolName
         cell.schoolStackView.isHidden = user.schoolName != nil ? false : true
         cell.numberOfRecommendationsLabel.text = user.numberOfRecommendationsInt.numberToString()

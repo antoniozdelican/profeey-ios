@@ -124,7 +124,7 @@ class UsersTableViewController: UITableViewController {
         let user = self.users[indexPath.row]
         cell.profilePicImageView.image = user.profilePicUrl != nil ? user.profilePic : UIImage(named: "ic_no_profile_pic_feed")
         cell.preferredUsernameLabel.text = user.preferredUsername
-        cell.professionNameLabel.text = user.professionName
+        cell.professionNameLabel.text = user.professionNameWhitespace
         if !self.isLoadingFollowingIds, let userId = user.userId {
             self.followingIds.contains(userId) ? cell.setFollowingButton() : cell.setFollowButton()
         }

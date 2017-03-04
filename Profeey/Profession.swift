@@ -16,10 +16,7 @@ class Profession: NSObject {
     
     // Generated.
     var professionNameWhitespace: String? {
-        guard let professionName = self.professionName else {
-            return nil
-        }
-        return professionName.replacingOccurrences(of: "_", with: " ")
+        return self.professionName?.replacingOccurrences(of: "_", with: " ")
     }
     var numberOfUsersInt: Int {
         guard let numberOfUsers = self.numberOfUsers else {

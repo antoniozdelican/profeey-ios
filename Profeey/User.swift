@@ -39,6 +39,12 @@ class User: NSObject {
     var fullName: String? {
         return [self.firstName, self.lastName].flatMap{$0}.joined(separator: " ")
     }
+    var professionNameWhitespace: String? {
+        guard let professionName = self.professionName else {
+            return nil
+        }
+        return professionName.replacingOccurrences(of: "_", with: " ")
+    }
     var numberOfPostsInt: Int {
         guard let numberOfPostsInt = self.numberOfPosts else {
             return 0

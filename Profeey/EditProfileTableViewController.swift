@@ -68,8 +68,8 @@ class EditProfileTableViewController: UITableViewController {
             self.schoolNameLabel.textColor = Colors.disabled
             self.clearSchoolButton.isHidden = true
         }
-        if let professionName = self.user?.professionName {
-            self.professionNameLabel.text = professionName
+        if let professionNameWhitespace = self.user?.professionNameWhitespace {
+            self.professionNameLabel.text = professionNameWhitespace
             self.professionNameLabel.textColor = Colors.black
             self.clearProfessionButton.isHidden = false
         } else {
@@ -353,7 +353,7 @@ extension EditProfileTableViewController: ProfessionsTableViewControllerDelegate
     func didSelectProfession(_ professionName: String?) {
         if let professionName = professionName {
             self.user?.professionName = professionName
-            self.professionNameLabel.text = professionName
+            self.professionNameLabel.text = self.user?.professionNameWhitespace
             self.professionNameLabel.textColor = Colors.black
             self.clearProfessionButton.isHidden = false
         } else {

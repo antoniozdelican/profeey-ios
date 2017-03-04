@@ -90,7 +90,7 @@ class SchoolsTableViewController: UITableViewController {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellNoResults", for: indexPath) as! NoResultsTableViewCell
                 return cell
             }
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cellSchools", for: indexPath) as! SchoolTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellSchool", for: indexPath) as! SchoolTableViewCell
             let school = self.popularSchools[indexPath.row]
             cell.schoolNameLabel.text = school.schoolName
             cell.numberOfUsersLabel.text = school.numberOfUsersString
@@ -106,7 +106,7 @@ class SchoolsTableViewController: UITableViewController {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellNoResults", for: indexPath) as! NoResultsTableViewCell
                 return cell
             }
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cellSchools", for: indexPath) as! SchoolTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellSchool", for: indexPath) as! SchoolTableViewCell
             let school = self.regularSchools[indexPath.row]
             cell.schoolNameLabel.text = school.schoolName
             cell.numberOfUsersLabel.text = school.numberOfUsersString

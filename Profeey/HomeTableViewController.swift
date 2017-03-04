@@ -173,7 +173,7 @@ class HomeTableViewController: UITableViewController {
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostUser", for: indexPath) as! PostUserTableViewCell
             cell.profilePicImageView.image = user?.profilePicUrl != nil ? user?.profilePic : UIImage(named: "ic_no_profile_pic_feed")
             cell.preferredUsernameLabel.text = user?.preferredUsername
-            cell.professionNameLabel.text = user?.professionName
+            cell.professionNameLabel.text = user?.professionNameWhitespace
             cell.postUserTableViewCellDelegate = self
             return cell
         case 1:

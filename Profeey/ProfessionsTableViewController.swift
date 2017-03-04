@@ -30,7 +30,7 @@ class ProfessionsTableViewController: UITableViewController {
         super.viewDidLoad()
         self.tableView.contentInset = UIEdgeInsetsMake(-1.0, 0.0, 0.0, 0.0)
         self.tableView.register(UINib(nibName: "TableSectionHeader", bundle: nil), forHeaderFooterViewReuseIdentifier: "tableSectionHeader")
-        self.addProfessionTextField.text = self.professionName
+        self.addProfessionTextField.text = self.professionName?.replacingOccurrences(of: "_", with: " ")
         
         self.isShowingPopularProfessions = true
         self.isSearchingPopularProfessions = true
@@ -90,7 +90,7 @@ class ProfessionsTableViewController: UITableViewController {
             }
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellProfession", for: indexPath) as! ProfessionTableViewCell
             let profession = self.popularProfessions[indexPath.row]
-            cell.professionNameLabel.text = profession.professionName
+            cell.professionNameLabel.text = profession.professionNameWhitespace
             cell.numberOfUsersLabel.text = profession.numberOfUsersString
             return cell
         } else {
@@ -110,7 +110,7 @@ class ProfessionsTableViewController: UITableViewController {
             }
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellProfession", for: indexPath) as! ProfessionTableViewCell
             let profession = self.regularProfessions[indexPath.row]
-            cell.professionNameLabel.text = profession.professionName
+            cell.professionNameLabel.text = profession.professionNameWhitespace
             cell.numberOfUsersLabel.text = profession.numberOfUsersString
             return cell
         }

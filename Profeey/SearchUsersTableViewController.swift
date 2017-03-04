@@ -98,7 +98,7 @@ class SearchUsersTableViewController: UITableViewController {
         cell.profilePicImageView.image = user.profilePicUrl != nil ? user.profilePic : UIImage(named: "ic_no_profile_pic_feed")
         cell.fullNameLabel.text = user.fullName
         cell.preferredUsernameLabel.text = user.preferredUsername
-        cell.professionNameLabel.text = user.professionName
+        cell.professionNameLabel.text = user.professionNameWhitespace
         cell.schoolNameLabel.text = user.schoolName
         cell.schoolStackView.isHidden = user.schoolName != nil ? false : true
         cell.numberOfRecommendationsLabel.text = user.numberOfRecommendationsInt.numberToString()

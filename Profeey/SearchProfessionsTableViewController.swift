@@ -90,7 +90,7 @@ class SearchProfessionsTableViewController: UITableViewController {
         }
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellSearchProfession", for: indexPath) as! SearchProfessionTableViewCell
         let profession = self.professions[indexPath.row]
-        cell.professionNameLabel.text = profession.professionName
+        cell.professionNameLabel.text = profession.professionNameWhitespace
         cell.numberOfUsersLabel.text = profession.numberOfUsersString
         return cell
     }

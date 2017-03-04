@@ -108,7 +108,7 @@ class WelcomeProfessionsTableViewController: UITableViewController {
             }
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellProfession", for: indexPath) as! ProfessionTableViewCell
             let profession = self.popularProfessions[indexPath.row]
-            cell.professionNameLabel.text = profession.professionName
+            cell.professionNameLabel.text = profession.professionNameWhitespace
             cell.numberOfUsersLabel.text = profession.numberOfUsersString
             return cell
         } else {
@@ -124,7 +124,7 @@ class WelcomeProfessionsTableViewController: UITableViewController {
             }
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellProfession", for: indexPath) as! ProfessionTableViewCell
             let profession = self.regularProfessions[indexPath.row]
-            cell.professionNameLabel.text = profession.professionName
+            cell.professionNameLabel.text = profession.professionNameWhitespace
             cell.numberOfUsersLabel.text = profession.numberOfUsersString
             return cell
         }

@@ -345,7 +345,7 @@ class ProfileTableViewController: UITableViewController {
             default:
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellProfileInfo", for: indexPath) as! ProfileInfoTableViewCell
                 cell.fullNameLabel.text = self.user?.fullName
-                cell.professionNameLabel.text = self.user?.professionName
+                cell.professionNameLabel.text = self.user?.professionNameWhitespace
                 cell.schoolNameLabel.text = self.user?.schoolName
                 cell.schoolStackView.isHidden = self.user?.schoolName != nil ? false : true
                 cell.aboutLabel.text = self.user?.about
@@ -787,7 +787,7 @@ class ProfileTableViewController: UITableViewController {
                 }
                 let profileInfoTableViewCell = self.tableView.cellForRow(at: IndexPath(row: 1, section: 0)) as? ProfileInfoTableViewCell
                 profileInfoTableViewCell?.fullNameLabel.text = self.user?.fullName
-                profileInfoTableViewCell?.professionNameLabel.text = self.user?.professionName
+                profileInfoTableViewCell?.professionNameLabel.text = self.user?.professionNameWhitespace
                 profileInfoTableViewCell?.schoolNameLabel.text = self.user?.schoolName
                 profileInfoTableViewCell?.schoolStackView.isHidden = self.user?.schoolName != nil ? false : true
                 profileInfoTableViewCell?.aboutLabel.text = self.user?.about
@@ -1305,7 +1305,7 @@ extension ProfileTableViewController {
         (self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? ProfileMainTableViewCell)?.profilePicImageView.image = self.user?.profilePic
         let cell = self.tableView.cellForRow(at: IndexPath(row: 1, section: 0)) as? ProfileInfoTableViewCell
         cell?.fullNameLabel.text = self.user?.fullName
-        cell?.professionNameLabel.text = self.user?.professionName
+        cell?.professionNameLabel.text = self.user?.professionNameWhitespace
         cell?.schoolNameLabel.text = self.user?.schoolName
         cell?.schoolStackView.isHidden = self.user?.schoolName != nil ? false : true
         cell?.aboutLabel.text = self.user?.about
