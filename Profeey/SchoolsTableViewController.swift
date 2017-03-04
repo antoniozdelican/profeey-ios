@@ -1,5 +1,5 @@
 //
-//  LocationsTableViewController.swift
+//  SchoolsTableViewController.swift
 //  Profeey
 //
 //  Created by Antonio Zdelican on 26/10/16.
@@ -10,42 +10,42 @@ import UIKit
 import AWSMobileHubHelper
 import AWSDynamoDB
 
-protocol LocationsTableViewControllerDelegate: class {
-    func didSelectLocation(_ location: Location)
+protocol SchoolsTableViewControllerDelegate: class {
+    func didSelectSchool(_ school: School)
 }
 
-class LocationsTableViewController: UITableViewController {
+class SchoolsTableViewController: UITableViewController {
     
     @IBOutlet weak var searchBar: UISearchBar!
     
-    var locationName: String?
-    weak var locationsTableViewControllerDelegate: LocationsTableViewControllerDelegate?
+    var schoolName: String?
+    weak var schoolsTableViewControllerDelegate: SchoolsTableViewControllerDelegate?
     
-    fileprivate var popularLocations: [Location] = []
-    fileprivate var regularLocations: [Location] = []
-    fileprivate var isSearchingPopularLocations: Bool = false
-    fileprivate var isSearchingRegularLocations: Bool = false
-    fileprivate var isShowingPopularLocations: Bool = false
+    fileprivate var popularSchools: [School] = []
+    fileprivate var regularSchools: [School] = []
+    fileprivate var isSearchingPopularSchools: Bool = false
+    fileprivate var isSearchingRegularSchools: Bool = false
+    fileprivate var isShowingPopularSchools: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.register(UINib(nibName: "SearchTableSectionHeader", bundle: nil), forHeaderFooterViewReuseIdentifier: "searchTableSectionHeader")
         
         // Configure SearchBar.
-        self.searchBar.text = self.locationName
+        self.searchBar.text = self.schoolName
         self.searchBar.delegate = self
         self.searchBar.backgroundImage = UIImage()
         self.searchBar.backgroundColor = Colors.greyLighter
         
         // Query.
-        self.isShowingPopularLocations = true
-        self.isSearchingPopularLocations = true
-        self.scanLocations()
+        self.isShowingPopularSchools = true
+        self.isSearchingPopularSchools = true
+        self.scanSchools()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
         self.view.endEditing(true)
+        super.viewWillDisappear(animated)
     }
 
     override func didReceiveMemoryWarning() {
@@ -59,57 +59,57 @@ class LocationsTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if self.isShowingPopularLocations {
-            if self.isSearchingPopularLocations {
+        if self.isShowingPopularSchools {
+            if self.isSearchingPopularSchools {
                 return 1
             }
-            if self.popularLocations.count == 0 {
+            if self.popularSchools.count == 0 {
                 return 1
             }
-            return self.popularLocations.count
+            return self.popularSchools.count
         } else {
-            if self.isSearchingRegularLocations {
+            if self.isSearchingRegularSchools {
                 return 1
             }
-            if self.regularLocations.count == 0 {
+            if self.regularSchools.count == 0 {
                 return 1
             }
-            return self.regularLocations.count
+            return self.regularSchools.count
         }
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if self.isShowingPopularLocations {
-            if self.isSearchingPopularLocations {
+        if self.isShowingPopularSchools {
+            if self.isSearchingPopularSchools {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellSearching", for: indexPath) as! SearchingTableViewCell
                 cell.activityIndicator.startAnimating()
                 // TODO update text.
                 return cell
             }
-            if self.popularLocations.count == 0 {
+            if self.popularSchools.count == 0 {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellNoResults", for: indexPath) as! NoResultsTableViewCell
                 return cell
             }
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cellLocation", for: indexPath) as! LocationTableViewCell
-            let location = self.popularLocations[indexPath.row]
-            cell.locationNameLabel.text = location.locationName
-            cell.numberOfUsersLabel.text = location.numberOfUsersString
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellSchools", for: indexPath) as! SchoolTableViewCell
+            let school = self.popularSchools[indexPath.row]
+            cell.schoolNameLabel.text = school.schoolName
+            cell.numberOfUsersLabel.text = school.numberOfUsersString
             return cell
         } else {
-            if self.isSearchingRegularLocations {
+            if self.isSearchingRegularSchools {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellSearching", for: indexPath) as! SearchingTableViewCell
                 cell.activityIndicator.startAnimating()
                 // TODO update text.
                 return cell
             }
-            if self.regularLocations.count == 0 {
+            if self.regularSchools.count == 0 {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellNoResults", for: indexPath) as! NoResultsTableViewCell
                 return cell
             }
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cellLocation", for: indexPath) as! LocationTableViewCell
-            let location = self.regularLocations[indexPath.row]
-            cell.locationNameLabel.text = location.locationName
-            cell.numberOfUsersLabel.text = location.numberOfUsersString
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellSchools", for: indexPath) as! SchoolTableViewCell
+            let school = self.regularSchools[indexPath.row]
+            cell.schoolNameLabel.text = school.schoolName
+            cell.numberOfUsersLabel.text = school.numberOfUsersString
             return cell
         }
     }
@@ -123,9 +123,9 @@ class LocationsTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let cell = tableView.cellForRow(at: indexPath)
-        if cell is LocationTableViewCell {
-            let selectedLocation = self.isShowingPopularLocations ? self.popularLocations[indexPath.row] : self.regularLocations[indexPath.row]
-            self.locationsTableViewControllerDelegate?.didSelectLocation(selectedLocation)
+        if cell is SchoolTableViewCell {
+            let selectedSchool = self.isShowingPopularSchools ? self.popularSchools[indexPath.row] : self.regularSchools[indexPath.row]
+            self.schoolsTableViewControllerDelegate?.didSelectSchool(selectedSchool)
             self.dismiss(animated: true, completion: nil)
         }
     }
@@ -140,7 +140,7 @@ class LocationsTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "searchTableSectionHeader") as? SearchTableSectionHeader
-        header?.titleLabel.text = self.isShowingPopularLocations ? "POPULAR" : "BEST MATCHES"
+        header?.titleLabel.text = self.isShowingPopularSchools ? "POPULAR" : "BEST MATCHES"
         return header
     }
     
@@ -160,57 +160,51 @@ class LocationsTableViewController: UITableViewController {
     
     // MARK: Helpers
     
-    fileprivate func filterLocations(_ namePrefix: String) {
+    fileprivate func filterSchools(_ namePrefix: String) {
         // Clear old.
-        self.regularLocations = []
-        self.regularLocations = self.popularLocations.filter({
-            (location: Location) in
-            if let searchCountry = location.country?.lowercased(), searchCountry.hasPrefix(namePrefix.lowercased()) {
-                return true
-            } else if let searchState = location.state?.lowercased(), searchState.hasPrefix(namePrefix.lowercased()) {
-                return true
-            } else if let searchCity = location.city?.lowercased(), searchCity.hasPrefix(namePrefix.lowercased()) {
-                return true
-            } else if let searchLocationName = location.locationName?.lowercased(), searchLocationName.hasPrefix(namePrefix.lowercased()) {
+        self.regularSchools = []
+        self.regularSchools = self.popularSchools.filter({
+            (school: School) in
+            if let searchSchoolName = school.schoolName?.lowercased(), searchSchoolName.hasPrefix(namePrefix.lowercased()) {
                 return true
             } else {
                 return false
             }
         })
-        self.regularLocations = self.sortLocations(self.regularLocations)
-        self.isSearchingRegularLocations = false
+        self.regularSchools = self.sortSchools(self.regularSchools)
+        self.isSearchingRegularSchools = false
         self.tableView.reloadData()
     }
     
-    fileprivate func sortLocations(_ locations: [Location]) -> [Location] {
-        return locations.sorted(by: {
-            (location1, location2) in
-            return location1.numberOfUsersInt > location2.numberOfUsersInt
+    fileprivate func sortSchools(_ schools: [School]) -> [School] {
+        return schools.sorted(by: {
+            (school1, school2) in
+            return school1.numberOfUsersInt > school2.numberOfUsersInt
         })
     }
     
     // MARK: AWS
     
-    fileprivate func scanLocations() {
+    fileprivate func scanSchools() {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().scanLocationsDynamoDB({
+        PRFYDynamoDBManager.defaultDynamoDBManager().scanSchoolsDynamoDB({
             (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                self.isSearchingPopularLocations = false
+                self.isSearchingPopularSchools = false
                 if let error = error {
-                    print("scanLocations error: \(error)")
+                    print("scanSchools error: \(error)")
                     self.tableView.reloadData()
                 } else {
-                    guard let awsLocations = response?.items as? [AWSLocation] else {
+                    guard let awsSchools = response?.items as? [AWSSchool] else {
                         self.tableView.reloadData()
                         return
                     }
-                    for awsLocation in awsLocations {
-                        let location = Location(locationId: awsLocation._locationId, country: awsLocation._country, state: awsLocation._state, city: awsLocation._city, latitude: awsLocation._latitude, longitude: awsLocation._longitude, numberOfUsers: awsLocation._numberOfUsers)
-                        self.popularLocations.append(location)
+                    for awsSchool in awsSchools {
+                        let school = School(schoolId: awsSchool._schoolId, schoolName: awsSchool._schoolName, numberOfUsers: awsSchool._numberOfUsers)
+                        self.popularSchools.append(school)
                     }
-                    self.popularLocations = self.sortLocations(self.popularLocations)
+                    self.popularSchools = self.sortSchools(self.popularSchools)
                     self.tableView.reloadData()
                 }
             })
@@ -218,24 +212,24 @@ class LocationsTableViewController: UITableViewController {
     }
 }
 
-extension LocationsTableViewController: UISearchBarDelegate {
+extension SchoolsTableViewController: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        let locationName = searchText.trimm()
-        if locationName.isEmpty {
-            self.isShowingPopularLocations = true
+        let schoolName = searchText.trimm()
+        if schoolName.isEmpty {
+            self.isShowingPopularSchools = true
             // Clear old.
-            self.regularLocations = []
-            self.isSearchingRegularLocations = false
+            self.regularSchools = []
+            self.isSearchingRegularSchools = false
             self.tableView.reloadData()
         } else {
-            self.isShowingPopularLocations = false
+            self.isShowingPopularSchools = false
             // Clear old.
-            self.regularLocations = []
-            self.isSearchingRegularLocations = true
+            self.regularSchools = []
+            self.isSearchingRegularSchools = true
             self.tableView.reloadData()
             // Start search.
-            self.filterLocations(locationName)
+            self.filterSchools(schoolName)
         }
     }
 }

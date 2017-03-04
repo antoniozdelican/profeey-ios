@@ -41,7 +41,7 @@
                                         <rect key="frame" x="0.0" y="35" width="375" height="134"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="9xC-Ut-Yh0" id="L7s-lT-mFe">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="133.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="133"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="X8K-Ec-Wil">
@@ -85,7 +85,7 @@
                                         <rect key="frame" x="0.0" y="169" width="375" height="52"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="0VP-8p-eU5" id="Lxe-Lo-enX">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="51.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="51"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="First Name" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="hDN-0D-hoc">
@@ -130,7 +130,7 @@
                                         <rect key="frame" x="0.0" y="221" width="375" height="52"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="LJ3-Vv-Luk" id="L0L-LH-1WR">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="51.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="51"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Last Name" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="n3l-UX-DND">
@@ -174,7 +174,7 @@
                                         <rect key="frame" x="0.0" y="273" width="375" height="52"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hdK-tH-pgh" id="ZGl-RF-pSm">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="51.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="51"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Bio" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4EU-xO-oOp">
@@ -205,10 +205,10 @@
                                         <rect key="frame" x="0.0" y="325" width="375" height="52"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="09t-K8-A5E" id="GUe-WO-4Nk">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="51.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="51"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="CITY" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b6n-lh-FGx">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SCHOOL" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b6n-lh-FGx">
                                                     <rect key="frame" x="16" y="19" width="82" height="15"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="82" id="48H-3m-CJB"/>
@@ -217,7 +217,7 @@
                                                     <color key="textColor" red="0.41868340970000001" green="0.41867089270000002" blue="0.41867792609999999" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add city" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aYd-ok-yjZ">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add school" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aYd-ok-yjZ">
                                                     <rect key="frame" x="110" y="16" width="211" height="19"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                     <color key="textColor" red="0.73251521590000002" green="0.7315930128" blue="0.76011711360000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -230,7 +230,7 @@
                                                     </constraints>
                                                     <state key="normal" image="ic_remove_grey"/>
                                                     <connections>
-                                                        <action selector="clearLocationButtonTapped:" destination="hBJ-e4-Y2L" eventType="touchUpInside" id="ah7-RY-Eu1"/>
+                                                        <action selector="clearSchoolButtonTapped:" destination="hBJ-e4-Y2L" eventType="touchUpInside" id="BhM-HS-DoX"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
@@ -251,7 +251,7 @@
                                         <rect key="frame" x="0.0" y="377" width="375" height="52"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="tJ9-M0-7wZ" id="1eK-Z8-GFz">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="51.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="51"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PROFESSION" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UkS-af-sOr">
@@ -297,7 +297,7 @@
                                         <rect key="frame" x="0.0" y="429" width="375" height="52"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="1DA-pk-Gg7" id="41L-Si-fVj">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="51.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="51"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Website" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="dlU-Aq-BDl">
@@ -371,21 +371,21 @@
                     <connections>
                         <outlet property="aboutPlaceholderLabel" destination="4EU-xO-oOp" id="yXa-Io-0xz"/>
                         <outlet property="aboutTextView" destination="0OH-rF-Oot" id="unN-uT-P5e"/>
-                        <outlet property="clearLocationButton" destination="n1K-sx-0RS" id="1yW-On-5ZT"/>
                         <outlet property="clearProfessionButton" destination="9cZ-9l-GXB" id="Hop-30-0h8"/>
-                        <outlet property="editLocationTableViewCell" destination="09t-K8-A5E" id="uRG-kB-qgz"/>
+                        <outlet property="clearSchoolButton" destination="n1K-sx-0RS" id="MGt-KZ-oKL"/>
                         <outlet property="editProfessionTableViewCell" destination="tJ9-M0-7wZ" id="af5-aH-rwm"/>
                         <outlet property="editProfilePicTableViewCell" destination="9xC-Ut-Yh0" id="Lj5-FU-ZgK"/>
+                        <outlet property="editSchoolTableViewCell" destination="09t-K8-A5E" id="zlS-h3-TD6"/>
                         <outlet property="firstNameTextField" destination="hDN-0D-hoc" id="xHb-L4-nUY"/>
                         <outlet property="lastNameTextField" destination="n3l-UX-DND" id="DNC-ic-SUh"/>
-                        <outlet property="locationNameLabel" destination="aYd-ok-yjZ" id="gCf-bb-did"/>
                         <outlet property="professionNameLabel" destination="Rmt-A8-Av6" id="gae-JD-RFn"/>
                         <outlet property="profilePicImageView" destination="X8K-Ec-Wil" id="acw-B8-0ib"/>
                         <outlet property="saveButton" destination="HYU-lT-mQG" id="6Mq-Dp-gNv"/>
+                        <outlet property="schoolNameLabel" destination="aYd-ok-yjZ" id="u5o-QT-oaK"/>
                         <outlet property="websiteTextField" destination="dlU-Aq-BDl" id="dfQ-Ma-TV2"/>
                         <segue destination="3PY-f3-dOd" kind="presentation" identifier="segueToCaptureVc" id="Zga-OK-Cah"/>
                         <segue destination="wNj-fz-mkK" kind="presentation" identifier="segueToProfessionsVc" id="uEf-s0-iik"/>
-                        <segue destination="hR5-c6-4hp" kind="presentation" identifier="segueToLocationsVc" id="zbz-lL-mjp"/>
+                        <segue destination="hR5-c6-4hp" kind="presentation" identifier="segueToSchoolsVc" id="zbz-lL-mjp"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="TyS-gI-g5e" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -400,10 +400,10 @@
             </objects>
             <point key="canvasLocation" x="2368" y="376"/>
         </scene>
-        <!--Locations-->
+        <!--Schools-->
         <scene sceneID="ssj-iP-ldE">
             <objects>
-                <viewControllerPlaceholder storyboardName="Locations" id="hR5-c6-4hp" sceneMemberID="viewController"/>
+                <viewControllerPlaceholder storyboardName="Schools" id="hR5-c6-4hp" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nDR-J1-COS" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2410" y="518"/>

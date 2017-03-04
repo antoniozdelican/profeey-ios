@@ -180,11 +180,11 @@
                                                 <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="v7s-oz-Jfl">
                                                     <rect key="frame" x="0.0" y="44.5" width="351" height="18"/>
                                                     <subviews>
-                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="252" verticalHuggingPriority="251" image="ic_location_profile" translatesAutoresizingMaskIntoConstraints="NO" id="ReO-IK-RhR">
-                                                            <rect key="frame" x="0.0" y="0.0" width="12" height="18"/>
+                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="252" verticalHuggingPriority="251" image="ic_school_profile" translatesAutoresizingMaskIntoConstraints="NO" id="ReO-IK-RhR">
+                                                            <rect key="frame" x="0.0" y="0.0" width="22" height="18"/>
                                                         </imageView>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Location Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xoV-ic-cvg">
-                                                            <rect key="frame" x="17" y="0.0" width="334" height="18"/>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="School Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xoV-ic-cvg">
+                                                            <rect key="frame" x="27" y="0.0" width="324" height="18"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                             <color key="textColor" red="0.41868340970000001" green="0.41867089270000002" blue="0.41867792609999999" alpha="1" colorSpace="calibratedRGB"/>
                                                             <nil key="highlightedColor"/>
@@ -215,17 +215,17 @@
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="M3B-Vg-CC6" firstAttribute="leading" secondItem="Doh-at-jyL" secondAttribute="leading" constant="12" id="36q-5d-wIr"/>
+                                        <constraint firstAttribute="bottom" secondItem="M3B-Vg-CC6" secondAttribute="bottom" priority="999" constant="7.5" id="MTK-ck-RrE"/>
                                         <constraint firstItem="M3B-Vg-CC6" firstAttribute="top" secondItem="Doh-at-jyL" secondAttribute="top" constant="12" id="TBJ-Zw-18z"/>
-                                        <constraint firstAttribute="bottom" secondItem="M3B-Vg-CC6" secondAttribute="bottom" priority="999" constant="7.5" id="krZ-al-yXe"/>
                                         <constraint firstAttribute="trailing" secondItem="M3B-Vg-CC6" secondAttribute="trailing" constant="12" id="v8A-ur-THA"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="aboutLabel" destination="g4K-X3-1E1" id="WVy-dH-U6H"/>
                                     <outlet property="fullNameLabel" destination="qs5-J3-mfB" id="LTn-l3-Gq7"/>
-                                    <outlet property="locationNameLabel" destination="xoV-ic-cvg" id="k5i-Wa-j16"/>
-                                    <outlet property="locationStackView" destination="v7s-oz-Jfl" id="kvy-lO-V4u"/>
                                     <outlet property="professionNameLabel" destination="krR-Lm-1mb" id="4TR-dL-X8v"/>
+                                    <outlet property="schoolNameLabel" destination="xoV-ic-cvg" id="xoS-Az-UZd"/>
+                                    <outlet property="schoolStackView" destination="v7s-oz-Jfl" id="YxK-bW-Jwy"/>
                                     <outlet property="websiteButton" destination="HXA-ei-5bY" id="noJ-hG-4sJ"/>
                                     <outlet property="websiteButtonHeightConstraint" destination="Kf0-Nb-vzR" id="xa3-63-OyR"/>
                                 </connections>
@@ -859,10 +859,10 @@
         <image name="ic_education" width="40" height="40"/>
         <image name="ic_followers_following" width="29" height="21"/>
         <image name="ic_heart_white" width="20" height="20"/>
-        <image name="ic_location_profile" width="12" height="18"/>
         <image name="ic_more_vertical_small" width="12" height="12"/>
         <image name="ic_recommendations" width="22" height="22"/>
         <image name="ic_refresh" width="32" height="32"/>
+        <image name="ic_school_profile" width="22" height="18"/>
         <image name="ic_work_experience" width="40" height="40"/>
     </resources>
 </document>

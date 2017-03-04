@@ -1,16 +1,16 @@
 //
-//  AWSLocationsTable.swift
+//  AWSSchoolsTable.swift
 //  Profeey
 //
-//  Created by Antonio Zdelican on 21/12/16.
-//  Copyright © 2016 Profeey. All rights reserved.
+//  Created by Antonio Zdelican on 04/03/17.
+//  Copyright © 2017 Profeey. All rights reserved.
 //
 
 import Foundation
 import AWSDynamoDB
 import AWSMobileHubHelper
 
-class AWSLocationsTable: NSObject, Table {
+class AWSSchoolsTable: NSObject, Table {
     
     var tableName: String
     var partitionKeyName: String
@@ -24,12 +24,12 @@ class AWSLocationsTable: NSObject, Table {
     }
     var tableDisplayName: String {
         
-        return "Locations"
+        return "Schools"
     }
     
     override init() {
         
-        model = AWSLocation()
+        model = AWSSchool()
         
         tableName = model.classForCoder.dynamoDBTableName()
         partitionKeyName = model.classForCoder.hashKeyAttribute()
@@ -43,12 +43,12 @@ class AWSLocationsTable: NSObject, Table {
     }
     
     func tableAttributeName(_ dataObjectAttributeName: String) -> String {
-        return AWSLocation.jsonKeyPathsByPropertyKey()[dataObjectAttributeName] as! String
+        return AWSSchool.jsonKeyPathsByPropertyKey()[dataObjectAttributeName] as! String
     }
     
-    func scanLocations(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+    func scanSchools(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
         let scanExpression = AWSDynamoDBScanExpression()
-        objectMapper.scan(AWSLocation.self, expression: scanExpression, completionHandler: completionHandler)
+        objectMapper.scan(AWSSchool.self, expression: scanExpression, completionHandler: completionHandler)
     }
 }

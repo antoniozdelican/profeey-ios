@@ -13,8 +13,8 @@ import AWSDynamoDB
 class ProfessionTableViewController: UITableViewController {
     
     var profession: Profession?
-    var isLocationActive: Bool = false
-    var location: Location?
+    var isSchoolActive: Bool = false
+    var school: School?
     
     fileprivate var users: [User] = []
     fileprivate var isSearchingUsers: Bool = false
@@ -27,7 +27,7 @@ class ProfessionTableViewController: UITableViewController {
         
         if let professionName = self.profession?.professionName {
             self.isSearchingUsers = true
-            self.queryProfessionUsers(professionName, locationId: self.location?.locationId)
+            self.queryProfessionUsers(professionName, schoolId: self.school?.schoolId)
         }
         
         // Add observers.
@@ -81,8 +81,8 @@ class ProfessionTableViewController: UITableViewController {
         cell.fullNameLabel.text = user.fullName
         cell.preferredUsernameLabel.text = user.preferredUsername
         cell.professionNameLabel.text = user.professionName
-        cell.locationNameLabel.text = user.locationName
-        cell.locationStackView.isHidden = user.locationName != nil ? false : true
+        cell.schoolNameLabel.text = user.schoolName
+        cell.schoolStackView.isHidden = user.schoolName != nil ? false : true
         cell.numberOfRecommendationsLabel.text = user.numberOfRecommendationsInt.numberToString()
         cell.numberOfRecommendationsStackView.isHidden = user.numberOfRecommendationsInt > 0 ? false : true
         return cell
@@ -128,8 +128,8 @@ class ProfessionTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "searchTableSectionHeader") as? SearchTableSectionHeader
         var titleText = "TOP"
-        if self.isLocationActive, let locationName = self.location?.locationName {
-            titleText = titleText + " in \(locationName)"
+        if self.isSchoolActive, let schoolName = self.school?.schoolName {
+            titleText = titleText + " in \(schoolName)"
         }
         header?.titleLabel.text = titleText
         return header
@@ -151,9 +151,9 @@ class ProfessionTableViewController: UITableViewController {
     
     // MARK: AWS
     
-    fileprivate func queryProfessionUsers(_ professionName: String, locationId: String?) {
+    fileprivate func queryProfessionUsers(_ professionName: String, schoolId: String?) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().queryProfessionUsers(professionName, locationId: locationId, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().queryProfessionUsers(professionName, schoolId: schoolId, completionHandler: {
             (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
@@ -167,7 +167,7 @@ class ProfessionTableViewController: UITableViewController {
                         return
                     }
                     for awsUser in awsUsers {
-                        let user = LocationUser(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationId: awsUser._locationId, locationName: awsUser._locationName, numberOfRecommendations: awsUser._numberOfRecommendations)
+                        let user = SchoolUser(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, schoolId: awsUser._schoolId, schoolName: awsUser._schoolName, numberOfRecommendations: awsUser._numberOfRecommendations)
                         if user.profilePicUrl == nil {
                             user.profilePic = UIImage(named: "ic_no_profile_pic_feed")
                         }

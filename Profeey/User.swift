@@ -20,8 +20,8 @@ class User: NSObject {
     
     // Extra properties.
     var about: String?
-    var locationId: String?
-    var locationName: String?
+    var schoolId: String?
+    var schoolName: String?
     var website: String?
     var numberOfFollowers: NSNumber?
     var numberOfPosts: NSNumber?
@@ -95,7 +95,7 @@ class User: NSObject {
     }
     
     // Basic user got from post.
-    // Should be used as default and then load location, about and other attributes when we open ProfileVc.
+    // Should be used as default and then load school, about and other attributes when we open ProfileVc.
     convenience init(userId: String?, firstName: String?, lastName: String?, preferredUsername: String?, professionName: String?, profilePicUrl: String?) {
         self.init()
         self.userId = userId
@@ -115,7 +115,7 @@ class User: NSObject {
     }
     
     func copyEditUser() -> EditUser {
-        let editUser = EditUser(userId: userId, firstName: firstName, lastName: lastName, preferredUsername: preferredUsername, professionName: professionName, profilePicUrl: profilePicUrl, locationId: locationId, locationName: locationName, website: website, about: about)
+        let editUser = EditUser(userId: userId, firstName: firstName, lastName: lastName, preferredUsername: preferredUsername, professionName: professionName, profilePicUrl: profilePicUrl, schoolId: schoolId, schoolName: schoolName, website: website, about: about)
         editUser.profilePic = self.profilePic
         return editUser
     }

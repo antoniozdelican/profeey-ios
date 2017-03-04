@@ -17,7 +17,7 @@ protocol DynamoDBManager {
     
     // MARK: CurrentUser
     
-    func updateCurrentUserLocal(_ firstName: String?, lastName: String?, preferredUsername: String?, professionName: String?, profilePicUrl: String?, locationId: String?, locationName: String?, profilePic: UIImage?)
+    func updateCurrentUserLocal(_ firstName: String?, lastName: String?, preferredUsername: String?, professionName: String?, profilePicUrl: String?, schoolId: String?, schoolName: String?, profilePic: UIImage?)
     
     // MARK: Users
     
@@ -30,11 +30,11 @@ protocol DynamoDBManager {
     func updateUserPreferredUsernameAndProfilePicDynamoDB(_ preferredUsername: String, profilePicUrl: String?, completionHandler: @escaping AWSContinuationBlock)
     func updateUserProfessionDynamoDB(_ professionName: String, completionHandler: @escaping AWSContinuationBlock)
     func updateUserEmailDynamoDB(_ email: String, emailVerified: NSNumber, completionHandler: @escaping AWSContinuationBlock)
-    func updateUserDynamoDB(_ firstName: String?, lastName: String?, professionName: String?, profilePicUrl: String?, about: String?, locationId: String?, locationName: String?, website: String?, completionHandler: @escaping AWSContinuationBlock)
+    func updateUserDynamoDB(_ firstName: String?, lastName: String?, professionName: String?, profilePicUrl: String?, about: String?, schoolId: String?, schoolName: String?, website: String?, completionHandler: @escaping AWSContinuationBlock)
     
     func scanUsersDynamoDB(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
-    func queryLocationUsers(_ locationId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
-    func queryProfessionUsers(_ professionName: String, locationId: String?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
+    func querySchoolUsers(_ schoolId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
+    func queryProfessionUsers(_ professionName: String, schoolId: String?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
     
     func queryPreferredUsernamesDynamoDB(_ preferredUsername: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
     func queryEmailsDynamoDB(_ email: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
@@ -121,13 +121,13 @@ protocol DynamoDBManager {
     
     func scanCategoriesDynamoDB(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
     
-    // MARK: Locations
+    // MARK: Schools
     
-    func scanLocationsDynamoDB(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
+    func scanSchoolsDynamoDB(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
     
-    // MARK: ProfessionLocations
+    // MARK: ProfessionSchools
     
-    func queryLocationProfessions(_ locationId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
+    func querySchoolProfessions(_ schoolId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
     
     // MARK: Messages
     

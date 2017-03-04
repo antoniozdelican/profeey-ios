@@ -28,7 +28,7 @@
         <!--Place-->
         <scene sceneID="xuW-VA-JCB">
             <objects>
-                <tableViewController id="OOJ-SG-eKd" customClass="LocationsTableViewController" customModule="Profeey" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="OOJ-SG-eKd" customClass="SchoolsTableViewController" customModule="Profeey" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="63" sectionHeaderHeight="28" sectionFooterHeight="28" id="tJC-Az-Bxg">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -41,7 +41,7 @@
                             <textInputTraits key="textInputTraits"/>
                         </searchBar>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellLocation" rowHeight="60" id="O73-3C-OeO" customClass="LocationTableViewCell" customModule="Profeey" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellSchool" rowHeight="60" id="O73-3C-OeO" customClass="SchoolTableViewCell" customModule="Profeey" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="72" width="375" height="60"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="O73-3C-OeO" id="We4-rk-PSM">
@@ -51,7 +51,7 @@
                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="SKH-fY-JnJ">
                                             <rect key="frame" x="16" y="12" width="343" height="36"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Location Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RCa-VS-ZwJ">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="School Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RCa-VS-ZwJ">
                                                     <rect key="frame" x="0.0" y="0.0" width="343" height="17"/>
                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
                                                     <color key="textColor" red="0.14748379589999999" green="0.1474793851" blue="0.14748191829999999" alpha="1" colorSpace="calibratedRGB"/>
@@ -73,8 +73,8 @@
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="locationNameLabel" destination="RCa-VS-ZwJ" id="4rV-uX-IO1"/>
                                     <outlet property="numberOfUsersLabel" destination="xkm-kw-9S1" id="h15-yV-bHF"/>
+                                    <outlet property="schoolNameLabel" destination="RCa-VS-ZwJ" id="Kgu-WE-QaM"/>
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellSearching" rowHeight="60" id="qL8-t1-5j4" customClass="SearchingTableViewCell" customModule="Profeey" customModuleProvider="target">
@@ -141,7 +141,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="searchBar" destination="cBN-wS-zVF" id="8vF-j3-miU"/>
+                        <outlet property="searchBar" destination="cBN-wS-zVF" id="BrA-au-pGf"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mMM-ao-gas" userLabel="First Responder" sceneMemberID="firstResponder"/>

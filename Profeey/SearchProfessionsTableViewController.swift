@@ -27,8 +27,8 @@ class SearchProfessionsTableViewController: UITableViewController {
     fileprivate var isSearchingPopularProfessions: Bool = false
     fileprivate var isShowingPopularProfessions: Bool = true
     
-    fileprivate var isLocationActive: Bool = false
-    fileprivate var location: Location?
+    fileprivate var isSchoolActive: Bool = false
+    fileprivate var school: School?
     
     fileprivate var noNetworkConnection: Bool = false
 
@@ -50,8 +50,8 @@ class SearchProfessionsTableViewController: UITableViewController {
             let cell = sender as? SearchProfessionTableViewCell,
             let indexPath = self.tableView.indexPath(for: cell) {
             destinationViewController.profession = self.professions[indexPath.row]
-            destinationViewController.isLocationActive = self.isLocationActive
-            destinationViewController.location = self.location
+            destinationViewController.isSchoolActive = self.isSchoolActive
+            destinationViewController.school = self.school
         }
     }
 
@@ -118,8 +118,8 @@ class SearchProfessionsTableViewController: UITableViewController {
             self.noNetworkConnection = false
             self.isSearchingPopularProfessions = true
             self.tableView.reloadData()
-            if self.isLocationActive, let locationId = self.location?.locationId {
-                self.queryLocationProfessions(locationId)
+            if self.isSchoolActive, let schoolId = self.school?.schoolId {
+                self.querySchoolProfessions(schoolId)
             } else {
                 self.scanProfessions()
             }
@@ -155,8 +155,8 @@ class SearchProfessionsTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "searchTableSectionHeader") as? SearchTableSectionHeader
         var titleText = self.isShowingPopularProfessions ? "POPULAR" : "BEST MATCHES"
-        if self.isLocationActive, let locationName = self.location?.locationName {
-            titleText = titleText + " in \(locationName)"
+        if self.isSchoolActive, let schoolName = self.school?.schoolName {
+            titleText = titleText + " in \(schoolName)"
         }
         header?.titleLabel.text = titleText
         return header
@@ -174,8 +174,8 @@ class SearchProfessionsTableViewController: UITableViewController {
             return
         }
         // Query.
-        if self.isLocationActive, let locationId = self.location?.locationId {
-            self.queryLocationProfessions(locationId)
+        if self.isSchoolActive, let schoolId = self.school?.schoolId {
+            self.querySchoolProfessions(schoolId)
         } else {
             self.scanProfessions()
         }
@@ -250,14 +250,14 @@ class SearchProfessionsTableViewController: UITableViewController {
         })
     }
     
-    fileprivate func queryLocationProfessions(_ locationId: String) {
+    fileprivate func querySchoolProfessions(_ schoolId: String) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().queryLocationProfessions(locationId, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().querySchoolProfessions(schoolId, completionHandler: {
             (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 guard error == nil else {
-                    print("queryLocationProfessions error: \(error!)")
+                    print("querySchoolProfessions error: \(error!)")
                     self.isSearchingPopularProfessions = false
                     self.refreshControl?.endRefreshing()
                     if (error as! NSError).code == -1009 {
@@ -268,9 +268,9 @@ class SearchProfessionsTableViewController: UITableViewController {
                     return
                 }
                 self.popularProfessions = []
-                if let awsProfessionLocations = response?.items as? [AWSProfessionLocation] {
-                    for awsProfessionLocation in awsProfessionLocations {
-                        let profession = Profession(professionName: awsProfessionLocation._professionName, numberOfUsers: awsProfessionLocation._numberOfUsers)
+                if let awsProfessionSchools = response?.items as? [AWSProfessionSchool] {
+                    for awsProfessionSchool in awsProfessionSchools {
+                        let profession = Profession(professionName: awsProfessionSchool._schoolName, numberOfUsers: awsProfessionSchool._numberOfUsers)
                         self.popularProfessions.append(profession)
                     }
                 }
@@ -292,22 +292,22 @@ class SearchProfessionsTableViewController: UITableViewController {
 
 extension SearchProfessionsTableViewController: SearchProfessionsDelegate {
     
-    func addLocation(_ location: Location) {
-        guard let locationId = location.locationId else {
+    func addSchool(_ school: School) {
+        guard let schoolId = school.schoolId else {
             return
         }
-        self.location = location
-        self.isLocationActive = true
+        self.school = school
+        self.isSchoolActive = true
         // Clear old.
         self.professions = []
         self.isSearchingPopularProfessions = true
         self.tableView.reloadData()
-        self.queryLocationProfessions(locationId)
+        self.querySchoolProfessions(schoolId)
     }
     
-    func removeLocation() {
-        self.location = nil
-        self.isLocationActive = false
+    func removeSchool() {
+        self.school = nil
+        self.isSchoolActive = false
         // Clear old.
         self.professions = []
         self.isSearchingPopularProfessions = true

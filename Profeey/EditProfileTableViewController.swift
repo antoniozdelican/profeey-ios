@@ -18,15 +18,15 @@ class EditProfileTableViewController: UITableViewController {
     
     @IBOutlet weak var saveButton: UIButton!
     @IBOutlet weak var editProfilePicTableViewCell: UITableViewCell!
-    @IBOutlet weak var editLocationTableViewCell: UITableViewCell!
+    @IBOutlet weak var editSchoolTableViewCell: UITableViewCell!
     @IBOutlet weak var editProfessionTableViewCell: UITableViewCell!
     @IBOutlet weak var profilePicImageView: UIImageView!
     @IBOutlet weak var firstNameTextField: UITextField!
     @IBOutlet weak var lastNameTextField: UITextField!
     @IBOutlet weak var aboutTextView: UITextView!
     @IBOutlet weak var aboutPlaceholderLabel: UILabel!
-    @IBOutlet weak var locationNameLabel: UILabel!
-    @IBOutlet weak var clearLocationButton: UIButton!
+    @IBOutlet weak var schoolNameLabel: UILabel!
+    @IBOutlet weak var clearSchoolButton: UIButton!
     @IBOutlet weak var professionNameLabel: UILabel!
     @IBOutlet weak var clearProfessionButton: UIButton!
     @IBOutlet weak var websiteTextField: UITextField!
@@ -59,14 +59,14 @@ class EditProfileTableViewController: UITableViewController {
         self.aboutTextView.text = self.user?.about
         self.aboutTextView.delegate = self
         self.aboutPlaceholderLabel.isHidden = self.user?.about != nil ? true : false
-        if let locationName = self.user?.locationName {
-            self.locationNameLabel.text = locationName
-            self.locationNameLabel.textColor = Colors.black
-            self.clearLocationButton.isHidden = false
+        if let schoolName = self.user?.schoolName {
+            self.schoolNameLabel.text = schoolName
+            self.schoolNameLabel.textColor = Colors.black
+            self.clearSchoolButton.isHidden = false
         } else {
-            self.locationNameLabel.text = "Add City"
-            self.locationNameLabel.textColor = Colors.disabled
-            self.clearLocationButton.isHidden = true
+            self.schoolNameLabel.text = "Add School"
+            self.schoolNameLabel.textColor = Colors.disabled
+            self.clearSchoolButton.isHidden = true
         }
         if let professionName = self.user?.professionName {
             self.professionNameLabel.text = professionName
@@ -89,9 +89,9 @@ class EditProfileTableViewController: UITableViewController {
             childViewController.profilePicUnwind = ProfilePicUnwind.editProfileVc
         }
         if let destinationViewController = segue.destination as? UINavigationController,
-            let childViewController = destinationViewController.childViewControllers[0] as? LocationsTableViewController {
-            childViewController.locationName = self.user?.locationName
-            childViewController.locationsTableViewControllerDelegate = self
+            let childViewController = destinationViewController.childViewControllers[0] as? SchoolsTableViewController {
+            childViewController.schoolName = self.user?.schoolName
+            childViewController.schoolsTableViewControllerDelegate = self
         }
         if let destinationViewController = segue.destination as? UINavigationController,
             let childViewController = destinationViewController.childViewControllers[0] as? ProfessionsTableViewController {
@@ -108,8 +108,8 @@ class EditProfileTableViewController: UITableViewController {
         if cell == self.editProfilePicTableViewCell {
             self.editProfilePicCellTapped()
         }
-        if cell == self.editLocationTableViewCell {
-            self.performSegue(withIdentifier: "segueToLocationsVc", sender: cell)
+        if cell == self.editSchoolTableViewCell {
+            self.performSegue(withIdentifier: "segueToSchoolsVc", sender: cell)
         }
         if cell == self.editProfessionTableViewCell {
             self.performSegue(withIdentifier: "segueToProfessionsVc", sender: cell)
@@ -202,12 +202,12 @@ class EditProfileTableViewController: UITableViewController {
         }
     }
     
-    @IBAction func clearLocationButtonTapped(_ sender: AnyObject) {
-        self.user?.locationId = nil
-        self.user?.locationName = nil
-        self.locationNameLabel.text = "Add City"
-        self.locationNameLabel.textColor = Colors.disabled
-        self.clearLocationButton.isHidden = true
+    @IBAction func clearSchoolButtonTapped(_ sender: AnyObject) {
+        self.user?.schoolId = nil
+        self.user?.schoolName = nil
+        self.schoolNameLabel.text = "Add School"
+        self.schoolNameLabel.textColor = Colors.disabled
+        self.clearSchoolButton.isHidden = true
     }
     
     @IBAction func clearProfessionButtonTapped(_ sender: AnyObject) {
@@ -263,7 +263,7 @@ class EditProfileTableViewController: UITableViewController {
             return
         }
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().updateUserDynamoDB(user.firstName, lastName: user.lastName, professionName: user.professionName, profilePicUrl: user.profilePicUrl, about: user.about, locationId: user.locationId, locationName: user.locationName, website: user.website, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().updateUserDynamoDB(user.firstName, lastName: user.lastName, professionName: user.professionName, profilePicUrl: user.profilePicUrl, about: user.about, schoolId: user.schoolId, schoolName: user.schoolName, website: user.website, completionHandler: {
             (task: AWSTask) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
@@ -282,7 +282,7 @@ class EditProfileTableViewController: UITableViewController {
                     // Notifiy observers.
                     NotificationCenter.default.post(name: NSNotification.Name(rawValue: UpdateUserNotificationKey), object: self, userInfo: userInfo)
                     // Update locally.
-                    PRFYDynamoDBManager.defaultDynamoDBManager().updateCurrentUserLocal(user.firstName, lastName: user.lastName, preferredUsername: user.preferredUsername, professionName: user.professionName, profilePicUrl: user.profilePicUrl, locationId: user.locationId, locationName: user.locationName, profilePic: user.profilePic)
+                    PRFYDynamoDBManager.defaultDynamoDBManager().updateCurrentUserLocal(user.firstName, lastName: user.lastName, preferredUsername: user.preferredUsername, professionName: user.professionName, profilePicUrl: user.profilePicUrl, schoolId: user.schoolId, schoolName: user.schoolName, profilePic: user.profilePic)
                     self.dismiss(animated: true, completion: nil)
                 }
             })
@@ -337,14 +337,14 @@ extension EditProfileTableViewController: UITextViewDelegate {
     }
 }
 
-extension EditProfileTableViewController: LocationsTableViewControllerDelegate {
+extension EditProfileTableViewController: SchoolsTableViewControllerDelegate {
     
-    func didSelectLocation(_ location: Location) {
-        self.user?.locationId = location.locationId
-        self.user?.locationName = location.locationName
-        self.locationNameLabel.text = location.locationName
-        self.locationNameLabel.textColor = Colors.black
-        self.clearLocationButton.isHidden = false
+    func didSelectSchool(_ school: School) {
+        self.user?.schoolId = school.schoolId
+        self.user?.schoolName = school.schoolName
+        self.schoolNameLabel.text = school.schoolName
+        self.schoolNameLabel.textColor = Colors.black
+        self.clearSchoolButton.isHidden = false
     }
 }
 

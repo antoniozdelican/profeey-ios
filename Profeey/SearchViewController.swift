@@ -14,15 +14,15 @@ enum SearchSegmentType {
 }
 
 protocol SearchUsersDelegate: class {
-    func addLocation(_ location: Location)
-    func removeLocation()
+    func addSchool(_ school: School)
+    func removeSchool()
     func searchBarTextChanged(_ searchText: String)
     func scrollToTop()
 }
 
 protocol SearchProfessionsDelegate: class {
-    func addLocation(_ location: Location)
-    func removeLocation()
+    func addSchool(_ school: School)
+    func removeSchool()
     func searchBarTextChanged(_ searchText: String)
     func scrollToTop()
 }
@@ -35,8 +35,8 @@ class SearchViewController: UIViewController {
     @IBOutlet weak var professionsButton: UIButton!
     
     fileprivate var searchBar = UISearchBar()
-    fileprivate var locationBarButtonItem: UIBarButtonItem?
-    fileprivate var isLocationActive: Bool = false
+    fileprivate var schoolBarButtonItem: UIBarButtonItem?
+    fileprivate var isSchoolActive: Bool = false
     fileprivate weak var searchUsersDelegate: SearchUsersDelegate?
     fileprivate weak var searchProfessionsDelegate: SearchProfessionsDelegate?
     
@@ -52,8 +52,8 @@ class SearchViewController: UIViewController {
         self.navigationItem.titleView = self.searchBar
         
         // BarButtonItem
-        self.locationBarButtonItem = UIBarButtonItem(image: UIImage(named: "ic_location_off")?.withRenderingMode(UIImageRenderingMode.alwaysOriginal), style: UIBarButtonItemStyle.plain, target: self, action: #selector(self.locationBarButtonItemTapped(_:)))
-        self.navigationItem.setRightBarButton(self.locationBarButtonItem, animated: true)
+        self.schoolBarButtonItem = UIBarButtonItem(image: UIImage(named: "ic_location_off")?.withRenderingMode(UIImageRenderingMode.alwaysOriginal), style: UIBarButtonItemStyle.plain, target: self, action: #selector(self.schoolBarButtonItemTapped(_:)))
+        self.navigationItem.setRightBarButton(self.schoolBarButtonItem, animated: true)
         
         // ScrollView
         self.mainScrollView.delegate = self
@@ -86,22 +86,22 @@ class SearchViewController: UIViewController {
             self.searchProfessionsDelegate = destinationViewController
         }
         if let navigationController = segue.destination as? UINavigationController,
-            let childViewController = navigationController.childViewControllers[0] as? LocationsTableViewController {
-            childViewController.locationsTableViewControllerDelegate = self
+            let childViewController = navigationController.childViewControllers[0] as? SchoolsTableViewController {
+            childViewController.schoolsTableViewControllerDelegate = self
         }
     }
     
     // MARK: Tappers
     
-    func locationBarButtonItemTapped(_ sender: Any) {
-        if self.isLocationActive {
-            self.isLocationActive = false
-            self.locationBarButtonItem?.image = UIImage(named: "ic_location_off")?.withRenderingMode(UIImageRenderingMode.alwaysOriginal)
+    func schoolBarButtonItemTapped(_ sender: Any) {
+        if self.isSchoolActive {
+            self.isSchoolActive = false
+            self.schoolBarButtonItem?.image = UIImage(named: "ic_location_off")?.withRenderingMode(UIImageRenderingMode.alwaysOriginal)
             self.searchBar.placeholder = "Search"
-            self.searchUsersDelegate?.removeLocation()
-            self.searchProfessionsDelegate?.removeLocation()
+            self.searchUsersDelegate?.removeSchool()
+            self.searchProfessionsDelegate?.removeSchool()
         } else {
-            self.performSegue(withIdentifier: "segueToLocationsVc", sender: self)
+            self.performSegue(withIdentifier: "segueToSchoolsVc", sender: self)
         }
     }
     
@@ -164,7 +164,7 @@ extension SearchViewController: UISearchBarDelegate {
         searchBar.text = ""
         searchBar.resignFirstResponder()
         searchBar.setShowsCancelButton(false, animated: true)
-        self.navigationItem.setRightBarButton(self.locationBarButtonItem, animated: true)
+        self.navigationItem.setRightBarButton(self.schoolBarButtonItem, animated: true)
         self.searchUsersDelegate?.searchBarTextChanged("")
         self.searchProfessionsDelegate?.searchBarTextChanged("")
     }
@@ -189,16 +189,16 @@ extension SearchViewController: SearchProfessionsTableViewControllerDelegate {
     }
 }
 
-extension SearchViewController: LocationsTableViewControllerDelegate {
+extension SearchViewController: SchoolsTableViewControllerDelegate {
     
-    func didSelectLocation(_ location: Location) {
-        guard let locationName = location.locationName else {
+    func didSelectSchool(_ school: School) {
+        guard let schoolName = school.schoolName else {
             return
         }
-        self.isLocationActive = true
-        self.locationBarButtonItem?.image = UIImage(named: "ic_location_active")?.withRenderingMode(UIImageRenderingMode.alwaysOriginal)
-        self.searchBar.placeholder = "Search in \(locationName)"
-        self.searchUsersDelegate?.addLocation(location)
-        self.searchProfessionsDelegate?.addLocation(location)
+        self.isSchoolActive = true
+        self.schoolBarButtonItem?.image = UIImage(named: "ic_location_active")?.withRenderingMode(UIImageRenderingMode.alwaysOriginal)
+        self.searchBar.placeholder = "Search in \(schoolName)"
+        self.searchUsersDelegate?.addSchool(school)
+        self.searchProfessionsDelegate?.addSchool(school)
     }
 }

@@ -132,11 +132,11 @@ class AWSUsersEmailIndex: NSObject, Index {
     
 }
 
-class AWSUsersLocationIndex: NSObject, Index {
+class AWSUsersSchoolIdIndex: NSObject, Index {
     
     var indexName: String? {
         
-        return "LocationIndex"
+        return "SchoolIdIndex"
     }
     
     func supportedOperations() -> [String] {
@@ -147,14 +147,14 @@ class AWSUsersLocationIndex: NSObject, Index {
     
     // MARK: QueryWithPartitionKey
     
-    // Query all users with locationId.
-    func queryLocationUsers(_ locationId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+    // Query all users with schoolId.
+    func querySchoolUsers(_ schoolId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
         let queryExpression = AWSDynamoDBQueryExpression()
-        queryExpression.indexName = "LocationIndex"
-        queryExpression.keyConditionExpression = "#locationId = :locationId"
-        queryExpression.expressionAttributeNames = ["#locationId": "locationId",]
-        queryExpression.expressionAttributeValues = [":locationId": locationId,]
+        queryExpression.indexName = "SchoolIdIndex"
+        queryExpression.keyConditionExpression = "#schoolId = :schoolId"
+        queryExpression.expressionAttributeNames = ["#schoolId": "schoolId",]
+        queryExpression.expressionAttributeValues = [":schoolId": schoolId,]
         objectMapper.query(AWSUser.self, expression: queryExpression, completionHandler: completionHandler)
     }
 }
@@ -175,8 +175,8 @@ class AWSUsersProfessionIndex: NSObject, Index {
     
     // MARK: QueryWithPartitionKey and QueryWithPartitionKeyAndFilter
     
-    // Query all users with professionName (and locationId if provided).
-    func queryProfessionUsers(_ professionName: String, locationId: String?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+    // Query all users with professionName (and schoolId if provided).
+    func queryProfessionUsers(_ professionName: String, schoolId: String?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
         let queryExpression = AWSDynamoDBQueryExpression()
         queryExpression.indexName = "ProfessionIndex"
@@ -184,10 +184,10 @@ class AWSUsersProfessionIndex: NSObject, Index {
         queryExpression.expressionAttributeNames = ["#professionName": "professionName"]
         queryExpression.expressionAttributeValues = [":professionName": professionName]
         
-        if let locationId = locationId {
-            queryExpression.filterExpression = "#locationId = :locationId"
-            queryExpression.expressionAttributeNames?["#locationId"] = "locationId"
-            queryExpression.expressionAttributeValues?[":locationId"] = locationId
+        if let schoolId = schoolId {
+            queryExpression.filterExpression = "#schoolId = :schoolId"
+            queryExpression.expressionAttributeNames?["#schoolId"] = "schoolId"
+            queryExpression.expressionAttributeValues?[":schoolId"] = schoolId
         }
         
         objectMapper.query(AWSUser.self, expression: queryExpression, completionHandler: completionHandler)

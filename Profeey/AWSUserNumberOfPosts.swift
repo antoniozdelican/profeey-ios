@@ -13,6 +13,6 @@ import Foundation
 class AWSUserNumberOfPosts: AWSUser {
     
     class func ignoreAttributes() -> [String] {
-        return ["created", "firstName", "lastName", "preferredUsername", "professionName", "profilePicUrl", "about", "email", "emailVerified", "locationId", "locationName", "website", "numberOfFollowers", "numberOfRecommendations", "isFacebookUser", "isDisabled"]
+        return ["created", "firstName", "lastName", "preferredUsername", "professionName", "profilePicUrl", "about", "email", "emailVerified", "schoolId", "schoolName", "website", "numberOfFollowers", "numberOfRecommendations", "isFacebookUser", "isDisabled"]
     }
 }

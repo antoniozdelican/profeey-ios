@@ -1,16 +1,16 @@
 //
-//  AWSProfessionLocationsTable.swift
+//  AWSProfessionSchoolsTable.swift
 //  Profeey
 //
-//  Created by Antonio Zdelican on 21/12/16.
-//  Copyright © 2016 Profeey. All rights reserved.
+//  Created by Antonio Zdelican on 04/03/17.
+//  Copyright © 2017 Profeey. All rights reserved.
 //
 
 import Foundation
 import AWSDynamoDB
 import AWSMobileHubHelper
 
-class AWSProfessionLocationsTable: NSObject, Table {
+class AWSProfessionSchoolsTable: NSObject, Table {
     
     var tableName: String
     var partitionKeyName: String
@@ -24,12 +24,12 @@ class AWSProfessionLocationsTable: NSObject, Table {
     }
     var tableDisplayName: String {
         
-        return "ProfessionLocations"
+        return "ProfessionSchools"
     }
     
     override init() {
         
-        model = AWSProfessionLocation()
+        model = AWSProfessionSchool()
         
         tableName = model.classForCoder.dynamoDBTableName()
         partitionKeyName = model.classForCoder.hashKeyAttribute()
@@ -43,16 +43,16 @@ class AWSProfessionLocationsTable: NSObject, Table {
     }
     
     func tableAttributeName(_ dataObjectAttributeName: String) -> String {
-        return AWSProfessionLocation.jsonKeyPathsByPropertyKey()[dataObjectAttributeName] as! String
+        return AWSProfessionSchool.jsonKeyPathsByPropertyKey()[dataObjectAttributeName] as! String
     }
 }
 
-// Query professions from a location.
-class AWSProfessionLocationsLocationIndex: NSObject, Index {
+// Query professions from a school.
+class AWSProfessionSchoolsSchoolIdIndex: NSObject, Index {
     
     var indexName: String? {
         
-        return "LocationIndex"
+        return "SchoolIdIndex"
     }
     
     func supportedOperations() -> [String] {
@@ -63,21 +63,21 @@ class AWSProfessionLocationsLocationIndex: NSObject, Index {
     
     // MARK: QueryWithPartitionKey
     
-    // Query all professions with locationId and numberOfUsers > 0.
-    func queryLocationProfessions(_ locationId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+    // Query all professions with schoolId and numberOfUsers > 0.
+    func querySchoolProfessions(_ schoolId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
         let queryExpression = AWSDynamoDBQueryExpression()
-        queryExpression.indexName = "LocationIndex"
-        queryExpression.keyConditionExpression = "#locationId = :locationId"
+        queryExpression.indexName = "SchoolIdIndex"
+        queryExpression.keyConditionExpression = "#schoolId = :schoolId"
         queryExpression.filterExpression = "#numberOfUsers > :numberOfUsers"
         queryExpression.expressionAttributeNames = [
-            "#locationId": "locationId",
+            "#schoolId": "schoolId",
             "#numberOfUsers": "numberOfUsers",
         ]
         queryExpression.expressionAttributeValues = [
-            ":locationId": locationId,
+            ":schoolId": schoolId,
             ":numberOfUsers": 0,
         ]
-        objectMapper.query(AWSProfessionLocation.self, expression: queryExpression, completionHandler: completionHandler)
+        objectMapper.query(AWSProfessionSchool.self, expression: queryExpression, completionHandler: completionHandler)
     }
 }

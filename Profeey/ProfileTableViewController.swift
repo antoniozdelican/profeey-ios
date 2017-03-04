@@ -13,7 +13,7 @@ import AWSMobileHubHelper
 
 enum ProfileSegment {
     case posts
-    case experience
+    //case experience
     case skills
 }
 
@@ -39,23 +39,23 @@ class ProfileTableViewController: UITableViewController {
     fileprivate var lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?
     fileprivate var hasLoadedInitialPosts: Bool = false
     
-    fileprivate var isLoadingWorkExperiences: Bool = false
-    fileprivate var workExperiences: [Experience] = []
-    fileprivate var hasLoadedInitialWorkExperiences: Bool = false
-    
-    fileprivate var isLoadingEducations: Bool = false
-    fileprivate var educations: [Experience] = []
-    fileprivate var hasLoadedInitialEducations: Bool = false
-    
-    fileprivate var experiences: [Experience] {
-        return self.workExperiences + self.educations
-    }
-    fileprivate var isLoadingExperiences: Bool {
-        return self.isLoadingWorkExperiences || self.isLoadingEducations
-    }
-    fileprivate var hasLoadedInitialExperiences: Bool {
-        return self.hasLoadedInitialWorkExperiences && self.hasLoadedInitialEducations
-    }
+//    fileprivate var isLoadingWorkExperiences: Bool = false
+//    fileprivate var workExperiences: [Experience] = []
+//    fileprivate var hasLoadedInitialWorkExperiences: Bool = false
+//    
+//    fileprivate var isLoadingEducations: Bool = false
+//    fileprivate var educations: [Experience] = []
+//    fileprivate var hasLoadedInitialEducations: Bool = false
+//    
+//    fileprivate var experiences: [Experience] {
+//        return self.workExperiences + self.educations
+//    }
+//    fileprivate var isLoadingExperiences: Bool {
+//        return self.isLoadingWorkExperiences || self.isLoadingEducations
+//    }
+//    fileprivate var hasLoadedInitialExperiences: Bool {
+//        return self.hasLoadedInitialWorkExperiences && self.hasLoadedInitialEducations
+//    }
     
     fileprivate var isLoadingUserCategories: Bool = false
     fileprivate var userCategories: [UserCategory] = []
@@ -155,13 +155,12 @@ class ProfileTableViewController: UITableViewController {
             self.isLoadingPosts = true
             self.tableView.tableFooterView = self.loadingTableFooterView
             self.queryPostsDateSorted(userId, startFromBeginning: true)
-        case .experience:
-            self.isLoadingWorkExperiences = true
-            self.isLoadingEducations = true
-            self.tableView.tableFooterView = self.loadingTableFooterView
-            self.queryWorkExperiences(userId)
-            self.queryEducations(userId)
-            break
+//        case .experience:
+//            self.isLoadingWorkExperiences = true
+//            self.isLoadingEducations = true
+//            self.tableView.tableFooterView = self.loadingTableFooterView
+//            self.queryWorkExperiences(userId)
+//            self.queryEducations(userId)
         case .skills:
             self.isLoadingUserCategories = true
             self.tableView.tableFooterView = self.loadingTableFooterView
@@ -218,15 +217,15 @@ class ProfileTableViewController: UITableViewController {
         if let destinationViewController = segue.destination as? FollowersFollowingViewController {
             destinationViewController.userId = self.user?.userId
         }
-        if let destinationViewController = segue.destination as? ExperiencesTableViewController {
-            if let workExperiences = self.workExperiences as? [WorkExperience] {
-                destinationViewController.workExperiences = workExperiences.map( { $0.copyWorkExperience() })
-            }
-            if let educations = self.educations as? [Education] {
-                destinationViewController.educations = educations.map( { $0.copyEducation() })
-            }
-            destinationViewController.experiencesTableViewControllerDelegate = self
-        }
+//        if let destinationViewController = segue.destination as? ExperiencesTableViewController {
+//            if let workExperiences = self.workExperiences as? [WorkExperience] {
+//                destinationViewController.workExperiences = workExperiences.map( { $0.copyWorkExperience() })
+//            }
+//            if let educations = self.educations as? [Education] {
+//                destinationViewController.educations = educations.map( { $0.copyEducation() })
+//            }
+//            destinationViewController.experiencesTableViewControllerDelegate = self
+//        }
         if let destinationViewController = segue.destination as? PostDetailsViewController,
             let cell = sender as? PostSmallTableViewCell,
             let indexPath = self.tableView.indexPath(for: cell) {
@@ -290,21 +289,21 @@ class ProfileTableViewController: UITableViewController {
                 return 1
             }
             return self.posts.count
-        case .experience:
-            if self.isLoadingExperiences {
-                return 0
-            }
-            if self.experiences.count == 0 || self.isBlocking || self.amIBlocked {
-                return 1
-            }
-            var experiencesCount = self.experiences.count
-            if self.workExperiences.count > 0 {
-                experiencesCount += 1
-            }
-            if self.educations.count > 0 {
-                experiencesCount += 1
-            }
-            return experiencesCount
+//        case .experience:
+//            if self.isLoadingExperiences {
+//                return 0
+//            }
+//            if self.experiences.count == 0 || self.isBlocking || self.amIBlocked {
+//                return 1
+//            }
+//            var experiencesCount = self.experiences.count
+//            if self.workExperiences.count > 0 {
+//                experiencesCount += 1
+//            }
+//            if self.educations.count > 0 {
+//                experiencesCount += 1
+//            }
+//            return experiencesCount
         case .skills:
             if !self.isLoadingUserCategories && self.userCategories.count == 0 || self.isBlocking || self.amIBlocked {
                 return 1
@@ -347,8 +346,8 @@ class ProfileTableViewController: UITableViewController {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellProfileInfo", for: indexPath) as! ProfileInfoTableViewCell
                 cell.fullNameLabel.text = self.user?.fullName
                 cell.professionNameLabel.text = self.user?.professionName
-                cell.locationNameLabel.text = self.user?.locationName
-                cell.locationStackView.isHidden = self.user?.locationName != nil ? false : true
+                cell.schoolNameLabel.text = self.user?.schoolName
+                cell.schoolStackView.isHidden = self.user?.schoolName != nil ? false : true
                 cell.aboutLabel.text = self.user?.about
                 cell.websiteButton.setTitle(self.user?.website, for: UIControlState.normal)
                 cell.websiteButton.isHidden = self.user?.website != nil ? false : true
@@ -385,81 +384,81 @@ class ProfileTableViewController: UITableViewController {
             cell.numberOfLikesLabel.text = post.numberOfLikesSmallString
             cell.postSmallTableViewCellDelegate = self
             return cell
-        case .experience:
-            if self.experiences.count == 0 || self.isBlocking || self.amIBlocked {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "cellProfileEmpty", for: indexPath) as! ProfileEmptyTableViewCell
-                cell.emptyMessageLabel.text = !self.amIBlocked ? "No experiences yet." : "You are blocked from following and viewing this account."
-                cell.addButton.isHidden = self.isCurrentUser ? false : true
-                cell.addButtonType = AddButtonType.experience
-                cell.setAddExperienceButton()
-                cell.profileEmptyTableViewCellDelegate = self
-                return cell
-            }
-            if self.workExperiences.count > 0 && indexPath.row == 0 {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "cellExperiencesHeader", for: indexPath) as! ExperiencesHeaderTableViewCell
-                cell.titleLabel?.text = "WORK EXPERIENCE"
-                if self.isCurrentUser {
-                    cell.editButton?.isHidden = false
-                    cell.experiencesHeaderTableViewCellDelegate = self
-                } else {
-                    cell.editButton?.isHidden = true
-                    cell.experiencesHeaderTableViewCellDelegate = nil
-                }
-                return cell
-            }
-            if self.educations.count > 0 {
-                if (self.workExperiences.count > 0 && indexPath.row == self.workExperiences.count + 1) || (self.workExperiences.count == 0 && indexPath.row == 0) {
-                    let cell = tableView.dequeueReusableCell(withIdentifier: "cellExperiencesHeader", for: indexPath) as! ExperiencesHeaderTableViewCell
-                    cell.titleLabel?.text = "EDUCATION"
-                    if self.isCurrentUser {
-                        cell.editButton?.isHidden = false
-                        cell.experiencesHeaderTableViewCellDelegate = self
-                    } else {
-                        cell.editButton?.isHidden = true
-                        cell.experiencesHeaderTableViewCellDelegate = nil
-                    }
-                    return cell
-                }
-            }
-            // Calculating where are the headers and where experiences.
-            var index: Int
-            if self.workExperiences.count > 0 {
-                if indexPath.row <= self.workExperiences.count {
-                    index = indexPath.row - 1
-                } else {
-                    index = indexPath.row - 2
-                }
-            } else {
-                index = indexPath.row - 1
-            }
-            // Configure experiences cells.
-            let experience = self.experiences[index]
-            if let experienceType = experience.experienceType, experienceType == .workExperience, let workExperience = experience as? WorkExperience {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "cellWorkExperience", for: indexPath) as! WorkExperienceTableViewCell
-                cell.titleLabel.text = workExperience.title
-                cell.organizationLabel.text = workExperience.organization
-                cell.timePeriodLabel.text = workExperience.timePeriod
-                cell.workDescriptionLabel.text = workExperience.workDescription
-                workExperience.isExpandedWorkDescription ? cell.untruncate() : cell.truncate()
-                cell.workExperienceTableViewCellDelegate = self
-//                cell.separatorViewLeftConstraint?.constant = (indexPath.row == self.workExperiences.count) ? 0.0 : 12.0
-                cell.separatorView.backgroundColor = (indexPath.row == self.workExperiences.count) ? UIColor.clear : Colors.greyLighter
-                return cell
-            } else if let experienceType = experience.experienceType, experienceType == .education, let education = experience as? Education {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "cellEducation", for: indexPath) as! EducationTableViewCell
-                cell.schoolLabel.text = education.school
-                cell.fieldOfStudyLabel.text = education.fieldOfStudy
-                cell.timePeriodLabel.text = education.timePeriod
-                cell.educationDescriptionLabel.text = education.educationDescription
-                education.isExpandedEducationDescription ? cell.untruncate() : cell.truncate()
-                cell.educationTableViewCellDelegate = self
-                let lastIndex = (self.workExperiences.count > 0) ? self.experiences.count + 1 : self.experiences.count
-//                cell.separatorViewLeftConstraint?.constant = (indexPath.row == lastIndex) ? 0.0 : 12.0
-                cell.separatorView.backgroundColor = (indexPath.row == lastIndex) ? UIColor.clear : Colors.greyLighter
-                return cell
-            } else {
-                return UITableViewCell()
-            }
+//        case .experience:
+//            if self.experiences.count == 0 || self.isBlocking || self.amIBlocked {
+//                let cell = tableView.dequeueReusableCell(withIdentifier: "cellProfileEmpty", for: indexPath) as! ProfileEmptyTableViewCell
+//                cell.emptyMessageLabel.text = !self.amIBlocked ? "No experiences yet." : "You are blocked from following and viewing this account."
+//                cell.addButton.isHidden = self.isCurrentUser ? false : true
+//                cell.addButtonType = AddButtonType.experience
+//                cell.setAddExperienceButton()
+//                cell.profileEmptyTableViewCellDelegate = self
+//                return cell
+//            }
+//            if self.workExperiences.count > 0 && indexPath.row == 0 {
+//                let cell = tableView.dequeueReusableCell(withIdentifier: "cellExperiencesHeader", for: indexPath) as! ExperiencesHeaderTableViewCell
+//                cell.titleLabel?.text = "WORK EXPERIENCE"
+//                if self.isCurrentUser {
+//                    cell.editButton?.isHidden = false
+//                    cell.experiencesHeaderTableViewCellDelegate = self
+//                } else {
+//                    cell.editButton?.isHidden = true
+//                    cell.experiencesHeaderTableViewCellDelegate = nil
+//                }
+//                return cell
+//            }
+//            if self.educations.count > 0 {
+//                if (self.workExperiences.count > 0 && indexPath.row == self.workExperiences.count + 1) || (self.workExperiences.count == 0 && indexPath.row == 0) {
+//                    let cell = tableView.dequeueReusableCell(withIdentifier: "cellExperiencesHeader", for: indexPath) as! ExperiencesHeaderTableViewCell
+//                    cell.titleLabel?.text = "EDUCATION"
+//                    if self.isCurrentUser {
+//                        cell.editButton?.isHidden = false
+//                        cell.experiencesHeaderTableViewCellDelegate = self
+//                    } else {
+//                        cell.editButton?.isHidden = true
+//                        cell.experiencesHeaderTableViewCellDelegate = nil
+//                    }
+//                    return cell
+//                }
+//            }
+//            // Calculating where are the headers and where experiences.
+//            var index: Int
+//            if self.workExperiences.count > 0 {
+//                if indexPath.row <= self.workExperiences.count {
+//                    index = indexPath.row - 1
+//                } else {
+//                    index = indexPath.row - 2
+//                }
+//            } else {
+//                index = indexPath.row - 1
+//            }
+//            // Configure experiences cells.
+//            let experience = self.experiences[index]
+//            if let experienceType = experience.experienceType, experienceType == .workExperience, let workExperience = experience as? WorkExperience {
+//                let cell = tableView.dequeueReusableCell(withIdentifier: "cellWorkExperience", for: indexPath) as! WorkExperienceTableViewCell
+//                cell.titleLabel.text = workExperience.title
+//                cell.organizationLabel.text = workExperience.organization
+//                cell.timePeriodLabel.text = workExperience.timePeriod
+//                cell.workDescriptionLabel.text = workExperience.workDescription
+//                workExperience.isExpandedWorkDescription ? cell.untruncate() : cell.truncate()
+//                cell.workExperienceTableViewCellDelegate = self
+////                cell.separatorViewLeftConstraint?.constant = (indexPath.row == self.workExperiences.count) ? 0.0 : 12.0
+//                cell.separatorView.backgroundColor = (indexPath.row == self.workExperiences.count) ? UIColor.clear : Colors.greyLighter
+//                return cell
+//            } else if let experienceType = experience.experienceType, experienceType == .education, let education = experience as? Education {
+//                let cell = tableView.dequeueReusableCell(withIdentifier: "cellEducation", for: indexPath) as! EducationTableViewCell
+//                cell.schoolLabel.text = education.school
+//                cell.fieldOfStudyLabel.text = education.fieldOfStudy
+//                cell.timePeriodLabel.text = education.timePeriod
+//                cell.educationDescriptionLabel.text = education.educationDescription
+//                education.isExpandedEducationDescription ? cell.untruncate() : cell.truncate()
+//                cell.educationTableViewCellDelegate = self
+//                let lastIndex = (self.workExperiences.count > 0) ? self.experiences.count + 1 : self.experiences.count
+////                cell.separatorViewLeftConstraint?.constant = (indexPath.row == lastIndex) ? 0.0 : 12.0
+//                cell.separatorView.backgroundColor = (indexPath.row == lastIndex) ? UIColor.clear : Colors.greyLighter
+//                return cell
+//            } else {
+//                return UITableViewCell()
+//            }
         case .skills:
             if self.userCategories.count == 0 || self.isBlocking || self.amIBlocked {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellProfileEmpty", for: indexPath) as! ProfileEmptyTableViewCell
@@ -495,8 +494,8 @@ class ProfileTableViewController: UITableViewController {
             }
             // Reset variables.
             self.hasLoadedInitialPosts = false
-            self.hasLoadedInitialWorkExperiences = false
-            self.hasLoadedInitialEducations = false
+//            self.hasLoadedInitialWorkExperiences = false
+//            self.hasLoadedInitialEducations = false
             self.hasLoadedInitialUserCategories = false
             // Query user.
             self.isLoadingUser = true
@@ -507,13 +506,12 @@ class ProfileTableViewController: UITableViewController {
                 self.isLoadingPosts = true
                 self.tableView.tableFooterView = self.loadingTableFooterView
                 self.queryPostsDateSorted(userId, startFromBeginning: true)
-            case .experience:
-                self.isLoadingWorkExperiences = true
-                self.isLoadingEducations = true
-                self.tableView.tableFooterView = self.loadingTableFooterView
-                self.queryWorkExperiences(userId)
-                self.queryEducations(userId)
-                break
+//            case .experience:
+//                self.isLoadingWorkExperiences = true
+//                self.isLoadingEducations = true
+//                self.tableView.tableFooterView = self.loadingTableFooterView
+//                self.queryWorkExperiences(userId)
+//                self.queryEducations(userId)
             case .skills:
                 self.isLoadingUserCategories = true
                 self.tableView.tableFooterView = self.loadingTableFooterView
@@ -560,14 +558,14 @@ class ProfileTableViewController: UITableViewController {
                 return 112.0
             }
             return 112.0
-        case .experience:
-            if self.experiences.count == 0 || self.isBlocking || self.amIBlocked {
-                return 112.0
-            }
-            if (indexPath.row == 0) || (self.workExperiences.count > 0 && indexPath.row == self.workExperiences.count + 1) {
-                return 40.0
-            }
-            return 105.0
+//        case .experience:
+//            if self.experiences.count == 0 || self.isBlocking || self.amIBlocked {
+//                return 112.0
+//            }
+//            if (indexPath.row == 0) || (self.workExperiences.count > 0 && indexPath.row == self.workExperiences.count + 1) {
+//                return 40.0
+//            }
+//            return 105.0
         case .skills:
             if self.userCategories.count == 0 || self.isBlocking || self.amIBlocked {
                 return 112.0
@@ -594,14 +592,14 @@ class ProfileTableViewController: UITableViewController {
                 return 112.0
             }
             return 112.0
-        case .experience:
-            if self.experiences.count == 0 || self.isBlocking || self.amIBlocked {
-                return 112.0
-            }
-            if (indexPath.row == 0) || (self.workExperiences.count > 0 && indexPath.row == self.workExperiences.count + 1) {
-                return 40.0
-            }
-            return UITableViewAutomaticDimension
+//        case .experience:
+//            if self.experiences.count == 0 || self.isBlocking || self.amIBlocked {
+//                return 112.0
+//            }
+//            if (indexPath.row == 0) || (self.workExperiences.count > 0 && indexPath.row == self.workExperiences.count + 1) {
+//                return 40.0
+//            }
+//            return UITableViewAutomaticDimension
         case .skills:
             if self.userCategories.count == 0 || self.isBlocking || self.amIBlocked {
                 return 112.0
@@ -621,7 +619,7 @@ class ProfileTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if section == 1 {
-            return 44.0
+            return 38.0
         }
         return 0.0
     }
@@ -711,15 +709,15 @@ class ProfileTableViewController: UITableViewController {
             }
             self.isLoadingPosts = true
             self.queryPostsDateSorted(userId, startFromBeginning: true)
-        case .experience:
-            guard !self.isLoadingExperiences else {
-                self.refreshControl?.endRefreshing()
-                return
-            }
-            self.isLoadingWorkExperiences = true
-            self.isLoadingEducations = true
-            self.queryWorkExperiences(userId)
-            self.queryEducations(userId)
+//        case .experience:
+//            guard !self.isLoadingExperiences else {
+//                self.refreshControl?.endRefreshing()
+//                return
+//            }
+//            self.isLoadingWorkExperiences = true
+//            self.isLoadingEducations = true
+//            self.queryWorkExperiences(userId)
+//            self.queryEducations(userId)
         case .skills:
             guard !self.isLoadingUserCategories else {
                 self.refreshControl?.endRefreshing()
@@ -759,7 +757,7 @@ class ProfileTableViewController: UITableViewController {
                     print("Not an awsUser. This should not happen.")
                     return
                 }
-                let user = FullUser(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationId: awsUser._locationId, locationName: awsUser._locationName, website: awsUser._website, about: awsUser._about, numberOfFollowers: awsUser._numberOfFollowers, numberOfPosts: awsUser._numberOfPosts, numberOfRecommendations: awsUser._numberOfRecommendations, email: awsUser._email, emailVerified: awsUser._emailVerified, isFacebookUser: awsUser._isFacebookUser)
+                let user = FullUser(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, schoolId: awsUser._schoolId, schoolName: awsUser._schoolName, website: awsUser._website, about: awsUser._about, numberOfFollowers: awsUser._numberOfFollowers, numberOfPosts: awsUser._numberOfPosts, numberOfRecommendations: awsUser._numberOfRecommendations, email: awsUser._email, emailVerified: awsUser._emailVerified, isFacebookUser: awsUser._isFacebookUser)
                 self.user = user
                 
                 // Reset flags and animations that were initiated.
@@ -778,7 +776,7 @@ class ProfileTableViewController: UITableViewController {
                     } else {
                         self.settingsButton?.image = UIImage(named: "ic_mail")
                         let blockButton = UIBarButtonItem(image: UIImage(named: "ic_more_vertical_big"), style: UIBarButtonItemStyle.plain, target: self, action: #selector(self.blockButtonTapped(_:)))
-                        self.navigationItem.rightBarButtonItems = [self.settingsButton!, blockButton]
+                        self.navigationItem.rightBarButtonItems = [blockButton, self.settingsButton!]
                     }
                     
                 }
@@ -790,8 +788,8 @@ class ProfileTableViewController: UITableViewController {
                 let profileInfoTableViewCell = self.tableView.cellForRow(at: IndexPath(row: 1, section: 0)) as? ProfileInfoTableViewCell
                 profileInfoTableViewCell?.fullNameLabel.text = self.user?.fullName
                 profileInfoTableViewCell?.professionNameLabel.text = self.user?.professionName
-                profileInfoTableViewCell?.locationNameLabel.text = self.user?.locationName
-                profileInfoTableViewCell?.locationStackView.isHidden = self.user?.locationName != nil ? false : true
+                profileInfoTableViewCell?.schoolNameLabel.text = self.user?.schoolName
+                profileInfoTableViewCell?.schoolStackView.isHidden = self.user?.schoolName != nil ? false : true
                 profileInfoTableViewCell?.aboutLabel.text = self.user?.about
                 profileInfoTableViewCell?.websiteButton.setTitle(self.user?.website, for: UIControlState.normal)
                 profileInfoTableViewCell?.websiteButton.isHidden = self.user?.website != nil ? false : true
@@ -873,91 +871,91 @@ class ProfileTableViewController: UITableViewController {
         })
     }
     
-    fileprivate func queryWorkExperiences(_ userId: String) {
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().queryWorkExperiencesDynamoDB(userId, completionHandler: {
-            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
-            DispatchQueue.main.async(execute: {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                guard error == nil else {
-                    print("queryWorkExperiences error: \(error)")
-                    self.isLoadingWorkExperiences = false
-                    self.hasLoadedInitialWorkExperiences = true
-                    if (error as! NSError).code == -1009 {
-                        (self.navigationController as? PRFYNavigationController)?.showBanner("No Internet Connection")
-                        self.noNetworkConnection = true
-                    }
-                    if self.selectedProfileSegment == ProfileSegment.experience && !self.isLoadingExperiences {
-                        self.tableView.tableFooterView = UIView()
-                        self.tableView.reloadData()
-                    }
-                    return
-                }
-                self.workExperiences = []
-                if let awsWorkExperiences = response?.items as? [AWSWorkExperience] {
-                    for awsWorkExperience in awsWorkExperiences {
-                        let workExperience = WorkExperience(userId: awsWorkExperience._userId, workExperienceId: awsWorkExperience._workExperienceId, title: awsWorkExperience._title, organization: awsWorkExperience._organization, workDescription: awsWorkExperience._workDescription, fromMonth: awsWorkExperience._fromMonth, fromYear: awsWorkExperience._fromYear, toMonth: awsWorkExperience._toMonth, toYear: awsWorkExperience._toYear)
-                        self.workExperiences.append(workExperience)
-                    }
-                    self.sortWorkExperiencesByToDate()
-                }
-                
-                // Reset flags and animations that were initiated.
-                self.isLoadingWorkExperiences = false
-                self.hasLoadedInitialWorkExperiences = true
-                self.noNetworkConnection = false
-                
-                // Reload tableView with downloaded experiences.
-                if self.selectedProfileSegment == ProfileSegment.experience && !self.isLoadingExperiences {
-                    self.tableView.tableFooterView = UIView()
-                    self.tableView.reloadData()
-                }
-            })
-        })
-    }
-    
-    fileprivate func queryEducations(_ userId: String) {
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().queryEducationsDynamoDB(userId, completionHandler: {
-            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
-            DispatchQueue.main.async(execute: {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                guard error == nil else {
-                    print("queryEducations error: \(error)")
-                    self.isLoadingEducations = false
-                    self.hasLoadedInitialEducations = true
-                    if (error as! NSError).code == -1009 {
-                        (self.navigationController as? PRFYNavigationController)?.showBanner("No Internet Connection")
-                        self.noNetworkConnection = true
-                    }
-                    if self.selectedProfileSegment == ProfileSegment.experience && !self.isLoadingExperiences {
-                        self.tableView.tableFooterView = UIView()
-                        self.tableView.reloadData()
-                    }
-                    return
-                }
-                self.educations = []
-                if let awsEducations = response?.items as? [AWSEducation] {
-                    for awsEducation in awsEducations {
-                        let education = Education(userId: awsEducation._userId, educationId: awsEducation._educationId, school: awsEducation._school, fieldOfStudy: awsEducation._fieldOfStudy, educationDescription: awsEducation._educationDescription, fromMonth: awsEducation._fromMonth, fromYear: awsEducation._fromYear, toMonth: awsEducation._toMonth, toYear: awsEducation._toYear)
-                        self.educations.append(education)
-                    }
-                    self.sortEducationsByToDate()
-                }
-                
-                // Reset flags and animations that were initiated.
-                self.isLoadingEducations = false
-                self.hasLoadedInitialEducations = true
-                self.noNetworkConnection = false
-                
-                // Reload tableView with downloaded experiences.
-                if self.selectedProfileSegment == ProfileSegment.experience && !self.isLoadingExperiences {
-                    self.tableView.tableFooterView = UIView()
-                    self.tableView.reloadData()
-                }
-            })
-        })
-    }
+//    fileprivate func queryWorkExperiences(_ userId: String) {
+//        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+//        PRFYDynamoDBManager.defaultDynamoDBManager().queryWorkExperiencesDynamoDB(userId, completionHandler: {
+//            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
+//            DispatchQueue.main.async(execute: {
+//                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+//                guard error == nil else {
+//                    print("queryWorkExperiences error: \(error)")
+//                    self.isLoadingWorkExperiences = false
+//                    self.hasLoadedInitialWorkExperiences = true
+//                    if (error as! NSError).code == -1009 {
+//                        (self.navigationController as? PRFYNavigationController)?.showBanner("No Internet Connection")
+//                        self.noNetworkConnection = true
+//                    }
+//                    if self.selectedProfileSegment == ProfileSegment.experience && !self.isLoadingExperiences {
+//                        self.tableView.tableFooterView = UIView()
+//                        self.tableView.reloadData()
+//                    }
+//                    return
+//                }
+//                self.workExperiences = []
+//                if let awsWorkExperiences = response?.items as? [AWSWorkExperience] {
+//                    for awsWorkExperience in awsWorkExperiences {
+//                        let workExperience = WorkExperience(userId: awsWorkExperience._userId, workExperienceId: awsWorkExperience._workExperienceId, title: awsWorkExperience._title, organization: awsWorkExperience._organization, workDescription: awsWorkExperience._workDescription, fromMonth: awsWorkExperience._fromMonth, fromYear: awsWorkExperience._fromYear, toMonth: awsWorkExperience._toMonth, toYear: awsWorkExperience._toYear)
+//                        self.workExperiences.append(workExperience)
+//                    }
+//                    self.sortWorkExperiencesByToDate()
+//                }
+//                
+//                // Reset flags and animations that were initiated.
+//                self.isLoadingWorkExperiences = false
+//                self.hasLoadedInitialWorkExperiences = true
+//                self.noNetworkConnection = false
+//                
+//                // Reload tableView with downloaded experiences.
+//                if self.selectedProfileSegment == ProfileSegment.experience && !self.isLoadingExperiences {
+//                    self.tableView.tableFooterView = UIView()
+//                    self.tableView.reloadData()
+//                }
+//            })
+//        })
+//    }
+//    
+//    fileprivate func queryEducations(_ userId: String) {
+//        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+//        PRFYDynamoDBManager.defaultDynamoDBManager().queryEducationsDynamoDB(userId, completionHandler: {
+//            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
+//            DispatchQueue.main.async(execute: {
+//                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+//                guard error == nil else {
+//                    print("queryEducations error: \(error)")
+//                    self.isLoadingEducations = false
+//                    self.hasLoadedInitialEducations = true
+//                    if (error as! NSError).code == -1009 {
+//                        (self.navigationController as? PRFYNavigationController)?.showBanner("No Internet Connection")
+//                        self.noNetworkConnection = true
+//                    }
+//                    if self.selectedProfileSegment == ProfileSegment.experience && !self.isLoadingExperiences {
+//                        self.tableView.tableFooterView = UIView()
+//                        self.tableView.reloadData()
+//                    }
+//                    return
+//                }
+//                self.educations = []
+//                if let awsEducations = response?.items as? [AWSEducation] {
+//                    for awsEducation in awsEducations {
+//                        let education = Education(userId: awsEducation._userId, educationId: awsEducation._educationId, school: awsEducation._school, fieldOfStudy: awsEducation._fieldOfStudy, educationDescription: awsEducation._educationDescription, fromMonth: awsEducation._fromMonth, fromYear: awsEducation._fromYear, toMonth: awsEducation._toMonth, toYear: awsEducation._toYear)
+//                        self.educations.append(education)
+//                    }
+//                    self.sortEducationsByToDate()
+//                }
+//                
+//                // Reset flags and animations that were initiated.
+//                self.isLoadingEducations = false
+//                self.hasLoadedInitialEducations = true
+//                self.noNetworkConnection = false
+//                
+//                // Reload tableView with downloaded experiences.
+//                if self.selectedProfileSegment == ProfileSegment.experience && !self.isLoadingExperiences {
+//                    self.tableView.tableFooterView = UIView()
+//                    self.tableView.reloadData()
+//                }
+//            })
+//        })
+//    }
     
     fileprivate func queryUserCategoriesNumberOfPostsSorted(_ userId: String) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
@@ -1176,25 +1174,25 @@ class ProfileTableViewController: UITableViewController {
     
     // MARK: Helpers
     
-    fileprivate func sortWorkExperiencesByToDate() {
-        let currentWorkExperiences = self.workExperiences.filter( { $0.toMonthInt == nil && $0.toYearInt == nil } )
-        let otherWorkExperiences = self.workExperiences.filter( { $0.toMonthInt != nil && $0.toYearInt != nil } )
-        let sortedOtherWorkExperiences = otherWorkExperiences.sorted(by: {
-            (workExperience1, workExperience2) in
-            return workExperience1.toYearInt! == workExperience2.toYearInt! ? (workExperience1.toMonthInt! > workExperience2.toMonthInt!) : (workExperience1.toYearInt! > workExperience2.toYearInt!)
-        })
-        self.workExperiences = currentWorkExperiences + sortedOtherWorkExperiences
-    }
+//    fileprivate func sortWorkExperiencesByToDate() {
+//        let currentWorkExperiences = self.workExperiences.filter( { $0.toMonthInt == nil && $0.toYearInt == nil } )
+//        let otherWorkExperiences = self.workExperiences.filter( { $0.toMonthInt != nil && $0.toYearInt != nil } )
+//        let sortedOtherWorkExperiences = otherWorkExperiences.sorted(by: {
+//            (workExperience1, workExperience2) in
+//            return workExperience1.toYearInt! == workExperience2.toYearInt! ? (workExperience1.toMonthInt! > workExperience2.toMonthInt!) : (workExperience1.toYearInt! > workExperience2.toYearInt!)
+//        })
+//        self.workExperiences = currentWorkExperiences + sortedOtherWorkExperiences
+//    }
     
-    fileprivate func sortEducationsByToDate() {
-        let currentEducations = self.educations.filter( { $0.toMonthInt == nil && $0.toYearInt == nil } )
-        let otherEducations = self.educations.filter( { $0.toMonthInt != nil && $0.toYearInt != nil } )
-        let sortedOtherEducations = otherEducations.sorted(by: {
-            (education1, education2) in
-            return education1.toYearInt! == education2.toYearInt! ? (education1.toMonthInt! > education2.toMonthInt!) : (education1.toYearInt! > education2.toYearInt!)
-        })
-        self.educations = currentEducations + sortedOtherEducations
-    }
+//    fileprivate func sortEducationsByToDate() {
+//        let currentEducations = self.educations.filter( { $0.toMonthInt == nil && $0.toYearInt == nil } )
+//        let otherEducations = self.educations.filter( { $0.toMonthInt != nil && $0.toYearInt != nil } )
+//        let sortedOtherEducations = otherEducations.sorted(by: {
+//            (education1, education2) in
+//            return education1.toYearInt! == education2.toYearInt! ? (education1.toMonthInt! > education2.toMonthInt!) : (education1.toYearInt! > education2.toYearInt!)
+//        })
+//        self.educations = currentEducations + sortedOtherEducations
+//    }
     
     fileprivate func sortUserCategories() {
         self.userCategories = self.userCategories.sorted(by: {
@@ -1298,8 +1296,8 @@ extension ProfileTableViewController {
         self.user?.lastName = editUser.lastName
         self.user?.professionName = editUser.professionName
         self.user?.profilePicUrl = editUser.profilePicUrl
-        self.user?.locationId = editUser.locationId
-        self.user?.locationName = editUser.locationName
+        self.user?.schoolId = editUser.schoolId
+        self.user?.schoolName = editUser.schoolName
         self.user?.about = editUser.about
         self.user?.website = editUser.website
         self.user?.profilePic = editUser.profilePic
@@ -1308,8 +1306,8 @@ extension ProfileTableViewController {
         let cell = self.tableView.cellForRow(at: IndexPath(row: 1, section: 0)) as? ProfileInfoTableViewCell
         cell?.fullNameLabel.text = self.user?.fullName
         cell?.professionNameLabel.text = self.user?.professionName
-        cell?.locationNameLabel.text = self.user?.locationName
-        cell?.locationStackView.isHidden = self.user?.locationName != nil ? false : true
+        cell?.schoolNameLabel.text = self.user?.schoolName
+        cell?.schoolStackView.isHidden = self.user?.schoolName != nil ? false : true
         cell?.aboutLabel.text = self.user?.about
         cell?.websiteButton.setTitle(self.user?.website, for: UIControlState.normal)
         cell?.websiteButton.isHidden = self.user?.website != nil ? false : true
@@ -1668,17 +1666,17 @@ extension ProfileTableViewController: ProfileSegmentedControlSectionHeaderDelega
                 self.tableView.reloadData()
             }
             self.tableView.reloadData()
-        case .experience:
-            if !self.hasLoadedInitialExperiences {
-                self.isLoadingWorkExperiences = true
-                self.isLoadingEducations = true
-                self.tableView.reloadData()
-                self.tableView.tableFooterView = self.loadingTableFooterView
-                self.queryWorkExperiences(userId)
-                self.queryEducations(userId)
-            } else {
-                self.tableView.reloadData()
-            }
+//        case .experience:
+//            if !self.hasLoadedInitialExperiences {
+//                self.isLoadingWorkExperiences = true
+//                self.isLoadingEducations = true
+//                self.tableView.reloadData()
+//                self.tableView.tableFooterView = self.loadingTableFooterView
+//                self.queryWorkExperiences(userId)
+//                self.queryEducations(userId)
+//            } else {
+//                self.tableView.reloadData()
+//            }
         case .skills:
             if !self.hasLoadedInitialUserCategories {
                 self.isLoadingUserCategories = true
@@ -1692,47 +1690,47 @@ extension ProfileTableViewController: ProfileSegmentedControlSectionHeaderDelega
     }
 }
 
-extension ProfileTableViewController: WorkExperienceTableViewCellDelegate {
-    
-    func workDescriptionLabelTapped(_ cell: WorkExperienceTableViewCell) {
-        guard let indexPath = self.tableView.indexPath(for: cell) else {
-            return
-        }
-        let index = indexPath.row - 1
-        guard let workExperience = self.experiences[index] as? WorkExperience else {
-            return
-        }
-        if !workExperience.isExpandedWorkDescription {
-            workExperience.isExpandedWorkDescription = true
-            cell.untruncate()
-            UIView.performWithoutAnimation {
-                self.tableView.beginUpdates()
-                self.tableView.endUpdates()
-            }
-        }
-    }
-}
+//extension ProfileTableViewController: WorkExperienceTableViewCellDelegate {
+//    
+//    func workDescriptionLabelTapped(_ cell: WorkExperienceTableViewCell) {
+//        guard let indexPath = self.tableView.indexPath(for: cell) else {
+//            return
+//        }
+//        let index = indexPath.row - 1
+//        guard let workExperience = self.experiences[index] as? WorkExperience else {
+//            return
+//        }
+//        if !workExperience.isExpandedWorkDescription {
+//            workExperience.isExpandedWorkDescription = true
+//            cell.untruncate()
+//            UIView.performWithoutAnimation {
+//                self.tableView.beginUpdates()
+//                self.tableView.endUpdates()
+//            }
+//        }
+//    }
+//}
 
-extension ProfileTableViewController: EducationTableViewCellDelegate {
-    
-    func educationDescriptionLabelTapped(_ cell: EducationTableViewCell) {
-        guard let indexPath = self.tableView.indexPath(for: cell) else {
-            return
-        }
-        let index = (self.workExperiences.count > 0) ? indexPath.row - 2 : indexPath.row - 1
-        guard let education = self.experiences[index] as? Education else {
-            return
-        }
-        if !education.isExpandedEducationDescription {
-            education.isExpandedEducationDescription = true
-            cell.untruncate()
-            UIView.performWithoutAnimation {
-                self.tableView.beginUpdates()
-                self.tableView.endUpdates()
-            }
-        }
-    }
-}
+//extension ProfileTableViewController: EducationTableViewCellDelegate {
+//    
+//    func educationDescriptionLabelTapped(_ cell: EducationTableViewCell) {
+//        guard let indexPath = self.tableView.indexPath(for: cell) else {
+//            return
+//        }
+//        let index = (self.workExperiences.count > 0) ? indexPath.row - 2 : indexPath.row - 1
+//        guard let education = self.experiences[index] as? Education else {
+//            return
+//        }
+//        if !education.isExpandedEducationDescription {
+//            education.isExpandedEducationDescription = true
+//            cell.untruncate()
+//            UIView.performWithoutAnimation {
+//                self.tableView.beginUpdates()
+//                self.tableView.endUpdates()
+//            }
+//        }
+//    }
+//}
 
 extension ProfileTableViewController: ExperiencesHeaderTableViewCellDelegate {
     
@@ -1741,24 +1739,24 @@ extension ProfileTableViewController: ExperiencesHeaderTableViewCellDelegate {
     }
 }
 
-extension ProfileTableViewController: ExperiencesTableViewControllerDelegate {
-    
-    func workExperiencesUpdated(_ workExperiences: [WorkExperience]) {
-        self.workExperiences = workExperiences
-        self.sortWorkExperiencesByToDate()
-        if self.selectedProfileSegment == ProfileSegment.experience {
-            self.tableView.reloadData()
-        }
-    }
-    
-    func educationsUpdated(_ educations: [Education]) {
-        self.educations = educations
-        self.sortEducationsByToDate()
-        if self.selectedProfileSegment == ProfileSegment.experience {
-            self.tableView.reloadData()
-        }
-    }
-}
+//extension ProfileTableViewController: ExperiencesTableViewControllerDelegate {
+//    
+//    func workExperiencesUpdated(_ workExperiences: [WorkExperience]) {
+//        self.workExperiences = workExperiences
+//        self.sortWorkExperiencesByToDate()
+//        if self.selectedProfileSegment == ProfileSegment.experience {
+//            self.tableView.reloadData()
+//        }
+//    }
+//    
+//    func educationsUpdated(_ educations: [Education]) {
+//        self.educations = educations
+//        self.sortEducationsByToDate()
+//        if self.selectedProfileSegment == ProfileSegment.experience {
+//            self.tableView.reloadData()
+//        }
+//    }
+//}
 
 extension ProfileTableViewController: ProfileEmptyTableViewCellDelegate {
     

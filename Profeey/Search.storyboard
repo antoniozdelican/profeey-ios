@@ -33,10 +33,10 @@
             </objects>
             <point key="canvasLocation" x="846" y="-63"/>
         </scene>
-        <!--Locations-->
+        <!--Schools-->
         <scene sceneID="0k8-Ud-tsz">
             <objects>
-                <viewControllerPlaceholder storyboardName="Locations" id="xov-Jp-aIP" sceneMemberID="viewController"/>
+                <viewControllerPlaceholder storyboardName="Schools" id="xov-Jp-aIP" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LR0-i9-PKO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2641" y="-479"/>
@@ -72,7 +72,7 @@
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="00O-NK-cBk">
                                         <rect key="frame" x="0.0" y="0.0" width="187.5" height="38"/>
                                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
-                                        <state key="normal" title="People">
+                                        <state key="normal" title="Profeeys">
                                             <color key="titleColor" red="0.41868340970000001" green="0.41867089270000002" blue="0.41867792609999999" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <connections>
@@ -82,7 +82,7 @@
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aew-Wr-4ki">
                                         <rect key="frame" x="187.5" y="0.0" width="187.5" height="38"/>
                                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
-                                        <state key="normal" title="Professions">
+                                        <state key="normal" title="Majors">
                                             <color key="titleColor" red="0.41868340970000001" green="0.41867089270000002" blue="0.41867792609999999" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <connections>
@@ -177,7 +177,7 @@
                         <outlet property="mainScrollView" destination="6dh-pb-sZN" id="kQ5-gv-NvT"/>
                         <outlet property="peopleButton" destination="00O-NK-cBk" id="HTV-mm-Fpg"/>
                         <outlet property="professionsButton" destination="aew-Wr-4ki" id="8jM-9i-ufD"/>
-                        <segue destination="xov-Jp-aIP" kind="presentation" identifier="segueToLocationsVc" id="e5V-T2-fRp"/>
+                        <segue destination="xov-Jp-aIP" kind="presentation" identifier="segueToSchoolsVc" id="e5V-T2-fRp"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YSb-UZ-dPL" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -198,7 +198,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="122"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="TID-kN-pyz" id="LZ4-C2-WzF">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="121.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="121"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="nbg-4b-fvK">
@@ -238,14 +238,14 @@
                                                 <stackView opaque="NO" contentMode="scaleToFill" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="zLq-F9-PXN">
                                                     <rect key="frame" x="0.0" y="0.0" width="299" height="17"/>
                                                     <subviews>
-                                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="252" verticalHuggingPriority="251" image="ic_location_profile" translatesAutoresizingMaskIntoConstraints="NO" id="1PG-Q7-whf">
-                                                            <rect key="frame" x="0.0" y="0.0" width="17" height="17"/>
+                                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="252" verticalHuggingPriority="251" image="ic_school_profile" translatesAutoresizingMaskIntoConstraints="NO" id="1PG-Q7-whf">
+                                                            <rect key="frame" x="0.0" y="0.0" width="22" height="17"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" priority="750" constant="17" id="BPb-uE-cT1"/>
                                                             </constraints>
                                                         </imageView>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Location Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="827-4V-8os">
-                                                            <rect key="frame" x="21" y="0.0" width="278" height="17"/>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="School Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="827-4V-8os">
+                                                            <rect key="frame" x="26" y="0.0" width="273" height="17"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                             <color key="textColor" red="0.41868340970000001" green="0.41867089270000002" blue="0.41867792609999999" alpha="1" colorSpace="calibratedRGB"/>
                                                             <nil key="highlightedColor"/>
@@ -283,20 +283,20 @@
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="fullNameLabel" destination="mmW-nR-t6u" id="Sc9-1W-v1W"/>
-                                    <outlet property="locationNameLabel" destination="827-4V-8os" id="BEJ-wT-ypp"/>
-                                    <outlet property="locationStackView" destination="zLq-F9-PXN" id="JSK-Yp-Kef"/>
                                     <outlet property="numberOfRecommendationsLabel" destination="ayT-Bh-wXX" id="x3R-lI-a5a"/>
                                     <outlet property="numberOfRecommendationsStackView" destination="5NR-PR-JHl" id="LfV-p6-sux"/>
                                     <outlet property="preferredUsernameLabel" destination="WvC-2Q-N4u" id="G5P-Bh-eZ3"/>
                                     <outlet property="professionNameLabel" destination="6gY-o4-5dF" id="8tX-fH-CCS"/>
                                     <outlet property="profilePicImageView" destination="nbg-4b-fvK" id="Y9s-NJ-s1G"/>
+                                    <outlet property="schoolNameLabel" destination="827-4V-8os" id="0ng-if-3V9"/>
+                                    <outlet property="schoolStackView" destination="zLq-F9-PXN" id="TSi-uG-TC6"/>
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellSearching" rowHeight="64" id="37P-0R-zjM" customClass="SearchingTableViewCell" customModule="Profeey" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="150" width="375" height="64"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="37P-0R-zjM" id="4JL-0T-2rI">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="63.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="63"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="CCY-Ke-St3">
@@ -325,7 +325,7 @@
                                 <rect key="frame" x="0.0" y="214" width="375" height="64"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Lps-bi-iwi" id="9w8-RR-LeS">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="63.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="63"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No results found" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ara-GL-pDP">
@@ -346,7 +346,7 @@
                                 <rect key="frame" x="0.0" y="278" width="375" height="112"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="vFz-qj-tmZ" id="JC9-QI-YiF">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="111.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="111"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No internet connection." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FZw-p4-25L">
@@ -411,7 +411,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="64"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="aJe-nY-JRF" id="pe6-U2-jxt">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="63.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="63"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="SND-dw-PNb">
@@ -457,7 +457,7 @@
                                 <rect key="frame" x="0.0" y="92" width="375" height="64"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="owJ-bO-ECF" id="A0W-pT-ZAF">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="63.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="63"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="N49-YI-R1N">
@@ -486,7 +486,7 @@
                                 <rect key="frame" x="0.0" y="156" width="375" height="64"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Shm-a4-RzR" id="uPm-KD-Wxp">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="63.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="63"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No results found" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ulw-2N-ive">
@@ -507,7 +507,7 @@
                                 <rect key="frame" x="0.0" y="220" width="375" height="112"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="PSi-ow-x1i" id="enK-zd-tef">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="111.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="111"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No internet connection." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Uvz-MK-IQA">
@@ -560,10 +560,10 @@
         </scene>
     </scenes>
     <resources>
-        <image name="ic_location_profile" width="12" height="18"/>
         <image name="ic_profession" width="40" height="40"/>
         <image name="ic_recommendations_search" width="17" height="17"/>
         <image name="ic_refresh" width="32" height="32"/>
+        <image name="ic_school_profile" width="22" height="17"/>
         <image name="ic_search" width="25" height="25"/>
     </resources>
 </document>

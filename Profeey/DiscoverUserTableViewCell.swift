@@ -18,8 +18,8 @@ class DiscoverUserTableViewCell: UITableViewCell {
     @IBOutlet weak var fullNameLabel: UILabel!
     @IBOutlet weak var preferredUsernameLabel: UILabel!
     @IBOutlet weak var professionNameLabel: UILabel!
-    @IBOutlet weak var locationNameLabel: UILabel!
-    @IBOutlet weak var locationStackView: UIStackView!
+    @IBOutlet weak var schoolNameLabel: UILabel!
+    @IBOutlet weak var schoolStackView: UIStackView!
     @IBOutlet weak var followButton: UIButton!
     
     weak var discoverUserTableViewCellDelegate: DiscoverUserTableViewCellDelegate?

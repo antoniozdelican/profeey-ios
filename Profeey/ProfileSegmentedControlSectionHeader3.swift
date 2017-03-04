@@ -65,7 +65,7 @@ class ProfileSegmentedControlSectionHeader3: UITableViewHeaderFooterView {
     
     @IBAction func experienceButtonTapped(_ sender: AnyObject) {
         self.setExperienceButtonActive()
-        self.profileSegmentedControlSectionHeaderDelegate?.segmentChanged(ProfileSegment.experience)
+        //self.profileSegmentedControlSectionHeaderDelegate?.segmentChanged(ProfileSegment.experience)
     }
     
     @IBAction func skillsButtonTapped(_ sender: AnyObject) {

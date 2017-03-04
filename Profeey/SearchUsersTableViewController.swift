@@ -27,8 +27,8 @@ class SearchUsersTableViewController: UITableViewController {
     fileprivate var isSearchingPopularUsers: Bool = false
     fileprivate var isShowingPopularUsers: Bool = true
     
-    fileprivate var isLocationActive: Bool = false
-    fileprivate var location: Location?
+    fileprivate var isSchoolActive: Bool = false
+    fileprivate var school: School?
     
     fileprivate var noNetworkConnection: Bool = false
 
@@ -99,8 +99,8 @@ class SearchUsersTableViewController: UITableViewController {
         cell.fullNameLabel.text = user.fullName
         cell.preferredUsernameLabel.text = user.preferredUsername
         cell.professionNameLabel.text = user.professionName
-        cell.locationNameLabel.text = user.locationName
-        cell.locationStackView.isHidden = user.locationName != nil ? false : true
+        cell.schoolNameLabel.text = user.schoolName
+        cell.schoolStackView.isHidden = user.schoolName != nil ? false : true
         cell.numberOfRecommendationsLabel.text = user.numberOfRecommendationsInt.numberToString()
         cell.numberOfRecommendationsStackView.isHidden = user.numberOfRecommendationsInt > 0 ? false : true
         return cell
@@ -129,8 +129,8 @@ class SearchUsersTableViewController: UITableViewController {
             self.noNetworkConnection = false
             self.isSearchingPopularUsers = true
             self.tableView.reloadData()
-            if self.isLocationActive, let locationId = self.location?.locationId {
-                self.queryLocationUsers(locationId)
+            if self.isSchoolActive, let schoolId = self.school?.schoolId {
+                self.querySchoolUsers(schoolId)
             } else {
                 self.scanUsers()
             }
@@ -166,8 +166,8 @@ class SearchUsersTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "searchTableSectionHeader") as? SearchTableSectionHeader
         var titleText = self.isShowingPopularUsers ? "POPULAR" : "BEST MATCHES"
-        if self.isLocationActive, let locationName = self.location?.locationName {
-            titleText = titleText + " in \(locationName)"
+        if self.isSchoolActive, let schoolName = self.school?.schoolName {
+            titleText = titleText + " in \(schoolName)"
         }
         header?.titleLabel.text = titleText
         return header
@@ -191,8 +191,8 @@ class SearchUsersTableViewController: UITableViewController {
             return
         }
         // Query.
-        if self.isLocationActive, let locationId = self.location?.locationId {
-            self.queryLocationUsers(locationId)
+        if self.isSchoolActive, let schoolId = self.school?.schoolId {
+            self.querySchoolUsers(schoolId)
         } else {
             self.scanUsers()
         }
@@ -246,7 +246,7 @@ class SearchUsersTableViewController: UITableViewController {
                 self.popularUsers = []
                 if let awsUsers = response?.items as? [AWSUser] {
                     for awsUser in awsUsers {
-                        let user = LocationUser(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationId: awsUser._locationId, locationName: awsUser._locationName, numberOfRecommendations: awsUser._numberOfRecommendations)
+                        let user = SchoolUser(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, schoolId: awsUser._schoolId, schoolName: awsUser._schoolName, numberOfRecommendations: awsUser._numberOfRecommendations)
                         self.popularUsers.append(user)
                     }
                 }
@@ -274,14 +274,14 @@ class SearchUsersTableViewController: UITableViewController {
         })
     }
     
-    fileprivate func queryLocationUsers(_ locationId: String) {
+    fileprivate func querySchoolUsers(_ schoolId: String) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().queryLocationUsers(locationId, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().querySchoolUsers(schoolId, completionHandler: {
             (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 guard error == nil else {
-                    print("queryLocationUsers error: \(error!)")
+                    print("querySchoolUsers error: \(error!)")
                     self.isSearchingPopularUsers = false
                     self.refreshControl?.endRefreshing()
                     if (error as! NSError).code == -1009 {
@@ -294,7 +294,7 @@ class SearchUsersTableViewController: UITableViewController {
                 self.popularUsers = []
                 if let awsUsers = response?.items as? [AWSUser] {
                     for awsUser in awsUsers {
-                        let user = LocationUser(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationId: awsUser._locationId, locationName: awsUser._locationName, numberOfRecommendations: awsUser._numberOfRecommendations)
+                        let user = SchoolUser(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, schoolId: awsUser._schoolId, schoolName: awsUser._schoolName, numberOfRecommendations: awsUser._numberOfRecommendations)
                         self.popularUsers.append(user)
                     }
                 }
@@ -388,22 +388,22 @@ extension SearchUsersTableViewController {
 
 extension SearchUsersTableViewController: SearchUsersDelegate {
     
-    func addLocation(_ location: Location) {
-        guard let locationId = location.locationId else {
+    func addSchool(_ school: School) {
+        guard let schoolId = school.schoolId else {
             return
         }
-        self.location = location
-        self.isLocationActive = true
+        self.school = school
+        self.isSchoolActive = true
         // Clear old.
         self.users = []
         self.isSearchingPopularUsers = true
         self.tableView.reloadData()
-        self.queryLocationUsers(locationId)
+        self.querySchoolUsers(schoolId)
     }
     
-    func removeLocation() {
-        self.location = nil
-        self.isLocationActive = false
+    func removeSchool() {
+        self.school = nil
+        self.isSchoolActive = false
         // Clear old.
         self.users = []
         self.isSearchingPopularUsers = true

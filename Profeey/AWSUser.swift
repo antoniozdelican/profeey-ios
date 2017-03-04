@@ -22,8 +22,8 @@ class AWSUser: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     var _about: String?
     var _email: String?
     var _emailVerified: NSNumber?
-    var _locationId: String?
-    var _locationName: String?
+    var _schoolId: String?
+    var _schoolName: String?
     var _website: String?
     
     var _numberOfFollowers: NSNumber?
@@ -69,7 +69,7 @@ class AWSUser: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     }
     
     // To update user on EditVc. Use AWSUserUpdate!
-    convenience init(_userId: String?, _firstName: String?, _lastName: String?, _professionName: String?, _profilePicUrl: String?, _about: String?, _locationId: String?, _locationName: String?, _website: String?) {
+    convenience init(_userId: String?, _firstName: String?, _lastName: String?, _professionName: String?, _profilePicUrl: String?, _about: String?, _schoolId: String?, _schoolName: String?, _website: String?) {
         self.init()
         self._userId = _userId
         self._firstName = _firstName
@@ -77,8 +77,8 @@ class AWSUser: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
         self._professionName = _professionName
         self._profilePicUrl = _profilePicUrl
         self._about = _about
-        self._locationId = _locationId
-        self._locationName = _locationName
+        self._schoolId = _schoolId
+        self._schoolName = _schoolName
         self._website = _website
     }
     
@@ -107,8 +107,8 @@ class AWSUser: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
             "_about" : "about",
             "_email" : "email",
             "_emailVerified" : "emailVerified",
-            "_locationId" : "locationId",
-            "_locationName" : "locationName",
+            "_schoolId" : "schoolId",
+            "_schoolName" : "schoolName",
             "_website" : "website",
             "_numberOfFollowers" : "numberOfFollowers",
             "_numberOfPosts" : "numberOfPosts",

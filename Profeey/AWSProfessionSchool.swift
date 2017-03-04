@@ -1,27 +1,27 @@
 //
-//  AWSProfessionLocation.swift
+//  AWSProfessionSchool.swift
 //  Profeey
 //
-//  Created by Antonio Zdelican on 21/12/16.
-//  Copyright © 2016 Profeey. All rights reserved.
+//  Created by Antonio Zdelican on 04/03/17.
+//  Copyright © 2017 Profeey. All rights reserved.
 //
 
 import Foundation
 import AWSDynamoDB
 
-class AWSProfessionLocation: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
+class AWSProfessionSchool: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     
     var _professionName: String?
-    var _locationId: String?
-    var _locationName: String?
+    var _schoolId: String?
+    var _schoolName: String?
     var _numberOfUsers: NSNumber?
     var _created: NSNumber?
     
     class func dynamoDBTableName() -> String {
         #if DEVELOPMENT
-            return "profeey-mobilehub-294297648-ProfessionLocations"
+            return "profeey-mobilehub-294297648-ProfessionSchools"
         #else
-            return "prodprofeey-mobilehub-725952970-ProfessionLocations"
+            return "prodprofeey-mobilehub-725952970-ProfessionSchools"
         #endif
     }
     
@@ -32,14 +32,14 @@ class AWSProfessionLocation: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     
     class func rangeKeyAttribute() -> String {
         
-        return "_locationId"
+        return "_schoolId"
     }
     
     override class func jsonKeyPathsByPropertyKey() -> [AnyHashable: Any] {
         return [
             "_professionName" : "professionName",
-            "_locationId" : "locationId",
-            "_locationName" : "locationName",
+            "_schoolId" : "schoolId",
+            "_schoolName" : "schoolName",
             "_numberOfUsers" : "numberOfUsers",
             "_created" : "created",
         ]

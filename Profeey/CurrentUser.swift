@@ -20,7 +20,7 @@ class CurrentUser: User {
         self.userId = userId
     }
     
-    convenience init(userId: String?, firstName: String?, lastName: String?, preferredUsername: String?, professionName: String?, profilePicUrl: String?, locationId: String?, locationName: String?) {
+    convenience init(userId: String?, firstName: String?, lastName: String?, preferredUsername: String?, professionName: String?, profilePicUrl: String?, schoolId: String?, schoolName: String?) {
         self.init()
         self.userId = userId
         self.firstName = firstName
@@ -28,7 +28,7 @@ class CurrentUser: User {
         self.preferredUsername = preferredUsername
         self.professionName = professionName
         self.profilePicUrl = profilePicUrl
-        self.locationId = locationId
-        self.locationName = locationName
+        self.schoolId = schoolId
+        self.schoolName = schoolName
     }
 }

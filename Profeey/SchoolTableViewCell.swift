@@ -1,5 +1,5 @@
 //
-//  LocationTableViewCell.swift
+//  SchoolTableViewCell.swift
 //  Profeey
 //
 //  Created by Antonio Zdelican on 26/10/16.
@@ -8,9 +8,9 @@
 
 import UIKit
 
-class LocationTableViewCell: UITableViewCell {
+class SchoolTableViewCell: UITableViewCell {
     
-    @IBOutlet weak var locationNameLabel: UILabel!
+    @IBOutlet weak var schoolNameLabel: UILabel!
     @IBOutlet weak var numberOfUsersLabel: UILabel!
 
     override func awakeFromNib() {

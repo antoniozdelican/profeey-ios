@@ -1,5 +1,5 @@
 //
-//  LocationUser.swift
+//  SchoolUser.swift
 //  Profeey
 //
 //  Created by Antonio Zdelican on 22/12/16.
@@ -8,13 +8,13 @@
 
 import Foundation
 
-class LocationUser: User {
+class SchoolUser: User {
     
     override init() {
         super.init()
     }
     
-    convenience init(userId: String?, firstName: String?, lastName: String?, preferredUsername: String?, professionName: String?, profilePicUrl: String?, locationId: String?, locationName: String?, numberOfRecommendations: NSNumber?) {
+    convenience init(userId: String?, firstName: String?, lastName: String?, preferredUsername: String?, professionName: String?, profilePicUrl: String?, schoolId: String?, schoolName: String?, numberOfRecommendations: NSNumber?) {
         self.init()
         self.userId = userId
         self.firstName = firstName
@@ -22,8 +22,8 @@ class LocationUser: User {
         self.preferredUsername = preferredUsername
         self.professionName = professionName
         self.profilePicUrl = profilePicUrl
-        self.locationId = locationId
-        self.locationName = locationName
+        self.schoolId = schoolId
+        self.schoolName = schoolName
         self.numberOfRecommendations = numberOfRecommendations
     }
 }

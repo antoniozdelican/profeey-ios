@@ -58,11 +58,11 @@
                                                 <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="qpb-Ab-NTx">
                                                     <rect key="frame" x="0.0" y="54" width="207" height="17"/>
                                                     <subviews>
-                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="252" verticalHuggingPriority="251" image="ic_location_profile" translatesAutoresizingMaskIntoConstraints="NO" id="2GS-B9-jMr">
-                                                            <rect key="frame" x="0.0" y="0.0" width="12" height="17"/>
+                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="252" verticalHuggingPriority="251" image="ic_school_profile" translatesAutoresizingMaskIntoConstraints="NO" id="2GS-B9-jMr">
+                                                            <rect key="frame" x="0.0" y="0.0" width="22" height="17"/>
                                                         </imageView>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Location Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pqm-vg-zMl">
-                                                            <rect key="frame" x="17" y="0.0" width="190" height="17"/>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="School Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pqm-vg-zMl">
+                                                            <rect key="frame" x="27" y="0.0" width="180" height="17"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                             <color key="textColor" red="0.41868340970000001" green="0.41867089270000002" blue="0.41867792609999999" alpha="1" colorSpace="calibratedRGB"/>
                                                             <nil key="highlightedColor"/>
@@ -100,11 +100,11 @@
                                 <connections>
                                     <outlet property="followButton" destination="VZN-rU-bj6" id="7ne-Fw-Nr1"/>
                                     <outlet property="fullNameLabel" destination="WcY-92-P5o" id="p1p-gJ-lHs"/>
-                                    <outlet property="locationNameLabel" destination="pqm-vg-zMl" id="vzD-6z-PAf"/>
-                                    <outlet property="locationStackView" destination="qpb-Ab-NTx" id="uSc-kj-GBB"/>
                                     <outlet property="preferredUsernameLabel" destination="LOO-OZ-Cy0" id="VJM-gf-h5D"/>
                                     <outlet property="professionNameLabel" destination="uG8-WQ-Q2T" id="Bep-Kt-TWB"/>
                                     <outlet property="profilePicImageView" destination="dIT-hb-dof" id="Wgq-hO-BfR"/>
+                                    <outlet property="schoolNameLabel" destination="pqm-vg-zMl" id="Rde-5Y-H5Z"/>
+                                    <outlet property="schoolStackView" destination="qpb-Ab-NTx" id="AeI-zV-1Iv"/>
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellSearching" rowHeight="60" id="nib-Ky-v3R" customClass="SearchingTableViewCell" customModule="Profeey" customModuleProvider="target">
@@ -198,6 +198,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="ic_location_profile" width="12" height="18"/>
+        <image name="ic_school_profile" width="22" height="17"/>
     </resources>
 </document>

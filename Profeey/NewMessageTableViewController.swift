@@ -27,9 +27,6 @@ class NewMessageTableViewController: UITableViewController {
     fileprivate var isSearchingPopularUsers: Bool = false
     fileprivate var isShowingPopularUsers: Bool = true
     
-    fileprivate var isLocationActive: Bool = false
-    fileprivate var location: Location?
-    
     fileprivate var noNetworkConnection: Bool = false
 
     override func viewDidLoad() {
@@ -231,7 +228,7 @@ class NewMessageTableViewController: UITableViewController {
                         guard awsUser._userId != AWSIdentityManager.defaultIdentityManager().identityId else {
                             continue
                         }
-                        let user = LocationUser(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationId: awsUser._locationId, locationName: awsUser._locationName, numberOfRecommendations: awsUser._numberOfRecommendations)
+                        let user = SchoolUser(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, schoolId: awsUser._schoolId, schoolName: awsUser._schoolName, numberOfRecommendations: awsUser._numberOfRecommendations)
                         self.popularUsers.append(user)
                     }
                 }

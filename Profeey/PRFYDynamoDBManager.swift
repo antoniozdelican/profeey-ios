@@ -26,7 +26,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
     
     // MARK: CurrentUser
     
-    func updateCurrentUserLocal(_ firstName: String?, lastName: String?, preferredUsername: String?, professionName: String?, profilePicUrl: String?, locationId: String?, locationName: String?, profilePic: UIImage?) {
+    func updateCurrentUserLocal(_ firstName: String?, lastName: String?, preferredUsername: String?, professionName: String?, profilePicUrl: String?, schoolId: String?, schoolName: String?, profilePic: UIImage?) {
         guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
             print("updateCurrentUserLocal no identityId!")
             return
@@ -39,8 +39,8 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         self.currentUserDynamoDB?.preferredUsername = preferredUsername
         self.currentUserDynamoDB?.professionName = professionName
         self.currentUserDynamoDB?.profilePicUrl = profilePicUrl
-        self.currentUserDynamoDB?.locationId = locationId
-        self.currentUserDynamoDB?.locationName = locationName
+        self.currentUserDynamoDB?.schoolId = schoolId
+        self.currentUserDynamoDB?.schoolName = schoolName
         self.currentUserDynamoDB?.profilePic = profilePic
     }
     
@@ -192,7 +192,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         awsUsersTable.saveUserSkipNull(awsUser, completionHandler: completionHandler)
     }
     
-    func updateUserDynamoDB(_ firstName: String?, lastName: String?, professionName: String?, profilePicUrl: String?, about: String?, locationId: String?, locationName: String?, website: String?, completionHandler: @escaping AWSContinuationBlock) {
+    func updateUserDynamoDB(_ firstName: String?, lastName: String?, professionName: String?, profilePicUrl: String?, about: String?, schoolId: String?, schoolName: String?, website: String?, completionHandler: @escaping AWSContinuationBlock) {
         guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
             print("updateUserDynamoDB no identityId!")
             AWSTask().continue(completionHandler)
@@ -200,7 +200,7 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         }
         print("updateUserDynamoDB:")
         let awsUsersTable = AWSUsersTable()
-        let awsUserUpdate = AWSUserUpdate(_userId: identityId, _firstName: firstName, _lastName: lastName, _professionName: professionName, _profilePicUrl: profilePicUrl, _about: about, _locationId: locationId, _locationName: locationName, _website: website)
+        let awsUserUpdate = AWSUserUpdate(_userId: identityId, _firstName: firstName, _lastName: lastName, _professionName: professionName, _profilePicUrl: profilePicUrl, _about: about, _schoolId: schoolId, _schoolName: schoolName, _website: website)
         awsUsersTable.saveUser(awsUserUpdate, completionHandler: completionHandler)
     }
     
@@ -209,14 +209,14 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         awsUsersTable.scanUsers(completionHandler)
     }
     
-    func queryLocationUsers(_ locationId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
-        let awsUsersLocationIndex = AWSUsersLocationIndex()
-        awsUsersLocationIndex.queryLocationUsers(locationId, completionHandler: completionHandler)
+    func querySchoolUsers(_ schoolId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+        let awsUsersSchoolIdIndex = AWSUsersSchoolIdIndex()
+        awsUsersSchoolIdIndex.querySchoolUsers(schoolId, completionHandler: completionHandler)
     }
     
-    func queryProfessionUsers(_ professionName: String, locationId: String?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+    func queryProfessionUsers(_ professionName: String, schoolId: String?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         let awsUsersProfessionIndex = AWSUsersProfessionIndex()
-        awsUsersProfessionIndex.queryProfessionUsers(professionName, locationId: locationId, completionHandler: completionHandler)
+        awsUsersProfessionIndex.queryProfessionUsers(professionName, schoolId: schoolId, completionHandler: completionHandler)
     }
     
     // Check if preferredUsername already exists in DynamoDB.
@@ -706,18 +706,18 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         awsCategoriesTable.scanCategories(completionHandler)
     }
     
-    // MARK: Locations
+    // MARK: Schools
     
-    func scanLocationsDynamoDB(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?){
-        let awsLocationsTable = AWSLocationsTable()
-        awsLocationsTable.scanLocations(completionHandler)
+    func scanSchoolsDynamoDB(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+        let awsSchoolsTable = AWSSchoolsTable()
+        awsSchoolsTable.scanSchools(completionHandler)
     }
     
-    // MARK: ProfessionLocations
+    // MARK: ProfessionSchools
     
-    func queryLocationProfessions(_ locationId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?){
-        let awsProfessionLocationsLocationIndex = AWSProfessionLocationsLocationIndex()
-        awsProfessionLocationsLocationIndex.queryLocationProfessions(locationId, completionHandler: completionHandler)
+    func querySchoolProfessions(_ schoolId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
+        let awsProfessionSchoolsSchoolIdIndex = AWSProfessionSchoolsSchoolIdIndex()
+        awsProfessionSchoolsSchoolIdIndex.querySchoolProfessions(schoolId, completionHandler: completionHandler)
     }
     
     // MARK: Messages

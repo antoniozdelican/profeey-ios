@@ -1,26 +1,21 @@
 //
-//  Profession.swift
+//  School.swift
 //  Profeey
 //
-//  Created by Antonio Zdelican on 12/09/16.
-//  Copyright © 2016 Profeey. All rights reserved.
+//  Created by Antonio Zdelican on 04/03/17.
+//  Copyright © 2017 Profeey. All rights reserved.
 //
 
 import Foundation
 
-class Profession: NSObject {
+class School: NSObject {
     
     // Properties.
-    var professionName: String?
+    var schoolId: String?
+    var schoolName: String?
     var numberOfUsers: NSNumber?
     
     // Generated.
-    var professionNameWhitespace: String? {
-        guard let professionName = self.professionName else {
-            return nil
-        }
-        return professionName.replacingOccurrences(of: "_", with: " ")
-    }
     var numberOfUsersInt: Int {
         guard let numberOfUsers = self.numberOfUsers else {
             return 0
@@ -42,9 +37,10 @@ class Profession: NSObject {
         super.init()
     }
     
-    convenience init(professionName: String?, numberOfUsers: NSNumber?) {
+    convenience init(schoolId: String?, schoolName: String?, numberOfUsers: NSNumber?) {
         self.init()
-        self.professionName = professionName
+        self.schoolId = schoolId
+        self.schoolName = schoolName
         self.numberOfUsers = numberOfUsers
     }
 }

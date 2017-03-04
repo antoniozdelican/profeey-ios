@@ -94,8 +94,8 @@ class DiscoverPeopleTableViewController: UITableViewController {
         cell.fullNameLabel.text = user.fullName
         cell.preferredUsernameLabel.text = user.preferredUsername
         cell.professionNameLabel.text = user.professionName
-        cell.locationNameLabel.text = user.locationName
-        cell.locationStackView.isHidden = user.locationName != nil ? false : true
+        cell.schoolNameLabel.text = user.schoolName
+        cell.schoolStackView.isHidden = user.schoolName != nil ? false : true
         cell.discoverUserTableViewCellDelegate = self
         if !self.isLoadingFollowingIds, let userId = user.userId {
             self.followingIds.contains(userId) ? cell.setFollowingButton() : cell.setFollowButton()
@@ -177,7 +177,7 @@ class DiscoverPeopleTableViewController: UITableViewController {
                         return
                     }
                     for awsUser in awsUsers {
-                        let user = LocationUser(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, locationId: awsUser._locationId, locationName: awsUser._locationName, numberOfRecommendations: awsUser._numberOfRecommendations)
+                        let user = SchoolUser(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, schoolId: awsUser._schoolId, schoolName: awsUser._schoolName, numberOfRecommendations: awsUser._numberOfRecommendations)
                         if awsUser._userId != self.currentUserId! {
                             self.users.append(user)
                         }
