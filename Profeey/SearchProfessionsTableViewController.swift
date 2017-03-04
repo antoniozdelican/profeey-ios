@@ -89,6 +89,10 @@ class SearchProfessionsTableViewController: UITableViewController {
             return cell
         }
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellSearchProfession", for: indexPath) as! SearchProfessionTableViewCell
+        
+        print("HERE")
+        print(self.professions[indexPath.row].professionNameWhitespace)
+        
         let profession = self.professions[indexPath.row]
         cell.professionNameLabel.text = profession.professionNameWhitespace
         cell.numberOfUsersLabel.text = profession.numberOfUsersString
@@ -270,7 +274,7 @@ class SearchProfessionsTableViewController: UITableViewController {
                 self.popularProfessions = []
                 if let awsProfessionSchools = response?.items as? [AWSProfessionSchool] {
                     for awsProfessionSchool in awsProfessionSchools {
-                        let profession = Profession(professionName: awsProfessionSchool._schoolName, numberOfUsers: awsProfessionSchool._numberOfUsers)
+                        let profession = Profession(professionName: awsProfessionSchool._professionName, numberOfUsers: awsProfessionSchool._numberOfUsers)
                         self.popularProfessions.append(profession)
                     }
                 }
