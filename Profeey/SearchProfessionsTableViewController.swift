@@ -150,7 +150,7 @@ class SearchProfessionsTableViewController: UITableViewController {
         if self.professions.count == 0 {
             return 64.0
         }
-        return 64.0
+        return UITableViewAutomaticDimension
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -190,10 +190,10 @@ class SearchProfessionsTableViewController: UITableViewController {
     
     // MARK: Helpers
     
-    fileprivate func filterProfessions(_ namePrefix: String) {
+    fileprivate func filterProfessions(_ name: String) {
         let regularProfessions = self.popularProfessions.filter({
             (profession: Profession) in
-            if let searchProfessionName = profession.professionName?.lowercased(), searchProfessionName.hasPrefix(namePrefix.lowercased()) {
+            if let searchProfessionName = profession.professionName?.lowercased(), searchProfessionName.contains(name.lowercased()) {
                 return true
             } else {
                 return false

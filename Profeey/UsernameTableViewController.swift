@@ -244,7 +244,7 @@ class UsernameTableViewController: UITableViewController {
                     alertController.addAction(okAction)
                     self.present(alertController, animated: true, completion: nil)
                 } else {
-                    self.performSegue(withIdentifier: "segueToWelcomeProfessionsVc", sender: self)
+                    self.performSegue(withIdentifier: "segueToWelcomeSchoolsVc", sender: self)
                 }
             })
             return nil

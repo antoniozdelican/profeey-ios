@@ -239,13 +239,13 @@
                                                     <rect key="frame" x="0.0" y="0.0" width="299" height="17"/>
                                                     <subviews>
                                                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="252" verticalHuggingPriority="251" image="ic_school_profile" translatesAutoresizingMaskIntoConstraints="NO" id="1PG-Q7-whf">
-                                                            <rect key="frame" x="0.0" y="0.0" width="22" height="17"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="18" height="17"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" priority="750" constant="17" id="BPb-uE-cT1"/>
                                                             </constraints>
                                                         </imageView>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="School Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="827-4V-8os">
-                                                            <rect key="frame" x="26" y="0.0" width="273" height="17"/>
+                                                            <rect key="frame" x="22" y="0.0" width="277" height="17"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                             <color key="textColor" red="0.41868340970000001" green="0.41867089270000002" blue="0.41867792609999999" alpha="1" colorSpace="calibratedRGB"/>
                                                             <nil key="highlightedColor"/>
@@ -329,7 +329,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No results found" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ara-GL-pDP">
-                                            <rect key="frame" x="12" y="23.5" width="351" height="17"/>
+                                            <rect key="frame" x="22" y="23.5" width="341" height="17"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <color key="textColor" red="0.41868340970000001" green="0.41867089270000002" blue="0.41867792609999999" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
@@ -337,7 +337,7 @@
                                     </subviews>
                                     <constraints>
                                         <constraint firstAttribute="trailing" secondItem="ara-GL-pDP" secondAttribute="trailing" constant="12" id="2RT-nU-kr9"/>
-                                        <constraint firstItem="ara-GL-pDP" firstAttribute="leading" secondItem="9w8-RR-LeS" secondAttribute="leading" constant="12" id="2kh-KO-1ef"/>
+                                        <constraint firstItem="ara-GL-pDP" firstAttribute="leading" secondItem="9w8-RR-LeS" secondAttribute="leading" constant="22" id="2kh-KO-1ef"/>
                                         <constraint firstItem="ara-GL-pDP" firstAttribute="centerY" secondItem="9w8-RR-LeS" secondAttribute="centerY" id="Yv4-bk-E0a"/>
                                     </constraints>
                                 </tableViewCellContentView>
@@ -430,26 +430,29 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
-                                        </stackView>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_profession" translatesAutoresizingMaskIntoConstraints="NO" id="drN-NS-lt6">
-                                            <rect key="frame" x="12" y="12" width="40" height="40"/>
                                             <constraints>
-                                                <constraint firstAttribute="width" constant="40" id="PVq-zE-zgy"/>
-                                                <constraint firstAttribute="height" constant="40" id="t0s-qg-thg"/>
+                                                <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="36" id="uQo-um-r6y"/>
+                                            </constraints>
+                                        </stackView>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_profession" translatesAutoresizingMaskIntoConstraints="NO" id="JNa-bT-2Z7">
+                                            <rect key="frame" x="14" y="14" width="36" height="36"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="36" id="4ya-to-9Db"/>
+                                                <constraint firstAttribute="width" constant="36" id="bAR-ge-2J3"/>
                                             </constraints>
                                         </imageView>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="SND-dw-PNb" firstAttribute="centerY" secondItem="pe6-U2-jxt" secondAttribute="centerY" id="3JJ-nq-haM"/>
-                                        <constraint firstItem="drN-NS-lt6" firstAttribute="leading" secondItem="pe6-U2-jxt" secondAttribute="leading" constant="12" id="UNv-yo-pUK"/>
+                                        <constraint firstItem="JNa-bT-2Z7" firstAttribute="centerY" secondItem="pe6-U2-jxt" secondAttribute="centerY" id="6Nl-4j-C6w"/>
+                                        <constraint firstItem="JNa-bT-2Z7" firstAttribute="leading" secondItem="pe6-U2-jxt" secondAttribute="leading" constant="14" id="Pjz-Dh-3GY"/>
+                                        <constraint firstItem="SND-dw-PNb" firstAttribute="top" secondItem="pe6-U2-jxt" secondAttribute="top" constant="14" id="T1J-kQ-T5F"/>
                                         <constraint firstAttribute="trailing" secondItem="SND-dw-PNb" secondAttribute="trailing" constant="12" id="lvY-iT-BRG"/>
-                                        <constraint firstItem="drN-NS-lt6" firstAttribute="top" secondItem="pe6-U2-jxt" secondAttribute="top" constant="12" id="oIN-SC-7JU"/>
-                                        <constraint firstItem="SND-dw-PNb" firstAttribute="leading" secondItem="drN-NS-lt6" secondAttribute="trailing" constant="12" id="quo-3S-hw6"/>
+                                        <constraint firstAttribute="bottom" secondItem="SND-dw-PNb" secondAttribute="bottom" constant="13" id="mZS-OG-0Ch"/>
+                                        <constraint firstItem="SND-dw-PNb" firstAttribute="leading" secondItem="JNa-bT-2Z7" secondAttribute="trailing" constant="14" id="oWr-bw-Bmy"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="numberOfUsersLabel" destination="NAE-Hw-st5" id="cq7-m7-CBy"/>
-                                    <outlet property="professionImageView" destination="drN-NS-lt6" id="zqN-eI-L6Y"/>
                                     <outlet property="professionNameLabel" destination="uAi-Eu-fBk" id="4IM-64-Han"/>
                                 </connections>
                             </tableViewCell>
@@ -490,14 +493,14 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No results found" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ulw-2N-ive">
-                                            <rect key="frame" x="12" y="23.5" width="351" height="17"/>
+                                            <rect key="frame" x="22" y="23.5" width="341" height="17"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <color key="textColor" red="0.41868340970000001" green="0.41867089270000002" blue="0.41867792609999999" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="ulw-2N-ive" firstAttribute="leading" secondItem="uPm-KD-Wxp" secondAttribute="leading" constant="12" id="ohw-Ar-PBS"/>
+                                        <constraint firstItem="ulw-2N-ive" firstAttribute="leading" secondItem="uPm-KD-Wxp" secondAttribute="leading" constant="22" id="ohw-Ar-PBS"/>
                                         <constraint firstItem="ulw-2N-ive" firstAttribute="centerY" secondItem="uPm-KD-Wxp" secondAttribute="centerY" id="tUO-Wf-AYU"/>
                                         <constraint firstAttribute="trailing" secondItem="ulw-2N-ive" secondAttribute="trailing" constant="12" id="tbQ-Qv-KDl"/>
                                     </constraints>
@@ -560,10 +563,10 @@
         </scene>
     </scenes>
     <resources>
-        <image name="ic_profession" width="40" height="40"/>
+        <image name="ic_profession" width="36" height="36"/>
         <image name="ic_recommendations_search" width="17" height="17"/>
         <image name="ic_refresh" width="32" height="32"/>
-        <image name="ic_school_profile" width="22" height="17"/>
+        <image name="ic_school_profile" width="18" height="17"/>
         <image name="ic_search" width="25" height="25"/>
     </resources>
 </document>

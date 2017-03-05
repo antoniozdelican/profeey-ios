@@ -23,7 +23,6 @@ class WelcomeProfessionsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.hidesBackButton = true
-        
         self.tableView.contentInset = UIEdgeInsetsMake(-1.0, 0.0, 0.0, 0.0)
         self.tableView.register(UINib(nibName: "TableSectionHeader", bundle: nil), forHeaderFooterViewReuseIdentifier: "tableSectionHeader")
         self.configureNavigationBar()
@@ -49,12 +48,11 @@ class WelcomeProfessionsTableViewController: UITableViewController {
     // MARK: Configuration
     
     fileprivate func configureNavigationBar() {
-        self.navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
-        self.navigationController?.navigationBar.shadowImage = nil
         self.navigationController?.navigationBar.barTintColor = UIColor.white
-        self.navigationController?.navigationBar.tintColor = Colors.black
-        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: Colors.black]
-        // Fix alignment for custom rightBarButtonItem.
+        self.navigationController?.navigationBar.tintColor = Colors.greyIcons
+        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: Colors.black, NSFontAttributeName: UIFont.systemFont(ofSize: 17.0, weight: UIFontWeightMedium)]
+        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        self.navigationController?.navigationBar.shadowImage = UIImage(named: "ic_navbar_shadow_resizable")
         self.skipButton.contentEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, 0.0, -8.0)
     }
     
@@ -146,11 +144,11 @@ class WelcomeProfessionsTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 60.0
+        return 68.0
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 60.0
+        return UITableViewAutomaticDimension
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -196,9 +194,9 @@ class WelcomeProfessionsTableViewController: UITableViewController {
     
     @IBAction func skipButtonTapped(_ sender: AnyObject) {
         self.view.endEditing(true)
-        let alertController = UIAlertController(title: "No Profession", message: "Are you sure you don't want to pick a profession?", preferredStyle: UIAlertControllerStyle.alert)
+        let alertController = UIAlertController(title: "No Area Of Study", message: "Are you sure you want to skip selecting your main field of study? It helps you build a better Profeey profile.", preferredStyle: UIAlertControllerStyle.alert)
         let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil)
-        let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: {
+        let okAction = UIAlertAction(title: "Skip", style: UIAlertActionStyle.default, handler: {
             (alertAction: UIAlertAction) in
             self.performSegue(withIdentifier: "segueToDiscoverPeopleVc", sender: self)
         })
@@ -209,12 +207,12 @@ class WelcomeProfessionsTableViewController: UITableViewController {
     
     // MARK: Helpers
     
-    fileprivate func filterProfessions(_ namePrefix: String) {
+    fileprivate func filterProfessions(_ name: String) {
         // Clear old.
         self.regularProfessions = []
         self.regularProfessions = self.popularProfessions.filter({
             (profession: Profession) in
-            if let searchProfessionName = profession.professionName?.lowercased(), searchProfessionName.hasPrefix(namePrefix.lowercased()) {
+            if let searchProfessionName = profession.professionName?.lowercased(), searchProfessionName.contains(name.lowercased()) {
                 return true
             } else {
                 return false

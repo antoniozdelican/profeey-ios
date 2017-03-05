@@ -50,20 +50,12 @@ class WelcomeSchoolsTableViewController: UITableViewController {
     // MARK: Configuration
     
     fileprivate func configureNavigationBar() {
-        self.navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
-        self.navigationController?.navigationBar.shadowImage = nil
         self.navigationController?.navigationBar.barTintColor = UIColor.white
-        self.navigationController?.navigationBar.tintColor = Colors.black
-        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: Colors.black]
+        self.navigationController?.navigationBar.tintColor = Colors.greyIcons
+        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: Colors.black, NSFontAttributeName: UIFont.systemFont(ofSize: 17.0, weight: UIFontWeightMedium)]
+        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        self.navigationController?.navigationBar.shadowImage = UIImage(named: "ic_navbar_shadow_resizable")
         self.skipButton.contentEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, 0.0, -8.0)
-    }
-    
-    // MARK: Navigation
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let destinationViewController = segue.destination as? WelcomeProfessionsTableViewController {
-            //destinationViewController.isOnboardingFlow = true
-        }
     }
     
     // MARK: UITableViewDataSource
@@ -140,20 +132,17 @@ class WelcomeSchoolsTableViewController: UITableViewController {
             let school = self.isShowingPopularSchools ? self.popularSchools[indexPath.row] : self.regularSchools[indexPath.row]
             if let schoolId = school.schoolId, let schoolName = school.schoolName {
                 self.view.endEditing(true)
-                
-                print(schoolId)
-                print(schoolName)
-                //self.saveUserSchool(schoolId, schoolName: schoolName)
+                self.saveUserSchool(schoolId, schoolName: schoolName)
             }
         }
     }
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 60.0
+        return 68.0
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 60.0
+        return UITableViewAutomaticDimension
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {

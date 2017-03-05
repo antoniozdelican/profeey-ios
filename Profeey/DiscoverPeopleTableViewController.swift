@@ -25,11 +25,11 @@ class DiscoverPeopleTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         if self.isOnboardingFlow {
             self.navigationItem.hidesBackButton = true
             self.nextButton?.contentEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, 0.0, -8.0)
         } else {
-            self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
             // Remove Next button.
             self.navigationItem.rightBarButtonItem = nil
         }
