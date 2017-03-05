@@ -159,7 +159,11 @@ class SchoolsTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "tableSectionHeader") as? TableSectionHeader
-        header?.titleLabel.text = self.isShowingPopularSchools ? "POPULAR" : "BEST MATCHES"
+        if self.isShowingPopularSchools {
+            header?.titleLabel.text = self.popularSchools.count != 0 ? "POPULAR" : "NO RESULTS FOUND"
+        } else {
+            header?.titleLabel.text = self.regularSchools.count != 0 ? "BEST MATCHES" : "NO RESULTS FOUND"
+        }
         return header
     }
     
@@ -179,12 +183,12 @@ class SchoolsTableViewController: UITableViewController {
     
     // MARK: Helpers
     
-    fileprivate func filterSchools(_ namePrefix: String) {
+    fileprivate func filterSchools(_ name: String) {
         // Clear old.
         self.regularSchools = []
         self.regularSchools = self.popularSchools.filter({
             (school: School) in
-            if let searchSchoolName = school.schoolName?.lowercased(), searchSchoolName.hasPrefix(namePrefix.lowercased()) {
+            if let searchSchoolName = school.schoolName?.lowercased(), searchSchoolName.contains(name.lowercased()) {
                 return true
             } else {
                 return false

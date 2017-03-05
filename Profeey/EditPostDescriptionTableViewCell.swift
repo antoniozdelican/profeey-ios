@@ -34,7 +34,7 @@ extension EditPostDescriptionTableViewCell: UITextViewDelegate {
     
     func textViewDidChange(_ textView: UITextView) {
         self.descriptionPlaceholderLabel.isHidden = !textView.text.isEmpty
-        self.descriptionImageView?.image = !textView.text.isEmpty ? UIImage(named: "ic_write_description_active") : UIImage(named: "ic_write_description")
+        self.descriptionImageView?.image = !textView.text.isEmpty ? UIImage(named: "ic_caption_on") : UIImage(named: "ic_caption_off")
         self.editPostDescriptionTableViewCellDelegate?.textViewDidChange(textView)
     }
 }

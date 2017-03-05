@@ -112,7 +112,7 @@ class SearchUsersTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.layoutMargins = UIEdgeInsets.zero
         if cell is NoResultsTableViewCell {
-            cell.separatorInset = UIEdgeInsetsMake(0.0, 12.0, 0.0, 0.0)
+            cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
         }
         if cell is NoNetworkTableViewCell {
             cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)

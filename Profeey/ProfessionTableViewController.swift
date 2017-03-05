@@ -93,7 +93,7 @@ class ProfessionTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.layoutMargins = UIEdgeInsets.zero
         if cell is NoResultsTableViewCell {
-            cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0)
+            cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
         }
     }
     

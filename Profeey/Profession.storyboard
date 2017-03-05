@@ -17,7 +17,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <inset key="separatorInset" minX="68" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        <inset key="separatorInset" minX="64" minY="0.0" maxX="0.0" maxY="0.0"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellSearchUser" rowHeight="122" id="czV-6D-NTM" customClass="SearchUserTableViewCell" customModule="Profeey" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="375" height="122"/>
@@ -64,13 +64,13 @@
                                                     <rect key="frame" x="0.0" y="0.0" width="299" height="17"/>
                                                     <subviews>
                                                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="252" verticalHuggingPriority="251" image="ic_school_profile" translatesAutoresizingMaskIntoConstraints="NO" id="Vq4-NX-6si">
-                                                            <rect key="frame" x="0.0" y="0.0" width="22" height="17"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="18" height="17"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" priority="750" constant="17" id="ont-5k-Xjk"/>
                                                             </constraints>
                                                         </imageView>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="School Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="46h-rZ-cp9">
-                                                            <rect key="frame" x="26" y="0.0" width="273" height="17"/>
+                                                            <rect key="frame" x="22" y="0.0" width="277" height="17"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                             <color key="textColor" red="0.41868340970000001" green="0.41867089270000002" blue="0.41867792609999999" alpha="1" colorSpace="calibratedRGB"/>
                                                             <nil key="highlightedColor"/>
@@ -125,17 +125,17 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="7Sw-VX-KRQ">
-                                            <rect key="frame" x="26" y="22" width="20" height="20"/>
+                                            <rect key="frame" x="22" y="22" width="20" height="20"/>
                                         </activityIndicatorView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Searching..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fJU-sC-2Hd">
-                                            <rect key="frame" x="68" y="24" width="291" height="17"/>
+                                            <rect key="frame" x="64" y="24" width="295" height="17"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <color key="textColor" red="0.41868340970000001" green="0.41867089270000002" blue="0.41867792609999999" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="7Sw-VX-KRQ" firstAttribute="leading" secondItem="dgW-ol-nQi" secondAttribute="leading" constant="26" id="Pzb-EH-I0r"/>
+                                        <constraint firstItem="7Sw-VX-KRQ" firstAttribute="leading" secondItem="dgW-ol-nQi" secondAttribute="leading" constant="22" id="Pzb-EH-I0r"/>
                                         <constraint firstItem="fJU-sC-2Hd" firstAttribute="centerY" secondItem="dgW-ol-nQi" secondAttribute="centerY" id="ZsL-uY-Sgy"/>
                                         <constraint firstItem="7Sw-VX-KRQ" firstAttribute="centerY" secondItem="dgW-ol-nQi" secondAttribute="centerY" id="cfK-1q-7Xg"/>
                                         <constraint firstAttribute="trailing" secondItem="fJU-sC-2Hd" secondAttribute="trailing" constant="16" id="kE4-1I-jw1"/>
@@ -195,6 +195,6 @@
     </scenes>
     <resources>
         <image name="ic_recommendations_search" width="17" height="17"/>
-        <image name="ic_school_profile" width="22" height="17"/>
+        <image name="ic_school_profile" width="18" height="17"/>
     </resources>
 </document>

@@ -25,7 +25,7 @@
             </objects>
             <point key="canvasLocation" x="2555" y="278"/>
         </scene>
-        <!--Profession-->
+        <!--Fields Of Study-->
         <scene sceneID="rT2-OZ-Nmb">
             <objects>
                 <tableViewController id="Hi8-Ey-38y" customClass="ProfessionsTableViewController" customModule="Profeey" customModuleProvider="target" sceneMemberID="viewController">
@@ -38,7 +38,7 @@
                             <rect key="frame" x="0.0" y="0.0" width="375" height="52"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Search your profession..." textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="FmP-eY-T18">
+                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Search your field of study..." textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="FmP-eY-T18">
                                     <rect key="frame" x="16" y="8" width="343" height="36"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="36" id="vrq-9r-bdZ"/>
@@ -101,7 +101,7 @@
                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="OUK-bO-HVS">
                                             <rect key="frame" x="64" y="14" width="299" height="36"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Profession Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EKn-QF-eah">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Profession Name" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EKn-QF-eah">
                                                     <rect key="frame" x="0.0" y="0.0" width="299" height="17"/>
                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
                                                     <color key="textColor" red="0.14748379589999999" green="0.1474793851" blue="0.14748191829999999" alpha="1" colorSpace="calibratedRGB"/>
@@ -114,6 +114,9 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="36" id="iXa-7R-y5G"/>
+                                            </constraints>
                                         </stackView>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_profession" translatesAutoresizingMaskIntoConstraints="NO" id="wwE-am-Fvm">
                                             <rect key="frame" x="14" y="14" width="36" height="36"/>
@@ -175,7 +178,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No results found" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QuA-bn-zDh">
-                                            <rect key="frame" x="22" y="23.5" width="341" height="17"/>
+                                            <rect key="frame" x="16" y="23.5" width="347" height="17"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <color key="textColor" red="0.41868340970000001" green="0.41867089270000002" blue="0.41867792609999999" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
@@ -183,7 +186,7 @@
                                     </subviews>
                                     <constraints>
                                         <constraint firstAttribute="trailing" secondItem="QuA-bn-zDh" secondAttribute="trailing" constant="12" id="3gd-XG-Izk"/>
-                                        <constraint firstItem="QuA-bn-zDh" firstAttribute="leading" secondItem="gYb-Ea-AU1" secondAttribute="leading" constant="22" id="6KO-1w-uGM"/>
+                                        <constraint firstItem="QuA-bn-zDh" firstAttribute="leading" secondItem="gYb-Ea-AU1" secondAttribute="leading" constant="16" id="6KO-1w-uGM"/>
                                         <constraint firstItem="QuA-bn-zDh" firstAttribute="centerY" secondItem="gYb-Ea-AU1" secondAttribute="centerY" id="ghU-cq-L9t"/>
                                     </constraints>
                                 </tableViewCellContentView>
@@ -194,7 +197,7 @@
                             <outlet property="delegate" destination="Hi8-Ey-38y" id="bUZ-kn-jgh"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Profession" id="Wog-GS-ett">
+                    <navigationItem key="navigationItem" title="Fields Of Study" id="Wog-GS-ett">
                         <barButtonItem key="leftBarButtonItem" image="ic_cancel_x" id="YMO-1N-j0d">
                             <connections>
                                 <action selector="cancelButtonTapped:" destination="Hi8-Ey-38y" id="ScR-go-eUA"/>

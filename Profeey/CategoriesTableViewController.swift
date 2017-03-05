@@ -117,6 +117,9 @@ class CategoriesTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.layoutMargins = UIEdgeInsets.zero
+        if cell is NoResultsTableViewCell {
+            cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
+        }
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -130,16 +133,36 @@ class CategoriesTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 60.0
+        return 64.0
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 60.0
+        if self.isShowingPopularCategories {
+            if self.isSearchingPopularCategories {
+                return 64.0
+            }
+            if self.popularCategories.count == 0 {
+                return 64.0
+            }
+            return UITableViewAutomaticDimension
+        } else {
+            if self.isSearchingRegularCategories {
+                return 64.0
+            }
+            if self.regularCategories.count == 0 {
+                return 64.0
+            }
+            return UITableViewAutomaticDimension
+        }
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "tableSectionHeader") as? TableSectionHeader
-        header?.titleLabel.text = self.isShowingPopularCategories ? "POPULAR" : "BEST MATCHES"
+        if self.isShowingPopularCategories {
+            header?.titleLabel.text = self.popularCategories.count != 0 ? "POPULAR" : "NO RESULTS FOUND"
+        } else {
+            header?.titleLabel.text = self.regularCategories.count != 0 ? "BEST MATCHES" : "NO RESULTS FOUND"
+        }
         return header
     }
     
@@ -185,12 +208,12 @@ class CategoriesTableViewController: UITableViewController {
     
     // MARK: Helpers
     
-    fileprivate func filterCategories(_ namePrefix: String) {
+    fileprivate func filterCategories(_ name: String) {
         // Clear old.
         self.regularCategories = []
         self.regularCategories = self.popularCategories.filter({
             (category: Category) in
-            if let searchCategoryName = category.categoryName?.lowercased(), searchCategoryName.hasPrefix(namePrefix.lowercased()) {
+            if let searchCategoryName = category.categoryName?.lowercased(), searchCategoryName.contains(name.lowercased()) {
                 return true
             } else {
                 return false

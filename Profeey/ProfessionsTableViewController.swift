@@ -77,15 +77,10 @@ class ProfessionsTableViewController: UITableViewController {
             if self.isSearchingPopularProfessions {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellSearching", for: indexPath) as! SearchingTableViewCell
                 cell.activityIndicator.startAnimating()
-                // TODO update text.
                 return cell
             }
             if self.popularProfessions.count == 0 {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "cellNoResultsRequest", for: indexPath) as! NoResultsRequestTableViewCell
-                cell.noResultsMessageLabel.text = "No results found message"
-                cell.setProfessionButton()
-                cell.noResultsRequestTableViewCellDelegate = self
-//                let cell = tableView.dequeueReusableCell(withIdentifier: "cellNoResults", for: indexPath) as! NoResultsTableViewCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellNoResults", for: indexPath) as! NoResultsTableViewCell
                 return cell
             }
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellProfession", for: indexPath) as! ProfessionTableViewCell
@@ -97,15 +92,10 @@ class ProfessionsTableViewController: UITableViewController {
             if self.isSearchingRegularProfessions {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellSearching", for: indexPath) as! SearchingTableViewCell
                 cell.activityIndicator.startAnimating()
-                // TODO update text.
                 return cell
             }
             if self.regularProfessions.count == 0 {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "cellNoResultsRequest", for: indexPath) as! NoResultsRequestTableViewCell
-                cell.noResultsMessageLabel.text = "No results found message"
-                cell.setProfessionButton()
-                cell.noResultsRequestTableViewCellDelegate = self
-                //                let cell = tableView.dequeueReusableCell(withIdentifier: "cellNoResults", for: indexPath) as! NoResultsTableViewCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellNoResults", for: indexPath) as! NoResultsTableViewCell
                 return cell
             }
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellProfession", for: indexPath) as! ProfessionTableViewCell
@@ -120,6 +110,9 @@ class ProfessionsTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.layoutMargins = UIEdgeInsets.zero
+        if cell is NoResultsTableViewCell {
+            cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
+        }
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -138,15 +131,22 @@ class ProfessionsTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if self.isShowingPopularProfessions {
-            if !self.isSearchingPopularProfessions && self.popularProfessions.count == 0 {
-                return UITableViewAutomaticDimension
+            if self.isSearchingPopularProfessions {
+                return 64.0
             }
+            if self.popularProfessions.count == 0 {
+                return 64.0
+            }
+            return UITableViewAutomaticDimension
         } else {
-            if !self.isSearchingRegularProfessions && self.regularProfessions.count == 0 {
-                return UITableViewAutomaticDimension
+            if self.isSearchingRegularProfessions {
+                return 64.0
             }
+            if self.regularProfessions.count == 0 {
+                return 64.0
+            }
+            return UITableViewAutomaticDimension
         }
-        return 64.0
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -202,12 +202,12 @@ class ProfessionsTableViewController: UITableViewController {
     
     // MARK: Helpers
     
-    fileprivate func filterProfessions(_ namePrefix: String) {
+    fileprivate func filterProfessions(_ name: String) {
         // Clear old.
         self.regularProfessions = []
         self.regularProfessions = self.popularProfessions.filter({
             (profession: Profession) in
-            if let searchProfessionName = profession.professionName?.lowercased(), searchProfessionName.hasPrefix(namePrefix.lowercased()) {
+            if let searchProfessionName = profession.professionName?.lowercased(), searchProfessionName.contains(name.lowercased()) {
                 return true
             } else {
                 return false
@@ -251,12 +251,5 @@ class ProfessionsTableViewController: UITableViewController {
                 }
             })
         })
-    }
-}
-
-extension ProfessionsTableViewController: NoResultsRequestTableViewCellDelegate {
-    
-    func requestButtonTapped() {
-        // todo
     }
 }

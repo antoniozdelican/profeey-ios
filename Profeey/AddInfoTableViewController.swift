@@ -60,12 +60,12 @@ class AddInfoTableViewController: UITableViewController {
             self.categoryNameLabel.text = categoryName
             self.categoryNameLabel.textColor = Colors.black
             self.clearCategoryButton.isHidden = false
-            self.categoryImageView.image = UIImage(named: "ic_skills_active")
+            self.categoryImageView.image = UIImage(named: "ic_skill_on")
         } else {
             self.categoryNameLabel.text = "Add Skill"
             self.categoryNameLabel.textColor = Colors.disabled
             self.clearCategoryButton.isHidden = true
-            self.categoryImageView.image = UIImage(named: "ic_skills")
+            self.categoryImageView.image = UIImage(named: "ic_skill_off")
         }
     }
     
@@ -141,7 +141,7 @@ class AddInfoTableViewController: UITableViewController {
         self.categoryNameLabel.text = "Add Skill"
         self.categoryNameLabel.textColor = Colors.disabled
         self.clearCategoryButton.isHidden = true
-        self.categoryImageView.image = UIImage(named: "ic_skills")
+        self.categoryImageView.image = UIImage(named: "ic_skill_off")
     }
 }
 
@@ -150,7 +150,7 @@ extension AddInfoTableViewController: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         if let text = self.captionTextView.text {
             self.captionPlaceholderLabel.isHidden = !text.isEmpty
-            self.captionImageView?.image = !text.isEmpty ? UIImage(named: "ic_write_description_active") : UIImage(named: "ic_write_description")
+            self.captionImageView?.image = !text.isEmpty ? UIImage(named: "ic_caption_on") : UIImage(named: "ic_caption_off")
             // Change height of tableViewCell.
             let size = textView.bounds.size
             let newSize = textView.sizeThatFits(CGSize(width: size.width, height: CGFloat.greatestFiniteMagnitude))
@@ -173,13 +173,13 @@ extension AddInfoTableViewController: CategoriesTableViewControllerDelegate {
             self.categoryNameLabel.text = categoryName
             self.categoryNameLabel.textColor = Colors.black
             self.clearCategoryButton.isHidden = false
-            self.categoryImageView.image = UIImage(named: "ic_skills_active")
+            self.categoryImageView.image = UIImage(named: "ic_skill_on")
         } else {
             self.categoryName = nil
             self.categoryNameLabel.text = "Add Skill"
             self.categoryNameLabel.textColor = Colors.disabled
             self.clearCategoryButton.isHidden = true
-            self.categoryImageView.image = UIImage(named: "ic_skills")
+            self.categoryImageView.image = UIImage(named: "ic_skill_off")
         }
     }
 }

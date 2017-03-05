@@ -58,12 +58,12 @@ class EditPostTableViewController: UITableViewController {
             self.categoryNameLabel.text = categoryName
             self.categoryNameLabel.textColor = Colors.black
             self.clearCategoryButton.isHidden = false
-            self.categoryImageView.image = UIImage(named: "ic_skills_active")
+            self.categoryImageView.image = UIImage(named: "ic_skill_on")
         } else {
             self.categoryNameLabel.text = "Add Skill"
             self.categoryNameLabel.textColor = Colors.disabled
             self.clearCategoryButton.isHidden = true
-            self.categoryImageView.image = UIImage(named: "ic_skills")
+            self.categoryImageView.image = UIImage(named: "ic_skill_off")
         }
     }
     
@@ -142,7 +142,7 @@ class EditPostTableViewController: UITableViewController {
         self.categoryNameLabel.text = "Add Skill"
         self.categoryNameLabel.textColor = Colors.disabled
         self.clearCategoryButton.isHidden = true
-        self.categoryImageView.image = UIImage(named: "ic_skills")
+        self.categoryImageView.image = UIImage(named: "ic_skill_off")
     }
     
     // MARK: AWS
@@ -209,13 +209,13 @@ extension EditPostTableViewController: CategoriesTableViewControllerDelegate {
             self.categoryNameLabel.text = categoryName
             self.categoryNameLabel.textColor = Colors.black
             self.clearCategoryButton.isHidden = false
-            self.categoryImageView.image = UIImage(named: "ic_skills_active")
+            self.categoryImageView.image = UIImage(named: "ic_skill_on")
         } else {
             self.editPost?.categoryName = nil
             self.categoryNameLabel.text = "Add Skill"
             self.categoryNameLabel.textColor = Colors.disabled
             self.clearCategoryButton.isHidden = true
-            self.categoryImageView.image = UIImage(named: "ic_skills")
+            self.categoryImageView.image = UIImage(named: "ic_skill_off")
         }
     }
 }

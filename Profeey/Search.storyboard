@@ -329,7 +329,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No results found" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ara-GL-pDP">
-                                            <rect key="frame" x="22" y="23.5" width="341" height="17"/>
+                                            <rect key="frame" x="16" y="23.5" width="347" height="17"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <color key="textColor" red="0.41868340970000001" green="0.41867089270000002" blue="0.41867792609999999" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
@@ -337,7 +337,7 @@
                                     </subviews>
                                     <constraints>
                                         <constraint firstAttribute="trailing" secondItem="ara-GL-pDP" secondAttribute="trailing" constant="12" id="2RT-nU-kr9"/>
-                                        <constraint firstItem="ara-GL-pDP" firstAttribute="leading" secondItem="9w8-RR-LeS" secondAttribute="leading" constant="22" id="2kh-KO-1ef"/>
+                                        <constraint firstItem="ara-GL-pDP" firstAttribute="leading" secondItem="9w8-RR-LeS" secondAttribute="leading" constant="16" id="2kh-KO-1ef"/>
                                         <constraint firstItem="ara-GL-pDP" firstAttribute="centerY" secondItem="9w8-RR-LeS" secondAttribute="centerY" id="Yv4-bk-E0a"/>
                                     </constraints>
                                 </tableViewCellContentView>
@@ -417,7 +417,7 @@
                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="SND-dw-PNb">
                                             <rect key="frame" x="64" y="14" width="299" height="36"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Profession Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uAi-Eu-fBk">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Profession Name" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uAi-Eu-fBk">
                                                     <rect key="frame" x="0.0" y="0.0" width="299" height="17"/>
                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
                                                     <color key="textColor" red="0.14748379589999999" green="0.1474793851" blue="0.14748191829999999" alpha="1" colorSpace="calibratedRGB"/>
@@ -493,14 +493,14 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No results found" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ulw-2N-ive">
-                                            <rect key="frame" x="22" y="23.5" width="341" height="17"/>
+                                            <rect key="frame" x="16" y="23.5" width="347" height="17"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <color key="textColor" red="0.41868340970000001" green="0.41867089270000002" blue="0.41867792609999999" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="ulw-2N-ive" firstAttribute="leading" secondItem="uPm-KD-Wxp" secondAttribute="leading" constant="22" id="ohw-Ar-PBS"/>
+                                        <constraint firstItem="ulw-2N-ive" firstAttribute="leading" secondItem="uPm-KD-Wxp" secondAttribute="leading" constant="16" id="ohw-Ar-PBS"/>
                                         <constraint firstItem="ulw-2N-ive" firstAttribute="centerY" secondItem="uPm-KD-Wxp" secondAttribute="centerY" id="tUO-Wf-AYU"/>
                                         <constraint firstAttribute="trailing" secondItem="ulw-2N-ive" secondAttribute="trailing" constant="12" id="tbQ-Qv-KDl"/>
                                     </constraints>
