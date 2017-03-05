@@ -36,6 +36,7 @@ class SearchUsersTableViewController: UITableViewController {
         super.viewDidLoad()
         self.tableView.register(UINib(nibName: "SearchTableSectionHeader", bundle: nil), forHeaderFooterViewReuseIdentifier: "searchTableSectionHeader")
         
+        // Adjust school.
         self.isShowingPopularUsers = true
         self.isSearchingPopularUsers = true
         self.scanUsers()
@@ -167,7 +168,7 @@ class SearchUsersTableViewController: UITableViewController {
         let header = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "searchTableSectionHeader") as? SearchTableSectionHeader
         var titleText = self.isShowingPopularUsers ? "POPULAR" : "BEST MATCHES"
         if self.isSchoolActive, let schoolName = self.school?.schoolName {
-            titleText = titleText + " in \(schoolName)"
+            titleText = titleText + " at \(schoolName)"
         }
         header?.titleLabel.text = titleText
         return header

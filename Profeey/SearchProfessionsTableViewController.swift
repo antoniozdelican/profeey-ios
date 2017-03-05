@@ -36,6 +36,7 @@ class SearchProfessionsTableViewController: UITableViewController {
         super.viewDidLoad()
         self.tableView.register(UINib(nibName: "SearchTableSectionHeader", bundle: nil), forHeaderFooterViewReuseIdentifier: "searchTableSectionHeader")
         
+        // Adjust school.
         self.isShowingPopularProfessions = true
         self.isSearchingPopularProfessions = true
         self.scanProfessions()
@@ -89,10 +90,6 @@ class SearchProfessionsTableViewController: UITableViewController {
             return cell
         }
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellSearchProfession", for: indexPath) as! SearchProfessionTableViewCell
-        
-        print("HERE")
-        print(self.professions[indexPath.row].professionNameWhitespace)
-        
         let profession = self.professions[indexPath.row]
         cell.professionNameLabel.text = profession.professionNameWhitespace
         cell.numberOfUsersLabel.text = profession.numberOfUsersString
@@ -160,7 +157,7 @@ class SearchProfessionsTableViewController: UITableViewController {
         let header = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "searchTableSectionHeader") as? SearchTableSectionHeader
         var titleText = self.isShowingPopularProfessions ? "POPULAR" : "BEST MATCHES"
         if self.isSchoolActive, let schoolName = self.school?.schoolName {
-            titleText = titleText + " in \(schoolName)"
+            titleText = titleText + " at \(schoolName)"
         }
         header?.titleLabel.text = titleText
         return header

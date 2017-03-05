@@ -52,12 +52,20 @@ class SearchViewController: UIViewController {
         self.navigationItem.titleView = self.searchBar
         
         // BarButtonItem
-        self.schoolBarButtonItem = UIBarButtonItem(image: UIImage(named: "ic_location_off")?.withRenderingMode(UIImageRenderingMode.alwaysOriginal), style: UIBarButtonItemStyle.plain, target: self, action: #selector(self.schoolBarButtonItemTapped(_:)))
+        self.schoolBarButtonItem = UIBarButtonItem(image: UIImage(named: "ic_school_off")?.withRenderingMode(UIImageRenderingMode.alwaysOriginal), style: UIBarButtonItemStyle.plain, target: self, action: #selector(self.schoolBarButtonItemTapped(_:)))
         self.navigationItem.setRightBarButton(self.schoolBarButtonItem, animated: true)
         
         // ScrollView
         self.mainScrollView.delegate = self
         self.adjustSegment(SearchSegmentType.people)
+        
+        // Adjust school.
+//        if let schoolId = PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB?.schoolId,
+//            let schoolName = PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB?.schoolName {
+//            let currentUserSchool = School(schoolId: schoolId, schoolName: schoolName, numberOfUsers: nil)
+//            self.isSchoolActive = true
+//            self.didSelectSchool(currentUserSchool)
+//        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -66,8 +74,8 @@ class SearchViewController: UIViewController {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
         self.searchBar.resignFirstResponder()
+        super.viewWillDisappear(animated)
     }
 
     override func didReceiveMemoryWarning() {
@@ -96,7 +104,7 @@ class SearchViewController: UIViewController {
     func schoolBarButtonItemTapped(_ sender: Any) {
         if self.isSchoolActive {
             self.isSchoolActive = false
-            self.schoolBarButtonItem?.image = UIImage(named: "ic_location_off")?.withRenderingMode(UIImageRenderingMode.alwaysOriginal)
+            self.schoolBarButtonItem?.image = UIImage(named: "ic_school_off")?.withRenderingMode(UIImageRenderingMode.alwaysOriginal)
             self.searchBar.placeholder = "Search"
             self.searchUsersDelegate?.removeSchool()
             self.searchProfessionsDelegate?.removeSchool()
@@ -196,8 +204,8 @@ extension SearchViewController: SchoolsTableViewControllerDelegate {
             return
         }
         self.isSchoolActive = true
-        self.schoolBarButtonItem?.image = UIImage(named: "ic_location_active")?.withRenderingMode(UIImageRenderingMode.alwaysOriginal)
-        self.searchBar.placeholder = "Search in \(schoolName)"
+        self.schoolBarButtonItem?.image = UIImage(named: "ic_school_on")?.withRenderingMode(UIImageRenderingMode.alwaysOriginal)
+        self.searchBar.placeholder = "Search at \(schoolName)"
         self.searchUsersDelegate?.addSchool(school)
         self.searchProfessionsDelegate?.addSchool(school)
     }

@@ -129,7 +129,7 @@ class ProfessionTableViewController: UITableViewController {
         let header = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "searchTableSectionHeader") as? SearchTableSectionHeader
         var titleText = "TOP"
         if self.isSchoolActive, let schoolName = self.school?.schoolName {
-            titleText = titleText + " in \(schoolName)"
+            titleText = titleText + " at \(schoolName)"
         }
         header?.titleLabel.text = titleText
         return header

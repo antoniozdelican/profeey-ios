@@ -157,9 +157,32 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
     }
     
     // Updates user on landing.
+    func updateUserSchoolDynamoDB(_ schoolId: String, schoolName: String, completionHandler: @escaping AWSContinuationBlock) {
+        guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
+            print("updateUserSchoolDynamoDB no identityId!")
+            AWSTask().continue(completionHandler)
+            return
+        }
+        let awsUsersTable = AWSUsersTable()
+        let awsUser = AWSUser(_userId: identityId, _schoolId: schoolId, _schoolName: schoolName)
+        awsUsersTable.saveUserSkipNull(awsUser, completionHandler: {
+            (task: AWSTask) in
+            if let error = task.error {
+                AWSTask(error: error).continue(completionHandler)
+            } else {
+                // Set currentUser.
+                self.currentUserDynamoDB?.schoolId = schoolId
+                self.currentUserDynamoDB?.schoolName = schoolName
+                AWSTask(result: awsUser).continue(completionHandler)
+            }
+            return nil
+        })
+    }
+    
+    // Updates user on landing.
     func updateUserProfessionDynamoDB(_ professionName: String, completionHandler: @escaping AWSContinuationBlock) {
         guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
-            print("saveUserProfessionDynamoDB no identityId!")
+            print("updateUserProfessionDynamoDB no identityId!")
             AWSTask().continue(completionHandler)
             return
         }

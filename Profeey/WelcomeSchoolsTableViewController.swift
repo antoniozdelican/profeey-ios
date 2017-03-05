@@ -1,43 +1,44 @@
 //
-//  WelcomeProfessionsTableViewController.swift
+//  WelcomeSchoolsTableViewController.swift
 //  Profeey
 //
-//  Created by Antonio Zdelican on 23/09/16.
-//  Copyright © 2016 Profeey. All rights reserved.
+//  Created by Antonio Zdelican on 05/03/17.
+//  Copyright © 2017 Profeey. All rights reserved.
 //
 
 import UIKit
+import AWSMobileHubHelper
 import AWSDynamoDB
 
-class WelcomeProfessionsTableViewController: UITableViewController {
+class WelcomeSchoolsTableViewController: UITableViewController {
     
     @IBOutlet weak var skipButton: UIButton!
-    @IBOutlet weak var addProfessionTextField: UITextField!
+    @IBOutlet weak var addSchoolTextField: UITextField!
     
-    fileprivate var popularProfessions: [Profession] = []
-    fileprivate var regularProfessions: [Profession] = []
-    fileprivate var isSearchingPopularProfessions: Bool = false
-    fileprivate var isSearchingRegularProfessions: Bool = false
-    fileprivate var isShowingPopularProfessions: Bool = true
-
+    fileprivate var popularSchools: [School] = []
+    fileprivate var regularSchools: [School] = []
+    fileprivate var isSearchingPopularSchools: Bool = false
+    fileprivate var isSearchingRegularSchools: Bool = false
+    fileprivate var isShowingPopularSchools: Bool = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.hidesBackButton = true
-        
         self.tableView.contentInset = UIEdgeInsetsMake(-1.0, 0.0, 0.0, 0.0)
         self.tableView.register(UINib(nibName: "TableSectionHeader", bundle: nil), forHeaderFooterViewReuseIdentifier: "tableSectionHeader")
         self.configureNavigationBar()
         
-        self.isShowingPopularProfessions = true
-        self.isSearchingPopularProfessions = true
-        self.scanProfessions()
+        // Query.
+        self.isShowingPopularSchools = true
+        self.isSearchingPopularSchools = true
+        self.scanSchools()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         self.view.endEditing(true)
         super.viewWillDisappear(animated)
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
@@ -54,75 +55,74 @@ class WelcomeProfessionsTableViewController: UITableViewController {
         self.navigationController?.navigationBar.barTintColor = UIColor.white
         self.navigationController?.navigationBar.tintColor = Colors.black
         self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: Colors.black]
-        // Fix alignment for custom rightBarButtonItem.
         self.skipButton.contentEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, 0.0, -8.0)
     }
     
     // MARK: Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let destinationViewController = segue.destination as? DiscoverPeopleTableViewController {
-            destinationViewController.isOnboardingFlow = true
+        if let destinationViewController = segue.destination as? WelcomeProfessionsTableViewController {
+            //destinationViewController.isOnboardingFlow = true
         }
     }
-
+    
     // MARK: UITableViewDataSource
-
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
-
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if self.isShowingPopularProfessions {
-            if self.isSearchingPopularProfessions {
+        if self.isShowingPopularSchools {
+            if self.isSearchingPopularSchools {
                 return 1
             }
-            if self.popularProfessions.count == 0 {
+            if self.popularSchools.count == 0 {
                 return 1
             }
-            return self.popularProfessions.count
+            return self.popularSchools.count
         } else {
-            if self.isSearchingRegularProfessions {
+            if self.isSearchingRegularSchools {
                 return 1
             }
-            if self.regularProfessions.count == 0 {
+            if self.regularSchools.count == 0 {
                 return 1
             }
-            return self.regularProfessions.count
+            return self.regularSchools.count
         }
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if self.isShowingPopularProfessions {
-            if self.isSearchingPopularProfessions {
+        if self.isShowingPopularSchools {
+            if self.isSearchingPopularSchools {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellSearching", for: indexPath) as! SearchingTableViewCell
                 cell.activityIndicator.startAnimating()
                 return cell
             }
-            if self.popularProfessions.count == 0 {
+            if self.popularSchools.count == 0 {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellNoResults", for: indexPath) as! NoResultsTableViewCell
                 return cell
             }
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cellProfession", for: indexPath) as! ProfessionTableViewCell
-            let profession = self.popularProfessions[indexPath.row]
-            cell.professionNameLabel.text = profession.professionNameWhitespace
-            cell.numberOfUsersLabel.text = profession.numberOfUsersString
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellSchool", for: indexPath) as! SchoolTableViewCell
+            let school = self.popularSchools[indexPath.row]
+            cell.schoolNameLabel.text = school.schoolName
+            cell.numberOfUsersLabel.text = school.numberOfUsersString
             return cell
         } else {
-            if self.isSearchingRegularProfessions {
+            if self.isSearchingRegularSchools {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellSearching", for: indexPath) as! SearchingTableViewCell
                 cell.activityIndicator.startAnimating()
                 // TODO update text.
                 return cell
             }
-            if self.regularProfessions.count == 0 {
+            if self.regularSchools.count == 0 {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellNoResults", for: indexPath) as! NoResultsTableViewCell
                 return cell
             }
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cellProfession", for: indexPath) as! ProfessionTableViewCell
-            let profession = self.regularProfessions[indexPath.row]
-            cell.professionNameLabel.text = profession.professionNameWhitespace
-            cell.numberOfUsersLabel.text = profession.numberOfUsersString
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cellSchool", for: indexPath) as! SchoolTableViewCell
+            let school = self.regularSchools[indexPath.row]
+            cell.schoolNameLabel.text = school.schoolName
+            cell.numberOfUsersLabel.text = school.numberOfUsersString
             return cell
         }
     }
@@ -136,11 +136,14 @@ class WelcomeProfessionsTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let cell = tableView.cellForRow(at: indexPath)
-        if cell is ProfessionTableViewCell {
-            let profession = self.isShowingPopularProfessions ? self.popularProfessions[indexPath.row] : self.regularProfessions[indexPath.row]
-            if let professionName = profession.professionName {
+        if cell is SchoolTableViewCell {
+            let school = self.isShowingPopularSchools ? self.popularSchools[indexPath.row] : self.regularSchools[indexPath.row]
+            if let schoolId = school.schoolId, let schoolName = school.schoolName {
                 self.view.endEditing(true)
-                self.saveUserProfession(professionName)
+                
+                print(schoolId)
+                print(schoolName)
+                //self.saveUserSchool(schoolId, schoolName: schoolName)
             }
         }
     }
@@ -155,7 +158,7 @@ class WelcomeProfessionsTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "tableSectionHeader") as? TableSectionHeader
-        header?.titleLabel.text = self.isShowingPopularProfessions ? "POPULAR" : "BEST MATCHES"
+        header?.titleLabel.text = self.isShowingPopularSchools ? "POPULAR" : "BEST MATCHES"
         return header
     }
     
@@ -171,36 +174,35 @@ class WelcomeProfessionsTableViewController: UITableViewController {
     
     // MARK: IBActions
     
-    @IBAction func addProfessionTextFieldChanged(_ sender: AnyObject) {
-        guard let text = self.addProfessionTextField.text else {
+    @IBAction func addSchoolTextFieldChanged(_ sender: AnyObject) {
+        guard let text = self.addSchoolTextField.text else {
             return
         }
-        var professionName = text.trimm()
-        professionName = professionName.replacingOccurrences(of: "_", with: " ")
-        if professionName.isEmpty {
-            self.isShowingPopularProfessions = true
+        let schoolName = text.trimm().replacingOccurrences(of: "_", with: " ")
+        if schoolName.isEmpty {
+            self.isShowingPopularSchools = true
             // Clear old.
-            self.regularProfessions = []
-            self.isSearchingRegularProfessions = false
+            self.regularSchools = []
+            self.isSearchingRegularSchools = false
             self.tableView.reloadData()
         } else {
-            self.isShowingPopularProfessions = false
+            self.isShowingPopularSchools = false
             // Clear old.
-            self.regularProfessions = []
-            self.isSearchingRegularProfessions = true
+            self.regularSchools = []
+            self.isSearchingRegularSchools = true
             self.tableView.reloadData()
-            // Start search for existing professions.
-            self.filterProfessions(professionName)
+            // Start search for existing schools.
+            self.filterSchools(schoolName)
         }
     }
     
     @IBAction func skipButtonTapped(_ sender: AnyObject) {
         self.view.endEditing(true)
-        let alertController = UIAlertController(title: "No Profession", message: "Are you sure you don't want to pick a profession?", preferredStyle: UIAlertControllerStyle.alert)
+        let alertController = UIAlertController(title: "School not selected", message: "Are you sure you want to skip selecting your school? Some friends might be there already.", preferredStyle: UIAlertControllerStyle.alert)
         let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil)
-        let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: {
+        let okAction = UIAlertAction(title: "Skip", style: UIAlertActionStyle.default, handler: {
             (alertAction: UIAlertAction) in
-            self.performSegue(withIdentifier: "segueToDiscoverPeopleVc", sender: self)
+            self.performSegue(withIdentifier: "segueToWelcomeProfessionsVc", sender: self)
         })
         alertController.addAction(cancelAction)
         alertController.addAction(okAction)
@@ -209,73 +211,73 @@ class WelcomeProfessionsTableViewController: UITableViewController {
     
     // MARK: Helpers
     
-    fileprivate func filterProfessions(_ namePrefix: String) {
+    fileprivate func filterSchools(_ name: String) {
         // Clear old.
-        self.regularProfessions = []
-        self.regularProfessions = self.popularProfessions.filter({
-            (profession: Profession) in
-            if let searchProfessionName = profession.professionName?.lowercased(), searchProfessionName.hasPrefix(namePrefix.lowercased()) {
+        self.regularSchools = []
+        self.regularSchools = self.popularSchools.filter({
+            (school: School) in
+            if let searchSchoolName = school.schoolName?.lowercased(), searchSchoolName.contains(name.lowercased()) {
                 return true
             } else {
                 return false
             }
         })
-        self.regularProfessions = self.sortProfessions(self.regularProfessions)
-        self.isSearchingRegularProfessions = false
+        self.regularSchools = self.sortSchools(self.regularSchools)
+        self.isSearchingRegularSchools = false
         self.tableView.reloadData()
     }
     
-    fileprivate func sortProfessions(_ professions: [Profession]) -> [Profession] {
-        return professions.sorted(by: {
-            (profession1, profession2) in
-            return profession1.numberOfUsersInt > profession2.numberOfUsersInt
+    fileprivate func sortSchools(_ schools: [School]) -> [School] {
+        return schools.sorted(by: {
+            (school1, school2) in
+            return school1.numberOfUsersInt > school2.numberOfUsersInt
         })
     }
     
     // MARK: AWS
     
-    fileprivate func scanProfessions() {
+    fileprivate func scanSchools() {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().scanProfessionsDynamoDB({
+        PRFYDynamoDBManager.defaultDynamoDBManager().scanSchoolsDynamoDB({
             (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                self.isSearchingPopularProfessions = false
+                self.isSearchingPopularSchools = false
                 if let error = error {
-                    print("scanProfessions error: \(error)")
+                    print("scanSchools error: \(error)")
                     self.tableView.reloadData()
                 } else {
-                    guard let awsProfessions = response?.items as? [AWSProfession] else {
+                    guard let awsSchools = response?.items as? [AWSSchool] else {
                         self.tableView.reloadData()
                         return
                     }
-                    for awsProfession in awsProfessions {
-                        let profession = Profession(professionName: awsProfession._professionName, numberOfUsers: awsProfession._numberOfUsers)
-                        self.popularProfessions.append(profession)
+                    for awsSchool in awsSchools {
+                        let school = School(schoolId: awsSchool._schoolId, schoolName: awsSchool._schoolName, numberOfUsers: awsSchool._numberOfUsers)
+                        self.popularSchools.append(school)
                     }
-                    self.popularProfessions = self.sortProfessions(self.popularProfessions)
+                    self.popularSchools = self.sortSchools(self.popularSchools)
                     self.tableView.reloadData()
                 }
             })
         })
     }
     
-    fileprivate func saveUserProfession(_ professionName: String) {
+    fileprivate func saveUserSchool(_ schoolId: String, schoolName: String) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         FullScreenIndicator.show()
-        PRFYDynamoDBManager.defaultDynamoDBManager().updateUserProfessionDynamoDB(professionName, completionHandler: {
+        PRFYDynamoDBManager.defaultDynamoDBManager().updateUserSchoolDynamoDB(schoolId, schoolName: schoolName, completionHandler: {
             (task: AWSTask) in
             DispatchQueue.main.async(execute: {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 FullScreenIndicator.hide()
                 if let error = task.error {
-                    print("saveUserProfession error: \(error)")
-                    let alertController = UIAlertController(title: "Save profession failed", message: error.localizedDescription, preferredStyle: UIAlertControllerStyle.alert)
+                    print("saveUserSchool error: \(error)")
+                    let alertController = UIAlertController(title: "Save school failed", message: error.localizedDescription, preferredStyle: UIAlertControllerStyle.alert)
                     let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil)
                     alertController.addAction(okAction)
                     self.present(alertController, animated: true, completion: nil)
                 } else {
-                    self.performSegue(withIdentifier: "segueToDiscoverPeopleVc", sender: self)
+                    self.performSegue(withIdentifier: "segueToWelcomeProfessionsVc", sender: self)
                 }
             })
             return nil

@@ -53,6 +53,14 @@ class AWSUser: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
         self._profilePicUrl = _profilePicUrl
     }
     
+    // To update schoolName on landing.
+    convenience init(_userId: String?, _schoolId: String?, _schoolName: String?) {
+        self.init()
+        self._userId = _userId
+        self._schoolId = _schoolId
+        self._schoolName = _schoolName
+    }
+    
     // To update professionName on landing.
     convenience init(_userId: String?, _professionName: String?) {
         self.init()
