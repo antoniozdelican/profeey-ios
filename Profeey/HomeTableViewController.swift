@@ -369,9 +369,7 @@ class HomeTableViewController: UITableViewController {
                 self.isRefreshingPosts = false
                 self.refreshControl?.endRefreshing()
                 self.isLoadingNextPosts = false
-                if self.posts.count == 0 {
-                    self.tableView.backgroundView = self.homeEmptyFeedView
-                }
+                self.tableView.backgroundView = self.posts.count == 0 ? self.homeEmptyFeedView: nil
                 self.noNetworkConnection = false
                 self.lastEvaluatedKey = response?.lastEvaluatedKey
                 self.tableView.tableFooterView = UIView()

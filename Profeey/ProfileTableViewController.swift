@@ -570,7 +570,7 @@ class ProfileTableViewController: UITableViewController {
             if self.userCategories.count == 0 || self.isBlocking || self.amIBlocked {
                 return 112.0
             }
-            return 44.0
+            return 58.0
         }
     }
     
@@ -604,7 +604,7 @@ class ProfileTableViewController: UITableViewController {
             if self.userCategories.count == 0 || self.isBlocking || self.amIBlocked {
                 return 112.0
             }
-            return 44.0
+            return UITableViewAutomaticDimension
         }
     }
     
