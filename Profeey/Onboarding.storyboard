@@ -889,12 +889,11 @@
         <!--Add School-->
         <scene sceneID="5HW-cI-yI0">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="hvp-ik-W0s" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tableViewController id="Hv6-z1-ekC" customClass="WelcomeSchoolsTableViewController" customModule="Profeey" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="IXa-Bq-nnm">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="IXa-Bq-nnm">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="0.97530043129999999" green="0.97527122499999996" blue="0.97528779509999997" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <inset key="separatorInset" minX="68" minY="0.0" maxX="0.0" maxY="0.0"/>
                         <view key="tableHeaderView" contentMode="scaleToFill" id="dhq-bm-MjH">
                             <rect key="frame" x="0.0" y="0.0" width="375" height="52"/>
@@ -914,7 +913,7 @@
                                 </textField>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ihv-Gq-YId" userLabel="Separator View">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="1"/>
-                                    <color key="backgroundColor" red="0.83041435480000003" green="0.83038914200000002" blue="0.83040338749999998" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="1" id="ezs-Ep-4h8">
                                             <userDefinedRuntimeAttributes>
@@ -954,7 +953,7 @@
                         </view>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellSchool" rowHeight="68" id="PTa-P9-pz3" customClass="SchoolTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="108" width="375" height="68"/>
+                                <rect key="frame" x="0.0" y="80" width="375" height="68"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="PTa-P9-pz3" id="Oy4-L0-KW5">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="67"/>
@@ -1003,7 +1002,7 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellSearching" rowHeight="68" id="NTi-Yl-72T" customClass="SearchingTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="176" width="375" height="68"/>
+                                <rect key="frame" x="0.0" y="148" width="375" height="68"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="NTi-Yl-72T" id="7in-QW-OlV">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="67"/>
@@ -1013,7 +1012,7 @@
                                             <rect key="frame" x="24" y="24" width="20" height="20"/>
                                         </activityIndicatorView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Searching..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="s2X-oA-EC3">
-                                            <rect key="frame" x="68" y="26" width="291" height="17"/>
+                                            <rect key="frame" x="68" y="25" width="291" height="18"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <color key="textColor" red="0.4941176471" green="0.4941176471" blue="0.4941176471" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
@@ -1033,14 +1032,14 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellNoResults" rowHeight="68" id="hiC-gM-Gdf" customClass="NoResultsTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="244" width="375" height="68"/>
+                                <rect key="frame" x="0.0" y="216" width="375" height="68"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hiC-gM-Gdf" id="Ssb-Ka-Vpo">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="67"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No results found" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3ek-0I-C5d">
-                                            <rect key="frame" x="16" y="26" width="343" height="17"/>
+                                            <rect key="frame" x="16" y="25" width="343" height="18"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <color key="textColor" red="0.4941176471" green="0.4941176471" blue="0.4941176471" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
@@ -1083,6 +1082,7 @@
                         <segue destination="XR1-b4-lzc" kind="show" identifier="segueToWelcomeProfessionsVc" id="mm0-dA-Afw"/>
                     </connections>
                 </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="hvp-ik-W0s" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="4439" y="-674"/>
         </scene>
@@ -1090,10 +1090,10 @@
         <scene sceneID="6ZR-rM-YwC">
             <objects>
                 <tableViewController id="XR1-b4-lzc" customClass="WelcomeProfessionsTableViewController" customModule="Profeey" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="16" sectionFooterHeight="1" id="lf0-q8-qwq">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="lf0-q8-qwq">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="0.97530055049999997" green="0.97527122499999996" blue="0.97528779509999997" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <inset key="separatorInset" minX="68" minY="0.0" maxX="0.0" maxY="0.0"/>
                         <view key="tableHeaderView" contentMode="scaleToFill" id="bK6-0O-rme">
                             <rect key="frame" x="0.0" y="0.0" width="375" height="52"/>
@@ -1113,7 +1113,7 @@
                                 </textField>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="quR-ZC-QKf" userLabel="Separator View">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="1"/>
-                                    <color key="backgroundColor" red="0.83041435480000003" green="0.83038914200000002" blue="0.83040338749999998" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="1" id="cUh-ah-CWn">
                                             <userDefinedRuntimeAttributes>
@@ -1153,7 +1153,7 @@
                         </view>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellProfession" rowHeight="68" id="yZd-kc-Z7q" customClass="ProfessionTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="108" width="375" height="68"/>
+                                <rect key="frame" x="0.0" y="80" width="375" height="68"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="yZd-kc-Z7q" id="n9k-lJ-gVo">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="67"/>
@@ -1202,7 +1202,7 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellSearching" rowHeight="68" id="yx4-V6-qYW" customClass="SearchingTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="176" width="375" height="68"/>
+                                <rect key="frame" x="0.0" y="148" width="375" height="68"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="yx4-V6-qYW" id="y4w-Sq-gS3">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="67"/>
@@ -1212,7 +1212,7 @@
                                             <rect key="frame" x="24" y="24" width="20" height="20"/>
                                         </activityIndicatorView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Searching..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gjk-Mr-xeB">
-                                            <rect key="frame" x="68" y="26" width="291" height="17"/>
+                                            <rect key="frame" x="68" y="25" width="291" height="18"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <color key="textColor" red="0.4941176471" green="0.4941176471" blue="0.4941176471" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
@@ -1232,14 +1232,14 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellNoResults" rowHeight="68" id="fgO-YQ-hCg" customClass="NoResultsTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="244" width="375" height="68"/>
+                                <rect key="frame" x="0.0" y="216" width="375" height="68"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="fgO-YQ-hCg" id="xoI-Tx-1cW">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="67"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No results found" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="X6t-j5-hau">
-                                            <rect key="frame" x="16" y="26" width="343" height="17"/>
+                                            <rect key="frame" x="16" y="25" width="343" height="18"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <color key="textColor" red="0.4941176471" green="0.4941176471" blue="0.4941176471" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>

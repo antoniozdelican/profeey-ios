@@ -184,7 +184,7 @@ class HomeTableViewController: UITableViewController {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostSmall", for: indexPath) as! PostSmallTableViewCell
                 cell.postImageView.image = post.image
                 cell.titleLabel.text = post.caption
-                cell.categoryNameLabel.text = post.categoryName
+                cell.categoryNameLabel.text = post.categoryNameWhitespace
                 cell.createdLabel.text = post.createdString
                 cell.numberOfLikesLabel.text = post.numberOfLikesSmallString
                 return cell
@@ -559,7 +559,7 @@ extension HomeTableViewController {
         post.caption = notification.userInfo?["caption"] as? String
         post.categoryName = notification.userInfo?["categoryName"] as? String
         (self.tableView.cellForRow(at: IndexPath(row: 1, section: postIndex)) as? PostSmallTableViewCell)?.titleLabel.text = post.caption
-        (self.tableView.cellForRow(at: IndexPath(row: 1, section: postIndex)) as? PostSmallTableViewCell)?.categoryNameLabel.text = post.categoryName
+        (self.tableView.cellForRow(at: IndexPath(row: 1, section: postIndex)) as? PostSmallTableViewCell)?.categoryNameLabel.text = post.categoryNameWhitespace
     }
     
     func deletePostNotification(_ notification: NSNotification) {

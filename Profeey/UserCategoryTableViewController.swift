@@ -102,7 +102,7 @@ class UserCategoryTableViewController: UITableViewController {
         let post = self.posts[indexPath.row]
         cell.postImageView.image = post.image
         cell.titleLabel.text = post.caption
-        cell.categoryNameLabel.text = post.categoryName
+        cell.categoryNameLabel.text = post.categoryNameWhitespace
         cell.createdLabel.text = post.createdString
         cell.numberOfLikesLabel.text = post.numberOfLikesSmallString
         cell.postSmallTableViewCellDelegate = self
@@ -288,7 +288,7 @@ extension UserCategoryTableViewController {
         post.caption = notification.userInfo?["caption"] as? String
         post.categoryName = notification.userInfo?["categoryName"] as? String
         (self.tableView.cellForRow(at: IndexPath(row: postIndex, section: 0)) as? PostSmallTableViewCell)?.titleLabel.text = post.caption
-        (self.tableView.cellForRow(at: IndexPath(row: postIndex, section: 0)) as? PostSmallTableViewCell)?.categoryNameLabel.text = post.categoryName
+        (self.tableView.cellForRow(at: IndexPath(row: postIndex, section: 0)) as? PostSmallTableViewCell)?.categoryNameLabel.text = post.categoryNameWhitespace
         
         // Remove if different categoryName.
         if self.userCategory?.categoryName != post.categoryName {

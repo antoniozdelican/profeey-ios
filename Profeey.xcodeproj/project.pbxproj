@@ -102,7 +102,6 @@
 		A96B31131E65B4A8005B0B12 /* Request.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A96B31121E65B4A8005B0B12 /* Request.storyboard */; };
 		A96B31151E65B762005B0B12 /* RequestTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96B31141E65B762005B0B12 /* RequestTableViewController.swift */; };
 		A96B31171E65B76C005B0B12 /* RequestConfirmationTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96B31161E65B76C005B0B12 /* RequestConfirmationTableViewController.swift */; };
-		A96B31191E65C75C005B0B12 /* NoResultsRequestTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96B31181E65C75C005B0B12 /* NoResultsRequestTableViewCell.swift */; };
 		A96C9AB51D7DADC3007E0B9D /* UploadingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96C9AB41D7DADC3007E0B9D /* UploadingTableViewCell.swift */; };
 		A9707D251E02AC76005D729D /* ForgotPassword.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9707D241E02AC76005D729D /* ForgotPassword.storyboard */; };
 		A976F7941E4B678D00028859 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A976F7921E4B678D00028859 /* FBSDKCoreKit.framework */; };
@@ -251,6 +250,7 @@
 		A9DC893D1E34F19600B9D213 /* HomeNoNetworkView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9DC893C1E34F19600B9D213 /* HomeNoNetworkView.xib */; };
 		A9DC893F1E34F26900B9D213 /* HomeNoNetworkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9DC893E1E34F26900B9D213 /* HomeNoNetworkView.swift */; };
 		A9E0267F1E2038BF00BD8ED2 /* PRFYUrls.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E0267E1E2038BF00BD8ED2 /* PRFYUrls.swift */; };
+		A9E1E73D1E6DA0EF00058B31 /* CategoryNewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E1E73C1E6DA0EF00058B31 /* CategoryNewTableViewCell.swift */; };
 		A9E3DA1A1E35561C0050EC99 /* EditEmailTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E3DA191E35561C0050EC99 /* EditEmailTableViewController.swift */; };
 		A9E3DA1C1E3556280050EC99 /* EditPasswordTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E3DA1B1E3556280050EC99 /* EditPasswordTableViewController.swift */; };
 		A9E3DD431D86A42400DED8C8 /* Profession.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E3DD421D86A42400DED8C8 /* Profession.swift */; };
@@ -397,7 +397,6 @@
 		A96B31121E65B4A8005B0B12 /* Request.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Request.storyboard; sourceTree = "<group>"; };
 		A96B31141E65B762005B0B12 /* RequestTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestTableViewController.swift; sourceTree = "<group>"; };
 		A96B31161E65B76C005B0B12 /* RequestConfirmationTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestConfirmationTableViewController.swift; sourceTree = "<group>"; };
-		A96B31181E65C75C005B0B12 /* NoResultsRequestTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoResultsRequestTableViewCell.swift; sourceTree = "<group>"; };
 		A96C9AB41D7DADC3007E0B9D /* UploadingTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UploadingTableViewCell.swift; sourceTree = "<group>"; };
 		A9707D241E02AC76005D729D /* ForgotPassword.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ForgotPassword.storyboard; sourceTree = "<group>"; };
 		A976F7921E4B678D00028859 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = Profeey/FBSDKCoreKit.framework; sourceTree = "<group>"; };
@@ -555,6 +554,7 @@
 		A9DC893C1E34F19600B9D213 /* HomeNoNetworkView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HomeNoNetworkView.xib; sourceTree = "<group>"; };
 		A9DC893E1E34F26900B9D213 /* HomeNoNetworkView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeNoNetworkView.swift; sourceTree = "<group>"; };
 		A9E0267E1E2038BF00BD8ED2 /* PRFYUrls.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PRFYUrls.swift; sourceTree = "<group>"; };
+		A9E1E73C1E6DA0EF00058B31 /* CategoryNewTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryNewTableViewCell.swift; sourceTree = "<group>"; };
 		A9E3DA191E35561C0050EC99 /* EditEmailTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditEmailTableViewController.swift; sourceTree = "<group>"; };
 		A9E3DA1B1E3556280050EC99 /* EditPasswordTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditPasswordTableViewController.swift; sourceTree = "<group>"; };
 		A9E3DD421D86A42400DED8C8 /* Profession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Profession.swift; sourceTree = "<group>"; };
@@ -945,7 +945,6 @@
 				A9459F711E00197200978DA8 /* TableSectionHeader.swift */,
 				A9B68DA01D897A24006AC4EA /* EmptyTableViewCell.swift */,
 				A9BF16481D6514C900060A9E /* NoResultsTableViewCell.swift */,
-				A96B31181E65C75C005B0B12 /* NoResultsRequestTableViewCell.swift */,
 				A9DC893A1E34D1C400B9D213 /* NoNetworkTableViewCell.swift */,
 				A9BF164A1D6519D100060A9E /* SearchingTableViewCell.swift */,
 				A95EB85A1D8FBE870039E51D /* DateTableViewCell.swift */,
@@ -1124,6 +1123,7 @@
 				A9AFFB0C1D8AFEB800219627 /* Categories.storyboard */,
 				A9AFFB101D8B00DF00219627 /* CategoriesTableViewController.swift */,
 				A9AFFB0E1D8AFF1800219627 /* CategoryTableViewCell.swift */,
+				A9E1E73C1E6DA0EF00058B31 /* CategoryNewTableViewCell.swift */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -1736,6 +1736,7 @@
 				A9D100671E0C4744006590F8 /* FullUser.swift in Sources */,
 				A9ACA7471DB508BB0004B8DE /* AWSWorkExperienceUpdate.swift in Sources */,
 				A9E9DC5B1E16C95B00FE7C3B /* PreviewViewController.swift in Sources */,
+				A9E1E73D1E6DA0EF00058B31 /* CategoryNewTableViewCell.swift in Sources */,
 				A9C443C81E375A2B009B6BCE /* AWSEndpointUsersTable.swift in Sources */,
 				A9E4507A1D59E6C500D14553 /* CommentTableViewCell.swift in Sources */,
 				A9BF16491D6514C900060A9E /* NoResultsTableViewCell.swift in Sources */,
@@ -1751,7 +1752,6 @@
 				A9DA6A061E335EE700B7CE3E /* ProfileTableViewController.swift in Sources */,
 				A9D688871E0AE06F00A07D86 /* AWSProfessionsTable.swift in Sources */,
 				A94797A71D2E3451007CBF08 /* User.swift in Sources */,
-				A96B31191E65C75C005B0B12 /* NoResultsRequestTableViewCell.swift in Sources */,
 				A90146E41DB2662E0092ED21 /* ProfileMainTableViewCell.swift in Sources */,
 				A94368781E238A8F0009F4EA /* NotificationsViewController.swift in Sources */,
 				A9E53B731D1067E800CD1D6C /* MainTabBarController.swift in Sources */,

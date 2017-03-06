@@ -159,10 +159,14 @@ class SchoolsTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "tableSectionHeader") as? TableSectionHeader
-        if self.isShowingPopularSchools {
-            header?.titleLabel.text = self.popularSchools.count != 0 ? "POPULAR" : "NO RESULTS FOUND"
+        if self.isSearchingPopularSchools || self.isSearchingRegularSchools {
+            header?.titleLabel.text = nil
         } else {
-            header?.titleLabel.text = self.regularSchools.count != 0 ? "BEST MATCHES" : "NO RESULTS FOUND"
+            if self.isShowingPopularSchools {
+                header?.titleLabel.text = self.popularSchools.count != 0 ? "POPULAR" : "NO RESULTS FOUND"
+            } else {
+                header?.titleLabel.text = self.regularSchools.count != 0 ? "BEST MATCHES" : "NO RESULTS FOUND"
+            }
         }
         return header
     }

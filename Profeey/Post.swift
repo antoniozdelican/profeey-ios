@@ -32,6 +32,9 @@ class Post: NSObject {
         let currentDate = Date()
         return currentDate.offsetFrom(Date(timeIntervalSince1970: TimeInterval(created)))
     }
+    var categoryNameWhitespace: String? {
+        return self.categoryName?.replacingOccurrences(of: "_", with: " ")
+    }
     //Likes
     var numberOfLikesInt: Int {
         guard let numberOfLikes = self.numberOfLikes else {

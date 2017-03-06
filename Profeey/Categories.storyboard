@@ -29,10 +29,10 @@
         <scene sceneID="52n-ja-bBp">
             <objects>
                 <tableViewController id="bSU-Zt-F7f" customClass="CategoriesTableViewController" customModule="Profeey" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="16" sectionFooterHeight="1" id="Dj7-eh-NVJ">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="Dj7-eh-NVJ">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="0.97530043129999999" green="0.97527122499999996" blue="0.97528779509999997" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <inset key="separatorInset" minX="64" minY="0.0" maxX="0.0" maxY="0.0"/>
                         <view key="tableHeaderView" contentMode="scaleToFill" id="NEy-lW-ctK">
                             <rect key="frame" x="0.0" y="0.0" width="375" height="52"/>
@@ -40,7 +40,7 @@
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="o1K-mC-YBx" userLabel="Separator View">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="1"/>
-                                    <color key="backgroundColor" red="0.83041435480000003" green="0.83038914200000002" blue="0.83040338749999998" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="1" id="nYe-GI-tXT">
                                             <userDefinedRuntimeAttributes>
@@ -92,10 +92,10 @@
                         </view>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellCategory" rowHeight="64" id="W4V-2a-D1j" customClass="CategoryTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="107.5" width="375" height="64"/>
+                                <rect key="frame" x="0.0" y="80" width="375" height="64"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="W4V-2a-D1j" id="FBk-I0-w5y">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="63.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="63"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="MkO-5y-Grb">
@@ -141,11 +141,54 @@
                                     <outlet property="numberOfPostsLabel" destination="NSp-Je-bOb" id="vb0-3M-VVj"/>
                                 </connections>
                             </tableViewCell>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellCategoryNew" rowHeight="64" id="S6G-zs-KkI" customClass="CategoryNewTableViewCell" customModule="Profeey" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="144" width="375" height="64"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="S6G-zs-KkI" id="YRo-on-56D">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="63"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="4a0-Rn-FKb">
+                                            <rect key="frame" x="64" y="14" width="299" height="36"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Category Name" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ijd-ol-ZAa">
+                                                    <rect key="frame" x="0.0" y="0.0" width="299" height="36"/>
+                                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
+                                                    <color key="textColor" red="0.41868340970000001" green="0.41867089270000002" blue="0.41867792609999999" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="36" id="Hst-9F-Rdn"/>
+                                            </constraints>
+                                        </stackView>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_skill" translatesAutoresizingMaskIntoConstraints="NO" id="hI6-Wh-4al">
+                                            <rect key="frame" x="14" y="14" width="36" height="36"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="36" id="4U7-yN-vP4"/>
+                                                <constraint firstAttribute="height" constant="36" id="O7Y-L6-YfD"/>
+                                            </constraints>
+                                        </imageView>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="hI6-Wh-4al" firstAttribute="leading" secondItem="YRo-on-56D" secondAttribute="leading" constant="14" id="EMT-KU-M3I"/>
+                                        <constraint firstItem="hI6-Wh-4al" firstAttribute="centerY" secondItem="YRo-on-56D" secondAttribute="centerY" id="Zhl-4g-5uP"/>
+                                        <constraint firstItem="4a0-Rn-FKb" firstAttribute="leading" secondItem="hI6-Wh-4al" secondAttribute="trailing" constant="14" id="edf-ek-q8W"/>
+                                        <constraint firstAttribute="trailing" secondItem="4a0-Rn-FKb" secondAttribute="trailing" constant="12" id="esu-96-gHR"/>
+                                        <constraint firstItem="4a0-Rn-FKb" firstAttribute="top" secondItem="YRo-on-56D" secondAttribute="top" constant="14" id="mob-am-d7B"/>
+                                        <constraint firstAttribute="bottom" secondItem="4a0-Rn-FKb" secondAttribute="bottom" constant="13" id="yzP-Ut-RNI"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <outlet property="categoryNameLabel" destination="ijd-ol-ZAa" id="RrV-Ih-a9f"/>
+                                </connections>
+                            </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellSearching" rowHeight="64" id="RWe-TI-3Cl" customClass="SearchingTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="171.5" width="375" height="64"/>
+                                <rect key="frame" x="0.0" y="208" width="375" height="64"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="RWe-TI-3Cl" id="W6J-xv-dEQ">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="63.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="63"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="Vwq-Bv-p3y">
@@ -171,10 +214,10 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellNoResults" rowHeight="64" id="AFV-3e-HaX" customClass="NoResultsTableViewCell" customModule="Profeey" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="235.5" width="375" height="64"/>
+                                <rect key="frame" x="0.0" y="272" width="375" height="64"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="AFV-3e-HaX" id="3l1-RV-usw">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="63.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="63"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No results found" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RJd-Tf-gDa">

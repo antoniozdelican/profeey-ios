@@ -20,6 +20,8 @@ class EditPostTableViewController: UITableViewController {
     @IBOutlet weak var categoryNameLabel: UILabel!
     @IBOutlet weak var clearCategoryButton: UIButton!
     @IBOutlet weak var editPostCategoryTableViewCell: UITableViewCell!
+    @IBOutlet weak var categorySeparatorView: UIView!
+    @IBOutlet weak var noCategoryMessageLabel: UILabel!
     
     var editPost: EditPost?
 
@@ -55,16 +57,21 @@ class EditPostTableViewController: UITableViewController {
         self.captionTextView.delegate = self
         self.captionPlaceholderLabel.isHidden = self.editPost?.caption != nil ? true : false
         if let categoryName = self.editPost?.categoryName {
-            self.categoryNameLabel.text = categoryName
+            self.categoryNameLabel.text = categoryName.replacingOccurrences(of: "_", with: " ")
             self.categoryNameLabel.textColor = Colors.black
             self.clearCategoryButton.isHidden = false
             self.categoryImageView.image = UIImage(named: "ic_skill_on")
+            self.saveButton.setTitleColor(Colors.blue, for: UIControlState.normal)
         } else {
             self.categoryNameLabel.text = "Add Skill"
             self.categoryNameLabel.textColor = Colors.disabled
             self.clearCategoryButton.isHidden = true
             self.categoryImageView.image = UIImage(named: "ic_skill_off")
+            self.saveButton.setTitleColor(Colors.disabled, for: UIControlState.normal)
         }
+        // Set no skill message.
+        self.noCategoryMessageLabel.text = "Skill is required"
+        self.noCategoryMessageLabel.isHidden = true
     }
     
     // MARK: Navigation
@@ -102,6 +109,8 @@ class EditPostTableViewController: UITableViewController {
             return 52.0
         case 2:
             return 52.0
+        case 3:
+            return 38.0
         default:
             return 0.0
         }
@@ -114,7 +123,9 @@ class EditPostTableViewController: UITableViewController {
         case 1:
             return UITableViewAutomaticDimension
         case 2:
-            return 52.0
+            return UITableViewAutomaticDimension
+        case 3:
+            return 38.0
         default:
             return 0.0
         }
@@ -130,7 +141,16 @@ class EditPostTableViewController: UITableViewController {
     
     @IBAction func saveButtonTapped(_ sender: AnyObject) {
         self.view.endEditing(true)
-        self.updatePost()
+        if self.editPost?.categoryName != nil {
+            self.updatePost()
+        } else {
+            UIView.animate(
+                withDuration: 0.2,
+                animations: {
+                    self.categorySeparatorView.backgroundColor = Colors.red
+                    self.noCategoryMessageLabel.isHidden = false
+            })
+        }
     }
     
     @IBAction func cancelButtonTapped(_ sender: AnyObject) {
@@ -143,6 +163,11 @@ class EditPostTableViewController: UITableViewController {
         self.categoryNameLabel.textColor = Colors.disabled
         self.clearCategoryButton.isHidden = true
         self.categoryImageView.image = UIImage(named: "ic_skill_off")
+        self.saveButton.setTitleColor(Colors.disabled, for: UIControlState.normal)
+        UIView.performWithoutAnimation {
+            self.tableView.beginUpdates()
+            self.tableView.endUpdates()
+        }
     }
     
     // MARK: AWS
@@ -206,16 +231,28 @@ extension EditPostTableViewController: CategoriesTableViewControllerDelegate {
     func didSelectCategory(_ categoryName: String?) {
         if let categoryName = categoryName {
             self.editPost?.categoryName = categoryName
-            self.categoryNameLabel.text = categoryName
+            self.categoryNameLabel.text = categoryName.replacingOccurrences(of: "_", with: " ")
             self.categoryNameLabel.textColor = Colors.black
             self.clearCategoryButton.isHidden = false
             self.categoryImageView.image = UIImage(named: "ic_skill_on")
+            self.saveButton.setTitleColor(Colors.blue, for: UIControlState.normal)
+            self.categorySeparatorView.backgroundColor = Colors.greyLight
+            self.noCategoryMessageLabel.isHidden = true
+            UIView.performWithoutAnimation {
+                self.tableView.beginUpdates()
+                self.tableView.endUpdates()
+            }
         } else {
             self.editPost?.categoryName = nil
             self.categoryNameLabel.text = "Add Skill"
             self.categoryNameLabel.textColor = Colors.disabled
             self.clearCategoryButton.isHidden = true
             self.categoryImageView.image = UIImage(named: "ic_skill_off")
+            self.saveButton.setTitleColor(Colors.disabled, for: UIControlState.normal)
+            UIView.performWithoutAnimation {
+                self.tableView.beginUpdates()
+                self.tableView.endUpdates()
+            }
         }
     }
 }

@@ -151,10 +151,14 @@ class ProfessionsTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "tableSectionHeader") as? TableSectionHeader
-        if self.isShowingPopularProfessions {
-            header?.titleLabel.text = self.popularProfessions.count != 0 ? "POPULAR" : "NO RESULTS FOUND"
+        if self.isSearchingPopularProfessions || self.isSearchingRegularProfessions {
+            header?.titleLabel.text = nil
         } else {
-            header?.titleLabel.text = self.regularProfessions.count != 0 ? "BEST MATCHES" : "NO RESULTS FOUND"
+            if self.isShowingPopularProfessions {
+                header?.titleLabel.text = self.popularProfessions.count != 0 ? "POPULAR" : "NO RESULTS FOUND"
+            } else {
+                header?.titleLabel.text = self.regularProfessions.count != 0 ? "BEST MATCHES" : "NO RESULTS FOUND"
+            }
         }
         return header
     }

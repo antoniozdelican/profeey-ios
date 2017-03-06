@@ -166,7 +166,7 @@ class PostDetailsTableViewController: UITableViewController {
                 return cell
             case 3:
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostCategoryCreated", for: indexPath) as! PostCategoryCreatedTableViewCell
-                cell.categoryNameCreatedLabel.text = [self.post?.categoryName, self.post?.createdString].flatMap({$0}).joined(separator: " · ")
+                cell.categoryNameCreatedLabel.text = [self.post?.categoryNameWhitespace, self.post?.createdString].flatMap({$0}).joined(separator: " · ")
                 return cell
             case 4:
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellPostButtons", for: indexPath) as! PostButtonsTableViewCell
@@ -274,7 +274,7 @@ class PostDetailsTableViewController: UITableViewController {
             case 2:
                 return UITableViewAutomaticDimension
             case 3:
-                return 26.0
+                return UITableViewAutomaticDimension
             case 4:
                 return 50.0
             default:
@@ -606,7 +606,7 @@ extension PostDetailsTableViewController {
         post.caption = notification.userInfo?["caption"] as? String
         post.categoryName = notification.userInfo?["categoryName"] as? String
         (self.tableView.cellForRow(at: IndexPath(row: 2, section: 0)) as? PostCaptionTableViewCell)?.captionLabel.text = post.caption
-        (self.tableView.cellForRow(at: IndexPath(row: 3, section: 0)) as? PostCategoryCreatedTableViewCell)?.categoryNameCreatedLabel.text = [post.categoryName, post.createdString].flatMap({$0}).joined(separator: " · ")
+        (self.tableView.cellForRow(at: IndexPath(row: 3, section: 0)) as? PostCategoryCreatedTableViewCell)?.categoryNameCreatedLabel.text = [post.categoryNameWhitespace, post.createdString].flatMap({$0}).joined(separator: " · ")
         UIView.performWithoutAnimation {
             self.tableView.beginUpdates()
             self.tableView.endUpdates()

@@ -15,6 +15,9 @@ class Category: NSObject {
     var numberOfPosts: NSNumber?
     
     // Generated.
+    var categoryNameWhitespace: String? {
+        return self.categoryName?.replacingOccurrences(of: "_", with: " ")
+    }
     var numberOfPostsInt: Int {
         guard let numberOfPosts = self.numberOfPosts else {
             return 0

@@ -21,6 +21,8 @@ class AddInfoTableViewController: UITableViewController {
     @IBOutlet weak var categoryNameLabel: UILabel!
     @IBOutlet weak var clearCategoryButton: UIButton!
     @IBOutlet weak var editPostCategoryTableViewCell: UITableViewCell!
+    @IBOutlet weak var categorySeparatorView: UIView!
+    @IBOutlet weak var noCategoryMessageLabel: UILabel!
     
     var postImage: UIImage?
     var caption: String?
@@ -57,16 +59,21 @@ class AddInfoTableViewController: UITableViewController {
         self.captionTextView.delegate = self
         self.captionPlaceholderLabel.isHidden = self.caption != nil ? true : false
         if let categoryName = self.categoryName {
-            self.categoryNameLabel.text = categoryName
+            self.categoryNameLabel.text = categoryName.replacingOccurrences(of: "_", with: " ")
             self.categoryNameLabel.textColor = Colors.black
             self.clearCategoryButton.isHidden = false
             self.categoryImageView.image = UIImage(named: "ic_skill_on")
+            self.saveButton.setTitleColor(Colors.blue, for: UIControlState.normal)
         } else {
             self.categoryNameLabel.text = "Add Skill"
             self.categoryNameLabel.textColor = Colors.disabled
             self.clearCategoryButton.isHidden = true
             self.categoryImageView.image = UIImage(named: "ic_skill_off")
+            self.saveButton.setTitleColor(Colors.disabled, for: UIControlState.normal)
         }
+        // Set no skill message.
+        self.noCategoryMessageLabel.text = "Skill is required"
+        self.noCategoryMessageLabel.isHidden = true
     }
     
     // MARK: Navigation
@@ -84,9 +91,6 @@ class AddInfoTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.layoutMargins = UIEdgeInsets.zero
-        if indexPath.row == 0 {
-            cell.separatorInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0)
-        }
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -104,7 +108,9 @@ class AddInfoTableViewController: UITableViewController {
         case 1:
             return 52.0
         case 2:
-            return 52.0
+            return 64.0
+        case 3:
+            return 38.0
         default:
             return 0.0
         }
@@ -117,7 +123,9 @@ class AddInfoTableViewController: UITableViewController {
         case 1:
             return UITableViewAutomaticDimension
         case 2:
-            return 52.0
+            return UITableViewAutomaticDimension
+        case 3:
+            return 38.0
         default:
             return 0.0
         }
@@ -132,8 +140,18 @@ class AddInfoTableViewController: UITableViewController {
     // MARK: IBActions
     
     @IBAction func saveButtonTapped(_ sender: AnyObject) {
-        // Upload is on HomeVc.
-        self.performSegue(withIdentifier: "segueUnwindToHomeVc", sender: self)
+        self.view.endEditing(true)
+        if self.categoryName != nil {
+            // Upload is on HomeVc.
+            self.performSegue(withIdentifier: "segueUnwindToHomeVc", sender: self)
+        } else {
+            UIView.animate(
+                withDuration: 0.2,
+                animations: {
+                    self.categorySeparatorView.backgroundColor = Colors.red
+                    self.noCategoryMessageLabel.isHidden = false
+            })
+        }
     }
     
     @IBAction func clearCategoryButtonTapped(_ sender: AnyObject) {
@@ -142,6 +160,11 @@ class AddInfoTableViewController: UITableViewController {
         self.categoryNameLabel.textColor = Colors.disabled
         self.clearCategoryButton.isHidden = true
         self.categoryImageView.image = UIImage(named: "ic_skill_off")
+        self.saveButton.setTitleColor(Colors.disabled, for: UIControlState.normal)
+        UIView.performWithoutAnimation {
+            self.tableView.beginUpdates()
+            self.tableView.endUpdates()
+        }
     }
 }
 
@@ -170,16 +193,28 @@ extension AddInfoTableViewController: CategoriesTableViewControllerDelegate {
     func didSelectCategory(_ categoryName: String?) {
         if let categoryName = categoryName {
             self.categoryName = categoryName
-            self.categoryNameLabel.text = categoryName
+            self.categoryNameLabel.text = categoryName.replacingOccurrences(of: "_", with: " ")
             self.categoryNameLabel.textColor = Colors.black
             self.clearCategoryButton.isHidden = false
             self.categoryImageView.image = UIImage(named: "ic_skill_on")
+            self.saveButton.setTitleColor(Colors.blue, for: UIControlState.normal)
+            self.categorySeparatorView.backgroundColor = Colors.greyLight
+            self.noCategoryMessageLabel.isHidden = true
+            UIView.performWithoutAnimation {
+                self.tableView.beginUpdates()
+                self.tableView.endUpdates()
+            }
         } else {
             self.categoryName = nil
             self.categoryNameLabel.text = "Add Skill"
             self.categoryNameLabel.textColor = Colors.disabled
             self.clearCategoryButton.isHidden = true
             self.categoryImageView.image = UIImage(named: "ic_skill_off")
+            self.saveButton.setTitleColor(Colors.disabled, for: UIControlState.normal)
+            UIView.performWithoutAnimation {
+                self.tableView.beginUpdates()
+                self.tableView.endUpdates()
+            }
         }
     }
 }

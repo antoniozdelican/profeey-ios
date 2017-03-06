@@ -379,7 +379,7 @@ class ProfileTableViewController: UITableViewController {
             let post = self.posts[indexPath.row]
             cell.postImageView.image = post.image
             cell.titleLabel.text = post.caption
-            cell.categoryNameLabel.text = post.categoryName
+            cell.categoryNameLabel.text = post.categoryNameWhitespace
             cell.createdLabel.text = post.createdString
             cell.numberOfLikesLabel.text = post.numberOfLikesSmallString
             cell.postSmallTableViewCellDelegate = self
@@ -471,7 +471,7 @@ class ProfileTableViewController: UITableViewController {
             }
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellUserCategory", for: indexPath) as! UserCategoryTableViewCell
             let userCategory = self.userCategories[indexPath.row]
-            cell.categoryNameLabel.text = userCategory.categoryName
+            cell.categoryNameLabel.text = userCategory.categoryNameWhitespace
             cell.numberOfPostsLabel.text = userCategory.numberOfPostsString
             return cell
         }
@@ -1377,7 +1377,7 @@ extension ProfileTableViewController {
         post.categoryName = notification.userInfo?["categoryName"] as? String
         if self.selectedProfileSegment == ProfileSegment.posts {
             (self.tableView.cellForRow(at: IndexPath(row: postIndex, section: 1)) as? PostSmallTableViewCell)?.titleLabel.text = post.caption
-            (self.tableView.cellForRow(at: IndexPath(row: postIndex, section: 1)) as? PostSmallTableViewCell)?.categoryNameLabel.text = post.categoryName
+            (self.tableView.cellForRow(at: IndexPath(row: postIndex, section: 1)) as? PostSmallTableViewCell)?.categoryNameLabel.text = post.categoryNameWhitespace
         }
         // Update UserCategories.
         if let categoryName = post.categoryName {

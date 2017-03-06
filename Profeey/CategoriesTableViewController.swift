@@ -31,7 +31,7 @@ class CategoriesTableViewController: UITableViewController {
         super.viewDidLoad()
         self.tableView.contentInset = UIEdgeInsetsMake(-1.0, 0.0, 0.0, 0.0)
         self.tableView.register(UINib(nibName: "TableSectionHeader", bundle: nil), forHeaderFooterViewReuseIdentifier: "tableSectionHeader")
-        self.addCategoryTextField.text = self.categoryName
+        self.addCategoryTextField.text = self.categoryName?.replacingOccurrences(of: "_", with: " ")
         
         self.isShowingPopularCategories = true
         self.isSearchingPopularCategories = true
@@ -82,32 +82,40 @@ class CategoriesTableViewController: UITableViewController {
             if self.isSearchingPopularCategories {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellSearching", for: indexPath) as! SearchingTableViewCell
                 cell.activityIndicator.startAnimating()
-                // TODO update text.
                 return cell
             }
             if self.popularCategories.count == 0 {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "cellNoResults", for: indexPath) as! NoResultsTableViewCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellCategoryNew", for: indexPath) as! CategoryNewTableViewCell
+                if let newCategoryName = self.addCategoryTextField.text {
+                    cell.categoryNameLabel.text = "\"\(newCategoryName)\""
+                } else {
+                    cell.categoryNameLabel.text = "No results found"
+                }
                 return cell
             }
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellCategory", for: indexPath) as! CategoryTableViewCell
             let category = self.popularCategories[indexPath.row]
-            cell.categoryNameLabel.text = category.categoryName
+            cell.categoryNameLabel.text = category.categoryNameWhitespace
             cell.numberOfPostsLabel.text = category.numberOfPostsString
             return cell
         } else {
             if self.isSearchingRegularCategories {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellSearching", for: indexPath) as! SearchingTableViewCell
                 cell.activityIndicator.startAnimating()
-                // TODO update text.
                 return cell
             }
             if self.regularCategories.count == 0 {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "cellNoResults", for: indexPath) as! NoResultsTableViewCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellCategoryNew", for: indexPath) as! CategoryNewTableViewCell
+                if let newCategoryName = self.addCategoryTextField.text {
+                    cell.categoryNameLabel.text = "\"\(newCategoryName)\""
+                } else {
+                    cell.categoryNameLabel.text = "No results found"
+                }
                 return cell
             }
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellCategory", for: indexPath) as! CategoryTableViewCell
             let category = self.regularCategories[indexPath.row]
-            cell.categoryNameLabel.text = category.categoryName
+            cell.categoryNameLabel.text = category.categoryNameWhitespace
             cell.numberOfPostsLabel.text = category.numberOfPostsString
             return cell
         }
@@ -117,9 +125,6 @@ class CategoriesTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.layoutMargins = UIEdgeInsets.zero
-        if cell is NoResultsTableViewCell {
-            cell.separatorInset = UIEdgeInsetsMake(0.0, cell.bounds.size.width, 0.0, 0.0)
-        }
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -128,6 +133,12 @@ class CategoriesTableViewController: UITableViewController {
         if cell is CategoryTableViewCell {
             let selectedCategory = self.isShowingPopularCategories ? self.popularCategories[indexPath.row] : self.regularCategories[indexPath.row]
             self.categoriesTableViewControllerDelegate?.didSelectCategory(selectedCategory.categoryName)
+            self.dismiss(animated: true, completion: nil)
+        }
+        if cell is CategoryNewTableViewCell, let newCategoryName = self.addCategoryTextField.text  {
+            // If new category, create with appropriate categoryName.
+            let newCategoryNameUnderscore = newCategoryName.trimm().replacingOccurrences(of: " ", with: "_")
+            self.categoriesTableViewControllerDelegate?.didSelectCategory(newCategoryNameUnderscore)
             self.dismiss(animated: true, completion: nil)
         }
     }
@@ -158,10 +169,14 @@ class CategoriesTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "tableSectionHeader") as? TableSectionHeader
-        if self.isShowingPopularCategories {
-            header?.titleLabel.text = self.popularCategories.count != 0 ? "POPULAR" : "NO RESULTS FOUND"
+        if self.isSearchingPopularCategories || self.isSearchingRegularCategories {
+            header?.titleLabel.text = nil
         } else {
-            header?.titleLabel.text = self.regularCategories.count != 0 ? "BEST MATCHES" : "NO RESULTS FOUND"
+            if self.isShowingPopularCategories {
+                header?.titleLabel.text = self.popularCategories.count != 0 ? "POPULAR" : "CREATE SKILL"
+            } else {
+                header?.titleLabel.text = self.regularCategories.count != 0 ? "BEST MATCHES" : "CREATE SKILL"
+            }
         }
         return header
     }
