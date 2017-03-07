@@ -49,13 +49,6 @@ protocol DynamoDBManager {
     func queryFollowingDynamoDB(_ userId: String, lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
     func queryFollowingIdsDynamoDB(_ userId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
     
-    // MARK: Recommendations
-    
-    func getRecommendationDynamoDB(_ recommendingId: String, completionHandler: @escaping AWSContinuationBlock)
-    func createRecommendationDynamoDB(_ recommendingId: String, recommendationText: String, completionHandler: @escaping AWSContinuationBlock)
-    func removeRecommendationDynamoDB(_ recommendingId: String, completionHandler: @escaping AWSContinuationBlock)
-    func queryRecommendationsDateSortedDynamoDB(_ recommendingId: String, lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
-    
     // MARK: Likes
     
     func getLikeDynamoDB(_ postId: String, completionHandler: @escaping AWSContinuationBlock)

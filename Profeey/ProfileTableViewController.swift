@@ -25,8 +25,6 @@ class ProfileTableViewController: UITableViewController {
     var isCurrentUser: Bool = false
     
     fileprivate var isLoadingUser = true
-    fileprivate var isLoadingRecommendation = true
-    fileprivate var isRecommending: Bool = false
     fileprivate var isLoadingRelationship = true
     fileprivate var isFollowing: Bool = false
     fileprivate var isLoadingBlock = true
@@ -98,8 +96,6 @@ class ProfileTableViewController: UITableViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(self.deleteCommentNotification(_:)), name: NSNotification.Name(DeleteCommentNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.followUserNotification(_:)), name: NSNotification.Name(FollowUserNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.unfollowUserNotification(_:)), name: NSNotification.Name(UnfollowUserNotificationKey), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.recommendUserNotification(_:)), name: NSNotification.Name(RecommendUserNotificationKey), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.unrecommendUserNotification(_:)), name: NSNotification.Name(UnrecommendUserNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.downloadImageNotification(_:)), name: NSNotification.Name(DownloadImageNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.createReportNotification(_:)), name: NSNotification.Name(CreateReportNotificationKey), object: nil)
         
@@ -184,11 +180,10 @@ class ProfileTableViewController: UITableViewController {
                         self.amIBlocked = true
                         (self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? ProfileMainTableViewCell)?.numberOfPostsButton.isEnabled = false
                         (self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? ProfileMainTableViewCell)?.numberOfFollowersButton.isEnabled = false
-                        (self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? ProfileMainTableViewCell)?.numberOfRecommendationsButton.isEnabled = false
+                        (self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? ProfileMainTableViewCell)?.numberOfCategoriesButton.isEnabled = false
                         // I can block as well.
-                        let blockButton = UIBarButtonItem(image: UIImage(named: "ic_more_vertical_big"), style: UIBarButtonItemStyle.plain, target: self, action: #selector(self.blockButtonTapped(_:)))
-                        self.navigationItem.rightBarButtonItems = [blockButton]
-                        
+                        self.settingsButton = UIBarButtonItem(image: UIImage(named: "ic_more_vertical_big"), style: UIBarButtonItemStyle.plain, target: self, action: #selector(self.blockButtonTapped(_:)))
+                        self.navigationItem.rightBarButtonItem = self.settingsButton
                         // Get block for other as well so I can block them too.
                         self.getBlock(userId)
                     } else {
@@ -240,13 +235,6 @@ class ProfileTableViewController: UITableViewController {
             let indexPath = self.tableView.indexPath(for: cell) {
             destinationViewController.user = self.user?.copyUser()
             destinationViewController.userCategory = self.userCategories[indexPath.row]
-        }
-        if let destinationViewController = segue.destination as? UINavigationController,
-            let childViewController = destinationViewController.childViewControllers[0] as? AddRecommendationTableViewController {
-            childViewController.user = self.user?.copyUser()
-        }
-        if let destinationViewController = segue.destination as? RecommendationsTableViewController {
-            destinationViewController.userId = self.user?.userId
         }
         if let destinationViewController = segue.destination as? MessagesViewController {
             destinationViewController.participant = self.user?.copyUser()
@@ -320,7 +308,7 @@ class ProfileTableViewController: UITableViewController {
                 cell.profilePicImageView.image = self.user?.profilePicUrl != nil ? self.user?.profilePic : UIImage(named: "ic_no_profile_pic_profile")
                 cell.numberOfPostsButton.setTitle(self.user?.numberOfPostsInt.numberToString(), for: UIControlState.normal)
                 cell.numberOfFollowersButton.setTitle(self.user?.numberOfFollowersInt.numberToString(), for: UIControlState.normal)
-                cell.numberOfRecommendationsButton.setTitle(self.user?.numberOfRecommendationsInt.numberToString(), for: UIControlState.normal)
+                cell.numberOfCategoriesButton.setTitle(self.user?.numberOfCategoriesInt.numberToString(), for: UIControlState.normal)
                 if self.isCurrentUser {
                     cell.messageButton.isHidden = true
                     cell.messageButtonWidthConstraint.constant = 0.0
@@ -624,8 +612,6 @@ class ProfileTableViewController: UITableViewController {
     func settingsButtonTapped(_ sender: AnyObject) {
         if self.isCurrentUser {
             self.performSegue(withIdentifier: "segueToSettingsVc", sender: self)
-        } else {
-            self.performSegue(withIdentifier: "segueToMessagesVc", sender: self)
         }
     }
     
@@ -752,7 +738,7 @@ class ProfileTableViewController: UITableViewController {
                     print("Not an awsUser. This should not happen.")
                     return
                 }
-                let user = FullUser(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, schoolId: awsUser._schoolId, schoolName: awsUser._schoolName, website: awsUser._website, about: awsUser._about, numberOfFollowers: awsUser._numberOfFollowers, numberOfPosts: awsUser._numberOfPosts, numberOfRecommendations: awsUser._numberOfRecommendations, email: awsUser._email, emailVerified: awsUser._emailVerified, isFacebookUser: awsUser._isFacebookUser)
+                let user = FullUser(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, schoolId: awsUser._schoolId, schoolName: awsUser._schoolName, website: awsUser._website, about: awsUser._about, numberOfFollowers: awsUser._numberOfFollowers, numberOfPosts: awsUser._numberOfPosts, numberOfCategories: awsUser._numberOfCategories, email: awsUser._email, emailVerified: awsUser._emailVerified, isFacebookUser: awsUser._isFacebookUser)
                 self.user = user
                 
                 // Reset flags and animations that were initiated.
@@ -764,15 +750,12 @@ class ProfileTableViewController: UITableViewController {
                 // Set/reinit settings button. This happens only once.
                 if !self.isSettingsButtonSet {
                     self.isSettingsButtonSet = true
-                    self.settingsButton = UIBarButtonItem(image: nil, style: UIBarButtonItemStyle.plain, target: self, action: #selector(self.settingsButtonTapped(_:)))
                     if self.isCurrentUser {
-                        self.settingsButton?.image = UIImage(named: "ic_settings")
-                        self.navigationItem.rightBarButtonItem = self.settingsButton
+                        self.settingsButton = UIBarButtonItem(image: UIImage(named: "ic_settings"), style: UIBarButtonItemStyle.plain, target: self, action: #selector(self.settingsButtonTapped(_:)))
                     } else {
-                        self.settingsButton?.image = UIImage(named: "ic_mail")
-                        let blockButton = UIBarButtonItem(image: UIImage(named: "ic_more_vertical_big"), style: UIBarButtonItemStyle.plain, target: self, action: #selector(self.blockButtonTapped(_:)))
-                        self.navigationItem.rightBarButtonItems = [blockButton, self.settingsButton!]
+                        self.settingsButton = UIBarButtonItem(image: UIImage(named: "ic_more_vertical_big"), style: UIBarButtonItemStyle.plain, target: self, action: #selector(self.blockButtonTapped(_:)))
                     }
+                    self.navigationItem.rightBarButtonItem = self.settingsButton
                     
                 }
                 
@@ -796,7 +779,7 @@ class ProfileTableViewController: UITableViewController {
                     PRFYS3Manager.defaultS3Manager().downloadImageS3(profilePicUrl, imageType: .userProfilePic)
                 }
                 
-                // Load block before relationship and recommendation.
+                // Load block before relationship.
                 if let userId = awsUser._userId, !self.isCurrentUser {
                     self.getBlock(userId)
                 }
@@ -865,92 +848,6 @@ class ProfileTableViewController: UITableViewController {
             })
         })
     }
-    
-//    fileprivate func queryWorkExperiences(_ userId: String) {
-//        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-//        PRFYDynamoDBManager.defaultDynamoDBManager().queryWorkExperiencesDynamoDB(userId, completionHandler: {
-//            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
-//            DispatchQueue.main.async(execute: {
-//                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-//                guard error == nil else {
-//                    print("queryWorkExperiences error: \(error)")
-//                    self.isLoadingWorkExperiences = false
-//                    self.hasLoadedInitialWorkExperiences = true
-//                    if (error as! NSError).code == -1009 {
-//                        (self.navigationController as? PRFYNavigationController)?.showBanner("No Internet Connection")
-//                        self.noNetworkConnection = true
-//                    }
-//                    if self.selectedProfileSegment == ProfileSegment.experience && !self.isLoadingExperiences {
-//                        self.tableView.tableFooterView = UIView()
-//                        self.tableView.reloadData()
-//                    }
-//                    return
-//                }
-//                self.workExperiences = []
-//                if let awsWorkExperiences = response?.items as? [AWSWorkExperience] {
-//                    for awsWorkExperience in awsWorkExperiences {
-//                        let workExperience = WorkExperience(userId: awsWorkExperience._userId, workExperienceId: awsWorkExperience._workExperienceId, title: awsWorkExperience._title, organization: awsWorkExperience._organization, workDescription: awsWorkExperience._workDescription, fromMonth: awsWorkExperience._fromMonth, fromYear: awsWorkExperience._fromYear, toMonth: awsWorkExperience._toMonth, toYear: awsWorkExperience._toYear)
-//                        self.workExperiences.append(workExperience)
-//                    }
-//                    self.sortWorkExperiencesByToDate()
-//                }
-//                
-//                // Reset flags and animations that were initiated.
-//                self.isLoadingWorkExperiences = false
-//                self.hasLoadedInitialWorkExperiences = true
-//                self.noNetworkConnection = false
-//                
-//                // Reload tableView with downloaded experiences.
-//                if self.selectedProfileSegment == ProfileSegment.experience && !self.isLoadingExperiences {
-//                    self.tableView.tableFooterView = UIView()
-//                    self.tableView.reloadData()
-//                }
-//            })
-//        })
-//    }
-//    
-//    fileprivate func queryEducations(_ userId: String) {
-//        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-//        PRFYDynamoDBManager.defaultDynamoDBManager().queryEducationsDynamoDB(userId, completionHandler: {
-//            (response: AWSDynamoDBPaginatedOutput?, error: Error?) in
-//            DispatchQueue.main.async(execute: {
-//                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-//                guard error == nil else {
-//                    print("queryEducations error: \(error)")
-//                    self.isLoadingEducations = false
-//                    self.hasLoadedInitialEducations = true
-//                    if (error as! NSError).code == -1009 {
-//                        (self.navigationController as? PRFYNavigationController)?.showBanner("No Internet Connection")
-//                        self.noNetworkConnection = true
-//                    }
-//                    if self.selectedProfileSegment == ProfileSegment.experience && !self.isLoadingExperiences {
-//                        self.tableView.tableFooterView = UIView()
-//                        self.tableView.reloadData()
-//                    }
-//                    return
-//                }
-//                self.educations = []
-//                if let awsEducations = response?.items as? [AWSEducation] {
-//                    for awsEducation in awsEducations {
-//                        let education = Education(userId: awsEducation._userId, educationId: awsEducation._educationId, school: awsEducation._school, fieldOfStudy: awsEducation._fieldOfStudy, educationDescription: awsEducation._educationDescription, fromMonth: awsEducation._fromMonth, fromYear: awsEducation._fromYear, toMonth: awsEducation._toMonth, toYear: awsEducation._toYear)
-//                        self.educations.append(education)
-//                    }
-//                    self.sortEducationsByToDate()
-//                }
-//                
-//                // Reset flags and animations that were initiated.
-//                self.isLoadingEducations = false
-//                self.hasLoadedInitialEducations = true
-//                self.noNetworkConnection = false
-//                
-//                // Reload tableView with downloaded experiences.
-//                if self.selectedProfileSegment == ProfileSegment.experience && !self.isLoadingExperiences {
-//                    self.tableView.tableFooterView = UIView()
-//                    self.tableView.reloadData()
-//                }
-//            })
-//        })
-//    }
     
     fileprivate func queryUserCategoriesNumberOfPostsSorted(_ userId: String) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
@@ -1131,26 +1028,6 @@ class ProfileTableViewController: UITableViewController {
     
     // MARK: Helpers
     
-//    fileprivate func sortWorkExperiencesByToDate() {
-//        let currentWorkExperiences = self.workExperiences.filter( { $0.toMonthInt == nil && $0.toYearInt == nil } )
-//        let otherWorkExperiences = self.workExperiences.filter( { $0.toMonthInt != nil && $0.toYearInt != nil } )
-//        let sortedOtherWorkExperiences = otherWorkExperiences.sorted(by: {
-//            (workExperience1, workExperience2) in
-//            return workExperience1.toYearInt! == workExperience2.toYearInt! ? (workExperience1.toMonthInt! > workExperience2.toMonthInt!) : (workExperience1.toYearInt! > workExperience2.toYearInt!)
-//        })
-//        self.workExperiences = currentWorkExperiences + sortedOtherWorkExperiences
-//    }
-    
-//    fileprivate func sortEducationsByToDate() {
-//        let currentEducations = self.educations.filter( { $0.toMonthInt == nil && $0.toYearInt == nil } )
-//        let otherEducations = self.educations.filter( { $0.toMonthInt != nil && $0.toYearInt != nil } )
-//        let sortedOtherEducations = otherEducations.sorted(by: {
-//            (education1, education2) in
-//            return education1.toYearInt! == education2.toYearInt! ? (education1.toMonthInt! > education2.toMonthInt!) : (education1.toYearInt! > education2.toYearInt!)
-//        })
-//        self.educations = currentEducations + sortedOtherEducations
-//    }
-    
     fileprivate func sortUserCategories() {
         self.userCategories = self.userCategories.sorted(by: {
             (userCategory1, userCategory2) in
@@ -1178,8 +1055,10 @@ extension ProfileTableViewController: ProfileMainTableViewCellDelegate {
         self.performSegue(withIdentifier: "segueToFollowersFollowingVc", sender: self)
     }
     
-    func numberOfRecommendationsButtonTapped() {
-        self.performSegue(withIdentifier: "segueToRecommendationsVc", sender: self)
+    func numberOfCategoriesButtonTapped() {
+        if self.userCategories.count > 0 && self.selectedProfileSegment == ProfileSegment.skills {
+            self.tableView.scrollToRow(at: IndexPath(row: 0, section: 1), at: UITableViewScrollPosition.top, animated: true)
+        }
     }
     
     func followButtonTapped() {
@@ -1214,31 +1093,8 @@ extension ProfileTableViewController: ProfileMainTableViewCellDelegate {
     }
     
     func messageButtonTapped() {
-        // TODO
+        self.performSegue(withIdentifier: "segueToMessagesVc", sender: self)
     }
-    
-//    func recommendButtonTapped() {
-//        if !self.isCurrentUser, !self.isLoadingRecommendation {
-//            if self.isRecommending, let recommendingId = self.user?.userId {
-//                let message = ["Unrecommend", self.user?.preferredUsername].flatMap({ $0 }).joined(separator: " ") + "?"
-//                let alertController = UIAlertController(title: nil, message: message, preferredStyle: UIAlertControllerStyle.actionSheet)
-//                // DELETE
-//                let deleteAction = UIAlertAction(title: "Unrecommend", style: UIAlertActionStyle.destructive, handler: {
-//                    (alert: UIAlertAction) in
-//                    // DynamoDB and Notify observers (self also).
-//                    self.removeRecommendation(recommendingId)
-//                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: UnrecommendUserNotificationKey), object: self, userInfo: ["recommendingId": recommendingId])
-//                })
-//                alertController.addAction(deleteAction)
-//                // CANCEL
-//                let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil)
-//                alertController.addAction(cancelAction)
-//                self.present(alertController, animated: true, completion: nil)
-//            } else {
-//                self.performSegue(withIdentifier: "segueToAddRecommendationVc", sender: self)
-//            }
-//        }
-//    }
 }
 
 extension ProfileTableViewController {
@@ -1488,44 +1344,6 @@ extension ProfileTableViewController {
         cell?.setFollowButton()
     }
     
-    func recommendUserNotification(_ notification: NSNotification) {
-        guard let recommendingId = notification.userInfo?["recommendingId"] as? String else {
-            return
-        }
-        guard self.user?.userId == recommendingId, !self.isLoadingRecommendation, !self.isRecommending else {
-            return
-        }
-        // Update data source and cell.
-        self.isRecommending = true
-        if let numberOfRecommendations = self.user?.numberOfRecommendations {
-            self.user?.numberOfRecommendations = NSNumber(value: numberOfRecommendations.intValue + 1)
-        } else {
-            self.user?.numberOfRecommendations = NSNumber(value: 1)
-        }
-        let cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? ProfileMainTableViewCell
-        cell?.numberOfRecommendationsButton.setTitle(self.user?.numberOfRecommendationsInt.numberToString(), for: UIControlState.normal)
-        //cell?.setRecommendingButton()
-    }
-    
-    func unrecommendUserNotification(_ notification: NSNotification) {
-        guard let recommendingId = notification.userInfo?["recommendingId"] as? String else {
-            return
-        }
-        guard self.user?.userId == recommendingId, !self.isLoadingRecommendation, self.isRecommending else {
-            return
-        }
-        // Update data source and cell.
-        self.isRecommending = false
-        if let numberOfRecommendations = self.user?.numberOfRecommendations, numberOfRecommendations.intValue > 0 {
-            self.user?.numberOfRecommendations = NSNumber(value: numberOfRecommendations.intValue - 1)
-        } else {
-            self.user?.numberOfRecommendations = NSNumber(value: 0)
-        }
-        let cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? ProfileMainTableViewCell
-        cell?.numberOfRecommendationsButton.setTitle(self.user?.numberOfRecommendationsInt.numberToString(), for: UIControlState.normal)
-        //cell?.setRecommendButton()
-    }
-    
     func downloadImageNotification(_ notification: NSNotification) {
         guard let imageKey = notification.userInfo?["imageKey"] as? String, let imageType = notification.userInfo?["imageType"] as? ImageType, let imageData = notification.userInfo?["imageData"] as? Data else {
             return
@@ -1590,11 +1408,9 @@ extension ProfileTableViewController {
         (self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? ProfileMainTableViewCell)?.messageButton.isHidden = false
         (self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? ProfileMainTableViewCell)?.setFollowButton()
         
-        // Load relationships and recommendations.
+        // Load relationship.
         self.isLoadingRelationship = true
-        self.isLoadingRecommendation = true
         self.getRelationship(blockingId)
-        //self.getRecommendation(blockingId)
         self.tableView.reloadData()
     }
 }

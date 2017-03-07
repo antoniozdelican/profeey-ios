@@ -11,7 +11,7 @@ import UIKit
 protocol ProfileMainTableViewCellDelegate: class {
     func numberOfPostsButtonTapped()
     func numberOfFollowersButtonTapped()
-    func numberOfRecommendationsButtonTapped()
+    func numberOfCategoriesButtonTapped()
     func followButtonTapped()
     func messageButtonTapped()
 }
@@ -21,7 +21,7 @@ class ProfileMainTableViewCell: UITableViewCell {
     @IBOutlet weak var profilePicImageView: UIImageView!
     @IBOutlet weak var numberOfPostsButton: UIButton!
     @IBOutlet weak var numberOfFollowersButton: UIButton!
-    @IBOutlet weak var numberOfRecommendationsButton: UIButton!
+    @IBOutlet weak var numberOfCategoriesButton: UIButton!
     @IBOutlet weak var followButton: UIButton!
     @IBOutlet weak var messageButton: UIButton!
     @IBOutlet weak var messageButtonWidthConstraint: NSLayoutConstraint!
@@ -88,8 +88,8 @@ class ProfileMainTableViewCell: UITableViewCell {
         self.profileMainTableViewCellDelegate?.numberOfFollowersButtonTapped()
     }
     
-    @IBAction func numberOfRecommendationsButtonTapped(_ sender: AnyObject) {
-        self.profileMainTableViewCellDelegate?.numberOfRecommendationsButtonTapped()
+    @IBAction func numberOfCategoriesButtonTapped(_ sender: AnyObject) {
+        self.profileMainTableViewCellDelegate?.numberOfCategoriesButtonTapped()
     }
     
     @IBAction func messageButtonTapped(_ sender: AnyObject) {

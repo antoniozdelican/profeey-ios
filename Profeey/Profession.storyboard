@@ -108,8 +108,8 @@
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="fullNameLabel" destination="1nE-Kx-wJL" id="CSb-gO-e7I"/>
-                                    <outlet property="numberOfRecommendationsLabel" destination="3nc-sN-dIv" id="TUA-5N-Jp5"/>
-                                    <outlet property="numberOfRecommendationsStackView" destination="sho-Zp-T5M" id="bYC-7C-hno"/>
+                                    <outlet property="numberOfPostsLabel" destination="3nc-sN-dIv" id="APc-se-EOe"/>
+                                    <outlet property="numberOfPostsStackView" destination="sho-Zp-T5M" id="0VZ-YD-tJu"/>
                                     <outlet property="preferredUsernameLabel" destination="Agh-vm-j9v" id="7uJ-Zd-lgX"/>
                                     <outlet property="professionNameLabel" destination="1Wk-dc-KIv" id="fMS-RJ-nGA"/>
                                     <outlet property="profilePicImageView" destination="8si-RS-oA4" id="vW2-9q-wLg"/>
@@ -128,7 +128,7 @@
                                             <rect key="frame" x="22" y="22" width="20" height="20"/>
                                         </activityIndicatorView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Searching..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fJU-sC-2Hd">
-                                            <rect key="frame" x="64" y="24" width="295" height="17"/>
+                                            <rect key="frame" x="64" y="23" width="295" height="17"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <color key="textColor" red="0.41868340970000001" green="0.41867089270000002" blue="0.41867792609999999" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
@@ -154,7 +154,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No results found" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aDQ-PH-1jU">
-                                            <rect key="frame" x="16" y="24" width="343" height="17"/>
+                                            <rect key="frame" x="16" y="23" width="343" height="17"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <color key="textColor" red="0.41868340970000001" green="0.41867089270000002" blue="0.41867792609999999" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>

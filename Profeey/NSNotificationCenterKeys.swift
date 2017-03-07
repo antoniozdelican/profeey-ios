@@ -24,9 +24,6 @@ let DeleteCommentNotificationKey: String = "DeleteCommentNotificationKey"
 let FollowUserNotificationKey: String = "FollowUserNotificationKey"
 let UnfollowUserNotificationKey: String = "UnfollowUserNotificationKey"
 
-let RecommendUserNotificationKey: String = "RecommendUserNotificationKey"
-let UnrecommendUserNotificationKey: String = "UnrecommendUserNotificationKey"
-
 let CreateWorkExperienceNotificationKey: String = "CreateWorkExperienceNotificationKey"
 let UpdateWorkExperienceNotificationKey: String = "UpdateWorkExperienceNotificationKey"
 let CreateEducationNotificationKey: String = "CreateEducationNotificationKey"

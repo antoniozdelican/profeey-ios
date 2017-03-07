@@ -42,8 +42,8 @@ class SearchUsersTableViewController: UITableViewController {
         self.scanUsers()
         
         // Add observers.
-        NotificationCenter.default.addObserver(self, selector: #selector(self.recommendUserNotification(_:)), name: NSNotification.Name(RecommendUserNotificationKey), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.unrecommendUserNotification(_:)), name: NSNotification.Name(UnrecommendUserNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.createPostNotification(_:)), name: NSNotification.Name(CreatePostNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.deletePostNotification(_:)), name: NSNotification.Name(DeletePostNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.downloadImageNotification(_:)), name: NSNotification.Name(DownloadImageNotificationKey), object: nil)
     }
 
@@ -102,8 +102,8 @@ class SearchUsersTableViewController: UITableViewController {
         cell.professionNameLabel.text = user.professionNameWhitespace
         cell.schoolNameLabel.text = user.schoolName
         cell.schoolStackView.isHidden = user.schoolName != nil ? false : true
-        cell.numberOfRecommendationsLabel.text = user.numberOfRecommendationsInt.numberToString()
-        cell.numberOfRecommendationsStackView.isHidden = user.numberOfRecommendationsInt > 0 ? false : true
+        cell.numberOfPostsLabel.text = user.numberOfPostsInt.numberToString()
+        cell.numberOfPostsStackView.isHidden = user.numberOfPostsInt > 0 ? false : true
         return cell
     }
     
@@ -221,7 +221,7 @@ class SearchUsersTableViewController: UITableViewController {
     fileprivate func sortUsers(_ users: [User]) -> [User] {
         return users.sorted(by: {
             (user1, user2) in
-            return user1.numberOfRecommendationsInt > user2.numberOfRecommendationsInt
+            return user1.numberOfPostsInt > user2.numberOfPostsInt
         })
     }
     
@@ -247,7 +247,7 @@ class SearchUsersTableViewController: UITableViewController {
                 self.popularUsers = []
                 if let awsUsers = response?.items as? [AWSUser] {
                     for awsUser in awsUsers {
-                        let user = SchoolUser(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, schoolId: awsUser._schoolId, schoolName: awsUser._schoolName, numberOfRecommendations: awsUser._numberOfRecommendations)
+                        let user = SchoolUser(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, schoolId: awsUser._schoolId, schoolName: awsUser._schoolName, numberOfPosts: awsUser._numberOfPosts)
                         self.popularUsers.append(user)
                     }
                 }
@@ -295,7 +295,7 @@ class SearchUsersTableViewController: UITableViewController {
                 self.popularUsers = []
                 if let awsUsers = response?.items as? [AWSUser] {
                     for awsUser in awsUsers {
-                        let user = SchoolUser(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, schoolId: awsUser._schoolId, schoolName: awsUser._schoolName, numberOfRecommendations: awsUser._numberOfRecommendations)
+                        let user = SchoolUser(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, schoolId: awsUser._schoolId, schoolName: awsUser._schoolName, numberOfPosts: awsUser._numberOfPosts)
                         self.popularUsers.append(user)
                     }
                 }
@@ -328,17 +328,17 @@ extension SearchUsersTableViewController {
     
     // MARK: NSNotifications
     
-    func recommendUserNotification(_ notification: NSNotification) {
-        guard let recommendingId = notification.userInfo?["recommendingId"] as? String else {
+    func createPostNotification(_ notification: NSNotification) {
+        guard let post = notification.userInfo?["post"] as? Post else {
             return
         }
-        guard let user = self.popularUsers.first(where: { $0.userId == recommendingId }) else {
+        guard let user = self.popularUsers.first(where: { $0.userId == post.userId }) else {
             return
         }
-        if let numberOfRecommendations = user.numberOfRecommendations {
-            user.numberOfRecommendations = NSNumber(value: numberOfRecommendations.intValue + 1)
+        if let numberOfPosts = user.numberOfPosts {
+            user.numberOfPosts = NSNumber(value: numberOfPosts.intValue + 1)
         } else {
-            user.numberOfRecommendations = NSNumber(value: 1)
+            user.numberOfPosts = NSNumber(value: 1)
         }
         self.popularUsers = self.sortUsers(self.popularUsers)
         // Sort visible.
@@ -346,17 +346,17 @@ extension SearchUsersTableViewController {
         self.tableView.reloadData()
     }
     
-    func unrecommendUserNotification(_ notification: NSNotification) {
-        guard let recommendingId = notification.userInfo?["recommendingId"] as? String else {
+    func deletePostNotification(_ notification: NSNotification) {
+        guard let post = notification.userInfo?["post"] as? Post else {
             return
         }
-        guard let user = self.popularUsers.first(where: { $0.userId == recommendingId }) else {
+        guard let user = self.popularUsers.first(where: { $0.userId == post.userId }) else {
             return
         }
-        if let numberOfRecommendations = user.numberOfRecommendations, numberOfRecommendations.intValue > 0 {
-            user.numberOfRecommendations = NSNumber(value: numberOfRecommendations.intValue - 1)
+        if let numberOfPosts = user.numberOfPosts, numberOfPosts.intValue > 0 {
+            user.numberOfPosts = NSNumber(value: numberOfPosts.intValue - 1)
         } else {
-            user.numberOfRecommendations = NSNumber(value: 0)
+            user.numberOfPosts = NSNumber(value: 0)
         }
         self.popularUsers = self.sortUsers(self.popularUsers)
         // Sort visible.

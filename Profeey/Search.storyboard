@@ -283,8 +283,8 @@
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="fullNameLabel" destination="mmW-nR-t6u" id="Sc9-1W-v1W"/>
-                                    <outlet property="numberOfRecommendationsLabel" destination="ayT-Bh-wXX" id="x3R-lI-a5a"/>
-                                    <outlet property="numberOfRecommendationsStackView" destination="5NR-PR-JHl" id="LfV-p6-sux"/>
+                                    <outlet property="numberOfPostsLabel" destination="ayT-Bh-wXX" id="vId-PM-qYo"/>
+                                    <outlet property="numberOfPostsStackView" destination="5NR-PR-JHl" id="bBV-0T-bew"/>
                                     <outlet property="preferredUsernameLabel" destination="WvC-2Q-N4u" id="G5P-Bh-eZ3"/>
                                     <outlet property="professionNameLabel" destination="6gY-o4-5dF" id="8tX-fH-CCS"/>
                                     <outlet property="profilePicImageView" destination="nbg-4b-fvK" id="Y9s-NJ-s1G"/>

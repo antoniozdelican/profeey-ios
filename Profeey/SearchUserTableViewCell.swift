@@ -16,8 +16,8 @@ class SearchUserTableViewCell: UITableViewCell {
     @IBOutlet weak var professionNameLabel: UILabel!
     @IBOutlet weak var schoolNameLabel: UILabel!
     @IBOutlet weak var schoolStackView: UIStackView!
-    @IBOutlet weak var numberOfRecommendationsLabel: UILabel!
-    @IBOutlet weak var numberOfRecommendationsStackView: UIStackView!
+    @IBOutlet weak var numberOfPostsLabel: UILabel!
+    @IBOutlet weak var numberOfPostsStackView: UIStackView!
     
     override func awakeFromNib() {
         super.awakeFromNib()

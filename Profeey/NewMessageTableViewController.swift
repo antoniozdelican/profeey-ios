@@ -199,7 +199,7 @@ class NewMessageTableViewController: UITableViewController {
     fileprivate func sortUsers(_ users: [User]) -> [User] {
         return users.sorted(by: {
             (user1, user2) in
-            return user1.numberOfRecommendationsInt > user2.numberOfRecommendationsInt
+            return user1.numberOfPostsInt > user2.numberOfPostsInt
         })
     }
     
@@ -228,7 +228,7 @@ class NewMessageTableViewController: UITableViewController {
                         guard awsUser._userId != AWSIdentityManager.defaultIdentityManager().identityId else {
                             continue
                         }
-                        let user = SchoolUser(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, schoolId: awsUser._schoolId, schoolName: awsUser._schoolName, numberOfRecommendations: awsUser._numberOfRecommendations)
+                        let user = SchoolUser(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, schoolId: awsUser._schoolId, schoolName: awsUser._schoolName, numberOfPosts: awsUser._numberOfPosts)
                         self.popularUsers.append(user)
                     }
                 }

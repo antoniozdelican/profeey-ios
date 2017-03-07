@@ -14,7 +14,7 @@ class SchoolUser: User {
         super.init()
     }
     
-    convenience init(userId: String?, firstName: String?, lastName: String?, preferredUsername: String?, professionName: String?, profilePicUrl: String?, schoolId: String?, schoolName: String?, numberOfRecommendations: NSNumber?) {
+    convenience init(userId: String?, firstName: String?, lastName: String?, preferredUsername: String?, professionName: String?, profilePicUrl: String?, schoolId: String?, schoolName: String?, numberOfPosts: NSNumber?) {
         self.init()
         self.userId = userId
         self.firstName = firstName
@@ -24,6 +24,6 @@ class SchoolUser: User {
         self.profilePicUrl = profilePicUrl
         self.schoolId = schoolId
         self.schoolName = schoolName
-        self.numberOfRecommendations = numberOfRecommendations
+        self.numberOfPosts = numberOfPosts
     }
 }

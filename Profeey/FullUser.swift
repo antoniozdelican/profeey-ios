@@ -14,7 +14,7 @@ class FullUser: User {
         super.init()
     }
     
-    convenience init(userId: String?, firstName: String?, lastName: String?, preferredUsername: String?, professionName: String?, profilePicUrl: String?, schoolId: String?, schoolName: String?, website: String?, about: String?, numberOfFollowers: NSNumber?, numberOfPosts: NSNumber?, numberOfRecommendations: NSNumber?, email: String?, emailVerified: NSNumber?, isFacebookUser: NSNumber?) {
+    convenience init(userId: String?, firstName: String?, lastName: String?, preferredUsername: String?, professionName: String?, profilePicUrl: String?, schoolId: String?, schoolName: String?, website: String?, about: String?, numberOfFollowers: NSNumber?, numberOfPosts: NSNumber?, numberOfCategories: NSNumber?, email: String?, emailVerified: NSNumber?, isFacebookUser: NSNumber?) {
         self.init()
         self.userId = userId
         self.firstName = firstName
@@ -28,7 +28,7 @@ class FullUser: User {
         self.about = about
         self.numberOfFollowers = numberOfFollowers
         self.numberOfPosts = numberOfPosts
-        self.numberOfRecommendations = numberOfRecommendations
+        self.numberOfCategories = numberOfCategories
         self.email = email
         self.emailVerified = emailVerified
         self.isFacebookUser = isFacebookUser

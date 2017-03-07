@@ -309,50 +309,6 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         awsRelationshipsPrimaryIndex.queryFollowingIds(userId, completionHandler: completionHandler)
     }
     
-    // MARK: Recommendations
-    
-    func getRecommendationDynamoDB(_ recommendingId: String, completionHandler: @escaping AWSContinuationBlock) {
-        guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
-            print("getRecommendationDynamoDB no identityId!")
-            AWSTask().continue(completionHandler)
-            return
-        }
-        print("getRecommendationDynamoDB:")
-        let awsRecommendationsTable = AWSRecommendationsTable()
-        awsRecommendationsTable.getRecommendation(identityId, recommendingId: recommendingId, completionHandler: completionHandler)
-    }
-    
-    func createRecommendationDynamoDB(_ recommendingId: String, recommendationText: String, completionHandler: @escaping AWSContinuationBlock) {
-        guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
-            print("createRecommendationDynamoDB no identityId!")
-            AWSTask().continue(completionHandler)
-            return
-        }
-        print("createRecommendationDynamoDB:")
-        let created = NSNumber(value: Date().timeIntervalSince1970 as Double)
-        let awsRecommendationsTable = AWSRecommendationsTable()
-        let awsRecommendation = AWSRecommendation(_userId: identityId, _recommendingId: recommendingId, _created: created, _recommendationText: recommendationText, _firstName: self.currentUserDynamoDB?.firstName, _lastName: self.currentUserDynamoDB?.lastName, _preferredUsername: self.currentUserDynamoDB?.preferredUsername, _professionName: self.currentUserDynamoDB?.professionName, _profilePicUrl: self.currentUserDynamoDB?.profilePicUrl)
-        awsRecommendationsTable.createRecommendation(awsRecommendation, completionHandler: completionHandler)
-    }
-    
-    func removeRecommendationDynamoDB(_ recommendingId: String, completionHandler: @escaping AWSContinuationBlock) {
-        guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
-            print("removeRecommendationDynamoDB no identityId!")
-            AWSTask().continue(completionHandler)
-            return
-        }
-        print("removeRecommendationDynamoDB:")
-        let awsRecommendationsTable = AWSRecommendationsTable()
-        let awsRecommendation = AWSRecommendation(_userId: identityId, _recommendingId: recommendingId)
-        awsRecommendationsTable.removeRecommendation(awsRecommendation, completionHandler: completionHandler)
-    }
-    
-    func queryRecommendationsDateSortedDynamoDB(_ recommendingId: String, lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
-        print("queryRecommendationsDateSortedDynamoDB:")
-        let awsRecommendationsDateSortedIndex = AWSRecommendationsDateSortedIndex()
-        awsRecommendationsDateSortedIndex.queryRecommendationsDateSorted(recommendingId, lastEvaluatedKey: lastEvaluatedKey, completionHandler: completionHandler)
-    }
-    
     // MARK: Likes
     
     func getLikeDynamoDB(_ postId: String, completionHandler: @escaping AWSContinuationBlock) {

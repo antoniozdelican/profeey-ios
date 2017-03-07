@@ -177,7 +177,7 @@ class DiscoverPeopleTableViewController: UITableViewController {
                         return
                     }
                     for awsUser in awsUsers {
-                        let user = SchoolUser(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, schoolId: awsUser._schoolId, schoolName: awsUser._schoolName, numberOfRecommendations: awsUser._numberOfRecommendations)
+                        let user = SchoolUser(userId: awsUser._userId, firstName: awsUser._firstName, lastName: awsUser._lastName, preferredUsername: awsUser._preferredUsername, professionName: awsUser._professionName, profilePicUrl: awsUser._profilePicUrl, schoolId: awsUser._schoolId, schoolName: awsUser._schoolName, numberOfPosts: awsUser._numberOfPosts)
                         if awsUser._userId != self.currentUserId! {
                             self.users.append(user)
                         }

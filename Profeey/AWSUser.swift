@@ -28,7 +28,7 @@ class AWSUser: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     
     var _numberOfFollowers: NSNumber?
     var _numberOfPosts: NSNumber?
-    var _numberOfRecommendations: NSNumber?
+    var _numberOfCategories: NSNumber?
     
     var _isFacebookUser: NSNumber?
     var _isDisabled: NSNumber?
@@ -120,7 +120,7 @@ class AWSUser: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
             "_website" : "website",
             "_numberOfFollowers" : "numberOfFollowers",
             "_numberOfPosts" : "numberOfPosts",
-            "_numberOfRecommendations" : "numberOfRecommendations",
+            "_numberOfCategories" : "numberOfCategories",
             "_isFacebookUser" : "isFacebookUser",
             "_isDisabled" : "isDisabled",
         ]

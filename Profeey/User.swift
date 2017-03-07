@@ -25,7 +25,7 @@ class User: NSObject {
     var website: String?
     var numberOfFollowers: NSNumber?
     var numberOfPosts: NSNumber?
-    var numberOfRecommendations: NSNumber?
+    var numberOfCategories: NSNumber?
     
     // For SignUp flow and editEmail.
     var email: String?
@@ -57,11 +57,11 @@ class User: NSObject {
         }
         return numberOfFollowers.intValue
     }
-    var numberOfRecommendationsInt: Int {
-        guard let numberOfRecommendations = self.numberOfRecommendations else {
+    var numberOfCategoriesInt: Int {
+        guard let numberOfCategories = self.numberOfCategories else {
             return 0
         }
-        return numberOfRecommendations.intValue
+        return numberOfCategories.intValue
     }
     
     var searchFirstName: String? {
