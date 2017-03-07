@@ -13,7 +13,7 @@ protocol ProfileMainTableViewCellDelegate: class {
     func numberOfFollowersButtonTapped()
     func numberOfRecommendationsButtonTapped()
     func followButtonTapped()
-    func recommendButtonTapped()
+    func messageButtonTapped()
 }
 
 class ProfileMainTableViewCell: UITableViewCell {
@@ -23,8 +23,8 @@ class ProfileMainTableViewCell: UITableViewCell {
     @IBOutlet weak var numberOfFollowersButton: UIButton!
     @IBOutlet weak var numberOfRecommendationsButton: UIButton!
     @IBOutlet weak var followButton: UIButton!
-    @IBOutlet weak var recommendButton: UIButton!
-    @IBOutlet weak var recommendButtonWidthConstraint: NSLayoutConstraint!
+    @IBOutlet weak var messageButton: UIButton!
+    @IBOutlet weak var messageButtonWidthConstraint: NSLayoutConstraint!
     
     weak var profileMainTableViewCellDelegate: ProfileMainTableViewCellDelegate?
     
@@ -33,31 +33,13 @@ class ProfileMainTableViewCell: UITableViewCell {
         self.profilePicImageView.layer.cornerRadius = 4.0
         self.profilePicImageView.clipsToBounds = true
         
-        // Loading buttons.
-        self.recommendButton.setBackgroundImage(UIImage(named: "btn_disabled_resizable"), for: UIControlState.normal)
+        // Set buttons.
         self.followButton.setBackgroundImage(UIImage(named: "btn_disabled_resizable"), for: UIControlState.normal)
+        self.messageButton.setBackgroundImage(UIImage(named: "btn_follow_resizable"), for: UIControlState.normal)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-    }
-    
-    func setRecommendButton() {
-        UIView.performWithoutAnimation {
-            self.recommendButton.setTitle("Recommend", for: UIControlState())
-            self.recommendButton.setTitleColor(Colors.turquoise, for: UIControlState())
-            self.recommendButton.setBackgroundImage(UIImage(named: "btn_recommend_resizable"), for: UIControlState.normal)
-            self.recommendButton.layoutIfNeeded()
-        }
-    }
-    
-    func setRecommendingButton() {
-        UIView.performWithoutAnimation {
-            self.recommendButton.setTitle("Recommending", for: UIControlState())
-            self.recommendButton.setTitleColor(UIColor.white, for: UIControlState())
-            self.recommendButton.setBackgroundImage(UIImage(named: "btn_recommending_resizable"), for: UIControlState.normal)
-            self.recommendButton.layoutIfNeeded()
-        }
     }
     
     func setEditButton() {
@@ -110,10 +92,9 @@ class ProfileMainTableViewCell: UITableViewCell {
         self.profileMainTableViewCellDelegate?.numberOfRecommendationsButtonTapped()
     }
     
-    @IBAction func recommendButtonTapped(_ sender: AnyObject) {
-        self.profileMainTableViewCellDelegate?.recommendButtonTapped()
+    @IBAction func messageButtonTapped(_ sender: AnyObject) {
+        self.profileMainTableViewCellDelegate?.messageButtonTapped()
     }
-    
     
     @IBAction func followButtonTapped(_ sender: AnyObject) {
         self.profileMainTableViewCellDelegate?.followButtonTapped()

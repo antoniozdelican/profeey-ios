@@ -322,22 +322,17 @@ class ProfileTableViewController: UITableViewController {
                 cell.numberOfFollowersButton.setTitle(self.user?.numberOfFollowersInt.numberToString(), for: UIControlState.normal)
                 cell.numberOfRecommendationsButton.setTitle(self.user?.numberOfRecommendationsInt.numberToString(), for: UIControlState.normal)
                 if self.isCurrentUser {
-                    cell.recommendButton.isHidden = true
-                    cell.recommendButtonWidthConstraint.constant = 0.0
+                    cell.messageButton.isHidden = true
+                    cell.messageButtonWidthConstraint.constant = 0.0
                     if !self.isLoadingUser {
                         cell.setEditButton()
                     }
                 } else {
-                    if !self.isLoadingBlock {
-                        cell.recommendButton.isHidden = self.isBlocking
-                        if !self.isBlocking {
-                            if !self.isLoadingRecommendation {
-                                self.isRecommending ? cell.setRecommendingButton() : cell.setRecommendButton()
-                            }
-                            if !self.isLoadingRelationship  {
-                                self.isFollowing ? cell.setFollowingButton() : cell.setFollowButton()
-                            }
-                        }
+                    if !self.isLoadingBlock && !self.isBlocking && !self.isLoadingRelationship {
+                        self.isFollowing ? cell.setFollowingButton() : cell.setFollowButton()
+                        cell.messageButton.isHidden = false
+                    } else {
+                        cell.messageButton.isHidden = true
                     }
                 }
                 cell.profileMainTableViewCellDelegate = self
@@ -1018,6 +1013,8 @@ class ProfileTableViewController: UITableViewController {
                         self.isFollowing = false
                         (self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? ProfileMainTableViewCell)?.setFollowButton()
                     }
+                    // Show messageButton.
+                    (self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? ProfileMainTableViewCell)?.messageButton.isHidden = false
                 }
             })
             return nil
@@ -1054,45 +1051,6 @@ class ProfileTableViewController: UITableViewController {
         })
     }
     
-    fileprivate func getRecommendation(_ recommendingId: String) {
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().getRecommendationDynamoDB(recommendingId, completionHandler: {
-            (task: AWSTask) in
-            DispatchQueue.main.async(execute: {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                if let error = task.error {
-                    print("getRecommendation error: \(error)")
-                } else {
-                    // Update data source and cell.
-                    self.isLoadingRecommendation = false
-                    if task.result != nil {
-                        self.isRecommending = true
-                        (self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? ProfileMainTableViewCell)?.setRecommendingButton()
-                    } else {
-                        self.isRecommending = false
-                        (self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? ProfileMainTableViewCell)?.setRecommendButton()
-                    }
-                }
-            })
-            return nil
-        })
-    }
-    
-    // In background.
-    fileprivate func removeRecommendation(_ recommendingId: String) {
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().removeRecommendationDynamoDB(recommendingId, completionHandler: {
-            (task: AWSTask) in
-            DispatchQueue.main.async(execute: {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                if let error = task.error {
-                    print("removeRecommendation error: \(error)")
-                }
-            })
-            return nil
-        })
-    }
-    
     // In background.
     fileprivate func removePost(_ postId: String, imageKey: String) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
@@ -1123,14 +1081,13 @@ class ProfileTableViewController: UITableViewController {
                     if task.result != nil {
                         self.isBlocking = true
                         let cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? ProfileMainTableViewCell
-                        cell?.recommendButton.isHidden = true
+                        cell?.messageButton.isHidden = true
                         cell?.setBlockingButton()
                     } else {
                         self.isBlocking = false
-                        // Load relationship and recommendation only if not blocking and not blocked.
+                        // Load relationship only if not blocking and not blocked.
                         if !self.amIBlocked {
                             self.getRelationship(userId)
-                            self.getRecommendation(userId)
                         }
                     }
                     self.tableView.reloadData()
@@ -1256,28 +1213,32 @@ extension ProfileTableViewController: ProfileMainTableViewCellDelegate {
         }
     }
     
-    func recommendButtonTapped() {
-        if !self.isCurrentUser, !self.isLoadingRecommendation {
-            if self.isRecommending, let recommendingId = self.user?.userId {
-                let message = ["Unrecommend", self.user?.preferredUsername].flatMap({ $0 }).joined(separator: " ") + "?"
-                let alertController = UIAlertController(title: nil, message: message, preferredStyle: UIAlertControllerStyle.actionSheet)
-                // DELETE
-                let deleteAction = UIAlertAction(title: "Unrecommend", style: UIAlertActionStyle.destructive, handler: {
-                    (alert: UIAlertAction) in
-                    // DynamoDB and Notify observers (self also).
-                    self.removeRecommendation(recommendingId)
-                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: UnrecommendUserNotificationKey), object: self, userInfo: ["recommendingId": recommendingId])
-                })
-                alertController.addAction(deleteAction)
-                // CANCEL
-                let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil)
-                alertController.addAction(cancelAction)
-                self.present(alertController, animated: true, completion: nil)
-            } else {
-                self.performSegue(withIdentifier: "segueToAddRecommendationVc", sender: self)
-            }
-        }
+    func messageButtonTapped() {
+        // TODO
     }
+    
+//    func recommendButtonTapped() {
+//        if !self.isCurrentUser, !self.isLoadingRecommendation {
+//            if self.isRecommending, let recommendingId = self.user?.userId {
+//                let message = ["Unrecommend", self.user?.preferredUsername].flatMap({ $0 }).joined(separator: " ") + "?"
+//                let alertController = UIAlertController(title: nil, message: message, preferredStyle: UIAlertControllerStyle.actionSheet)
+//                // DELETE
+//                let deleteAction = UIAlertAction(title: "Unrecommend", style: UIAlertActionStyle.destructive, handler: {
+//                    (alert: UIAlertAction) in
+//                    // DynamoDB and Notify observers (self also).
+//                    self.removeRecommendation(recommendingId)
+//                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: UnrecommendUserNotificationKey), object: self, userInfo: ["recommendingId": recommendingId])
+//                })
+//                alertController.addAction(deleteAction)
+//                // CANCEL
+//                let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil)
+//                alertController.addAction(cancelAction)
+//                self.present(alertController, animated: true, completion: nil)
+//            } else {
+//                self.performSegue(withIdentifier: "segueToAddRecommendationVc", sender: self)
+//            }
+//        }
+//    }
 }
 
 extension ProfileTableViewController {
@@ -1543,7 +1504,7 @@ extension ProfileTableViewController {
         }
         let cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? ProfileMainTableViewCell
         cell?.numberOfRecommendationsButton.setTitle(self.user?.numberOfRecommendationsInt.numberToString(), for: UIControlState.normal)
-        cell?.setRecommendingButton()
+        //cell?.setRecommendingButton()
     }
     
     func unrecommendUserNotification(_ notification: NSNotification) {
@@ -1562,7 +1523,7 @@ extension ProfileTableViewController {
         }
         let cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? ProfileMainTableViewCell
         cell?.numberOfRecommendationsButton.setTitle(self.user?.numberOfRecommendationsInt.numberToString(), for: UIControlState.normal)
-        cell?.setRecommendButton()
+        //cell?.setRecommendButton()
     }
     
     func downloadImageNotification(_ notification: NSNotification) {
@@ -1610,7 +1571,7 @@ extension ProfileTableViewController {
             return
         }
         self.isBlocking = true
-        (self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? ProfileMainTableViewCell)?.recommendButton.isHidden = true
+        (self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? ProfileMainTableViewCell)?.messageButton.isHidden = true
         (self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? ProfileMainTableViewCell)?.setBlockingButton()
         self.tableView.reloadData()
     }
@@ -1626,14 +1587,14 @@ extension ProfileTableViewController {
             return
         }
         self.isBlocking = false
-        (self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? ProfileMainTableViewCell)?.recommendButton.isHidden = false
+        (self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? ProfileMainTableViewCell)?.messageButton.isHidden = false
         (self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? ProfileMainTableViewCell)?.setFollowButton()
         
         // Load relationships and recommendations.
         self.isLoadingRelationship = true
         self.isLoadingRecommendation = true
         self.getRelationship(blockingId)
-        self.getRecommendation(blockingId)
+        //self.getRecommendation(blockingId)
         self.tableView.reloadData()
     }
 }
