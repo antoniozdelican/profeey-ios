@@ -10,7 +10,6 @@ import UIKit
 
 enum AddButtonType {
     case post
-    case experience
 }
 
 protocol ProfileEmptyTableViewCellDelegate: class {
@@ -37,13 +36,6 @@ class ProfileEmptyTableViewCell: UITableViewCell {
     func setAddPostButton() {
         UIView.performWithoutAnimation {
             self.addButton.setTitle("Add Post", for: UIControlState.normal)
-            self.addButton.layoutIfNeeded()
-        }
-    }
-    
-    func setAddExperienceButton() {
-        UIView.performWithoutAnimation {
-            self.addButton.setTitle("Add Experience", for: UIControlState.normal)
             self.addButton.layoutIfNeeded()
         }
     }

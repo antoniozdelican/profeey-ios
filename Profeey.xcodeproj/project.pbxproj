@@ -125,12 +125,6 @@
 		A999CD451DBE829F00E7ADB1 /* SearchTableSectionHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = A999CD441DBE829F00E7ADB1 /* SearchTableSectionHeader.xib */; };
 		A999CD481DBE93D400E7ADB1 /* ProfessionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A999CD471DBE93D400E7ADB1 /* ProfessionTableViewController.swift */; };
 		A99ADD261DB361BE00A34C8D /* CurrentUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99ADD251DB361BE00A34C8D /* CurrentUser.swift */; };
-		A99B9E2B1DB53CB40047360D /* AWSEducation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99B9E2A1DB53CB40047360D /* AWSEducation.swift */; };
-		A99B9E2D1DB53D8C0047360D /* AWSEducationsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99B9E2C1DB53D8C0047360D /* AWSEducationsTable.swift */; };
-		A99B9E2F1DB53DFC0047360D /* AWSEducationUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99B9E2E1DB53DFC0047360D /* AWSEducationUpdate.swift */; };
-		A99B9E311DB53E370047360D /* Education.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99B9E301DB53E370047360D /* Education.swift */; };
-		A99B9E341DB53FE20047360D /* EditEducation.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A99B9E331DB53FE20047360D /* EditEducation.storyboard */; };
-		A99B9E361DB548F50047360D /* EditEducationTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99B9E351DB548F50047360D /* EditEducationTableViewController.swift */; };
 		A99B9E381DB54A130047360D /* CurrentlyDoingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99B9E371DB54A130047360D /* CurrentlyDoingTableViewCell.swift */; };
 		A99DA01B1E50F37E003AF54E /* ProfileSegmentedControlSectionHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = A99DA01A1E50F37E003AF54E /* ProfileSegmentedControlSectionHeader.xib */; };
 		A99DA01D1E50F3BF003AF54E /* ProfileSegmentedControlSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99DA01C1E50F3BF003AF54E /* ProfileSegmentedControlSectionHeader.swift */; };
@@ -150,11 +144,6 @@
 		A9AA36391D947C4E00E5EAFA /* LogInTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AA36381D947C4E00E5EAFA /* LogInTableViewController.swift */; };
 		A9AC8FBE1DBDFDCB00C9BCE0 /* PostDetails.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9AC8FBD1DBDFDCB00C9BCE0 /* PostDetails.storyboard */; };
 		A9AC8FC01DBDFF5200C9BCE0 /* PostDetailsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AC8FBF1DBDFF5200C9BCE0 /* PostDetailsTableViewController.swift */; };
-		A9ACA7411DB506A50004B8DE /* AWSWorkExperience.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9ACA7401DB506A50004B8DE /* AWSWorkExperience.swift */; };
-		A9ACA7451DB508540004B8DE /* AWSWorkExperiencesTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9ACA7441DB508540004B8DE /* AWSWorkExperiencesTable.swift */; };
-		A9ACA7471DB508BB0004B8DE /* AWSWorkExperienceUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9ACA7461DB508BB0004B8DE /* AWSWorkExperienceUpdate.swift */; };
-		A9ACA7491DB50AF40004B8DE /* WorkExperience.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9ACA7481DB50AF40004B8DE /* WorkExperience.swift */; };
-		A9ACF1891D927E1E00A99B7F /* Experiences.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9ACF1881D927E1E00A99B7F /* Experiences.storyboard */; };
 		A9AFFB061D8AD9DE00219627 /* SearchUserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AFFB051D8AD9DE00219627 /* SearchUserTableViewCell.swift */; };
 		A9AFFB081D8AFE0C00219627 /* Professions.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9AFFB071D8AFE0C00219627 /* Professions.storyboard */; };
 		A9AFFB0D1D8AFEB800219627 /* Categories.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9AFFB0C1D8AFEB800219627 /* Categories.storyboard */; };
@@ -192,19 +181,6 @@
 		A9C88E5C1E22698200B7D2E7 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C88E5B1E22698200B7D2E7 /* Message.swift */; };
 		A9C88E611E22782700B7D2E7 /* AWSMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C88E601E22782700B7D2E7 /* AWSMessage.swift */; };
 		A9C88E631E22783200B7D2E7 /* AWSMessagesTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C88E621E22783200B7D2E7 /* AWSMessagesTable.swift */; };
-		A9CBBC451DB634A8009C8EC7 /* EditWorkExperienceTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CBBC441DB634A8009C8EC7 /* EditWorkExperienceTableViewController.swift */; };
-		A9CBBC471DB634C0009C8EC7 /* EditWorkExperience.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9CBBC461DB634C0009C8EC7 /* EditWorkExperience.storyboard */; };
-		A9CBBC501DB63FDD009C8EC7 /* EditWorkTitleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CBBC4F1DB63FDD009C8EC7 /* EditWorkTitleTableViewCell.swift */; };
-		A9CBBC521DB63FEA009C8EC7 /* EditWorkOrganizationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CBBC511DB63FEA009C8EC7 /* EditWorkOrganizationTableViewCell.swift */; };
-		A9CBBC541DB63FF6009C8EC7 /* EditWorkDescriptionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CBBC531DB63FF6009C8EC7 /* EditWorkDescriptionTableViewCell.swift */; };
-		A9CBBC561DB64A0E009C8EC7 /* EditEducationSchoolTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CBBC551DB64A0E009C8EC7 /* EditEducationSchoolTableViewCell.swift */; };
-		A9CBBC581DB64A2B009C8EC7 /* EditEducationFieldOfStudyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CBBC571DB64A2B009C8EC7 /* EditEducationFieldOfStudyTableViewCell.swift */; };
-		A9CBBC5A1DB6515A009C8EC7 /* WorkExperienceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CBBC591DB6515A009C8EC7 /* WorkExperienceTableViewCell.swift */; };
-		A9CBBC5C1DB651BD009C8EC7 /* ExperiencesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CBBC5B1DB651BD009C8EC7 /* ExperiencesTableViewController.swift */; };
-		A9CBBC601DB6610E009C8EC7 /* ExperiencesTableSectionHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9CBBC5F1DB6610E009C8EC7 /* ExperiencesTableSectionHeader.xib */; };
-		A9CBBC621DB66134009C8EC7 /* ExperiencesTableSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CBBC611DB66134009C8EC7 /* ExperiencesTableSectionHeader.swift */; };
-		A9CBBC641DB66856009C8EC7 /* EducationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CBBC631DB66856009C8EC7 /* EducationTableViewCell.swift */; };
-		A9CBBC661DB669EA009C8EC7 /* EditEducationDescriptionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CBBC651DB669EA009C8EC7 /* EditEducationDescriptionTableViewCell.swift */; };
 		A9D100631E0C4308006590F8 /* EditUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D100621E0C4308006590F8 /* EditUser.swift */; };
 		A9D100651E0C442A006590F8 /* SchoolUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D100641E0C442A006590F8 /* SchoolUser.swift */; };
 		A9D100671E0C4744006590F8 /* FullUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D100661E0C4744006590F8 /* FullUser.swift */; };
@@ -233,10 +209,8 @@
 		A9D962291DE77180008EA0DF /* AWSMobileClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D962281DE77180008EA0DF /* AWSMobileClient.swift */; };
 		A9D97BF81D95718C00D6F22E /* WelcomeProfessionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D97BF71D95718C00D6F22E /* WelcomeProfessionsTableViewController.swift */; };
 		A9DA6A061E335EE700B7CE3E /* ProfileTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9DA6A051E335EE700B7CE3E /* ProfileTableViewController.swift */; };
-		A9DA6A121E3394C100B7CE3E /* Experience.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9DA6A111E3394C100B7CE3E /* Experience.swift */; };
 		A9DBC6341E1139F00087CB19 /* FollowersFollowing.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9DBC6331E1139F00087CB19 /* FollowersFollowing.storyboard */; };
 		A9DBC6361E113A6B0087CB19 /* FollowersFollowingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9DBC6351E113A6B0087CB19 /* FollowersFollowingViewController.swift */; };
-		A9DC89371E34B14B00B9D213 /* ExperiencesHeaderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9DC89361E34B14B00B9D213 /* ExperiencesHeaderTableViewCell.swift */; };
 		A9DC893B1E34D1C400B9D213 /* NoNetworkTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9DC893A1E34D1C400B9D213 /* NoNetworkTableViewCell.swift */; };
 		A9DC893D1E34F19600B9D213 /* HomeNoNetworkView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9DC893C1E34F19600B9D213 /* HomeNoNetworkView.xib */; };
 		A9DC893F1E34F26900B9D213 /* HomeNoNetworkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9DC893E1E34F26900B9D213 /* HomeNoNetworkView.swift */; };
@@ -418,12 +392,6 @@
 		A999CD441DBE829F00E7ADB1 /* SearchTableSectionHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SearchTableSectionHeader.xib; sourceTree = "<group>"; };
 		A999CD471DBE93D400E7ADB1 /* ProfessionTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfessionTableViewController.swift; sourceTree = "<group>"; };
 		A99ADD251DB361BE00A34C8D /* CurrentUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrentUser.swift; sourceTree = "<group>"; };
-		A99B9E2A1DB53CB40047360D /* AWSEducation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSEducation.swift; sourceTree = "<group>"; };
-		A99B9E2C1DB53D8C0047360D /* AWSEducationsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSEducationsTable.swift; sourceTree = "<group>"; };
-		A99B9E2E1DB53DFC0047360D /* AWSEducationUpdate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSEducationUpdate.swift; sourceTree = "<group>"; };
-		A99B9E301DB53E370047360D /* Education.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Education.swift; sourceTree = "<group>"; };
-		A99B9E331DB53FE20047360D /* EditEducation.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = EditEducation.storyboard; sourceTree = "<group>"; };
-		A99B9E351DB548F50047360D /* EditEducationTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditEducationTableViewController.swift; sourceTree = "<group>"; };
 		A99B9E371DB54A130047360D /* CurrentlyDoingTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrentlyDoingTableViewCell.swift; sourceTree = "<group>"; };
 		A99DA01A1E50F37E003AF54E /* ProfileSegmentedControlSectionHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProfileSegmentedControlSectionHeader.xib; sourceTree = "<group>"; };
 		A99DA01C1E50F3BF003AF54E /* ProfileSegmentedControlSectionHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileSegmentedControlSectionHeader.swift; sourceTree = "<group>"; };
@@ -443,11 +411,6 @@
 		A9AA36381D947C4E00E5EAFA /* LogInTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogInTableViewController.swift; sourceTree = "<group>"; };
 		A9AC8FBD1DBDFDCB00C9BCE0 /* PostDetails.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = PostDetails.storyboard; sourceTree = "<group>"; };
 		A9AC8FBF1DBDFF5200C9BCE0 /* PostDetailsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostDetailsTableViewController.swift; sourceTree = "<group>"; };
-		A9ACA7401DB506A50004B8DE /* AWSWorkExperience.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSWorkExperience.swift; sourceTree = "<group>"; };
-		A9ACA7441DB508540004B8DE /* AWSWorkExperiencesTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSWorkExperiencesTable.swift; sourceTree = "<group>"; };
-		A9ACA7461DB508BB0004B8DE /* AWSWorkExperienceUpdate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSWorkExperienceUpdate.swift; sourceTree = "<group>"; };
-		A9ACA7481DB50AF40004B8DE /* WorkExperience.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorkExperience.swift; sourceTree = "<group>"; };
-		A9ACF1881D927E1E00A99B7F /* Experiences.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Experiences.storyboard; sourceTree = "<group>"; };
 		A9AFFB051D8AD9DE00219627 /* SearchUserTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchUserTableViewCell.swift; sourceTree = "<group>"; };
 		A9AFFB071D8AFE0C00219627 /* Professions.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Professions.storyboard; sourceTree = "<group>"; };
 		A9AFFB0C1D8AFEB800219627 /* Categories.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Categories.storyboard; sourceTree = "<group>"; };
@@ -486,19 +449,6 @@
 		A9C88E5B1E22698200B7D2E7 /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		A9C88E601E22782700B7D2E7 /* AWSMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSMessage.swift; sourceTree = "<group>"; };
 		A9C88E621E22783200B7D2E7 /* AWSMessagesTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSMessagesTable.swift; sourceTree = "<group>"; };
-		A9CBBC441DB634A8009C8EC7 /* EditWorkExperienceTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditWorkExperienceTableViewController.swift; sourceTree = "<group>"; };
-		A9CBBC461DB634C0009C8EC7 /* EditWorkExperience.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = EditWorkExperience.storyboard; sourceTree = "<group>"; };
-		A9CBBC4F1DB63FDD009C8EC7 /* EditWorkTitleTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditWorkTitleTableViewCell.swift; sourceTree = "<group>"; };
-		A9CBBC511DB63FEA009C8EC7 /* EditWorkOrganizationTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditWorkOrganizationTableViewCell.swift; sourceTree = "<group>"; };
-		A9CBBC531DB63FF6009C8EC7 /* EditWorkDescriptionTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditWorkDescriptionTableViewCell.swift; sourceTree = "<group>"; };
-		A9CBBC551DB64A0E009C8EC7 /* EditEducationSchoolTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditEducationSchoolTableViewCell.swift; sourceTree = "<group>"; };
-		A9CBBC571DB64A2B009C8EC7 /* EditEducationFieldOfStudyTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditEducationFieldOfStudyTableViewCell.swift; sourceTree = "<group>"; };
-		A9CBBC591DB6515A009C8EC7 /* WorkExperienceTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorkExperienceTableViewCell.swift; sourceTree = "<group>"; };
-		A9CBBC5B1DB651BD009C8EC7 /* ExperiencesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExperiencesTableViewController.swift; sourceTree = "<group>"; };
-		A9CBBC5F1DB6610E009C8EC7 /* ExperiencesTableSectionHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ExperiencesTableSectionHeader.xib; sourceTree = "<group>"; };
-		A9CBBC611DB66134009C8EC7 /* ExperiencesTableSectionHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExperiencesTableSectionHeader.swift; sourceTree = "<group>"; };
-		A9CBBC631DB66856009C8EC7 /* EducationTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EducationTableViewCell.swift; sourceTree = "<group>"; };
-		A9CBBC651DB669EA009C8EC7 /* EditEducationDescriptionTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditEducationDescriptionTableViewCell.swift; sourceTree = "<group>"; };
 		A9D100621E0C4308006590F8 /* EditUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditUser.swift; sourceTree = "<group>"; };
 		A9D100641E0C442A006590F8 /* SchoolUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchoolUser.swift; sourceTree = "<group>"; };
 		A9D100661E0C4744006590F8 /* FullUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FullUser.swift; sourceTree = "<group>"; };
@@ -527,10 +477,8 @@
 		A9D962281DE77180008EA0DF /* AWSMobileClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSMobileClient.swift; sourceTree = "<group>"; };
 		A9D97BF71D95718C00D6F22E /* WelcomeProfessionsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeProfessionsTableViewController.swift; sourceTree = "<group>"; };
 		A9DA6A051E335EE700B7CE3E /* ProfileTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileTableViewController.swift; sourceTree = "<group>"; };
-		A9DA6A111E3394C100B7CE3E /* Experience.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Experience.swift; sourceTree = "<group>"; };
 		A9DBC6331E1139F00087CB19 /* FollowersFollowing.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = FollowersFollowing.storyboard; sourceTree = "<group>"; };
 		A9DBC6351E113A6B0087CB19 /* FollowersFollowingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FollowersFollowingViewController.swift; sourceTree = "<group>"; };
-		A9DC89361E34B14B00B9D213 /* ExperiencesHeaderTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExperiencesHeaderTableViewCell.swift; sourceTree = "<group>"; };
 		A9DC893A1E34D1C400B9D213 /* NoNetworkTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoNetworkTableViewCell.swift; sourceTree = "<group>"; };
 		A9DC893C1E34F19600B9D213 /* HomeNoNetworkView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HomeNoNetworkView.xib; sourceTree = "<group>"; };
 		A9DC893E1E34F26900B9D213 /* HomeNoNetworkView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeNoNetworkView.swift; sourceTree = "<group>"; };
@@ -982,28 +930,6 @@
 			name = Profession;
 			sourceTree = "<group>";
 		};
-		A99B9E291DB53C8D0047360D /* AWSEducations */ = {
-			isa = PBXGroup;
-			children = (
-				A99B9E2A1DB53CB40047360D /* AWSEducation.swift */,
-				A99B9E2E1DB53DFC0047360D /* AWSEducationUpdate.swift */,
-				A99B9E2C1DB53D8C0047360D /* AWSEducationsTable.swift */,
-			);
-			name = AWSEducations;
-			sourceTree = "<group>";
-		};
-		A99B9E321DB53FCB0047360D /* Edit Education */ = {
-			isa = PBXGroup;
-			children = (
-				A99B9E331DB53FE20047360D /* EditEducation.storyboard */,
-				A99B9E351DB548F50047360D /* EditEducationTableViewController.swift */,
-				A9CBBC551DB64A0E009C8EC7 /* EditEducationSchoolTableViewCell.swift */,
-				A9CBBC571DB64A2B009C8EC7 /* EditEducationFieldOfStudyTableViewCell.swift */,
-				A9CBBC651DB669EA009C8EC7 /* EditEducationDescriptionTableViewCell.swift */,
-			);
-			name = "Edit Education";
-			sourceTree = "<group>";
-		};
 		A9A196191DDC63EE008D6494 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
@@ -1028,9 +954,6 @@
 				A9B7A2431D65A562009DA340 /* Category.swift */,
 				A9E3DD421D86A42400DED8C8 /* Profession.swift */,
 				A940A1CD1E6B36FD00A39B73 /* School.swift */,
-				A9DA6A111E3394C100B7CE3E /* Experience.swift */,
-				A9ACA7481DB50AF40004B8DE /* WorkExperience.swift */,
-				A99B9E301DB53E370047360D /* Education.swift */,
 				A91C1CD81DEDA8C2006FBDD4 /* PRFYNotification.swift */,
 				A9C88E5B1E22698200B7D2E7 /* Message.swift */,
 				A943687F1E23AB480009F4EA /* Conversation.swift */,
@@ -1071,29 +994,6 @@
 				A9E9DC601E16DB3B00FE7C3B /* GridView.swift */,
 			);
 			name = Preview;
-			sourceTree = "<group>";
-		};
-		A9ACA73F1DB506910004B8DE /* AWSWorkExperiences */ = {
-			isa = PBXGroup;
-			children = (
-				A9ACA7401DB506A50004B8DE /* AWSWorkExperience.swift */,
-				A9ACA7461DB508BB0004B8DE /* AWSWorkExperienceUpdate.swift */,
-				A9ACA7441DB508540004B8DE /* AWSWorkExperiencesTable.swift */,
-			);
-			name = AWSWorkExperiences;
-			sourceTree = "<group>";
-		};
-		A9ACF1871D927DF400A99B7F /* Experiences */ = {
-			isa = PBXGroup;
-			children = (
-				A9ACF1881D927E1E00A99B7F /* Experiences.storyboard */,
-				A9CBBC5F1DB6610E009C8EC7 /* ExperiencesTableSectionHeader.xib */,
-				A9CBBC5B1DB651BD009C8EC7 /* ExperiencesTableViewController.swift */,
-				A9CBBC611DB66134009C8EC7 /* ExperiencesTableSectionHeader.swift */,
-				A9CBBC591DB6515A009C8EC7 /* WorkExperienceTableViewCell.swift */,
-				A9CBBC631DB66856009C8EC7 /* EducationTableViewCell.swift */,
-			);
-			name = Experiences;
 			sourceTree = "<group>";
 		};
 		A9AFFB0B1D8AFE8B00219627 /* Categories */ = {
@@ -1167,18 +1067,6 @@
 				A9C88E621E22783200B7D2E7 /* AWSMessagesTable.swift */,
 			);
 			name = AWSMessages;
-			sourceTree = "<group>";
-		};
-		A9CBBC431DB6348C009C8EC7 /* Edit Work Experience */ = {
-			isa = PBXGroup;
-			children = (
-				A9CBBC461DB634C0009C8EC7 /* EditWorkExperience.storyboard */,
-				A9CBBC441DB634A8009C8EC7 /* EditWorkExperienceTableViewController.swift */,
-				A9CBBC4F1DB63FDD009C8EC7 /* EditWorkTitleTableViewCell.swift */,
-				A9CBBC511DB63FEA009C8EC7 /* EditWorkOrganizationTableViewCell.swift */,
-				A9CBBC531DB63FF6009C8EC7 /* EditWorkDescriptionTableViewCell.swift */,
-			);
-			name = "Edit Work Experience";
 			sourceTree = "<group>";
 		};
 		A9CC71A81DEB44DE0054DA93 /* DynamoDB */ = {
@@ -1300,9 +1188,6 @@
 				A9E53B651D1065FB00CD1D6C /* Notifications */,
 				A9E53B661D10660200CD1D6C /* Profile */,
 				A967FFCB1D25213F00AE4E24 /* Edit Profile */,
-				A9ACF1871D927DF400A99B7F /* Experiences */,
-				A9CBBC431DB6348C009C8EC7 /* Edit Work Experience */,
-				A99B9E321DB53FCB0047360D /* Edit Education */,
 				A9D49EE11DD5D8E0000F90A8 /* User Category */,
 				A9B70C9D1D871CBA00B9882A /* Post Details */,
 				A9543CA91DA3A1CC002BF372 /* Edit Post */,
@@ -1360,7 +1245,6 @@
 				A90146E31DB2662E0092ED21 /* ProfileMainTableViewCell.swift */,
 				A90146E51DB27C580092ED21 /* ProfileInfoTableViewCell.swift */,
 				A9D716A81D57486100300135 /* PostSmallTableViewCell.swift */,
-				A9DC89361E34B14B00B9D213 /* ExperiencesHeaderTableViewCell.swift */,
 				A9D49EDD1DD5C583000F90A8 /* UserCategoryTableViewCell.swift */,
 				A9D49EE61DD5F58B000F90A8 /* ProfileEmptyTableViewCell.swift */,
 			);
@@ -1386,8 +1270,6 @@
 				A91A7B021DC4FA7C00F7D6A7 /* AWSComments */,
 				A9193A2F1D6F130700E38F56 /* AWSRelationships */,
 				A98A38221D8C070A00C9CA75 /* AWSUserCategories */,
-				A9ACA73F1DB506910004B8DE /* AWSWorkExperiences */,
-				A99B9E291DB53C8D0047360D /* AWSEducations */,
 				A91C1CD11DED9C5B006FBDD4 /* AWSNotifications */,
 				A9D6086E1E2A80BF00AD8C16 /* AWSNotificationsCounters */,
 				A97A3F631DF0271000FC5AEA /* AWSEndpointUsers */,
@@ -1530,19 +1412,15 @@
 				A944BAAA1DD10323000BE754 /* HomeEmptyFeedView.xib in Resources */,
 				A9A57B2A1DD1CB92004F0177 /* DiscoverPeople.storyboard in Resources */,
 				A9E53B6F1D10667B00CD1D6C /* Notifications.storyboard in Resources */,
-				A99B9E341DB53FE20047360D /* EditEducation.storyboard in Resources */,
 				A990ECB31D6A576E00C3C9CE /* Users.storyboard in Resources */,
 				A9C071D21E3562CB00A27D42 /* SettingsTableSectionHeader.xib in Resources */,
 				A9D49EE31DD5D920000F90A8 /* UserCategory.storyboard in Resources */,
 				A9D3DFEC1E4090C200202E60 /* CameraNoAccessView.xib in Resources */,
-				A9CBBC471DB634C0009C8EC7 /* EditWorkExperience.storyboard in Resources */,
 				A9459F701E00196100978DA8 /* TableSectionHeader.xib in Resources */,
-				A9ACF1891D927E1E00A99B7F /* Experiences.storyboard in Resources */,
 				A9E53B691D10665100CD1D6C /* Home.storyboard in Resources */,
 				A9AC8FBE1DBDFDCB00C9BCE0 /* PostDetails.storyboard in Resources */,
 				A999CD451DBE829F00E7ADB1 /* SearchTableSectionHeader.xib in Resources */,
 				A96B31131E65B4A8005B0B12 /* Request.storyboard in Resources */,
-				A9CBBC601DB6610E009C8EC7 /* ExperiencesTableSectionHeader.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1582,14 +1460,9 @@
 				A99030FD1D46634600336D26 /* AlbumTableViewCell.swift in Sources */,
 				A98B42E11D43C95A0089A769 /* ProfessionTableViewCell.swift in Sources */,
 				A9B7A2441D65A562009DA340 /* Category.swift in Sources */,
-				A9CBBC621DB66134009C8EC7 /* ExperiencesTableSectionHeader.swift in Sources */,
-				A9CBBC581DB64A2B009C8EC7 /* EditEducationFieldOfStudyTableViewCell.swift in Sources */,
 				A943687A1E239E6C0009F4EA /* ConversationsTableViewController.swift in Sources */,
 				A940A1CC1E6B365900A39B73 /* AWSSchoolsTable.swift in Sources */,
 				A9C88E611E22782700B7D2E7 /* AWSMessage.swift in Sources */,
-				A9CBBC451DB634A8009C8EC7 /* EditWorkExperienceTableViewController.swift in Sources */,
-				A99B9E2F1DB53DFC0047360D /* AWSEducationUpdate.swift in Sources */,
-				A9CBBC5C1DB651BD009C8EC7 /* ExperiencesTableViewController.swift in Sources */,
 				A9D716A91D57486100300135 /* PostSmallTableViewCell.swift in Sources */,
 				A9C88E581E225F7B00B7D2E7 /* MessagesViewController.swift in Sources */,
 				A931E25C1E262C75006F175A /* OwnMessageTableViewCell.swift in Sources */,
@@ -1607,7 +1480,6 @@
 				A9BB471F1E325277007CBA69 /* EditPostTableViewController.swift in Sources */,
 				A99DA01D1E50F3BF003AF54E /* ProfileSegmentedControlSectionHeader.swift in Sources */,
 				A9A5039F1D2FE0810030A472 /* AWSUser.swift in Sources */,
-				A9CBBC5A1DB6515A009C8EC7 /* WorkExperienceTableViewCell.swift in Sources */,
 				A990ECB51D6A582100C3C9CE /* UserTableViewCell.swift in Sources */,
 				A928CCB81E369B7C0030ACA9 /* VerifyEmailTableViewController.swift in Sources */,
 				A9B750011D8782C200DDC8C8 /* AWSActivity.swift in Sources */,
@@ -1620,12 +1492,10 @@
 				A9B7A24A1D65D8C0009DA340 /* HomeTableViewController.swift in Sources */,
 				A9AA36371D9463E100E5EAFA /* SignUpTableViewController.swift in Sources */,
 				A9F49D5A1D379D70002EB68B /* AWSPostsTable.swift in Sources */,
-				A9DC89371E34B14B00B9D213 /* ExperiencesHeaderTableViewCell.swift in Sources */,
 				A943494F1E38FF2F004E96BF /* PostCategoryCreatedTableViewCell.swift in Sources */,
 				A9C88E5C1E22698200B7D2E7 /* Message.swift in Sources */,
 				A91C1CD51DED9D85006FBDD4 /* AWSNotificationsTable.swift in Sources */,
 				A99ADD261DB361BE00A34C8D /* CurrentUser.swift in Sources */,
-				A9ACA7451DB508540004B8DE /* AWSWorkExperiencesTable.swift in Sources */,
 				A9E9DC611E16DB3B00FE7C3B /* GridView.swift in Sources */,
 				A91A35241D1C26E6006F22B2 /* FullScreenIndicator.swift in Sources */,
 				A99984DF1DB6B65B00842E51 /* AddTableViewCell.swift in Sources */,
@@ -1634,14 +1504,11 @@
 				A9D100651E0C442A006590F8 /* SchoolUser.swift in Sources */,
 				A95EB85D1D8FBEAB0039E51D /* DatePickerTableViewCell.swift in Sources */,
 				A9F179E91E61F1AA00A15292 /* ReportHeaderTableViewCell.swift in Sources */,
-				A9CBBC501DB63FDD009C8EC7 /* EditWorkTitleTableViewCell.swift in Sources */,
-				A9ACA7491DB50AF40004B8DE /* WorkExperience.swift in Sources */,
 				A9A503A11D2FE0A90030A472 /* AWSUsersTable.swift in Sources */,
 				A9D49EE01DD5C834000F90A8 /* UserCategory.swift in Sources */,
 				A9F179EE1E62020F00A15292 /* AWSReport.swift in Sources */,
 				A913FC701D51F6AF000D10A6 /* DynamoDBManager.swift in Sources */,
 				A9D49EDE1DD5C583000F90A8 /* UserCategoryTableViewCell.swift in Sources */,
-				A9CBBC641DB66856009C8EC7 /* EducationTableViewCell.swift in Sources */,
 				A91828451DC0E49800EC9E63 /* SchoolTableViewCell.swift in Sources */,
 				A98A38241D8C076C00C9CA75 /* AWSUserCategory.swift in Sources */,
 				A943687E1E23AB260009F4EA /* ConversationTableViewCell.swift in Sources */,
@@ -1651,7 +1518,6 @@
 				A9B68DA11D897A24006AC4EA /* EmptyTableViewCell.swift in Sources */,
 				A91C1CD31DED9C75006FBDD4 /* AWSNotification.swift in Sources */,
 				A999CD411DBE6FB000E7ADB1 /* SearchProfessionTableViewCell.swift in Sources */,
-				A9CBBC541DB63FF6009C8EC7 /* EditWorkDescriptionTableViewCell.swift in Sources */,
 				A92A86BE1E606E1300EB0162 /* ReportConfirmationTableViewController.swift in Sources */,
 				A9D185D91D71927E0073E65F /* AWSLike.swift in Sources */,
 				A9D450631DCA247B000967E2 /* AWSCommentsTable.swift in Sources */,
@@ -1671,9 +1537,7 @@
 				A944BAAC1DD10413000BE754 /* HomeEmptyFeedView.swift in Sources */,
 				A9D97BF81D95718C00D6F22E /* WelcomeProfessionsTableViewController.swift in Sources */,
 				A94349581E3921CD004E96BF /* NewMessageUserTableViewCell.swift in Sources */,
-				A9CBBC521DB63FEA009C8EC7 /* EditWorkOrganizationTableViewCell.swift in Sources */,
 				A9D100671E0C4744006590F8 /* FullUser.swift in Sources */,
-				A9ACA7471DB508BB0004B8DE /* AWSWorkExperienceUpdate.swift in Sources */,
 				A9E9DC5B1E16C95B00FE7C3B /* PreviewViewController.swift in Sources */,
 				A9E1E73D1E6DA0EF00058B31 /* CategoryNewTableViewCell.swift in Sources */,
 				A9C443C81E375A2B009B6BCE /* AWSEndpointUsersTable.swift in Sources */,
@@ -1694,11 +1558,9 @@
 				A94368781E238A8F0009F4EA /* NotificationsViewController.swift in Sources */,
 				A9E53B731D1067E800CD1D6C /* MainTabBarController.swift in Sources */,
 				A913FC721D51FAD6000D10A6 /* PRFYDynamoDBManager.swift in Sources */,
-				A99B9E2B1DB53CB40047360D /* AWSEducation.swift in Sources */,
 				A9E3DD431D86A42400DED8C8 /* Profession.swift in Sources */,
 				A9A503991D2FA9180030A472 /* LocalService.swift in Sources */,
 				A94368851E23AF5A0009F4EA /* AWSConversationsTable.swift in Sources */,
-				A9CBBC661DB669EA009C8EC7 /* EditEducationDescriptionTableViewCell.swift in Sources */,
 				A9EAEC071DA6A38600DA6A4D /* AWSPostUpdate.swift in Sources */,
 				A9A21DB51D95397A0093F162 /* UsernameTableViewController.swift in Sources */,
 				A9F179F01E62021E00A15292 /* AWSReportsTable.swift in Sources */,
@@ -1711,17 +1573,14 @@
 				A9D608701E2A811D00AD8C16 /* AWSNotificationsCounter.swift in Sources */,
 				A9C071D01E3562B200A27D42 /* SettingsTableSectionHeader.swift in Sources */,
 				A999CD3F1DBE6F9F00E7ADB1 /* SearchProfessionsTableViewController.swift in Sources */,
-				A99B9E311DB53E370047360D /* Education.swift in Sources */,
 				A9D962291DE77180008EA0DF /* AWSMobileClient.swift in Sources */,
 				A9B6A89F1D7F8063001EE407 /* PostUserTableViewCell.swift in Sources */,
 				A9F179EB1E61F1B800A15292 /* ReportTypeTableViewCell.swift in Sources */,
 				A931E25E1E262C81006F175A /* OtherMessageTableViewCell.swift in Sources */,
-				A9DA6A121E3394C100B7CE3E /* Experience.swift in Sources */,
 				A95EB85B1D8FBE870039E51D /* DateTableViewCell.swift in Sources */,
 				A940A1CA1E6B364D00A39B73 /* AWSSchool.swift in Sources */,
 				A940A1D31E6B377300A39B73 /* AWSProfessionSchoolsTable.swift in Sources */,
 				A90E2E031E4CE08000E8D0AE /* CommentsTableSectionHeader.swift in Sources */,
-				A99B9E361DB548F50047360D /* EditEducationTableViewController.swift in Sources */,
 				A9D334081D800D8D005565C2 /* PostImageTableViewCell.swift in Sources */,
 				A9D49EE71DD5F58B000F90A8 /* ProfileEmptyTableViewCell.swift in Sources */,
 				A9FAB36D1D8A114900E871CD /* AWSUserUpdate.swift in Sources */,
@@ -1745,16 +1604,13 @@
 				A999CD431DBE828800E7ADB1 /* SearchTableSectionHeader.swift in Sources */,
 				A9A57B2C1DD1CBB0004F0177 /* DiscoverPeopleTableViewController.swift in Sources */,
 				A940A1CE1E6B36FD00A39B73 /* School.swift in Sources */,
-				A99B9E2D1DB53D8C0047360D /* AWSEducationsTable.swift in Sources */,
 				A96B31151E65B762005B0B12 /* RequestTableViewController.swift in Sources */,
 				A9EC9E391E086EAD00A5F619 /* EditPost.swift in Sources */,
-				A9ACA7411DB506A50004B8DE /* AWSWorkExperience.swift in Sources */,
 				A949A20A1E40BFB800EE8B88 /* CaptureNavigationController.swift in Sources */,
 				A901CFE91DA78FA900C44B26 /* CameraViewController.swift in Sources */,
 				A91C1CD71DEDA669006FBDD4 /* NotificationTableViewCell.swift in Sources */,
 				A9D688851E0AE06500A07D86 /* AWSProfession.swift in Sources */,
 				A97A9AED1D85D0ED00507517 /* ProfessionsTableViewController.swift in Sources */,
-				A9CBBC561DB64A0E009C8EC7 /* EditEducationSchoolTableViewCell.swift in Sources */,
 				A901CFE71DA78DDC00C44B26 /* CaptureScrollViewController.swift in Sources */,
 				A9F179E51E61B7DD00A15292 /* PostReportTableViewCell.swift in Sources */,
 				A96C9AB51D7DADC3007E0B9D /* UploadingTableViewCell.swift in Sources */,

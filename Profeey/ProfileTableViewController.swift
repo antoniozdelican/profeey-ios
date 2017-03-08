@@ -13,7 +13,6 @@ import AWSMobileHubHelper
 
 enum ProfileSegment {
     case posts
-    //case experience
     case skills
 }
 
@@ -36,24 +35,6 @@ class ProfileTableViewController: UITableViewController {
     fileprivate var isLoadingPosts: Bool = false
     fileprivate var lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?
     fileprivate var hasLoadedInitialPosts: Bool = false
-    
-//    fileprivate var isLoadingWorkExperiences: Bool = false
-//    fileprivate var workExperiences: [Experience] = []
-//    fileprivate var hasLoadedInitialWorkExperiences: Bool = false
-//    
-//    fileprivate var isLoadingEducations: Bool = false
-//    fileprivate var educations: [Experience] = []
-//    fileprivate var hasLoadedInitialEducations: Bool = false
-//    
-//    fileprivate var experiences: [Experience] {
-//        return self.workExperiences + self.educations
-//    }
-//    fileprivate var isLoadingExperiences: Bool {
-//        return self.isLoadingWorkExperiences || self.isLoadingEducations
-//    }
-//    fileprivate var hasLoadedInitialExperiences: Bool {
-//        return self.hasLoadedInitialWorkExperiences && self.hasLoadedInitialEducations
-//    }
     
     fileprivate var isLoadingUserCategories: Bool = false
     fileprivate var userCategories: [UserCategory] = []
@@ -151,12 +132,6 @@ class ProfileTableViewController: UITableViewController {
             self.isLoadingPosts = true
             self.tableView.tableFooterView = self.loadingTableFooterView
             self.queryPostsDateSorted(userId, startFromBeginning: true)
-//        case .experience:
-//            self.isLoadingWorkExperiences = true
-//            self.isLoadingEducations = true
-//            self.tableView.tableFooterView = self.loadingTableFooterView
-//            self.queryWorkExperiences(userId)
-//            self.queryEducations(userId)
         case .skills:
             self.isLoadingUserCategories = true
             self.tableView.tableFooterView = self.loadingTableFooterView
@@ -212,15 +187,6 @@ class ProfileTableViewController: UITableViewController {
         if let destinationViewController = segue.destination as? FollowersFollowingViewController {
             destinationViewController.userId = self.user?.userId
         }
-//        if let destinationViewController = segue.destination as? ExperiencesTableViewController {
-//            if let workExperiences = self.workExperiences as? [WorkExperience] {
-//                destinationViewController.workExperiences = workExperiences.map( { $0.copyWorkExperience() })
-//            }
-//            if let educations = self.educations as? [Education] {
-//                destinationViewController.educations = educations.map( { $0.copyEducation() })
-//            }
-//            destinationViewController.experiencesTableViewControllerDelegate = self
-//        }
         if let destinationViewController = segue.destination as? PostDetailsViewController,
             let cell = sender as? PostSmallTableViewCell,
             let indexPath = self.tableView.indexPath(for: cell) {
@@ -277,21 +243,6 @@ class ProfileTableViewController: UITableViewController {
                 return 1
             }
             return self.posts.count
-//        case .experience:
-//            if self.isLoadingExperiences {
-//                return 0
-//            }
-//            if self.experiences.count == 0 || self.isBlocking || self.amIBlocked {
-//                return 1
-//            }
-//            var experiencesCount = self.experiences.count
-//            if self.workExperiences.count > 0 {
-//                experiencesCount += 1
-//            }
-//            if self.educations.count > 0 {
-//                experiencesCount += 1
-//            }
-//            return experiencesCount
         case .skills:
             if !self.isLoadingUserCategories && self.userCategories.count == 0 || self.isBlocking || self.amIBlocked {
                 return 1
@@ -367,81 +318,6 @@ class ProfileTableViewController: UITableViewController {
             cell.numberOfLikesLabel.text = post.numberOfLikesSmallString
             cell.postSmallTableViewCellDelegate = self
             return cell
-//        case .experience:
-//            if self.experiences.count == 0 || self.isBlocking || self.amIBlocked {
-//                let cell = tableView.dequeueReusableCell(withIdentifier: "cellProfileEmpty", for: indexPath) as! ProfileEmptyTableViewCell
-//                cell.emptyMessageLabel.text = !self.amIBlocked ? "No experiences yet." : "You are blocked from following and viewing this account."
-//                cell.addButton.isHidden = self.isCurrentUser ? false : true
-//                cell.addButtonType = AddButtonType.experience
-//                cell.setAddExperienceButton()
-//                cell.profileEmptyTableViewCellDelegate = self
-//                return cell
-//            }
-//            if self.workExperiences.count > 0 && indexPath.row == 0 {
-//                let cell = tableView.dequeueReusableCell(withIdentifier: "cellExperiencesHeader", for: indexPath) as! ExperiencesHeaderTableViewCell
-//                cell.titleLabel?.text = "WORK EXPERIENCE"
-//                if self.isCurrentUser {
-//                    cell.editButton?.isHidden = false
-//                    cell.experiencesHeaderTableViewCellDelegate = self
-//                } else {
-//                    cell.editButton?.isHidden = true
-//                    cell.experiencesHeaderTableViewCellDelegate = nil
-//                }
-//                return cell
-//            }
-//            if self.educations.count > 0 {
-//                if (self.workExperiences.count > 0 && indexPath.row == self.workExperiences.count + 1) || (self.workExperiences.count == 0 && indexPath.row == 0) {
-//                    let cell = tableView.dequeueReusableCell(withIdentifier: "cellExperiencesHeader", for: indexPath) as! ExperiencesHeaderTableViewCell
-//                    cell.titleLabel?.text = "EDUCATION"
-//                    if self.isCurrentUser {
-//                        cell.editButton?.isHidden = false
-//                        cell.experiencesHeaderTableViewCellDelegate = self
-//                    } else {
-//                        cell.editButton?.isHidden = true
-//                        cell.experiencesHeaderTableViewCellDelegate = nil
-//                    }
-//                    return cell
-//                }
-//            }
-//            // Calculating where are the headers and where experiences.
-//            var index: Int
-//            if self.workExperiences.count > 0 {
-//                if indexPath.row <= self.workExperiences.count {
-//                    index = indexPath.row - 1
-//                } else {
-//                    index = indexPath.row - 2
-//                }
-//            } else {
-//                index = indexPath.row - 1
-//            }
-//            // Configure experiences cells.
-//            let experience = self.experiences[index]
-//            if let experienceType = experience.experienceType, experienceType == .workExperience, let workExperience = experience as? WorkExperience {
-//                let cell = tableView.dequeueReusableCell(withIdentifier: "cellWorkExperience", for: indexPath) as! WorkExperienceTableViewCell
-//                cell.titleLabel.text = workExperience.title
-//                cell.organizationLabel.text = workExperience.organization
-//                cell.timePeriodLabel.text = workExperience.timePeriod
-//                cell.workDescriptionLabel.text = workExperience.workDescription
-//                workExperience.isExpandedWorkDescription ? cell.untruncate() : cell.truncate()
-//                cell.workExperienceTableViewCellDelegate = self
-////                cell.separatorViewLeftConstraint?.constant = (indexPath.row == self.workExperiences.count) ? 0.0 : 12.0
-//                cell.separatorView.backgroundColor = (indexPath.row == self.workExperiences.count) ? UIColor.clear : Colors.greyLighter
-//                return cell
-//            } else if let experienceType = experience.experienceType, experienceType == .education, let education = experience as? Education {
-//                let cell = tableView.dequeueReusableCell(withIdentifier: "cellEducation", for: indexPath) as! EducationTableViewCell
-//                cell.schoolLabel.text = education.school
-//                cell.fieldOfStudyLabel.text = education.fieldOfStudy
-//                cell.timePeriodLabel.text = education.timePeriod
-//                cell.educationDescriptionLabel.text = education.educationDescription
-//                education.isExpandedEducationDescription ? cell.untruncate() : cell.truncate()
-//                cell.educationTableViewCellDelegate = self
-//                let lastIndex = (self.workExperiences.count > 0) ? self.experiences.count + 1 : self.experiences.count
-////                cell.separatorViewLeftConstraint?.constant = (indexPath.row == lastIndex) ? 0.0 : 12.0
-//                cell.separatorView.backgroundColor = (indexPath.row == lastIndex) ? UIColor.clear : Colors.greyLighter
-//                return cell
-//            } else {
-//                return UITableViewCell()
-//            }
         case .skills:
             if self.userCategories.count == 0 || self.isBlocking || self.amIBlocked {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellProfileEmpty", for: indexPath) as! ProfileEmptyTableViewCell
@@ -477,8 +353,6 @@ class ProfileTableViewController: UITableViewController {
             }
             // Reset variables.
             self.hasLoadedInitialPosts = false
-//            self.hasLoadedInitialWorkExperiences = false
-//            self.hasLoadedInitialEducations = false
             self.hasLoadedInitialUserCategories = false
             // Query user.
             self.isLoadingUser = true
@@ -489,12 +363,6 @@ class ProfileTableViewController: UITableViewController {
                 self.isLoadingPosts = true
                 self.tableView.tableFooterView = self.loadingTableFooterView
                 self.queryPostsDateSorted(userId, startFromBeginning: true)
-//            case .experience:
-//                self.isLoadingWorkExperiences = true
-//                self.isLoadingEducations = true
-//                self.tableView.tableFooterView = self.loadingTableFooterView
-//                self.queryWorkExperiences(userId)
-//                self.queryEducations(userId)
             case .skills:
                 self.isLoadingUserCategories = true
                 self.tableView.tableFooterView = self.loadingTableFooterView
@@ -541,14 +409,6 @@ class ProfileTableViewController: UITableViewController {
                 return 112.0
             }
             return 112.0
-//        case .experience:
-//            if self.experiences.count == 0 || self.isBlocking || self.amIBlocked {
-//                return 112.0
-//            }
-//            if (indexPath.row == 0) || (self.workExperiences.count > 0 && indexPath.row == self.workExperiences.count + 1) {
-//                return 40.0
-//            }
-//            return 105.0
         case .skills:
             if self.userCategories.count == 0 || self.isBlocking || self.amIBlocked {
                 return 112.0
@@ -575,14 +435,6 @@ class ProfileTableViewController: UITableViewController {
                 return 112.0
             }
             return 112.0
-//        case .experience:
-//            if self.experiences.count == 0 || self.isBlocking || self.amIBlocked {
-//                return 112.0
-//            }
-//            if (indexPath.row == 0) || (self.workExperiences.count > 0 && indexPath.row == self.workExperiences.count + 1) {
-//                return 40.0
-//            }
-//            return UITableViewAutomaticDimension
         case .skills:
             if self.userCategories.count == 0 || self.isBlocking || self.amIBlocked {
                 return 112.0
@@ -690,15 +542,6 @@ class ProfileTableViewController: UITableViewController {
             }
             self.isLoadingPosts = true
             self.queryPostsDateSorted(userId, startFromBeginning: true)
-//        case .experience:
-//            guard !self.isLoadingExperiences else {
-//                self.refreshControl?.endRefreshing()
-//                return
-//            }
-//            self.isLoadingWorkExperiences = true
-//            self.isLoadingEducations = true
-//            self.queryWorkExperiences(userId)
-//            self.queryEducations(userId)
         case .skills:
             guard !self.isLoadingUserCategories else {
                 self.refreshControl?.endRefreshing()
@@ -1495,13 +1338,6 @@ extension ProfileTableViewController: ProfileSegmentedControlSectionHeaderDelega
     }
 }
 
-extension ProfileTableViewController: ExperiencesHeaderTableViewCellDelegate {
-    
-    func editButtonTapped() {
-        self.performSegue(withIdentifier: "segueToExperiencesVc", sender: self)
-    }
-}
-
 extension ProfileTableViewController: ProfileEmptyTableViewCellDelegate {
     
     func addButtonTapped(_ addButtonType: AddButtonType) {
@@ -1516,8 +1352,6 @@ extension ProfileTableViewController: ProfileEmptyTableViewCellDelegate {
             } else {
                 self.performSegue(withIdentifier: "segueToCaptureVc", sender: self)
             }
-        case .experience:
-            self.performSegue(withIdentifier: "segueToExperiencesVc", sender: self)
         }
     }
 }
