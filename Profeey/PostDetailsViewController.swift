@@ -72,7 +72,6 @@ class PostDetailsViewController: UIViewController {
     }
     
     // Awesome! Hides and shows bottomBar only for this Vc.
-    
     override var hidesBottomBarWhenPushed: Bool {
         get {
             return navigationController?.topViewController == self

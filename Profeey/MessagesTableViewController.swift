@@ -470,3 +470,10 @@ extension MessagesTableViewController: OtherMessageTableViewCellDelegate {
         self.performSegue(withIdentifier: "segueToProfileVc", sender: cell)
     }
 }
+
+extension MessagesTableViewController: MessagesViewControllerDelegate {
+    
+    func toggleTableViewContentOffsetY(_ offsetY: CGFloat) {
+        // TODO
+    }
+}

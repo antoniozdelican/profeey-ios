@@ -10,6 +10,10 @@ import UIKit
 import AWSMobileHubHelper
 import AWSDynamoDB
 
+protocol MessagesViewControllerDelegate: class {
+    func toggleTableViewContentOffsetY(_ offsetY: CGFloat)
+}
+
 class MessagesViewController: UIViewController {
     
     @IBOutlet weak var messageTextView: UITextView!
@@ -46,9 +50,9 @@ class MessagesViewController: UIViewController {
     
     fileprivate var messageBarBottomConstraintConstant: CGFloat = 0.0
     fileprivate var messageBarHeightConstraintConstant: CGFloat = 49.0
-    fileprivate var tabBarHeight: CGFloat = 49.0
     // Top + Bottom padding between textView and message bar view.
     fileprivate var messageBarTopBottomPadding: CGFloat = 13.0
+    fileprivate weak var messagesViewControllerDelegate: MessagesViewControllerDelegate?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -75,14 +79,21 @@ class MessagesViewController: UIViewController {
         super.didReceiveMemoryWarning()
     }
     
+    // Hides and shows bottomBar only for this Vc.
+    override var hidesBottomBarWhenPushed: Bool {
+        get {
+            return navigationController?.topViewController == self
+        }
+        set {
+            super.hidesBottomBarWhenPushed = newValue
+        }
+    }
+    
     // MARK: Configuration
     
     fileprivate func configureConstants() {
         self.messageBarBottomConstraintConstant = self.messageBarBottomConstraint.constant
         self.messageBarHeightConstraintConstant = self.messageBarHeightConstraint.constant
-        if let height = self.tabBarController?.tabBar.frame.height {
-            self.tabBarHeight = height
-        }
     }
     
     // MARK: Navigation
@@ -92,6 +103,7 @@ class MessagesViewController: UIViewController {
             destinationViewController.conversationId = self.conversationId
             destinationViewController.participant = self.participant // don't need to copy here
             destinationViewController.messagesTableViewControllerDelegate = self
+            self.messagesViewControllerDelegate = destinationViewController
         }
     }
     
@@ -121,7 +133,8 @@ class MessagesViewController: UIViewController {
         let userInfo: NSDictionary = (notification as NSNotification).userInfo! as NSDictionary
         let keyboardSize = (userInfo.object(forKey: UIKeyboardFrameEndUserInfoKey)! as AnyObject).cgRectValue.size
         let duration = userInfo.object(forKey: UIKeyboardAnimationDurationUserInfoKey) as! Double
-        self.messageBarBottomConstraint.constant = keyboardSize.height - self.tabBarHeight
+        self.messageBarBottomConstraint.constant = keyboardSize.height
+        self.messagesViewControllerDelegate?.toggleTableViewContentOffsetY(keyboardSize.height)
         UIView.animate(withDuration: duration, animations: {
             self.view.layoutIfNeeded()
         })
@@ -131,6 +144,7 @@ class MessagesViewController: UIViewController {
         let userInfo: NSDictionary = (notification as NSNotification).userInfo! as NSDictionary
         let duration = userInfo.object(forKey: UIKeyboardAnimationDurationUserInfoKey) as! Double
         self.messageBarBottomConstraint.constant = self.messageBarBottomConstraintConstant
+        self.messagesViewControllerDelegate?.toggleTableViewContentOffsetY(self.messageBarBottomConstraintConstant)
         UIView.animate(withDuration: duration, animations: {
             self.view.layoutIfNeeded()
         })
