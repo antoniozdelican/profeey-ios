@@ -25,7 +25,7 @@ class UserCategoryTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-        self.navigationItem.title = self.userCategory?.categoryName
+        self.navigationItem.title = self.userCategory?.categoryName?.replacingOccurrences(of: "_", with: " ")
         
         if let userId = self.userCategory?.userId, let categoryName = self.userCategory?.categoryName {
             // Query.
