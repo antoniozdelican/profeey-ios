@@ -194,7 +194,7 @@ class WelcomeProfessionsTableViewController: UITableViewController {
     
     @IBAction func skipButtonTapped(_ sender: AnyObject) {
         self.view.endEditing(true)
-        let alertController = UIAlertController(title: "No Area Of Study", message: "Are you sure you want to skip selecting your main field of study? It helps you build a better Profeey profile.", preferredStyle: UIAlertControllerStyle.alert)
+        let alertController = UIAlertController(title: "No Major", message: "Are you sure you want to skip selecting your main field of study? It helps you build a better Profeey profile.", preferredStyle: UIAlertControllerStyle.alert)
         let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil)
         let okAction = UIAlertAction(title: "Skip", style: UIAlertActionStyle.default, handler: {
             (alertAction: UIAlertAction) in

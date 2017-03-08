@@ -88,7 +88,7 @@
         <scene sceneID="LJr-5E-6zZ">
             <objects>
                 <navigationController storyboardIdentifier="dummyCaptureNavigationController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="mGX-QG-puc" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" tag="2" title="" image="ic_camera" id="hqh-jT-SdQ">
+                    <tabBarItem key="tabBarItem" tag="2" title="" id="hqh-jT-SdQ">
                         <inset key="imageInsets" minX="0.0" minY="6" maxX="0.0" maxY="-6"/>
                     </tabBarItem>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="476-Eb-hrs">
@@ -112,7 +112,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="ic_camera" width="24" height="21"/>
         <image name="ic_home" width="25" height="25"/>
         <image name="ic_notifications" width="25" height="25"/>
         <image name="ic_profile" width="25" height="25"/>

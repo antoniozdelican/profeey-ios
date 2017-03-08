@@ -25,7 +25,7 @@
             </objects>
             <point key="canvasLocation" x="2555" y="278"/>
         </scene>
-        <!--Fields Of Study-->
+        <!--Majors-->
         <scene sceneID="rT2-OZ-Nmb">
             <objects>
                 <tableViewController id="Hi8-Ey-38y" customClass="ProfessionsTableViewController" customModule="Profeey" customModuleProvider="target" sceneMemberID="viewController">
@@ -38,7 +38,7 @@
                             <rect key="frame" x="0.0" y="0.0" width="375" height="52"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Search your field of study..." textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="FmP-eY-T18">
+                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Search your major..." textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="FmP-eY-T18">
                                     <rect key="frame" x="16" y="8" width="343" height="36"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="36" id="vrq-9r-bdZ"/>
@@ -197,7 +197,7 @@
                             <outlet property="delegate" destination="Hi8-Ey-38y" id="bUZ-kn-jgh"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Fields Of Study" id="Wog-GS-ett">
+                    <navigationItem key="navigationItem" title="Majors" id="Wog-GS-ett">
                         <barButtonItem key="leftBarButtonItem" image="ic_cancel_x" id="YMO-1N-j0d">
                             <connections>
                                 <action selector="cancelButtonTapped:" destination="Hi8-Ey-38y" id="ScR-go-eUA"/>

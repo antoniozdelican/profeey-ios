@@ -1046,8 +1046,15 @@ class ProfileTableViewController: UITableViewController {
 extension ProfileTableViewController: ProfileMainTableViewCellDelegate {
     
     func numberOfPostsButtonTapped() {
-        if self.posts.count > 0 && self.selectedProfileSegment == ProfileSegment.posts {
-            self.tableView.scrollToRow(at: IndexPath(row: 0, section: 1), at: UITableViewScrollPosition.top, animated: true)
+        if self.selectedProfileSegment == ProfileSegment.posts {
+            if self.posts.count > 0 {
+               self.tableView.scrollToRow(at: IndexPath(row: 0, section: 1), at: UITableViewScrollPosition.top, animated: true)
+            }
+        } else {
+            if let segmentedControl = (self.tableView.headerView(forSection: 1) as? ProfileSegmentedControlSectionHeader)?.segmentedControl {
+                segmentedControl.selectedSegmentIndex = 0
+                self.segmentChanged(ProfileSegment.posts)
+            }
         }
     }
     
@@ -1056,8 +1063,15 @@ extension ProfileTableViewController: ProfileMainTableViewCellDelegate {
     }
     
     func numberOfCategoriesButtonTapped() {
-        if self.userCategories.count > 0 && self.selectedProfileSegment == ProfileSegment.skills {
-            self.tableView.scrollToRow(at: IndexPath(row: 0, section: 1), at: UITableViewScrollPosition.top, animated: true)
+        if self.selectedProfileSegment == ProfileSegment.skills {
+            if self.userCategories.count > 0 {
+                self.tableView.scrollToRow(at: IndexPath(row: 0, section: 1), at: UITableViewScrollPosition.top, animated: true)
+            }
+        } else {
+            if let segmentedControl = (self.tableView.headerView(forSection: 1) as? ProfileSegmentedControlSectionHeader)?.segmentedControl {
+                segmentedControl.selectedSegmentIndex = 1
+                self.segmentChanged(ProfileSegment.skills)
+            }
         }
     }
     
@@ -1443,17 +1457,6 @@ extension ProfileTableViewController: ProfileSegmentedControlSectionHeaderDelega
                 self.tableView.reloadData()
             }
             self.tableView.reloadData()
-//        case .experience:
-//            if !self.hasLoadedInitialExperiences {
-//                self.isLoadingWorkExperiences = true
-//                self.isLoadingEducations = true
-//                self.tableView.reloadData()
-//                self.tableView.tableFooterView = self.loadingTableFooterView
-//                self.queryWorkExperiences(userId)
-//                self.queryEducations(userId)
-//            } else {
-//                self.tableView.reloadData()
-//            }
         case .skills:
             if !self.hasLoadedInitialUserCategories {
                 self.isLoadingUserCategories = true
@@ -1467,73 +1470,12 @@ extension ProfileTableViewController: ProfileSegmentedControlSectionHeaderDelega
     }
 }
 
-//extension ProfileTableViewController: WorkExperienceTableViewCellDelegate {
-//    
-//    func workDescriptionLabelTapped(_ cell: WorkExperienceTableViewCell) {
-//        guard let indexPath = self.tableView.indexPath(for: cell) else {
-//            return
-//        }
-//        let index = indexPath.row - 1
-//        guard let workExperience = self.experiences[index] as? WorkExperience else {
-//            return
-//        }
-//        if !workExperience.isExpandedWorkDescription {
-//            workExperience.isExpandedWorkDescription = true
-//            cell.untruncate()
-//            UIView.performWithoutAnimation {
-//                self.tableView.beginUpdates()
-//                self.tableView.endUpdates()
-//            }
-//        }
-//    }
-//}
-
-//extension ProfileTableViewController: EducationTableViewCellDelegate {
-//    
-//    func educationDescriptionLabelTapped(_ cell: EducationTableViewCell) {
-//        guard let indexPath = self.tableView.indexPath(for: cell) else {
-//            return
-//        }
-//        let index = (self.workExperiences.count > 0) ? indexPath.row - 2 : indexPath.row - 1
-//        guard let education = self.experiences[index] as? Education else {
-//            return
-//        }
-//        if !education.isExpandedEducationDescription {
-//            education.isExpandedEducationDescription = true
-//            cell.untruncate()
-//            UIView.performWithoutAnimation {
-//                self.tableView.beginUpdates()
-//                self.tableView.endUpdates()
-//            }
-//        }
-//    }
-//}
-
 extension ProfileTableViewController: ExperiencesHeaderTableViewCellDelegate {
     
     func editButtonTapped() {
         self.performSegue(withIdentifier: "segueToExperiencesVc", sender: self)
     }
 }
-
-//extension ProfileTableViewController: ExperiencesTableViewControllerDelegate {
-//    
-//    func workExperiencesUpdated(_ workExperiences: [WorkExperience]) {
-//        self.workExperiences = workExperiences
-//        self.sortWorkExperiencesByToDate()
-//        if self.selectedProfileSegment == ProfileSegment.experience {
-//            self.tableView.reloadData()
-//        }
-//    }
-//    
-//    func educationsUpdated(_ educations: [Education]) {
-//        self.educations = educations
-//        self.sortEducationsByToDate()
-//        if self.selectedProfileSegment == ProfileSegment.experience {
-//            self.tableView.reloadData()
-//        }
-//    }
-//}
 
 extension ProfileTableViewController: ProfileEmptyTableViewCellDelegate {
     

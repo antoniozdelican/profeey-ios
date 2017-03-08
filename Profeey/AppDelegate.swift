@@ -77,7 +77,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         AWSMobileClient.sharedInstance.application(application, didReceiveRemoteNotification: userInfo)
 
-        if let notificationType = (userInfo["notificationType"] as? NSNumber)?.intValue {
+        if let notificationType = userInfo["notificationType"] as? String {
             let mainTabBarController = self.window?.rootViewController as? MainTabBarController
             
             // Get new message.

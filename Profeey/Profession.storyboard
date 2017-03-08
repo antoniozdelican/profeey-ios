@@ -80,11 +80,11 @@
                                                 <stackView opaque="NO" contentMode="scaleToFill" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="sho-Zp-T5M">
                                                     <rect key="frame" x="0.0" y="20" width="299" height="17"/>
                                                     <subviews>
-                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="252" verticalHuggingPriority="251" image="ic_recommendations_search" translatesAutoresizingMaskIntoConstraints="NO" id="g2i-zD-JfY">
-                                                            <rect key="frame" x="0.0" y="0.0" width="17" height="17"/>
+                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="252" verticalHuggingPriority="251" image="ic_camera_search" translatesAutoresizingMaskIntoConstraints="NO" id="g2i-zD-JfY">
+                                                            <rect key="frame" x="0.0" y="0.0" width="18" height="17"/>
                                                         </imageView>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="14" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3nc-sN-dIv">
-                                                            <rect key="frame" x="21" y="0.0" width="278" height="17"/>
+                                                            <rect key="frame" x="22" y="0.0" width="277" height="17"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                             <color key="textColor" red="0.41868340970000001" green="0.41867089270000002" blue="0.41867792609999999" alpha="1" colorSpace="calibratedRGB"/>
                                                             <nil key="highlightedColor"/>
@@ -194,7 +194,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="ic_recommendations_search" width="17" height="17"/>
+        <image name="ic_camera_search" width="18" height="17"/>
         <image name="ic_school_profile" width="18" height="17"/>
     </resources>
 </document>

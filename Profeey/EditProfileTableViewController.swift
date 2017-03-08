@@ -73,7 +73,7 @@ class EditProfileTableViewController: UITableViewController {
             self.professionNameLabel.textColor = Colors.black
             self.clearProfessionButton.isHidden = false
         } else {
-            self.professionNameLabel.text = "Add Field Of Study"
+            self.professionNameLabel.text = "Add Major"
             self.professionNameLabel.textColor = Colors.disabled
             self.clearProfessionButton.isHidden = true
         }
@@ -212,7 +212,7 @@ class EditProfileTableViewController: UITableViewController {
     
     @IBAction func clearProfessionButtonTapped(_ sender: AnyObject) {
         self.user?.professionName = nil
-        self.professionNameLabel.text = "Add Field Of Study"
+        self.professionNameLabel.text = "Add Major"
         self.professionNameLabel.textColor = Colors.disabled
         self.clearProfessionButton.isHidden = true
     }
@@ -358,7 +358,7 @@ extension EditProfileTableViewController: ProfessionsTableViewControllerDelegate
             self.clearProfessionButton.isHidden = false
         } else {
             self.user?.professionName = nil
-            self.professionNameLabel.text = "Add Field Of Study"
+            self.professionNameLabel.text = "Add Major"
             self.professionNameLabel.textColor = Colors.disabled
             self.clearProfessionButton.isHidden = true
         }

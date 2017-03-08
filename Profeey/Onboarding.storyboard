@@ -1086,7 +1086,7 @@
             </objects>
             <point key="canvasLocation" x="4439" y="-674"/>
         </scene>
-        <!--Add Field Of Study-->
+        <!--Add Major-->
         <scene sceneID="6ZR-rM-YwC">
             <objects>
                 <tableViewController id="XR1-b4-lzc" customClass="WelcomeProfessionsTableViewController" customModule="Profeey" customModuleProvider="target" sceneMemberID="viewController">
@@ -1099,7 +1099,7 @@
                             <rect key="frame" x="0.0" y="0.0" width="375" height="52"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Search your field of study..." textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="vwO-fj-1za">
+                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Search your major..." textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="vwO-fj-1za">
                                     <rect key="frame" x="16" y="8" width="343" height="36"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="36" id="THy-cZ-8YP"/>
@@ -1259,7 +1259,7 @@
                             <outlet property="delegate" destination="XR1-b4-lzc" id="En3-gk-rd7"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Add Field Of Study" id="HGZ-Hh-9k6">
+                    <navigationItem key="navigationItem" title="Add Major" id="HGZ-Hh-9k6">
                         <barButtonItem key="rightBarButtonItem" id="Cy9-1O-fAb">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="38t-oH-VyK">
                                 <rect key="frame" x="323" y="5" width="36" height="33"/>

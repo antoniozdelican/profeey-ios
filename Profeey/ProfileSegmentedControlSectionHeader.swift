@@ -24,8 +24,6 @@ class ProfileSegmentedControlSectionHeader: UITableViewHeaderFooterView {
         switch self.segmentedControl.selectedSegmentIndex {
         case 0:
             self.profileSegmentedControlSectionHeaderDelegate?.segmentChanged(ProfileSegment.posts)
-//        case 1:
-//            self.profileSegmentedControlSectionHeaderDelegate?.segmentChanged(ProfileSegment.experience)
         case 1:
             self.profileSegmentedControlSectionHeaderDelegate?.segmentChanged(ProfileSegment.skills)
         default:

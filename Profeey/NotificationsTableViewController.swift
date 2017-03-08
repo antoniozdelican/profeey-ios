@@ -105,9 +105,9 @@ class NotificationsTableViewController: UITableViewController {
             self.queryNotificationsDateSorted(true)
         }
         if cell is NotificationTableViewCell, let notificationType = self.notifications[indexPath.row].notificationType {
-            if notificationType.intValue == NotificationType.like.rawValue || notificationType.intValue == NotificationType.comment.rawValue {
+            if notificationType == NotificationType.like.rawValue || notificationType == NotificationType.comment.rawValue {
                 self.performSegue(withIdentifier: "segueToPostDetailsVc", sender: cell)
-            } else if notificationType.intValue == NotificationType.following.rawValue || notificationType.intValue == NotificationType.recommendation.rawValue {
+            } else if notificationType == NotificationType.following.rawValue {
                 self.performSegue(withIdentifier: "segueToProfileVc", sender: cell)
             }
         }

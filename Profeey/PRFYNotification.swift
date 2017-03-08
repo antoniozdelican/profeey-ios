@@ -14,7 +14,7 @@ class PRFYNotification: NSObject {
     var userId: String? // currentUser.id
     var notificationId: String?
     var created: NSNumber?
-    var notificationType: NSNumber?
+    var notificationType: String?
     // Optional if notification is Like or Comment.
     var postId: String?
     
@@ -33,15 +33,13 @@ class PRFYNotification: NSObject {
         guard let notificationType = self.notificationType else {
             return nil
         }
-        switch notificationType.intValue {
+        switch notificationType {
         case NotificationType.like.rawValue:
             return " liked your post. "
         case NotificationType.comment.rawValue:
             return " commented on your post. "
         case NotificationType.following.rawValue:
             return " started following you. "
-        case NotificationType.recommendation.rawValue:
-            return " recommended you. "
         default:
             return nil
         }
@@ -51,7 +49,7 @@ class PRFYNotification: NSObject {
         super.init()
     }
     
-    convenience init(userId: String?, notificationId: String?, created: NSNumber?, notificationType: NSNumber?, postId: String?, user: User?) {
+    convenience init(userId: String?, notificationId: String?, created: NSNumber?, notificationType: String?, postId: String?, user: User?) {
         self.init()
         self.userId = userId
         self.notificationId = notificationId

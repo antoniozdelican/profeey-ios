@@ -19,12 +19,11 @@ enum MainChildController: Int {
     case profile = 3
 }
 
-enum NotificationType: Int {
-    case like = 0
-    case comment = 1
-    case following = 2
-    case recommendation = 3
-    case message = 4
+enum NotificationType: String {
+    case like = "LIKE"
+    case comment = "COMM"
+    case following = "FOLL"
+    case message = "MESS"
 }
 
 class MainTabBarController: UITabBarController {
@@ -103,7 +102,7 @@ class MainTabBarController: UITabBarController {
                 tabBarItem?.selectedImage = selectedImage
             }
 //            if tabBarItem?.tag == 2 {
-//                guard let image = UIImage(named: "ic_camera"), let selectedImage = UIImage(named: "ic_camera_active") else {
+//                guard let image = UIImage(named: ""), let selectedImage = UIImage(named: "") else {
 //                    return
 //                }
 //                tabBarItem?.image = image.withRenderingMode(UIImageRenderingMode.alwaysOriginal)
