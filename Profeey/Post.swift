@@ -105,6 +105,7 @@ class Post: NSObject {
     func copyPost() -> Post {
         let post = Post(userId: userId, postId: postId, created: created, caption: caption, categoryName: categoryName, imageUrl: imageUrl, imageWidth: imageWidth, imageHeight: imageHeight, numberOfLikes: numberOfLikes, numberOfComments: numberOfComments, user: user)
         post.image = image
+        post.isLikedByCurrentUser = isLikedByCurrentUser
         return post
     }
     

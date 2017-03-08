@@ -408,6 +408,8 @@ class HomeTableViewController: UITableViewController {
                         // Update data source and cells.
                         let post = self.posts[postIndex]
                         post.isLikedByCurrentUser = true
+                        // Notify observers (PostDetailsVc).
+                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: GetLikeNotificationKey), object: self, userInfo: ["postId": postId])
                     }
                 }
             })

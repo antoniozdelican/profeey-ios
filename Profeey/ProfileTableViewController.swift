@@ -820,7 +820,10 @@ class ProfileTableViewController: UITableViewController {
                         let post = Post(userId: awsPost._userId, postId: awsPost._postId, created: awsPost._created, caption: awsPost._caption, categoryName: awsPost._categoryName, imageUrl: awsPost._imageUrl, imageWidth: awsPost._imageWidth, imageHeight: awsPost._imageHeight, numberOfLikes: awsPost._numberOfLikes, numberOfComments: awsPost._numberOfComments, user: self.user)
                         self.posts.append(post)
                         numberOfNewPosts += 1
-                        // TODO: Immediately getLike.
+                        // Immediately getLike.
+                        if let postId = awsPost._postId {
+                            self.getLike(postId)
+                        }
                     }
                 }
                 // Reset flags and animations that were initiated.
@@ -1020,6 +1023,28 @@ class ProfileTableViewController: UITableViewController {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 if let error = task.error {
                     print("removeBlock error: \(error)")
+                }
+            })
+            return nil
+        })
+    }
+    
+    fileprivate func getLike(_ postId: String) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().getLikeDynamoDB(postId, completionHandler: {
+            (task: AWSTask) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                if let error = task.error {
+                    print("getLike error: \(error)")
+                } else {
+                    if task.result != nil, let postIndex = self.posts.index(where: { $0.postId == postId }) {
+                        // Update data source and cells.
+                        let post = self.posts[postIndex]
+                        post.isLikedByCurrentUser = true
+                        // Notify observers (PostDetailsVc).
+                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: GetLikeNotificationKey), object: self, userInfo: ["postId": postId])
+                    }
                 }
             })
             return nil

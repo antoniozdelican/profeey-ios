@@ -15,6 +15,7 @@ let CreatePostNotificationKey: String = "CreatePostNotificationKey"
 let UpdatePostNotificationKey: String = "UpdatePostNotificationKey"
 let DeletePostNotificationKey: String = "DeletePostNotificationKey"
 
+let GetLikeNotificationKey: String = "GetLikeNotificationKey"
 let CreateLikeNotificationKey: String = "CreateLikeNotificationKey"
 let DeleteLikeNotificationKey: String = "DeleteLikeNotificationKey"
 

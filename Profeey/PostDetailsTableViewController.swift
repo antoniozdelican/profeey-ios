@@ -51,19 +51,16 @@ class PostDetailsTableViewController: UITableViewController {
             self.isLoadingComments = true
             self.getPost(notificationPostId)
         } else if let postId = self.post?.postId {
-            // Just check if currentUser liked this post.
-            self.getLike(postId)
             // Query comments.
-            if let postId = self.post?.postId {
-                self.isLoadingComments = true
-                self.tableView.tableFooterView = self.loadingTableFooterView
-                self.queryCommentsDateSorted(postId, startFromBeginning: true)
-            }
+            self.isLoadingComments = true
+            self.tableView.tableFooterView = self.loadingTableFooterView
+            self.queryCommentsDateSorted(postId, startFromBeginning: true)
         }
         
         // Add observers.
         NotificationCenter.default.addObserver(self, selector: #selector(self.updatePostNotification(_:)), name: NSNotification.Name(UpdatePostNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.deletePostNotification(_:)), name: NSNotification.Name(DeletePostNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.getLikeNotification(_:)), name: NSNotification.Name(GetLikeNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.createLikeNotification(_:)), name: NSNotification.Name(CreateLikeNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.deleteLikeNotification(_:)), name: NSNotification.Name(DeleteLikeNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.createCommentNotification(_:)), name: NSNotification.Name(CreateCommentNotificationKey), object: nil)
@@ -427,8 +424,6 @@ class PostDetailsTableViewController: UITableViewController {
                         PRFYS3Manager.defaultS3Manager().downloadImageS3(imageUrl, imageType: .postPic)
                     }
                     if let postId = awsPost._postId {
-                        // Get like.
-                        self.getLike(postId)
                         // Query comments.
                         self.isLoadingComments = true
                         self.tableView.tableFooterView = self.loadingTableFooterView
@@ -455,27 +450,6 @@ class PostDetailsTableViewController: UITableViewController {
                     // Notifiy obervers.
                     NotificationCenter.default.post(name: NSNotification.Name(rawValue: DeletePostNotificationKey), object: self, userInfo: ["postId": postId])
                     self.performSegue(withIdentifier: "segueUnwindToProfileVc", sender: self)
-                }
-            })
-            return nil
-        })
-    }
-    
-    // Check if currentUser liked a post.    
-    fileprivate func getLike(_ postId: String) {
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        PRFYDynamoDBManager.defaultDynamoDBManager().getLikeDynamoDB(postId, completionHandler: {
-            (task: AWSTask) in
-            DispatchQueue.main.async(execute: {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                if let error = task.error {
-                    print("getLike error: \(error)")
-                } else {
-                    if task.result != nil {
-                        // Update data source and cells.
-                        self.post?.isLikedByCurrentUser = true
-                        (self.tableView.cellForRow(at: IndexPath(row: 4, section: 0)) as? PostButtonsTableViewCell)?.setSelectedLikeButton()
-                    }
                 }
             })
             return nil
@@ -622,6 +596,18 @@ extension PostDetailsTableViewController {
         }
         // Just unwind to ProfileVc in case deletion was on HomeVc.
         self.performSegue(withIdentifier: "segueUnwindToProfileVc", sender: self)
+    }
+    
+    func getLikeNotification(_ notification: NSNotification) {
+        guard let postId = notification.userInfo?["postId"] as? String else {
+            return
+        }
+        guard let post = self.post, post.postId == postId else {
+            return
+        }
+        // Update data source and cells.
+        post.isLikedByCurrentUser = true
+        (self.tableView.cellForRow(at: IndexPath(row: 4, section: 0)) as? PostButtonsTableViewCell)?.setSelectedLikeButton()
     }
     
     func createLikeNotification(_ notification: NSNotification) {
