@@ -18,9 +18,13 @@ class UsernameTableViewController: UITableViewController {
     @IBOutlet weak var usernameTextField: UITextField!
     @IBOutlet weak var usernameBoxView: UIView!
     @IBOutlet weak var continueButton: UIButton!
+    @IBOutlet weak var invalidPreferredUsernameMessageLabel: UILabel!
+    @IBOutlet weak var invalidPreferredUsernameBoxView: UIView!
     
     fileprivate var userPool: AWSCognitoIdentityUserPool?
     fileprivate var newProfilePicImageData: Data?
+    fileprivate var cleanPreferredUsername: String?
+    fileprivate var shouldShowInvalidMessage: Bool = false
     
     var isUserPoolUser: Bool = true
 
@@ -32,6 +36,8 @@ class UsernameTableViewController: UITableViewController {
         
         self.usernameTextField.delegate = self
         self.usernameBoxView.layer.cornerRadius = 4.0
+        self.usernameBoxView.layer.borderWidth = 0.5
+        self.usernameBoxView.layer.borderColor = UIColor.clear.cgColor
         
         self.continueButton.setBackgroundImage(UIImage(named: "btn_white_active_resizable"), for: UIControlState.normal)
         self.continueButton.setBackgroundImage(UIImage(named: "btn_white_active_resizable"), for: UIControlState.highlighted)
@@ -40,6 +46,8 @@ class UsernameTableViewController: UITableViewController {
         self.continueButton.setTitleColor(Colors.turquoise.withAlphaComponent(0.2), for: UIControlState.highlighted)
         self.continueButton.setTitleColor(UIColor.white, for: UIControlState.disabled)
         self.continueButton.isEnabled = false
+        self.invalidPreferredUsernameMessageLabel.text = "Your username must be 30 characters or less and contain only letters, numbers, periods and underscores."
+        self.invalidPreferredUsernameBoxView.layer.cornerRadius = 4.0
         
         // Check if it's a userPool User.
         if self.isUserPoolUser {
@@ -72,6 +80,34 @@ class UsernameTableViewController: UITableViewController {
             let childViewController = navigationController.childViewControllers[0] as? CaptureScrollViewController {
             childViewController.isProfilePic = true
             childViewController.profilePicUnwind = ProfilePicUnwind.usernameVc
+        }
+    }
+    
+    // MARK: UITableViewDataSource
+    
+    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        switch indexPath.row {
+        case 0:
+            return 202.0
+        case 1:
+            return 41.0
+        case 2:
+            return 68.0
+        default:
+            return 0.0
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        switch indexPath.row {
+        case 0:
+            return 202.0
+        case 1:
+            return self.shouldShowInvalidMessage ? UITableViewAutomaticDimension : 0.0
+        case 2:
+            return 68.0
+        default:
+            return 0.0
         }
     }
     
@@ -111,10 +147,31 @@ class UsernameTableViewController: UITableViewController {
     }
     
     @IBAction func usernameTextFieldChanged(_ sender: Any) {
-        guard let preferredUsername = self.usernameTextField.text?.trimm(), !preferredUsername.isEmpty else {
+        // 1. Replace " " with "_" while typing.
+        guard let preferredUsername = self.usernameTextField.text?.replacingOccurrences(of: " ", with: "_"), !preferredUsername.isEmpty else {
+            self.cleanPreferredUsername = nil
             self.continueButton.isEnabled = false
+            self.removeInvalidMessage()
             return
         }
+        self.usernameTextField.text = preferredUsername
+        // 2. Check if less than 30 characters
+        guard preferredUsername.characters.count <= 30 else {
+            self.cleanPreferredUsername = nil
+            self.continueButton.isEnabled = false
+            self.showInvalidMessage("Your username must be 30 characters or less and contain only letters, numbers, periods and underscores.")
+            return
+        }
+        // 3. Check regex.
+        guard self.isValidPreferredUsername(preferredUsername) else {
+            self.cleanPreferredUsername = nil
+            self.continueButton.isEnabled = false
+            self.showInvalidMessage("Your username can contain only letters, numbers, periods and underscores.")
+            return
+        }
+        self.removeInvalidMessage()
+        // 4. Put characters lowercase and enable button.
+        self.cleanPreferredUsername = preferredUsername.lowercased()
         self.continueButton.isEnabled = true
     }
     
@@ -128,9 +185,11 @@ class UsernameTableViewController: UITableViewController {
                 self.continueButton.isHighlighted = true
         },
             completion: nil)
-        self.view.endEditing(true)
-        // CHECK IF IT IS Facebook user or UserPool!
-        self.queryPreferredUsernames()
+        
+        if let cleanPreferredUsername = self.cleanPreferredUsername {
+            self.view.endEditing(true)
+            self.queryPreferredUsernames(cleanPreferredUsername)
+        }
     }
     
     @IBAction func unwindToUsernameTableViewController(_ segue: UIStoryboardSegue) {
@@ -144,14 +203,54 @@ class UsernameTableViewController: UITableViewController {
         }
     }
     
+    // MARK: Helpers
+    
+    /*
+     - preferredUsername must be 30 characters or less and contain only letters, numbers, periods and underscores
+     - if the letter was uppercase, turn it into lowercase always
+     - while typing space, make an underscore instead
+    */
+    
+    fileprivate func isValidPreferredUsername(_ preferredUsername: String) -> Bool {
+        var returnValue = true
+        let preferredUsernameRegex = "^[a-zA-Z0-9_.]{1,30}$"
+        do {
+            let regex = try NSRegularExpression(pattern: preferredUsernameRegex)
+            let nsString = preferredUsername as NSString
+            let results = regex.matches(in: preferredUsername, range: NSRange(location: 0, length: nsString.length))
+            if results.count == 0 {
+                returnValue = false
+            }
+        } catch let error as NSError {
+            print("invalid regex: \(error.localizedDescription)")
+            returnValue = false
+        }
+        return  returnValue
+    }
+    
+    fileprivate func removeInvalidMessage() {
+        if self.shouldShowInvalidMessage {
+            self.shouldShowInvalidMessage = false
+            self.usernameBoxView.layer.borderColor = UIColor.clear.cgColor
+            self.tableView.beginUpdates()
+            self.tableView.endUpdates()
+        }
+    }
+    
+    fileprivate func showInvalidMessage(_ text: String) {
+        if !self.shouldShowInvalidMessage {
+            self.shouldShowInvalidMessage = true
+            self.invalidPreferredUsernameMessageLabel.text = text
+            self.usernameBoxView.layer.borderColor = Colors.red.cgColor
+            self.tableView.beginUpdates()
+            self.tableView.endUpdates()
+        }
+    }
+    
     // MARK: AWS
     
     // Check if preferredUsername already exists in DynamoDB. This is before any other action.
-    fileprivate func queryPreferredUsernames() {
-        guard let preferredUsername = self.usernameTextField.text?.trimm(), !preferredUsername.isEmpty else {
-            return
-        }
-        print("queryPreferredUsernames:")
+    fileprivate func queryPreferredUsernames(_ preferredUsername: String) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         FullScreenIndicator.show()
         PRFYDynamoDBManager.defaultDynamoDBManager().queryPreferredUsernamesDynamoDB(preferredUsername, completionHandler: {
@@ -172,7 +271,7 @@ class UsernameTableViewController: UITableViewController {
                     }
                     // 2. updatePreferredUsername if isUserPoolUser, else go to updateUser.
                     if self.isUserPoolUser {
-                        self.userPoolUpdatePreferredUsername()
+                        self.userPoolUpdatePreferredUsername(preferredUsername)
                     } else {
                         // 3a. Store profilePic if exists and update in DynamoDB with preferredUsername.
                         if let profilePicImageData = self.newProfilePicImageData {
@@ -186,10 +285,7 @@ class UsernameTableViewController: UITableViewController {
         })
     }
     
-    fileprivate func userPoolUpdatePreferredUsername() {
-        guard let preferredUsername = self.usernameTextField.text?.trimm(), !preferredUsername.isEmpty else {
-            return
-        }
+    fileprivate func userPoolUpdatePreferredUsername(_ preferredUsername: String) {
         var userAttributes: [AWSCognitoIdentityUserAttributeType] = []
         userAttributes.append(AWSCognitoIdentityUserAttributeType(name: "preferred_username", value: preferredUsername))
         
@@ -283,6 +379,15 @@ class UsernameTableViewController: UITableViewController {
 extension UsernameTableViewController: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if let cleanPreferredUsername = self.cleanPreferredUsername, isValidPreferredUsername(cleanPreferredUsername) {
+            self.view.endEditing(true)
+            self.queryPreferredUsernames(cleanPreferredUsername)
+        }
+        return true
+    }
+    
+    func textFieldShouldClear(_ textField: UITextField) -> Bool {
+        self.removeInvalidMessage()
         return true
     }
 }
