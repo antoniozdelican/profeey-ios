@@ -51,6 +51,8 @@ class MainTabBarController: UITabBarController {
         self.configureNewNotificationsView()
         
         if AWSIdentityManager.defaultIdentityManager().isLoggedIn {
+            // Get currentUser first from NSUserDefaults before it loads from DynamoDB.
+            PRFYDynamoDBManager.defaultDynamoDBManager().setCurrentUserLocal()
             // Get currentUser from DynamoDB upon initialization of this rootVc.
             self.isLoadingCurrentUser = true
             self.getCurrentUser()
@@ -368,6 +370,8 @@ class MainTabBarController: UITabBarController {
                 AWSUserFileManager.defaultUserFileManager().clearCache()
                 // Current user cleanUp.
                 PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB = nil
+                // Clean NSUserDefaults also.
+                LocalUser.clearAllLocal()
                 
                 // Present disabled message.
                 self.showDisabledMessage()

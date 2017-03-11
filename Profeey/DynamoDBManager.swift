@@ -17,6 +17,9 @@ protocol DynamoDBManager {
     
     // MARK: CurrentUser
     
+    // Special one getting from NSUserDefaults
+    func setCurrentUserLocal()
+    // Update with fresh DynamoDB data.
     func updateCurrentUserLocal(_ firstName: String?, lastName: String?, preferredUsername: String?, professionName: String?, profilePicUrl: String?, schoolId: String?, schoolName: String?, profilePic: UIImage?)
     
     // MARK: Users

@@ -356,6 +356,8 @@ class LogInTableViewController: UITableViewController {
                 AWSUserFileManager.defaultUserFileManager().clearCache()
                 // Current user cleanUp.
                 PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB = nil
+                // Clean NSUserDefaults also.
+                LocalUser.clearAllLocal()
                 
                 // Present disabled message.
                 self.showDisabledMessage()

@@ -26,6 +26,25 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
     
     // MARK: CurrentUser
     
+    // Setting local user data from NSUserDefaults. This is just to have some local user data before fresh data loads from DynamoDB (with updateCurrentUserLocal).
+    func setCurrentUserLocal() {
+        guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
+            print("setCurrentUserLocal no identityId!")
+            return
+        }
+        if self.currentUserDynamoDB == nil {
+            self.currentUserDynamoDB = CurrentUser(userId: identityId)
+        }
+        self.currentUserDynamoDB?.firstName = LocalUser.getFirstNameLocal()
+        self.currentUserDynamoDB?.lastName = LocalUser.getLastNameLocal()
+        self.currentUserDynamoDB?.preferredUsername = LocalUser.getPreferredUsernameLocal()
+        self.currentUserDynamoDB?.professionName = LocalUser.getProfessionNameLocal()
+        self.currentUserDynamoDB?.profilePicUrl = LocalUser.getProfilePicUrlLocal()
+        self.currentUserDynamoDB?.schoolId = LocalUser.getSchoolIdLocal()
+        self.currentUserDynamoDB?.schoolName = LocalUser.getSchoolNameLocal()
+    }
+    
+    // Update with fresh DynamoDB data.
     func updateCurrentUserLocal(_ firstName: String?, lastName: String?, preferredUsername: String?, professionName: String?, profilePicUrl: String?, schoolId: String?, schoolName: String?, profilePic: UIImage?) {
         guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
             print("updateCurrentUserLocal no identityId!")
@@ -42,6 +61,14 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         self.currentUserDynamoDB?.schoolId = schoolId
         self.currentUserDynamoDB?.schoolName = schoolName
         self.currentUserDynamoDB?.profilePic = profilePic
+        // Update LocalUser (NSUserDefaults).
+        LocalUser.setFirstNameLocal(firstName)
+        LocalUser.setLastNameLocal(lastName)
+        LocalUser.setPreferredUsernameLocal(preferredUsername)
+        LocalUser.setProfessionNameLocal(professionName)
+        LocalUser.setProfilePicUrlLocal(profilePicUrl)
+        LocalUser.setSchoolIdLocal(schoolId)
+        LocalUser.setSchoolNameLocal(schoolName)
     }
     
     // MARK: Users
@@ -97,6 +124,9 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
                 self.currentUserDynamoDB = CurrentUser(userId: identityId)
                 self.currentUserDynamoDB?.firstName = firstName
                 self.currentUserDynamoDB?.lastName = lastName
+                // Update LocalUser (NSUserDefaults).
+                LocalUser.setFirstNameLocal(firstName)
+                LocalUser.setLastNameLocal(lastName)
                 AWSTask(result: awsUser).continue(completionHandler)
             }
             return nil
@@ -126,6 +156,9 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
                 self.currentUserDynamoDB = CurrentUser(userId: identityId)
                 self.currentUserDynamoDB?.firstName = firstName
                 self.currentUserDynamoDB?.lastName = lastName
+                // Update LocalUser (NSUserDefaults).
+                LocalUser.setFirstNameLocal(firstName)
+                LocalUser.setLastNameLocal(lastName)
                 AWSTask(result: awsUser).continue(completionHandler)
             }
             return nil
@@ -150,6 +183,9 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
                 // Set currentUser.
                 self.currentUserDynamoDB?.preferredUsername = preferredUsername
                 self.currentUserDynamoDB?.profilePicUrl = profilePicUrl
+                // Update LocalUser (NSUserDefaults).
+                LocalUser.setPreferredUsernameLocal(preferredUsername)
+                LocalUser.setProfilePicUrlLocal(profilePicUrl)
                 AWSTask(result: awsUser).continue(completionHandler)
             }
             return nil
@@ -173,6 +209,9 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
                 // Set currentUser.
                 self.currentUserDynamoDB?.schoolId = schoolId
                 self.currentUserDynamoDB?.schoolName = schoolName
+                // Update LocalUser (NSUserDefaults).
+                LocalUser.setSchoolIdLocal(schoolId)
+                LocalUser.setSchoolNameLocal(schoolName)
                 AWSTask(result: awsUser).continue(completionHandler)
             }
             return nil
@@ -196,6 +235,8 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
             } else {
                 // Set currentUser.
                 self.currentUserDynamoDB?.professionName = professionName
+                // Update LocalUser (NSUserDefaults).
+                LocalUser.setProfessionNameLocal(professionName)
                 AWSTask(result: awsUser).continue(completionHandler)
             }
             return nil

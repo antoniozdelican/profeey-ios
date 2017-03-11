@@ -196,6 +196,9 @@ class SettingsTableViewController: UITableViewController {
                 AWSUserFileManager.defaultUserFileManager().clearCache()
                 // Current user cleanUp.
                 PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB = nil
+                // Clean NSUserDefaults also.
+                LocalUser.clearAllLocal()
+                
                 // Redirect.
                 self.redirectToOnboarding()
             })
