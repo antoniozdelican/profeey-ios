@@ -37,9 +37,13 @@ class SearchProfessionsTableViewController: UITableViewController {
         self.tableView.register(UINib(nibName: "SearchTableSectionHeader", bundle: nil), forHeaderFooterViewReuseIdentifier: "searchTableSectionHeader")
         
         // Adjust school.
-        self.isShowingPopularProfessions = true
-        self.isSearchingPopularProfessions = true
-        self.scanProfessions()
+        if PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB?.schoolId != nil && PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB?.schoolName != nil {
+            self.isSchoolActive = true
+        } else {
+            self.isShowingPopularProfessions = true
+            self.isSearchingPopularProfessions = true
+            self.scanProfessions()
+        }
     }
 
     override func didReceiveMemoryWarning() {

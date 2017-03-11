@@ -61,7 +61,7 @@ class EditPostTableViewController: UITableViewController {
             self.categoryNameLabel.textColor = Colors.black
             self.clearCategoryButton.isHidden = false
             self.categoryImageView.image = UIImage(named: "ic_skill_on")
-            self.saveButton.setTitleColor(Colors.blue, for: UIControlState.normal)
+            self.saveButton.setTitleColor(Colors.turquoise, for: UIControlState.normal)
         } else {
             self.categoryNameLabel.text = "Add Skill"
             self.categoryNameLabel.textColor = Colors.disabled
@@ -235,7 +235,7 @@ extension EditPostTableViewController: CategoriesTableViewControllerDelegate {
             self.categoryNameLabel.textColor = Colors.black
             self.clearCategoryButton.isHidden = false
             self.categoryImageView.image = UIImage(named: "ic_skill_on")
-            self.saveButton.setTitleColor(Colors.blue, for: UIControlState.normal)
+            self.saveButton.setTitleColor(Colors.turquoise, for: UIControlState.normal)
             self.categorySeparatorView.backgroundColor = Colors.greyLight
             self.noCategoryMessageLabel.isHidden = true
             UIView.performWithoutAnimation {

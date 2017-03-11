@@ -17,7 +17,8 @@ class OnboardingNavigationController: UINavigationController {
         self.navigationBar.shadowImage = UIImage()
         self.navigationBar.barTintColor = Colors.turquoise
         self.navigationBar.tintColor = UIColor.white
-        self.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
+//        self.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
+        self.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: UIFont.systemFont(ofSize: 17.0, weight: UIFontWeightMedium)]
     }
 
     override func didReceiveMemoryWarning() {

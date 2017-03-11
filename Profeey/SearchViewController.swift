@@ -47,7 +47,7 @@ class SearchViewController: UIViewController {
         // SearchBar configuration.
         self.searchBar.searchBarStyle = UISearchBarStyle.minimal
         self.searchBar.tintColor = Colors.black
-        self.searchBar.placeholder = "Search"
+        self.searchBar.placeholder = "Search all schools"
         self.searchBar.delegate = self
         self.navigationItem.titleView = self.searchBar
         
@@ -60,12 +60,12 @@ class SearchViewController: UIViewController {
         self.adjustSegment(SearchSegmentType.people)
         
         // Adjust school.
-//        if let schoolId = PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB?.schoolId,
-//            let schoolName = PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB?.schoolName {
-//            let currentUserSchool = School(schoolId: schoolId, schoolName: schoolName, numberOfUsers: nil)
-//            self.isSchoolActive = true
-//            self.didSelectSchool(currentUserSchool)
-//        }
+        if let schoolId = PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB?.schoolId,
+            let schoolName = PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB?.schoolName {
+            let currentUserSchool = School(schoolId: schoolId, schoolName: schoolName, numberOfUsers: nil)
+            self.isSchoolActive = true
+            self.didSelectSchool(currentUserSchool)
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -105,7 +105,7 @@ class SearchViewController: UIViewController {
         if self.isSchoolActive {
             self.isSchoolActive = false
             self.schoolBarButtonItem?.image = UIImage(named: "ic_school_off")?.withRenderingMode(UIImageRenderingMode.alwaysOriginal)
-            self.searchBar.placeholder = "Search"
+            self.searchBar.placeholder = "Search all schools"
             self.searchUsersDelegate?.removeSchool()
             self.searchProfessionsDelegate?.removeSchool()
         } else {

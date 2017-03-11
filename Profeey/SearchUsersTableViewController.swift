@@ -37,9 +37,13 @@ class SearchUsersTableViewController: UITableViewController {
         self.tableView.register(UINib(nibName: "SearchTableSectionHeader", bundle: nil), forHeaderFooterViewReuseIdentifier: "searchTableSectionHeader")
         
         // Adjust school.
-        self.isShowingPopularUsers = true
-        self.isSearchingPopularUsers = true
-        self.scanUsers()
+        if PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB?.schoolId != nil && PRFYDynamoDBManager.defaultDynamoDBManager().currentUserDynamoDB?.schoolName != nil {
+            self.isSchoolActive = true
+        } else {
+            self.isShowingPopularUsers = true
+            self.isSearchingPopularUsers = true
+            self.scanUsers()
+        }
         
         // Add observers.
         NotificationCenter.default.addObserver(self, selector: #selector(self.createPostNotification(_:)), name: NSNotification.Name(CreatePostNotificationKey), object: nil)

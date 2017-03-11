@@ -49,7 +49,7 @@ class WelcomeProfessionsTableViewController: UITableViewController {
     
     fileprivate func configureNavigationBar() {
         self.navigationController?.navigationBar.barTintColor = UIColor.white
-        self.navigationController?.navigationBar.tintColor = Colors.greyIcons
+        self.navigationController?.navigationBar.tintColor = Colors.turquoise
         self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: Colors.black, NSFontAttributeName: UIFont.systemFont(ofSize: 17.0, weight: UIFontWeightMedium)]
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         self.navigationController?.navigationBar.shadowImage = UIImage(named: "ic_navbar_shadow_resizable")

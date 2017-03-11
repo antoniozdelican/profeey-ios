@@ -125,7 +125,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // UINavigationBar
         UINavigationBar.appearance().barTintColor = UIColor.white
         UINavigationBar.appearance().isTranslucent = false
-        UINavigationBar.appearance().tintColor = Colors.greyIcons
+        UINavigationBar.appearance().tintColor = Colors.turquoise
         UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: Colors.black, NSFontAttributeName: UIFont.systemFont(ofSize: 17.0, weight: UIFontWeightMedium)]
         //UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: Colors.black]
         UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
