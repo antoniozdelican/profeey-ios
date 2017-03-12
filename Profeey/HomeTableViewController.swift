@@ -232,7 +232,7 @@ class HomeTableViewController: UITableViewController {
             if self.posts[indexPath.section].isReportedByCurrentUser {
                 return 112.0
             }
-            return 60.0
+            return 56.0
         case 1:
             if indexPath.section == 0 && self.isUploading {
                 return 40.0
@@ -250,7 +250,7 @@ class HomeTableViewController: UITableViewController {
             if self.posts[indexPath.section].isReportedByCurrentUser {
                 return 112.0
             }
-            return 60.0
+            return 56.0
         case 1:
             if indexPath.section == 0 && self.isUploading {
                 return 40.0
