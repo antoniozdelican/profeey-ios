@@ -48,6 +48,7 @@ class HomeTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        self.navigationItem.titleView = UIImageView(image: UIImage(named: "ic_logo_title"))
         self.tableView.delaysContentTouches = false
 
         // Set background views.
