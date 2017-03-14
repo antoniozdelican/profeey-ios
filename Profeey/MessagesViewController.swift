@@ -103,6 +103,7 @@ class MessagesViewController: UIViewController {
             destinationViewController.conversationId = self.conversationId
             destinationViewController.participant = self.participant // don't need to copy here
             destinationViewController.messagesTableViewControllerDelegate = self
+            destinationViewController.removeMessageDelegate = self
             self.messagesViewControllerDelegate = destinationViewController
         }
     }
@@ -290,10 +291,6 @@ extension MessagesViewController: MessagesTableViewControllerDelegate {
     }
     
     func initialMessagesLoaded(_ numberOfInitialMessages: Int) {
-        
-        print("EVO")
-        print(numberOfInitialMessages)
-        
         if self.numberOfInitialMessages == nil {
             self.numberOfInitialMessages = numberOfInitialMessages
         }
@@ -303,8 +300,13 @@ extension MessagesViewController: MessagesTableViewControllerDelegate {
         self.messageTextView.isEditable = false
         self.sendButton.isEnabled = false
     }
+}
+
+// Special delegate so we can use it in Report flow as well.
+extension MessagesViewController: RemoveMessageDelegate {
     
     func removeMessage(_ messageId: String) {
+        print("IM THE REMOVER:")
         self.preRemoveMessage(messageId)
     }
 }

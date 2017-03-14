@@ -96,6 +96,9 @@ class PostDetailsTableViewController: UITableViewController {
             let childViewController =  navigationController.childViewControllers[0] as? ReportTableViewController {
             if let cell = sender as? CommentTableViewCell, let indexPath = self.tableView.indexPath(for: cell) {
                 childViewController.userId = self.comments[indexPath.row].userId
+                // We include postId here so we can notify observers to delete comment locally.
+                childViewController.postId = self.post?.postId
+                childViewController.commentId = self.comments[indexPath.row].commentId
                 childViewController.reportType = ReportType.user
             } else {
                 childViewController.userId = self.post?.userId
@@ -714,16 +717,32 @@ extension PostDetailsTableViewController {
     }
     
     func createReportNotification(_ notification: NSNotification) {
-        if let postId = notification.userInfo?["postId"] as? String {
-            // It's a post report.
-            guard let post = self.post, post.postId == postId else {
+        guard let postId = notification.userInfo?["postId"] as? String else {
+            return
+        }
+        guard let post = self.post, post.postId == postId else {
+            return
+        }
+        if let commentId = notification.userInfo?["commentId"] as? String {
+            // It's a comment (user) report.
+            guard let commentIndex = self.comments.index(where: { $0.commentId == commentId }) else {
                 return
             }
+            // Update data source and cells.
+            post.numberOfComments = NSNumber(value: post.numberOfCommentsInt - 1)
+            (self.tableView.cellForRow(at: IndexPath(row: 4, section: 0)) as? PostButtonsTableViewCell)?.numberOfCommentsButton.isHidden = (post.numberOfCommentsString != nil) ? false : true
+            (self.tableView.cellForRow(at: IndexPath(row: 4, section: 0)) as? PostButtonsTableViewCell)?.numberOfCommentsButton.setTitle(post.numberOfCommentsString, for: UIControlState())
+            // Update comments.
+            self.comments.remove(at: commentIndex)
+            if self.comments.count == 0 {
+                self.tableView.reloadData()
+            } else {
+                self.tableView.deleteRows(at: [IndexPath(row: commentIndex, section: 1)], with: UITableViewRowAnimation.automatic)
+            }
+        } else {
+            // It's a post report.
             post.isReportedByCurrentUser = true
             self.tableView.reloadData()
-        } else {
-            // It's a comment (user) report.
-            // Do nothing for now with UI.
         }
     }
 }

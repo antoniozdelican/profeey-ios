@@ -304,6 +304,7 @@
                     <connections>
                         <outlet property="loadingTableFooterView" destination="DT1-h9-beq" id="YAI-ef-hVa"/>
                         <segue destination="eUa-vq-9a7" kind="show" identifier="segueToProfileVc" id="ybP-Oe-V4C"/>
+                        <segue destination="fmD-Wl-kQh" kind="presentation" identifier="segueToReportVc" id="B9S-KL-zAF"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dL3-uj-4mz" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -316,7 +317,15 @@
                 <viewControllerPlaceholder storyboardName="Profile" id="eUa-vq-9a7" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Vmy-LC-aDY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4546" y="40"/>
+            <point key="canvasLocation" x="4619" y="18"/>
+        </scene>
+        <!--Report-->
+        <scene sceneID="2dN-st-snj">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Report" id="fmD-Wl-kQh" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="2aT-O8-e2c" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4620" y="116"/>
         </scene>
     </scenes>
     <resources>

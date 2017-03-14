@@ -14,6 +14,9 @@ protocol MessagesTableViewControllerDelegate: class {
     func scrollViewWillBeginDragging()
     func initialMessagesLoaded(_ numberOfInitialMessages: Int)
     func blockedConversation()
+}
+
+protocol RemoveMessageDelegate: class {
     func removeMessage(_ messageId: String)
 }
 
@@ -24,6 +27,7 @@ class MessagesTableViewController: UITableViewController {
     var conversationId: String?
     var participant: User?
     weak var messagesTableViewControllerDelegate: MessagesTableViewControllerDelegate?
+    weak var removeMessageDelegate: RemoveMessageDelegate?
     
     fileprivate var allMessagesSections: [[Message]] = []
     fileprivate var isLoadingMessages: Bool = true
@@ -83,6 +87,17 @@ class MessagesTableViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destinationViewController = segue.destination as? ProfileTableViewController {
             destinationViewController.user = self.participant?.copyUser()
+        }
+        if let navigationController = segue.destination as? UINavigationController,
+            let childViewController =  navigationController.childViewControllers[0] as? ReportTableViewController,
+            let cell = sender as? OtherMessageTableViewCell,
+            let indexPath = self.tableView.indexPath(for: cell) {
+            let messageSection = self.allMessagesSections[indexPath.section]
+            let message = messageSection[indexPath.row]
+            childViewController.userId = message.senderId
+            childViewController.reportType = ReportType.user
+            childViewController.messageId = message.messageId
+            childViewController.removeMessageDelegate = self.removeMessageDelegate
         }
     }
 
@@ -502,7 +517,7 @@ extension MessagesTableViewController: OwnMessageTableViewCellDelegate {
             alertController.addAction(cancelAction)
             let deleteConfirmAction = UIAlertAction(title: "Delete", style: UIAlertActionStyle.default, handler: {
                 (alert: UIAlertAction) in
-                self.messagesTableViewControllerDelegate?.removeMessage(messageId)
+                self.removeMessageDelegate?.removeMessage(messageId)
             })
             alertController.addAction(deleteConfirmAction)
             self.present(alertController, animated: true, completion: nil)
@@ -538,8 +553,7 @@ extension MessagesTableViewController: OtherMessageTableViewCellDelegate {
         // Report.
         let reportAction = UIAlertAction(title: "Report", style: UIAlertActionStyle.destructive, handler: {
             (alert: UIAlertAction) in
-            // TODO
-            //self.performSegue(withIdentifier: "segueToReportVc", sender: cell)
+            self.performSegue(withIdentifier: "segueToReportVc", sender: cell)
         })
         alertController.addAction(reportAction)
         let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil)

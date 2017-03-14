@@ -409,7 +409,7 @@ extension UserCategoryTableViewController {
     }
     
     func createReportNotification(_ notification: NSNotification) {
-        guard let postId = notification.userInfo?["postId"] as? String else {
+        guard let postId = notification.userInfo?["postId"] as? String, notification.userInfo?["commentId"] == nil else {
             return
         }
         guard let postIndex = self.posts.index(where: { $0.postId == postId }) else {

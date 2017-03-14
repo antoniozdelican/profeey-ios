@@ -498,8 +498,6 @@ extension MainTabBarController: AWSPushManagerDelegate {
     }
     
     func pushManager(_ pushManager: AWSPushManager, didReceivePushNotification userInfo: [AnyHashable : Any]) {
-        
-        print("Hello it's hereeee")
         // Do nothing.
         
         // Try fix bug here.

@@ -33,6 +33,10 @@ class ReportTableViewController: UITableViewController {
     var reportType: ReportType = ReportType.post
     var userId: String?
     var postId: String?
+    // In case we are reporting user for message or comment.
+    var messageId: String?
+    var removeMessageDelegate: RemoveMessageDelegate?
+    var commentId: String?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,6 +63,10 @@ class ReportTableViewController: UITableViewController {
             destinationViewController.userId = self.userId
             destinationViewController.postId = self.postId
             destinationViewController.reportType = self.reportType
+            // In case we are reporting user for message or comment.
+            destinationViewController.messageId = self.messageId
+            destinationViewController.removeMessageDelegate = self.removeMessageDelegate
+            destinationViewController.commentId = self.commentId
         }
     }
     

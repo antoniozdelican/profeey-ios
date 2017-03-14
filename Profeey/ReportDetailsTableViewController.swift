@@ -15,6 +15,10 @@ class ReportDetailsTableViewController: UITableViewController {
     var reportMidType: ReportMidType?
     var userId: String?
     var postId: String?
+    // In case we are reporting user for message or comment.
+    var messageId: String?
+    var removeMessageDelegate: RemoveMessageDelegate?
+    var commentId: String?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -154,8 +158,17 @@ class ReportDetailsTableViewController: UITableViewController {
                     if let postId = self.postId {
                         userInfo["postId"] = postId
                     }
+                    // Only in case if it's just a comment report.
+                    if let commentId = self.commentId {
+                        userInfo["commentId"] = commentId
+                    }
                     NotificationCenter.default.post(name: NSNotification.Name(rawValue: CreateReportNotificationKey), object: self, userInfo: userInfo)
                     self.performSegue(withIdentifier: "segueToReportConfirmationVc", sender: self)
+                    
+                    // In case we are reporting user for message or comment.
+                    if let messageId = self.messageId {
+                        self.removeMessageDelegate?.removeMessage(messageId)
+                    }
                 }
             })
             return nil
