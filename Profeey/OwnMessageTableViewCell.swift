@@ -36,7 +36,9 @@ class OwnMessageTableViewCell: UITableViewCell {
         self.createdLabelHeightConstraintConstant = self.createdLabelHeightConstraint.constant
         
         // Long gesture for delete/copy message.
-        self.messageTextContainerView.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(self.ownMessageTextContainerViewTapped(_:))))
+        let gestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(self.ownMessageTextContainerViewTapped(_:)))
+        gestureRecognizer.minimumPressDuration = 0.2
+        self.messageTextContainerView.addGestureRecognizer(gestureRecognizer)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

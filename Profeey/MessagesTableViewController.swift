@@ -501,12 +501,11 @@ extension MessagesTableViewController: OwnMessageTableViewCellDelegate {
         guard let messageId = message.messageId else {
             return
         }
-        
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
         // Copy.
         let copyAction = UIAlertAction(title: "Copy", style: UIAlertActionStyle.default, handler: {
             (alert: UIAlertAction) in
-            // TODO
+            UIPasteboard.general.string = message.messageText
         })
         alertController.addAction(copyAction)
         // Delete.
@@ -542,12 +541,11 @@ extension MessagesTableViewController: OtherMessageTableViewCellDelegate {
         self.parent?.view.endEditing(true)
         let messageSection = self.allMessagesSections[indexPath.section]
         let message = messageSection[indexPath.row]
-        
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
         // Copy.
         let copyAction = UIAlertAction(title: "Copy", style: UIAlertActionStyle.default, handler: {
             (alert: UIAlertAction) in
-            // TODO
+            UIPasteboard.general.string = message.messageText
         })
         alertController.addAction(copyAction)
         // Report.

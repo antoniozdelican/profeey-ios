@@ -197,7 +197,7 @@
                                     <outlet property="createdLabelBottomConstraint" destination="IAD-0N-OH2" id="bjl-YS-YZ3"/>
                                     <outlet property="createdLabelHeightConstraint" destination="imG-S1-W2j" id="9J2-9n-95T"/>
                                     <outlet property="createdLabelTopConstraint" destination="hJS-Kl-1pT" id="yFk-qm-U6t"/>
-                                    <outlet property="messageTextContainerView" destination="2CK-cb-rA6" id="IQR-SI-av1"/>
+                                    <outlet property="messageTextContainerView" destination="2CK-cb-rA6" id="Wti-EW-U4A"/>
                                     <outlet property="messageTextLabel" destination="Leo-ic-PNw" id="IhB-En-fqN"/>
                                 </connections>
                             </tableViewCell>
