@@ -31,6 +31,7 @@ let CreateMessageNotificationKey: String = "CreateMessageNotificationKey"
 let DeleteMessageNotificationKey: String = "DeleteMessageNotificationKey"
 
 let CreateConversationNotificationKey: String = "CreateConversationNotificationKey"
+//let DeleteConversationNotificationKey: String = "DeleteConversationNotificationKey"
 
 let CreateReportNotificationKey: String = "CreateReportNotificationKey"
 

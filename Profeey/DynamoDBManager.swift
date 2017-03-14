@@ -124,7 +124,7 @@ protocol DynamoDBManager {
     func getConversationDynamoDB(_ conversationId: String, completionHandler: @escaping AWSContinuationBlock)
     func createConversationDynamoDB(_ messageText: String, conversationId: String, participantId: String, participantFirstName: String?, participantLastName: String?, participantPreferredUsername: String?, participantProfessionName: String?, participantProfilePicUrl: String?, completionHandler: @escaping AWSContinuationBlock)
     func updateSeenConversationDynamoDB(_ conversationId: String, completionHandler: @escaping AWSContinuationBlock)
-    func removeConversationDynamoDB(_ conversationId: String, completionHandler: @escaping AWSContinuationBlock)
+    //func removeConversationDynamoDB(_ conversationId: String, completionHandler: @escaping AWSContinuationBlock)
     func queryConversationsDateSortedDynamoDB(_ lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
     func queryUnseenConversationsDynamoDB(_ completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?)
     

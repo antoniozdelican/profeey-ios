@@ -14,6 +14,7 @@ protocol MessagesTableViewControllerDelegate: class {
     func scrollViewWillBeginDragging()
     func initialMessagesLoaded(_ numberOfInitialMessages: Int)
     func blockedConversation()
+    func removeMessage(_ messageId: String)
 }
 
 class MessagesTableViewController: UITableViewController {
@@ -137,6 +138,7 @@ class MessagesTableViewController: UITableViewController {
             } else {
                 cell.hideCreatedLabel()
             }
+            cell.ownMessageTableViewCellDelegate = self
             cell.transform = CGAffineTransform(scaleX: 1, y: -1)
             return cell
         } else {
@@ -429,7 +431,15 @@ extension MessagesTableViewController {
             return
         }
         self.allMessagesSections[messageSectionIndex!].remove(at: messageRowIndex!)
+        if allMessagesSections[messageSectionIndex!].count == 0 {
+            self.allMessagesSections.remove(at: messageSectionIndex!)
+        }
         self.tableView.reloadData()
+        
+        // Update ConversationVc with last message.
+        if self.allMessagesSections.count > 0, let lastMessage = self.allMessagesSections[0].first {
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: DeleteMessageNotificationKey), object: self, userInfo: ["lastMessage": lastMessage.copyMessage()])
+        }
     }
     
     func apnsNewMessageNotificationKey(_ notification: NSNotification) {
@@ -464,10 +474,77 @@ extension MessagesTableViewController {
     }
 }
 
+extension MessagesTableViewController: OwnMessageTableViewCellDelegate {
+    
+    func ownMessageTapped(_ cell: OwnMessageTableViewCell) {
+        guard let indexPath = self.tableView.indexPath(for: cell) else {
+            return
+        }
+        self.parent?.view.endEditing(true)
+        let messageSection = self.allMessagesSections[indexPath.section]
+        let message = messageSection[indexPath.row]
+        guard let messageId = message.messageId else {
+            return
+        }
+        
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
+        // Copy.
+        let copyAction = UIAlertAction(title: "Copy", style: UIAlertActionStyle.default, handler: {
+            (alert: UIAlertAction) in
+            // TODO
+        })
+        alertController.addAction(copyAction)
+        // Delete.
+        let deleteAction = UIAlertAction(title: "Delete", style: UIAlertActionStyle.destructive, handler: {
+            (alert: UIAlertAction) in
+            let alertController = UIAlertController(title: "Delete Message?", message: "You and your recipient won't see this message anymore.", preferredStyle: UIAlertControllerStyle.alert)
+            let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil)
+            alertController.addAction(cancelAction)
+            let deleteConfirmAction = UIAlertAction(title: "Delete", style: UIAlertActionStyle.default, handler: {
+                (alert: UIAlertAction) in
+                self.messagesTableViewControllerDelegate?.removeMessage(messageId)
+            })
+            alertController.addAction(deleteConfirmAction)
+            self.present(alertController, animated: true, completion: nil)
+        })
+        alertController.addAction(deleteAction)
+        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil)
+        alertController.addAction(cancelAction)
+        self.present(alertController, animated: true, completion: nil)
+    }
+}
+
 extension MessagesTableViewController: OtherMessageTableViewCellDelegate {
     
     func profilePicImageViewTapped(_ cell: OtherMessageTableViewCell) {
         self.performSegue(withIdentifier: "segueToProfileVc", sender: cell)
+    }
+    
+    func otherMessageTapped(_ cell: OtherMessageTableViewCell) {
+        guard let indexPath = self.tableView.indexPath(for: cell) else {
+            return
+        }
+        self.parent?.view.endEditing(true)
+        let messageSection = self.allMessagesSections[indexPath.section]
+        let message = messageSection[indexPath.row]
+        
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
+        // Copy.
+        let copyAction = UIAlertAction(title: "Copy", style: UIAlertActionStyle.default, handler: {
+            (alert: UIAlertAction) in
+            // TODO
+        })
+        alertController.addAction(copyAction)
+        // Report.
+        let reportAction = UIAlertAction(title: "Report", style: UIAlertActionStyle.destructive, handler: {
+            (alert: UIAlertAction) in
+            // TODO
+            //self.performSegue(withIdentifier: "segueToReportVc", sender: cell)
+        })
+        alertController.addAction(reportAction)
+        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil)
+        alertController.addAction(cancelAction)
+        self.present(alertController, animated: true, completion: nil)
     }
 }
 

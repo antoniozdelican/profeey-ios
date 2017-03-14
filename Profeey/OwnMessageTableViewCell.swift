@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol OwnMessageTableViewCellDelegate: class {
+    func ownMessageTapped(_ cell: OwnMessageTableViewCell)
+}
+
 class OwnMessageTableViewCell: UITableViewCell {
     
     @IBOutlet weak var messageTextLabel: UILabel!
@@ -16,6 +20,8 @@ class OwnMessageTableViewCell: UITableViewCell {
     @IBOutlet weak var createdLabelTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var createdLabelBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var createdLabelHeightConstraint: NSLayoutConstraint!
+    
+    weak var ownMessageTableViewCellDelegate: OwnMessageTableViewCellDelegate?
     
     fileprivate var createdLabelTopConstraintConstant: CGFloat = 0.0
     fileprivate var createdLabelBottomConstraintConstant: CGFloat = 0.0
@@ -28,6 +34,9 @@ class OwnMessageTableViewCell: UITableViewCell {
         self.createdLabelTopConstraintConstant = self.createdLabelTopConstraint.constant
         self.createdLabelBottomConstraintConstant = self.createdLabelBottomConstraint.constant
         self.createdLabelHeightConstraintConstant = self.createdLabelHeightConstraint.constant
+        
+        // Long gesture for delete/copy message.
+        self.messageTextContainerView.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(self.ownMessageTextContainerViewTapped(_:))))
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -49,6 +58,14 @@ class OwnMessageTableViewCell: UITableViewCell {
         self.createdLabelTopConstraint.constant =  self.createdLabelTopConstraintConstant
         self.createdLabelBottomConstraint.constant = self.createdLabelBottomConstraintConstant
         self.createdLabelHeightConstraint.constant = self.createdLabelHeightConstraintConstant
+    }
+    
+    // MARK: Tappers
+    
+    func ownMessageTextContainerViewTapped(_ sender: AnyObject) {
+        if sender.state == UIGestureRecognizerState.began {
+            self.ownMessageTableViewCellDelegate?.ownMessageTapped(self)
+        }
     }
 
 }

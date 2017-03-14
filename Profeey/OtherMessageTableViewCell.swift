@@ -10,6 +10,7 @@ import UIKit
 
 protocol OtherMessageTableViewCellDelegate: class {
     func profilePicImageViewTapped(_ cell:OtherMessageTableViewCell)
+    func otherMessageTapped(_ cell: OtherMessageTableViewCell)
 }
 
 class OtherMessageTableViewCell: UITableViewCell {
@@ -40,6 +41,9 @@ class OtherMessageTableViewCell: UITableViewCell {
         self.createdLabelTopConstraintConstant = self.createdLabelTopConstraint.constant
         self.createdLabelBottomConstraintConstant = self.createdLabelBottomConstraint.constant
         self.createdLabelHeightConstraintConstant = self.createdLabelHeightConstraint.constant
+        
+        // Long gesture for delete/report message.
+        self.messageTextContainerView.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(self.otherMessageTextContainerViewTapped(_:))))
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -74,6 +78,12 @@ class OtherMessageTableViewCell: UITableViewCell {
     
     func profilePicImageViewTapped(_ sender: AnyObject) {
         self.otherMessageTableViewCellDelegate?.profilePicImageViewTapped(self)
+    }
+    
+    func otherMessageTextContainerViewTapped(_ sender: AnyObject) {
+        if sender.state == UIGestureRecognizerState.began {
+            self.otherMessageTableViewCellDelegate?.otherMessageTapped(self)
+        }
     }
     
 }

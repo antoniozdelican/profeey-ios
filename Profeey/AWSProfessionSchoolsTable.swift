@@ -63,20 +63,17 @@ class AWSProfessionSchoolsSchoolIdIndex: NSObject, Index {
     
     // MARK: QueryWithPartitionKey
     
-    // Query all professions with schoolId and numberOfUsers > 0.
+    // Query all professions with schoolId.
     func querySchoolProfessions(_ schoolId: String, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?) {
         let objectMapper = AWSDynamoDBObjectMapper.default()
         let queryExpression = AWSDynamoDBQueryExpression()
         queryExpression.indexName = "SchoolIdIndex"
         queryExpression.keyConditionExpression = "#schoolId = :schoolId"
-        queryExpression.filterExpression = "#numberOfUsers > :numberOfUsers"
         queryExpression.expressionAttributeNames = [
             "#schoolId": "schoolId",
-            "#numberOfUsers": "numberOfUsers",
         ]
         queryExpression.expressionAttributeValues = [
             ":schoolId": schoolId,
-            ":numberOfUsers": 0,
         ]
         objectMapper.query(AWSProfessionSchool.self, expression: queryExpression, completionHandler: completionHandler)
     }

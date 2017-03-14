@@ -697,16 +697,17 @@ class PRFYDynamoDBManager: NSObject, DynamoDBManager {
         awsConversationsTable.updateConversationSkipNull(awsConversation, completionHandler: completionHandler)
     }
     
-    func removeConversationDynamoDB(_ conversationId: String, completionHandler: @escaping AWSContinuationBlock) {
-        guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
-            print("removeConversationDynamoDB no identityId!")
-            AWSTask().continue(completionHandler)
-            return
-        }
-        let awsConversationsTable = AWSConversationsTable()
-        let awsConversation = AWSConversation(_userId: identityId, _conversationId: conversationId)
-        awsConversationsTable.removeConversation(awsConversation, completionHandler: completionHandler)
-    }
+    // Don't delete conversation because we are never sure how many (old) messages are in the conversation.
+//    func removeConversationDynamoDB(_ conversationId: String, completionHandler: @escaping AWSContinuationBlock) {
+//        guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {
+//            print("removeConversationDynamoDB no identityId!")
+//            AWSTask().continue(completionHandler)
+//            return
+//        }
+//        let awsConversationsTable = AWSConversationsTable()
+//        let awsConversation = AWSConversation(_userId: identityId, _conversationId: conversationId)
+//        awsConversationsTable.removeConversation(awsConversation, completionHandler: completionHandler)
+//    }
     
     func queryConversationsDateSortedDynamoDB(_ lastEvaluatedKey: [String : AWSDynamoDBAttributeValue]?, completionHandler: ((AWSDynamoDBPaginatedOutput?, Error?) -> Void)?){
         guard let identityId = AWSIdentityManager.defaultIdentityManager().identityId else {

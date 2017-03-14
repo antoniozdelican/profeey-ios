@@ -30,6 +30,7 @@ class ConversationsTableViewController: UITableViewController {
         
         // Add observers.
         NotificationCenter.default.addObserver(self, selector: #selector(self.createMessageNotification(_:)), name: NSNotification.Name(CreateMessageNotificationKey), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.deleteMessageNotification(_:)), name: NSNotification.Name(DeleteMessageNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.createConversationNotification(_:)), name: NSNotification.Name(CreateConversationNotificationKey), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.downloadImageNotification(_:)), name: NSNotification.Name(DownloadImageNotificationKey), object: nil)
         // Special observer to simulate instant messaging.
@@ -309,6 +310,17 @@ extension ConversationsTableViewController {
             return
         }
         self.updateConversationWithLastMessage(conversationId, message: message)
+    }
+    
+    // Only updates if necessary aka if lastMessage is sent.
+    func deleteMessageNotification(_ notification: NSNotification) {
+        guard let lastMessage = notification.userInfo?["lastMessage"] as? Message, let conversationId = lastMessage.conversationId else {
+            return
+        }
+        guard let _ = self.conversations.index(where: { $0.conversationId == conversationId }) else {
+            return
+        }
+        self.updateConversationWithLastMessage(conversationId, message: lastMessage)
     }
     
     func createConversationNotification(_ notification: NSNotification) {

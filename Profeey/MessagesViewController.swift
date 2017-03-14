@@ -160,10 +160,7 @@ class MessagesViewController: UIViewController {
     }
     
     fileprivate func preCreateMessage(_ messageText: String) {
-        guard let conversationId = self.conversationId, let numberOfInitialMessages = self.numberOfInitialMessages else {
-            return
-        }
-        guard let senderId = self.senderId, let recipientId = self.recipientId else {
+        guard let conversationId = self.conversationId, let senderId = self.senderId, let recipientId = self.recipientId else {
             return
         }
         self.resetMessageBox()
@@ -175,14 +172,24 @@ class MessagesViewController: UIViewController {
         
         // Notify observers.
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: CreateMessageNotificationKey), object: self, userInfo: ["message": message.copyMessage()])
-        
         // Actual creation.
-        self.createMessage(messageText, conversationId: conversationId, messageId: messageId, created: created, senderId: senderId, recipientId: recipientId, numberOfInitialMessages: numberOfInitialMessages)
+        self.createMessage(messageText, conversationId: conversationId, messageId: messageId, created: created, senderId: senderId, recipientId: recipientId)
+    }
+    
+    fileprivate func preRemoveMessage(_ messageId: String) {
+        guard let conversationId = self.conversationId else {
+            return
+        }
+        // Notify observers.
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: DeleteMessageNotificationKey), object: self, userInfo: ["messageId": messageId])
+        // Actual removal.
+        self.removeMessage(conversationId, messageId: messageId)
     }
     
     // MARK: AWS
     
-    fileprivate func createMessage(_ messageText: String, conversationId: String, messageId: String, created: NSNumber, senderId: String, recipientId: String, numberOfInitialMessages: Int) {
+    // In background.
+    fileprivate func createMessage(_ messageText: String, conversationId: String, messageId: String, created: NSNumber, senderId: String, recipientId: String) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         PRFYDynamoDBManager.defaultDynamoDBManager().createMessageDynamoDB(conversationId, recipientId: recipientId, messageText: messageText, messageId: messageId, created: created, completionHandler: {
             (task: AWSTask) in
@@ -193,28 +200,41 @@ class MessagesViewController: UIViewController {
                     if (task.error as! NSError).code == -1009 {
                         (self.navigationController as? PRFYNavigationController)?.showBanner("No Internet Connection")
                     }
-                    // Notify of message error.
                     // TODO
+                    // Notify of message error.
                     return
                 }
-                
-                // Notify that message has been sent.
                 // TODO
+                // Notify that message has been sent.
                 
                 // Create conversation if it's a first message between users.
-                if numberOfInitialMessages == 0 {
+                if let numberOfInitialMessages = self.numberOfInitialMessages, numberOfInitialMessages == 0 {
                     let participant = User(userId: self.participant?.userId, firstName: self.participant?.firstName, lastName: self.participant?.lastName, preferredUsername: self.participant?.preferredUsername, professionName: self.participant?.professionName, profilePicUrl: self.participant?.profilePicUrl)
                     let conversation = Conversation(userId: senderId, conversationId: conversationId, lastMessageText: messageText, lastMessageCreated: created, lastMessageSeen: NSNumber(value: 1), participant: participant)
                     
                     // Notify observers.
                     NotificationCenter.default.post(name: NSNotification.Name(rawValue: CreateConversationNotificationKey), object: self, userInfo: ["conversation": conversation.copyConversation()])
-                    
                     // Actual creation.
                     self.createConversation(messageText, conversationId: conversationId, participantId: recipientId)
-                    
                     // Set to 1 to ensure creation is not repeated! (BUG).
                     self.numberOfInitialMessages = 1
                 }
+            })
+            return nil
+        })
+    }
+    
+    // In background.
+    func removeMessage(_ conversationId: String, messageId: String) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        PRFYDynamoDBManager.defaultDynamoDBManager().removeMessageDynamoDB(conversationId, messageId: messageId, completionHandler: {
+            (task: AWSTask) in
+            DispatchQueue.main.async(execute: {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                if let error = task.error {
+                    print("removeMessage error: \(error)")
+                }
+                // Don't delete conversation because we don't know how many (old) messages are there.
             })
             return nil
         })
@@ -270,6 +290,10 @@ extension MessagesViewController: MessagesTableViewControllerDelegate {
     }
     
     func initialMessagesLoaded(_ numberOfInitialMessages: Int) {
+        
+        print("EVO")
+        print(numberOfInitialMessages)
+        
         if self.numberOfInitialMessages == nil {
             self.numberOfInitialMessages = numberOfInitialMessages
         }
@@ -278,5 +302,9 @@ extension MessagesViewController: MessagesTableViewControllerDelegate {
     func blockedConversation() {
         self.messageTextView.isEditable = false
         self.sendButton.isEnabled = false
+    }
+    
+    func removeMessage(_ messageId: String) {
+        self.preRemoveMessage(messageId)
     }
 }
