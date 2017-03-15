@@ -278,8 +278,9 @@ class HomeTableViewController: UITableViewController {
                 (status: PHAuthorizationStatus) in
                 self.performSegue(withIdentifier: "segueToCaptureVc", sender: self)
             })
+        } else {
+            self.performSegue(withIdentifier: "segueToCaptureVc", sender: self)
         }
-        self.performSegue(withIdentifier: "segueToCaptureVc", sender: self)
     }
     
     @IBAction func refreshControlChanged(_ sender: AnyObject) {
