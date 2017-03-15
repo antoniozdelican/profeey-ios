@@ -879,7 +879,7 @@
                                             <constraints>
                                                 <constraint firstAttribute="trailing" secondItem="0Nu-6d-ZrU" secondAttribute="trailing" constant="28" id="0SB-MK-QMQ"/>
                                                 <constraint firstItem="0Nu-6d-ZrU" firstAttribute="leading" secondItem="UUG-JD-vPt" secondAttribute="leading" constant="28" id="AU3-gm-e9z"/>
-                                                <constraint firstAttribute="bottom" secondItem="0Nu-6d-ZrU" secondAttribute="bottom" id="Kl0-h7-la5"/>
+                                                <constraint firstAttribute="bottom" secondItem="0Nu-6d-ZrU" secondAttribute="bottom" priority="999" id="Kl0-h7-la5"/>
                                                 <constraint firstItem="0Nu-6d-ZrU" firstAttribute="top" secondItem="UUG-JD-vPt" secondAttribute="top" id="k14-u3-MWm"/>
                                             </constraints>
                                         </tableViewCellContentView>
