@@ -34,6 +34,7 @@ class LogInTableViewController: UITableViewController {
         self.activityIndicatorView.isHidden = true
         // Set Facebook permissions.
         AWSFacebookSignInProvider.sharedInstance().setPermissions(["public_profile", "email"])
+        AWSFacebookSignInProvider.sharedInstance().setLoginBehavior(0)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -207,6 +208,8 @@ class LogInTableViewController: UITableViewController {
                 //UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 guard error == nil else {
                     print("logInWithFacebookSignInProvider error: \(error!)")
+                    let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: task.error?.localizedDescription, cancelButtonTitle: "Try Again")
+                    self.present(alertController, animated: true, completion: nil)
                     return
                 }
                 // Disable all buttons and textFields.

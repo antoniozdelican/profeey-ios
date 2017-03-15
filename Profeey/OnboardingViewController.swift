@@ -27,6 +27,7 @@ class OnboardingViewController: UIViewController {
         self.activityIndicatorView.isHidden = true
         // Set Facebook permissions.
         AWSFacebookSignInProvider.sharedInstance().setPermissions(["public_profile", "email"])
+        AWSFacebookSignInProvider.sharedInstance().setLoginBehavior(0)
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
