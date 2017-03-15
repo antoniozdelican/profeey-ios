@@ -208,7 +208,7 @@ class LogInTableViewController: UITableViewController {
                 //UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 guard error == nil else {
                     print("logInWithFacebookSignInProvider error: \(error!)")
-                    let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: task.error?.localizedDescription, cancelButtonTitle: "Try Again")
+                    let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error?.localizedDescription, cancelButtonTitle: "Try Again")
                     self.present(alertController, animated: true, completion: nil)
                     return
                 }

@@ -148,6 +148,8 @@ class OnboardingViewController: UIViewController {
                 //UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 guard error == nil else {
                     print("logInWithSignInProvider error: \(error!)")
+                    let alertController = self.getSimpleAlertWithTitle("Something went wrong", message: error?.localizedDescription, cancelButtonTitle: "Try Again")
+                    self.present(alertController, animated: true, completion: nil)
                     return
                 }
                 // Disable all buttons.
